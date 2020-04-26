@@ -1,0 +1,256 @@
+﻿<Window 
+		x:Class="Bau.DbStudio.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Bau.DbStudio"
+		xmlns:commandsLocal="clr-namespace:Bau.DbStudio.Converters"
+		xmlns:avalonDock="http://schemas.xceed.com/wpf/xaml/avalondock"
+		xmlns:avalonDockExtended="clr-namespace:Bau.DbStudio.Controls"
+        mc:Ignorable="d"
+        Title="{Binding Path=Text}" Height="450" Width="800" Loaded="Window_Loaded" Unloaded="Window_Unloaded" WindowStartupLocation="CenterScreen" WindowState="Maximized">
+	<Window.CommandBindings>
+		<CommandBinding Command="Save" Executed="SaveCommandBinding_Executed" CanExecute="SaveCommandBinding_CanExecute"/>
+		<CommandBinding Command="Search" Executed="SearchCommandBinding_Executed"/>
+		<CommandBinding Command="commandsLocal:CustomCommands.ExecuteScript" Executed="ExecuteScriptCommandBinding_Executed" CanExecute="ExecuteScriptCommandBinding_CanExecute"/>
+		<CommandBinding Command="commandsLocal:CustomCommands.NewQuery" Executed="NewQueryCommandBinding_Executed" CanExecute="NewQueryCommandBinding_CanExecute"/>
+	</Window.CommandBindings>
+	<Window.InputBindings>
+		<KeyBinding Command="Save" Key="S" Modifiers="Ctrl"/>
+		<KeyBinding Command="Search" Key="F" Modifiers="Ctrl"/>
+	</Window.InputBindings>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
+		<!-- Menú -->
+		<Menu Grid.Column="0" Grid.Row="0">
+			<MenuItem Header="_Archivo">
+				<MenuItem Header="_Nuevo">
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
+					</MenuItem.Icon>
+					<MenuItem Header="_Conexión" Command="{Binding Path=SolutionViewModel.TreeConnectionsViewModel.NewConnectionCommand}" >
+						<MenuItem.Icon>
+							<Image Width="16" Height="16" Source="/Resources/Images/Connection.png" />
+						</MenuItem.Icon>
+					</MenuItem>
+					<MenuItem Header="_Distribución" Command="{Binding Path=SolutionViewModel.TreeConnectionsViewModel.NewDeploymentCommand}" >
+						<MenuItem.Icon>
+							<Image Width="16" Height="16" Source="/Resources/Images/Deployment.png" />
+						</MenuItem.Icon>
+					</MenuItem>
+					<Separator/>
+					<MenuItem Header="D_irectorio" Command="{Binding Path=SolutionViewModel.TreeFoldersViewModel.NewFolderFilesCommand}" >
+						<MenuItem.Icon>
+							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Folder.png" />
+						</MenuItem.Icon>
+					</MenuItem>
+					<Separator/>
+					<MenuItem Header="_Storage" Command="{Binding Path=SolutionViewModel.TreeStoragesViewModel.NewStorageCommand}" >
+						<MenuItem.Icon>
+							<Image Width="16" Height="16" Source="/Resources/Images/Search.png" />
+						</MenuItem.Icon>
+					</MenuItem>
+					<Separator/>
+					<MenuItem Header="_Consulta" InputGestureText="Ctrl+Q" Command="commandsLocal:CustomCommands.NewQuery" >
+						<MenuItem.Icon>
+							<Image Width="16" Height="16" Source="/Resources/Images/Script.png" />
+						</MenuItem.Icon>
+					</MenuItem>
+				</MenuItem>
+				<MenuItem Header="_Guardar" InputGestureText="Ctrl+S" Command="Save" >
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Save.png" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<MenuItem Header="_Guardar como" Command="{Binding Path=SaveAsCommand}" >
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/SaveAs.png" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<Separator/>
+				<MenuItem Header="_Actualizar" Command="{Binding Path=RefreshCommand}" >
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Refresh.png" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<Separator/>
+				<MenuItem x:Name="mnuWorkspace" Header="_Espacio de trabajo" >
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="Resources/Images/Project.png" />
+					</MenuItem.Icon>
+					<MenuItem Header="_Nuevo" Command="{Binding Path=SolutionViewModel.NewWorkspaceCommand}" >
+						<MenuItem.Icon>
+							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
+						</MenuItem.Icon>
+					</MenuItem>
+					<Separator x:Name="mnuStartWorkspaces" />
+					<Separator x:Name="mnuEndWorkspaces" />
+					<MenuItem Header="_Borrar" Command="{Binding Path=SolutionViewModel.DeleteWorkspaceCommand}" >
+						<MenuItem.Icon>
+							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
+						</MenuItem.Icon>
+					</MenuItem>
+				</MenuItem>
+				<Separator/>
+				<MenuItem Header="_Salir" InputGestureText="Alt+F4" Click="ExitMenuItem_Click" >
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Exit.png" />
+					</MenuItem.Icon>
+				</MenuItem>
+			</MenuItem>
+
+			<MenuItem Header="_Editar">
+				<MenuItem Header="Copiar" Command="ApplicationCommands.Copy">
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/BauControls;component/Resources/Images/Copy.png" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<MenuItem Header="Cortar" Command="ApplicationCommands.Cut">
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/BauControls;component/Resources/Images/Cut.png" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<MenuItem Header="Pegar" Command="ApplicationCommands.Paste">
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/BauControls;component/Resources/Images/Paste.png" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<Separator/>
+				<MenuItem Header="Borrar" Command="ApplicationCommands.Delete">
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/BauControls;component/Resources/Images/Delete.png" />
+					</MenuItem.Icon>
+				</MenuItem>
+
+				<Separator/>
+				<MenuItem Header="_Buscar" InputGestureText="Ctrl+F" Command="Search">
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/Resources/Images/Search.png" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<Separator/>
+				<MenuItem Header="E_jecutar" InputGestureText="F5" Command="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.ExecuteScripCommand}">
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/Resources/Images/ArrowRight.png" />
+					</MenuItem.Icon>
+				</MenuItem>
+			</MenuItem>
+
+			<MenuItem Header="_Herramientas">
+				<MenuItem Header="_Configuración" Click="Configuration_Click">
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Tag.png" />
+					</MenuItem.Icon>
+				</MenuItem>
+			</MenuItem>
+
+			<MenuItem Header="_Ventana">
+				<MenuItem Header="Cambiar tema" Click="CloseAllWindows_Click">
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
+					</MenuItem.Icon>
+					<MenuItem Header="Aero" Click="ThemeAero_Click" IsCheckable="True" x:Name="mnuThemeAero"/>
+					<MenuItem Header="Metro" Click="ThemeMetro_Click" IsCheckable="True" x:Name="mnuThemeMetro"/>
+					<MenuItem Header="VS 2010" Click="ThemeVS2010_Click" IsCheckable="True" x:Name="mnuThemeVs2010"/>
+				</MenuItem>
+				<MenuItem Header="_Cerrar todos los documentos" Click="CloseAllWindows_Click">
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
+					</MenuItem.Icon>
+				</MenuItem>
+			</MenuItem>
+		</Menu>
+		<ToolBar Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
+			<Button ToolTip="Añadir carpeta" Command="{Binding Path=SolutionViewModel.TreeFoldersViewModel.NewFolderFilesCommand}" Margin="2">
+				<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Folder.png" />
+			</Button>
+			<Button ToolTip="Añadir conexión" Command="{Binding Path=SolutionViewModel.TreeConnectionsViewModel.NewConnectionCommand}" Margin="2">
+				<Image Width="16" Height="16" Source="/Resources/Images/Connection.png" />
+			</Button>
+			<Separator Margin="2"/>
+			<Button ToolTip="Guardar" Command="{Binding Path=SaveCommand}" Margin="2">
+				<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Save.png" />
+			</Button>
+			<Button ToolTip="Guardar como" Command="{Binding Path=SaveAsCommand}" Margin="2">
+				<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/SaveAs.png" />
+			</Button>
+			<Separator/>
+			<Button ToolTip="Actualizar" Command="{Binding Path=RefreshCommand}" Margin="2">
+				<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Refresh.png" />
+			</Button>
+			<Separator Margin="2"/>
+			<Button ToolTip="Consulta" Command="{Binding Path=SolutionViewModel.TreeConnectionsViewModel.NewQueryCommand}" Margin="2">
+				<Image Width="16" Height="16" Source="/Resources/Images/Script.png" />
+			</Button>
+			<ComboBox HorizontalAlignment="Right" Width="200" MinWidth="200" Margin="20,2,0,2" 
+						  ItemsSource="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.Connections.Items}" DisplayMemberPath="Text" 
+						  SelectedItem="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.Connections.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+			<Button Content="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.ShortFileName}" Margin="2"
+					ToolTip="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.FileNameParameters}"
+					Command="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.OpenParametersFileCommand}"
+					Foreground="Black" FontWeight="Normal" />
+			<Button Margin="5,0,0,0" ToolTip="Seleccionar archivo de parámetros" 
+					Command="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.UpdateParametersFileCommand}">
+				<Image Width="16" Height="16" Source="/Resources/Images/File.png" />
+			</Button>
+			<Button Margin="5,0,0,0" ToolTip="Ejecutar" Command="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.ExecuteScripCommand}"
+					Visibility="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.IsExecuting,Converter={StaticResource InverseBoolToVisibilityConverter}}">
+				<Image Width="16" Height="16" Source="/Resources/Images/ArrowRight.png" />
+			</Button>
+			<Button Margin="5,0,0,0" ToolTip="Cancelar" Command="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.CancelScriptExecutionCommand}"
+					Visibility="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.IsExecuting,Converter={StaticResource BoolToVisibilityConverter}}">
+				<Image Width="16" Height="16" Source="/Resources/Images/Stop.png" />
+			</Button>
+			<Label Content="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.ExecutionTime}" Margin="2"
+				   Foreground="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.ExecutionTimeColor,Converter={StaticResource MVVMColorConverter}}"/>
+		</ToolBar>
+
+		<avalonDockExtended:DockLayout x:Name="dckManager" Grid.Row="2" Grid.Column="0">
+			<avalonDock:DockingManager.Theme>
+				<avalonDock:AeroTheme></avalonDock:AeroTheme>
+			</avalonDock:DockingManager.Theme>
+
+			<avalonDock:LayoutRoot>
+			</avalonDock:LayoutRoot>
+		</avalonDockExtended:DockLayout>
+		<!-- Barra de estado -->
+		<StatusBar Grid.Row="3" Grid.Column="0">
+			<StatusBarItem>
+				<TextBlock Text="{Binding Path=StatusMessage}"/>
+			</StatusBarItem>
+			<StatusBarItem HorizontalAlignment="Right">
+				<StackPanel Orientation="Horizontal">
+					<!--
+					<TextBlock Text="{Binding Path=ProgressMessage}" Visibility="{Binding Path=ShowProgressBar,Converter={StaticResource BoolToVisibilityConverter}}"
+					VerticalAlignment="Center"
+							  Margin="0, 2, 5, 2" />
+					<ProgressBar x:Name="prgProgress" Width="200" Height="20" Visibility="{Binding Path=ShowProgressBar,Converter={StaticResource BoolToVisibilityConverter}}"
+								 IsIndeterminate="True"
+								 VerticalAlignment="Center"
+								 Value="{Binding Path=ActualProgress}" Maximum="{Binding Path=TotalProgress}" 
+								 Margin="0, 2, 5, 2" />
+					
+					<Button Visibility="{Binding Path=ShowProgressBar,Converter={StaticResource BoolToVisibilityConverter}}"
+							Command="{Binding Path=CancelProcessCommand}">
+						<Button.Content>
+							<Image  Width="16" Height="16" Source="/BauControls;component/Themes/Images/Close.png" />
+						</Button.Content>
+					</Button>
+					-->
+				</StackPanel>
+			</StatusBarItem>
+			<StatusBarItem HorizontalAlignment="Right">
+				<TextBlock x:Name="lblVersion" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5"/>
+			</StatusBarItem>
+		</StatusBar>
+	</Grid>
+</Window>

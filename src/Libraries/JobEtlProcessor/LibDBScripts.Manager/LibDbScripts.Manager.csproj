@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+  <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Bau.Libraries.LibDbScripts.Manager</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Processor\Managers\Database\**" />
+    <Compile Remove="Processor\Sentences\Definitions\**" />
+    <Compile Remove="Properties\**" />
+    <EmbeddedResource Remove="Processor\Managers\Database\**" />
+    <EmbeddedResource Remove="Processor\Sentences\Definitions\**" />
+    <EmbeddedResource Remove="Properties\**" />
+    <None Remove="Processor\Managers\Database\**" />
+    <None Remove="Processor\Sentences\Definitions\**" />
+    <None Remove="Properties\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Processor\Sentences\Parameters\ProviderDefinitionModel.cs" />
+    <Compile Remove="Processor\Sentences\SentenceExportCsv.cs" />
+    <Compile Remove="Processor\Sentences\SentenceImportCsv.cs" />
+    <Compile Remove="Repository\DbScriptDefinitionsRepository.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibDataStructures\src\LibDataStructures.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibLogger\src\LibLogger.Core\LibLogger.Core.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Compilers\src\LibInterpreter\LibInterpreter.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DbAggregator\DbAggregator.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DbScripts\LibDbScripts.Parser\LibDbScripts.Parser.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Formats\LibCsvFiles\LibCsvFiles.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Formats\LibParquetFiles\LibParquetFiles.csproj" />
+  </ItemGroup>
+
+</Project>

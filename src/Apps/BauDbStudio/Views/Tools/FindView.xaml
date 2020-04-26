@@ -1,0 +1,52 @@
+﻿<Window x:Class="Bau.DbStudio.Views.Tools.FindView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Bau.DbStudio.Views.Tools"
+        mc:Ignorable="d"
+        Title="Buscar y reemplazar" WindowStartupLocation="CenterOwner"
+        Width="500" Height="200" ResizeMode="NoResize" Closed="Window_Closed"
+        WindowStyle="ToolWindow" ShowInTaskbar="False">
+	<Grid Margin="0,4">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="Auto" />
+		</Grid.ColumnDefinitions>
+		<Label Margin="5" Grid.Row="0" Grid.Column="0">Buscar:</Label>
+		<TextBox x:Name="txtFind" Margin="5" Grid.Row="0" Grid.Column="1" Text="{Binding Path=TextToFind}"/>
+		<Label Margin="5" Grid.Row="1" Grid.Column="0">Reemplazar:</Label>
+		<TextBox x:Name="txtReplace" Margin="5" Grid.Row="1" Grid.Column="1" Text="{Binding Path=TextToReplace}"/>
+		<Button Grid.Row="0" Grid.Column="2" Margin="5" Content="Buscar siguiente" Command="{Binding Path=FindNextCommand}"/>
+		<Button Grid.Row="0" Grid.Column="3" Margin="5" Content="Buscar anterior" Command="{Binding Path=FindPreviousCommand}"/>
+		<Button Grid.Row="1" Grid.Column="2" Margin="5" Content="Reemplazar" Command="{Binding Path=ReplaceCommand}"/>
+		<Button Grid.Row="1" Grid.Column="3" Margin="5" Content="Reemplazar todo" Command="{Binding Path=ReplaceAllCommand}" IsEnabled="False"/>
+		<Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
+			<CheckBox Grid.Row="0" Grid.Column="0" Margin="5" 
+				Content="Coincidir mayúsculas y minúsculas" IsChecked="{Binding Path=CaseSensitive}" />
+			<CheckBox Grid.Row="0" Grid.Column="1" Margin="5" 
+				Content="Coincidir palabra completa" IsChecked="{Binding Path=WholeWord}" />
+			<CheckBox Grid.Row="1" Grid.Column="0" Margin="5" 
+				Content="Expresión regular" IsChecked="{Binding Path=UseRegex}" />
+			<CheckBox Grid.Row="1" Grid.Column="1" Margin="5" 
+				Content="Comodines" IsChecked="{Binding Path=UseWildcard}" />
+		</Grid>
+	</Grid>
+</Window>

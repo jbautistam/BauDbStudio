@@ -1,0 +1,123 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>Bau.DbStudio</RootNamespace>
+    <Authors>Jose Antonio Bautista</Authors>
+    <ApplicationIcon>Resources\BauDbStudio.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\BauDbStudio.ico" />
+    <None Remove="Resources\Images\ArrowDown.png" />
+    <None Remove="Resources\Images\ArrowRight.png" />
+    <None Remove="Resources\Images\ArrowUp.png" />
+    <None Remove="Resources\Images\Connection.png" />
+    <None Remove="Resources\Images\Deployment.png" />
+    <None Remove="Resources\Images\Field.png" />
+    <None Remove="Resources\Images\File.png" />
+    <None Remove="Resources\Images\FileCsharp.png" />
+    <None Remove="Resources\Images\FileCsv.png" />
+    <None Remove="Resources\Images\FileJson.png" />
+    <None Remove="Resources\Images\FileParquet.png" />
+    <None Remove="Resources\Images\FilePowershell.png" />
+    <None Remove="Resources\Images\FilePython.png" />
+    <None Remove="Resources\Images\FileSql.png" />
+    <None Remove="Resources\Images\FileXml.png" />
+    <None Remove="Resources\Images\FolderNode.png" />
+    <None Remove="Resources\Images\Key.png" />
+    <None Remove="Resources\Images\Project.png" />
+    <None Remove="Resources\Images\ProjectDisabled.png" />
+    <None Remove="Resources\Images\Script.png" />
+    <None Remove="Resources\Images\ScriptDisabled.png" />
+    <None Remove="Resources\Images\Search.png" />
+    <None Remove="Resources\Images\SplashScreenImage.png" />
+    <None Remove="Resources\Images\Step.png" />
+    <None Remove="Resources\Images\StepDisabled.png" />
+    <None Remove="Resources\Images\Stop.png" />
+    <None Remove="Resources\Images\Table.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="3.8.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Controls\WPF\BauControls\src\BauControls.csproj" />
+    <ProjectReference Include="..\..\..\..\..\Controls\WPF\CodeEditor\src\CodeEditor.csproj" />
+    <ProjectReference Include="..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.ViewModels\BauMvvm.ViewModels.csproj" />
+    <ProjectReference Include="..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.Views\BauMvvm.Views.csproj" />
+    <ProjectReference Include="..\..\..\..\..\Libraries\Common\LibSystem.Windows\src\LibSystem.Windows.csproj" />
+    <ProjectReference Include="..\..\Libraries\DbStudio\DbStudio.ViewModels\DbStudio.ViewModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\BauDbStudio.ico" />
+    <Resource Include="Resources\Images\ArrowDown.png" />
+    <Resource Include="Resources\Images\ArrowRight.png" />
+    <Resource Include="Resources\Images\ArrowUp.png" />
+    <Resource Include="Resources\Images\Connection.png" />
+    <Resource Include="Resources\Images\DataError.png" />
+    <Resource Include="Resources\Images\Deployment.png" />
+    <Resource Include="Resources\Images\Field.png" />
+    <Resource Include="Resources\Images\File.png" />
+    <Resource Include="Resources\Images\FileCsharp.png" />
+    <Resource Include="Resources\Images\FileCsv.png" />
+    <Resource Include="Resources\Images\FileJson.png" />
+    <Resource Include="Resources\Images\FileParquet.png" />
+    <Resource Include="Resources\Images\FilePowershell.png" />
+    <Resource Include="Resources\Images\FilePython.png" />
+    <Resource Include="Resources\Images\FileSql.png" />
+    <Resource Include="Resources\Images\FileXml.png" />
+    <Resource Include="Resources\Images\FolderNode.png" />
+    <Resource Include="Resources\Images\Key.png" />
+    <Resource Include="Resources\Images\Project.png" />
+    <Resource Include="Resources\Images\ProjectDisabled.png" />
+    <Resource Include="Resources\Images\Script.png" />
+    <Resource Include="Resources\Images\ScriptDisabled.png" />
+    <Resource Include="Resources\Images\Search.png" />
+    <Resource Include="Resources\Images\Step.png" />
+    <Resource Include="Resources\Images\StepDisabled.png" />
+    <Resource Include="Resources\Images\Stop.png" />
+    <Resource Include="Resources\Images\Table.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <SplashScreen Include="Resources\SplashScreenImage.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+</Project>

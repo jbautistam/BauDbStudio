@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Bau.Libraries.DbStudio.ViewModels</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Configuration\**" />
+    <EmbeddedResource Remove="Configuration\**" />
+    <None Remove="Configuration\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Solutions\Explorers\Connections\TreeDetailsNodeViewModel.cs" />
+    <Compile Remove="Solutions\Explorers\Connections\TreeNodeViewModel.cs" />
+    <Compile Remove="Solutions\Explorers\Files\TreeDetailsNodeViewModel.cs" />
+    <Compile Remove="Solutions\Explorers\Files\TreeFoldersViewModel.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.ViewModels\BauMvvm.ViewModels.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Cloud\LibCloudStorage\src\LibCloudStorage\LibCloudStorage.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibLogger\src\LibLogger.Core\LibLogger.Core.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Formats\LibCsvFiles\LibCsvFiles.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Formats\LibParquetFiles\LibParquetFiles.csproj" />
+    <ProjectReference Include="..\..\JobEtlProcessor\LibJobProcessor.Cloud\LibJobProcessor.Cloud.csproj" />
+    <ProjectReference Include="..\..\JobEtlProcessor\LibJobProcessor.Database\LibJobProcessor.Database.csproj" />
+    <ProjectReference Include="..\..\JobEtlProcessor\LibJobProcessor.Manager\LibJobProcessor.Manager.csproj" />
+    <ProjectReference Include="..\DbStudio.Application\DbStudio.Application.csproj" />
+    <ProjectReference Include="..\DbStudio.Models\DbStudio.Models.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,67 @@
+﻿using System;
+using System.Collections.Generic;
+using Bau.Libraries.DbStudio.ViewModels.Solutions.Details;
+
+namespace Bau.Libraries.DbStudio.ViewModels.Controllers
+{
+	/// <summary>
+	///		Interface para los controladores de solución
+	/// </summary>
+	public interface ISparkSolutionController
+	{
+		/// <summary>
+		///		Controlador principal
+		/// </summary>
+		BauMvvm.ViewModels.Controllers.IHostController HostController { get; }
+
+		/// <summary>
+		///		Controlador de log
+		/// </summary>
+		LibLogger.Core.LogManager Logger { get; }
+
+		/// <summary>
+		///		Nombre de la aplicación
+		/// </summary>
+		string AppName { get; }
+
+		/// <summary>
+		///		Directorio de aplicación
+		/// </summary>
+		string AppPath { get; }
+
+		/// <summary>
+		///		Abre una ventana de detalles
+		/// </summary>
+		BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType OpenWindow(IDetailViewModel detailsViewModel);
+
+		/// <summary>
+		///		Abre un cuadro de diálogo
+		/// </summary>
+		BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType OpenDialog(BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewModel dialogViewModel);
+
+		/// <summary>
+		///		Abre el explorador sobre un directorio
+		/// </summary>
+		void OpenExplorer(string path);
+
+		/// <summary>
+		///		Obtiene la ventana de detalles activa
+		/// </summary>
+		IDetailViewModel GetActiveDetails();
+
+		/// <summary>
+		///		Obtiene la lista de ventanas de detalles abiertas
+		/// </summary>
+		List<IDetailViewModel> GetOpenedDetails();
+
+		/// <summary>
+		///		Indica a la ventana principal que cambie el Id de un documento
+		/// </summary>
+		void UpdateTabId(string oldTabId, string newTabId, string newHeader);
+
+		/// <summary>
+		///		Indica a la ventana principal que cierre un documento
+		/// </summary>
+		void CloseWindow(string tabId);
+	}
+}
