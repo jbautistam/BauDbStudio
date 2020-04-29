@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-using Bau.Libraries.LibHelper.Extensors;
-using
 using Bau.Libraries.LibJobProcessor.Core.Models;
 using Bau.Libraries.LibJobProcessor.Core.Models.Jobs;
 using Bau.Libraries.LibDataStructures.Collections;
@@ -113,19 +111,6 @@ namespace Bau.Libraries.LibJobProcessor.Powershell
 					result.Add(key, parameter.Value);
 				// Devuelve el diccionario de parámetros
 				return result;
-		}
-
-		/// <summary>
-		///		Obtiene el valor de un atributo en forma de cadena
-		/// </summary>
-		private string GetAttributeValue(LibDataStructures.Trees.TreeNodeModel node, string key)
-		{
-			object value = node.Attributes[key].Value;
-
-				if (value == null)
-					return string.Empty;
-				else
-					return value.ToString().Trim();
 		}
 
 		/// <summary>

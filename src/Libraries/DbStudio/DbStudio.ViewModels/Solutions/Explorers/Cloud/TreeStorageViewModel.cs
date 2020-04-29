@@ -18,6 +18,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Cloud
 			NewStorageCommand = new BaseCommand(_ => OpenStorage(null));
 			DeleteAsyncCommand = new BaseCommand(async _ => await DeleteItemAsync(), _ => SelectedNode != null)
 										.AddListener(this, nameof(SelectedNode));
+			UploadAsyncCommand = new BaseCommand(async _ => await UploadAsync(), _ => CanExecuteAction(nameof(UploadAsyncCommand)))
+										.AddListener(this, nameof(SelectedNode));
+			DownloadAsyncCommand = new BaseCommand(async _ => await DownloadAsync(), _ => CanExecuteAction(nameof(DownloadAsyncCommand)))
+										.AddListener(this, nameof(SelectedNode));
 		}
 
 		/// <summary>
@@ -43,6 +47,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Cloud
 						return type == BaseTreeNodeViewModel.NodeType.Storage;
 					case nameof(DeleteCommand):
 						return true;
+					case nameof(UploadAsyncCommand):
+					case nameof(DownloadAsyncCommand):
+						return type == BaseTreeNodeViewModel.NodeType.StorageContainer || type == BaseTreeNodeViewModel.NodeType.File;
 					default:
 						return false;
 				}
@@ -83,6 +90,28 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Cloud
 		protected override void DeleteItem()
 		{	
 			// ... no hace nada, en este caso va por DeleteItemAsync
+		}
+
+		/// <summary>
+		///		Sube archivos
+		/// </summary>
+		private async Task UploadAsync()
+		{
+		}
+
+		/// <summary>
+		///		Descarga archivos
+		/// </summary>
+		private async Task DownloadAsync()
+		{
+			if (SolutionViewModel.MainViewModel.MainController.HostController.DialogsController.OpenDialogSelectPath(SolutionViewModel.MainViewModel.LastPathSelected, out string path) 
+					== BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+			{
+				if (string.IsNullOrWhiteSpace(path) || !System.IO.Directory.Exists(path))
+					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Seleccione un directorio");
+				else
+					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage($"Descargar en el directorio {path}");
+			}
 		}
 
 		/// <summary>
@@ -205,5 +234,15 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Cloud
 		///		Comando para borrar un elemento (asíncrono)
 		/// </summary>
 		public BaseCommand DeleteAsyncCommand { get; }
+
+		/// <summary>
+		///		Comando para subir archivos (asíncrono)
+		/// </summary>
+		public BaseCommand UploadAsyncCommand { get; }
+
+		/// <summary>
+		///		Comando para descargar archivos (asíncrono)
+		/// </summary>
+		public BaseCommand DownloadAsyncCommand { get; }
 	}
 }

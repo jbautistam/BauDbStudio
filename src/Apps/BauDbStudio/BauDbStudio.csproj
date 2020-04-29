@@ -21,6 +21,7 @@
     <None Remove="Resources\Images\ArrowUp.png" />
     <None Remove="Resources\Images\Connection.png" />
     <None Remove="Resources\Images\Deployment.png" />
+    <None Remove="Resources\Images\Download.png" />
     <None Remove="Resources\Images\Field.png" />
     <None Remove="Resources\Images\File.png" />
     <None Remove="Resources\Images\FileCsharp.png" />
@@ -43,6 +44,7 @@
     <None Remove="Resources\Images\StepDisabled.png" />
     <None Remove="Resources\Images\Stop.png" />
     <None Remove="Resources\Images\Table.png" />
+    <None Remove="Resources\Images\Upload.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -65,6 +67,8 @@
     <Resource Include="Resources\Images\ArrowUp.png" />
     <Resource Include="Resources\Images\Connection.png" />
     <Resource Include="Resources\Images\DataError.png" />
+    <Resource Include="Resources\Images\Upload.png" />
+    <Resource Include="Resources\Images\Download.png" />
     <Resource Include="Resources\Images\Deployment.png" />
     <Resource Include="Resources\Images\Field.png" />
     <Resource Include="Resources\Images\File.png" />

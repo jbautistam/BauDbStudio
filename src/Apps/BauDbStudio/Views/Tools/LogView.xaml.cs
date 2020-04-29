@@ -3,7 +3,7 @@ using System.Windows.Controls;
 
 using Bau.Libraries.DbStudio.ViewModels.Tools;
 
-namespace Bau.DbStudio.Views.Log
+namespace Bau.DbStudio.Views.Tools
 {
 	/// <summary>
 	///		Vista para el log
@@ -24,9 +24,7 @@ namespace Bau.DbStudio.Views.Log
 		private void ListView_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
 		{
 			if ((sender as ListView)?.SelectedItem is LogListItemViewModel logItem)
-			{
 				logItem.ShowDetailsCommand.Execute(null);
-			}
 		}
 	}
 }

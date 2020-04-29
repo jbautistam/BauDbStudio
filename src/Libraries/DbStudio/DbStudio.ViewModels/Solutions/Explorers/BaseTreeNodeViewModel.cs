@@ -34,11 +34,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers
 			/// <summary>Conexión a storage</summary>
 			Storage,
 			/// <summary>Contenedor de storage</summary>
-			StorageContainer,
-			/// <summary>Carpeta / contenedor de storage</summary>
-			StorageFolder,
-			/// <summary>Archivo de storage</summary>
-			StorageFile
+			StorageContainer
 		}
 		/// <summary>
 		///		Tipo de icono

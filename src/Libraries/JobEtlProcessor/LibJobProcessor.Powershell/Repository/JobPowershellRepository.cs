@@ -19,9 +19,9 @@ namespace Bau.Libraries.LibJobProcessor.Powershell.Repository
 		private const string TagTimeout = "Timeout";
 		private const string TagFileName = "FileName";
 		private const string TagContent = "Content";
-		private const string TagMapping = "Mapping";
-		private const string TagSource = "Source";
-		private const string TagTarget = "Target";
+		private const string TagMap = "Map";
+		private const string TagFrom = "From";
+		private const string TagTo = "To";
 
 		/// <summary>
 		///		Carga los datos del proceso
@@ -76,9 +76,9 @@ namespace Bau.Libraries.LibJobProcessor.Powershell.Repository
 				sentence.Content = rootML.Attributes[TagContent].Value.TrimIgnoreNull();
 				// Carga los mapeos
 				foreach (MLNode nodeML in rootML.Nodes)
-					if (nodeML.Name == TagMapping)
-						sentence.Mappings.Add(rootML.Attributes[TagSource].Value.TrimIgnoreNull(),
-											  rootML.Attributes[TagTarget].Value.TrimIgnoreNull());
+					if (nodeML.Name == TagMap)
+						sentence.Mappings.Add(rootML.Attributes[TagFrom].Value.TrimIgnoreNull(),
+											  rootML.Attributes[TagTo].Value.TrimIgnoreNull());
 				// Devuelve la sentencia leida
 				return sentence;
 		}

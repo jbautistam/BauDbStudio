@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Threading.Tasks;
 
 using Bau.Libraries.BauMvvm.ViewModels;
 
@@ -111,7 +112,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 							// Graba el archivo
 							try
 							{
-								System.Threading.Tasks.Task.Run(() => SaveFile(block, fileName));
+								Task.Run(() => SaveFile(block, fileName));
 							}
 							catch (Exception exception)
 							{
