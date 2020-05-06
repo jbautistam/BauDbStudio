@@ -222,12 +222,17 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 						// Ejecuta la exportación
 						SolutionViewModel.MainViewModel.Manager.ExportToDataBricks(deployment);
 						// Mensaje
-						SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Fin de la copia de archivos");
+						SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
+																														"Distribución", "Fin de la copia de archivos",
+																														TimeSpan.FromSeconds(10));
 					}
 					catch (Exception exception)
 					{
 						SolutionViewModel.MainViewModel.Manager.Logger.Default.LogItems.Error($"Error al copiar los archivos: {exception.Message}");
-						SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage($"Error en la copia de archivos {exception.Message}");
+						SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Error,
+																														"Distribución", 
+																														$"Error en la copia de archivos. {exception.Message}",
+																														TimeSpan.FromSeconds(10));
 					}
 					// Limpia el log
 					SolutionViewModel.MainViewModel.Manager.Logger.Flush();

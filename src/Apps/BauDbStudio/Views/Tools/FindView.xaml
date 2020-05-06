@@ -7,7 +7,9 @@
         mc:Ignorable="d"
         Title="Buscar y reemplazar" WindowStartupLocation="CenterOwner"
         Width="500" Height="200" ResizeMode="NoResize" Closed="Window_Closed"
-        WindowStyle="ToolWindow" ShowInTaskbar="False">
+        WindowStyle="ToolWindow" ShowInTaskbar="False"
+		xmlns:Behaviors="clr-namespace:Bau.DbStudio.Converters"
+		Behaviors:FocusBehavior.FocusFirst="true">
 	<Grid Margin="0,4">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />

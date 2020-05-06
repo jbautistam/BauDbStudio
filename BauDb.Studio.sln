@@ -103,7 +103,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "System", "System", "{477615
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibJobProcessor.Powershell", "src\Libraries\JobEtlProcessor\LibJobProcessor.Powershell\LibJobProcessor.Powershell.csproj", "{36C26A78-6CAE-40B2-AE1F-33F52E7CB47A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibPowershell", "..\..\Libraries\Common\LibPowerShell\src\LibPowershell\LibPowershell.csproj", "{1272396E-B567-413C-AC29-9BA7ACA4BA73}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BauMvvm.Views.Wpf", "..\..\Libraries\Architecture\Mvvm\src\BauMvvm.Views.Wpf\BauMvvm.Views.Wpf.csproj", "{A6265CD2-5A09-4151-A292-782946FA4E4D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibPowerShellManager", "..\..\Libraries\Common\LibPowerShell\LibPowerShellManager\LibPowerShellManager.csproj", "{6A591578-FE7A-48C5-8C3D-56876CA2BB85}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -263,10 +265,14 @@ Global
 		{36C26A78-6CAE-40B2-AE1F-33F52E7CB47A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36C26A78-6CAE-40B2-AE1F-33F52E7CB47A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36C26A78-6CAE-40B2-AE1F-33F52E7CB47A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1272396E-B567-413C-AC29-9BA7ACA4BA73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1272396E-B567-413C-AC29-9BA7ACA4BA73}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1272396E-B567-413C-AC29-9BA7ACA4BA73}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1272396E-B567-413C-AC29-9BA7ACA4BA73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6265CD2-5A09-4151-A292-782946FA4E4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6265CD2-5A09-4151-A292-782946FA4E4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6265CD2-5A09-4151-A292-782946FA4E4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6265CD2-5A09-4151-A292-782946FA4E4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A591578-FE7A-48C5-8C3D-56876CA2BB85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A591578-FE7A-48C5-8C3D-56876CA2BB85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A591578-FE7A-48C5-8C3D-56876CA2BB85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A591578-FE7A-48C5-8C3D-56876CA2BB85}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -318,7 +324,8 @@ Global
 		{5FEA8A35-DE6B-4EA4-9DDC-20974FADBACD} = {88C69E53-CB47-4E32-8D42-D6FB3208C008}
 		{477615CB-82F6-4B13-9F1F-DE664A78888B} = {A11B5607-E4D6-4254-97F7-1BE636C5C2C0}
 		{36C26A78-6CAE-40B2-AE1F-33F52E7CB47A} = {88C69E53-CB47-4E32-8D42-D6FB3208C008}
-		{1272396E-B567-413C-AC29-9BA7ACA4BA73} = {477615CB-82F6-4B13-9F1F-DE664A78888B}
+		{A6265CD2-5A09-4151-A292-782946FA4E4D} = {2E460AEC-0DD6-46AC-A4B0-74823FF4856D}
+		{6A591578-FE7A-48C5-8C3D-56876CA2BB85} = {477615CB-82F6-4B13-9F1F-DE664A78888B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A8389148-0008-4F6C-ADF4-15B8FEC0277F}

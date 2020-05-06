@@ -55,6 +55,7 @@
     <ProjectReference Include="..\..\..\..\..\Controls\WPF\BauControls\src\BauControls.csproj" />
     <ProjectReference Include="..\..\..\..\..\Controls\WPF\CodeEditor\src\CodeEditor.csproj" />
     <ProjectReference Include="..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.ViewModels\BauMvvm.ViewModels.csproj" />
+    <ProjectReference Include="..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.Views.Wpf\BauMvvm.Views.Wpf.csproj" />
     <ProjectReference Include="..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.Views\BauMvvm.Views.csproj" />
     <ProjectReference Include="..\..\..\..\..\Libraries\Common\LibSystem.Windows\src\LibSystem.Windows.csproj" />
     <ProjectReference Include="..\..\Libraries\DbStudio\DbStudio.ViewModels\DbStudio.ViewModels.csproj" />

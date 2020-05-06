@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
-using Bau.Libraries.BauMvvm.Views.Forms.Trees;
+using Bau.Libraries.BauMvvm.Views.Wpf.Forms.Trees;
 using Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers;
 using Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files;
 

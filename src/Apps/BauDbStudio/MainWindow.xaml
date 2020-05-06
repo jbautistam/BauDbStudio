@@ -9,7 +9,7 @@
 		xmlns:avalonDock="http://schemas.xceed.com/wpf/xaml/avalondock"
 		xmlns:avalonDockExtended="clr-namespace:Bau.DbStudio.Controls"
         mc:Ignorable="d"
-        Title="{Binding Path=Text}" Height="450" Width="800" Loaded="Window_Loaded" Unloaded="Window_Unloaded" WindowStartupLocation="CenterScreen" WindowState="Maximized">
+        Title="{Binding Path=Text}" Height="450" Width="800" Loaded="Window_Loaded" Unloaded="Window_Unloaded" WindowStartupLocation="CenterScreen" WindowState="Maximized" Closing="Window_Closing">
 	<Window.CommandBindings>
 		<CommandBinding Command="Save" Executed="SaveCommandBinding_Executed" CanExecute="SaveCommandBinding_CanExecute"/>
 		<CommandBinding Command="Search" Executed="SearchCommandBinding_Executed"/>

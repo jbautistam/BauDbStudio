@@ -56,27 +56,27 @@ namespace Bau.Libraries.LibJobProcessor.Powershell.Manager
 		private async Task ProcessScriptAsync(BlockLogModel parent, ExecuteScriptSentence sentence, NormalizedDictionary<object> parameters, 
 											  CancellationToken cancellationToken)
 		{
+			// Evita el warning
+			await Task.Delay(1000);
+			// Ejecuta la sentencia
 			using (BlockLogModel block = parent.CreateBlock(LogModel.LogType.Info, $"Start execute script"))
 			{
-				string fileName = Step.Project.GetFullFileName(sentence.FileName);
+				try
+				{
+					PowerShellController controller = new PowerShellController(this, Step);
 
-					if (!System.IO.File.Exists(fileName))
-						AddError(block, $"Can't find the file '{fileName}'");
-					else
-						try
-						{
-							// Sube el archivo
-							//using (ICloudStorageManager manager = new StorageManager().OpenAzureStorageBlob(connection.StorageConnectionString))
-							//{
-							//	await manager.UploadAsync(sentence.Target.Container, sentence.Target.Blob, fileName);
-							//}
-							// Log
-							block.Info($"Executed the script");
-						}
-						catch (Exception exception)
-						{
-							AddError(block, "Error when execute script sentence", exception);
-						}
+						// Ejecuta el script
+						controller.Execute(block, sentence, parameters);
+						// Muestra los errores
+						if (controller.Errors.Count > 0)
+							AddErrors(block, controller.Errors);
+						else
+							block.Info("End script execution");
+				}
+				catch (Exception exception)
+				{
+					AddError(block, $"Error when execute script Powershell. {exception.Message}");
+				}
 			}
 		}
 
@@ -87,6 +87,18 @@ namespace Bau.Libraries.LibJobProcessor.Powershell.Manager
 		{
 			block.Error(message, exception);
 			Errors.Add(message + Environment.NewLine + exception?.Message);
+		}
+
+		/// <summary>
+		///		Añade una serie de errores a la colección
+		/// </summary>
+		private void AddErrors(BlockLogModel block, List<string> errors)
+		{
+			foreach (string error in errors)
+			{
+				block.Error(error);
+				Errors.Add(error);
+			}
 		}
 
 		/// <summary>

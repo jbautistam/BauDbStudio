@@ -37,5 +37,10 @@ namespace Bau.Libraries.LibJobProcessor.Powershell.Models
 		///		Mapeos
 		/// </summary>
 		internal NormalizedDictionary<string> Mappings { get; } = new NormalizedDictionary<string>();
+
+		/// <summary>
+		///		Mapeos de directorios sobre parámetros
+		/// </summary>
+		internal NormalizedDictionary<string> Paths { get; } = new NormalizedDictionary<string>();
 	}
 }

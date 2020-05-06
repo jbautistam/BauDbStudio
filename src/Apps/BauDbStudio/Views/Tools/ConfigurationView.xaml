@@ -7,7 +7,9 @@
 		x:Class="Bau.DbStudio.Views.Tools.ConfigurationView"
 		xmlns:xceed="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="Configuración" Height="350" Width="800" ResizeMode="NoResize" ShowInTaskbar="False">
+        Title="Configuración" Height="350" Width="800" ResizeMode="NoResize" ShowInTaskbar="False"
+		xmlns:Behaviors="clr-namespace:Bau.DbStudio.Converters"
+		Behaviors:FocusBehavior.FocusFirst="true">
 	<Window.Resources>
 		<CollectionViewSource Source="{Binding Source={x:Static Fonts.SystemFontFamilies}}" x:Key="myFonts"/>
 	</Window.Resources>

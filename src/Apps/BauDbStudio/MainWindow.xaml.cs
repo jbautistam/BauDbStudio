@@ -328,7 +328,7 @@ namespace Bau.DbStudio
 				// Asigna las propiedades
 				mnuNewItem.Header = text;
 				if (!string.IsNullOrWhiteSpace(icon))
-					mnuNewItem.Icon = new Libraries.BauMvvm.Views.Tools.ToolsWpf().GetImage(icon);
+					mnuNewItem.Icon = new Libraries.BauMvvm.Views.Wpf.Tools.ToolsWpf().GetImage(icon);
 				mnuNewItem.Tag = tag;
 				mnuNewItem.IsCheckable = isCheckable;
 				// Añade el comando
@@ -344,6 +344,26 @@ namespace Bau.DbStudio
 		{
 			for (int index = indexEnd - 1; index > startIndex; index--)
 				mnuParent.Items.RemoveAt(index);
+		}
+
+		/// <summary>
+		///		Comprueba si hay algún elemento sin guardar
+		/// </summary>
+		private bool CanExitApp()
+		{
+			List<object> views = dckManager.GetOpenedViews();
+
+				// Comprueba si alguna de las vistas tiene modificaciones pendientes
+				foreach (object view in views)
+					if (view is IDetailViewModel viewModel && viewModel.IsUpdated)
+					{
+						// Mensaje para el usuario
+						ViewModel.MainController.HostController.SystemController.ShowMessage("Grabe las últimas modificaciones antes de cerrar la aplicación");
+						// Indica que no puede salir de la aplicación
+						return false;
+					}
+				// Si ha llegado hasta aquí, se puede cerrar
+				return true;
 		}
 
 		/// <summary>
@@ -448,6 +468,11 @@ namespace Bau.DbStudio
 		private void NewQueryCommandBinding_CanExecute(object sender, System.Windows.Input.CanExecuteRoutedEventArgs e)
 		{
 			e.CanExecute = ViewModel.SolutionViewModel.TreeConnectionsViewModel.NewQueryCommand.CanExecute(null);
+		}
+
+		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+			e.Cancel = !CanExitApp();
 		}
 	}
 }

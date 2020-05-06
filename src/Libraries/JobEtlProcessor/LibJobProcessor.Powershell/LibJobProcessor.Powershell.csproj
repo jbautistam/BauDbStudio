@@ -10,6 +10,7 @@
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibHelper\src\LibHelper.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibLogger\src\LibLogger.Core\LibLogger.Core.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibMarkup\src\LibMarkup.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibPowerShell\LibPowerShellManager\LibPowerShellManager.csproj" />
     <ProjectReference Include="..\LibJobProcessor.Core\LibJobProcessor.Core.csproj" />
   </ItemGroup>
 

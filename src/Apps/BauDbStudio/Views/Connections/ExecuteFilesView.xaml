@@ -7,7 +7,9 @@
 			 xmlns:CodeEditor="clr-namespace:Bau.Controls.CodeEditor;assembly=CodeEditor"
 			 xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
 			 x:Class="Bau.DbStudio.Views.Connections.ExecuteFilesView"
-             mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
+             mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800"
+		xmlns:Behaviors="clr-namespace:Bau.DbStudio.Converters"
+		Behaviors:FocusBehavior.FocusFirst="true">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*"/>

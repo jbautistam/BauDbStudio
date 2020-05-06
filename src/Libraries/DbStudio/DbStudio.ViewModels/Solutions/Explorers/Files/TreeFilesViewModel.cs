@@ -162,8 +162,13 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 							// Crea el archivo, abre el documento y actualiza el árbol
 							if (!string.IsNullOrWhiteSpace(fileName))
 							{
-								LibHelper.Files.HelperFiles.SaveTextFile(System.IO.Path.Combine(path, fileName), string.Empty, System.Text.Encoding.UTF8);
+								// Obtiene el nombre completo
+								fileName = System.IO.Path.Combine(path, fileName);
+								// Graba el archivo
+								LibHelper.Files.HelperFiles.SaveTextFile(fileName, string.Empty, System.Text.Encoding.UTF8);
+								// Abre la ventana
 								SolutionViewModel.MainViewModel.MainController.OpenWindow(new Details.Files.FileViewModel(SolutionViewModel, fileName));
+								// Actualiza el árbol
 								Load();
 							}
 						}

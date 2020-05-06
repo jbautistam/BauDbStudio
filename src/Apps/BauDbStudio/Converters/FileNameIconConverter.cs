@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Windows.Data;
 
-using Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers;
-
 namespace Bau.DbStudio.Converters
 {
 	/// <summary>

@@ -22,6 +22,9 @@ namespace Bau.Libraries.LibJobProcessor.Powershell.Repository
 		private const string TagMap = "Map";
 		private const string TagFrom = "From";
 		private const string TagTo = "To";
+		private const string TagPath = "Path";
+		private const string TagParameterName = "ParameterName";
+		private const string TagValue = "Value";
 
 		/// <summary>
 		///		Carga los datos del proceso
@@ -77,8 +80,13 @@ namespace Bau.Libraries.LibJobProcessor.Powershell.Repository
 				// Carga los mapeos
 				foreach (MLNode nodeML in rootML.Nodes)
 					if (nodeML.Name == TagMap)
-						sentence.Mappings.Add(rootML.Attributes[TagFrom].Value.TrimIgnoreNull(),
-											  rootML.Attributes[TagTo].Value.TrimIgnoreNull());
+						sentence.Mappings.Add(nodeML.Attributes[TagFrom].Value.TrimIgnoreNull(),
+											  nodeML.Attributes[TagTo].Value.TrimIgnoreNull());
+				// Carga los directorios
+				foreach (MLNode nodeML in rootML.Nodes)
+					if (nodeML.Name == TagPath)
+						sentence.Paths.Add(nodeML.Attributes[TagParameterName].Value.TrimIgnoreNull(),
+										   nodeML.Attributes[TagValue].Value.TrimIgnoreNull());
 				// Devuelve la sentencia leida
 				return sentence;
 		}

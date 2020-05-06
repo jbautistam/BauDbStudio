@@ -26,7 +26,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Databricks
 		{
 			using (BlockLogModel block = Manager.Logger.Default.CreateBlock(LogModel.LogType.Debug, "Comienzo de la copia de directorios"))
 			{
-				(NormalizedDictionary<object> parameters, string error) = GetParameters(deployment.JsonParameters);
+				(NormalizedDictionary<object> constants, string error) = GetParameters(deployment.JsonParameters);
 
 					if (!string.IsNullOrWhiteSpace(error))
 						block.Error(error);
@@ -35,7 +35,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Databricks
 						// Elimina el directorio destino
 						HelperFiles.KillPath(deployment.TargetPath);
 						// Copia los directorios
-						CopyPath(block, deployment.SourcePath, deployment.TargetPath, parameters);
+						CopyPath(block, deployment.SourcePath, deployment.TargetPath, constants);
 						// Borra los directorios vacíos
 						HelperFiles.KillEmptyPaths(deployment.TargetPath);
 						// Log
@@ -45,7 +45,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Databricks
 		}
 
 		/// <summary>
-		///		Obtiene los parámetros de un archivo
+		///		Obtiene los parámetros de una cadena Json
 		/// </summary>
 		private (NormalizedDictionary<object> parameters, string error) GetParameters(string jsonParameters)
 		{
@@ -76,21 +76,21 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Databricks
 		/// <summary>
 		///		Copia los archivos de un directorio
 		/// </summary>
-		private void CopyPath(BlockLogModel block, string sourcePath, string targetPath, NormalizedDictionary<object> parameters)
+		private void CopyPath(BlockLogModel block, string sourcePath, string targetPath, NormalizedDictionary<object> constants)
 		{
 			// Log
 			block.Debug($"Copiando '{sourcePath}' a '{targetPath}'");
 			// Copia los archivos
-			CopyFiles(sourcePath, targetPath, parameters);
+			CopyFiles(sourcePath, targetPath, constants);
 			// Copia recursivamente los directorios
 			foreach (string path in System.IO.Directory.EnumerateDirectories(sourcePath))
-				CopyPath(block, path, System.IO.Path.Combine(targetPath, System.IO.Path.GetFileName(path)), parameters);
+				CopyPath(block, path, System.IO.Path.Combine(targetPath, System.IO.Path.GetFileName(path)), constants);
 		}
 
 		/// <summary>
 		///		Copia los archivos
 		/// </summary>
-		private void CopyFiles(string sourcePath, string targetPath, NormalizedDictionary<object> parameters)
+		private void CopyFiles(string sourcePath, string targetPath, NormalizedDictionary<object> constants)
 		{
 			// Crea el directorio 
 			//? Sí, está dos veces, no sé porqué si se ejecuta dos veces consecutivas este método, la segunda vez no crea el directorio a menos que
@@ -107,7 +107,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Databricks
 						if (file.EndsWith(".py", StringComparison.CurrentCultureIgnoreCase))
 							SaveFileWithoutBom(targetFile, HelperFiles.LoadTextFile(file));
 						else if (file.EndsWith(".sql", StringComparison.CurrentCultureIgnoreCase))
-							SaveFileWithoutBom(targetFile, TransformSql(file, parameters));
+							SaveFileWithoutBom(targetFile, TransformSql(file, constants));
 				}
 		}
 
@@ -136,11 +136,11 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Databricks
 		/// <summary>
 		///		Transforma la SQL para un notebook
 		/// </summary>
-		private string TransformSql(string sourceFile, NormalizedDictionary<object> parameters)
+		private string TransformSql(string sourceFile, NormalizedDictionary<object> constants)
 		{
 			System.Text.StringBuilder sbResult = new System.Text.StringBuilder();
-			string content = NormalizeNotebookContent(sourceFile, parameters);
-			List<SqlSectionModel> scriptSqlParts = new SqlParser().Tokenize(content, parameters.ToDictionary(), out string error);
+			string content = NormalizeNotebookContent(sourceFile, constants);
+			List<SqlSectionModel> scriptSqlParts = new SqlParser().Tokenize(content, constants.ToDictionary(), out string error);
 
 				if (!string.IsNullOrWhiteSpace(error))
 					throw new Exception(error);
@@ -203,14 +203,14 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Databricks
 		/// <summary>
 		///		Obtiene el contenido normalizado de un notebook
 		/// </summary>
-		private string NormalizeNotebookContent(string fileName, NormalizedDictionary<object> parameters)
+		private string NormalizeNotebookContent(string fileName, NormalizedDictionary<object> constants)
 		{
 			string content = HelperFiles.LoadTextFile(fileName);
 
 				// Reemplaza las constantes
-				content = ReplaceConstants(content, parameters);
+				content = ReplaceConstants(content, constants);
 				// Sustituye los argumentos de tipo $Xxxx por getArgument("xxxx")
-				content = ConvertArgumentsToGetArgument(content, "$");
+				content = ConvertArgumentsToGetArgument(content, "$", constants);
 				// Pasa los nombres de archivo a minúsculas
 				content = ConvertFileNameToLower(content);
 				// Devuelve la cadena normalizada
@@ -220,10 +220,10 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Databricks
 		/// <summary>
 		///		Reemplaza las constantes
 		/// </summary>
-		private string ReplaceConstants(string content, NormalizedDictionary<object> parameters)
+		private string ReplaceConstants(string content, NormalizedDictionary<object> constants)
 		{
 			// Reemplaza las constantes
-			foreach ((string key, object value) in parameters.Enumerate())
+			foreach ((string key, object value) in constants.Enumerate())
 			{
 				string parameter = (value ?? "").ToString();
 
@@ -249,7 +249,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Databricks
 		/// <summary>
 		///		Pasa los argumentos $xxxx de la cadena SQL a la función getArgument("xxxx")
 		/// </summary>
-		private string ConvertArgumentsToGetArgument(string value, string parameterPrefix)
+		private string ConvertArgumentsToGetArgument(string value, string parameterPrefix, NormalizedDictionary<object> constants)
 		{
 			System.Text.RegularExpressions.Match match = System.Text.RegularExpressions.Regex.Match(value, "\\" + parameterPrefix + "\\w*",
 																									System.Text.RegularExpressions.RegexOptions.IgnoreCase,
@@ -260,13 +260,16 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Databricks
 				// Mientras haya una coincidencia
 				while (match.Success)
 				{
-					(string argument, string additional) = NormalizeArgument(value.Substring(match.Index + 1, match.Length).ToLower().TrimIgnoreNull());
+					(string argument, string additional) = NormalizeArgument(value.Substring(match.Index + 1, match.Length).ToLower());
 
 						// Añade la parte anterior a la cadena de salida y cambia el índice de último elemento encontrado
 						output += value.Substring(lastIndex, match.Index - lastIndex);
 						lastIndex = match.Index + match.Length + 1;
-						// Añade el valor del parámetro a la cadena de salida
-						output += " getArgument(\"" + argument + "\") " + additional;
+						// Añade el valor del parámetro a la cadena de salida (siempre que no sea una constante que hay que dejarla igual)
+						if (!constants.ContainsKey(argument))
+							output += " getArgument(\"" + argument + "\") " + additional;
+						else
+							output += $"${argument.ToLower()}" + additional;
 						// Pasa a la siguiente coincidencia
 						match = match.NextMatch();
 				}
@@ -278,7 +281,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Databricks
 		}
 
 		/// <summary>
-		///	Quita del final del argumento todo lo que no sean caracteres alfabéticos / numéricos, por ejemplo las comas
+		///		Quita del final del argumento todo lo que no sean caracteres alfabéticos / numéricos, por ejemplo las comas
 		///	puede que el argumento esté en una cadena del tipo: CONCAT($dateWeek,7), en ese caso, la variable argument contiene
 		/// '$dateWeek,' y hay que dejarlo como argument = '$dateweek' y additional = ',7'
 		/// </summary>

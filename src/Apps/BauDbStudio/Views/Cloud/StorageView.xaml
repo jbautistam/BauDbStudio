@@ -7,7 +7,9 @@
 		x:Class="Bau.DbStudio.Views.Cloud.StorageView"
 		xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="Datos de almacenamiento" Height="450" Width="800" ResizeMode="NoResize" ShowInTaskbar="False">
+        Title="Datos de almacenamiento" Height="450" Width="800" ResizeMode="NoResize" ShowInTaskbar="False"
+		xmlns:Behaviors="clr-namespace:Bau.DbStudio.Converters"
+		Behaviors:FocusBehavior.FocusFirst="true">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*"/>
