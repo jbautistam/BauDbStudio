@@ -30,6 +30,9 @@ namespace Bau.Libraries.LibJobProcessor.Cloud.Repository
 		private const string TagMove = "Move";
 		private const string TagFrom = "From";
 		private const string TagTo = "To";
+		private const string TagDownloadPath = "DownloadPath";
+		private const string TagPath = "Path";
+		private const string TagStoragePath = "StoragePath";
 
 		/// <summary>
 		///		Carga los datos del proceso
@@ -71,6 +74,9 @@ namespace Bau.Libraries.LibJobProcessor.Cloud.Repository
 							break;
 						case TagDownloadBlob:
 								sentences.Add(LoadDownloadBlobSentence(nodeML));
+							break;
+						case TagDownloadPath:
+								sentences.Add(LoadDownloadPathSentence(nodeML));
 							break;
 						case TagCopy:
 								sentences.Add(LoadCopyBlobSentence(nodeML, false));
@@ -167,6 +173,23 @@ namespace Bau.Libraries.LibJobProcessor.Cloud.Repository
 				sentence.Source.Container = rootML.Attributes[TagBlobContainer].Value;
 				sentence.Source.Blob = rootML.Attributes[TagBlobFile].Value;
 				sentence.FileName = rootML.Attributes[TagFileName].Value;
+				// Devuelve la sentencia
+				return sentence;
+		}
+
+		/// <summary>
+		///		Carga la sentencia para descargar un directorio del storage
+		/// </summary>
+		private BaseSentence LoadDownloadPathSentence(MLNode rootML)
+		{
+			DownloadBlobFolderSentence sentence = new DownloadBlobFolderSentence();
+
+				// Carga los datos de la sentencia
+				AssignBlobSentences(sentence, rootML);
+				sentence.StorageKey = rootML.Attributes[TagSource].Value;
+				sentence.Source.Container = rootML.Attributes[TagBlobContainer].Value;
+				sentence.Source.Blob = rootML.Attributes[TagStoragePath].Value;
+				sentence.Path = rootML.Attributes[TagPath].Value;
 				// Devuelve la sentencia
 				return sentence;
 		}

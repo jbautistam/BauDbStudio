@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Bau.Libraries.LibDataStructures.Collections;
-using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.LibJobProcessor.Core.Interfaces;
 using Bau.Libraries.LibJobProcessor.Core.Models;
 using Bau.Libraries.LibJobProcessor.Core.Models.Jobs;
@@ -96,6 +95,10 @@ namespace Bau.Libraries.LibJobProcessor.Manager
 					Errors.Add(error);
 				}
 				else
+				{
+					// Asigna la fecha de inicio de proceso del proyecto
+					project.StartExecution = DateTime.Now;
+					// Ejecuta los pasos
 					foreach (JobStepModel job in project.Jobs)
 						if (cancellationToken.IsCancellationRequested)
 							block.Debug($"The job '{job.Name}' is not processed because user canceled the execution");
@@ -105,6 +108,7 @@ namespace Bau.Libraries.LibJobProcessor.Manager
 							block.Debug($"The job '{job.Name}' is not processed because there is a previous error");
 						else
 							await ExecuteJobAsync(project, job, cancellationToken);
+				}
 			}
 			// Devuelve el valor que indica si se ha procesado correctamente
 			return !HasError;

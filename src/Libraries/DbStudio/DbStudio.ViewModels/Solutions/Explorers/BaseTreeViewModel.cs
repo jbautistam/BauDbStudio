@@ -24,7 +24,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers
 			Children = new ObservableCollection<IHierarchicalViewModel>();
 			ContextUI = SynchronizationContext.Current;
 			// Asigna los comandos
-			OpenPropertiesCommand = new BaseCommand(parameter => OpenProperties(), parameter => CanExecuteAction(nameof(OpenPropertiesCommand)))
+			OpenCommand = new BaseCommand(parameter => OpenProperties(), parameter => CanExecuteAction(nameof(OpenCommand)))
 										.AddListener(this, nameof(SelectedNode));
 			DeleteCommand = new BaseCommand(parameter => DeleteItem(), parameter => CanExecuteAction(nameof(DeleteCommand)))
 										.AddListener(this, nameof(SelectedNode));
@@ -168,7 +168,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers
 		/// <summary>
 		///		Comando para abrir la ventana de propiedades
 		/// </summary>
-		public BaseCommand OpenPropertiesCommand { get; }
+		public BaseCommand OpenCommand { get; }
 
 		/// <summary>
 		///		Comando para borrar un nodo

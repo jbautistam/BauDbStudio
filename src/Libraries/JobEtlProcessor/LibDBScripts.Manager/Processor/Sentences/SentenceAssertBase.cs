@@ -15,6 +15,11 @@ namespace Bau.Libraries.LibDbScripts.Manager.Processor.Sentences
 		internal string Target { get; set; }
 
 		/// <summary>
+		///		Mensaje que acompaña al resultado de la comparación
+		/// </summary>
+		internal string Message { get; set; }
+
+		/// <summary>
 		///		Comando a ejecutar
 		/// </summary>
 		internal Parameters.ProviderSentenceModel Command { get; set; }

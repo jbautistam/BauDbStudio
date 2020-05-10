@@ -25,7 +25,7 @@ namespace Bau.Libraries.LibDbScripts.Manager.Builder
 		{
 			SentenceBlock block = new SentenceBlock
 											{
-												Name = message
+												Message = message
 											};
 
 				// Añade el bloque a las sentencias

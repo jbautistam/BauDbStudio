@@ -50,6 +50,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files.ScriptsManag
 				// Añade los procesadores
 				manager.AddProcessor(new LibJobProcessor.Cloud.JobCloudManager(Logger));
 				manager.AddProcessor(new LibJobProcessor.Database.JobDatabaseManager(Logger));
+				manager.AddProcessor(new LibJobProcessor.Powershell.JobPowershellManager(Logger));
+				manager.AddProcessor(new LibJobProcessor.FilesShell.JobFileShellManager(Logger));
 				// Ejecuta el proyecto
 				await manager.ProcessAsync(project, context, cancellationToken);
 				// Asigna los errores
@@ -57,9 +59,14 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files.ScriptsManag
 					block.Info("La ejecución del proyecto ha terminado correctamente");
 				else
 				{
-					block.Error("Error en la ejecución del proyecto");
-					foreach (string error in manager.Errors)
-						block.Error(error);
+					string errorTotal = "Error en la ejecución del proyecto";
+
+						// Añade los errores
+						foreach (string error in manager.Errors)
+							if (!string.IsNullOrWhiteSpace(error))
+								errorTotal += Environment.NewLine + error.Trim();
+						// Lanza el mensaje de error
+						block.Error(errorTotal);
 				}
 		}
 

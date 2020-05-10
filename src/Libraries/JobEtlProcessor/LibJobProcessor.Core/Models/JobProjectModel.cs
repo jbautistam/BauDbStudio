@@ -84,6 +84,13 @@ namespace Bau.Libraries.LibJobProcessor.Core.Models
 				// Sustituye los directorios "Fijos"
 				fullFileName = fullFileName.ReplaceWithStringComparison("{{ProjectWorkPath}}", ProjectWorkPath);
 				fullFileName = fullFileName.ReplaceWithStringComparison("{{ContextWorkPath}}", ContextWorkPath);
+				// Sustituye los directorios "especiales"
+				fullFileName = fullFileName.ReplaceWithStringComparison("{{Date}}", $"{StartExecution:yyyy-MM-dd}");
+				fullFileName = fullFileName.ReplaceWithStringComparison("{{Time}}", $"{StartExecution:HH_mm_ss}");
+				fullFileName = fullFileName.ReplaceWithStringComparison("{{DateTime}}", $"{StartExecution:yyyy-MM-dd HH_mm_ss}");
+				// Reemplaza los caracteres / por \ y quita los duplicados
+				fullFileName = fullFileName.Replace('/', '\\');
+				fullFileName = fullFileName.Replace("\\\\", "\\");
 				// Devuelve el nombre de archivo
 				return fullFileName;
 		}
@@ -97,6 +104,11 @@ namespace Bau.Libraries.LibJobProcessor.Core.Models
 		///		Directorio de trabajo del contexto
 		/// </summary>
 		public string ContextWorkPath { get; set; }
+
+		/// <summary>
+		///		Fecha de inicio de la ejecución
+		/// </summary>
+		public DateTime StartExecution { get; set; } = DateTime.Now;
 
 		/// <summary>
 		///		Contexto de los diferentes tipos de procesadores

@@ -55,6 +55,8 @@ namespace Bau.DbStudio.Views.Files
 					ViewModel.IsUpdated = false;
 					IsLoadedViewModel = true;
 				}
+				// Selecciona el editor (el behaviour no funciona con esta ventana)
+				udtEditor.Focus();
 			}
 		}
 

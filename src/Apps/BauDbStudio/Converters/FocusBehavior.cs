@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -30,10 +31,17 @@ namespace Bau.DbStudio.Converters
 
         static void OnFocusFirstPropertyChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
         {
-            Control control = obj as Control;
+            try
+            {
+                Control control = obj as Control;
 
-				if (control != null && ((args.NewValue as bool?) ?? false))
-					control.Loaded += (sender, e) => control.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+				    if (control != null && ((args.NewValue as bool?) ?? false))
+                        control.Loaded += (sender, e) => control.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+            }
+            catch (Exception exception)
+            {
+                System.Diagnostics.Debug.WriteLine(exception.Message);
+            }
         }
     }
 }

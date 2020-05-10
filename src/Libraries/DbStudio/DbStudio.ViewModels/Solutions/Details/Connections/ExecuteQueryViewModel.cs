@@ -14,6 +14,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 	/// </summary>
 	public class ExecuteQueryViewModel : BaseObservableObject, IDetailViewModel
 	{
+		// Eventos públicos
+		public event EventHandler<Controllers.EventArguments.EditorSelectedTextRequiredEventArgs> SelectedTextRequired;
 		// Variables privadas
 		private string _header, _fileName, _query, _lastQuery, _executionTime;
 		private DataTable _dataResults;
@@ -64,54 +66,72 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 		/// </summary>
 		private async Task ExecuteQueryAsync()
 		{
-			if (string.IsNullOrWhiteSpace(Query))
-				SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Introduzca una consulta para ejecutar");
-			else
-			{
-				ConnectionModel connection = ComboConnections.GetSelectedConnection();
+			string querySelected = GetEditorSelectedText();
 
-					if (connection == null)
-						SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Seleccione una conexión");
-					else
-					{
-						(Application.Connections.Models.ArgumentListModel arguments, string error) = SolutionViewModel.ConnectionExecutionViewModel.GetParameters();
+				if (string.IsNullOrWhiteSpace(querySelected))
+					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Introduzca una consulta para ejecutar");
+				else
+				{
+					ConnectionModel connection = ComboConnections.GetSelectedConnection();
 
-							if (!string.IsNullOrWhiteSpace(error))
-								SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage(error);
-							else
-							{
-								// Limpia los datos
-								DataResults = null;
-								// Arranca la consulta
-								StartQuery();
-								// Ejecuta la consulta
-								try
+						if (connection == null)
+							SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Seleccione una conexión");
+						else
+						{
+							(Application.Connections.Models.ArgumentListModel arguments, string error) = SolutionViewModel.ConnectionExecutionViewModel.GetParameters();
+
+								if (!string.IsNullOrWhiteSpace(error))
+									SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage(error);
+								else
 								{
-									// Actualiza la página actual si es una consulta nueva
-									if (string.IsNullOrWhiteSpace(_lastQuery) || !Query.Equals(_lastQuery, StringComparison.CurrentCultureIgnoreCase))
-										ActualPage = 1;
-									// Carga la consulta
-									if (PaginateQuery)
-										DataResults = await SolutionViewModel.MainViewModel.Manager.GetDatatableQueryAsync(connection, Query, arguments, 
-																														   ActualPage, PageSize, 
-																														   connection.timeoutExecuteScript, 
-																														   _cancellationToken);
-									else
-										DataResults = await SolutionViewModel.MainViewModel.Manager.GetDatatableQueryAsync(connection, Query, arguments, 0, 0,
-																														   connection.timeoutExecuteScript, 
-																														   _cancellationToken);
-									// Guarda la consulta que se acaba de lanzar
-									_lastQuery = Query;
+									// Limpia los datos
+									DataResults = null;
+									// Arranca la consulta
+									StartQuery();
+									// Ejecuta la consulta
+									try
+									{
+										// Actualiza la página actual si es una consulta nueva
+										if (string.IsNullOrWhiteSpace(_lastQuery) || !querySelected.Equals(_lastQuery, StringComparison.CurrentCultureIgnoreCase))
+											ActualPage = 1;
+										// Carga la consulta
+										if (PaginateQuery)
+											DataResults = await SolutionViewModel.MainViewModel.Manager.GetDatatableQueryAsync(connection, querySelected, arguments, 
+																															   ActualPage, PageSize, 
+																															   connection.timeoutExecuteScript, 
+																															   _cancellationToken);
+										else
+											DataResults = await SolutionViewModel.MainViewModel.Manager.GetDatatableQueryAsync(connection, querySelected, arguments, 0, 0,
+																															   connection.timeoutExecuteScript, 
+																															   _cancellationToken);
+										// Guarda la consulta que se acaba de lanzar
+										_lastQuery = querySelected;
+									}
+									catch (Exception exception)
+									{
+										SolutionViewModel.MainViewModel.Manager.Logger.Default.LogItems.Error($"Error al ejecutar la consulta. {exception.Message}");
+									}
+									// Detiene la ejecucion
+									StopQuery();
 								}
-								catch (Exception exception)
-								{
-									SolutionViewModel.MainViewModel.Manager.Logger.Default.LogItems.Error($"Error al ejecutar la consulta. {exception.Message}");
-								}
-								// Detiene la ejecucion
-								StopQuery();
-							}
-					}
-			}
+						}
+				}
+		}
+
+		/// <summary>
+		///		Lanza un evento para solicitar el texto seleccionado al editor
+		/// </summary>
+		private string GetEditorSelectedText()
+		{
+			Controllers.EventArguments.EditorSelectedTextRequiredEventArgs eventArgs = new Controllers.EventArguments.EditorSelectedTextRequiredEventArgs();
+
+				// Lanza el evento
+				SelectedTextRequired?.Invoke(this, eventArgs);
+				// Recupera el texto
+				if (string.IsNullOrEmpty(eventArgs.SelectedText))
+					return Query;
+				else
+					return eventArgs.SelectedText;
 		}
 
 		/// <summary>

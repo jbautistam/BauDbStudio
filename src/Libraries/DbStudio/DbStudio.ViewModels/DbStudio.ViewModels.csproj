@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <RootNamespace>Bau.Libraries.DbStudio.ViewModels</RootNamespace>
   </PropertyGroup>
 
@@ -32,7 +32,9 @@
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Formats\LibParquetFiles\LibParquetFiles.csproj" />
     <ProjectReference Include="..\..\JobEtlProcessor\LibJobProcessor.Cloud\LibJobProcessor.Cloud.csproj" />
     <ProjectReference Include="..\..\JobEtlProcessor\LibJobProcessor.Database\LibJobProcessor.Database.csproj" />
+    <ProjectReference Include="..\..\JobEtlProcessor\LibJobProcessor.FilesShell\LibJobProcessor.FilesShell.csproj" />
     <ProjectReference Include="..\..\JobEtlProcessor\LibJobProcessor.Manager\LibJobProcessor.Manager.csproj" />
+    <ProjectReference Include="..\..\JobEtlProcessor\LibJobProcessor.Powershell\LibJobProcessor.Powershell.csproj" />
     <ProjectReference Include="..\DbStudio.Application\DbStudio.Application.csproj" />
     <ProjectReference Include="..\DbStudio.Models\DbStudio.Models.csproj" />
   </ItemGroup>

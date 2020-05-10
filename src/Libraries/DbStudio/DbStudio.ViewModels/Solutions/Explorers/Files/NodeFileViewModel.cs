@@ -55,7 +55,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 		}
 
 		/// <summary>
-		///		Obtiene la cadena SQL asociada al nombre del archivo o a una SELECT con los nombres de campo
+		///		Obtiene la cadena SQL asociada al nombre del archivo o a una SELECT con los nombres de campo o simplemente el nombre de archivo
 		/// </summary>
 		public string GetSqlSelect(bool fullSql)
 		{
@@ -71,6 +71,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 				}
 				else if (FileName.EndsWith(".csv", StringComparison.CurrentCultureIgnoreCase))
 					result += $"csv.`{FileName}`";
+				else
+					result += FileName;
 				// Devuelve el resultado
 				return result;
 		}

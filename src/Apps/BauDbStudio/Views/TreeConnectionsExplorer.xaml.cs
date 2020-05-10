@@ -44,7 +44,7 @@ namespace Bau.DbStudio.Views
 			if (trvExplorer.DataContext is TreeConnectionsViewModel && (sender as TreeView)?.SelectedItem is BaseTreeNodeViewModel node)
 			{
 				ViewModel.SelectedNode = node;
-				ViewModel.OpenPropertiesCommand.Execute(null);
+				ViewModel.OpenCommand.Execute(null);
 			}
 		}
 

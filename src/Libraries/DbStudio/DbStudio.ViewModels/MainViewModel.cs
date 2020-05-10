@@ -36,6 +36,8 @@ namespace Bau.Libraries.DbStudio.ViewModels
 									.AddListener(this, nameof(SelectedDetailsViewModel));
 			SaveAsCommand = new BaseCommand(_ => Save(true), _ => CanSave())
 									.AddListener(this, nameof(SelectedDetailsViewModel));
+			SaveAllCommand = new BaseCommand(_ => SaveAll(), _ => CanSave())
+									.AddListener(this, nameof(SelectedDetailsViewModel));
 			RefreshCommand = new BaseCommand(_ => Refresh());
 		}
 
@@ -70,6 +72,19 @@ namespace Bau.Libraries.DbStudio.ViewModels
 		{
 			if (SelectedDetailsViewModel != null)
 				SelectedDetailsViewModel.SaveDetails(newName);
+		}
+
+		/// <summary>
+		///		Graba todos las ventanas de edición abiertas
+		/// </summary>
+		private void SaveAll()
+		{
+			System.Collections.Generic.List<Solutions.Details.IDetailViewModel> viewModels = MainController.GetOpenedDetails();
+
+				// Graba el contenido de los viewModels abiertos
+				foreach (Solutions.Details.IDetailViewModel viewModel in viewModels)
+					if (viewModel.IsUpdated)
+						viewModel.SaveDetails(false);
 		}
 
 		/// <summary>
@@ -178,6 +193,11 @@ namespace Bau.Libraries.DbStudio.ViewModels
 		///		Comando para grabar el elemento actual con un nuevo nombre
 		/// </summary>
 		public BaseCommand SaveAsCommand { get; }
+
+		/// <summary>
+		///		Comando para grabar todos los elementos abiertos
+		/// </summary>
+		public BaseCommand SaveAllCommand { get; }
 
 		/// <summary>
 		///		Comando para actualizar los datos

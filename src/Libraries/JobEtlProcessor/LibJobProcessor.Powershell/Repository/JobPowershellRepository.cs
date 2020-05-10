@@ -14,7 +14,7 @@ namespace Bau.Libraries.LibJobProcessor.Powershell.Repository
 	{
 		// Constantes privadas
 		private const string TagRoot = "PowershellScript";
-		private const string TagScript = "Script";
+		private const string TagExecute = "Execute";
 		private const string TagEnabled = "Enabled";
 		private const string TagTimeout = "Timeout";
 		private const string TagFileName = "FileName";
@@ -58,7 +58,7 @@ namespace Bau.Libraries.LibJobProcessor.Powershell.Repository
 				foreach (MLNode nodeML in rootML.Nodes)
 					switch (nodeML.Name)
 					{
-						case TagScript:
+						case TagExecute:
 								sentences.Add(LoadScriptSentence(nodeML));
 							break;
 					}
@@ -76,7 +76,7 @@ namespace Bau.Libraries.LibJobProcessor.Powershell.Repository
 				// Asigna las propiedades
 				AssignProperties(sentence, rootML);
 				sentence.FileName = rootML.Attributes[TagFileName].Value.TrimIgnoreNull();
-				sentence.Content = rootML.Attributes[TagContent].Value.TrimIgnoreNull();
+				sentence.Content = rootML.Nodes[TagContent].Value.TrimIgnoreNull();
 				// Carga los mapeos
 				foreach (MLNode nodeML in rootML.Nodes)
 					if (nodeML.Name == TagMap)

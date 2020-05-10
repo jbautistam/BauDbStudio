@@ -69,6 +69,7 @@ namespace Bau.Libraries.LibDbScripts.Manager.Repository
 		private const string TagWithError = "WithError";
 		private const string TagRecords = "Records";
 		private const string TagSentenceAssertScalar = "AssertScalar";
+		private const string TagMessage = "Message";
 		private const string TagResult = "Result";
 		private const string TagSentenceExecuteScript = "ExecuteScript";
 		private const string TagMap = "Map";
@@ -245,7 +246,7 @@ namespace Bau.Libraries.LibDbScripts.Manager.Repository
 			SentenceBlock sentence = new SentenceBlock();
 
 				// Asigna las propiedades
-				sentence.Name = rootML.Attributes[TagName].Value;
+				sentence.Message = rootML.Attributes[TagMessage].Value;
 				sentence.Sentences.AddRange(LoadSentences(rootML.Nodes, pathBase));
 				// Devuelve la sentencia
 				return sentence;
@@ -506,6 +507,7 @@ namespace Bau.Libraries.LibDbScripts.Manager.Repository
 
 				// Asigna las propiedades
 				sentence.Target = rootML.Attributes[TagTarget].Value;
+				sentence.Message = rootML.Attributes[TagMessage].Value;
 				sentence.Command = GetProviderCommand(rootML, TagProviderCommand);
 				sentence.WithError = rootML.Attributes[TagWithError].Value.GetBool();
 				sentence.Records = rootML.Attributes[TagRecords].Value.GetInt(0);
@@ -521,6 +523,7 @@ namespace Bau.Libraries.LibDbScripts.Manager.Repository
 			return new SentenceAssertScalar
 							{
 								Target = rootML.Attributes[TagTarget].Value,
+								Message = rootML.Attributes[TagMessage].Value,
 								Command = GetProviderCommand(rootML, TagProviderCommand),
 								Result = rootML.Attributes[TagResult].Value.GetLong(0)
 							};

@@ -56,8 +56,6 @@ namespace Bau.Libraries.LibJobProcessor.Powershell.Manager
 		private async Task ProcessScriptAsync(BlockLogModel parent, ExecuteScriptSentence sentence, NormalizedDictionary<object> parameters, 
 											  CancellationToken cancellationToken)
 		{
-			// Evita el warning
-			await Task.Delay(1000);
 			// Ejecuta la sentencia
 			using (BlockLogModel block = parent.CreateBlock(LogModel.LogType.Info, $"Start execute script"))
 			{
@@ -66,7 +64,7 @@ namespace Bau.Libraries.LibJobProcessor.Powershell.Manager
 					PowerShellController controller = new PowerShellController(this, Step);
 
 						// Ejecuta el script
-						controller.Execute(block, sentence, parameters);
+						await controller.ExecuteAsync(block, sentence, parameters);
 						// Muestra los errores
 						if (controller.Errors.Count > 0)
 							AddErrors(block, controller.Errors);

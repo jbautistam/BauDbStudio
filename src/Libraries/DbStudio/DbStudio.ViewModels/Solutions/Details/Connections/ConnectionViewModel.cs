@@ -51,7 +51,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 			UseIntegratedSecurity = Connection.Parameters[nameof(UseIntegratedSecurity)].GetBool();
 			ConnectionString = Connection.Parameters[nameof(ConnectionString)];
 			FileName = Connection.Parameters[nameof(FileName)];
-			timeoutExecuteScriptMinutes = (int) Connection.timeoutExecuteScript.TotalMinutes;
+			TimeoutExecuteScriptMinutes = (int) Connection.timeoutExecuteScript.TotalMinutes;
 			// Indica que no ha habido modificaciones
 			IsUpdated = false;
 		}
@@ -165,7 +165,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 				Connection.Parameters[nameof(UseIntegratedSecurity)] = UseIntegratedSecurity.ToString();
 				Connection.Parameters[nameof(ConnectionString)] = ConnectionString;
 				Connection.Parameters[nameof(FileName)] = FileName;
-				Connection.timeoutExecuteScript = TimeSpan.FromMinutes(timeoutExecuteScriptMinutes);
+				Connection.timeoutExecuteScript = TimeSpan.FromMinutes(TimeoutExecuteScriptMinutes);
 				// Añade la conexión a la solución si es necesario
 				if (IsNew)
 					SolutionViewModel.Solution.Connections.Add(Connection);
@@ -318,7 +318,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 		/// <summary>
 		///		Minutos de timeout para la ejecución de scripts
 		/// </summary>
-		public int timeoutExecuteScriptMinutes
+		public int TimeoutExecuteScriptMinutes
 		{
 			get { return _timeoutExecuteScriptMinutes; }
 			set { CheckProperty(ref _timeoutExecuteScriptMinutes, value); }

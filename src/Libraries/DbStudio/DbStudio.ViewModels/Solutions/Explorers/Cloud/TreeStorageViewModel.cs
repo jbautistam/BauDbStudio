@@ -43,7 +43,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Cloud
 				// Comprueba la acción
 				switch (action)
 				{
-					case nameof(OpenPropertiesCommand):
+					case nameof(OpenCommand):
 						return type == BaseTreeNodeViewModel.NodeType.Storage;
 					case nameof(DeleteCommand):
 						return true;

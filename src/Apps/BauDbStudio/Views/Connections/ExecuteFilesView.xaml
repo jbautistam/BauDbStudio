@@ -4,12 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Bau.DbStudio.Views.Connections"
-			 xmlns:CodeEditor="clr-namespace:Bau.Controls.CodeEditor;assembly=CodeEditor"
-			 xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
 			 x:Class="Bau.DbStudio.Views.Connections.ExecuteFilesView"
-             mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800"
-		xmlns:Behaviors="clr-namespace:Bau.DbStudio.Converters"
-		Behaviors:FocusBehavior.FocusFirst="true">
+             mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*"/>

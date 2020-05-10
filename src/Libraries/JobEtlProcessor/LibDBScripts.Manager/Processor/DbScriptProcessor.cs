@@ -107,7 +107,7 @@ namespace Bau.Libraries.LibDbScripts.Manager.Processor
 		/// </summary>
 		private void ExecuteBlock(SentenceBlock sentence)
 		{
-			using (BlockLogModel block = Manager.Logger.Default.CreateBlock(LogModel.LogType.Info, $"Start block {sentence.Name}"))
+			using (BlockLogModel block = Manager.Logger.Default.CreateBlock(LogModel.LogType.Info, $"Start block {sentence.Message}"))
 			{
 				ExecuteWithContext(sentence.Sentences);
 			}
@@ -491,7 +491,7 @@ namespace Bau.Libraries.LibDbScripts.Manager.Processor
 					if (!string.IsNullOrWhiteSpace(error))
 						block.Assert(!sentence.WithError, $"Error found at sentence: {error}");
 					else
-						block.Assert(result != sentence.Records, $"Result: {result} - Should be {sentence.Records}");
+						block.Assert(result != sentence.Records, $"{sentence.Message} - Result: {result} - Should be {sentence.Records}");
 			}
 		}
 
@@ -520,9 +520,9 @@ namespace Bau.Libraries.LibDbScripts.Manager.Processor
 								{
 									object result = provider.ExecuteScalar(command);
 
-										// Lanza le resultado de la prueba
-										block.Assert(result == null || ((result as long?) ?? 0) != sentence.Result, 
-													 $"Result: {result} - Should be {sentence.Result}");
+										// Lanza el resultado de la prueba
+										block.Assert(result == null || ((result as long?) ?? 0) != sentence.Result,
+													 $"{sentence.Message} - Result: {result} - Should be {sentence.Result}");
 								}
 								catch (Exception exception)
 								{

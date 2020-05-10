@@ -154,14 +154,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 		}
 
 		/// <summary>
-		///		Obtiene el viewModel seleccionado
-		/// </summary>
-		private IDetailViewModel GetSelectedViewModel()
-		{
-			return SolutionViewModel.MainViewModel.MainController.GetActiveDetails();
-		}
-
-		/// <summary>
 		///		Obtiene el modo de ejecución
 		/// </summary>
 		private ExecutionMode GetExecutionMode(IDetailViewModel viewModel)
@@ -205,7 +197,14 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 							// Ejecuta la tarea
 							try
 							{
+								// Ejecuta el script
 								await ExecuteScriptSqlAsync(viewModel, connection, arguments, _cancellationToken);
+								// Mensaje al usuario
+								SolutionViewModel.MainViewModel.MainController.HostController.SystemController
+										.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
+														  "Ejecución de script SQL",
+														  "Ha terminado correctamente la ejecución del script SQL", 
+														  TimeSpan.FromSeconds(10));
 							}
 							catch (Exception exception)
 							{
@@ -247,7 +246,13 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 							// Ejecuta la tarea
 							try
 							{
+								// Ejecuta el script XML
 								await fileViewModel.ExecuteXmlScriptAsync(contextFileName, _cancellationToken);
+								// Muestra el mensaje al usuario
+								SolutionViewModel.MainViewModel.MainController.HostController.SystemController
+										.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
+														  "Ejecución de script XML",
+														  "Ha terminado correctamente la ejecución del script", TimeSpan.FromSeconds(10));
 							}
 							catch (Exception exception)
 							{

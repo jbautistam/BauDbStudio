@@ -65,6 +65,12 @@
 							<Image Width="16" Height="16" Source="/Resources/Images/Script.png" />
 						</MenuItem.Icon>
 					</MenuItem>
+					<Separator/>
+					<MenuItem Header="_Xml de pruebas" Command="{Binding Path=SolutionViewModel.CreateTestXmlCommand}" >
+						<MenuItem.Icon>
+							<Image Width="16" Height="16" Source="/Resources/Images/FileXml.png" />
+						</MenuItem.Icon>
+					</MenuItem>
 				</MenuItem>
 				<MenuItem Header="_Guardar" InputGestureText="Ctrl+S" Command="Save" >
 					<MenuItem.Icon>
@@ -74,6 +80,11 @@
 				<MenuItem Header="_Guardar como" Command="{Binding Path=SaveAsCommand}" >
 					<MenuItem.Icon>
 						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/SaveAs.png" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<MenuItem Header="Guardar _todo" Command="{Binding Path=SaveAllCommand}" >
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/SaveAll.png" />
 					</MenuItem.Icon>
 				</MenuItem>
 				<Separator/>
@@ -183,7 +194,10 @@
 			<Button ToolTip="Guardar como" Command="{Binding Path=SaveAsCommand}" Margin="2">
 				<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/SaveAs.png" />
 			</Button>
-			<Separator/>
+			<Button ToolTip="Guardar todo" Command="{Binding Path=SaveAllCommand}" Margin="2">
+				<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/SaveAll.png" />
+			</Button>
+			<Separator Margin="2"/>
 			<Button ToolTip="Actualizar" Command="{Binding Path=RefreshCommand}" Margin="2">
 				<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Refresh.png" />
 			</Button>

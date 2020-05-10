@@ -116,7 +116,7 @@ namespace Bau.Libraries.LibJobProcessor.Powershell
 		/// <summary>
 		///		Clave del proveedor
 		/// </summary>
-		public string Key { get; } = "CloudManager";
+		public string Key { get; } = "PowershellManager";
 
 		/// <summary>
 		///		Logger

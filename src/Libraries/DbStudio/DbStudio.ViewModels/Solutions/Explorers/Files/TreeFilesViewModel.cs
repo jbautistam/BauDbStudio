@@ -79,7 +79,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 				// Devuelve el valor que indica si puede ejecutar la acción
 				switch (action)
 				{
-					case nameof(OpenPropertiesCommand):
+					case nameof(OpenCommand):
 						return type == BaseTreeNodeViewModel.NodeType.File && !isFolder;
 					case nameof(CopyCommand):
 						return type == BaseTreeNodeViewModel.NodeType.File;

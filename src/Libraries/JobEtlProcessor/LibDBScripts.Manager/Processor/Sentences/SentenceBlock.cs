@@ -10,9 +10,9 @@ namespace Bau.Libraries.LibDbScripts.Manager.Processor.Sentences
 	internal class SentenceBlock : SentenceBase
 	{
 		/// <summary>
-		///		Nombre del bloque
+		///		Mensaje del bloque
 		/// </summary>
-		internal string Name { get; set; }
+		internal string Message { get; set; }
 
 		/// <summary>
 		///		Sentencias del bloque

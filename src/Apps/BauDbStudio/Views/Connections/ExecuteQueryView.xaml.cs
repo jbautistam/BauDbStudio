@@ -35,9 +35,13 @@ namespace Bau.DbStudio.Views.Connections
 				// Asigna el nombre de archivo
 				udtEditor.Text = ViewModel.Query;
 				udtEditor.ChangeHighLightByExtension(".sql");
+				// Asigna el manejador de eventos
+				ViewModel.SelectedTextRequired += (sender, args) => args.SelectedText = udtEditor.GetSelectedText();
 				// Indica que no ha habido modificaciones
 				ViewModel.IsUpdated = false;
 			}
+			// Pasa el foco al control de edición
+			udtEditor.Focus();
 		}
 
 		/// <summary>

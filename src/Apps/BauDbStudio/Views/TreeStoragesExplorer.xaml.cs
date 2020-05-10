@@ -35,7 +35,7 @@ namespace Bau.DbStudio.Views
 			if (trvExplorer.DataContext is TreeStorageViewModel && (sender as TreeView)?.SelectedItem is BaseTreeNodeViewModel node)
 			{
 				ViewModel.SelectedNode = node;
-				ViewModel.OpenPropertiesCommand.Execute(null);
+				ViewModel.OpenCommand.Execute(null);
 			}
 		}
 

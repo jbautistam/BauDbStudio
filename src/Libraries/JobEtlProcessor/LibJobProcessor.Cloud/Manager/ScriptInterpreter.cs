@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 using Bau.Libraries.LibBlobStorage;
 using Bau.Libraries.LibDataStructures.Collections;
+using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.LibJobProcessor.Cloud.Models;
 using Bau.Libraries.LibJobProcessor.Cloud.Models.Sentences;
 using Bau.Libraries.LibJobProcessor.Core.Models.Jobs;
@@ -27,8 +28,11 @@ namespace Bau.Libraries.LibJobProcessor.Cloud.Manager
 		/// <summary>
 		///		Procesa las sentencias del script
 		/// </summary>
-		internal async Task<bool> ProcessAsync(BlockLogModel block, List<BaseSentence> program, NormalizedDictionary<object> parameters, CancellationToken cancellationToken)
+		internal async Task<bool> ProcessAsync(BlockLogModel block, List<BaseSentence> program, 
+											   NormalizedDictionary<object> parameters, CancellationToken cancellationToken)
 		{
+			// Guarda los parámetros de entrada
+			Parameters = parameters;
 			// Ejecuta el programa
 			await ExecuteAsync(block, program, cancellationToken);
 			// Devuelve el valor que indica si todo es correcto
@@ -52,6 +56,9 @@ namespace Bau.Libraries.LibJobProcessor.Cloud.Manager
 							break;
 						case DownloadBlobSentence sentence:
 								await ProcessDownloadAsync(block, sentence);
+							break;
+						case DownloadBlobFolderSentence sentence:
+								await ProcessDownloadFolderAsync(block, sentence);
 							break;
 						case CopyBlobSentence sentence:
 								await ProcessCopyAsync(block, sentence);
@@ -93,7 +100,7 @@ namespace Bau.Libraries.LibJobProcessor.Cloud.Manager
 									// Sube el archivo
 									using (ICloudStorageManager manager = new StorageManager().OpenAzureStorageBlob(connection.StorageConnectionString))
 									{
-										await manager.UploadAsync(sentence.Target.Container, sentence.Target.Blob, fileName);
+										await manager.UploadAsync(GetContainerName(sentence.Target.Container), sentence.Target.Blob, fileName);
 									}
 									// Log
 									block.Info($"Uploaded file '{sentence.FileName}' to '{sentence.Target.ToString()}'");
@@ -128,7 +135,7 @@ namespace Bau.Libraries.LibJobProcessor.Cloud.Manager
 									// Crea el directorio
 									LibHelper.Files.HelperFiles.MakePath(System.IO.Path.GetDirectoryName(fileName));
 									// Descarga el archivo
-									await manager.DownloadAsync(sentence.Source.Container, sentence.Source.Blob, fileName);
+									await manager.DownloadAsync(GetContainerName(sentence.Source.Container), sentence.Source.Blob, fileName);
 							}
 							// Log
 							block.Info($"Downloaded file '{sentence.FileName}' to '{sentence.Source.ToString()}'");
@@ -136,6 +143,51 @@ namespace Bau.Libraries.LibJobProcessor.Cloud.Manager
 						catch (Exception exception)
 						{
 							AddError(block, $"Error when download '{sentence.FileName}' to '{sentence.Source.ToString()}'", exception);
+						}
+			}
+		}
+
+		/// <summary>
+		///		Procesa la sentencia de descarga de una carpeta
+		/// </summary>
+		private async Task ProcessDownloadFolderAsync(BlockLogModel parent, DownloadBlobFolderSentence sentence)
+		{
+			using (BlockLogModel block = parent.CreateBlock(LogModel.LogType.Info, $"Start downloading from '{sentence.Source.ToString()}'"))
+			{
+				CloudConnection connection = GetConnection(sentence.StorageKey);
+
+					if (connection == null)
+						AddError(block, $"Can't find the connection for '{sentence.StorageKey}");
+					else
+						try
+						{
+							string path = Step.Project.GetFullFileName(sentence.Path);
+							string container = GetContainerName(sentence.Source.Container);
+
+								// Log
+								block.Info($"Start download '{container}/{sentence.Source.Blob}' to '{path}'");
+								// Crea la carpeta
+								LibHelper.Files.HelperFiles.MakePath(path);
+								// Descarga la carpeta
+								using (ICloudStorageManager manager = new StorageManager().OpenAzureStorageBlob(connection.StorageConnectionString))
+								{
+									List<LibBlobStorage.Metadata.BlobModel> blobs = await manager.ListBlobsAsync(container, sentence.Source.Blob);
+
+										foreach (LibBlobStorage.Metadata.BlobModel blob in blobs)
+										{
+											// Log
+											block.Info($"Download '{blob.FullFileName}'");
+											// Descarga el archivo
+											await manager.DownloadAsync(container, blob.FullFileName, 
+																		System.IO.Path.Combine(path, System.IO.Path.GetFileName(blob.FullFileName)));
+										}
+								}
+								// Log
+								block.Info($"End download '{container}/{sentence.Source.Blob}' to '{path}'");
+						}
+						catch (Exception exception)
+						{
+							AddError(block, $"Error when download to '{sentence.Path}'", exception);
 						}
 			}
 		}
@@ -167,9 +219,11 @@ namespace Bau.Libraries.LibJobProcessor.Cloud.Manager
 								using (ICloudStorageManager manager = new StorageManager().OpenAzureStorageBlob(connection.StorageConnectionString))
 								{
 									if (sentence.Move)
-										await manager.MoveAsync(sentence.Source.Container, sentence.Target.Blob, sentence.Target.Container, blobTarget);
+										await manager.MoveAsync(GetContainerName(sentence.Source.Container), sentence.Target.Blob, 
+																GetContainerName(sentence.Target.Container), blobTarget);
 									else
-										await manager.CopyAsync(sentence.Source.Container, sentence.Target.Blob, sentence.Target.Container, blobTarget);
+										await manager.CopyAsync(GetContainerName(sentence.Source.Container), sentence.Target.Blob, 
+																GetContainerName(sentence.Target.Container), blobTarget);
 								}
 								// Log
 								block.Info($"End {processType} from '{sentence.Source.ToString()}' to '{sentence.Target.Container}/{blobTarget}'");
@@ -190,6 +244,28 @@ namespace Bau.Libraries.LibJobProcessor.Cloud.Manager
 				return Connections[storageKey];
 			else
 				return null;
+		}
+
+		/// <summary>
+		///		Obtiene el nombre del contenedor. Si es necesario, lo recoge de los parámetros
+		/// </summary>
+		private string GetContainerName(string container)
+		{
+			// Quita los espacios
+			container = container.TrimIgnoreNull();
+			// Si el nombre del contenedor es del tipo {{parámetro}} lo sustituye por el valor del parámetro
+			if (!string.IsNullOrWhiteSpace(container) && container.StartsWith("{{") && container.EndsWith("}}") && container.Length > 4)
+			{
+				object value = Parameters[container.Substring(2, container.Length - 4)];
+
+					// Sustituye por el valor del parámetro
+					if (value == null)
+						container = string.Empty;
+					else
+						container = value.ToString();
+			}
+			// Devuelve el nombre del contenedor
+			return container;
 		}
 
 		/// <summary>
@@ -215,6 +291,11 @@ namespace Bau.Libraries.LibJobProcessor.Cloud.Manager
 		///		Conexiones
 		/// </summary>
 		private NormalizedDictionary<CloudConnection> Connections { get; }
+
+		/// <summary>
+		///		Parámetros de entrada
+		/// </summary>
+		private NormalizedDictionary<object> Parameters { get; set; }
 
 		/// <summary>
 		///		Errores de proceso

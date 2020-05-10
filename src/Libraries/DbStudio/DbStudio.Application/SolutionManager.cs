@@ -130,6 +130,6 @@ namespace Bau.Libraries.DbStudio.Application
 		/// <summary>
 		///		Manager de conexiones
 		/// </summary>
-		private Connections.ConnectionManager ConnectionManager { get; }
+		internal Connections.ConnectionManager ConnectionManager { get; }
 	}
 }

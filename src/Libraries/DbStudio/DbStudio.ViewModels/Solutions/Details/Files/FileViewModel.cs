@@ -12,7 +12,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 	public class FileViewModel : BaseObservableObject, IDetailViewModel
 	{
 		// Eventos públicos
-		public event EventHandler<EventArguments.EditorSelectedTextRequiredEventArgs> SelectedTextRequired;
+		public event EventHandler<Controllers.EventArguments.EditorSelectedTextRequiredEventArgs> SelectedTextRequired;
 		// Variables privadas
 		private string _header, _fileName, _content;
 
@@ -103,7 +103,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 		/// </summary>
 		private string GetEditorSelectedText()
 		{
-			EventArguments.EditorSelectedTextRequiredEventArgs eventArgs = new EventArguments.EditorSelectedTextRequiredEventArgs();
+			Controllers.EventArguments.EditorSelectedTextRequiredEventArgs eventArgs = new Controllers.EventArguments.EditorSelectedTextRequiredEventArgs();
 
 				// Lanza el evento
 				SelectedTextRequired?.Invoke(this, eventArgs);

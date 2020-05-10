@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 using Bau.Libraries.BauMvvm.ViewModels;
+using Bau.Libraries.DbStudio.Application.Controllers.EtlProjects;
 using Bau.Libraries.DbStudio.Models;
+using Bau.Libraries.LibLogger.Models.Log;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 {
@@ -29,6 +32,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 			// Asigna los comandos
 			NewWorkspaceCommand = new BaseCommand(_ => NewWorkspace());
 			DeleteWorkspaceCommand = new BaseCommand(_ => DeleteWorkspace());
+			CreateTestXmlCommand = new BaseCommand(async _ => await CreateTestXmlAsync());
 		}
 
 		/// <summary>
@@ -91,6 +95,52 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 				// Lanza el evento de carga del menú
 				MainViewModel.RaiseEventWorkSpaceChanged();
 			}
+		}
+
+		/// <summary>
+		///		Abre la ventana de creación de archivos de pruebas
+		/// </summary>
+		private async Task CreateTestXmlAsync()
+		{
+			Details.EtlProjects.CreateTestXmlViewModel viewModel = new Details.EtlProjects.CreateTestXmlViewModel(this);
+
+				if (MainViewModel.MainController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+					using (BlockLogModel block = MainViewModel.MainController.Logger.Default.CreateBlock(LogModel.LogType.Info, "Comienzo de la creación de proyectos de pruebas"))
+				{
+					XmlTestProjectGenerator generator = new XmlTestProjectGenerator(MainViewModel.Manager, viewModel.ComboConnections.GetSelectedConnection(),
+																					viewModel.DataBase, viewModel.OutputPath);
+
+						try
+						{
+							if (!await generator.GenerateAsync(block, viewModel.Provider, viewModel.PathVariable, viewModel.DataBaseVariable, viewModel.SufixTestTables,
+															   viewModel.FileNameProject, viewModel.FileNameTest, viewModel.FileNameAssert, 
+															   System.Threading.CancellationToken.None))
+								block.Error($"Error en la generación de los archivos de pruebas. {GetError(generator.Errors)}");
+							else
+							{
+								block.Info("Fin de la creación de proyectos de pruebas");
+								MainViewModel.MainController.HostController.SystemController.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
+																											  "Generación de proyectos XML",
+																											  "Ha terminado correctamente la generación del archivo de pruebas",
+																											  TimeSpan.FromSeconds(10));
+							}
+						}
+						catch (Exception exception)
+						{
+							block.Error($"Error en la generación de los archivos de pruebas {exception.Message}");
+						}
+				}
+
+				string GetError(System.Collections.Generic.List<string> errors)
+				{
+					string result = string.Empty;
+
+						// Añade los errores
+						foreach (string error in errors)
+							result += error + Environment.NewLine;
+						// Devuelve la cadena de error
+						return result;
+				}
 		}
 
 		/// <summary>
@@ -162,5 +212,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 		///		Borra el espacio de trabajo seleccionado
 		/// </summary>
 		public BaseCommand DeleteWorkspaceCommand { get; }
+
+		/// <summary>
+		///		Crea los archivos XML de proyecto de pruebas
+		/// </summary>
+		public BaseCommand CreateTestXmlCommand { get; }
 	}
 }
