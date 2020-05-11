@@ -30,6 +30,11 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Repository
 		private const string TagKey = "Key";
 		private const string TagValue = "Value";
 		private const string TagTransformFileName = "TransformFileName";
+		private const string TagConvertFile = "ConvertFile";
+		private const string TagColumn = "Column";
+		private const string TagName = "Name";
+		private const string TagType = "Type";
+		private const string TagConvertPath = "ConvertPath";
 
 		/// <summary>
 		///		Carga los datos del proceso
@@ -74,6 +79,12 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Repository
 							break;
 						case TagExecute:
 								sentences.Add(LoadExecuteSentence(nodeML));
+							break;
+						case TagConvertFile:
+								sentences.Add(LoadConvertFileSentence(nodeML));
+							break;
+						case TagConvertPath:
+								sentences.Add(LoadConvertPathSentence(nodeML));
 							break;
 					}
 				// Devuelve la lista de sentencias
@@ -185,6 +196,59 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Repository
 															TransformFileName = nodeML.Attributes[TagTransformFileName].Value.GetBool()
 														}
 											  );
+				// Devuelve la sentencia
+				return sentence;
+		}
+
+		/// <summary>
+		///		Carga una sentencia de conversión de archivo
+		/// </summary>
+		private BaseSentence LoadConvertFileSentence(MLNode rootML)
+		{
+			ConvertFileSentence sentence = new ConvertFileSentence();
+
+				// Carga los datos
+				AssignSentence(sentence, rootML);
+				sentence.FileNameSource = rootML.Attributes[TagFrom].Value.TrimIgnoreNull();
+				sentence.FileNameTarget = rootML.Attributes[TagTo].Value.TrimIgnoreNull();
+				// Carga las columnas
+				sentence.Columns.AddRange(LoadColumns(rootML));
+				// Devuelve la sentencia
+				return sentence;
+		}
+
+		/// <summary>
+		///		Carga la definición de columnas de un archivo
+		/// </summary>
+		private List<FileColumnModel> LoadColumns(MLNode rootML)
+		{
+			List<FileColumnModel> columns = new List<FileColumnModel>();
+
+				// Carga la lista de columnas
+				foreach (MLNode nodeML in rootML.Nodes)
+					if (nodeML.Name == TagColumn)
+						columns.Add(new FileColumnModel
+											{
+												Name = rootML.Attributes[TagName].Value,
+												Type = rootML.Attributes[TagType].Value.GetEnum(FileColumnModel.ColumnType.String)
+											}
+									);
+				// Devuelve la lista de columnas
+				return columns;
+		}
+
+		/// <summary>
+		///		Carga la sentencia de conversión de archivos de un directorio
+		/// </summary>
+		private BaseSentence LoadConvertPathSentence(MLNode rootML)
+		{
+			ConvertPathSentence sentence = new ConvertPathSentence();
+
+				// Carga los datos
+				AssignSentence(sentence, rootML);
+				sentence.Path = rootML.Attributes[TagPath].Value.TrimIgnoreNull();
+				sentence.Source = rootML.Attributes[TagFrom].Value.GetEnum(ConvertPathSentence.FileType.Unknown);
+				sentence.Target = rootML.Attributes[TagTo].Value.GetEnum(ConvertPathSentence.FileType.Unknown);
 				// Devuelve la sentencia
 				return sentence;
 		}

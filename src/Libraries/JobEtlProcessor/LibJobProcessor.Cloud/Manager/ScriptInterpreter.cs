@@ -174,13 +174,17 @@ namespace Bau.Libraries.LibJobProcessor.Cloud.Manager
 									List<LibBlobStorage.Metadata.BlobModel> blobs = await manager.ListBlobsAsync(container, sentence.Source.Blob);
 
 										foreach (LibBlobStorage.Metadata.BlobModel blob in blobs)
-										{
-											// Log
-											block.Info($"Download '{blob.FullFileName}'");
-											// Descarga el archivo
-											await manager.DownloadAsync(container, blob.FullFileName, 
-																		System.IO.Path.Combine(path, System.IO.Path.GetFileName(blob.FullFileName)));
-										}
+											if (blob.Length != 0)
+											{
+												string fileName = System.IO.Path.Combine(path, blob.LocalFileName);
+
+													// Log
+													block.Info($"Download '{blob.FullFileName}'");
+													// Crea el directorio
+													LibHelper.Files.HelperFiles.MakePath(System.IO.Path.GetDirectoryName(fileName));
+													// Descarga el archivo
+													await manager.DownloadAsync(container, blob.FullFileName, fileName);
+											}
 								}
 								// Log
 								block.Info($"End download '{container}/{sentence.Source.Blob}' to '{path}'");

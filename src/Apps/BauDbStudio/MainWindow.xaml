@@ -208,8 +208,8 @@
 			<ComboBox HorizontalAlignment="Right" Width="200" MinWidth="200" Margin="20,2,0,2" 
 						  ItemsSource="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.Connections.Items}" DisplayMemberPath="Text" 
 						  SelectedItem="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.Connections.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-			<Button Content="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.ShortFileName}" Margin="2"
-					ToolTip="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.FileNameParameters}"
+			<Button Content="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.ConnectionShortFileName}" Margin="2"
+					ToolTip="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.ConnectionParametersFileName}"
 					Command="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.OpenParametersFileCommand}"
 					Foreground="Black" FontWeight="Normal" />
 			<Button Margin="5,0,0,0" ToolTip="Seleccionar archivo de parámetros" 

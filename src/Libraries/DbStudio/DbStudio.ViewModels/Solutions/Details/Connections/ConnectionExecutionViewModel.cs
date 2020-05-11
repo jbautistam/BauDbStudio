@@ -32,8 +32,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 
 		// Variables privadas
 		private ComboViewModel _connections;
-		private string _fileNameParameters, _shortFileName, _executionTime;
+		private string _connectionParametersFileName, _connectionShortFileName;
+		private string _etlParametersFileName, _etlShortFileName;
 		private BauMvvm.ViewModels.Media.MvvmColor _executionTimeColor;
+		private string _executionTime;
 		private bool _isExecuting;
 		private CancellationTokenSource _tokenSource;
 		private CancellationToken _cancellationToken = CancellationToken.None;
@@ -42,17 +44,15 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 
 		public ConnectionExecutionViewModel(SolutionViewModel solutionViewModel)
 		{
-			// Asigna la solución
+			// Asigna la solución y el viewmodel de parámetros de ejecución
 			SolutionViewModel = solutionViewModel;
 			// Asigna los comandos
 			ExecuteScripCommand = new BaseCommand(async _ => await ExecuteScriptAsync(), _ => !IsExecuting)
 													.AddListener(this, nameof(IsExecuting));
 			CancelScriptExecutionCommand = new BaseCommand(_ => CancelScriptExecution(), _ => IsExecuting)
 													.AddListener(this, nameof(IsExecuting));
-			OpenParametersFileCommand = new BaseCommand(_ => OpenParametersFile(), _ => !string.IsNullOrWhiteSpace(FileNameParameters))
-												.AddListener(this, nameof(FileNameParameters));
-			UpdateParametersFileCommand = new BaseCommand(_ => UpdateParametersFile());
-			RemoveParametersFileCommand = new BaseCommand(_ => FileNameParameters = string.Empty);
+			UpdateParametersFileCommand = new BaseCommand(_ => UpdateParametersFile(), _ => !string.IsNullOrWhiteSpace(ConnectionParametersFileName));
+			OpenParametersFileCommand = new BaseCommand(_ => OpenParametersFile());
 		}
 
 		/// <summary>
@@ -61,10 +61,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 		public void Initialize()
 		{
 			// Carga el nombre del archivo de parámetros de la solución
-			if (System.IO.File.Exists(SolutionViewModel.Solution.LastParametersFileName))
-				FileNameParameters = SolutionViewModel.Solution.LastParametersFileName;
-			else
-				FileNameParameters = string.Empty;
+			LoadConnectionFileNames();
 			// Inicializa el combo
 			Connections = new ComboViewModel(this);
 			// Carga las conexiones
@@ -76,6 +73,24 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 			// Si no se ha seleccionado nada, selecciona el primer elemento
 			if (Connections.SelectedItem == null)
 				Connections.SelectedItem = Connections.Items[0];
+		}
+
+		/// <summary>
+		///		Carga los nombres de archivos de la solución
+		/// </summary>
+		private void LoadConnectionFileNames()
+		{
+			// Carga el nombre del archivo de parámetros de conexión de la solución
+			if (System.IO.File.Exists(SolutionViewModel.Solution.LastConnectionParametersFileName))
+				ConnectionParametersFileName = SolutionViewModel.Solution.LastConnectionParametersFileName;
+			else
+				ConnectionParametersFileName = string.Empty;
+			// Carga el nombre del archivo de parámetros de conexión de los proyectos ETl de la solución
+			if (System.IO.File.Exists(SolutionViewModel.Solution.LastEtlParametersFileName))
+				EtlParametersFileName = SolutionViewModel.Solution.LastEtlParametersFileName;
+			else
+				EtlParametersFileName = string.Empty;
+
 		}
 
 		/// <summary>
@@ -229,38 +244,31 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Grabe el contenido del archivo antes de ejecutar");
 				else if (string.IsNullOrWhiteSpace(fileViewModel.Content))
 					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Introduzca el proyecto para ejecutar");
-				else 
+				else if (string.IsNullOrWhiteSpace(EtlParametersFileName) || !System.IO.File.Exists(EtlParametersFileName))
+					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Seleccione un archivo de contexto");
+				else
 				{
-					string contextFileName = SolutionViewModel.MainViewModel.MainController.HostController.DialogsController.OpenDialogLoad(SolutionViewModel.MainViewModel.LastPathSelected,
-																																			"Archivos de contexto (*.xml)|*.xml|Todos los archivos|*.*",
-																																			"context.xml", "*.xml");
-
-						if (string.IsNullOrWhiteSpace(contextFileName) || !System.IO.File.Exists(contextFileName))
-							SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Seleccione un archivo de contexto");
-						else
-						{
-							// Cambia el último directorio seleccionado
-							SolutionViewModel.MainViewModel.LastPathSelected = System.IO.Path.GetDirectoryName(contextFileName);
-							// Arranca la ejecución
-							StartExecution();
-							// Ejecuta la tarea
-							try
-							{
-								// Ejecuta el script XML
-								await fileViewModel.ExecuteXmlScriptAsync(contextFileName, _cancellationToken);
-								// Muestra el mensaje al usuario
-								SolutionViewModel.MainViewModel.MainController.HostController.SystemController
-										.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
-														  "Ejecución de script XML",
-														  "Ha terminado correctamente la ejecución del script", TimeSpan.FromSeconds(10));
-							}
-							catch (Exception exception)
-							{
-								SolutionViewModel.MainViewModel.MainController.Logger.Default.LogItems.Error($"Error al ejecutar la consulta. {exception.Message}");
-							}
-							// Indica que ha finalizado la tarea y detiene el temporizador
-							StopExecuting();
-						}
+					// Cambia el último directorio seleccionado
+					SolutionViewModel.MainViewModel.LastPathSelected = System.IO.Path.GetDirectoryName(EtlParametersFileName);
+					// Arranca la ejecución
+					StartExecution();
+					// Ejecuta la tarea
+					try
+					{
+						// Ejecuta el script XML
+						await fileViewModel.ExecuteXmlScriptAsync(EtlParametersFileName, _cancellationToken);
+						// Muestra el mensaje al usuario
+						SolutionViewModel.MainViewModel.MainController.HostController.SystemController
+								.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
+													"Ejecución de script XML",
+													"Ha terminado correctamente la ejecución del script", TimeSpan.FromSeconds(10));
+					}
+					catch (Exception exception)
+					{
+						SolutionViewModel.MainViewModel.MainController.Logger.Default.LogItems.Error($"Error al ejecutar la consulta. {exception.Message}");
+					}
+					// Indica que ha finalizado la tarea y detiene el temporizador
+					StopExecuting();
 				}
 			}
 		}
@@ -317,14 +325,15 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 			string error = string.Empty;
 
 				// Carga los parámetros si es necesario
-				if (!string.IsNullOrWhiteSpace(FileNameParameters))
+				if (!string.IsNullOrWhiteSpace(ConnectionParametersFileName))
 				{
-					if (!System.IO.File.Exists(FileNameParameters))
+					if (!System.IO.File.Exists(ConnectionParametersFileName))
 						error = "No se encuentra el archivo de parámetros";
 					else 
 						try
 						{
-							System.Data.DataTable table = new LibJsonConversor.JsonToDataTableConversor().ConvertToDataTable(LibHelper.Files.HelperFiles.LoadTextFile(FileNameParameters));
+							System.Data.DataTable table = new LibJsonConversor.JsonToDataTableConversor()
+																	.ConvertToDataTable(LibHelper.Files.HelperFiles.LoadTextFile(ConnectionParametersFileName));
 
 								// Crea la colección de parámetros a partir de la tabla
 								if (table.Rows.Count == 0)
@@ -348,32 +357,30 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 		}
 
 		/// <summary>
-		///		Abre el archivo de parámetros
-		/// </summary>
-		private void OpenParametersFile()
-		{
-			if (!string.IsNullOrWhiteSpace(FileNameParameters))
-				SolutionViewModel.MainViewModel.MainController.OpenWindow(new Files.FileViewModel(SolutionViewModel, FileNameParameters));
-		}
-
-		/// <summary>
 		///		Modifica el archivo de parámetros seleccionado
 		/// </summary>
 		private void UpdateParametersFile()
 		{
-			string fileName = SolutionViewModel.MainViewModel.MainController.HostController.DialogsController.OpenDialogLoad
-									(SolutionViewModel.MainViewModel.LastPathSelected, "Archivo json (*.json)|*.json|Todos los archivos (*.*)|*.*", null, "*.json");
+			ConnectionParametersExecutionViewModel parametersViewModel = new ConnectionParametersExecutionViewModel(this);
 
-				if (!string.IsNullOrWhiteSpace(fileName) && System.IO.File.Exists(fileName))
+				if (SolutionViewModel.MainViewModel.MainController.OpenDialog(parametersViewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 				{
-					// Guarda el nombre de archivo en los parámetros
-					FileNameParameters = fileName;
-					// Guarda el nombre de archivo en la solución
-					SolutionViewModel.Solution.LastParametersFileName = fileName;
+					// Guarda los nombres de archivos en la solución
+					SolutionViewModel.Solution.LastConnectionParametersFileName = parametersViewModel.ConnectionParametersFileName;
+					SolutionViewModel.Solution.LastEtlParametersFileName = parametersViewModel.EtlParametersFileName;
 					SolutionViewModel.MainViewModel.SaveSolution();
-					// Cambia el último directorio seleccionado
-					SolutionViewModel.MainViewModel.LastPathSelected = System.IO.Path.GetDirectoryName(FileNameParameters);
+					// Carga los nombres de archivos en el viewModel
+					LoadConnectionFileNames();
 				}
+		}
+
+		/// <summary>
+		///		Abre el archivo de parámetros
+		/// </summary>
+		private void OpenParametersFile()
+		{
+			if (!string.IsNullOrWhiteSpace(ConnectionParametersFileName))
+				SolutionViewModel.MainViewModel.MainController.OpenWindow(new Files.FileViewModel(SolutionViewModel, ConnectionParametersFileName));
 		}
 
 		/// <summary>
@@ -391,30 +398,57 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 		}
 
 		/// <summary>
-		///		Nombre del archivo de parámetros
+		///		Nombre del archivo con los parámetros de ejecución sobre una conexión
 		/// </summary>
-		public string FileNameParameters
-		{
-			get { return _fileNameParameters; }
+		public string ConnectionParametersFileName
+		{ 
+			get { return _connectionParametersFileName; }
 			set 
 			{ 
-				if (CheckProperty(ref _fileNameParameters, value))
+				if (CheckProperty(ref _connectionParametersFileName, value))
 				{
 					if (string.IsNullOrWhiteSpace(value))
-						ShortFileName = string.Empty;
+						ConnectionShortFileName = string.Empty;
 					else
-						ShortFileName = System.IO.Path.GetFileName(value);
+						ConnectionShortFileName = System.IO.Path.GetFileName(value);
 				}
 			}
 		}
 
 		/// <summary>
-		///		Nombre corto del archivo de parámetros
+		///		Nombre corto del archivo con parámetros de ejecución sobre una conexión
 		/// </summary>
-		public string ShortFileName
-		{
-			get { return _shortFileName; }
-			set { CheckProperty(ref _shortFileName, value); }
+		public string ConnectionShortFileName
+		{ 
+			get { return _connectionShortFileName; }
+			set { CheckProperty(ref _connectionShortFileName, value); }
+		}
+
+		/// <summary>
+		///		Nombre del archivo con los parámetros de ejecución para los proyectos de ETL
+		/// </summary>
+		public string EtlParametersFileName
+		{ 
+			get { return _etlParametersFileName; }
+			set 
+			{
+				if (CheckProperty(ref _etlParametersFileName, value))
+				{
+					if (string.IsNullOrWhiteSpace(value))
+						EtlShortFileName = string.Empty;
+					else
+						EtlShortFileName = System.IO.Path.GetFileName(value);
+				}
+			}
+		}
+
+		/// <summary>
+		///		Nombre corto del archivo de parámetros de ejecución de los proyectos de ETL
+		/// </summary>
+		public string EtlShortFileName
+		{ 
+			get { return _etlShortFileName; }
+			set { CheckProperty(ref _etlShortFileName, value); }
 		}
 
 		/// <summary>
@@ -455,7 +489,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 		public BaseCommand CancelScriptExecutionCommand { get; }
 
 		/// <summary>
-		///		Comando para abrir un archivo de parámetros
+		///		Comando para abrir el archivo de parámetros
 		/// </summary>
 		public BaseCommand OpenParametersFileCommand { get; }
 
@@ -463,10 +497,5 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 		///		Comando para modificar un archivo de parámetros
 		/// </summary>
 		public BaseCommand UpdateParametersFileCommand { get; }
-
-		/// <summary>
-		///		Comando para quitar el archivo de parámetros
-		/// </summary>
-		public BaseCommand RemoveParametersFileCommand { get; }
 	}
 }

@@ -73,6 +73,9 @@ namespace Bau.DbStudio.Controllers
 					case Libraries.DbStudio.ViewModels.Solutions.Details.Connections.ConnectionViewModel viewModel:
 							result = HostHelperController.ShowDialog(MainWindow, new Views.Connections.ConnectionView(viewModel));
 						break;
+					case Libraries.DbStudio.ViewModels.Solutions.Details.Connections.ConnectionParametersExecutionViewModel viewModel:
+							result = HostHelperController.ShowDialog(MainWindow, new Views.Connections.ConnectionParametersView(viewModel));
+						break;
 					case Libraries.DbStudio.ViewModels.Solutions.Details.Files.CsvFilePropertiesViewModel viewModel:
 							result = HostHelperController.ShowDialog(MainWindow, new Views.Files.CsvFilePropertiesView(viewModel));
 						break;

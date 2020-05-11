@@ -57,6 +57,12 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Manager
 						case ExecuteSentence sentence:
 								await ProcessExecuteAsync(block, sentence);
 							break;
+						case ConvertFileSentence sentence:
+								await ConvertFileAsync(block, sentence, cancellationToken);
+							break;
+						case ConvertPathSentence sentence:
+								await ConvertPathAsync(block, sentence, cancellationToken);
+							break;
 					}
 		}
 
@@ -124,7 +130,7 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Manager
 						else if (System.IO.File.Exists(path))
 							LibHelper.Files.HelperFiles.KillFile(path);
 						else
-							AddError(block, $"Cant find file or path '{path}'");
+							block.Info($"Cant find file or path '{path}' for delete");
 					}
 					catch (Exception exception)
 					{
@@ -188,6 +194,93 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Manager
 				}
 				// Devuelve la lista de argumentos
 				return parameters;
+		}
+
+		/// <summary>
+		///		Convierte los archivos de un directorio
+		/// </summary>
+		private async Task ConvertPathAsync(BlockLogModel parent, ConvertPathSentence sentence, CancellationToken cancellationToken)
+		{
+			using (BlockLogModel block = parent.CreateBlock(LogModel.LogType.Info, $"Start convert path '{sentence.Path}' from {sentence.Source} to {sentence.Target}"))
+			{
+				string path = Step.Project.GetFullFileName(sentence.Path);
+
+					if (!System.IO.Directory.Exists(path))
+						AddError(block, $"Cant find the path '{path}'");
+					else
+						try
+						{
+							switch (sentence.Source)
+							{
+								case ConvertPathSentence.FileType.Csv:
+										if (sentence.Target == ConvertPathSentence.FileType.Parquet)
+											foreach (string source in System.IO.Directory.GetFiles(path, "*.csv"))
+												if (!cancellationToken.IsCancellationRequested)
+												{
+													string target = System.IO.Path.Combine(path, System.IO.Path.GetFileNameWithoutExtension(source) + ".parquet");
+
+														await new Controllers.CsvToParquetConversor().ConvertAsync(source, target, cancellationToken);
+												}
+										else
+											AddError(block, $"Cant convert '{sentence.Source}' to '{sentence.Target}'");
+									break;
+								case ConvertPathSentence.FileType.Parquet:
+										if (sentence.Target == ConvertPathSentence.FileType.Csv)
+											foreach (string source in System.IO.Directory.GetFiles(path, "*.parquet"))
+												if (!cancellationToken.IsCancellationRequested)
+												{
+													string target = System.IO.Path.Combine(path, System.IO.Path.GetFileNameWithoutExtension(source) + ".csv");
+
+														await new Controllers.ParquetToCsvConversor().ConvertAsync(source, target, cancellationToken);
+												}
+										else
+											AddError(block, $"Cant convert '{sentence.Source}' to '{sentence.Target}'");
+									break;
+								default:
+										AddError(block, $"Cant convert '{sentence.Source}' to '{sentence.Target}'");
+									break;
+							}
+						}
+						catch (Exception exception)
+						{
+							AddError(block, $"Error when convert path '{path}'", exception);
+						}
+			}
+		}
+
+		/// <summary>
+		///		Convierte un archivo
+		/// </summary>
+		private async Task ConvertFileAsync(BlockLogModel parent, ConvertFileSentence sentence, CancellationToken cancellationToken)
+		{
+			using (BlockLogModel block = parent.CreateBlock(LogModel.LogType.Info, $"Start convert file '{sentence.FileNameSource}' to {sentence.FileNameTarget}"))
+			{
+				string source = Step.Project.GetFullFileName(sentence.FileNameSource);
+				string target = Step.Project.GetFullFileName(sentence.FileNameTarget);
+
+					if (!System.IO.File.Exists(source))
+						AddError(block, $"Cant find the file '{source}'");
+					else if (source.EndsWith(".csv", StringComparison.CurrentCultureIgnoreCase) && target.EndsWith(".parquet", StringComparison.CurrentCultureIgnoreCase))
+						try
+						{
+							await new Controllers.CsvToParquetConversor().ConvertAsync(source, target, cancellationToken);
+						}
+						catch (Exception exception)
+						{
+							AddError(block, $"Cant convert '{source}' to '{target}'", exception);
+						}
+					else if (source.EndsWith(".parquet", StringComparison.CurrentCultureIgnoreCase) && target.EndsWith(".csv", StringComparison.CurrentCultureIgnoreCase))
+						try
+						{
+							await new Controllers.ParquetToCsvConversor().ConvertAsync(source, target, cancellationToken);
+						}
+						catch (Exception exception)
+						{
+							AddError(block, $"Cant convert '{source}' to '{target}'", exception);
+						}
+					else
+						AddError(block, $"Cant convert file '{source}' to '{target}'");
+			}
 		}
 
 		/// <summary>

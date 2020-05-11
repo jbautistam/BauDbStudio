@@ -59,9 +59,14 @@ namespace Bau.Libraries.DbStudio.Models
 		}
 
 		/// <summary>
-		///		Nombre del último archivo de parámetros seleccionado
+		///		Nombre del último archivo de parámetros de conexión seleccionado
 		/// </summary>
-		public string LastParametersFileName { get; set; }
+		public string LastConnectionParametersFileName { get; set; }
+
+		/// <summary>
+		///		Nombre del último archivo de parámetros de proyectos de ETL seleccionado
+		/// </summary>
+		public string LastEtlParametersFileName { get; set; }
 
 		/// <summary>
 		///		Conexiones

@@ -76,6 +76,7 @@ namespace Bau.Libraries.LibJobProcessor.Core.Models
 		public string GetFullFileName(string fileName, List<JobContextModel> contexts = null)
 		{
 			string fullFileName = fileName;
+			bool isUncPath = false;
 
 				// Sustituye los directorios del contexto global
 				foreach (JobContextModel context in contexts ?? Contexts)
@@ -88,9 +89,19 @@ namespace Bau.Libraries.LibJobProcessor.Core.Models
 				fullFileName = fullFileName.ReplaceWithStringComparison("{{Date}}", $"{StartExecution:yyyy-MM-dd}");
 				fullFileName = fullFileName.ReplaceWithStringComparison("{{Time}}", $"{StartExecution:HH_mm_ss}");
 				fullFileName = fullFileName.ReplaceWithStringComparison("{{DateTime}}", $"{StartExecution:yyyy-MM-dd HH_mm_ss}");
+				// Comprueba si es un directorio UNC
+				if (fullFileName.StartsWith("\\\\"))
+				{
+					isUncPath = true;
+					fullFileName = fullFileName.Substring(2);
+				}
 				// Reemplaza los caracteres / por \ y quita los duplicados
 				fullFileName = fullFileName.Replace('/', '\\');
-				fullFileName = fullFileName.Replace("\\\\", "\\");
+				while (fullFileName.IndexOf("\\\\") >= 0)
+					fullFileName = fullFileName.Replace("\\\\", "\\");
+				// Añade los caracteres de un directorio UNC
+				if (isUncPath)
+					fullFileName = "\\\\" + fullFileName;
 				// Devuelve el nombre de archivo
 				return fullFileName;
 		}

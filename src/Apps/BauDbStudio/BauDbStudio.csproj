@@ -126,6 +126,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Update="Views\Connections\ConnectionParametersView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\EtlProjects\CreateTestXmlView.xaml">
       <SubType>Designer</SubType>
     </Page>
