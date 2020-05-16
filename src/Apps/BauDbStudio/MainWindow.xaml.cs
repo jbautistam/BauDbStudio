@@ -35,6 +35,7 @@ namespace Bau.DbStudio
 			// Carga la última solución
 			ViewModel.SolutionViewModel.Load();
 			ViewModel.LastPathSelected = MainController.ConfigurationController.LastPathSelected;
+			ViewModel.LastFilesViewModel.Add(MainController.ConfigurationController.LastFiles);
 			// Añade los manejadores de eventos
 			ViewModel.WorkspacesChanged += (sender, args) => ShowMenuWorkspaces();
 			// Añade los paneles
@@ -375,6 +376,7 @@ namespace Bau.DbStudio
 			if (!string.IsNullOrWhiteSpace(ViewModel.LastPathSelected))
 				MainController.ConfigurationController.LastPathSelected = ViewModel.LastPathSelected;
 			MainController.ConfigurationController.LastWorkSpace = ViewModel.SolutionViewModel.Workspace;
+			MainController.ConfigurationController.LastFiles = ViewModel.LastFilesViewModel.GetFiles();
 			MainController.ConfigurationController.Save();
 			// Cierra la aplicación
 			Close();

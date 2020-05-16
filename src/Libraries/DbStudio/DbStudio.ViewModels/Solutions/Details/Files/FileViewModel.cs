@@ -27,8 +27,11 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 		/// </summary>
 		public void Load()
 		{
+			// Carga el archivo
 			if (!string.IsNullOrWhiteSpace(FileName) && System.IO.File.Exists(FileName))
 				Content = LibHelper.Files.HelperFiles.LoadTextFile(FileName);
+			// Añade el archivo a los últimos archivos abiertos
+			SolutionViewModel.MainViewModel.LastFilesViewModel.Add(FileName);
 		}
 
 		/// <summary>
@@ -52,6 +55,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 				LibHelper.Files.HelperFiles.SaveTextFile(FileName, Content, System.Text.Encoding.UTF8);
 				// Actualiza el árbol
 				SolutionViewModel.TreeFoldersViewModel.Load();
+				// Añade el archivo a los últimos archivos abiertos
+				SolutionViewModel.MainViewModel.LastFilesViewModel.Add(FileName);
 				// Indica que no ha habido modificaciones
 				IsUpdated = false;
 			}

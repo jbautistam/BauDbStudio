@@ -9,11 +9,6 @@
     <ApplicationIcon>Resources\BauDbStudio.ico</ApplicationIcon>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
-  </PropertyGroup>
-
   <ItemGroup>
     <None Remove="Resources\BauDbStudio.ico" />
     <None Remove="Resources\Images\ArrowDown.png" />

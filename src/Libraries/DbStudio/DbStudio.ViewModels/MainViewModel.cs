@@ -18,6 +18,7 @@ namespace Bau.Libraries.DbStudio.ViewModels
 		private string _text;
 		private Solutions.Details.IDetailViewModel _selectedDetailsViewModel;
 		private Tools.LogListViewModel _logViewModel;
+		private Tools.LastFilesListViewModel _lastFilesViewModel;
 
 		public MainViewModel(Controllers.ISparkSolutionController mainController, string workspace)
 		{
@@ -31,6 +32,7 @@ namespace Bau.Libraries.DbStudio.ViewModels
 			SolutionViewModel = new Solutions.SolutionViewModel(this, workspace);
 			// Inicializa el log
 			LogViewModel = new Tools.LogListViewModel(this);
+			LastFilesViewModel = new Tools.LastFilesListViewModel(this);
 			// Asigna los comandos
 			SaveCommand = new BaseCommand(_ => Save(false), _ => CanSave())
 									.AddListener(this, nameof(SelectedDetailsViewModel));
@@ -176,7 +178,16 @@ namespace Bau.Libraries.DbStudio.ViewModels
 		public Tools.LogListViewModel LogViewModel
 		{
 			get { return _logViewModel; }
-			set { CheckProperty(ref _logViewModel, value); }
+			set { CheckObject(ref _logViewModel, value); }
+		}
+
+		/// <summary>
+		///		ViewModel de los últimos archivos abiertos
+		/// </summary>
+		public Tools.LastFilesListViewModel LastFilesViewModel
+		{
+			get { return _lastFilesViewModel; }
+			set { CheckObject(ref _lastFilesViewModel, value); }
 		}
 
 		/// <summary>

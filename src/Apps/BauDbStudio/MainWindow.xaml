@@ -20,6 +20,7 @@
 		<KeyBinding Command="Save" Key="S" Modifiers="Ctrl"/>
 		<KeyBinding Command="Search" Key="F" Modifiers="Ctrl"/>
 	</Window.InputBindings>
+
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
@@ -32,6 +33,7 @@
 		</Grid.ColumnDefinitions>
 		<!-- Menú -->
 		<Menu Grid.Column="0" Grid.Row="0">
+
 			<MenuItem Header="_Archivo">
 				<MenuItem Header="_Nuevo">
 					<MenuItem.Icon>
@@ -111,6 +113,14 @@
 						</MenuItem.Icon>
 					</MenuItem>
 				</MenuItem>
+				<MenuItem Header="Archivos recientes" ItemsSource="{Binding LastFilesViewModel.Files}">
+					<MenuItem.ItemContainerStyle>
+						<Style>
+							<Setter Property="MenuItem.Header" Value="{Binding Header}"/>
+							<Setter Property="MenuItem.Command" Value="{Binding OpenFileCommand}"/>
+						</Style>
+					</MenuItem.ItemContainerStyle>
+				</MenuItem>
 				<Separator/>
 				<MenuItem Header="_Salir" InputGestureText="Alt+F4" Click="ExitMenuItem_Click" >
 					<MenuItem.Icon>
@@ -122,23 +132,23 @@
 			<MenuItem Header="_Editar">
 				<MenuItem Header="Copiar" Command="ApplicationCommands.Copy">
 					<MenuItem.Icon>
-						<Image Width="16" Height="16" Source="/BauControls;component/Resources/Images/Copy.png" />
+						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Copy.png" />
 					</MenuItem.Icon>
 				</MenuItem>
 				<MenuItem Header="Cortar" Command="ApplicationCommands.Cut">
 					<MenuItem.Icon>
-						<Image Width="16" Height="16" Source="/BauControls;component/Resources/Images/Cut.png" />
+						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Cut.png" />
 					</MenuItem.Icon>
 				</MenuItem>
 				<MenuItem Header="Pegar" Command="ApplicationCommands.Paste">
 					<MenuItem.Icon>
-						<Image Width="16" Height="16" Source="/BauControls;component/Resources/Images/Paste.png" />
+						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Paste.png" />
 					</MenuItem.Icon>
 				</MenuItem>
 				<Separator/>
 				<MenuItem Header="Borrar" Command="ApplicationCommands.Delete">
 					<MenuItem.Icon>
-						<Image Width="16" Height="16" Source="/BauControls;component/Resources/Images/Delete.png" />
+						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
 					</MenuItem.Icon>
 				</MenuItem>
 
