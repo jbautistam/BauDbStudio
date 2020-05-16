@@ -63,5 +63,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Controllers
 		///		Indica a la ventana principal que cierre un documento
 		/// </summary>
 		void CloseWindow(string tabId);
+
+		/// <summary>
+		///		Obtiene el nombre del archivo de la consola de ejecución de proyectos ETL
+		/// </summary>
+		string GetEtlConsoleFileName();
 	}
 }

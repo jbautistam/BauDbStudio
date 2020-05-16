@@ -57,7 +57,7 @@
     <ProjectReference Include="..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.ViewModels\BauMvvm.ViewModels.csproj" />
     <ProjectReference Include="..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.Views.Wpf\BauMvvm.Views.Wpf.csproj" />
     <ProjectReference Include="..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.Views\BauMvvm.Views.csproj" />
-    <ProjectReference Include="..\..\..\..\..\Libraries\Common\LibSystem.Windows\src\LibSystem.Windows.csproj" />
+    <ProjectReference Include="..\..\..\..\..\Libraries\Common\LibSystem.Windows\LibSystem.Windows.csproj" />
     <ProjectReference Include="..\..\Libraries\DbStudio\DbStudio.ViewModels\DbStudio.ViewModels.csproj" />
   </ItemGroup>
 
@@ -127,6 +127,9 @@
 
   <ItemGroup>
     <Page Update="Views\Connections\ConnectionParametersView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\EtlProjects\ExecuteEtlConsoleView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\EtlProjects\CreateTestXmlView.xaml">

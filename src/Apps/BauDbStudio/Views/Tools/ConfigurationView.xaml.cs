@@ -28,6 +28,23 @@ namespace Bau.DbStudio.Views.Tools
 				cboFontChooser.SelectedIndex = 0;
 			txtFontSize.Value = MainWindow.MainController.ConfigurationController.EditorFontSize;
 			chkShowLineNumber.IsChecked = MainWindow.MainController.ConfigurationController.EditorShowLinesNumber;
+			fnConsole.FileName = MainWindow.MainController.ConfigurationController.ConsoleExecutable;
+		}
+
+		/// <summary>
+		///		Comprueba los datos introducidos en el formulario
+		/// </summary>
+		private bool ValidateData()
+		{
+			bool validated = false;
+
+				// Comprueba los datos introducidos
+				if (!string.IsNullOrWhiteSpace(fnConsole.FileName) && !System.IO.File.Exists(fnConsole.FileName))
+					MainWindow.MainController.SparkSolutionController.HostController.SystemController.ShowMessage("No se encuentra el archivo de ejecución de consola");
+				else
+					validated = true;
+				// Devuelve el valor que indica si los datos son correctos
+				return validated;
 		}
 
 		/// <summary>
@@ -35,13 +52,19 @@ namespace Bau.DbStudio.Views.Tools
 		/// </summary>
 		private void Save()
 		{
-			// Cambia los valores
-			if (cboFontChooser.SelectedItem != null)
-				MainWindow.MainController.ConfigurationController.EditorFontName = cboFontChooser.SelectedItem.ToString();
-			MainWindow.MainController.ConfigurationController.EditorFontSize = txtFontSize.Value ?? 10;
-			MainWindow.MainController.ConfigurationController.EditorShowLinesNumber = chkShowLineNumber.IsChecked ?? false;
-			// Cierra la ventana
-			Close();
+			if (ValidateData())
+			{
+				// Cambia los valores
+				if (cboFontChooser.SelectedItem != null)
+					MainWindow.MainController.ConfigurationController.EditorFontName = cboFontChooser.SelectedItem.ToString();
+				MainWindow.MainController.ConfigurationController.EditorFontSize = txtFontSize.Value ?? 10;
+				MainWindow.MainController.ConfigurationController.EditorShowLinesNumber = chkShowLineNumber.IsChecked ?? false;
+				MainWindow.MainController.ConfigurationController.ConsoleExecutable = fnConsole.FileName;
+				// Graba la configuración
+				MainWindow.MainController.ConfigurationController.Save();
+				// Cierra la ventana
+				Close();
+			}
 		}
 
 		private void cmdAccept_Click(object sender, RoutedEventArgs e)

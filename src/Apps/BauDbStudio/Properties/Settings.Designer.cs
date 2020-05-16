@@ -106,5 +106,17 @@ namespace Bau.DbStudio.Properties {
                 this["LastWorkSpace"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ConsoleExecutable {
+            get {
+                return ((string)(this["ConsoleExecutable"]));
+            }
+            set {
+                this["ConsoleExecutable"] = value;
+            }
+        }
     }
 }

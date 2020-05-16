@@ -6,11 +6,11 @@ using Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects;
 namespace Bau.DbStudio.Views.EtlProjects
 {
 	/// <summary>
-	///		Vista para crear proyectos de prueba de base de datos
+	///		Vista para ejecutar un proyecto de ETL
 	/// </summary>
-	public partial class CreateTestXmlView : Window
+	public partial class ExecuteEtlConsoleView : Window
 	{
-		public CreateTestXmlView(CreateTestXmlViewModel viewModel)
+		public ExecuteEtlConsoleView(ExecuteEtlConsoleViewModel viewModel)
 		{
 			InitializeComponent();
 			DataContext = ViewModel = viewModel;
@@ -24,6 +24,6 @@ namespace Bau.DbStudio.Views.EtlProjects
 		/// <summary>
 		///		ViewModel
 		/// </summary>
-		public CreateTestXmlViewModel ViewModel { get; }
+		public ExecuteEtlConsoleViewModel ViewModel { get; }
 	}
 }

@@ -10,7 +10,7 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Manager.Controllers
 	internal class CsvToParquetConversor
 	{
 		/// <summary>
-		///		Convierte un archivo parquet a csv
+		///		Convierte un archivo csv a parquet
 		/// </summary>
 		internal async Task ConvertAsync(string source, string target, CancellationToken cancellationToken)
 		{

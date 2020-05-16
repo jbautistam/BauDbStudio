@@ -315,26 +315,43 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 		/// </summary>
 		private void ExecuteScript()
 		{
-			List<string> files = GetFilesFromPath(".sql");
+			string fileName = GetSelectedFile();
+			bool executeXml = false;
 
-				// Ejecuta los archivos (si ha encontrado alguno)
-				if (files.Count == 0)
-					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("No se encuentra ningún archivo SQL para ejecutar");
-				else
-					SolutionViewModel.MainViewModel.MainController.OpenWindow(new Details.Connections.ExecuteFilesViewModel(SolutionViewModel, files));
+				// Si el archivo seleccionado es XML, lo ejecuta sobre una consola
+				if (!string.IsNullOrWhiteSpace(fileName))
+				{
+					if (fileName.EndsWith(".xml", StringComparison.CurrentCultureIgnoreCase))
+					{
+						// Ejecuta el archivo XML en una consola
+						ExecuteEtlScript(fileName);
+						// Indica que se trata de un archivo XML ejecutado sobre consola
+						executeXml = true;
+					}
+				}
+				// Si no se trata de un archivo de proyecto XML (que se va a ejecutar en consola), se ejecutan los SQL
+				if (!executeXml)
+				{
+					List<string> files = GetFilesFromPath(fileName, ".sql");
+
+						// Ejecuta los archivos (si ha encontrado alguno)
+						if (files.Count == 0)
+							SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("No se encuentra ningún archivo SQL para ejecutar");
+						else
+							SolutionViewModel.MainViewModel.MainController.OpenWindow(new Details.Connections.ExecuteFilesViewModel(SolutionViewModel, files));
+				}
 		}
 
 		/// <summary>
-		///		Obtiene los archivos SQL de un directorio (o el archivo seleccionado
+		///		Obtiene los archivos SQL de un directorio (o el archivo seleccionado)
 		/// </summary>
-		private List<string> GetFilesFromPath(string extension)
+		private List<string> GetFilesFromPath(string selectedFileName, string extension)
 		{
 			List<string> files = new List<string>();
-			string path = GetSelectedFile();
 
 				// Obtiene el archivo seleccionado o los archivos de un directorio
-				if (!string.IsNullOrWhiteSpace(path))
-					files.Add(path);
+				if (!string.IsNullOrWhiteSpace(selectedFileName) && selectedFileName.EndsWith(extension, StringComparison.CurrentCultureIgnoreCase))
+					files.Add(selectedFileName);
 				else
 				{
 					// Obtiene la lista de todos los archivos
@@ -348,6 +365,14 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 				}
 				// Devuelve la colección de archivos
 				return files;
+		}
+
+		/// <summary>
+		///		Ejecuta un script de XML
+		/// </summary>
+		private void ExecuteEtlScript(string fileName)
+		{
+			SolutionViewModel.MainViewModel.MainController.OpenDialog(new Details.EtlProjects.ExecuteEtlConsoleViewModel(SolutionViewModel, fileName));
 		}
 
 		/// <summary>

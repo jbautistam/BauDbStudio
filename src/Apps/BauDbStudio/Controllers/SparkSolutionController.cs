@@ -23,13 +23,6 @@ namespace Bau.DbStudio.Controllers
 			MainWindow = mainWindow;
 			Logger = new Libraries.LibLogger.Core.LogManager();
 			AppName = applicationName;
-
-			if (System.IO.File.Exists(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Studio.Configuration.xml")))
-			{
-				Libraries.LibHelper.Files.HelperFiles.MakePath(appPath);
-				Libraries.LibHelper.Files.HelperFiles.MoveFile(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Studio.Configuration.xml"),
-															   System.IO.Path.Combine(appPath, "Studio.Configuration.xml"));
-			}
 			// Directorio de aplicación
 			AppPath = appPath;
 			// Crea el directorio de aplicación
@@ -85,6 +78,9 @@ namespace Bau.DbStudio.Controllers
 					case Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects.CreateTestXmlViewModel viewModel:
 							result = HostHelperController.ShowDialog(MainWindow, new Views.EtlProjects.CreateTestXmlView(viewModel));
 						break;
+					case Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects.ExecuteEtlConsoleViewModel viewModel:
+							result = HostHelperController.ShowDialog(MainWindow, new Views.EtlProjects.ExecuteEtlConsoleView(viewModel));
+						break;
 				}
 				// Devuelve el resultado
 				return result;
@@ -128,6 +124,14 @@ namespace Bau.DbStudio.Controllers
 		public void CloseWindow(string tabId)
 		{
 			MainWindow.CloseTab(tabId);
+		}
+
+		/// <summary>
+		///		Obtiene el nombre de la consola de ejecución de proyectos ETL
+		/// </summary>
+		public string GetEtlConsoleFileName()
+		{
+			return MainWindow.MainController.ConfigurationController.ConsoleExecutable;
 		}
 
 		/// <summary>

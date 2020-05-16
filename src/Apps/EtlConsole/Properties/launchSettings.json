@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "EtlConsole": {
+      "commandName": "Project",
+      "commandLineArgs": "--project \"C:\\Projects\\Repos\\Foundation\\SqlScripts\\src\\SparkSqlScripts\\XmlScripts\\Engine stocks\\Validation\\Stock validation.xml\" --context \"C:\\Projects\\Repos\\Foundation\\SqlScripts\\src\\SparkSqlScripts\\XmlScripts\\Engine stocks\\Parameters\\Vidal.Context.xml\""
+    }
+  }
+}

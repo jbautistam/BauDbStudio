@@ -18,6 +18,7 @@ namespace Bau.DbStudio.Controllers
 			EditorFontSize = Properties.Settings.Default.EditorFontSize;
 			EditorShowLinesNumber = Properties.Settings.Default.EditorShowLinesNumber;
 			EditorZoom = Properties.Settings.Default.EditorZoom;
+			ConsoleExecutable = Properties.Settings.Default.ConsoleExecutable;
 			LastWorkSpace = Properties.Settings.Default.LastWorkSpace;
 		}
 
@@ -33,6 +34,7 @@ namespace Bau.DbStudio.Controllers
 			Properties.Settings.Default.EditorFontSize = EditorFontSize;
 			Properties.Settings.Default.EditorShowLinesNumber = EditorShowLinesNumber;
 			Properties.Settings.Default.EditorZoom = EditorZoom;
+			Properties.Settings.Default.ConsoleExecutable = ConsoleExecutable;
 			Properties.Settings.Default.LastWorkSpace = LastWorkSpace;
 			// Graba la configuración
 			Properties.Settings.Default.Save();
@@ -63,10 +65,16 @@ namespace Bau.DbStudio.Controllers
 		/// </summary>
 		public bool EditorShowLinesNumber { get; set; } = true;
 
+
 		/// <summary>
 		///		Indica el nivel de zoom del editor
 		/// </summary>
 		public double EditorZoom { get; set; } = 1.0;
+
+		/// <summary>
+		///		Nombre del ejecutable de la consola
+		/// </summary>
+		public string ConsoleExecutable { get; set; }
 
 		/// <summary>
 		///		Ultimo workspace seleccionado
