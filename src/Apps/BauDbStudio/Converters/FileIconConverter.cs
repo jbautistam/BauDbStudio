@@ -32,6 +32,8 @@ namespace Bau.DbStudio.Converters
 					return "/Resources/Images/Connection.png";
 				case BaseTreeNodeViewModel.IconType.Deployment:
 					return "/Resources/Images/Deployment.png";
+				case BaseTreeNodeViewModel.IconType.Storage:
+					return "/Resources/Images/Storage.png";
 				case BaseTreeNodeViewModel.IconType.Project:
 					return "/Resources/Images/Project.png";
 				case BaseTreeNodeViewModel.IconType.Path:
@@ -46,6 +48,8 @@ namespace Bau.DbStudio.Converters
 					return "/Resources/Images/Field.png";
 				case BaseTreeNodeViewModel.IconType.Error:
 					return "/Resources/Images/DataError.png";
+				case BaseTreeNodeViewModel.IconType.Loading:
+					return "/Resources/Images/Loading.png";
 				default:
 					return null;
 			}

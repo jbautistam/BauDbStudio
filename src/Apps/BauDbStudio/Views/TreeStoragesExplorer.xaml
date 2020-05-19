@@ -27,10 +27,20 @@
 				</HierarchicalDataTemplate>
 				<!-- Menú -->
 				<ContextMenu x:Key="mnuExplorer">
-					<MenuItem Header="Nuevo storage" Command="{Binding Path=NewStorageCommand}">
+					<MenuItem Header="Nuevo">
 						<MenuItem.Icon>
 							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
 						</MenuItem.Icon>
+						<MenuItem Header="Cuenta de storage" Command="{Binding Path=NewStorageCommand}">
+							<MenuItem.Icon>
+								<Image Width="16" Height="16" Source="/Resources/Images/Storage.png" />
+							</MenuItem.Icon>
+						</MenuItem>
+						<MenuItem Header="Contenedor" Command="{Binding Path=NewContainerCommand}">
+							<MenuItem.Icon>
+								<Image Width="16" Height="16" Source="/Resources/Images/FolderNode.png" />
+							</MenuItem.Icon>
+						</MenuItem>
 					</MenuItem>
 					<MenuItem Header="Abrir" Command="{Binding OpenPropertiesCommand}">
 						<MenuItem.Icon>
@@ -44,10 +54,20 @@
 						</MenuItem.Icon>
 					</MenuItem>
 					<Separator/>
-					<MenuItem Header="Subir archivos" Command="{Binding UploadAsyncCommand}">
+					<MenuItem Header="Subir">
 						<MenuItem.Icon>
 							<Image Width="16" Height="16" Source="/Resources/Images/Upload.png" />
 						</MenuItem.Icon>
+						<MenuItem Header="Directorio" Command="{Binding UploadFolderAsyncCommand}">
+							<MenuItem.Icon>
+								<Image Width="16" Height="16" Source="/Resources/Images/Upload.png" />
+							</MenuItem.Icon>
+						</MenuItem>
+						<MenuItem Header="Archivos" Command="{Binding UploadFileAsyncCommand}">
+							<MenuItem.Icon>
+								<Image Width="16" Height="16" Source="/Resources/Images/Upload.png" />
+							</MenuItem.Icon>
+						</MenuItem>
 					</MenuItem>
 					<MenuItem Header="Descargar archivos" Command="{Binding DownloadAsyncCommand}">
 						<MenuItem.Icon>
@@ -68,8 +88,8 @@
 				</Style>
 			</TreeView.ItemContainerStyle>
 			<TreeView.InputBindings>
-				<KeyBinding Key="Enter" Command="{Binding OpenCommand}" />
-				<KeyBinding Key="Delete" Command="{Binding DeleteCommand}" />
+				<KeyBinding Key="Enter" Command="{Binding OpenPropertiesCommand}" />
+				<KeyBinding Key="Delete" Command="{Binding DeleteAsyncCommand}" />
 			</TreeView.InputBindings>
 		</TreeView>
 	</Grid>

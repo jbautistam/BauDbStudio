@@ -41,8 +41,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers
 				Children.Clear();
 				// Añade los nodos raíz
 				AddRootNodes();
-				//AddRootNode("Conexiones", NodeRootModel.NodeType.Connection, TreeNodeViewModel.IconType.Path);
-				//AddRootNode("Archivos", NodeRootModel.NodeType.FilesRoot, TreeNodeViewModel.IconType.Project);
 				// Expande los nodos previamente abiertos
 				ExpandNodes(Children, nodesExpanded);
 		}
@@ -51,14 +49,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers
 		///		Añade los nodos raíz
 		/// </summary>
 		protected abstract void AddRootNodes();
-
-		///// <summary>
-		/////		Añade un nodo raíz al árbol
-		///// </summary>
-		//private void AddRootNode(string text, NodeRootModel.NodeType type, TreeNodeViewModel.IconType icon)
-		//{
-		//	Children.Add(new TreeDetailsNodeViewModel(this, null,  text, icon, new NodeRootModel(type), true, true, BauMvvm.ViewModels.Media.MvvmColor.Red));
-		//}
 
 		/// <summary>
 		///		Obtiene recursivamente los elementos expandidos del árbol (para poder recuperarlos posteriormente y dejarlos abiertos de nuevo)
@@ -111,13 +101,13 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers
 			return false;
 		}
 
-		/// <summary>
-		///		Ejecuta una acción
-		/// </summary>
-		private void ExecuteAction(string action)
-		{
-			SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage(action);
-		}
+		///// <summary>
+		/////		Ejecuta una acción
+		///// </summary>
+		//private void ExecuteAction(string action)
+		//{
+		//	SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage(action);
+		//}
 
 		/// <summary>
 		///		Comprueba si se puede ejecutar una acción

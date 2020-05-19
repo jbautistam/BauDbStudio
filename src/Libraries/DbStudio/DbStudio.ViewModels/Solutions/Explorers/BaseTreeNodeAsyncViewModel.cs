@@ -25,6 +25,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers
 		/// </summary>
 		protected override void LoadNodes()
 		{
+			// Muestra el nodo de carga
+			Children.Add(new NodeMessageViewModel(TreeViewModel, this, "Cargando ..."));
+			// Carga los nodos
 			Task.Run(async () => await LoadNodesAsync(new CancellationToken()));
 		}
 

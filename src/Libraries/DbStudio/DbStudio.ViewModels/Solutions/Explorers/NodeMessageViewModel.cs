@@ -7,9 +7,11 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers
 	/// </summary>
 	public class NodeMessageViewModel : BaseTreeNodeViewModel
 	{
-		public NodeMessageViewModel(BaseTreeViewModel trvTree, BaseTreeNodeViewModel parent, string message) : 
-					base(trvTree, parent, message, NodeType.Table, IconType.Error, null, false, true, BauMvvm.ViewModels.Media.MvvmColor.Red)
+		public NodeMessageViewModel(BaseTreeViewModel trvTree, BaseTreeNodeViewModel parent, string message, IconType icon = IconType.Loading) : 
+					base(trvTree, parent, message, NodeType.Message, icon, null, false, false, BauMvvm.ViewModels.Media.MvvmColor.DarkGreen)
 		{
+			if (icon == IconType.Error)
+				Foreground = BauMvvm.ViewModels.Media.MvvmColor.Red;
 		}
 
 		/// <summary>

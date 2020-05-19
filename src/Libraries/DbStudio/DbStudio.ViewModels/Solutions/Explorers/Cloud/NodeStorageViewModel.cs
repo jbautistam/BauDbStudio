@@ -16,7 +16,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Cloud
 	public class NodeStorageViewModel : BaseTreeNodeAsyncViewModel
 	{
 		public NodeStorageViewModel(BaseTreeViewModel trvTree, IHierarchicalViewModel parent, StorageModel storage) 
-					: base(trvTree, parent, storage.Name, NodeType.Storage, IconType.Project, storage, true, true, MvvmColor.Navy)
+					: base(trvTree, parent, storage.Name, NodeType.Storage, IconType.Storage, storage, true, true, MvvmColor.Navy)
 		{
 			Storage = storage;
 		}
@@ -40,7 +40,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Cloud
 				}
 				catch (Exception exception)
 				{
-					nodes.Add(new NodeMessageViewModel(TreeViewModel, this, $"Error al cargar los contenedores. {exception.Message}"));
+					nodes.Add(new NodeMessageViewModel(TreeViewModel, this, $"Error al cargar los contenedores. {exception.Message}", IconType.Error));
 					TreeViewModel.SolutionViewModel.MainViewModel.MainController.Logger.Default.LogItems.Error($"Error al cargar los contenedores. {exception.Message}");
 				}
 				// Devuelve la colección de nodos

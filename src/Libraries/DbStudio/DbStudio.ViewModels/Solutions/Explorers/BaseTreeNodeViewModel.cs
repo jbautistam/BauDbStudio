@@ -34,7 +34,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers
 			/// <summary>Conexión a storage</summary>
 			Storage,
 			/// <summary>Contenedor de storage</summary>
-			StorageContainer
+			StorageContainer,
+			/// <summary>Mensaje (transitorio)</summary>
+			Message
 		}
 		/// <summary>
 		///		Tipo de icono
@@ -49,7 +51,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers
 			Table,
 			Key,
 			Field,
-			Error
+			Error,
+			Loading,
+			Storage
 		}
 		// Variables privadas
 		private IconType _icon;
