@@ -43,6 +43,8 @@ namespace Bau.EtlConsole
 					Console.WriteLine($"      --{ArgumentType.Project.ToString()} <Xml project file name>");
 					Console.WriteLine($"      --{ArgumentType.Context.ToString()} <Xml context file name>");
 				}
+				// Log
+				Logger.Flush();
 				// Espera que se pulse una tecla
 				#if DEBUG
 					Console.WriteLine("Press any key...");
@@ -215,20 +217,6 @@ namespace Bau.EtlConsole
 		/// </summary>
 		private static void ResetColor()
 		{
-			Console.ResetColor();
-		}
-
-		/// <summary>
-		///		Escribe la información de pruebas
-		/// </summary>
-		private static void WriteAssert(bool isError, string message)
-		{
-			// Cambia el color
-			if (isError)
-				Console.ForegroundColor = ConsoleColor.Red;
-			// Muestra el mensaje
-			Console.WriteLine(message);
-			// Deja los colores como estaban
 			Console.ResetColor();
 		}
 

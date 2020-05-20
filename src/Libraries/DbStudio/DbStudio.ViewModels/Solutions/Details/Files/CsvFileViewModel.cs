@@ -16,10 +16,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 		/// <summary>
 		///		Carga el archivo
 		/// </summary>
-		protected override DataTable LoadFile(out int totalRecords)
+		protected override DataTable LoadFile(bool countRecords, out int totalRecords)
 		{
 			return new LibCsvFiles.Controllers.CsvDataTableReader(FileParameters)
-													.Load(FileName, ActualPage, RecordsPerPage, out totalRecords);
+													.Load(FileName, ActualPage, RecordsPerPage, countRecords, out totalRecords);
 		}
 
 		/// <summary>

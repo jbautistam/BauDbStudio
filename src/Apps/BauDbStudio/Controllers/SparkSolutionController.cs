@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using Bau.Libraries.BauMvvm.Views.Wpf.Controllers;
 using Bau.Libraries.BauMvvm.ViewModels.Controllers;
 using Bau.Libraries.DbStudio.ViewModels.Solutions.Details;
-using System.Collections.Generic;
 
 namespace Bau.DbStudio.Controllers
 {

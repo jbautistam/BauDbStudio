@@ -52,21 +52,22 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 				// Carga el archivo
 				try
 				{
-					DataResults = LoadFile(out totalRecords);
+					DataResults = LoadFile(Records == 0, out totalRecords);
 				}
 				catch (Exception exception)
 				{
 					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage($"Error when load {FileName}{Environment.NewLine}{exception.Message}");
 				}
 				// Asigna el número de registros
-				Records = totalRecords;
-				Pages = totalRecords / RecordsPerPage + 1;
+				if (Records == 0)
+					Records = totalRecords;
+				Pages = Records / RecordsPerPage + 1;
 		}
 
 		/// <summary>
 		///		Carga un archivo y obtiene una tabla paginada
 		/// </summary>
-		protected abstract DataTable LoadFile(out int totalRecords);
+		protected abstract DataTable LoadFile(bool countRecords, out int totalRecords);
 
 		/// <summary>
 		///		Abre las propiedades del archivo

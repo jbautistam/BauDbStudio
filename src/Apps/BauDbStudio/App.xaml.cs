@@ -34,7 +34,15 @@ namespace Bau.DbStudio
 		/// </summary>
 		private void TreatException(Exception exception)
 		{
-			System.Diagnostics.Trace.TraceError($"Unhandled exception: {exception?.Message}");
+			try
+			{
+				System.Diagnostics.Trace.TraceError($"Unhandled exception: {exception?.Message}");
+				MessageBox.Show($"Error: {exception.Message}");
+			}
+			catch (Exception newException)
+			{
+				System.Diagnostics.Trace.TraceError($"Unhandled exception: {newException?.Message}");
+			}
 		}
 	}
 }

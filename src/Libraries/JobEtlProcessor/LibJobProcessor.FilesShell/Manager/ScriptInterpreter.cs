@@ -82,9 +82,6 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Manager
 		/// </summary>
 		private async Task ProcessCopyAsync(BlockLogModel parent, CopySentence sentence)
 		{
-			// Evita el warning
-			await Task.Delay(1);
-			// Copia los archivos / directorios
 			using (BlockLogModel block = parent.CreateBlock(LogModel.LogType.Info, $"Start copy from '{sentence.Source}' to '{sentence.Target}'"))
 			{
 				string source = Step.Project.GetFullFileName(sentence.Source);
@@ -93,9 +90,9 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Manager
 					try
 					{
 						if (System.IO.Directory.Exists(source))
-							LibHelper.Files.HelperFiles.CopyPath(source, target, sentence.Mask);
+							await LibHelper.Files.HelperFiles.CopyPathAsync(source, target, sentence.Mask);
 						else if (System.IO.File.Exists(source))
-							LibHelper.Files.HelperFiles.CopyFile(source, target);
+							await LibHelper.Files.HelperFiles.CopyFileAsync(source, target);
 						else
 							AddError(block, $"Cant find source file or path '{source}'");
 					}
