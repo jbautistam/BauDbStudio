@@ -218,8 +218,7 @@ namespace Bau.Libraries.DbStudio.Application.Connections
 													// Log
 													block.Info($"Get execution plan: {sql}");
 													// Obtiene el plan de ejecución
-													// EXPLAIN [EXTENDED | CODEGEN] statement
-													result = await provider.GetExecutionPlanAsync($"EXPLAIN EXTENDED {sql}", null, CommandType.Text, timeout, cancellationToken);
+													result = await provider.GetExecutionPlanAsync(sql, null, CommandType.Text, timeout, cancellationToken);
 												}
 										}
 									// Log
