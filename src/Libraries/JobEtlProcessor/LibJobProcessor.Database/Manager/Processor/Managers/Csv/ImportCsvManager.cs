@@ -31,7 +31,7 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Managers.Csv
 							block.Error($"Can't find the provider. Key: '{sentence.Target}'");
 						else
 						{
-							string fileName = Processor.Manager.GetFullFileName(sentence.FileName);
+							string fileName = Processor.Manager.Step.Project.GetFullFileName(sentence.FileName);
 
 								if (!System.IO.File.Exists(fileName))
 									block.Error($"Cant find the file '{fileName}'");

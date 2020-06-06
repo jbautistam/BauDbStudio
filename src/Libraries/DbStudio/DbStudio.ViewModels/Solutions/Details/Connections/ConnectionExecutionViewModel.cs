@@ -51,8 +51,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 													.AddListener(this, nameof(IsExecuting));
 			CancelScriptExecutionCommand = new BaseCommand(_ => CancelScriptExecution(), _ => IsExecuting)
 													.AddListener(this, nameof(IsExecuting));
-			UpdateParametersFileCommand = new BaseCommand(_ => UpdateParametersFile(), _ => !string.IsNullOrWhiteSpace(ConnectionParametersFileName));
-			OpenParametersFileCommand = new BaseCommand(_ => OpenParametersFile());
+			UpdateParametersFileCommand = new BaseCommand(_ => UpdateParametersFile());
+			OpenParametersFileCommand = new BaseCommand(_ => OpenParametersFile(), _ => !string.IsNullOrWhiteSpace(ConnectionParametersFileName));
 		}
 
 		/// <summary>

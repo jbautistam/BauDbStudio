@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.LibDataStructures.Collections;
 using Bau.Libraries.DbAggregator;
 using Bau.Libraries.LibLogger.Core;
+using Bau.Libraries.LibJobProcessor.Core.Models.Jobs;
 
 namespace Bau.Libraries.LibJobProcessor.Database.Manager
 {
@@ -15,11 +15,11 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager
 	/// </summary>
 	internal class DbScriptManager
 	{
-		internal DbScriptManager(DbAggregatorManager dataProviderManager, NormalizedDictionary<object> parameters, NormalizedDictionary<string> paths, LogManager logger)
+		internal DbScriptManager(JobStepModel step, DbAggregatorManager dataProviderManager, NormalizedDictionary<object> parameters, LogManager logger)
 		{
+			Step = step;
 			DataProviderManager = dataProviderManager;
 			Parameters = parameters;
-			Paths = paths;
 			Logger = logger;
 		}
 
@@ -58,41 +58,20 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager
 		/// </summary>
 		private async Task<bool> ProcessAsync(Processor.Sentences.ProgramModel program, CancellationToken cancellationToken)
 		{
-			await Task.Run(() => {
-									Processor.DbScriptProcessor processor = new Processor.DbScriptProcessor(this);
+			Processor.DbScriptProcessor processor = new Processor.DbScriptProcessor(this);
 
-										// Ejecuta el script
-										processor.Process(program);
-								});
+				// Evita los warnings
+				await Task.Delay(1);
+				// Ejecuta el script
+				processor.Process(program);
 				// Devuelve el valor que indica si ha habido errores
 				return Errors.Count == 0;
 		}
 
 		/// <summary>
-		///		Obtiene el nombre de archivo completo: si existe el archivo, devuelve el mismo nombre de archivo, 
-		///	si es un nombre de archivo relativo, se convierte el nombre de archivo según los nombres de contexto
+		///		Datos del paso
 		/// </summary>
-		internal string GetFullFileName(string fileName)
-		{
-			if (System.IO.File.Exists(fileName))
-				return fileName;
-			else
-				return ConvertFileNameWihtPaths(fileName);
-		}
-
-		/// <summary>
-		///		Obtiene el nombre completo de un archivo a partir de los datos de los contextos
-		/// </summary>
-		private string ConvertFileNameWihtPaths(string fileName)
-		{
-			string fullFileName = fileName;
-
-				// Sustituye los directorios del contexto global
-				foreach ((string key, string value) in Paths.Enumerate())
-					fullFileName = fullFileName.ReplaceWithStringComparison("{{" + key + "}}", value);
-				// Devuelve el nombre de archivo
-				return fullFileName;
-		}
+		internal JobStepModel Step { get; }
 
 		/// <summary>
 		///		Controlador de los proveedores de datos
@@ -103,11 +82,6 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager
 		///		Parámetros iniciales
 		/// </summary>
 		internal NormalizedDictionary<object> Parameters { get; }
-
-		/// <summary>
-		///		Directorios de trabajo
-		/// </summary>
-		private NormalizedDictionary<string> Paths { get; } = new NormalizedDictionary<string>();
 
 		/// <summary>
 		///		Manager de log

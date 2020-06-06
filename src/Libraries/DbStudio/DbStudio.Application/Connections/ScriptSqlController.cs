@@ -58,7 +58,7 @@ namespace Bau.Libraries.DbStudio.Application.Connections
 													// Log
 													block.Info($"Executing: {sql}");
 													// Obtiene la consulta
-													if (sql.TrimIgnoreNull().StartsWith("SELECT ", StringComparison.CurrentCultureIgnoreCase))
+													if (sql.TrimIgnoreNull().StartsWith("SELECT", StringComparison.CurrentCultureIgnoreCase))
 													{
 														if (pageSize == 0)
 															result = await provider.GetDataTableAsync(sql, null, CommandType.Text, timeout, cancellationToken);
@@ -184,6 +184,52 @@ namespace Bau.Libraries.DbStudio.Application.Connections
 				return scriptsExecuted;
 		}
 
+		/// <summary>
+		///		Obtiene el plan de ejecución de una consulta
+		/// </summary>
+		internal async Task<DataTable> GetExecutionPlanAsync(IDbProvider provider, string query, Models.ArgumentListModel arguments, 
+															 TimeSpan timeout, CancellationToken cancellationToken)
+		{
+			DataTable result = null;
+
+				// Obtiene la tabla
+				using (BlockLogModel block = Manager.SolutionManager.Logger.Default.CreateBlock(LogModel.LogType.Info, "Get execution plan"))
+				{
+					if (string.IsNullOrWhiteSpace(query))
+						block.Error("The query is empty");
+					else
+					{
+						List<SqlSectionModel> scripts = new SqlParser().Tokenize(query, arguments.Constants.ToDictionary(), out string error);
+
+							if (!string.IsNullOrWhiteSpace(error))
+								block.Error(error);
+							else
+							{
+								ParametersDbCollection parametersDb = ConvertParameters(provider, arguments.Parameters);
+
+									// Obtiene el datatable
+									foreach (SqlSectionModel script in scripts)
+										if (script.Type == SqlSectionModel.SectionType.Sql)
+										{
+											string sql = provider.SqlHelper.ConvertSqlNoParameters(script.Content, parametersDb).TrimIgnoreNull();
+
+												if (!string.IsNullOrWhiteSpace(sql))
+												{
+													// Log
+													block.Info($"Get execution plan: {sql}");
+													// Obtiene el plan de ejecución
+													// EXPLAIN [EXTENDED | CODEGEN] statement
+													result = await provider.GetExecutionPlanAsync($"EXPLAIN EXTENDED {sql}", null, CommandType.Text, timeout, cancellationToken);
+												}
+										}
+									// Log
+									block.Info("End query");
+							}
+					}
+				}
+				// Devuelve la última tabla obtenida
+				return result;
+		}
 
 		/// <summary>
 		///		Crea la lista de parámetros a pasar a la consulta

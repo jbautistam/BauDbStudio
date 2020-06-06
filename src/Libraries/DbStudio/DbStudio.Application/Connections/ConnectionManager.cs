@@ -136,6 +136,14 @@ namespace Bau.Libraries.DbStudio.Application.Connections
 		}
 
 		/// <summary>
+		///		Obtiene el plan de ejecución de una consulta
+		/// </summary>
+		internal async Task<DataTable> GetExecutionPlanAsync(ConnectionModel connection, string query, Models.ArgumentListModel arguments, TimeSpan timeout, CancellationToken cancellationToken)
+		{
+			return await Task.Run(() => new ScriptSqlController(this).GetExecutionPlanAsync(GetDbProvider(connection), query, arguments, timeout, cancellationToken));
+		}
+
+		/// <summary>
 		///		Manager de la solución
 		/// </summary>
 		internal SolutionManager SolutionManager { get; }

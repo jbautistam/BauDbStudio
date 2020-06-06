@@ -61,7 +61,7 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Managers.Csv
 						block.Debug($"Skip table {table.Name} because is excluded");
 					else 
 					{
-						string fileName = System.IO.Path.Combine(Processor.Manager.GetFullFileName(sentence.Path), $"{table.Name}.csv");
+						string fileName = System.IO.Path.Combine(Processor.Manager.Step.Project.GetFullFileName(sentence.Path), $"{table.Name}.csv");
 
 							if (System.IO.File.Exists(fileName))
 								sentences.Add(CreateSentence(sentence, table));

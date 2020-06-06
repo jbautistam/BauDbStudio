@@ -40,7 +40,7 @@ namespace Bau.Libraries.LibJobProcessor.Database
 						block.Error($"Cant find the file {step.ScriptFileName}");
 					else
 					{
-						DbScriptManager scriptManager = new DbScriptManager(dataProviderManager, parameters, GetProjectPaths(step), Logger);
+						DbScriptManager scriptManager = new DbScriptManager(step, dataProviderManager, parameters, Logger);
 
 							// Ejecuta el paso
 							if (System.IO.Path.GetExtension(step.ScriptFileName).EqualsIgnoreCase(".sql"))
@@ -154,24 +154,6 @@ namespace Bau.Libraries.LibJobProcessor.Database
 					}
 				// Devuelve la conexión
 				return connection;
-		}
-
-
-		/// <summary>
-		///		Obtiene los directorios de proyecto
-		/// </summary>
-		private NormalizedDictionary<string> GetProjectPaths(JobStepModel step)
-		{
-			NormalizedDictionary<string> paths = new NormalizedDictionary<string>();
-
-				// Añade los directorios de proyecto
-				foreach (JobContextModel context in step.Project.Contexts)
-					paths.AddRange(context.Paths);
-				// Sustituye los directorios "Fijos"
-				paths.Add("ProjectWorkPath", step.Project.ProjectWorkPath);
-				paths.Add("ContextWorkPath", step.Project.ContextWorkPath);
-				// Devuelve el diccionario de directorios
-				return paths;
 		}
 
 		/// <summary>

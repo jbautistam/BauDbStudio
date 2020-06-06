@@ -101,14 +101,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers
 			return false;
 		}
 
-		///// <summary>
-		/////		Ejecuta una acción
-		///// </summary>
-		//private void ExecuteAction(string action)
-		//{
-		//	SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage(action);
-		//}
-
 		/// <summary>
 		///		Comprueba si se puede ejecutar una acción
 		/// </summary>

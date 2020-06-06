@@ -35,7 +35,7 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Managers.Csv
 							exported = true;
 							// Elimina los archivos si es necesario
 							if (sentence.DeleteOldFiles)
-								DeletePathFiles(block, Processor.Manager.GetFullFileName(sentence.Path));
+								DeletePathFiles(block, Processor.Manager.Step.Project.GetFullFileName(sentence.Path));
 							// Exporta las tablas del esquema (mientras no haya errores
 							foreach (SentenceExportCsv sentenceCsv in GetExportFileSentences(block, provider, sentence))
 								if (exported)

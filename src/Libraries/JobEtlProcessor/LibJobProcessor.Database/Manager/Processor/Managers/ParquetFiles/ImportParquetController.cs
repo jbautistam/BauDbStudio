@@ -19,7 +19,7 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Managers.Parq
 		/// </summary>
 		internal bool Execute(SentenceImportParquet sentence)
 		{
-			string fileName = Processor.Manager.GetFullFileName(sentence.FileName);
+			string fileName = Processor.Manager.Step.Project.GetFullFileName(sentence.FileName);
 			bool imported = false;
 
 				// Importa el archivo

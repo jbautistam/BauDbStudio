@@ -42,6 +42,15 @@ namespace Bau.DbStudio.Views.Connections
 			}
 			// Pasa el foco al control de edición
 			udtEditor.Focus();
+			// Asigna la configuración al editor del plan de ejecución
+			udtExecutionPlan.EditorFontName = MainWindow.MainController.ConfigurationController.EditorFontName;
+			udtExecutionPlan.EditorFontSize = MainWindow.MainController.ConfigurationController.EditorFontSize;
+			udtExecutionPlan.ShowLinesNumber = MainWindow.MainController.ConfigurationController.EditorShowLinesNumber;
+			ViewModel.PropertyChanged += (sender, args) => {
+																if (!string.IsNullOrWhiteSpace(args.PropertyName) &&
+																		args.PropertyName.Equals(nameof(ExecuteQueryViewModel.ExecutionPlanText), StringComparison.CurrentCultureIgnoreCase))
+																	udtExecutionPlan.Text = ViewModel.ExecutionPlanText;
+															};
 		}
 
 		/// <summary>

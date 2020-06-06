@@ -23,7 +23,7 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Managers.Csv
 		internal bool Execute(SentenceExportCsv sentence)
 		{
 			bool exported = false;
-			string fileName = Processor.Manager.GetFullFileName(sentence.FileName);
+			string fileName = Processor.Manager.Step.Project.GetFullFileName(sentence.FileName);
 
 				// Exporta los datos
 				using (BlockLogModel block = Processor.Manager.Logger.Default.CreateBlock(LogModel.LogType.Info, $"Start exporting to '{fileName}'"))

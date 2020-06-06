@@ -37,8 +37,17 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 		/// </summary>
 		protected override void AddRootNodes()
 		{
-			foreach (string path in SolutionViewModel.Solution.Folders)
-				Children.Add(new NodeFolderRootViewModel(this, null, path));
+			List<string> paths = new List<string>();
+
+				// Añade los directorios
+				foreach (string path in SolutionViewModel.Solution.Folders)
+					if (!string.IsNullOrWhiteSpace(path) && System.IO.Directory.Exists(path))
+						paths.Add(path);
+				// Ordena por el nombre del directorio
+				paths.Sort((first, second) => System.IO.Path.GetFileName(first).CompareTo(System.IO.Path.GetFileName(second)));
+				// Recarga los nodos
+				foreach (string path in paths)
+					Children.Add(new NodeFolderRootViewModel(this, null, path));
 		}
 
 		/// <summary>

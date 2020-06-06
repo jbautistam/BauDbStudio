@@ -33,7 +33,7 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Managers.Csv
 					else
 					{
 						ProviderModel provider = Processor.GetProvider(sentence.Source);
-						string baseFileName = Processor.Manager.GetFullFileName(sentence.FileName);
+						string baseFileName = Processor.Manager.Step.Project.GetFullFileName(sentence.FileName);
 
 							if (provider == null)
 								block.Error($"Can't find the provider. Key: '{sentence.Source}'");

@@ -304,7 +304,7 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor
 						AddError($"The script filename is not defined");
 					else
 					{
-						string fileName = Manager.GetFullFileName(sentence.FileName);
+						string fileName = Manager.Step.Project.GetFullFileName(sentence.FileName);
 
 							if (!System.IO.File.Exists(fileName))
 								AddError($"Cant find the file '{fileName}'");

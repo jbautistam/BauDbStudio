@@ -17,7 +17,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 		// Eventos públicos
 		public event EventHandler<Controllers.EventArguments.EditorSelectedTextRequiredEventArgs> SelectedTextRequired;
 		// Variables privadas
-		private string _header, _fileName, _query, _lastQuery, _executionTime;
+		private string _header, _fileName, _query, _lastQuery, _executionTime, _executionPlanText;
 		private DataTable _dataResults;
 		private ComboConnectionsViewModel _comboConnectionsViewModel;
 		private int _actualPage, _pageSize;
@@ -45,6 +45,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 									.AddListener(this, nameof(IsExecuting));
 			CancelQueryCommand = new BaseCommand(_ => CancelQuery(), _ => IsExecuting)
 													.AddListener(this, nameof(IsExecuting));
+			ShowExecutionPlanCommand = new BaseCommand(async _ => await ShowExecutionPlanAsync(), _ => !IsExecuting)
+											.AddListener(this, nameof(IsExecuting));
 			ExportCommand = new BaseCommand(async _ => await ExportAsync(), _ => !IsExecuting)
 									.AddListener(this, nameof(IsExecuting));
 			FirstPageCommand = new BaseCommand(async _ => await GoPageAsync(1), _ => PaginateQuery && !IsExecuting)
@@ -114,6 +116,50 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 									// Detiene la ejecucion
 									StopQuery();
 								}
+						}
+				}
+		}
+
+		/// <summary>
+		///		Muestra el plan de ejecución
+		/// </summary>
+		private async Task ShowExecutionPlanAsync()
+		{
+			string query = GetEditorSelectedText();
+
+				if (string.IsNullOrWhiteSpace(query))
+					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Introduzca una consulta");
+				else
+				{
+					ConnectionModel connection = ComboConnections.GetSelectedConnection();
+
+						if (connection == null)
+							SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Seleccione una conexión");
+						else
+						{
+							(Application.Connections.Models.ArgumentListModel arguments, string error) = SolutionViewModel.ConnectionExecutionViewModel.GetParameters();
+
+								if (!string.IsNullOrWhiteSpace(error))
+									SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage(error);
+								else
+									try
+									{
+										DataTable table = await SolutionViewModel.MainViewModel.Manager.GetExecutionPlanAsync(connection, query, arguments, 
+																															  connection.timeoutExecuteScript, _cancellationToken);
+										string plan = string.Empty;
+
+											// Obtiene el plan de ejecución
+											if (table != null)
+												foreach (DataRow row in table.Rows)
+													if (!(row[0] is DBNull) && row[0] != null)
+														plan += row[0].ToString() + Environment.NewLine;
+											// Asigna el texto del plan de ejecución
+											ExecutionPlanText = plan;
+									}
+									catch (Exception exception)
+									{
+										SolutionViewModel.MainViewModel.MainController.Logger.Default.LogItems.Error($"Error al obtener el plan de ejecución. {exception.Message}");
+									}
 						}
 				}
 		}
@@ -412,6 +458,15 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 		}
 
 		/// <summary>
+		///		Texto del plan de ejecución
+		/// </summary>
+		public string ExecutionPlanText 
+		{ 
+			get { return _executionPlanText; }
+			set { CheckProperty(ref _executionPlanText, value); }
+		}
+
+		/// <summary>
 		///		Comando para ejecutar la consulta
 		/// </summary>
 		public BaseCommand ProcessCommand { get; }
@@ -420,6 +475,11 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 		///		Comando para cancelar la ejecución de un script
 		/// </summary>
 		public BaseCommand CancelQueryCommand { get; }
+
+		/// <summary>
+		///		Comando para mostrar el plan de ejecución
+		/// </summary>
+		public BaseCommand ShowExecutionPlanCommand { get; }
 
 		/// <summary>
 		///		Comando para grabar el resultado de una consulta

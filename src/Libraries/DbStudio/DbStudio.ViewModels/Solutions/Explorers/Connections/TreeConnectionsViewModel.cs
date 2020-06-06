@@ -42,8 +42,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 					case nameof(NewConnectionCommand):
 					case nameof(NewDeploymentCommand):
 						return true;
-					//case nameof(NewQueryCommand):
-					//	return nodeType != BaseTreeNodeViewModel.NodeType.Unknown;
 					case nameof(OpenCommand):
 						return nodeType == BaseTreeNodeViewModel.NodeType.Connection || 
 							   nodeType == BaseTreeNodeViewModel.NodeType.Deployment ||  

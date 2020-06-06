@@ -19,7 +19,7 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Managers.Parq
 		/// </summary>
 		internal bool Execute(SentenceExportParquet sentence)
 		{
-			string fileName = Processor.Manager.GetFullFileName(sentence.FileName);
+			string fileName = Processor.Manager.Step.Project.GetFullFileName(sentence.FileName);
 			bool exported = false;
 
 				// Procesa la sentencia

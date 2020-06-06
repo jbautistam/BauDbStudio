@@ -44,6 +44,10 @@
 						<Image Width="16" Height="16" Source="/Resources/Images/Stop.png" />
 					</Button>
 					<TextBlock Text="{Binding Path=ExecutionTime}" Grid.Row="0" Grid.Column="9" Margin="10" Foreground="Black" FontWeight="Bold" />
+
+					<Button Grid.Row="0" Grid.Column="10" ToolTip="Plan de ejecución" Command="{Binding Path=ShowExecutionPlanCommand}" Margin="5">
+						<Image Width="16" Height="16" Source="/Resources/Images/ExecutionPlan.png" />
+					</Button>
 					<Separator/>
 					<Button Grid.Row="0" Grid.Column="11" Command="{Binding Path=ExportCommand}" Margin="5">
 						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Save.png" />
@@ -75,12 +79,17 @@
 					</Button>
 				</ToolBar>
 			</Grid>
-			<DataGrid Grid.Row="1" Grid.Column="0" Margin="5" CanUserResizeColumns="True" AutoGenerateColumns="True" 
-					LoadingRow="DataGrid_LoadingRow"
-				ItemsSource="{Binding Path=DataResults}" FontWeight="Normal" CanUserAddRows="False"
-				IsReadOnly="True" CanUserDeleteRows="False" ClipboardCopyMode="IncludeHeader" VerticalContentAlignment="Center" VerticalAlignment="Stretch"
-				AutoGeneratingColumn="DataGrid_AutoGeneratingColumn"
-				/>
+			<TabControl Grid.Row="1" Grid.Column="0">
+				<TabItem Header="Resultado">
+					<DataGrid Margin="5" CanUserResizeColumns="True" AutoGenerateColumns="True" 
+							  LoadingRow="DataGrid_LoadingRow" ItemsSource="{Binding Path=DataResults}" FontWeight="Normal" CanUserAddRows="False"
+							  IsReadOnly="True" CanUserDeleteRows="False" ClipboardCopyMode="IncludeHeader" VerticalContentAlignment="Center" VerticalAlignment="Stretch"
+							  AutoGeneratingColumn="DataGrid_AutoGeneratingColumn"/>
+				</TabItem>
+				<TabItem Header="Plan de ejecución">
+					<CodeEditor:ctlEditor x:Name="udtExecutionPlan" ReadOnly="True" />
+				</TabItem>
+			</TabControl>
 		</Grid>
 	</Grid>
 </UserControl>
