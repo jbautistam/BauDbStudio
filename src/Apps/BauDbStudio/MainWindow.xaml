@@ -114,6 +114,9 @@
 					</MenuItem>
 				</MenuItem>
 				<MenuItem Header="Archivos recientes" ItemsSource="{Binding LastFilesViewModel.Files}">
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/Resources/Images/File.png" />
+					</MenuItem.Icon>
 					<MenuItem.ItemContainerStyle>
 						<Style>
 							<Setter Property="MenuItem.Header" Value="{Binding Header}"/>
