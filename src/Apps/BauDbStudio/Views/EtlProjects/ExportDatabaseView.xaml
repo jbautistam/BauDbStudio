@@ -3,12 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Bau.DbStudio.Views.Connections"
 		xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:Files="clr-namespace:Bau.Controls.Files;assembly=BauControls"
-		x:Class="Bau.DbStudio.Views.EtlProjects.CreateTestXmlView"
+		x:Class="Bau.DbStudio.Views.EtlProjects.ExportDatabaseView"
         mc:Ignorable="d"
-        Title="Datos de la conexión" Height="550" Width="800" ResizeMode="NoResize" ShowInTaskbar="False"
+        Title="Exportación de base de datos" Height="295" Width="800" ResizeMode="NoResize" ShowInTaskbar="False"
 		xmlns:Behaviors="clr-namespace:Bau.DbStudio.Converters"
 		Behaviors:FocusBehavior.FocusFirst="true">
 	<Grid>
@@ -27,46 +26,25 @@
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto"/>
 					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="*"/>
 				</Grid.ColumnDefinitions>
 				<Label Grid.Row="0" Grid.Column="0" Margin="5" Content="Conexión:"/>
-				<ComboBox Grid.Row="0" Grid.Column="1" Margin="5" 
+				<ComboBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" Margin="5" 
 						  ItemsSource="{Binding ComboConnections.Connections.Items}" DisplayMemberPath="Text" 
 						  SelectedItem="{Binding ComboConnections.Connections.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 				<Label Grid.Row="1" Grid.Column="0" Margin="5" Content="Base de datos:"/>
 				<TextBox Grid.Row="1" Grid.Column="1" 
 							Text="{Binding Path=DataBase, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
-			</Grid>
-		</GroupBox>
-		<GroupBox Header="Variables del XML" Grid.Row="1" Grid.Column="0">
-			<Grid>
-				<Grid.RowDefinitions>
-					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="Auto"/>
-				</Grid.RowDefinitions>
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="Auto"/>
-					<ColumnDefinition Width="*"/>
-					<ColumnDefinition Width="Auto"/>
-					<ColumnDefinition Width="*"/>
-				</Grid.ColumnDefinitions>
-				<Label Grid.Row="0" Grid.Column="0" Margin="5" Content="Clave del proveedor de datos:"/>
-				<TextBox Grid.Row="0" Grid.Column="1" 
-							Text="{Binding Path=Provider, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
-				<Label Grid.Row="0" Grid.Column="2" Margin="5" Content="Base de datos:"/>
-				<TextBox Grid.Row="0" Grid.Column="3" 
-							Text="{Binding Path=DataBaseVariable, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
-				<Label Grid.Row="1" Grid.Column="0" Margin="5" Content="Directorio:"/>
-				<TextBox Grid.Row="1" Grid.Column="1" 
-							Text="{Binding Path=PathVariable, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
-				<Label Grid.Row="1" Grid.Column="2" Margin="5" Content="Sufijo tablas pruebas:"/>
-				<TextBox Grid.Row="1" Grid.Column="3" 
-							Text="{Binding Path=SufixTestTables, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+				<Label Grid.Row="1" Grid.Column="2" Margin="5" Content="Tamaño bloque grabación:"/>
+				<toolkit:LongUpDown Grid.Row="1" Grid.Column="3" Minimum="1000000" Maximum="100000000"
+					Value="{Binding Path=BlockSize, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+
 			</Grid>
 		</GroupBox>
 		<GroupBox Header="Archivos de salida" Grid.Row="2" Grid.Column="0">
 			<Grid>
 				<Grid.RowDefinitions>
-					<RowDefinition Height="Auto"/>
 					<RowDefinition Height="Auto"/>
 					<RowDefinition Height="Auto"/>
 				</Grid.RowDefinitions>
@@ -77,13 +55,10 @@
 				<Label Grid.Row="0" Grid.Column="0" Margin="5" Content="Directorio:"/>
 				<Files:PathSelect Grid.Row="0" Grid.Column="1"
 							PathName="{Binding Path=OutputPath, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
-				<Label Grid.Row="1" Grid.Column="0" Margin="5" Content="Archivo de pruebas:"/>
-				<TextBox Grid.Row="1" Grid.Column="3" 
-							Text="{Binding Path=FileNameTest, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
-				<Label Grid.Row="2" Grid.Column="0" Margin="5" Content="Archivo de comparación:"/>
-				<TextBox Grid.Row="2" Grid.Column="1" 
-							Text="{Binding Path=FileNameAssert, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
-
+				<Label Grid.Row="2" Grid.Column="0" Margin="5" Content="Formato:"/>
+				<ComboBox Grid.Row="2" Grid.Column="1" Margin="5" 
+						  ItemsSource="{Binding ComboFormat.Items}" DisplayMemberPath="Text" 
+						  SelectedItem="{Binding ComboFormat.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 			</Grid>
 		</GroupBox>
 		<StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">

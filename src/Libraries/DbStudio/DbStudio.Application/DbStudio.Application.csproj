@@ -29,6 +29,8 @@
     <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DataBaseProviders\LibDbProviders.SqLite\LibDbProviders.SqLite.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DataBaseProviders\LibDbProviders.SqlServer\LibDbProviders.SqlServer.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DbScripts\LibDbScripts.Parser\LibDbScripts.Parser.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Formats\LibCsvFiles\LibCsvFiles.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Formats\LibParquetFiles\LibParquetFiles.csproj" />
     <ProjectReference Include="..\DbStudio.Models\DbStudio.Models.csproj" />
   </ItemGroup>
 

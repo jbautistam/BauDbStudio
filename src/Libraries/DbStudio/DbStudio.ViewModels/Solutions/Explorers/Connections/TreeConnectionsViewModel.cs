@@ -63,13 +63,13 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 			switch (GetSelectedNodeType())
 			{
 				case BaseTreeNodeViewModel.NodeType.Connection:
-						OpenConnection((SelectedNode as NodeConnectionViewModel)?.Tag as Models.Connections.ConnectionModel);
+						OpenConnection((SelectedNode as NodeConnectionViewModel)?.Tag as ConnectionModel);
 					break;
 				case BaseTreeNodeViewModel.NodeType.Deployment:
 						OpenDeployment((SelectedNode as NodeDeploymentViewModel)?.Tag as Models.Deployments.DeploymentModel);
 					break;
 				case BaseTreeNodeViewModel.NodeType.Table:
-						OpenQuery((SelectedNode as NodeTableViewModel)?.Tag as Models.Connections.ConnectionTableModel);
+						OpenQuery((SelectedNode as NodeTableViewModel)?.Tag as ConnectionTableModel);
 					break;
 			}
 		}

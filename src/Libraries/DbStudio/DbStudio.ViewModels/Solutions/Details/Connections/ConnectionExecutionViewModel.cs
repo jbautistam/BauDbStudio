@@ -2,10 +2,12 @@
 using System.Threading;
 using System.Threading.Tasks;
 
+using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.ComboItems;
 using Bau.Libraries.DbStudio.Application.Connections.Models;
 using Bau.Libraries.DbStudio.Models.Connections;
+using Bau.Libraries.LibLogger.Models.Log;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 {
@@ -52,7 +54,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 			CancelScriptExecutionCommand = new BaseCommand(_ => CancelScriptExecution(), _ => IsExecuting)
 													.AddListener(this, nameof(IsExecuting));
 			UpdateParametersFileCommand = new BaseCommand(_ => UpdateParametersFile());
-			OpenParametersFileCommand = new BaseCommand(_ => OpenParametersFile(), _ => !string.IsNullOrWhiteSpace(ConnectionParametersFileName));
+			OpenParametersFileCommand = new BaseCommand(_ => OpenParametersFile(), _ => !string.IsNullOrWhiteSpace(ConnectionParametersFileName))
+													.AddListener(this, nameof(ConnectionParametersFileName));
+			ExportDataBaseCommand = new BaseCommand(async _ => await ExportDataBaseAsync());
 		}
 
 		/// <summary>
@@ -127,6 +131,58 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 						case ExecutionMode.JobsXml:
 								await PrepareExecuteScriptXmlAsync(selectedViewModel);
 							break;
+					}
+			}
+		}
+
+		/// <summary>
+		///		Exporta las tablas de una base de datos a un directorio
+		/// </summary>
+		private async Task ExportDataBaseAsync()
+		{
+			if (IsExecuting)
+				SolutionViewModel.MainViewModel.MainController.HostController
+						.SystemController.ShowMessage("No se pueden exportar los datos en este momento. Espere que finalice la ejecución de los scripts");
+			else
+			{
+				EtlProjects.ExportDatabaseViewModel viewModel = new EtlProjects.ExportDatabaseViewModel(SolutionViewModel);
+
+					if (SolutionViewModel.MainViewModel.MainController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+					{
+						// Exporta los datos
+						using (BlockLogModel block = SolutionViewModel.MainViewModel.MainController.Logger.Default
+														.CreateBlock(LogModel.LogType.Info, $"Exportando archivos de {viewModel.ComboConnections.GetSelectedConnection().Name} {viewModel.DataBase}"))
+						{
+							// Arranca la ejecución
+							StartExecution();
+							// Ejecuta la exportación
+							try
+							{
+								Application.Controllers.Export.ExportDataBaseGenerator generator = new Application.Controllers.Export.ExportDataBaseGenerator(SolutionViewModel.MainViewModel.Manager);
+
+									if (await generator.ExportAsync(block, viewModel.ComboConnections.GetSelectedConnection(),
+																	viewModel.DataBase, viewModel.OutputPath, viewModel.FormatType, viewModel.BlockSize, CancellationToken.None))
+									{
+										block.Info($"Fin de la exportación de la base de datos {viewModel.DataBase}");
+										SolutionViewModel.MainViewModel.MainController.HostController.SystemController
+												.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
+																  "Explotación de archivos",
+																  "Ha terminado correctamente la exportación de archivos",
+																  TimeSpan.FromSeconds(10));
+									}
+									else
+										block.Error($"Error en la exportación de datos. {generator.Errors.Concatenate()}");
+
+							}
+							catch (Exception exception)
+							{
+								block.Error("Exception when create files", exception);
+							}
+							// Detiene la ejecución
+							StopExecuting();
+						}
+						// Log
+						SolutionViewModel.MainViewModel.MainController.Logger.Flush();
 					}
 			}
 		}
@@ -497,5 +553,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 		///		Comando para modificar un archivo de parámetros
 		/// </summary>
 		public BaseCommand UpdateParametersFileCommand { get; }
+
+		/// <summary>
+		///		Exportar las tablas de base de datos
+		/// </summary>
+		public BaseCommand ExportDataBaseCommand { get; }
 	}
 }

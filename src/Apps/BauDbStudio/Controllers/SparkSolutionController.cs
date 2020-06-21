@@ -55,7 +55,7 @@ namespace Bau.DbStudio.Controllers
 		/// </summary>
 		public SystemControllerEnums.ResultType OpenDialog(Libraries.BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewModel dialogViewModel)
 		{
-			SystemControllerEnums.ResultType result = SystemControllerEnums.ResultType.Yes;
+			SystemControllerEnums.ResultType result = SystemControllerEnums.ResultType.No;
 
 				// Muestra la ventana adecuada
 				switch (dialogViewModel)
@@ -80,6 +80,9 @@ namespace Bau.DbStudio.Controllers
 						break;
 					case Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects.ExecuteEtlConsoleViewModel viewModel:
 							result = HostHelperController.ShowDialog(MainWindow, new Views.EtlProjects.ExecuteEtlConsoleView(viewModel));
+						break;
+					case Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects.ExportDatabaseViewModel viewModel:
+							result = HostHelperController.ShowDialog(MainWindow, new Views.EtlProjects.ExportDatabaseView(viewModel));
 						break;
 				}
 				// Devuelve el resultado

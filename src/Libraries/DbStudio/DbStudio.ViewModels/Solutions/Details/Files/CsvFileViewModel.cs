@@ -2,7 +2,7 @@
 using System.Data;
 
 using Bau.Libraries.LibCsvFiles;
-using Bau.Libraries.LibParquetFiles;
+using Bau.Libraries.LibParquetFiles.Writers;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 {
@@ -30,7 +30,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 			// Graba el archivo
 			using (CsvReader reader = new CsvReader(FileName, FileParameters, null))
 			{
-				using (ParquetDataWriter writer = new ParquetDataWriter(fileName))
+				using (ParquetWriter writer = new ParquetWriter(fileName))
 				{
 					// Log
 					writer.Progress += (sender, args) => block.Progress(System.IO.Path.GetFileName(fileName), args.Records, args.Records + 1);

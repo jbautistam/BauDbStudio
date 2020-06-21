@@ -21,6 +21,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers
 			ConnectionRoot,
 			/// <summary>Conexión</summary>
 			Connection,
+			/// <summary>Esquema de una conexión</summary>
+			SchemaRoot,
 			/// <summary>Tabla</summary>
 			Table,
 			/// <summary>Raíz de la distribución</summary>
@@ -48,6 +50,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers
 			Project,
 			Path,
 			File,
+			Schema,
 			Table,
 			Key,
 			Field,

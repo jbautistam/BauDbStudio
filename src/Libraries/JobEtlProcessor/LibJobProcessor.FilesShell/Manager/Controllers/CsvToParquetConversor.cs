@@ -14,7 +14,7 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Manager.Controllers
 		/// </summary>
 		internal async Task ConvertAsync(string source, string target, CancellationToken cancellationToken)
 		{
-			LibParquetFiles.ParquetDataWriter writer = new LibParquetFiles.ParquetDataWriter(target);
+			LibParquetFiles.Writers.ParquetWriter writer = new LibParquetFiles.Writers.ParquetWriter(target);
 
 				// Evita el error de await
 				await Task.Delay(1);

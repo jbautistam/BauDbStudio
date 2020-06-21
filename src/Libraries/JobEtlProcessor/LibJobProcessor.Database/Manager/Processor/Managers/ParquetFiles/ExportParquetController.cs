@@ -1,6 +1,6 @@
 ﻿using System;
 
-using Bau.Libraries.LibParquetFiles;
+using Bau.Libraries.LibParquetFiles.Writers;
 using Bau.Libraries.LibLogger.Models.Log;
 using Bau.Libraries.DbAggregator.Models;
 using Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Sentences.Parquet;
@@ -80,9 +80,9 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Managers.Parq
 		/// <summary>
 		///		Obtiene el generador de archivos parquet
 		/// </summary>
-		private ParquetDataWriter GetDataWriter(string fileName, int recordsPerBlock, BlockLogModel block)
+		private ParquetWriter GetDataWriter(string fileName, int recordsPerBlock, BlockLogModel block)
 		{
-			ParquetDataWriter writer = new ParquetDataWriter(fileName, recordsPerBlock);
+			ParquetWriter writer = new ParquetWriter(fileName, recordsPerBlock);
 
 				// Asigna el manejador de eventos
 				writer.Progress += (sender, args) => block.Progress("Writing to file", args.Records, 0);

@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Solutions\Explorers\Connections\NodeSchemaViewModel.cs" />
     <Compile Remove="Solutions\Explorers\Connections\TreeDetailsNodeViewModel.cs" />
     <Compile Remove="Solutions\Explorers\Connections\TreeNodeViewModel.cs" />
     <Compile Remove="Solutions\Explorers\Files\TreeDetailsNodeViewModel.cs" />

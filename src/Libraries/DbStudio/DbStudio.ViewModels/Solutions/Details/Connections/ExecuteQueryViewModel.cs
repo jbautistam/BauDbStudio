@@ -151,8 +151,14 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 											// Obtiene el plan de ejecución
 											if (table != null)
 												foreach (DataRow row in table.Rows)
-													if (!(row[0] is DBNull) && row[0] != null)
-														plan += row[0].ToString() + Environment.NewLine;
+												{
+													// Añade el contenido de las columnas
+													for (int column = 0; column < table.Columns.Count; column++)
+														if (!(row[column] is DBNull) && row[column] != null)
+															plan += row[column].ToString();
+													// Añade un salto de línea
+													plan += Environment.NewLine;
+												}
 											// Asigna el texto del plan de ejecución
 											ExecutionPlanText = plan;
 									}

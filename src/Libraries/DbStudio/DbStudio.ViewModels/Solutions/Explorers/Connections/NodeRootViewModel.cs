@@ -10,13 +10,16 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 	/// </summary>
 	public class NodeRootViewModel : BaseTreeNodeViewModel
 	{
-		public NodeRootViewModel(BaseTreeViewModel trvTree, IHierarchicalViewModel parent, NodeType type, string text) :
-					base(trvTree, parent, text, type, IconType.Connection, type, true, true, MvvmColor.Red)
+		public NodeRootViewModel(BaseTreeViewModel trvTree, IHierarchicalViewModel parent, NodeType type, string text, bool lazyLoad = true) :
+					base(trvTree, parent, text, type, IconType.Connection, type, lazyLoad, true, MvvmColor.Red)
 		{
 			switch (type)
 			{
 				case NodeType.ConnectionRoot:
 						Icon = IconType.Connection;
+					break;
+				case NodeType.SchemaRoot:
+						Icon = IconType.Schema;
 					break;
 				case NodeType.DeploymentRoot:
 						Icon = IconType.Deployment;

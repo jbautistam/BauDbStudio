@@ -10,7 +10,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 	public class NodeTableViewModel : BaseTreeNodeViewModel
 	{
 		public NodeTableViewModel(BaseTreeViewModel trvTree, NodeConnectionViewModel parent, ConnectionTableModel table) : 
-					base(trvTree, parent, table.FullName, NodeType.Table, IconType.Table, table, true, true, BauMvvm.ViewModels.Media.MvvmColor.Navy)
+					base(trvTree, parent, table.Name, NodeType.Table, IconType.Table, table, true, true, BauMvvm.ViewModels.Media.MvvmColor.Navy)
 		{
 			Table = table;
 		}

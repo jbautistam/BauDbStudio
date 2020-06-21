@@ -1,6 +1,6 @@
 ﻿using System;
 
-using Bau.Libraries.LibParquetFiles;
+using Bau.Libraries.LibParquetFiles.Readers;
 using Bau.Libraries.LibLogger.Models.Log;
 using Bau.Libraries.DbAggregator.Models;
 using Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Sentences.Parquet;

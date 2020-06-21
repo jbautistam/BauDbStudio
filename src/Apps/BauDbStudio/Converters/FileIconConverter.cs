@@ -30,6 +30,8 @@ namespace Bau.DbStudio.Converters
 			{ 
 				case BaseTreeNodeViewModel.IconType.Connection:
 					return "/Resources/Images/Connection.png";
+				case BaseTreeNodeViewModel.IconType.Schema:
+					return "/Resources/Images/Schema.png";
 				case BaseTreeNodeViewModel.IconType.Deployment:
 					return "/Resources/Images/Deployment.png";
 				case BaseTreeNodeViewModel.IconType.Storage:

@@ -86,7 +86,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 			int length = 80;
 
 				// Añade los nombres de campos
-				using (LibParquetFiles.ParquetDataReader reader = new LibParquetFiles.ParquetDataReader(FileName))
+				using (LibParquetFiles.Readers.ParquetDataReader reader = new LibParquetFiles.Readers.ParquetDataReader(FileName))
 				{
 					// Abre el archivo
 					reader.Open();

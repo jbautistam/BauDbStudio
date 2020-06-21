@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
+using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.DbStudio.Application.Controllers.EtlProjects;
 using Bau.Libraries.DbStudio.Models;
@@ -106,41 +107,30 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 
 				if (MainViewModel.MainController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 					using (BlockLogModel block = MainViewModel.MainController.Logger.Default.CreateBlock(LogModel.LogType.Info, "Comienzo de la creación de proyectos de pruebas"))
-				{
-					XmlTestProjectGenerator generator = new XmlTestProjectGenerator(MainViewModel.Manager, viewModel.ComboConnections.GetSelectedConnection(),
-																					viewModel.DataBase, viewModel.OutputPath);
+					{
+						XmlTestProjectGenerator generator = new XmlTestProjectGenerator(MainViewModel.Manager, viewModel.ComboConnections.GetSelectedConnection(),
+																						viewModel.DataBase, viewModel.OutputPath);
 
-						try
-						{
-							if (!await generator.GenerateAsync(block, viewModel.Provider, viewModel.PathVariable, viewModel.DataBaseVariable, viewModel.SufixTestTables,
-															   viewModel.FileNameProject, viewModel.FileNameTest, viewModel.FileNameAssert, 
-															   System.Threading.CancellationToken.None))
-								block.Error($"Error en la generación de los archivos de pruebas. {GetError(generator.Errors)}");
-							else
+							try
 							{
-								block.Info("Fin de la creación de proyectos de pruebas");
-								MainViewModel.MainController.HostController.SystemController.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
-																											  "Generación de proyectos XML",
-																											  "Ha terminado correctamente la generación del archivo de pruebas",
-																											  TimeSpan.FromSeconds(10));
+								if (!await generator.GenerateAsync(block, viewModel.Provider, viewModel.PathVariable, viewModel.DataBaseVariable, viewModel.SufixTestTables,
+																   viewModel.FileNameTest, viewModel.FileNameAssert, 
+																   System.Threading.CancellationToken.None))
+									block.Error($"Error en la generación de los archivos de pruebas. {generator.Errors.Concatenate()}");
+								else
+								{
+									block.Info("Fin de la creación de proyectos de pruebas");
+									MainViewModel.MainController.HostController.SystemController.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
+																												  "Generación de proyectos XML",
+																												  "Ha terminado correctamente la generación del archivo de pruebas",
+																												  TimeSpan.FromSeconds(10));
+								}
 							}
-						}
-						catch (Exception exception)
-						{
-							block.Error($"Error en la generación de los archivos de pruebas {exception.Message}");
-						}
-				}
-
-				string GetError(System.Collections.Generic.List<string> errors)
-				{
-					string result = string.Empty;
-
-						// Añade los errores
-						foreach (string error in errors)
-							result += error + Environment.NewLine;
-						// Devuelve la cadena de error
-						return result;
-				}
+							catch (Exception exception)
+							{
+								block.Error($"Error en la generación de los archivos de pruebas {exception.Message}");
+							}
+					}
 		}
 
 		/// <summary>

@@ -33,7 +33,6 @@
 		</Grid.ColumnDefinitions>
 		<!-- Menú -->
 		<Menu Grid.Column="0" Grid.Row="0">
-
 			<MenuItem Header="_Archivo">
 				<MenuItem Header="_Nuevo">
 					<MenuItem.Icon>
@@ -168,8 +167,13 @@
 					</MenuItem.Icon>
 				</MenuItem>
 			</MenuItem>
-
 			<MenuItem Header="_Herramientas">
+				<MenuItem Header="_Pruebas">
+					<MenuItem Header="_Exportar tablas de datos" Command="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.ExportDataBaseCommand}">
+					</MenuItem>
+					<MenuItem Header="_Comprobar datos">
+					</MenuItem>
+				</MenuItem>
 				<MenuItem Header="_Configuración" Click="Configuration_Click">
 					<MenuItem.Icon>
 						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Tag.png" />

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Data;
-using System.Threading;
-using System.Threading.Tasks;
 
-using Bau.Libraries.LibParquetFiles;
+using Bau.Libraries.LibParquetFiles.Readers;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 {

@@ -62,7 +62,7 @@ namespace Bau.Libraries.DbStudio.Application.Connections
 		/// <summary>
 		///		Obtiene un proveedor de base de datos
 		/// </summary>
-		private IDbProvider GetDbProvider(ConnectionModel connection)
+		internal IDbProvider GetDbProvider(ConnectionModel connection)
 		{
 			IDbProvider provider = CacheProviders.GetProvider(connection);
 

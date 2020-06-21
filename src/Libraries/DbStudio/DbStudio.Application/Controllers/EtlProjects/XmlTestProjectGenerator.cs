@@ -13,7 +13,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 	/// </summary>
 	public class XmlTestProjectGenerator
 	{
-		public XmlTestProjectGenerator(SolutionManager manager, Models.Connections.ConnectionModel connection, string dataBase, string path)
+		public XmlTestProjectGenerator(SolutionManager manager, ConnectionModel connection, string dataBase, string path)
 		{
 			Manager = manager;
 			Connection = connection;
@@ -25,7 +25,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 		///		Genera los archivos
 		/// </summary>
 		public async Task<bool> GenerateAsync(BlockLogModel block, string provider, string pathVariable, string databaseVariable, string sufixTestTables,
-											  string fileNameProject, string fileNameTest, string fileNameAssert, CancellationToken cancellationToken)
+											  string fileNameTest, string fileNameAssert, CancellationToken cancellationToken)
 		{
 			// Limpia los errores
 			Errors.Clear();
@@ -34,9 +34,13 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 			// Genera los archivos
 			if (!cancellationToken.IsCancellationRequested)
 			{
-				// Genera el archivo de proyecto
-				if (!string.IsNullOrWhiteSpace(fileNameProject))
-					SaveProjectFile(block, fileNameProject, fileNameTest, fileNameAssert);
+				// Genera el archivo de parámetros
+				SaveParametersFile(block, "Sample.Test.Context.xml", provider, pathVariable, databaseVariable);
+				// Genera el archivo de proyecto y parámetros
+				if (!string.IsNullOrWhiteSpace(fileNameTest))
+					SaveProjectFile(block, fileNameTest, "Create test files");
+				if (!string.IsNullOrWhiteSpace(fileNameAssert))
+					SaveProjectFile(block, fileNameAssert, "Check files");
 				// Genera el archivo de prueba
 				if (!string.IsNullOrWhiteSpace(fileNameTest))
 					SaveTestFile(block, fileNameTest, provider, pathVariable, databaseVariable, sufixTestTables);
@@ -49,26 +53,24 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 		}
 
 		/// <summary>
-		///		Graba el archivo de proyecto
+		///		Graba el archivo de proyecto para la creación del archivo de pruebas
 		/// </summary>
-		private void SaveProjectFile(BlockLogModel block, string fileNameProject, string fileNameTest, string fileNameAssert)
+		private void SaveProjectFile(BlockLogModel block, string fileNameTest, string message)
 		{
 			MLFile fileML = new MLFile();
 			MLNode rootML = fileML.Nodes.Add("EtlProject");
+			string fileName = System.IO.Path.GetFileNameWithoutExtension(fileNameTest) + ".project" + System.IO.Path.GetExtension(fileNameTest);
 
 				// Log
-				block.Info($"Start generation project '{fileNameProject}'");
+				block.Info($"Start generation project '{fileName}'");
 				// Añade el nombre del proyecto
-				rootML.Nodes.Add("Name", "Create test files");
+				rootML.Nodes.Add("Name", message);
 				// Añade los archivos de scripts
-				if (!string.IsNullOrWhiteSpace(fileNameTest))
-					rootML.Nodes.Add(GetStepNode(fileNameTest, "Create test file", false));
-				if (!string.IsNullOrWhiteSpace(fileNameAssert))
-					rootML.Nodes.Add(GetStepNode(fileNameAssert, "Assert test data", false));
+				rootML.Nodes.Add(GetStepNode(fileNameTest, message, true));
 				// Graba el archivo
-				new LibMarkupLanguage.Services.XML.XMLWriter().Save(System.IO.Path.Combine(Path, fileNameProject), fileML);
+				new LibMarkupLanguage.Services.XML.XMLWriter().Save(System.IO.Path.Combine(Path, fileName), fileML);
 				// Log
-				block.Info($"End generation project '{fileNameProject}'");
+				block.Info($"End generation project '{fileName}'");
 		}
 
 		/// <summary>
@@ -100,8 +102,8 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 				// Log
 				block.Info($"Start generate file '{fileName}'");
 				// Crea los nodos de creación de los archivos de pruebas
-				foreach (Models.Connections.ConnectionTableModel table in Connection.Tables)
-					if (!string.IsNullOrWhiteSpace(databaseVariable) && databaseVariable.Equals(table.Schema, StringComparison.CurrentCultureIgnoreCase))
+				foreach (ConnectionTableModel table in Connection.Tables)
+					if (!string.IsNullOrWhiteSpace(DataBase) && DataBase.Equals(table.Schema, StringComparison.CurrentCultureIgnoreCase))
 					{
 						MLNode blockML = rootML.Nodes.Add("Block");
 						MLNode nodeDropML = blockML.Nodes.Add("Execute");
@@ -136,8 +138,8 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 				// Log
 				block.Info($"Start generate file '{fileName}'");
 				// Crea los nodos de creación de los archivos de pruebas
-				foreach (Models.Connections.ConnectionTableModel table in Connection.Tables)
-					if (!string.IsNullOrWhiteSpace(databaseVariable) && databaseVariable.Equals(table.Schema, StringComparison.CurrentCultureIgnoreCase))
+				foreach (ConnectionTableModel table in Connection.Tables)
+					if (!string.IsNullOrWhiteSpace(DataBase) && DataBase.Equals(table.Schema, StringComparison.CurrentCultureIgnoreCase))
 					{
 						MLNode blockML = rootML.Nodes.Add("Block");
 						MLNode nodeAssertML = blockML.Nodes.Add("AssertScalar");
@@ -197,6 +199,65 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 				}
 				// Devuelve la cadena SQL
 				return sql;
+		}
+
+		/// <summary>
+		///		Graba el archivo de ejemplo de parámetros
+		/// </summary>
+		private void SaveParametersFile(BlockLogModel block, string fileName, string provider, string pathVariable, string databaseVariable)
+		{
+			MLFile fileML = new MLFile();
+			MLNode rootML = fileML.Nodes.Add("EtlContext");
+			MLNode globalML = rootML.Nodes.Add("Global");
+			MLNode contextML = rootML.Nodes.Add("Context");
+
+				// Log
+				block.Info($"Start generate file '{fileName}'");
+				// Añade los nodos básicos
+				rootML.Nodes.Add("Name", "Test context sample");
+				// Añade los parámetros globales
+				globalML.Nodes.Add(GetParameterNode("MountPath", "string", "TestPath"));
+				globalML.Nodes.Add(GetParameterNode("DbCompute", "string", DataBase));
+				// Añade los parámetros del contexto
+				contextML.Attributes.Add("Processor", "DbManager");
+				contextML.Nodes.Add(GetConnectionNode(Connection, provider));
+				// Graba el archivo
+				new LibMarkupLanguage.Services.XML.XMLWriter().Save(System.IO.Path.Combine(Path, fileName), fileML);
+				// Log
+				block.Info($"End generation file '{fileName}'");
+		}
+
+		/// <summary>
+		///		Obtiene un nodo de parámetros
+		/// </summary>
+		private MLNode GetParameterNode(string key, string type, string value)
+		{
+			MLNode nodeML = new MLNode("Parameter");
+
+				// Añade los atributos
+				nodeML.Attributes.Add("Key", key);
+				nodeML.Attributes.Add("Type", type);
+				nodeML.Attributes.Add("Value", value);
+				// Devuelve el nodo
+				return nodeML;
+		}
+
+		/// <summary>
+		///		Obtiene un nodo de conexión
+		/// </summary>
+		private MLNode GetConnectionNode(ConnectionModel connection, string provider)
+		{
+			MLNode rootML = new MLNode("Connection");
+
+				// Añade los atributos
+				rootML.Attributes.Add("Key", provider);
+				rootML.Attributes.Add("Type", connection.Type.ToString());
+				rootML.Nodes.Add("Name", connection.Name);
+				// Añade los parámetros
+				foreach ((string key, string value) in connection.Parameters.Enumerate())
+					rootML.Nodes.Add(key, value);
+				// Devuelve el nodo
+				return rootML;
 		}
 
 		/// <summary>

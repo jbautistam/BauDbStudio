@@ -69,12 +69,13 @@ namespace Bau.Libraries.DbStudio.ViewModels.Controllers.Exporter
 		/// </summary>
 		private async Task ExportToParquetAsync(BlockLogModel block, string fileName, DbDataReader reader, CancellationToken cancellationToken)
 		{
-			LibParquetFiles.ParquetDataWriter writer = new LibParquetFiles.ParquetDataWriter(fileName);
-
+			using (LibParquetFiles.Writers.ParquetWriterAsync writer = new LibParquetFiles.Writers.ParquetWriterAsync(fileName))
+			{
 				// Asigna el evento de progreso
 				writer.Progress += (sender, args) => block.Progress(System.IO.Path.GetFileName(fileName), args.Records, args.Records + 1);
 				// Graba el archivo
 				await writer.WriteAsync(reader, cancellationToken);
+			}
 		}
 	}
 }

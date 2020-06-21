@@ -41,6 +41,7 @@
     <None Remove="Resources\Images\Loading.png" />
     <None Remove="Resources\Images\Project.png" />
     <None Remove="Resources\Images\ProjectDisabled.png" />
+    <None Remove="Resources\Images\Schema.png" />
     <None Remove="Resources\Images\Script.png" />
     <None Remove="Resources\Images\ScriptDisabled.png" />
     <None Remove="Resources\Images\Search.png" />
@@ -76,6 +77,7 @@
     <Resource Include="Resources\Images\DataError.png" />
     <Resource Include="Resources\Images\ExecutionPlan.png" />
     <Resource Include="Resources\Images\Loading.png" />
+    <Resource Include="Resources\Images\Schema.png" />
     <Resource Include="Resources\Images\Storage.png" />
     <Resource Include="Resources\Images\Upload.png" />
     <Resource Include="Resources\Images\Download.png" />
@@ -136,6 +138,9 @@
 
   <ItemGroup>
     <Page Update="Views\Connections\ConnectionParametersView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\EtlProjects\ExportDatabaseView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\EtlProjects\ExecuteEtlConsoleView.xaml">

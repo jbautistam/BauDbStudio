@@ -12,7 +12,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 		// Variables privadas
 		private string _provider, _dataBase;
 		private string _pathVariable, _dataBaseVariable, _sufixTestTables;
-		private string _outputPath, _fileNameProject, _fileNameTest, _fileNameAssert;
+		private string _outputPath, _fileNameTest, _fileNameAssert;
 		private Connections.ComboConnectionsViewModel _comboConnections;
 
 		public CreateTestXmlViewModel(SolutionViewModel solutionViewModel)
@@ -36,7 +36,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 			DataBaseVariable = "DbCompute";
 			SufixTestTables = "Test";
 			OutputPath = SolutionViewModel.MainViewModel.LastPathSelected;
-			FileNameProject = "00. Test database.xml";
 			FileNameTest = "05. Create test tables.xml";
 			FileNameAssert = "10. Compare with test tables.xml";
 			// Indica que no ha habido modificaciones
@@ -63,8 +62,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Introduzca el nombre de la variable de base de datos");
 				else if (string.IsNullOrWhiteSpace(OutputPath))
 					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Introduzca el directorio de grabación de los proyectos");
-				else if (string.IsNullOrWhiteSpace(FileNameProject))
-					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Introduzca el nombre del archivo XML de proyecto");
 				else if (string.IsNullOrWhiteSpace(FileNameTest))
 					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Introduzca el nombre del archivo XML de pruebas");
 				else if (string.IsNullOrWhiteSpace(FileNameAssert))
@@ -153,15 +150,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 		{
 			get { return _outputPath; }
 			set { CheckProperty(ref _outputPath, value); }
-		}
-
-		/// <summary>
-		///		Nombre del archivo de proyecto
-		/// </summary>
-		public string FileNameProject
-		{
-			get { return _fileNameProject; }
-			set { CheckProperty(ref _fileNameProject, value); }
 		}
 
 		/// <summary>
