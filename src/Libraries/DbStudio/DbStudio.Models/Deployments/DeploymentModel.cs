@@ -42,6 +42,21 @@ namespace Bau.Libraries.DbStudio.Models.Deployments
 		public string TargetPath { get; set; }
 
 		/// <summary>
+		///		Indica si se deben escribir los comentarios en los archivos finales
+		/// </summary>
+		public bool WriteComments { get; set; } = true;
+
+		/// <summary>
+		///		Indica si se deben reemplazar los argumentos por GetArgument
+		/// </summary>
+		public bool ReplaceArguments { get; set; } = true;
+
+		/// <summary>
+		///		Indica si se deben pasar a minúsculas los nombres de archivos
+		/// </summary>
+		public bool LowcaseFileNames { get; set; } = true;
+
+		/// <summary>
 		///		Parámetros
 		/// </summary>
 		public string JsonParameters { get; set; }

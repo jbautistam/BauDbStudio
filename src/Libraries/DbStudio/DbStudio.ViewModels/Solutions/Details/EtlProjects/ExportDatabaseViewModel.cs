@@ -39,7 +39,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 			// Asigna las propiedades
 			DataBase = string.Empty;
 			OutputPath = SolutionViewModel.MainViewModel.LastPathSelected;
-			BlockSize = 4_000_000;
+			BlockSize = 2_000_000;
 			// Indica que no ha habido modificaciones
 			IsUpdated = false;
 		}

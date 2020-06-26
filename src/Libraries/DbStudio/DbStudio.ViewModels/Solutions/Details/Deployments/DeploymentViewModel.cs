@@ -12,7 +12,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Deployments
 	{
 		// Variables privadas
 		private string _name, _description, _sourcePath, _targetPath, _jsonParameters;
-		private bool _isNew;
+		private bool _isNew, _writeComments, _lowcaseFileNames, _replaceArguments;
 		private ComboViewModel _comboTypes;
 
 		public DeploymentViewModel(SolutionViewModel solutionViewModel, DeploymentModel deployment)
@@ -41,6 +41,17 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Deployments
 			SourcePath = Deployment.SourcePath;
 			TargetPath = Deployment.TargetPath;
 			JsonParameters = Deployment.JsonParameters;
+			WriteComments = Deployment.WriteComments;
+			ReplaceArguments = Deployment.ReplaceArguments;
+			LowcaseFileName = Deployment.LowcaseFileNames;
+			// Si es nuevo, añade los parámetros predeterminados
+			if (IsNew)
+			{
+				JsonParameters = "{" + Environment.NewLine;
+				JsonParameters += "\t\"MountPath\": \"$mountpath\"," + Environment.NewLine;
+				JsonParameters += "\t\"DbCompute\": \"$dbcompute\"" + Environment.NewLine;
+				JsonParameters += "}";
+			}
 			// Indica que no ha habido modificaciones
 			IsUpdated = false;
 		}
@@ -97,6 +108,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Deployments
 				Deployment.SourcePath = SourcePath;
 				Deployment.TargetPath = TargetPath;
 				Deployment.JsonParameters = JsonParameters;
+				Deployment.WriteComments = WriteComments;
+				Deployment.ReplaceArguments = ReplaceArguments;
+				Deployment.LowcaseFileNames = LowcaseFileName;
 				// Añade los datos a la solución si es necesario
 				if (IsNew)
 					SolutionViewModel.Solution.Deployments.Add(Deployment);
@@ -181,6 +195,33 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Deployments
 		{
 			get { return _jsonParameters; }
 			set { CheckProperty(ref _jsonParameters, value); }
+		}
+
+		/// <summary>
+		///		Indica si se deben escribir los comentarios en los archivos de salida
+		/// </summary>
+		public bool WriteComments
+		{
+			get { return _writeComments; }
+			set { CheckProperty(ref _writeComments, value); }
+		}
+
+		/// <summary>
+		///		Indica si se deben pasar los nombres de archivos a minúsculas
+		/// </summary>
+		public bool LowcaseFileName
+		{
+			get { return _lowcaseFileNames; }
+			set { CheckProperty(ref _lowcaseFileNames, value); }
+		}
+
+		/// <summary>
+		///		Indica si se deben reemplazar los argumentos $argument por GetArgument()
+		/// </summary>
+		public bool ReplaceArguments
+		{
+			get { return _replaceArguments; }
+			set { CheckProperty(ref _replaceArguments, value); }
 		}
 	}
 }

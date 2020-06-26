@@ -30,6 +30,9 @@ namespace Bau.Libraries.DbStudio.Application.Repository
 		private const string TagSource = "Source";
 		private const string TagTarget = "Target";
 		private const string TagJsonParameters = "JsonParameters";
+		private const string TagWriteComments = "WriteComments";
+		private const string TagReplaceArguments = "ReplaceArguments";
+		private const string TagLowcaseFileNames = "LowcaseFileNames";
 		private const string TagStorage = "Storage";
 		private const string TagConnectionSring = "ConnectionString";
 
@@ -126,6 +129,9 @@ namespace Bau.Libraries.DbStudio.Application.Repository
 						deployment.SourcePath = nodeML.Nodes[TagSource].Value.TrimIgnoreNull();
 						deployment.TargetPath = nodeML.Nodes[TagTarget].Value.TrimIgnoreNull();
 						deployment.JsonParameters = nodeML.Nodes[TagJsonParameters].Value.TrimIgnoreNull();
+						deployment.WriteComments = nodeML.Attributes[TagWriteComments].Value.GetBool(true);
+						deployment.ReplaceArguments = nodeML.Attributes[TagReplaceArguments].Value.GetBool(true);
+						deployment.LowcaseFileNames = nodeML.Attributes[TagLowcaseFileNames].Value.GetBool(true);
 						// Añade el objeto a la solución
 						solution.Deployments.Add(deployment);
 				}
@@ -239,6 +245,9 @@ namespace Bau.Libraries.DbStudio.Application.Repository
 						nodeML.Nodes.Add(TagSource, deployment.SourcePath);
 						nodeML.Nodes.Add(TagTarget, deployment.TargetPath);
 						nodeML.Nodes.Add(TagJsonParameters, deployment.JsonParameters);
+						nodeML.Attributes.Add(TagWriteComments, deployment.WriteComments);
+						nodeML.Attributes.Add(TagReplaceArguments, deployment.ReplaceArguments);
+						nodeML.Attributes.Add(TagLowcaseFileNames, deployment.LowcaseFileNames);
 				}
 				// Devuelve la colección de nodos
 				return nodesML;

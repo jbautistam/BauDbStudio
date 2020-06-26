@@ -15,8 +15,8 @@
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Compilers\src\LibInterpreter\LibInterpreter.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DbAggregator\DbAggregator.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DbScripts\LibDbScripts.Parser\LibDbScripts.Parser.csproj" />
-    <ProjectReference Include="..\..\..\..\..\..\Libraries\Formats\LibCsvFiles\LibCsvFiles.csproj" />
-    <ProjectReference Include="..\..\..\..\..\..\Libraries\Formats\LibParquetFiles\LibParquetFiles.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Formats\LibCsvFiles\src\LibCsvFiles.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Formats\LibParquetFiles\src\LibParquetFiles.csproj" />
     <ProjectReference Include="..\LibJobProcessor.Core\LibJobProcessor.Core.csproj" />
   </ItemGroup>
 

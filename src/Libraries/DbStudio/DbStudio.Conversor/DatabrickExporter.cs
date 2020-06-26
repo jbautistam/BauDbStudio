@@ -7,90 +7,55 @@ using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.LibHelper.Files;
 using Bau.Libraries.LibLogger.Models.Log;
 
-namespace Bau.Libraries.DbStudio.Application.Controllers.Databricks
+namespace Bau.Libraries.DbStudio.Conversor
 {
 	/// <summary>
 	///		Exportador de archivos a notebooks de databricks
 	/// </summary>
-	internal class DatabrickExporter
+	public class DatabrickExporter
 	{
-		internal DatabrickExporter(SolutionManager manager)
+		public DatabrickExporter(LibLogger.Core.LogManager logger, ExporterOptions options)
 		{
-			Manager = manager;
+			Logger = logger;
+			Options = options;
 		}
 
 		/// <summary>
 		///		Exporta los archivos
 		/// </summary>
-		internal void Export(Models.Deployments.DeploymentModel deployment)
+		public void Export()
 		{
-			using (BlockLogModel block = Manager.Logger.Default.CreateBlock(LogModel.LogType.Debug, "Comienzo de la copia de directorios"))
-			{
-				(NormalizedDictionary<object> constants, string error) = GetParameters(deployment.JsonParameters);
-
-					if (!string.IsNullOrWhiteSpace(error))
-						block.Error(error);
-					else
-					{				
-						// Elimina el directorio destino
-						HelperFiles.KillPath(deployment.TargetPath);
-						// Copia los directorios
-						CopyPath(block, deployment.SourcePath, deployment.TargetPath, constants);
-						// Borra los directorios vacíos
-						HelperFiles.KillEmptyPaths(deployment.TargetPath);
-						// Log
-						block.Debug("Fin de la copia de directorios");
-					}
+			using (BlockLogModel block = Logger.Default.CreateBlock(LogModel.LogType.Info, "Start copy files"))
+			{	
+				// Elimina el directorio destino
+				HelperFiles.KillPath(Options.TargetPath);
+				// Copia los directorios
+				CopyPath(block, Options.SourcePath, Options.TargetPath);
+				// Borra los directorios vacíos
+				HelperFiles.KillEmptyPaths(Options.TargetPath);
+				// Log
+				block.Info("End copy files");
 			}
-		}
-
-		/// <summary>
-		///		Obtiene los parámetros de una cadena Json
-		/// </summary>
-		private (NormalizedDictionary<object> parameters, string error) GetParameters(string jsonParameters)
-		{
-			NormalizedDictionary<object> parameters = new NormalizedDictionary<object>();
-			string error = string.Empty;
-
-				// Carga los parámetros si es necesario
-				if (!string.IsNullOrWhiteSpace(jsonParameters))
-					try
-					{
-						System.Data.DataTable table = new LibJsonConversor.JsonToDataTableConversor().ConvertToDataTable(jsonParameters);
-
-							// Crea la colección de parámetros a partir de la tabla
-							if (table.Rows.Count == 0)
-								error = "No se ha encontrado ningún parámetro en el archivo";
-							else
-								foreach (System.Data.DataColumn column in table.Columns)
-									parameters.Add(column.ColumnName, table.Rows[0][column.Ordinal]);
-					}
-					catch (Exception exception)
-					{
-						error = $"Error cuando se cargaba el archivo de parámetros. {exception.Message}";
-					}
-				// Devuelve el resultado
-				return (parameters, error);
 		}
 
 		/// <summary>
 		///		Copia los archivos de un directorio
 		/// </summary>
-		private void CopyPath(BlockLogModel block, string sourcePath, string targetPath, NormalizedDictionary<object> constants)
+		private void CopyPath(BlockLogModel block, string sourcePath, string targetPath)
 		{
 			// Log
-			block.Debug($"Copiando '{sourcePath}' a '{targetPath}'");
+			block.Info($"Copying '{sourcePath}' a '{targetPath}'");
 			// Copia los archivos
-			CopyFiles(sourcePath, targetPath, constants);
+			CopyFiles(sourcePath, targetPath);
 			// Copia recursivamente los directorios
 			foreach (string path in System.IO.Directory.EnumerateDirectories(sourcePath))
-				CopyPath(block, path, System.IO.Path.Combine(targetPath, System.IO.Path.GetFileName(path)), constants);
+				CopyPath(block, path, System.IO.Path.Combine(targetPath, System.IO.Path.GetFileName(path)));
 		}
 
 		/// <summary>
 		///		Copia los archivos
 		/// </summary>
-		private void CopyFiles(string sourcePath, string targetPath, NormalizedDictionary<object> constants)
+		private void CopyFiles(string sourcePath, string targetPath)
 		{
 			// Crea el directorio 
 			//? Sí, está dos veces, no sé porqué si se ejecuta dos veces consecutivas este método, la segunda vez no crea el directorio a menos que
@@ -107,7 +72,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Databricks
 						if (file.EndsWith(".py", StringComparison.CurrentCultureIgnoreCase))
 							SaveFileWithoutBom(targetFile, HelperFiles.LoadTextFile(file));
 						else if (file.EndsWith(".sql", StringComparison.CurrentCultureIgnoreCase))
-							SaveFileWithoutBom(targetFile, TransformSql(file, constants));
+							SaveFileWithoutBom(targetFile, TransformSql(file));
 				}
 		}
 
@@ -136,11 +101,11 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Databricks
 		/// <summary>
 		///		Transforma la SQL para un notebook
 		/// </summary>
-		private string TransformSql(string sourceFile, NormalizedDictionary<object> constants)
+		private string TransformSql(string sourceFile)
 		{
 			System.Text.StringBuilder sbResult = new System.Text.StringBuilder();
-			string content = NormalizeNotebookContent(sourceFile, constants);
-			List<SqlSectionModel> scriptSqlParts = new SqlParser().Tokenize(content, constants.ToDictionary(), out string error);
+			string content = NormalizeNotebookContent(sourceFile);
+			List<SqlSectionModel> scriptSqlParts = new SqlParser().Tokenize(content, Options.Parameters.ToDictionary(), out string error);
 
 				if (!string.IsNullOrWhiteSpace(error))
 					throw new Exception(error);
@@ -168,7 +133,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Databricks
 											sbResult.AppendLine(scriptSqlPart.Content);
 										break;
 									case SqlSectionModel.SectionType.Comment:
-											if (!string.IsNullOrWhiteSpace(scriptSqlPart.Content))
+											if (Options.WriteComments && !string.IsNullOrWhiteSpace(scriptSqlPart.Content))
 											{
 												string [] parts = scriptSqlPart.Content.Split('\r', '\n');
 												bool firstComment = true;
@@ -203,16 +168,18 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Databricks
 		/// <summary>
 		///		Obtiene el contenido normalizado de un notebook
 		/// </summary>
-		private string NormalizeNotebookContent(string fileName, NormalizedDictionary<object> constants)
+		private string NormalizeNotebookContent(string fileName)
 		{
 			string content = HelperFiles.LoadTextFile(fileName);
 
 				// Reemplaza las constantes
-				content = ReplaceConstants(content, constants);
+				content = ReplaceConstants(content, Options.Parameters);
 				// Sustituye los argumentos de tipo $Xxxx por getArgument("xxxx")
-				content = ConvertArgumentsToGetArgument(content, "$", constants);
+				if (Options.ReplaceArguments)
+					content = ConvertArgumentsToGetArgument(content, "$", Options.Parameters);
 				// Pasa los nombres de archivo a minúsculas
-				content = ConvertFileNameToLower(content);
+				if (Options.LowcaseFileNames)
+					content = ConvertFileNameToLower(content);
 				// Devuelve la cadena normalizada
 				return content;
 		}
@@ -220,10 +187,10 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Databricks
 		/// <summary>
 		///		Reemplaza las constantes
 		/// </summary>
-		private string ReplaceConstants(string content, NormalizedDictionary<object> constants)
+		private string ReplaceConstants(string content, NormalizedDictionary<object> parameters)
 		{
 			// Reemplaza las constantes
-			foreach ((string key, object value) in constants.Enumerate())
+			foreach ((string key, object value) in parameters.Enumerate())
 			{
 				string parameter = (value ?? "").ToString();
 
@@ -232,18 +199,6 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Databricks
 			}
 			// Devuelve el contenido
 			return content;
-		}
-
-		/// <summary>
-		///		Pasa los argumentos de la cadena SQL a minúsculas (Databricks distingue entre mayúsculas y minúsculas y se ha decidido que todos los argumentos estarán
-		///	en minúsculas
-		/// </summary>
-		private string ConvertArgumentsToLower(string sql, string parameterPrefix)
-		{
-			return ConvertToLower(sql, 
-								  System.Text.RegularExpressions.Regex.Match(sql, "\\" + parameterPrefix + "\\w*",
-																			 System.Text.RegularExpressions.RegexOptions.IgnoreCase,
-																			 TimeSpan.FromSeconds(10)));
 		}
 
 		/// <summary>
@@ -380,8 +335,13 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Databricks
 		}
 
 		/// <summary>
-		///		Manager principal
+		///		Logger
 		/// </summary>
-		internal SolutionManager Manager { get; }
+		internal LibLogger.Core.LogManager Logger { get; }
+
+		/// <summary>
+		///		Configuración de distribución
+		/// </summary>
+		internal ExporterOptions Options { get; }
 	}
 }

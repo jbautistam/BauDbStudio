@@ -117,7 +117,7 @@ namespace Bau.Libraries.DbStudio.Application
 		/// </summary>
 		public void ExportToDataBricks(Models.Deployments.DeploymentModel deployment)
 		{
-			new Controllers.Databricks.DatabrickExporter(this).Export(deployment);
+			new Controllers.Databricks.DatabrickExporterController(this).Export(deployment);
 		}
 
 		/// <summary>

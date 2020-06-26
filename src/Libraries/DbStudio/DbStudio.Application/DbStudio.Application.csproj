@@ -18,7 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibHelper\src\LibHelper.csproj" />
-    <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibJsonConversor\LibJsonConversor.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibJsonConversor\src\LibJsonConversor.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibLogger\src\LibLogger.Core\LibLogger.Core.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibMarkup\src\LibMarkup.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DataBaseProviders\LibDbProviders.Base\LibDbProviders.Base.csproj" />
@@ -29,8 +29,9 @@
     <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DataBaseProviders\LibDbProviders.SqLite\LibDbProviders.SqLite.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DataBaseProviders\LibDbProviders.SqlServer\LibDbProviders.SqlServer.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DbScripts\LibDbScripts.Parser\LibDbScripts.Parser.csproj" />
-    <ProjectReference Include="..\..\..\..\..\..\Libraries\Formats\LibCsvFiles\LibCsvFiles.csproj" />
-    <ProjectReference Include="..\..\..\..\..\..\Libraries\Formats\LibParquetFiles\LibParquetFiles.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Formats\LibCsvFiles\src\LibCsvFiles.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Formats\LibParquetFiles\src\LibParquetFiles.csproj" />
+    <ProjectReference Include="..\DbStudio.Conversor\DbStudio.Conversor.csproj" />
     <ProjectReference Include="..\DbStudio.Models\DbStudio.Models.csproj" />
   </ItemGroup>
 
