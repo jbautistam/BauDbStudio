@@ -34,6 +34,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 			NewWorkspaceCommand = new BaseCommand(_ => NewWorkspace());
 			DeleteWorkspaceCommand = new BaseCommand(_ => DeleteWorkspace());
 			CreateTestXmlCommand = new BaseCommand(async _ => await CreateTestXmlAsync());
+			CreateValidationScriptsCommand = new BaseCommand(async _ => await CreateValidationScriptsAsync());
 		}
 
 		/// <summary>
@@ -111,6 +112,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 						XmlTestProjectGenerator generator = new XmlTestProjectGenerator(MainViewModel.Manager, viewModel.ComboConnections.GetSelectedConnection(),
 																						viewModel.DataBase, viewModel.OutputPath);
 
+							// Genera los archivos
 							try
 							{
 								if (!await generator.GenerateAsync(block, viewModel.Provider, viewModel.PathVariable, viewModel.DataBaseVariable, viewModel.SufixTestTables,
@@ -130,6 +132,56 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 							{
 								block.Error($"Error en la generación de los archivos de pruebas {exception.Message}");
 							}
+							// Log
+							MainViewModel.MainController.Logger.Flush();
+					}
+		}
+
+		/// <summary>
+		///		Crea los scripts de validación de archivos
+		/// </summary>
+		private async Task CreateValidationScriptsAsync()
+		{
+			Details.EtlProjects.CreateValidationScriptsViewModel viewModel = new Details.EtlProjects.CreateValidationScriptsViewModel(this);
+
+				if (MainViewModel.MainController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+					using (BlockLogModel block = MainViewModel.MainController.Logger.Default.CreateBlock(LogModel.LogType.Info, "Comienzo de la creación de archivos de validación"))
+					{
+						ScriptsValidationOptions options = new ScriptsValidationOptions
+																	{
+																		Connection = viewModel.TreeConnection.Connection,
+																		Tables = viewModel.TreeConnection.GetSelectedTables(),
+																		OutputPath = viewModel.OutputPath,
+																		DataBaseVariable = viewModel.DataBaseVariable,
+																		Mode = viewModel.ValidateFiles ? ScriptsValidationOptions.ValidationMode.Files : ScriptsValidationOptions.ValidationMode.Database,
+																		MountPathVariable = viewModel.MountPathVariable,
+																		MountPathContent = viewModel.MountPathContent,
+																		FormatType = viewModel.FormatType,
+																		SubpathValidate = viewModel.PathValidate,
+																		DatabaseTarget = viewModel.DataBaseTarget
+																	};
+						ScriptsValidationGenerator generator = new ScriptsValidationGenerator(MainViewModel.Manager, options);
+
+							// Crea los archivos de prueba
+							try
+							{
+								if (!await generator.GenerateAsync(System.Threading.CancellationToken.None))
+									block.Error($"Error en la generación de los archivos de validación. {generator.Errors.Concatenate()}");
+								else
+								{
+									block.Info("Fin de la creación de archivos de validación");
+									MainViewModel.MainController.HostController.SystemController.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
+																												  "Generación de archivos de validación",
+																												  "Ha terminado correctamente la generación de los archivos de validación",
+																												  TimeSpan.FromSeconds(10));
+								}
+							}
+							catch (Exception exception)
+							{
+								block.Error($"Error en la generación de archivos de validación {exception.Message}");
+							}
+							// Log
+							MainViewModel.MainController.Logger.Flush();
 					}
 		}
 
@@ -207,5 +259,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 		///		Crea los archivos XML de proyecto de pruebas
 		/// </summary>
 		public BaseCommand CreateTestXmlCommand { get; }
+
+		/// <summary>
+		///		Crea los archivos XML de validación
+		/// </summary>
+		public BaseCommand CreateValidationScriptsCommand { get; }
 	}
 }

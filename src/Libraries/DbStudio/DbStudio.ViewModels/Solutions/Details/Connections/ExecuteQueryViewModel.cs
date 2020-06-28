@@ -100,11 +100,11 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 										if (PaginateQuery)
 											DataResults = await SolutionViewModel.MainViewModel.Manager.GetDatatableQueryAsync(connection, querySelected, arguments, 
 																															   ActualPage, PageSize, 
-																															   connection.timeoutExecuteScript, 
+																															   connection.TimeoutExecuteScript, 
 																															   _cancellationToken);
 										else
 											DataResults = await SolutionViewModel.MainViewModel.Manager.GetDatatableQueryAsync(connection, querySelected, arguments, 0, 0,
-																															   connection.timeoutExecuteScript, 
+																															   connection.TimeoutExecuteScript, 
 																															   _cancellationToken);
 										// Guarda la consulta que se acaba de lanzar
 										_lastQuery = querySelected;
@@ -145,7 +145,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 									try
 									{
 										DataTable table = await SolutionViewModel.MainViewModel.Manager.GetExecutionPlanAsync(connection, query, arguments, 
-																															  connection.timeoutExecuteScript, _cancellationToken);
+																															  connection.TimeoutExecuteScript, _cancellationToken);
 										string plan = string.Empty;
 
 											// Obtiene el plan de ejecución
@@ -335,7 +335,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 																	  string fileName, CancellationToken cancellationToken)
 		{
 			using (System.Data.Common.DbDataReader reader = await SolutionViewModel.MainViewModel.Manager.ExecuteReaderAsync(connection, Query, arguments,
-																															 connection.timeoutExecuteScript,
+																															 connection.TimeoutExecuteScript,
 																															 cancellationToken))
 			{
 				return await new ExportDataController().ExportAsync(SolutionViewModel.MainViewModel.MainController.Logger, fileName, reader, cancellationToken);

@@ -5,7 +5,7 @@ using Bau.Libraries.DbStudio.Models.Connections;
 namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 {
 	/// <summary>
-	///		ViewModel de creación de archivos XML de pruebas
+	///		ViewModel de creación de scripts de validación de archivos
 	/// </summary>
 	public class CreateTestXmlViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewModel
 	{

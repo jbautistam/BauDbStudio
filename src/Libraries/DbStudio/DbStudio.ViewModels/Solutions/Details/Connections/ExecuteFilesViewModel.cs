@@ -102,7 +102,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 							file.SetStatus(ExecuteFilesItemViewModel.Status.Start, "Ejecutando ...");
 							// Ejecuta la consulta
 							await SolutionViewModel.MainViewModel.Manager.ExecuteQueryAsync(connection, content, arguments, 
-																							connection.timeoutExecuteScript, cancellationToken);
+																							connection.TimeoutExecuteScript, cancellationToken);
 							// Detiene la ejecución
 							file.SetStatus(ExecuteFilesItemViewModel.Status.End, "Fin de ejecución");
 						}

@@ -1,7 +1,6 @@
 ﻿using System;
 
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.ComboItems;
-using Bau.Libraries.DbStudio.Application.Controllers.Export;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 {
@@ -14,7 +13,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 		private Connections.ComboConnectionsViewModel _comboConnections;
 		private ComboViewModel _comboFormat;
 		private string _dataBase, _outputPath;
-		private ExportDataBaseGenerator.FormatType _formatType;
+		private Application.SolutionManager.FormatType _formatType;
 		private long _blockSize;
 
 		public ExportDatabaseViewModel(SolutionViewModel solutionViewModel)
@@ -33,8 +32,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 		{
 			// Combo de formato de los archivos
 			ComboFormat = new ComboViewModel(this);
-			ComboFormat.AddItem((int) ExportDataBaseGenerator.FormatType.Parquet, "Parquet");
-			ComboFormat.AddItem((int) ExportDataBaseGenerator.FormatType.Csv, "CSV");
+			ComboFormat.AddItem((int) Application.SolutionManager.FormatType.Parquet, "Parquet");
+			ComboFormat.AddItem((int) Application.SolutionManager.FormatType.Csv, "CSV");
 			ComboFormat.SelectedItem = ComboFormat.Items[0];
 			// Asigna las propiedades
 			DataBase = string.Empty;
@@ -72,7 +71,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 				// Guarda el directorio seleccionado
 				SolutionViewModel.MainViewModel.LastPathSelected = OutputPath;
 				// Guarda las propiedades
-				FormatType = (ExportDataBaseGenerator.FormatType) (ComboFormat.SelectedID ?? (int) ExportDataBaseGenerator.FormatType.Parquet);
+				FormatType = (Application.SolutionManager.FormatType) (ComboFormat.SelectedID ?? (int) Application.SolutionManager.FormatType.Parquet);
 				// Indica que ya no es nuevo y está grabado
 				IsUpdated = false;
 				// Cierra la ventana
@@ -124,7 +123,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 		/// <summary>
 		///		Formato de los archivos de salida
 		/// </summary>
-		public ExportDataBaseGenerator.FormatType FormatType
+		public Application.SolutionManager.FormatType FormatType
 		{
 			get { return _formatType; }
 			set { CheckProperty(ref _formatType, value); }

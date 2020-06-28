@@ -81,10 +81,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 						// Ejecuta la consulta
 						if (!string.IsNullOrEmpty(selectedText))
 							await SolutionViewModel.MainViewModel.Manager.ExecuteQueryAsync(connection, selectedText, arguments, 
-																							connection.timeoutExecuteScript, cancellationToken);
+																							connection.TimeoutExecuteScript, cancellationToken);
 						else
 							await SolutionViewModel.MainViewModel.Manager.ExecuteQueryAsync(connection, Content, arguments, 
-																							connection.timeoutExecuteScript, cancellationToken);
+																							connection.TimeoutExecuteScript, cancellationToken);
 						// Muestra el tiempo de ejecución
 						block.Info($"Tiempo de ejecución: {SolutionViewModel.ConnectionExecutionViewModel.ExecutionTime}");
 				}

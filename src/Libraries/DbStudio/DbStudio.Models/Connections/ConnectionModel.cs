@@ -47,9 +47,9 @@ namespace Bau.Libraries.DbStudio.Models.Connections
 		public LibDataStructures.Collections.NormalizedDictionary<string> Parameters { get; } = new LibDataStructures.Collections.NormalizedDictionary<string>();
 
 		/// <summary>
-		///		timeout para la ejecución de scripts
+		///		Timeout para la ejecución de scripts
 		/// </summary>
-		public TimeSpan timeoutExecuteScript { get; set; }
+		public TimeSpan TimeoutExecuteScript { get; set; }
 
 		/// <summary>
 		///		Tablas

@@ -16,18 +16,6 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Export
 	/// </summary>
 	public class ExportDataBaseGenerator
 	{
-		// Enumerados privados
-		/// <summary>
-		///		Tipo de formato de los archivos de salida
-		/// </summary>
-		public enum FormatType
-		{
-			/// <summary>Archivos CSV</summary>
-			Csv,
-			/// <summary>Archivos parquet</summary>
-			Parquet
-		}
-
 		public ExportDataBaseGenerator(SolutionManager manager)
 		{
 			Manager = manager;
@@ -37,7 +25,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Export
 		///		Exporta las tablas de una conexión a una serie de archivos
 		/// </summary>
 		public async Task<bool> ExportAsync(BlockLogModel block, ConnectionModel connection, string dataBase, string path, 
-											FormatType formatType, long blockSize, CancellationToken cancellationToken)
+											SolutionManager.FormatType formatType, long blockSize, CancellationToken cancellationToken)
 		{
 			// Limpia los errores
 			Errors.Clear();
@@ -70,7 +58,8 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Export
 		///		Exporta una tabla particionando la consulta en varios <see cref="IDataReader"/> (porque por ejemplo spark carga todo el dataReader en memoria
 		///	y da un error de OutOfMemory)
 		/// </summary>
-		private void ExportTable(BlockLogModel block, ConnectionModel connection, ConnectionTableModel table, string path, FormatType formatType, long blockSize)
+		private void ExportTable(BlockLogModel block, ConnectionModel connection, ConnectionTableModel table, string path, 
+								 SolutionManager.FormatType formatType, long blockSize)
 		{
 			IDbProvider provider = Manager.ConnectionManager.GetDbProvider(connection);
 			long records = 0;
@@ -80,7 +69,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Export
 				if (connection.Type == ConnectionModel.ConnectionType.Spark)
 				{
 					records = provider.GetRecordsCount($"SELECT * FROM {provider.SqlHelper.FormatName(table.Schema, table.Name)}", 
-													   null, connection.timeoutExecuteScript) ?? 0;
+													   null, connection.TimeoutExecuteScript) ?? 0;
 					totalPages = (int) Math.Ceiling((double) (records / blockSize)) + 1;
 				}
 				// Obtiene los datos
@@ -102,7 +91,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Export
 						//Log
 						block.Info($"Reading page {actualPage + 1} / {records / blockSize + 1:#,##0} ({records:#,##0}) from table {table.Name}");
 						// Exporta la tabla
-						ExportTable(block, provider, sql, fileName, formatType, connection.timeoutExecuteScript);
+						ExportTable(block, provider, sql, fileName, formatType, connection.TimeoutExecuteScript);
 				}
 		}
 
@@ -127,16 +116,16 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Export
 		/// <summary>
 		///		Exporta una tabla
 		/// </summary>
-		private void ExportTable(BlockLogModel block, IDbProvider provider, string sql, string fileName, FormatType formatType, TimeSpan timeout)
+		private void ExportTable(BlockLogModel block, IDbProvider provider, string sql, string fileName, SolutionManager.FormatType formatType, TimeSpan timeout)
 		{
 			using (IDataReader reader = provider.ExecuteReader(sql, null, CommandType.Text, timeout))
 			{
 				switch (formatType)
 				{
-					case FormatType.Csv:
+					case SolutionManager.FormatType.Csv:
 							ExportToCsv(block, fileName, reader);
 						break;
-					case FormatType.Parquet:
+					case SolutionManager.FormatType.Parquet:
 							ExportToParquet(block, fileName, reader);
 						break;
 				}
@@ -172,7 +161,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Export
 		/// <summary>
 		///		Obtiene el nombre de archivo de salida
 		/// </summary>
-		private string GetFileName(string path, string name, FormatType formatType, int? index = null)
+		private string GetFileName(string path, string name, SolutionManager.FormatType formatType, int? index = null)
 		{
 			// Añade el índice si es necesario
 			if (index != null)
@@ -180,10 +169,10 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Export
 			// Añade la extensión al nombre de archivo
 			switch (formatType)
 			{
-				case FormatType.Csv:
+				case SolutionManager.FormatType.Csv:
 						name += ".csv";
 					break;
-				case FormatType.Parquet:
+				case SolutionManager.FormatType.Parquet:
 						name += ".parquet";
 					break;
 			}

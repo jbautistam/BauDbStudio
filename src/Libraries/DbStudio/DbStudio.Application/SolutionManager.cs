@@ -17,6 +17,17 @@ namespace Bau.Libraries.DbStudio.Application
 	{
 		// Constantes privadas
 		private const string DefaultWorkspace = "Studio.Configuration";
+		// Enumerados públicos
+		/// <summary>
+		///		Tipo de formato de los archivos de salida
+		/// </summary>
+		public enum FormatType
+		{
+			/// <summary>Archivos CSV</summary>
+			Csv,
+			/// <summary>Archivos parquet</summary>
+			Parquet
+		}
 
 		public SolutionManager(LogManager logger, string pathConfiguration)
 		{

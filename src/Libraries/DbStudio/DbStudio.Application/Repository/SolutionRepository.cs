@@ -81,7 +81,7 @@ namespace Bau.Libraries.DbStudio.Application.Repository
 						connection.Name = nodeML.Nodes[TagName].Value.TrimIgnoreNull();
 						connection.Description = nodeML.Nodes[TagDescription].Value.TrimIgnoreNull();
 						connection.Type = nodeML.Attributes[TagType].Value.GetEnum(ConnectionModel.ConnectionType.Spark);
-						connection.timeoutExecuteScript = TimeSpan.FromMinutes(nodeML.Attributes[TagtimeoutExecuteScript].Value.GetInt(40));
+						connection.TimeoutExecuteScript = TimeSpan.FromMinutes(nodeML.Attributes[TagtimeoutExecuteScript].Value.GetInt(40));
 						// Carga los parámetros
 						foreach (MLNode childML in nodeML.Nodes)
 							if (childML.Name == TagParameter)
@@ -188,7 +188,7 @@ namespace Bau.Libraries.DbStudio.Application.Repository
 						nodeML.Nodes.Add(TagName, connection.Name);
 						nodeML.Nodes.Add(TagDescription, connection.Description);
 						nodeML.Attributes.Add(TagType, connection.Type.ToString());
-						nodeML.Attributes.Add(TagtimeoutExecuteScript, connection.timeoutExecuteScript.TotalMinutes);
+						nodeML.Attributes.Add(TagtimeoutExecuteScript, connection.TimeoutExecuteScript.TotalMinutes);
 						// Añade los parámetros
 						foreach ((string key, string value) in connection.Parameters.Enumerate())
 						{
