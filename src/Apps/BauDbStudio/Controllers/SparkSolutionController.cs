@@ -81,6 +81,9 @@ namespace Bau.DbStudio.Controllers
 					case Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects.CreateValidationScriptsViewModel viewModel:
 							result = HostHelperController.ShowDialog(MainWindow, new Views.EtlProjects.CreateValidationScriptView(viewModel));
 						break;
+					case Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects.CreateImportFilesScriptViewModel viewModel:
+							result = HostHelperController.ShowDialog(MainWindow, new Views.EtlProjects.CreateImportFilesScriptView(viewModel));
+						break;
 					case Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects.ExecuteEtlConsoleViewModel viewModel:
 							result = HostHelperController.ShowDialog(MainWindow, new Views.EtlProjects.ExecuteEtlConsoleView(viewModel));
 						break;

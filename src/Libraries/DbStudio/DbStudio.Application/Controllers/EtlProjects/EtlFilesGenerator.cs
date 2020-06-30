@@ -32,8 +32,8 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 				content += "CREATE DATABASE IF NOT EXISTS {{" + dataBaseVariable + "}}" + Environment.NewLine;
 				content += "\tLOCATION '{{" + mountPathVariable + "}}/{{" + dataBaseVariable + "}}'" + Environment.NewLine;
 				content += GetSqlSeparator();
-			// Reemplaza los placeholder
-			Save(fileName, content);
+				// Graba el archivo
+				Save(fileName, content);
 		}
 
 		/// <summary>
@@ -97,7 +97,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 		/// <summary>
 		///		Obtiene el nombre de archivo
 		/// </summary>
-		private string GetFileNameTable(string mountPathVariable, string pathValidate, string table, SolutionManager.FormatType formatType)
+		internal string GetFileNameTable(string mountPathVariable, string pathValidate, string table, SolutionManager.FormatType formatType)
 		{
 			string extension = "parquet";
 

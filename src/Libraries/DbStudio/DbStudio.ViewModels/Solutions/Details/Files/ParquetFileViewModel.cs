@@ -15,7 +15,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 		/// <summary>
 		///		Carga la página del archivo
 		/// </summary>
-		protected override DataTable LoadFile(bool countRecords, out int totalRecords)
+		protected override DataTable LoadFile(bool countRecords, out long totalRecords)
 		{
 			return new ParquetDataTableReader().ParquetReaderToDataTable(FileName, (ActualPage - 1) * RecordsPerPage, RecordsPerPage, out totalRecords);
 		}

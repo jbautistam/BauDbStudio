@@ -13,7 +13,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 	{
 		// Variables privadas
 		private string _header, _fileName, _formattedPage;
-		private int _actualPage, _pages, _records, _recordsPerPage;
+		private int _actualPage, _pages, _recordsPerPage;
+		private long _records;
 		private DataTable _dataResults;
 
 		protected BaseFileViewModel(SolutionViewModel solutionViewModel, string fileName, string exportFilesExtensions) : base(false)
@@ -47,7 +48,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 		/// </summary>
 		public void LoadFile()
 		{
-			int totalRecords = 0;
+			long totalRecords = 0;
 
 				// Carga el archivo
 				try
@@ -58,16 +59,16 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 				{
 					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage($"Error when load {FileName}{Environment.NewLine}{exception.Message}");
 				}
-				// Asigna el número de registros
+				// Asigna el número de registros y páginas
 				if (Records == 0)
 					Records = totalRecords;
-				Pages = Records / RecordsPerPage + 1;
+				Pages = (int) Records / RecordsPerPage + 1;
 		}
 
 		/// <summary>
 		///		Carga un archivo y obtiene una tabla paginada
 		/// </summary>
-		protected abstract DataTable LoadFile(bool countRecords, out int totalRecords);
+		protected abstract DataTable LoadFile(bool countRecords, out long totalRecords);
 
 		/// <summary>
 		///		Abre las propiedades del archivo
@@ -212,7 +213,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 		/// <summary>
 		///		Número total de registros
 		/// </summary>
-		public int Records
+		public long Records
 		{
 			get { return _records; }
 			set 

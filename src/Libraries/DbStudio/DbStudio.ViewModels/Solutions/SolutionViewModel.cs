@@ -35,6 +35,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 			DeleteWorkspaceCommand = new BaseCommand(_ => DeleteWorkspace());
 			CreateTestXmlCommand = new BaseCommand(async _ => await CreateTestXmlAsync());
 			CreateValidationScriptsCommand = new BaseCommand(async _ => await CreateValidationScriptsAsync());
+			CreateImportFilesScriptsCommand = new BaseCommand(async _ => await CreateImportFilesScriptsAsync());
 		}
 
 		/// <summary>
@@ -186,6 +187,50 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 		}
 
 		/// <summary>
+		///		Crea los scripts de importación de archivos
+		/// </summary>
+		private async Task CreateImportFilesScriptsAsync()
+		{
+			Details.EtlProjects.CreateImportFilesScriptViewModel viewModel = new Details.EtlProjects.CreateImportFilesScriptViewModel(this);
+
+				if (MainViewModel.MainController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+					using (BlockLogModel block = MainViewModel.MainController.Logger.Default.CreateBlock(LogModel.LogType.Info, "Comienzo de la creación de archivos de importación"))
+					{
+						ScriptsImportOptions options = new ScriptsImportOptions
+																	{
+																		Connection = viewModel.ComboConnections.GetSelectedConnection(),
+																		DataBaseVariable = viewModel.DataBaseVariable,
+																		PrefixOutputTable = viewModel.PrefixOutputTable,
+																		MountPathVariable = viewModel.MountPathVariable,
+																		SubPath = viewModel.SubPath,
+																		PathInputFiles = viewModel.PathInputFiles,
+																		OutputFileName = viewModel.OutputFileName
+																	};
+						ScriptsImportGenerator generator = new ScriptsImportGenerator(MainViewModel.Manager, options);
+
+							// Crea los archivos de prueba
+							try
+							{
+								if (!await generator.GenerateAsync(System.Threading.CancellationToken.None))
+									block.Error($"Error en la generación de los archivos de importación. {generator.Errors.Concatenate()}");
+								else
+								{
+									block.Info("Fin de la creación de archivos de importación");
+									MainViewModel.MainController.HostController.SystemController.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
+																												  "Generación de archivos de importación",
+																												  "Ha terminado correctamente la generación de los archivos de importación",
+																												  TimeSpan.FromSeconds(10));
+								}
+							}
+							catch (Exception exception)
+							{
+								block.Error($"Error en la generación de archivos de importación {exception.Message}");
+							}
+							// Log
+							MainViewModel.MainController.Logger.Flush();
+					}
+		}
+		/// <summary>
 		///		ViewModel de la ventana principal
 		/// </summary>
 		public MainViewModel MainViewModel { get; }
@@ -261,8 +306,13 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 		public BaseCommand CreateTestXmlCommand { get; }
 
 		/// <summary>
-		///		Crea los archivos XML de validación
+		///		Crea los archivos SQL de validación
 		/// </summary>
 		public BaseCommand CreateValidationScriptsCommand { get; }
+
+		/// <summary>
+		///		Crea los archivos SQL de importación de archivos a una base de datos
+		/// </summary>
+		public BaseCommand CreateImportFilesScriptsCommand { get; }
 	}
 }

@@ -168,20 +168,22 @@
 				</MenuItem>
 			</MenuItem>
 			<MenuItem Header="_Herramientas">
-				<MenuItem Header="_Conexión" Command="{Binding Path=SolutionViewModel.TreeConnectionsViewModel.NewConnectionCommand}" >
+				<MenuItem Header="_Exportar tablas de datos ... " Command="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.ExportDataBaseCommand}">
 					<MenuItem.Icon>
-						<Image Width="16" Height="16" Source="/Resources/Images/Connection.png" />
+						<Image Width="16" Height="16" Source="/Resources/Images/Export.png" />
 					</MenuItem.Icon>
-					<MenuItem Header="_Exportar tablas de datos ... " Command="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.ExportDataBaseCommand}">
-						<MenuItem.Icon>
-							<Image Width="16" Height="16" Source="/Resources/Images/Export.png" />
-						</MenuItem.Icon>
-					</MenuItem>
 				</MenuItem>
-				<MenuItem Header="_Pruebas">
-					<MenuItem Header="_Crear archivos validación" Command="{Binding Path=SolutionViewModel.CreateValidationScriptsCommand}">
-					</MenuItem>
+				<MenuItem Header="_Crear scripts validación" Command="{Binding Path=SolutionViewModel.CreateValidationScriptsCommand}">
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/Resources/Images/FileSql.png" />
+					</MenuItem.Icon>
 				</MenuItem>
+				<MenuItem Header="Crear script de importación de archivos" Command="{Binding Path=SolutionViewModel.CreateImportFilesScriptsCommand}">
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/Resources/Images/FileSql.png" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<Separator/>
 				<MenuItem Header="_Configuración ..." Click="Configuration_Click">
 					<MenuItem.Icon>
 						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Tag.png" />

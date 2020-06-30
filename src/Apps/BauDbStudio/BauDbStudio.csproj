@@ -142,6 +142,9 @@
     <Page Update="Views\Connections\ConnectionParametersView.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Views\EtlProjects\CreateImportFilesScriptView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\EtlProjects\CreateValidationScriptView.xaml">
       <SubType>Designer</SubType>
     </Page>

@@ -27,6 +27,9 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 		{
 			IDbProvider provider = Manager.ConnectionManager.GetDbProvider(Options.Connection);
 
+				// Limpia los errores
+				Errors.Clear();
+				// Genera los archivos
 				if (provider == null)
 					Errors.Add($"Cant find provider for connection '{Options.Connection.Name}'");
 				else
@@ -35,8 +38,6 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 					NormalizedDictionary<List<ConnectionTableModel>> schemaTables = GetSchemaTablesSelected();
 					int index = 1;
 
-						// Limpia los errores
-						Errors.Clear();
 						// Genera el archivo de creación de la base de datos
 						generator.WriteFileCreateConnection(Options.DataBaseVariable, Options.MountPathVariable, "00. Create database.sql");
 						// Carga el esquema
@@ -77,8 +78,8 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 								content += generator.GetSqlDropTable(Options.DataBaseVariable, validateTable) + Environment.NewLine;
 								content += generator.GetSqlSeparator();
 								// Añade la instrucción de crear la tabla
-								content += content += generator.GetSqlCreateTable(Options.DataBaseVariable, validateTable,
-																				  GetSqlValidation(generator, table, prepareCountTables));
+								content += generator.GetSqlCreateTable(Options.DataBaseVariable, validateTable,
+																	   GetSqlValidation(generator, table, prepareCountTables));
 								content += generator.GetSqlSeparator();
 								// Prepara la consulta de unión para la tabla de resultados final (sólo en el caso que sea un archivo de validación del número de registros)
 								if (prepareCountTables)

@@ -5,7 +5,7 @@ using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.ComboItems;
 namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 {
 	/// <summary>
-	///		ViewModel de creación de archivos XML de pruebas
+	///		ViewModel de creación de archivos SQL de validación
 	/// </summary>
 	public class CreateValidationScriptsViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewModel
 	{
