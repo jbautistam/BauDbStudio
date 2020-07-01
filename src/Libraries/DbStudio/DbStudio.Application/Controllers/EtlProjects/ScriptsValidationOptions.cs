@@ -70,5 +70,10 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 		///		Base de datos a comparar
 		/// </summary>
 		public string DatabaseTarget { get; set; }
+
+		/// <summary>
+		///		Indica si se debe generar un archivo QVS de validación
+		/// </summary>
+		public bool GenerateQvs { get; set; }
 	}
 }

@@ -58,8 +58,10 @@ namespace Bau.Libraries.DbStudio.Application.Connections
 													// Log
 													block.Info($"Executing: {sql}");
 													// Obtiene la consulta
-													if (sql.StartsWith("SELECT ", StringComparison.CurrentCultureIgnoreCase) ||
-														sql.StartsWith("WITH ", StringComparison.CurrentCultureIgnoreCase))
+													if (sql.StartsWith("SELECT", StringComparison.CurrentCultureIgnoreCase) ||
+														sql.StartsWith("WITH ", StringComparison.CurrentCultureIgnoreCase) ||
+														sql.StartsWith("EXECUTE ", StringComparison.CurrentCultureIgnoreCase) ||
+														sql.StartsWith("EXEC ", StringComparison.CurrentCultureIgnoreCase))
 													{
 														if (pageSize == 0)
 															result = await provider.GetDataTableAsync(sql, null, CommandType.Text, timeout, cancellationToken);

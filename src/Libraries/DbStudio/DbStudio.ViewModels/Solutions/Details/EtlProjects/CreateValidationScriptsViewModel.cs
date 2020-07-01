@@ -12,7 +12,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 		// Variables privadas
 		private string _dataBaseVariable, _mountPathVariable, _mountPathContent, _pathValidate;
 		private string _outputPath, _dataBaseTarget;
-		private bool _validateFiles;
+		private bool _validateFiles, _generateQvs;
 		private Connections.ComboConnectionsViewModel _comboConnections;
 		private Explorers.Connections.TreeConnectionTablesViewModel _treeConnection;
 		private Application.SolutionManager.FormatType _formatType;
@@ -48,7 +48,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 			MountPathContent = "/mnt/c/Test";
 			DataBaseVariable = "DbValidate";
 			PathValidate = "Validate";
-			OutputPath = SolutionViewModel.MainViewModel.LastPathSelected;
+			GenerateQvs = true;
+			OutputPath = string.Empty;
 			// Carga el árbol de conexiones
 			TreeConnection.LoadConnection(ComboConnections.GetSelectedConnection());
 			// Indica que no ha habido modificaciones
@@ -168,6 +169,15 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 		{
 			get { return _outputPath; }
 			set { CheckProperty(ref _outputPath, value); }
+		}
+
+		/// <summary>
+		///		Indica si se debe generar un QVS de validación
+		/// </summary>
+		public bool GenerateQvs
+		{
+			get { return _generateQvs; }
+			set { CheckProperty(ref _generateQvs, value); }
 		}
 
 		/// <summary>

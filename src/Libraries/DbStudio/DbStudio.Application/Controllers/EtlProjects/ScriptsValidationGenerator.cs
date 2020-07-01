@@ -49,6 +49,9 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 								// Prepara los scripts de validación
 								PrepareFilesValidation(generator, schema, tables, true, index);
 								PrepareFilesValidation(generator, schema, tables, false, index + 1);
+								// Prepara el archivo de validación de QlikView si es necesario
+								if (Options.GenerateQvs)
+									PrepareFileValidationQvs(generator, schema, tables);
 								// Incrementa el índice
 								index += 2;
 							}
@@ -144,6 +147,14 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 		}
 
 		/// <summary>
+		///		Obtiene el nombre del archivo de validación de QlikView
+		/// </summary>
+		private string GetQlikViewValidateFileName(string schema)
+		{
+			return $"Validate files {schema}.qvs";
+		}
+
+		/// <summary>
 		///		Prepara el archivo JSON de parámetors
 		/// </summary>
 		private void PrepareParametersFile(EtlFilesGenerator generator)
@@ -167,80 +178,115 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 			return $"\t\"{name}\": \"{value}\"";
 		}
 
-/*
 		/// <summary>
-		///		Prepara los archivos de validación por esquema contando el número de registros
+		///		Prepara un archivo de validación de QlikView
 		/// </summary>
-		private void PrepareFilesValidationCount(EtlFilesGenerator generator, ConnectionModel connection, 
-												 string dataBaseVariable, string mountPathVariable, string pathValidate,
-												 string schema, List<ConnectionTableModel> tables, int index)
+		/// <remarks>
+		///		Por ejemplo, para validar una tabla de Spark contra un archivo QVD:
+		///	Tiendas:
+		///	LOAD Text(CodigoErp1) AS CodigoErp1, 
+		///	     Text(NombreTienda) As NombreTienda,
+		///	     Flag_Spark;
+		///	SQL SELECT CodigoErp1,
+		///	    NombreTienda,
+		///	    1 As Flag_Spark
+		///	FROM SPARK.dbcompute.`Stores`;
+		///	Join (Tiendas)
+		///	LOAD Text(CodigoErp1) AS CodigoErp1, 
+		///	     Text(NombreTienda) As NombreTienda,
+		///	     1 As Flag_QV
+		///	FROM
+		///	\DirectorioQlik\Stores.qvd
+		///	(qvd);
+		/// </remarks>
+		private void PrepareFileValidationQvs(EtlFilesGenerator generator, string schema, List<ConnectionTableModel> tables)
 		{
 			string content = string.Empty;
-			string sqlUnion = string.Empty;
 
 				// Crea el contenido de la validación de archivos (con el número de registros distintos)
 				foreach (ConnectionTableModel selectedTable in tables)
-					foreach (ConnectionTableModel table in connection.Tables)
+					foreach (ConnectionTableModel table in Options.Connection.Tables)
 						if (selectedTable.FullName.Equals(table.FullName, StringComparison.CurrentCultureIgnoreCase))
 						{
-							string validateTable = $"{table.Name}_Validate_Count";
-
-								// Añade la instrucción de borrar la tabla
-								content += generator.GetSqlDropTable(dataBaseVariable, validateTable) + Environment.NewLine;
-								content += generator.GetSqlSeparator();
-								// Añade la instrucción de crear la tabla
-								content += generator.GetSqlCreateTable(dataBaseVariable, validateTable,
-																	   generator.GetSqlValidateFile(table, mountPathVariable, pathValidate, FormatType, true) + Environment.NewLine);
-								content += generator.GetSqlSeparator();
-								// Prepara la consulta de unión para la tabla de resultados final
-								if (!string.IsNullOrEmpty(sqlUnion))
-									sqlUnion += "\tUNION ALL" + Environment.NewLine;
-								sqlUnion += "\tSELECT '" + validateTable + "' AS Table, Number FROM {{DbCompute}}.`" + validateTable + "`" + Environment.NewLine;
+							// Cabecera
+							content += $"{table.Name}:" + Environment.NewLine;
+							// Obtiene la primera tabla para QlikView: la consulta de Spark
+							content += GetSqlSelectSparkForQlikView(table);
+							// Añade el join
+							content += $"Join ({table.Name})" + Environment.NewLine;
+							// Obtiene la segunda tabla para QlikView: la consulta sobre archivo
+							content += GetSqlQlikView(table) + Environment.NewLine + Environment.NewLine;
 						}
-				// Añade la consulta de unión a la consulta final
-				if (!string.IsNullOrWhiteSpace(sqlUnion))
+				// Graba el archivo
+				generator.Save(GetQlikViewValidateFileName(schema), content);
+		}
+
+		/// <summary>
+		///		Obtiene la SQL de la consulta de la tabla en Spark
+		/// </summary>
+		private string GetSqlSelectSparkForQlikView(ConnectionTableModel table)
+		{
+			string sql = "LOAD ";
+
+				// Añade los campos de la tabla
+				sql += GetQlikViewFields(table, "Flag_Spark", true) + ";" + Environment.NewLine;
+				// Añade la consulta de carga de base de datos
+				sql += "SQL SELECT " + GetQlikViewFields(table, "1 AS Flag_Spark", false) + Environment.NewLine;
+				// Añade el nombre de tabla
+				sql += $" FROM Spark.{Options.DataBaseVariable}.`{table.Name}`;" + Environment.NewLine;
+				// Devuelve la cadena
+				return sql;
+		}
+
+		/// <summary>
+		///		Obtiene la SQL de la consulta sobre el archivo de QlikView
+		/// </summary>
+		private string GetSqlQlikView(ConnectionTableModel table)
+		{
+			string sql = "LOAD ";
+
+				// Añade los campos de la tabla
+				sql += GetQlikViewFields(table, "1 AS Flag_QV", true) + Environment.NewLine;
+				// Añade el nombre de tabla
+				sql += $" FROM {Options.MountPathContent}/{table.Name}.qvd (qvd);" + Environment.NewLine;
+				// Devuelve la cadena
+				return sql;
+		}
+
+		/// <summary>
+		///		Obtiene una cadena con los campos
+		/// </summary>
+		private string GetQlikViewFields(ConnectionTableModel table, string additionalField, bool addText)
+		{
+			string sql = string.Empty;
+
+				// Añade los campos a la cadena
+				foreach (ConnectionTableFieldModel field in table.Fields)
 				{
-					string countAllTable = $"Validate_Differences";
+					string fieldText = field.Name;
 
-						// Añade la instrucción de borrar la tabla final
-						content += generator.GetSqlDropTable(dataBaseVariable, countAllTable) + Environment.NewLine;
-						content += generator.GetSqlSeparator();
-						// Añade la instrucción de crear la tabla de diferencias
-						content += generator.GetSqlCreateTable(dataBaseVariable, countAllTable, sqlUnion) + Environment.NewLine;
-						content += generator.GetSqlSeparator();
+						// Añade la conversión a texto de QlikView
+						if (addText && field.Type.IndexOf("string", StringComparison.CurrentCultureIgnoreCase) >= 0)
+							fieldText = $"TEXT({fieldText}) AS {fieldText}";
+						// Añade el separador
+						if (!string.IsNullOrWhiteSpace(sql))
+							sql += ", " + Environment.NewLine + "\t";
+						// Añade el campo
+						sql += fieldText;
 				}
-				// Graba el archivo
-				generator.Save($"{(index * 10).ToString()} Validate number {schema}.sql", content);
+				// Añade el campo adicional si es necesario
+				if (!string.IsNullOrWhiteSpace(additionalField))
+				{
+					// Añade el separador
+					if (!string.IsNullOrWhiteSpace(sql))
+						sql += ", ";
+					// Añade el campo adicional
+					sql += additionalField;
+				}
+				// Devuelve la cadnea SQL
+				return sql;
 		}
 
-		/// <summary>
-		///		Prepara los archivos de validación por esquema comparando campos
-		/// </summary>
-		private void PrepareFilesValidationCompare(EtlFilesGenerator generator, ConnectionModel connection, string dataBaseVariable, 
-												   string mountPathVariable, string pathValidate, 
-												   string schema, List<ConnectionTableModel> tables, int index)
-		{
-			string content = string.Empty;
-
-				// Crea el contenido de la validación de archivos (con el número de registros distintos)
-				foreach (ConnectionTableModel selectedTable in tables)
-					foreach (ConnectionTableModel table in connection.Tables)
-						if (selectedTable.FullName.Equals(table.FullName, StringComparison.CurrentCultureIgnoreCase))
-						{
-							string validateTable = $"{table.Name}_Validate";
-
-								// Añade la instrucción de borrar la tabla
-								content += generator.GetSqlDropTable(dataBaseVariable, validateTable) + Environment.NewLine;
-								content += generator.GetSqlSeparator();
-								// Añade la instrucción de crear la tabla
-								content += generator.GetSqlCreateTable(dataBaseVariable, validateTable,
-																	   generator.GetSqlValidateFile(table, mountPathVariable, pathValidate, FormatType, false) + Environment.NewLine);
-								content += generator.GetSqlSeparator();
-						}
-				// Graba el archivo
-				generator.Save($"{(index * 10).ToString()} Validate fields {schema}.sql", content);
-		}
-*/
 		/// <summary>
 		///		Obtiene un diccionario con los esquemas y tablas seleccionados
 		/// </summary>

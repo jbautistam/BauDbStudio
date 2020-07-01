@@ -27,6 +27,7 @@
 				<Grid.RowDefinitions>
 					<RowDefinition Height="Auto"/>
 					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
 				</Grid.RowDefinitions>
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto"/>
@@ -39,6 +40,8 @@
 				<Label Grid.Row="1" Grid.Column="0" Margin="5" Content="Directorio de salida:"/>
 				<Files:PathSelect Grid.Row="1" Grid.Column="1" 
 							PathName="{Binding Path=OutputPath, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+				<CheckBox Grid.Row="2" Grid.Column="1" Content="Generar script de validación de QlikView"
+						  IsChecked="{Binding Path=GenerateQvs, UpdateSourceTrigger=PropertyChanged}"/>
 			</Grid>
 		</GroupBox>
 		<GroupBox Grid.Row="1" Grid.Column="0" Header="Tablas a comparar">
