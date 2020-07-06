@@ -11,7 +11,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 	{
 		// Variables privadas
 		private string _dataBaseVariable, _mountPathVariable, _mountPathContent, _pathValidate;
-		private string _outputPath, _dataBaseTarget;
+		private string _outputPath, _dataBaseTarget, _tablePrefixes;
 		private bool _validateFiles, _generateQvs;
 		private Connections.ComboConnectionsViewModel _comboConnections;
 		private Explorers.Connections.TreeConnectionTablesViewModel _treeConnection;
@@ -48,6 +48,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 			MountPathContent = "/mnt/c/Test";
 			DataBaseVariable = "DbValidate";
 			PathValidate = "Validate";
+			TablePrefixes = "SRC_;EXT_;TRN_";
 			GenerateQvs = true;
 			OutputPath = string.Empty;
 			// Carga el árbol de conexiones
@@ -223,6 +224,15 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 		{
 			get { return _dataBaseTarget; }
 			set { CheckProperty(ref _dataBaseTarget, value); }
+		}
+
+		/// <summary>
+		///		Prefijos a eliminar en las tablas al compararlas con archivos separadas por punto y coma (por ejemplo, SRC_, TMP_...)
+		/// </summary>
+		public string TablePrefixes
+		{
+			get { return _tablePrefixes; }
+			set { CheckProperty(ref _tablePrefixes, value); }
 		}
 	}
 }

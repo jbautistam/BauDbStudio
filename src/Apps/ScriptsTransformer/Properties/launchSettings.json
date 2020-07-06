@@ -2,7 +2,7 @@
   "profiles": {
     "ScriptsTransformer": {
       "commandName": "Project",
-      "commandLineArgs": "-source \"C:\\Projects\\Repos\\Foundation\\EngineScripts\\src\\Engine\\Stocks\" -target \"C:\\Projects\\Repos\\Foundation\\flowmanager-databricks\\src\\Notebooks\\EngineStocks\\Engine\\Stocks\" -MountPath \"$mountpath\" -DbCompute \"$dbcompute\""
+      "commandLineArgs": "-source C:/Projects/engine-scripts/src/Engine/Stocks -target C:/deleteme/engine -MountPath $mountpath -DbCompute $dbcompute"
     }
   }
 }

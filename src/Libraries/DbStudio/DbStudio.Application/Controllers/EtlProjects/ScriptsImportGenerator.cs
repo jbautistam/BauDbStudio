@@ -82,7 +82,9 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 					sql += "-- Can't infer the data types" + Environment.NewLine;
 				// Añade la consulta para leer el archivo
 				sql += "\tSELECT " + GetSqlTransformFieldNames(table, "\t\t\t") + Environment.NewLine;
-				sql += "\t\tFROM " + generator.GetFileNameTable(Options.MountPathVariable, Options.SubPath, System.IO.Path.GetFileNameWithoutExtension(fileName), SolutionManager.FormatType.Parquet);
+				sql += "\t\tFROM " + generator.GetFileNameTable(Options.MountPathVariable, Options.SubPath, 
+																System.IO.Path.GetFileNameWithoutExtension(fileName), SolutionManager.FormatType.Parquet,
+																string.Empty);
 				sql += Environment.NewLine;
 				// Devuelve la consulta SQL
 				return sql;

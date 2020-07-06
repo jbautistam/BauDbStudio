@@ -23,6 +23,7 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Repository
 		private const string TagFrom = "From";
 		private const string TagTo = "To";
 		private const string TagMask = "Mask";
+		private const string TagFlattenPaths = "FlattenPaths";
 		private const string TagPath = "Path";
 		private const string TagExecute = "Execute";
 		private const string TagProcess = "Process";
@@ -157,6 +158,7 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Repository
 				sentence.Source = rootML.Attributes[TagFrom].Value.TrimIgnoreNull();
 				sentence.Target = rootML.Attributes[TagTo].Value.TrimIgnoreNull();
 				sentence.Mask = rootML.Attributes[TagMask].Value.TrimIgnoreNull();
+				sentence.FlattenPaths = rootML.Attributes[TagFlattenPaths].Value.GetBool(false);
 				// Devuelve la sentencia
 				return sentence;
 		}

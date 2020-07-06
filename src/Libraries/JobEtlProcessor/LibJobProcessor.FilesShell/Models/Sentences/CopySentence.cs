@@ -34,5 +34,10 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Models.Sentences
 		///		Máscara de archivos
 		/// </summary>
 		internal string Mask { get; set; }
+
+		/// <summary>
+		///		Indica si al copiar directorios se deben pegar sobre un único directorio
+		/// </summary>
+		internal bool FlattenPaths { get; set; }
 	}
 }

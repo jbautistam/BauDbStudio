@@ -50,16 +50,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 		}
 
 		/// <summary>
-		///		Abre la ventana con los datos de una conexión
-		/// </summary>
-		internal void OpenConnection(ConnectionModel connection)
-		{
-			if (SolutionViewModel.MainViewModel.MainController.OpenDialog(new Details.Connections.ConnectionViewModel(SolutionViewModel, connection)) == 
-					BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
-				Load();
-		}
-
-		/// <summary>
 		///		Obtiene las tablas seleccionadas en el árbol
 		/// </summary>
 		internal List<ConnectionTableModel> GetSelectedTables()

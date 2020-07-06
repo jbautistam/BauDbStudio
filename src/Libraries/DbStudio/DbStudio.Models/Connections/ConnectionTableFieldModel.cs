@@ -7,6 +7,26 @@ namespace Bau.Libraries.DbStudio.Models.Connections
 	/// </summary>
 	public class ConnectionTableFieldModel : LibDataStructures.Base.BaseExtendedModel
 	{
+		// Enumerados públicos
+		/// <summary>
+		///		Tipo de campo
+		/// </summary>
+		public enum Fieldtype
+		{
+			/// <summary>Desconocido. No se debería utilizar</summary>
+			Unknown,
+			/// <summary>Cadena</summary>
+			String,
+			/// <summary>Fecha</summary>
+			Date,
+			/// <summary>Número entero</summary>
+			Integer,
+			/// <summary>Número decimal</summary>
+			Decimal,
+			/// <summary>Valor lógico</summary>
+			Boolean
+		}
+
 		public ConnectionTableFieldModel(ConnectionTableModel table)
 		{
 			Table = table;
@@ -18,9 +38,14 @@ namespace Bau.Libraries.DbStudio.Models.Connections
 		public ConnectionTableModel Table { get; }
 
 		/// <summary>
-		///		Tipo de campo
+		///		Tipo normalizado del campo
 		/// </summary>
-		public string Type { get; set; }
+		public Fieldtype Type { get; set; }
+
+		/// <summary>
+		///		Tipo de campo (texto)
+		/// </summary>
+		public string TypeText { get; set; }
 
 		/// <summary>
 		///		Longitud del campo
@@ -36,7 +61,7 @@ namespace Bau.Libraries.DbStudio.Models.Connections
 			{
 				string length = Length > 0 ? $"({Length:#,##0})" : string.Empty;
 
-					return $"{Name} [{Type}{length}]";
+					return $"{Name} [{TypeText}{length}]";
 			}
 		}
 

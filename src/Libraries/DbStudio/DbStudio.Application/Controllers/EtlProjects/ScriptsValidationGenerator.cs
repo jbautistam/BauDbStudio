@@ -117,8 +117,8 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 			switch (Options.Mode)
 			{
 				case ScriptsValidationOptions.ValidationMode.Files:
-					return generator.GetSqlValidateFile(table, Options.MountPathVariable,
-														Options.SubpathValidate, Options.FormatType, prepareCountTables);
+					return generator.GetSqlValidateFile(table, Options.MountPathVariable, Options.SubpathValidate, Options.TablePrefixes, 
+														Options.FormatType, prepareCountTables);
 				default:
 					throw new Exception("Not implemented");
 			}
@@ -215,7 +215,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 							// Añade el join
 							content += $"Join ({table.Name})" + Environment.NewLine;
 							// Obtiene la segunda tabla para QlikView: la consulta sobre archivo
-							content += GetSqlQlikView(table) + Environment.NewLine + Environment.NewLine;
+							content += GetSqlQlikView(generator, table) + Environment.NewLine + Environment.NewLine;
 						}
 				// Graba el archivo
 				generator.Save(GetQlikViewValidateFileName(schema), content);
@@ -241,14 +241,14 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 		/// <summary>
 		///		Obtiene la SQL de la consulta sobre el archivo de QlikView
 		/// </summary>
-		private string GetSqlQlikView(ConnectionTableModel table)
+		private string GetSqlQlikView(EtlFilesGenerator generator, ConnectionTableModel table)
 		{
 			string sql = "LOAD ";
 
 				// Añade los campos de la tabla
 				sql += GetQlikViewFields(table, "1 AS Flag_QV", true) + Environment.NewLine;
 				// Añade el nombre de tabla
-				sql += $" FROM {Options.MountPathContent}/{table.Name}.qvd (qvd);" + Environment.NewLine;
+				sql += $" FROM [{Options.MountPathContent}/{generator.RemovePrefix(table.Name, Options.TablePrefixes)}.qvd] (qvd);" + Environment.NewLine;
 				// Devuelve la cadena
 				return sql;
 		}
@@ -266,7 +266,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 					string fieldText = field.Name;
 
 						// Añade la conversión a texto de QlikView
-						if (addText && field.Type.IndexOf("string", StringComparison.CurrentCultureIgnoreCase) >= 0)
+						if (addText && field.Type == ConnectionTableFieldModel.Fieldtype.Integer)
 							fieldText = $"TEXT({fieldText}) AS {fieldText}";
 						// Añade el separador
 						if (!string.IsNullOrWhiteSpace(sql))

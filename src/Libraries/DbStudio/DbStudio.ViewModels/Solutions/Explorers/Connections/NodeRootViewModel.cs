@@ -25,6 +25,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 						Icon = IconType.Deployment;
 					break;
 			}
+			PropertyChanged += (sender, args) => {
+													if (args.PropertyName.Equals(nameof(IsChecked), StringComparison.CurrentCultureIgnoreCase))
+														CheckChildNodes();
+												 };
 		}
 
 		/// <summary>
@@ -65,6 +69,16 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 			// Añade los nodos
 			foreach (Models.Deployments.DeploymentModel deployment in TreeViewModel.SolutionViewModel.Solution.Deployments)
 				Children.Add(new NodeDeploymentViewModel(TreeViewModel, this, deployment));
+		}
+
+		/// <summary>
+		///		Selecciona los nodos hijo
+		/// </summary>
+		private void CheckChildNodes()
+		{
+			if (Type == NodeType.SchemaRoot)
+				foreach (BaseTreeNodeViewModel node in Children)
+					node.IsChecked = IsChecked;
 		}
 	}
 }

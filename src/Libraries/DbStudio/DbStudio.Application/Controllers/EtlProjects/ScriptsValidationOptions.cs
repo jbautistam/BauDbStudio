@@ -75,5 +75,10 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 		///		Indica si se debe generar un archivo QVS de validación
 		/// </summary>
 		public bool GenerateQvs { get; set; }
+
+		/// <summary>
+		///		Prefijos a eliminar en las tablas al compararlas con archivos separadas por punto y coma (por ejemplo, SRC_, TMP_...)
+		/// </summary>
+		public string TablePrefixes { get; set; }
 	}
 }

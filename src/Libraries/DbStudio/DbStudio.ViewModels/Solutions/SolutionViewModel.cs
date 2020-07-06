@@ -160,7 +160,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 																		FormatType = viewModel.FormatType,
 																		SubpathValidate = viewModel.PathValidate,
 																		DatabaseTarget = viewModel.DataBaseTarget,
-																		GenerateQvs = viewModel.GenerateQvs
+																		GenerateQvs = viewModel.GenerateQvs,
+																		TablePrefixes = viewModel.TablePrefixes
 																	};
 						ScriptsValidationGenerator generator = new ScriptsValidationGenerator(MainViewModel.Manager, options);
 

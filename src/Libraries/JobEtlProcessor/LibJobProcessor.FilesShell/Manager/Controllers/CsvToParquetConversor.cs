@@ -2,6 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 
+using Bau.Libraries.LibLogger.Models.Log;
+
 namespace Bau.Libraries.LibJobProcessor.FilesShell.Manager.Controllers
 {
 	/// <summary>
@@ -12,19 +14,33 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Manager.Controllers
 		/// <summary>
 		///		Convierte un archivo csv a parquet
 		/// </summary>
-		internal async Task ConvertAsync(string source, string target, CancellationToken cancellationToken)
+		internal async Task<bool> ConvertAsync(BlockLogModel block, string source, string target, CancellationToken cancellationToken)
 		{
-			LibParquetFiles.Writers.ParquetWriter writer = new LibParquetFiles.Writers.ParquetWriter(target);
+			bool converted = false;
 
-				// Evita el error de await
-				await Task.Delay(1);
-				// Crea el directorio de salida
-				LibHelper.Files.HelperFiles.MakePath(System.IO.Path.GetDirectoryName(target));
-				// Escribe el archivo
-				using (LibCsvFiles.CsvReader reader = new LibCsvFiles.CsvReader(source, null, null))
+				// Convierte el archivo
+				try
 				{
-					writer.Write(reader);
+					LibParquetFiles.Writers.ParquetWriter writer = new LibParquetFiles.Writers.ParquetWriter(target);
+
+						// Evita el error de await
+						await Task.Delay(1);
+						// Crea el directorio de salida
+						LibHelper.Files.HelperFiles.MakePath(System.IO.Path.GetDirectoryName(target));
+						// Escribe el archivo
+						using (LibCsvFiles.CsvReader reader = new LibCsvFiles.CsvReader(source, null, null))
+						{
+							writer.Write(reader);
+						}
+						// Indica que se ha convertido el archivo
+						converted = true;
 				}
+				catch (Exception exception)
+				{
+					block.Error($"Error when convert '{source}' to '{target}'", exception);
+				}
+				// Devuelve el valor que indica si se ha convertido
+				return converted;
 		}
 	}
 }

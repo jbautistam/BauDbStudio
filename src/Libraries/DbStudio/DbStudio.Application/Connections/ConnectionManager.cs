@@ -46,7 +46,8 @@ namespace Bau.Libraries.DbStudio.Application.Connections
 								// Asigna las propiedades
 								field.Name = fieldSchema.Name;
 								field.Description = fieldSchema.Description;
-								field.Type = fieldSchema.DbType; // fieldSchema.Type.ToString();
+								field.TypeText = fieldSchema.DbType; // fieldSchema.Type.ToString();
+								field.Type = Convert(fieldSchema.Type);
 								field.Length = fieldSchema.Length;
 								field.IsRequired = fieldSchema.IsRequired;
 								field.IsKey = fieldSchema.IsKey;
@@ -57,6 +58,28 @@ namespace Bau.Libraries.DbStudio.Application.Connections
 						// Añade la tabla a la colección
 						connection.Tables.Add(table);
 				}
+		}
+
+		/// <summary>
+		///		Convierte el tipo de campo
+		/// </summary>
+		private ConnectionTableFieldModel.Fieldtype Convert(FieldDbModel.Fieldtype type)
+		{
+			switch (type)
+			{
+				case FieldDbModel.Fieldtype.String:
+					return ConnectionTableFieldModel.Fieldtype.String;
+				case FieldDbModel.Fieldtype.Date:
+					return ConnectionTableFieldModel.Fieldtype.Date;
+				case FieldDbModel.Fieldtype.Integer:
+					return ConnectionTableFieldModel.Fieldtype.Integer;
+				case FieldDbModel.Fieldtype.Decimal:
+					return ConnectionTableFieldModel.Fieldtype.Decimal;
+				case FieldDbModel.Fieldtype.Boolean:
+					return ConnectionTableFieldModel.Fieldtype.Boolean;
+				default:
+					return ConnectionTableFieldModel.Fieldtype.Unknown;
+			}
 		}
 
 		/// <summary>
