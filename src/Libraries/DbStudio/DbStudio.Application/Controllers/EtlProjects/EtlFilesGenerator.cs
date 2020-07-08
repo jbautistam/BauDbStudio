@@ -55,8 +55,8 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 		/// <summary>
 		///		Obtiene la cadena de validación sobre un archivo
 		/// </summary>
-		internal string GetSqlValidateFile(ConnectionTableModel table, string mountPathVariable, string pathValidate, string tablePrefixes, 
-										   SolutionManager.FormatType formatType, bool countRecords)
+		internal string GetSqlValidateFile(ConnectionTableModel table, string dataBaseComputeVariable, string mountPathVariable, string pathValidate, string tablePrefixes, 
+										   SolutionManager.FormatType formatType, bool countRecords, bool compareStrings, string dateFormat, string decimalSeparator)
 		{
 			string sql = string.Empty;
 
@@ -68,8 +68,8 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 					else
 						sql = "\t" + GetSqlHeaderCompare(table, "Test", "Target");
 					sql += Environment.NewLine + $"\t\tFROM {GetFileNameTable(mountPathVariable, pathValidate, table.Name, formatType, tablePrefixes)} AS Test";
-					sql += Environment.NewLine + $"\t\tFULL OUTER JOIN {Provider.SqlHelper.FormatName(table.Schema,table.Name)} AS Target";
-					sql += Environment.NewLine + "\t\t\tON " + GetSqlCompareFields(table).Trim();
+					sql += Environment.NewLine + "\t\tFULL OUTER JOIN {{" + dataBaseComputeVariable + "}}." + Provider.SqlHelper.FormatName(table.Name) + " AS Target";
+					sql += Environment.NewLine + "\t\t\tON " + GetSqlCompareFields(table, compareStrings, dateFormat, decimalSeparator).Trim();
 					sql += Environment.NewLine + $"\t\tWHERE {Provider.SqlHelper.FormatName("Target", table.Fields[0].Name)} IS NULL";
 					sql += Environment.NewLine + $"\t\t\tOR {Provider.SqlHelper.FormatName("Test", table.Fields[0].Name)} IS NULL";
 					sql += Environment.NewLine;
@@ -146,7 +146,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 		/// <summary>
 		///		Obtiene la cadena de comparación de campos
 		/// </summary>
-		private string GetSqlCompareFields(ConnectionTableModel table)
+		private string GetSqlCompareFields(ConnectionTableModel table, bool compareStrings, string dateFormat, string decimalSeparator)
 		{
 			string sql = string.Empty;
 
@@ -159,7 +159,8 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 						if (!string.IsNullOrWhiteSpace(sql))
 							sql += "\t\t\t\tAND ";
 						// Añade la comparación
-						sql += $"IfNull({Provider.SqlHelper.FormatName("Target", field.Name)}, {nullValue}) = IfNull({Provider.SqlHelper.FormatName("Test", field.Name)}, {nullValue})" + Environment.NewLine;
+						sql += $"IfNull({Provider.SqlHelper.FormatName("Target", field.Name)}, {nullValue}) =";
+						sql += $" IfNull({GetSqlReplaceField("Test", field, compareStrings, dateFormat, decimalSeparator)}, {nullValue})" + Environment.NewLine;
 				}
 				// Devuelve la cadena SQL
 				return sql;
@@ -181,6 +182,32 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 				default:
 					return "''";
 			}
+		}
+
+		/// <summary>
+		///		Cuando se compara por cadenas, obtiene la cadena de reemplazo junto al nombre de campo
+		/// </summary>
+		private string GetSqlReplaceField(string tableAlias, ConnectionTableFieldModel field, bool compareStrings, string dateFormat, string decimalSeparator)
+		{
+			string sql = Provider.SqlHelper.FormatName(tableAlias, field.Name);
+
+				// Si son cadenas, hace la conversión adecuada
+				if (compareStrings)
+				{
+					switch (field.Type)
+					{
+						case ConnectionTableFieldModel.Fieldtype.Date:
+								if (!string.IsNullOrWhiteSpace(dateFormat))
+									sql = $"to_date({sql}, '{dateFormat}')";
+							break;
+						case ConnectionTableFieldModel.Fieldtype.Decimal:
+								if (!string.IsNullOrWhiteSpace(decimalSeparator))
+									sql = $"CAST(REPLACE({sql}, '{decimalSeparator}', '.') AS float)";
+							break;
+					}
+				}
+				// Devuelve la cadena SQL
+				return sql;
 		}
 
 		/// <summary>

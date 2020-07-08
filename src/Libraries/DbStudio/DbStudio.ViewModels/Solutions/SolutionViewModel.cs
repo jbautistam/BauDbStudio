@@ -153,7 +153,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 																		Connection = viewModel.TreeConnection.Connection,
 																		Tables = viewModel.TreeConnection.GetSelectedTables(),
 																		OutputPath = viewModel.OutputPath,
-																		DataBaseVariable = viewModel.DataBaseVariable,
+																		DataBaseComputeVariable = viewModel.DataBaseComputeVariable,
+																		DataBaseValidateVariable = viewModel.DataBaseValidateVariable,
 																		Mode = viewModel.ValidateFiles ? ScriptsValidationOptions.ValidationMode.Files : ScriptsValidationOptions.ValidationMode.Database,
 																		MountPathVariable = viewModel.MountPathVariable,
 																		MountPathContent = viewModel.MountPathContent,
@@ -161,7 +162,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 																		SubpathValidate = viewModel.PathValidate,
 																		DatabaseTarget = viewModel.DataBaseTarget,
 																		GenerateQvs = viewModel.GenerateQvs,
-																		TablePrefixes = viewModel.TablePrefixes
+																		TablePrefixes = viewModel.TablePrefixes,
+																		CompareString = viewModel.CompareString,
+																		DateFormat = viewModel.DateFormat,
+																		DecimalSeparator = viewModel.DecimalSeparator
 																	};
 						ScriptsValidationGenerator generator = new ScriptsValidationGenerator(MainViewModel.Manager, options);
 

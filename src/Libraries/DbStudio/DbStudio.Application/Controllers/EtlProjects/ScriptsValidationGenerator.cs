@@ -39,7 +39,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 					int index = 1;
 
 						// Genera el archivo de creación de la base de datos
-						generator.WriteFileCreateConnection(Options.DataBaseVariable, Options.MountPathVariable, "00. Create database.sql");
+						generator.WriteFileCreateConnection(Options.DataBaseValidateVariable, Options.MountPathVariable, "00. Create database.sql");
 						// Carga el esquema
 						await Manager.ConnectionManager.LoadSchemaAsync(Options.Connection, cancellationToken);
 						// Prepara los archivos de validación de tablas
@@ -78,10 +78,10 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 							string validateTable = GetValidateTableName(table, prepareCountTables);
 
 								// Añade la instrucción de borrar la tabla
-								content += generator.GetSqlDropTable(Options.DataBaseVariable, validateTable) + Environment.NewLine;
+								content += generator.GetSqlDropTable(Options.DataBaseValidateVariable, validateTable) + Environment.NewLine;
 								content += generator.GetSqlSeparator();
 								// Añade la instrucción de crear la tabla
-								content += generator.GetSqlCreateTable(Options.DataBaseVariable, validateTable,
+								content += generator.GetSqlCreateTable(Options.DataBaseValidateVariable, validateTable,
 																	   GetSqlValidation(generator, table, prepareCountTables));
 								content += generator.GetSqlSeparator();
 								// Prepara la consulta de unión para la tabla de resultados final (sólo en el caso que sea un archivo de validación del número de registros)
@@ -90,7 +90,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 									if (!string.IsNullOrEmpty(sqlUnion))
 										sqlUnion += "\tUNION ALL" + Environment.NewLine;
 									sqlUnion += "\tSELECT '" + validateTable + "' AS Table, Number FROM " + 
-													generator.GetSqlTableName(Options.DataBaseVariable, validateTable) + Environment.NewLine;
+													generator.GetSqlTableName(Options.DataBaseValidateVariable, validateTable) + Environment.NewLine;
 								}
 						}
 				// Añade la consulta de unión a la consulta final
@@ -99,10 +99,10 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 					string countAllTable = $"Validate_Differences";
 
 						// Añade la instrucción de borrar la tabla final
-						content += generator.GetSqlDropTable(Options.DataBaseVariable, countAllTable) + Environment.NewLine;
+						content += generator.GetSqlDropTable(Options.DataBaseValidateVariable, countAllTable) + Environment.NewLine;
 						content += generator.GetSqlSeparator();
 						// Añade la instrucción de crear la tabla de diferencias
-						content += generator.GetSqlCreateTable(Options.DataBaseVariable, countAllTable, sqlUnion) + Environment.NewLine;
+						content += generator.GetSqlCreateTable(Options.DataBaseValidateVariable, countAllTable, sqlUnion) + Environment.NewLine;
 						content += generator.GetSqlSeparator();
 				}
 				// Graba el archivo
@@ -117,8 +117,8 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 			switch (Options.Mode)
 			{
 				case ScriptsValidationOptions.ValidationMode.Files:
-					return generator.GetSqlValidateFile(table, Options.MountPathVariable, Options.SubpathValidate, Options.TablePrefixes, 
-														Options.FormatType, prepareCountTables);
+					return generator.GetSqlValidateFile(table, Options.DataBaseComputeVariable, Options.MountPathVariable, Options.SubpathValidate, Options.TablePrefixes, 
+														Options.FormatType, prepareCountTables, Options.CompareString, Options.DateFormat, Options.DecimalSeparator);
 				default:
 					throw new Exception("Not implemented");
 			}
@@ -163,7 +163,8 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 
 				// Añade los parámetros
 				json += GetJsonParameter("Constant." + Options.MountPathVariable, Options.MountPathContent) + "," + Environment.NewLine;
-				json += GetJsonParameter("Constant." + Options.DataBaseVariable, Options.DataBaseVariable) + Environment.NewLine;
+				json += GetJsonParameter("Constant." + Options.DataBaseValidateVariable, Options.DataBaseValidateVariable) + "," + Environment.NewLine;
+				json += GetJsonParameter("Constant." + Options.DataBaseComputeVariable, Options.DataBaseComputeVariable) + Environment.NewLine;
 				// Cierra el JSON
 				json += "}";
 				// y graba el archivo
@@ -233,7 +234,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 				// Añade la consulta de carga de base de datos
 				sql += "SQL SELECT " + GetQlikViewFields(table, "1 AS Flag_Spark", false) + Environment.NewLine;
 				// Añade el nombre de tabla
-				sql += $" FROM Spark.{Options.DataBaseVariable}.`{table.Name}`;" + Environment.NewLine;
+				sql += $" FROM Spark.{Options.DataBaseComputeVariable}.`{table.Name}`;" + Environment.NewLine;
 				// Devuelve la cadena
 				return sql;
 		}

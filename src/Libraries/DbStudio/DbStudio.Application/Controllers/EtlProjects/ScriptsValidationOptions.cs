@@ -37,9 +37,14 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 		public string OutputPath { get; set; } 
 
 		/// <summary>
-		///		Nombre de la variable de base de datos
+		///		Nombre de la variable de base de datos de cálculo
 		/// </summary>
-		public string DataBaseVariable { get; set; }
+		public string DataBaseComputeVariable { get; set; }
+
+		/// <summary>
+		///		Nombre de la variable de base de datos de validación
+		/// </summary>
+		public string DataBaseValidateVariable { get; set; }
 
 		/// <summary>
 		///		Indica el modo de validación
@@ -80,5 +85,20 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 		///		Prefijos a eliminar en las tablas al compararlas con archivos separadas por punto y coma (por ejemplo, SRC_, TMP_...)
 		/// </summary>
 		public string TablePrefixes { get; set; }
+
+		/// <summary>
+		///		Indica si en el archivo se van a comparar cadena
+		/// </summary>
+		public bool CompareString { get; set; }
+
+		/// <summary>
+		///		Formato de fechas
+		/// </summary>
+		public string DateFormat { get; set; }
+
+		/// <summary>
+		///		Separador decimal
+		/// </summary>
+		public string DecimalSeparator { get; set; }
 	}
 }

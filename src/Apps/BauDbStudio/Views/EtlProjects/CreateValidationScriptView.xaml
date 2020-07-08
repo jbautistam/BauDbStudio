@@ -8,7 +8,7 @@
 		xmlns:ConnectionsViewModel="clr-namespace:Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers;assembly=DbStudio.ViewModels"
 		x:Class="Bau.DbStudio.Views.EtlProjects.CreateValidationScriptView"
         mc:Ignorable="d"
-        Title="Creación de scripts de validación" Height="550" Width="900" ResizeMode="NoResize" ShowInTaskbar="False"
+        Title="Creación de scripts de validación" Height="650" Width="1200" ResizeMode="NoResize" ShowInTaskbar="False"
 		xmlns:Behaviors="clr-namespace:Bau.DbStudio.Converters"
 		Behaviors:FocusBehavior.FocusFirst="true">
 	<Grid>
@@ -19,7 +19,7 @@
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*"/>
-			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="2*"/>
 		</Grid.ColumnDefinitions>
 		<GroupBox Header="Parámetros de scripts de validación" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
 			<Grid>
@@ -81,38 +81,81 @@
 					<RowDefinition Height="Auto"/>
 					<RowDefinition Height="Auto"/>
 					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="Auto"/>
 				</Grid.RowDefinitions>
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto"/>
 					<ColumnDefinition Width="*"/>
 				</Grid.ColumnDefinitions>
-				<Label Grid.Row="0" Grid.Column="0" Margin="5" Content="Base de datos de validación:"/>
+				<Label Grid.Row="0" Grid.Column="0" Margin="5" Content="Base de datos de cálculo:"/>
 				<TextBox Grid.Row="0" Grid.Column="1"
-							Text="{Binding Path=DataBaseVariable, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
-				<RadioButton Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="5"  Content="Validar contra archivos" Foreground="Red" FontWeight="Bold" GroupName="Validation"
+							Text="{Binding Path=DataBaseComputeVariable, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+				<Label Grid.Row="1" Grid.Column="0" Margin="5" Content="Base de datos de validación:"/>
+				<TextBox Grid.Row="1" Grid.Column="1"
+							Text="{Binding Path=DataBaseValidateVariable, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+				<RadioButton Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="5"  Content="Validar contra archivos" Foreground="Red" FontWeight="Bold" GroupName="Validation"
 							IsChecked="{Binding Path=ValidateFiles,UpdateSourceTrigger=PropertyChanged}"/>
-				<Label Grid.Row="2" Grid.Column="0" Margin="5" Content="Directorio de datos:"/>
-				<TextBox Grid.Row="2" Grid.Column="1" 
+				<Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="*"/>
+					</Grid.ColumnDefinitions>
+					<Grid Grid.Row="0" Grid.Column="0">
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+						</Grid.RowDefinitions>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="*"/>
+						</Grid.ColumnDefinitions>
+						<Label Grid.Row="0" Grid.Column="0" Margin="5" Content="Directorio de datos:"/>
+						<TextBox Grid.Row="0" Grid.Column="1" 
 							Text="{Binding Path=MountPathVariable, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
-				<Label Grid.Row="3" Grid.Column="0" Margin="5" Content="Directorio base:"/>
-				<TextBox Grid.Row="3" Grid.Column="1" 
+						<Label Grid.Row="1" Grid.Column="0" Margin="5" Content="Directorio base:"/>
+						<TextBox Grid.Row="1" Grid.Column="1" 
 							Text="{Binding Path=MountPathContent, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
-				<Label Grid.Row="4" Grid.Column="0" Margin="5" Content="Subdirectorio de archivos:"/>
-				<TextBox Grid.Row="4" Grid.Column="1" 
+						<Label Grid.Row="2" Grid.Column="0" Margin="5" Content="Subdirectorio de archivos:"/>
+						<TextBox Grid.Row="2" Grid.Column="1" 
 							Text="{Binding Path=PathValidate, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
-				<Label Grid.Row="5" Grid.Column="0" Margin="5" Content="Formato archivos:"/>
-				<ComboBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="5" Margin="5" 
+						<Label Grid.Row="3" Grid.Column="0" Margin="5" Content="Formato archivos:"/>
+						<ComboBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="5" Margin="5" 
 						  ItemsSource="{Binding ComboFormat.Items}" DisplayMemberPath="Text" 
 						  SelectedItem="{Binding ComboFormat.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-				<Label Grid.Row="6" Grid.Column="0" Margin="5" Content="Prefijos de las tablas:"/>
-				<TextBox Grid.Row="6" Grid.Column="1" 
+						<Label Grid.Row="4" Grid.Column="0" Margin="5" Content="Prefijos de las tablas:"/>
+						<TextBox Grid.Row="4" Grid.Column="1" 
 							Text="{Binding Path=TablePrefixes, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
-				<RadioButton Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Margin="5" Content="Validar contra base de datos"  Foreground="Red" FontWeight="Bold" GroupName="Validation"/>
-				<Label Grid.Row="8" Grid.Column="0" Margin="5" Content="Base de datos:"/>
-				<TextBox Grid.Row="8" Grid.Column="1" 
+					</Grid>
+					<Grid Grid.Row="0" Grid.Column="1">
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+						</Grid.RowDefinitions>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="*"/>
+						</Grid.ColumnDefinitions>
+						<CheckBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" 
+									Content="Comparar cadenas" IsChecked="{Binding Path=CompareString,UpdateSourceTrigger=PropertyChanged}"/>
+						<Label Grid.Row="1" Grid.Column="0" Margin="5" Content="Formato de fechas:"/>
+						<TextBox Grid.Row="1" Grid.Column="1" 
+							Text="{Binding Path=DateFormat, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+						<Label Grid.Row="2" Grid.Column="0" Margin="5" Content="Separador decimal:"/>
+						<TextBox Grid.Row="2" Grid.Column="1" 
+							Text="{Binding Path=DecimalSeparator, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+					</Grid>
+				</Grid>
+				<RadioButton Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="5" Content="Validar contra base de datos"  Foreground="Red" FontWeight="Bold" GroupName="Validation"/>
+				<Label Grid.Row="5" Grid.Column="0" Margin="5" Content="Base de datos:"/>
+				<TextBox Grid.Row="5" Grid.Column="1" 
 							Text="{Binding Path=DataBaseTarget, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
 			</Grid>
 		</GroupBox>

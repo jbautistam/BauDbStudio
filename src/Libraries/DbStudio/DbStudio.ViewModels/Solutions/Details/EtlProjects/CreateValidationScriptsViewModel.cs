@@ -10,9 +10,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 	public class CreateValidationScriptsViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewModel
 	{
 		// Variables privadas
-		private string _dataBaseVariable, _mountPathVariable, _mountPathContent, _pathValidate;
+		private string _dataBaseValidateVariable, _dataBaseComputeVariable, _mountPathVariable, _mountPathContent, _pathValidate;
 		private string _outputPath, _dataBaseTarget, _tablePrefixes;
-		private bool _validateFiles, _generateQvs;
+		private string _dateFormat, _decimalSeparator;
+		private bool _validateFiles, _generateQvs, _compareString;
 		private Connections.ComboConnectionsViewModel _comboConnections;
 		private Explorers.Connections.TreeConnectionTablesViewModel _treeConnection;
 		private Application.SolutionManager.FormatType _formatType;
@@ -46,11 +47,15 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 			ValidateFiles = true;
 			MountPathVariable = "MountPath";
 			MountPathContent = "/mnt/c/Test";
-			DataBaseVariable = "DbValidate";
+			DataBaseComputeVariable = "DbCompute";
+			DataBaseValidateVariable = "DbValidate";
 			PathValidate = "Validate";
 			TablePrefixes = "SRC_;EXT_;TRN_";
 			GenerateQvs = true;
 			OutputPath = string.Empty;
+			CompareString = true;
+			DateFormat = "d/M/yyyy";
+			DecimalSeparator = ",";
 			// Carga el árbol de conexiones
 			TreeConnection.LoadConnection(ComboConnections.GetSelectedConnection());
 			// Indica que no ha habido modificaciones
@@ -69,8 +74,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Seleccione una conexión");
 				else if (string.IsNullOrWhiteSpace(OutputPath))
 					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Introduzca el directorio de grabación de los archivos");
-				else if (string.IsNullOrWhiteSpace(DataBaseVariable))
-					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Introduzca el nombre de la variable de base de datos");
+				else if (string.IsNullOrWhiteSpace(DataBaseComputeVariable))
+					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Introduzca el nombre de la variable de base de datos de cálculo");
+				else if (string.IsNullOrWhiteSpace(DataBaseValidateVariable))
+					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Introduzca el nombre de la variable de base de datos de validación");
 				else if (TreeConnection.GetSelectedTables().Count == 0)
 					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Seleccione al menos una tabla");
 				else if (ValidateFiles)
@@ -155,12 +162,21 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 		}
 
 		/// <summary>
-		///		Variable con el nombre de base de datos
+		///		Variable con el nombre de base de datos de validación
 		/// </summary>
-		public string DataBaseVariable
+		public string DataBaseValidateVariable
 		{
-			get { return _dataBaseVariable; }
-			set { CheckProperty(ref _dataBaseVariable, value); }
+			get { return _dataBaseValidateVariable; }
+			set { CheckProperty(ref _dataBaseValidateVariable, value); }
+		}
+
+		/// <summary>
+		///		Variable con el nombre de base de datos de cálculo
+		/// </summary>
+		public string DataBaseComputeVariable
+		{
+			get { return _dataBaseComputeVariable; }
+			set { CheckProperty(ref _dataBaseComputeVariable, value); }
 		}
 
 		/// <summary>
@@ -233,6 +249,33 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 		{
 			get { return _tablePrefixes; }
 			set { CheckProperty(ref _tablePrefixes, value); }
+		}
+
+		/// <summary>
+		///		Indica si en el archivo se van a comparar cadena
+		/// </summary>
+		public bool CompareString 
+		{ 
+			get { return _compareString; } 
+			set { CheckProperty(ref _compareString, value); }
+		}
+
+		/// <summary>
+		///		Formato de fechas
+		/// </summary>
+		public string DateFormat
+		{
+			get { return _dateFormat; }
+			set { CheckProperty(ref _dateFormat, value); }
+		}
+
+		/// <summary>
+		///		Separador decimal
+		/// </summary>
+		public string DecimalSeparator
+		{
+			get { return _decimalSeparator; }
+			set { CheckProperty(ref _decimalSeparator, value); }
 		}
 	}
 }
