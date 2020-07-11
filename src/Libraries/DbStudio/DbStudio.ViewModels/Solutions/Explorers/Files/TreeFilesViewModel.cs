@@ -381,7 +381,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 		/// </summary>
 		private void ExecuteEtlScript(string fileName)
 		{
-			SolutionViewModel.MainViewModel.MainController.OpenDialog(new Details.EtlProjects.ExecuteEtlConsoleViewModel(SolutionViewModel, fileName));
+			SolutionViewModel.MainViewModel.MainController.OpenWindow(new Details.EtlProjects.ExecuteEtlConsoleViewModel(SolutionViewModel, fileName));
 		}
 
 		/// <summary>

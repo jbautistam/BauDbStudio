@@ -21,7 +21,7 @@ namespace Bau.Libraries.DbStudio.Application.Repository
 		private const string TagEtlFileParameters = "EtlFileParameters";
 		private const string TagId = "Id";
 		private const string TagConnection = "Connection";
-		private const string TagtimeoutExecuteScript = "timeoutExecuteScript";
+		private const string TagtimeoutExecuteScript = "TimeoutExecuteScript";
 		private const string TagFolder = "Folder";
 		private const string TagType = "Type";
 		private const string TagParameter = "Parameter";
@@ -35,6 +35,7 @@ namespace Bau.Libraries.DbStudio.Application.Repository
 		private const string TagLowcaseFileNames = "LowcaseFileNames";
 		private const string TagStorage = "Storage";
 		private const string TagConnectionSring = "ConnectionString";
+		private const string TagConnectionSelected = "ConnectionSelected";
 
 		/// <summary>
 		///		Carga los datos de una solución
@@ -55,6 +56,7 @@ namespace Bau.Libraries.DbStudio.Application.Repository
 							solution.Name = rootML.Nodes[TagName].Value.TrimIgnoreNull();
 							solution.Description = rootML.Nodes[TagDescription].Value.TrimIgnoreNull();
 							solution.LastConnectionParametersFileName = rootML.Nodes[TagFileParameters].Value.TrimIgnoreNull();
+							solution.LastConnectionSelectedGlobalId = rootML.Nodes[TagConnectionSelected].Value.TrimIgnoreNull();
 							solution.LastEtlParametersFileName = rootML.Nodes[TagEtlFileParameters].Value.TrimIgnoreNull();
 							// Carga los objetos
 							LoadConnections(solution, rootML);
@@ -161,6 +163,7 @@ namespace Bau.Libraries.DbStudio.Application.Repository
 				rootML.Nodes.Add(TagName, solution.Name);
 				rootML.Nodes.Add(TagDescription, solution.Description);
 				rootML.Nodes.Add(TagFileParameters, solution.LastConnectionParametersFileName);
+				rootML.Nodes.Add(TagConnectionSelected, solution.LastConnectionSelectedGlobalId);
 				rootML.Nodes.Add(TagEtlFileParameters, solution.LastEtlParametersFileName);
 				// Añade los objetos
 				rootML.Nodes.AddRange(GetConnectionsNodes(solution));

@@ -58,10 +58,10 @@ namespace Bau.Libraries.LibJobProcessor.Cloud.Manager
 								await ProcessDownloadAsync(block, sentence);
 							break;
 						case DownloadBlobFolderSentence sentence:
-								await ProcessDownloadFolderAsync(block, sentence);
+								await ProcessDownloadFolderAsync(block, sentence, cancellationToken);
 							break;
 						case CopyBlobSentence sentence:
-								await ProcessCopyAsync(block, sentence);
+								await ProcessCopyAsync(block, sentence, cancellationToken);
 							break;
 					}
 		}
@@ -150,7 +150,7 @@ namespace Bau.Libraries.LibJobProcessor.Cloud.Manager
 		/// <summary>
 		///		Procesa la sentencia de descarga de una carpeta
 		/// </summary>
-		private async Task ProcessDownloadFolderAsync(BlockLogModel parent, DownloadBlobFolderSentence sentence)
+		private async Task ProcessDownloadFolderAsync(BlockLogModel parent, DownloadBlobFolderSentence sentence, CancellationToken cancellationToken)
 		{
 			using (BlockLogModel block = parent.CreateBlock(LogModel.LogType.Info, $"Start downloading from '{sentence.Source.ToString()}'"))
 			{
@@ -174,7 +174,7 @@ namespace Bau.Libraries.LibJobProcessor.Cloud.Manager
 									List<LibBlobStorage.Metadata.BlobModel> blobs = await manager.ListBlobsAsync(container, sentence.Source.Blob);
 
 										foreach (LibBlobStorage.Metadata.BlobModel blob in blobs)
-											if (blob.Length != 0)
+											if (blob.Length != 0 && !cancellationToken.IsCancellationRequested)
 											{
 												string fileName = System.IO.Path.Combine(path, blob.LocalFileName);
 
@@ -199,7 +199,7 @@ namespace Bau.Libraries.LibJobProcessor.Cloud.Manager
 		/// <summary>
 		///		Procesa una copia de archivos
 		/// </summary>
-		private async Task ProcessCopyAsync(BlockLogModel parent, CopyBlobSentence sentence)
+		private async Task ProcessCopyAsync(BlockLogModel parent, CopyBlobSentence sentence, CancellationToken cancellationToken)
 		{
 			string processType = sentence.Move ? "move" : "copy";
 			string blobTarget = sentence.Target.Blob;
@@ -224,10 +224,10 @@ namespace Bau.Libraries.LibJobProcessor.Cloud.Manager
 								{
 									if (sentence.Move)
 										await manager.MoveAsync(GetContainerName(sentence.Source.Container), sentence.Target.Blob, 
-																GetContainerName(sentence.Target.Container), blobTarget);
+																GetContainerName(sentence.Target.Container), blobTarget, cancellationToken);
 									else
 										await manager.CopyAsync(GetContainerName(sentence.Source.Container), sentence.Target.Blob, 
-																GetContainerName(sentence.Target.Container), blobTarget);
+																GetContainerName(sentence.Target.Container), blobTarget, cancellationToken);
 								}
 								// Log
 								block.Info($"End {processType} from '{sentence.Source.ToString()}' to '{sentence.Target.Container}/{blobTarget}'");

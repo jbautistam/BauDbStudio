@@ -214,6 +214,9 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Manager
 											{
 												string target = System.IO.Path.Combine(path, System.IO.Path.GetFileNameWithoutExtension(source) + ".parquet");
 
+													// Log
+													block.Info($"Exporting '{source}' to '{target}'");
+													// Convierte el archivo
 													if (!await new Controllers.CsvToParquetConversor().ConvertAsync(block, source, target, cancellationToken))
 														AddError(block, $"Error when convert '{source}' to '{target}'");
 											}
@@ -227,6 +230,9 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Manager
 											{
 												string target = System.IO.Path.Combine(path, System.IO.Path.GetFileNameWithoutExtension(source) + ".csv");
 
+													// Log
+													block.Info($"Exporting '{source}' to '{target}'");
+													// Convierte el archivo
 													if (!await new Controllers.ParquetToCsvConversor().ConvertAsync(block, source, target, cancellationToken))
 														AddError(block, $"Error when convert '{source}' to '{target}'");
 											}

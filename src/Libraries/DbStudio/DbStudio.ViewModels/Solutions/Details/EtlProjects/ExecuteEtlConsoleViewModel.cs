@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Threading.Tasks;
 
+using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.DbStudio.Models.Connections;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
@@ -7,17 +9,23 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 	/// <summary>
 	///		ViewModel de ejecución de la consola de proyectos de ETL
 	/// </summary>
-	public class ExecuteEtlConsoleViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewModel
+	public class ExecuteEtlConsoleViewModel : BaseObservableObject, IDetailViewModel
 	{
+		// Eventos públicos
+		public event EventHandler LoadFileRequired;
 		// Variables privadas
-		private string _etlConsoleFileName, _projectFileName, _contextFileName;
+		private string _header, _etlConsoleFileName, _projectFileName, _contextFileName;
 
-		public ExecuteEtlConsoleViewModel(SolutionViewModel solutionViewModel, string projectFileName)
+		public ExecuteEtlConsoleViewModel(SolutionViewModel solutionViewModel, string projectFileName) : base(false)
 		{
 			// Inicializa las propiedades
 			SolutionViewModel = solutionViewModel;
 			// Inicializa el viewModel
 			InitViewModel(projectFileName);
+			// Inicializa los comandos
+			ExecuteScriptCommand = new BaseCommand(async _ => await PrepareExecuteScriptAsync());
+			ExecuteConsoleCommand = new BaseCommand(_ => ExecuteConsole(), _ => !string.IsNullOrWhiteSpace(EtlConsoleFileName))
+											.AddListener(this, nameof(EtlConsoleFileName));
 		}
 
 		/// <summary>
@@ -26,9 +34,12 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 		private void InitViewModel(string projectFileName)
 		{
 			// Asigna las propiedades
+			Header = "Ejecución script";
 			EtlConsoleFileName = SolutionViewModel.MainViewModel.MainController.GetEtlConsoleFileName();
 			ProjectFileName = projectFileName;
 			ContextFileName = SolutionViewModel.ConnectionExecutionViewModel.EtlParametersFileName;
+			// Lanza el evento de carga de archivos
+			RaiseEventLoadFile();
 			// Indica que no ha habido modificaciones
 			IsUpdated = false;
 		}
@@ -54,23 +65,62 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 		}
 
 		/// <summary>
-		///		Graba los datos
+		///		Graba los datos (en este caso simplemente implementa la interface)
 		/// </summary>
-		protected override void Save()
+		public void SaveDetails(bool newName)
+		{
+			// Vacío, sólo implementa la interface
+		}
+
+		/// <summary>
+		///		Ejecuta el script sobre una consola
+		/// </summary>
+		private void ExecuteConsole()
 		{
 			if (ValidateData())
 			{
 				LibSystem.Processes.SystemProcessHelper processor = new LibSystem.Processes.SystemProcessHelper();
 
+					// Guarda el archivo de contexto
+					SolutionViewModel.ConnectionExecutionViewModel.EtlParametersFileName = ContextFileName;
 					// Ejecuta la consola
 					processor.ExecuteApplication(EtlConsoleFileName,
 												 $"--project \"{ProjectFileName}\" --context \"{ContextFileName}\"",
 												 false, true);
 					// Indica que ya no es nuevo y está grabado
 					IsUpdated = false;
-					// Cierra la ventana
-					RaiseEventClose(true);
 			}
+		}
+
+		/// <summary>
+		///		Prepara la ejecución del script
+		/// </summary>
+		private async Task PrepareExecuteScriptAsync()
+		{
+			await SolutionViewModel.ConnectionExecutionViewModel.ExecuteScriptAsync();
+		}
+
+		/// <summary>
+		///		Ejecuta el script XML
+		/// </summary>
+		internal async Task ExecuteXmlScriptAsync(System.Threading.CancellationToken cancellationToken)
+		{
+			Files.ScriptsManager.JobXmlProjectManager manager = new Files.ScriptsManager.JobXmlProjectManager(SolutionViewModel.MainViewModel.Manager.Logger);
+
+				// Guarda el archivo de contexto
+				SolutionViewModel.ConnectionExecutionViewModel.EtlParametersFileName = ContextFileName;
+				// Ejecuta el script XML
+				await manager.ExecuteAsync(ProjectFileName, ContextFileName, cancellationToken);
+				// Libera el log
+				SolutionViewModel.MainViewModel.Manager.Logger.Flush();
+		}
+
+		/// <summary>
+		///		Lanza el evento de carga de archivos
+		/// </summary>
+		private void RaiseEventLoadFile()
+		{
+			LoadFileRequired?.Invoke(this, EventArgs.Empty);
 		}
 
 		/// <summary>
@@ -98,7 +148,11 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 		public string ProjectFileName
 		{
 			get { return _projectFileName; }
-			set { CheckProperty(ref _projectFileName, value); }
+			set 
+			{ 
+				if (CheckProperty(ref _projectFileName, value))
+					RaiseEventLoadFile();
+			}
 		}
 
 		/// <summary>
@@ -107,7 +161,38 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 		public string ContextFileName
 		{
 			get { return _contextFileName; }
-			set { CheckProperty(ref _contextFileName, value); }
+			set 
+			{ 
+				if (CheckProperty(ref _contextFileName, value))
+					RaiseEventLoadFile();
+			}
 		}
+
+		/// <summary>
+		///		Cabecera de la pestaña
+		/// </summary>
+		public string Header 
+		{ 
+			get { return _header; }
+			set { CheckProperty(ref _header, value); }
+		}
+
+		/// <summary>
+		///		Id del documento en la ventana principal (sólo puede haber uno de este tipo)
+		/// </summary>
+		public string TabId 
+		{ 
+			get { return GetType().ToString(); }
+		}
+
+		/// <summary>
+		///		Ejecuta el script en la propia aplicación
+		/// </summary>
+		public BaseCommand ExecuteScriptCommand { get; }
+		
+		/// <summary>
+		///		Ejecuta el script sobre una consola
+		/// </summary>
+		public BaseCommand ExecuteConsoleCommand { get; }
 	}
 }

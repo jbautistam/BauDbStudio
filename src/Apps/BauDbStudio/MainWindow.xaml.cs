@@ -100,6 +100,9 @@ namespace Bau.DbStudio
 				case Libraries.DbStudio.ViewModels.Solutions.Details.Connections.ExecuteFilesViewModel viewModel:
 						AddTab(new Views.Connections.ExecuteFilesView(viewModel), viewModel);
 					break;
+				case Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects.ExecuteEtlConsoleViewModel viewModel:
+						AddTab(new Views.EtlProjects.ExecuteEtlConsoleView(viewModel), viewModel);
+					break;
 			}
 		}
 

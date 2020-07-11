@@ -69,6 +69,11 @@ namespace Bau.Libraries.DbStudio.Models
 		public string LastEtlParametersFileName { get; set; }
 
 		/// <summary>
+		///		Id de la última conexión seleccionada
+		/// </summary>
+		public string LastConnectionSelectedGlobalId { get; set; }
+
+		/// <summary>
 		///		Conexiones
 		/// </summary>
 		public Connections.ConnectionModelCollection Connections { get; } = new Connections.ConnectionModelCollection();

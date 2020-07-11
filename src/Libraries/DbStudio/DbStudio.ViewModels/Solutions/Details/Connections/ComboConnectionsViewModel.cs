@@ -31,14 +31,23 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 			if (SolutionViewModel.Solution.Connections.Count == 0)
 				Connections.AddItem(null, "<Seleccione una conexión>", null);
 			else
+			{
+				// Ordena las conexiones
+				SolutionViewModel.Solution.Connections.SortByName();
+				// Carga las conexiones
 				foreach (ConnectionModel connection in SolutionViewModel.Solution.Connections)
 				{
 					// Añade la conexión
 					Connections.AddItem(null, connection.Name, connection);
-					// Selecciona la conexión
+					// Selecciona la conexión que se acaba de añadir si es la conexión solicitada en el parámetro o si coincide con la conexión global
 					if (!string.IsNullOrWhiteSpace(selectedConnection) && selectedConnection.Equals(connection.Name, StringComparison.CurrentCultureIgnoreCase))
 						Connections.SelectedItem = Connections.Items[Connections.Items.Count - 1];
+					else if (string.IsNullOrWhiteSpace(selectedConnection) &&
+							 !string.IsNullOrWhiteSpace(SolutionViewModel.Solution.LastConnectionSelectedGlobalId) &&
+							 connection.GlobalId.Equals(SolutionViewModel.Solution.LastConnectionSelectedGlobalId, StringComparison.CurrentCultureIgnoreCase))
+						Connections.SelectedItem = Connections.Items[Connections.Items.Count - 1];
 				}
+			}
 			// Si no se ha seleccionado nada, selecciona el primer elemento
 			if (Connections.SelectedItem == null)
 				Connections.SelectedItem = Connections.Items[0];

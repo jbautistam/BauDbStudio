@@ -8,6 +8,7 @@ using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.ComboItems;
 using Bau.Libraries.DbStudio.Application.Connections.Models;
 using Bau.Libraries.DbStudio.Models.Connections;
 using Bau.Libraries.LibLogger.Models.Log;
+using Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 {
@@ -29,7 +30,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 			/// <summary>Xml de procesos</summary>
 			JobsXml,
 			/// <summary>Lote de scripts SQL</summary>
-			BatchSql
+			BatchSql,
+			/// <summary>Lote de scripts ETL</summary>
+			BatchEtl
 		}
 
 		// Variables privadas
@@ -64,19 +67,49 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 		/// </summary>
 		public void Initialize()
 		{
-			// Carga el nombre del archivo de parámetros de la solución
-			LoadConnectionFileNames();
-			// Inicializa el combo
-			Connections = new ComboViewModel(this);
-			// Carga las conexiones
-			if (SolutionViewModel.Solution.Connections.Count == 0)
-				Connections.AddItem(null, "<Seleccione una conexión>", null);
-			else
-				foreach (ConnectionModel connection in SolutionViewModel.Solution.Connections)
-					Connections.AddItem(null, connection.Name, connection);
-			// Si no se ha seleccionado nada, selecciona el primer elemento
-			if (Connections.SelectedItem == null)
-				Connections.SelectedItem = Connections.Items[0];
+			ConnectionModel selectedConnection = GetSelectedConnection();
+
+				// Obtiene la última conexión seleccionada
+				if (selectedConnection == null && !string.IsNullOrWhiteSpace(SolutionViewModel.Solution.LastConnectionSelectedGlobalId))
+					selectedConnection = SolutionViewModel.Solution.Connections.Search(SolutionViewModel.Solution.LastConnectionSelectedGlobalId);
+				// Carga el nombre del archivo de parámetros de la solución
+				LoadConnectionFileNames();
+				// Inicializa el combo
+				Connections = new ComboViewModel(this);
+				// Carga las conexiones
+				if (SolutionViewModel.Solution.Connections.Count == 0)
+					Connections.AddItem(null, "<Seleccione una conexión>", null);
+				else
+				{
+					// Ordena las conexiones por nombre
+					SolutionViewModel.Solution.Connections.SortByName();
+					// Añade las conexiones al combo
+					foreach (ConnectionModel connection in SolutionViewModel.Solution.Connections)
+						Connections.AddItem(null, connection.Name, connection);
+				}
+				// Selecciona la conexión anterior
+				if (selectedConnection != null)
+					foreach (ComboItem item in Connections.Items)
+						if ((item.Tag as ConnectionModel)?.GlobalId.Equals(selectedConnection?.GlobalId, StringComparison.CurrentCultureIgnoreCase) ?? false)
+							Connections.SelectedItem = item;
+				// Si no se ha seleccionado nada, selecciona el primer elemento
+				if (Connections.SelectedItem == null)
+					Connections.SelectedItem = Connections.Items[0];
+				// Ajusta el manejador de eventos para grabar la última conexión seleccionada
+				Connections.PropertyChanged += (sender, args) => {
+																	if (args.PropertyName.Equals(nameof(Connections.SelectedItem), StringComparison.CurrentCultureIgnoreCase))
+																	{
+																		ConnectionModel connection = GetSelectedConnection();
+
+																			if (connection != null && 
+																				!connection.GlobalId.Equals(SolutionViewModel.Solution.LastConnectionSelectedGlobalId, 
+																											StringComparison.CurrentCultureIgnoreCase))
+																			{
+																				SolutionViewModel.Solution.LastConnectionSelectedGlobalId = connection.GlobalId;
+																				SolutionViewModel.MainViewModel.SaveSolution();
+																			}
+																	}
+																 };
 		}
 
 		/// <summary>
@@ -94,7 +127,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 				EtlParametersFileName = SolutionViewModel.Solution.LastEtlParametersFileName;
 			else
 				EtlParametersFileName = string.Empty;
-
 		}
 
 		/// <summary>
@@ -102,7 +134,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 		/// </summary>
 		public ConnectionModel GetSelectedConnection()
 		{
-			if (Connections.SelectedItem?.Tag is ConnectionModel connection)
+			if (Connections?.SelectedItem?.Tag is ConnectionModel connection)
 				return connection;
 			else
 				return null;
@@ -111,7 +143,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 		/// <summary>
 		///		Ejecuta un script
 		/// </summary>
-		private async Task ExecuteScriptAsync()
+		internal async Task ExecuteScriptAsync()
 		{
 			if (IsExecuting)
 				SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Ya se está ejecutando una consulta");
@@ -131,6 +163,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 						case ExecutionMode.JobsXml:
 								await PrepareExecuteScriptXmlAsync(selectedViewModel);
 							break;
+						case ExecutionMode.BatchEtl:
+								await PrepareExecuteBatchXmlAsync(selectedViewModel);
+							break;
 					}
 			}
 		}
@@ -145,7 +180,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 						.SystemController.ShowMessage("No se pueden exportar los datos en este momento. Espere que finalice la ejecución de los scripts");
 			else
 			{
-				EtlProjects.ExportDatabaseViewModel viewModel = new EtlProjects.ExportDatabaseViewModel(SolutionViewModel);
+				ExportDatabaseViewModel viewModel = new ExportDatabaseViewModel(SolutionViewModel);
 
 					if (SolutionViewModel.MainViewModel.MainController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 					{
@@ -238,6 +273,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 						return ExecutionMode.JobsXml;
 					else
 						return ExecutionMode.Unknown;
+				case ExecuteEtlConsoleViewModel consoleViewModel:
+					return ExecutionMode.BatchEtl;
 				case ExecuteFilesViewModel _:
 					return ExecutionMode.BatchSql;
 				default:
@@ -329,6 +366,45 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 			}
 		}
 
+		/// <summary>
+		///		Prepara la ejecución de un script XML
+		/// </summary>
+		private async Task PrepareExecuteBatchXmlAsync(IDetailViewModel viewModel)
+		{
+			if (viewModel is ExecuteEtlConsoleViewModel etlViewModel)
+			{
+				if (string.IsNullOrWhiteSpace(etlViewModel.ProjectFileName))
+					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Seleccione el archivo de proyecto");
+				else if (!etlViewModel.ProjectFileName.EndsWith(".xml"))
+					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("No se reconoce el formato del archivo de proyecto");
+				else if (string.IsNullOrWhiteSpace(etlViewModel.ContextFileName))
+					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Seleccione el archivo de contexto");
+				else if (!etlViewModel.ContextFileName.EndsWith(".xml"))
+					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("No se reconoce el formato del archivo de contexto");
+				else
+				{
+					// Arranca la ejecución
+					StartExecution();
+					// Ejecuta la tarea
+					try
+					{
+						// Ejecuta el script XML
+						await etlViewModel.ExecuteXmlScriptAsync(_cancellationToken);
+						// Muestra el mensaje al usuario
+						SolutionViewModel.MainViewModel.MainController.HostController.SystemController
+								.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
+													"Ejecución de script XML",
+													"Ha terminado correctamente la ejecución del script", TimeSpan.FromSeconds(10));
+					}
+					catch (Exception exception)
+					{
+						SolutionViewModel.MainViewModel.MainController.Logger.Default.LogItems.Error($"Error al ejecutar la consulta. {exception.Message}");
+					}
+					// Indica que ha finalizado la tarea y detiene el temporizador
+					StopExecuting();
+				}
+			}
+		}
 		/// <summary>
 		///		Ejecuta el script
 		/// </summary>
