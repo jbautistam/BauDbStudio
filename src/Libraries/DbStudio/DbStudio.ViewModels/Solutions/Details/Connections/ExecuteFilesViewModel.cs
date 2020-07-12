@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.DbStudio.Models.Connections;
-using Bau.Libraries.LibDataStructures.Collections;
 using Bau.Libraries.LibLogger.Models.Log;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
@@ -35,8 +34,22 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 			// Crea la lista de archivos
 			Files = new BauMvvm.ViewModels.Forms.ControlItems.ControlItemCollectionViewModel<ExecuteFilesItemViewModel>();
 			// Asigna los archivos
+			files.Sort((first, second) => CompareFiles(first, second));
 			foreach (string file in files)
 				Files.Add(new ExecuteFilesItemViewModel(file, files));
+		}
+
+		/// <summary>
+		///		Compara dos archivos
+		/// </summary>
+		private int CompareFiles(string firstFile, string secondFile)
+		{
+			int comparePath = System.IO.Path.GetDirectoryName(firstFile).ToUpperInvariant().CompareTo(System.IO.Path.GetDirectoryName(secondFile).ToUpperInvariant());
+
+				if (comparePath == 0)
+					return System.IO.Path.GetFileName(firstFile).ToUpperInvariant().CompareTo(System.IO.Path.GetFileName(secondFile).ToUpperInvariant());
+				else
+					return comparePath;
 		}
 
 		/// <summary>
