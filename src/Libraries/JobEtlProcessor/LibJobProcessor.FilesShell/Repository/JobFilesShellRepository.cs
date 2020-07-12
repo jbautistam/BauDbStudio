@@ -23,6 +23,7 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Repository
 		private const string TagFrom = "From";
 		private const string TagTo = "To";
 		private const string TagMask = "Mask";
+		private const string TagRecursive = "Recursive";
 		private const string TagFlattenPaths = "FlattenPaths";
 		private const string TagPath = "Path";
 		private const string TagExecute = "Execute";
@@ -158,6 +159,7 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Repository
 				sentence.Source = rootML.Attributes[TagFrom].Value.TrimIgnoreNull();
 				sentence.Target = rootML.Attributes[TagTo].Value.TrimIgnoreNull();
 				sentence.Mask = rootML.Attributes[TagMask].Value.TrimIgnoreNull();
+				sentence.Recursive = rootML.Attributes[TagRecursive].Value.GetBool(false);
 				sentence.FlattenPaths = rootML.Attributes[TagFlattenPaths].Value.GetBool(false);
 				// Devuelve la sentencia
 				return sentence;

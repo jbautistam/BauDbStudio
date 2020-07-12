@@ -36,6 +36,11 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Models.Sentences
 		internal string Mask { get; set; }
 
 		/// <summary>
+		///		Indica si se tienen que copiar recursivamente los directorios
+		/// </summary>
+		internal bool Recursive { get; set; }
+
+		/// <summary>
 		///		Indica si al copiar directorios se deben pegar sobre un único directorio
 		/// </summary>
 		internal bool FlattenPaths { get; set; }

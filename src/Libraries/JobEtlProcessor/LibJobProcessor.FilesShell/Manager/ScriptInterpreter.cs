@@ -90,7 +90,7 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Manager
 					try
 					{
 						if (System.IO.Directory.Exists(source))
-							await LibHelper.Files.HelperFiles.CopyPathAsync(source, target, sentence.Mask, sentence.FlattenPaths);
+							await LibHelper.Files.HelperFiles.CopyPathAsync(source, target, sentence.Mask, sentence.Recursive, sentence.FlattenPaths);
 						else if (System.IO.File.Exists(source))
 							await LibHelper.Files.HelperFiles.CopyFileAsync(source, target);
 						else
