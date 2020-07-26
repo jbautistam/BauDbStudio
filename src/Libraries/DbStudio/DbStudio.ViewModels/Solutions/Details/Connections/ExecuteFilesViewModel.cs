@@ -171,6 +171,14 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 		}
 
 		/// <summary>
+		///		Obtiene el mensaje que se debe mostrar al cerrar la ventana
+		/// </summary>
+		public string GetSaveAndCloseMessage()
+		{
+			return "¿Desea grabar la consulta antes de continuar?";
+		}
+
+		/// <summary>
 		///		Solución
 		/// </summary>
 		public SolutionViewModel SolutionViewModel { get; }

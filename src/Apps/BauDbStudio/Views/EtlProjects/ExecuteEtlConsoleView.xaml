@@ -68,8 +68,8 @@
 				</StackPanel>
 			</Button>
 			<Label Grid.Row="0" Grid.Column="1" Margin="5" Content="Ejecutable:"/>
-			<Files:FileSelect Grid.Row="0" Grid.Column="2" FileName="{Binding Path=EtlConsoleFileName, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
-			<Button Grid.Row="0" Grid.Column="3" Margin="2" Padding="5" Command="{Binding Path=ExecuteConsoleCommand}">
+			<Files:FileSelect Grid.Row="0" Grid.Column="2" FileName="{Binding Path=EtlConsoleFileName, UpdateSourceTrigger=PropertyChanged}" Margin="5" IsEnabled="False"/>
+			<Button Grid.Row="0" Grid.Column="3" Margin="2" Padding="5" Command="{Binding Path=ExecuteConsoleCommand}" IsEnabled="False">
 				<StackPanel Orientation="Horizontal">
 					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Accept.png"/>
 					<TextBlock Text="Ejecutar en consola externa"  Margin="5,0,0,0" />

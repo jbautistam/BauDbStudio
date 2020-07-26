@@ -1,11 +1,6 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" 
-CurrentProfile="(Default)"
-GeneratedClassNamespace="Bau.DbStudio.Properties" 
-GeneratedClassName="Settings">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Bau.DbStudio.Properties" GeneratedClassName="Settings">
+  <Profiles />
   <Settings>
     <Setting Name="LastPathSelected" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
@@ -26,13 +21,16 @@ GeneratedClassName="Settings">
       <Value Profile="(Default)">1</Value>
     </Setting>
     <Setting Name="LastWorkSpace" Type="System.String" Scope="User">
-      <Value Profile="(Default)"></Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="ConsoleExecutable" Type="System.String" Scope="User">
-      <Value Profile="(Default)"></Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="LastFiles" Type="System.String" Scope="User">
-      <Value Profile="(Default)"></Value>
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ShowWindowNotifications" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -171,6 +171,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 					SolutionViewModel.Solution.Connections.Add(Connection);
 				// Graba la solución
 				SolutionViewModel.MainViewModel.SaveSolution();
+				// Actualiza el combo de conexiones
+				SolutionViewModel.ConnectionExecutionViewModel.Load();
 				// Indica que ya no es nuevo y está grabado
 				IsNew = false;
 				IsUpdated = false;

@@ -15,7 +15,8 @@
 	</Window.Resources>
 	<Grid>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
@@ -65,7 +66,20 @@
 				<Files:FileSelect x:Name="fnConsole" Grid.Row="0" Grid.Column="1" Margin="5"  />
 			</Grid>
 		</GroupBox>
-		<StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
+		<GroupBox Grid.Row="2" Grid.Column="0" Header="Aplicación">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+				<CheckBox Grid.Row="0" Grid.Column="0" x:Name="chkShowNotifications"
+						Content="Mostrar notificaciones de sistema"/>
+			</Grid>			
+		</GroupBox>
+		<StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
 			<Button Margin="2" Padding="5" IsDefault="True" Click="cmdAccept_Click" >
 				<StackPanel Orientation="Horizontal">
 					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Accept.png"/>

@@ -117,6 +117,17 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 		}
 
 		/// <summary>
+		///		Obtiene el mensaje que se debe mostrar al cerrar la ventana
+		/// </summary>
+		public string GetSaveAndCloseMessage()
+		{
+			if (string.IsNullOrWhiteSpace(FileName))
+				return "¿Desea grabar el archivo antes de continuar?";
+			else
+				return $"¿Desea grabar el archivo '{System.IO.Path.GetFileName(FileName)}' antes de continuar?";
+		}
+
+		/// <summary>
 		///		Solución
 		/// </summary>
 		public SolutionViewModel SolutionViewModel { get; }

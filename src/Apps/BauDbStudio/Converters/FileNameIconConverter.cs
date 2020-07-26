@@ -41,6 +41,9 @@ namespace Bau.DbStudio.Converters
 						icon = "/Resources/Images/FileJson.png";
 					else if (fileName.EndsWith(".xml", StringComparison.CurrentCultureIgnoreCase))
 						icon = "/Resources/Images/FileXml.png";
+					else if (fileName.EndsWith(".xlsx", StringComparison.CurrentCultureIgnoreCase) ||
+							 fileName.EndsWith(".xls", StringComparison.CurrentCultureIgnoreCase))
+						icon = "/Resources/Images/FileExcel.png";
 					else if (fileName.EndsWith(".py", StringComparison.CurrentCultureIgnoreCase))
 						icon = "/Resources/Images/FilePython.png";
 					else if (fileName.EndsWith(".ps", StringComparison.CurrentCultureIgnoreCase) ||

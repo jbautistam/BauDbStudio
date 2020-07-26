@@ -19,9 +19,10 @@
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*"/>
-			<ColumnDefinition Width="2*"/>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="*"/>
 		</Grid.ColumnDefinitions>
-		<GroupBox Header="Parámetros de scripts de validación" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+		<GroupBox Header="Parámetros de scripts de validación" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
 			<Grid>
 				<Grid.RowDefinitions>
 					<RowDefinition Height="Auto"/>
@@ -81,6 +82,11 @@
 					<RowDefinition Height="Auto"/>
 					<RowDefinition Height="Auto"/>
 					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
 				</Grid.RowDefinitions>
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto"/>
@@ -94,72 +100,65 @@
 							Text="{Binding Path=DataBaseValidateVariable, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
 				<RadioButton Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="5"  Content="Validar contra archivos" Foreground="Red" FontWeight="Bold" GroupName="Validation"
 							IsChecked="{Binding Path=ValidateFiles,UpdateSourceTrigger=PropertyChanged}"/>
-				<Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
-					<Grid.RowDefinitions>
-						<RowDefinition Height="Auto"/>
-					</Grid.RowDefinitions>
-					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="*"/>
-						<ColumnDefinition Width="*"/>
-					</Grid.ColumnDefinitions>
-					<Grid Grid.Row="0" Grid.Column="0">
-						<Grid.RowDefinitions>
-							<RowDefinition Height="Auto"/>
-							<RowDefinition Height="Auto"/>
-							<RowDefinition Height="Auto"/>
-							<RowDefinition Height="Auto"/>
-							<RowDefinition Height="Auto"/>
-						</Grid.RowDefinitions>
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="Auto"/>
-							<ColumnDefinition Width="*"/>
-						</Grid.ColumnDefinitions>
-						<Label Grid.Row="0" Grid.Column="0" Margin="5" Content="Directorio de datos:"/>
-						<TextBox Grid.Row="0" Grid.Column="1" 
+				<Label Grid.Row="3" Grid.Column="0" Margin="5" Content="Directorio de datos:"/>
+				<TextBox Grid.Row="3" Grid.Column="1" 
 							Text="{Binding Path=MountPathVariable, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
-						<Label Grid.Row="1" Grid.Column="0" Margin="5" Content="Directorio base:"/>
-						<TextBox Grid.Row="1" Grid.Column="1" 
+				<Label Grid.Row="4" Grid.Column="0" Margin="5" Content="Directorio base:"/>
+				<TextBox Grid.Row="4" Grid.Column="1" 
 							Text="{Binding Path=MountPathContent, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
-						<Label Grid.Row="2" Grid.Column="0" Margin="5" Content="Subdirectorio de archivos:"/>
-						<TextBox Grid.Row="2" Grid.Column="1" 
+				<Label Grid.Row="5" Grid.Column="0" Margin="5" Content="Subdirectorio de archivos:"/>
+				<TextBox Grid.Row="5" Grid.Column="1" 
 							Text="{Binding Path=PathValidate, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
-						<Label Grid.Row="3" Grid.Column="0" Margin="5" Content="Formato archivos:"/>
-						<ComboBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="5" Margin="5" 
+				<Label Grid.Row="6" Grid.Column="0" Margin="5" Content="Formato archivos:"/>
+				<ComboBox Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="5" Margin="5" 
 						  ItemsSource="{Binding ComboFormat.Items}" DisplayMemberPath="Text" 
 						  SelectedItem="{Binding ComboFormat.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-						<Label Grid.Row="4" Grid.Column="0" Margin="5" Content="Prefijos de las tablas:"/>
-						<TextBox Grid.Row="4" Grid.Column="1" 
+				<Label Grid.Row="7" Grid.Column="0" Margin="5" Content="Prefijos de las tablas:"/>
+				<TextBox Grid.Row="7" Grid.Column="1" 
 							Text="{Binding Path=TablePrefixes, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
-					</Grid>
-					<Grid Grid.Row="0" Grid.Column="1">
-						<Grid.RowDefinitions>
-							<RowDefinition Height="Auto"/>
-							<RowDefinition Height="Auto"/>
-							<RowDefinition Height="Auto"/>
-							<RowDefinition Height="Auto"/>
-							<RowDefinition Height="Auto"/>
-						</Grid.RowDefinitions>
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="Auto"/>
-							<ColumnDefinition Width="*"/>
-						</Grid.ColumnDefinitions>
-						<CheckBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" 
-									Content="Comparar cadenas" IsChecked="{Binding Path=CompareString,UpdateSourceTrigger=PropertyChanged}"/>
-						<Label Grid.Row="1" Grid.Column="0" Margin="5" Content="Formato de fechas:"/>
-						<TextBox Grid.Row="1" Grid.Column="1" 
-							Text="{Binding Path=DateFormat, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
-						<Label Grid.Row="2" Grid.Column="0" Margin="5" Content="Separador decimal:"/>
-						<TextBox Grid.Row="2" Grid.Column="1" 
-							Text="{Binding Path=DecimalSeparator, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
-					</Grid>
-				</Grid>
-				<RadioButton Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="5" Content="Validar contra base de datos"  Foreground="Red" FontWeight="Bold" GroupName="Validation"/>
-				<Label Grid.Row="5" Grid.Column="0" Margin="5" Content="Base de datos:"/>
-				<TextBox Grid.Row="5" Grid.Column="1" 
+				<RadioButton Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2" Margin="5" Content="Validar contra base de datos"  Foreground="Red" FontWeight="Bold" GroupName="Validation"/>
+				<Label Grid.Row="9" Grid.Column="0" Margin="5" Content="Base de datos:"/>
+				<TextBox Grid.Row="9" Grid.Column="1" 
 							Text="{Binding Path=DataBaseTarget, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
 			</Grid>
 		</GroupBox>
-		<StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
+		<GroupBox Header="Transformación de campos" Grid.Row="1" Grid.Column="2">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+				<CheckBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" 
+									Content="Comparar cadenas" IsChecked="{Binding Path=CompareString,UpdateSourceTrigger=PropertyChanged}"/>
+				<Label Grid.Row="1" Grid.Column="0" Margin="5" Content="Formato de fechas:"/>
+				<TextBox Grid.Row="1" Grid.Column="1" 
+							Text="{Binding Path=DateFormat, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+				<Label Grid.Row="2" Grid.Column="0" Margin="5" Content="Separador decimal:"/>
+				<TextBox Grid.Row="2" Grid.Column="1" 
+							Text="{Binding Path=DecimalSeparator, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+				<Label Grid.Row="3" Grid.Column="0" Margin="5" Content="Tipo campo decimal:"/>
+				<TextBox Grid.Row="3" Grid.Column="1" 
+							Text="{Binding Path=DecimalType, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+				<Label Grid.Row="4" Grid.Column="0" Margin="5" Content="Campos bit:"/>
+				<TextBox Grid.Row="4" Grid.Column="1" 
+							Text="{Binding Path=BitFields, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+				<TextBlock Grid.Row="5" Grid.Column="1" Margin="5" 
+						   Text="Nombres de los campos a comparar de tipo bit (se comparan numéricos con ABS). Nombres de campos separados por punto y coma"
+						   TextWrapping="Wrap"/>
+				<CheckBox Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" 
+									Content="Comparar las cadenas sólo caracteres alfabéticos y dígitos" IsChecked="{Binding Path=CompareOnlyAlphaAndDigits,UpdateSourceTrigger=PropertyChanged}"/>
+			</Grid>
+		</GroupBox>
+		<StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
 			<Button Margin="2" Padding="5" IsDefault="True" Command="{Binding SaveCommand}">
 				<StackPanel Orientation="Horizontal">
 					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Accept.png"/>

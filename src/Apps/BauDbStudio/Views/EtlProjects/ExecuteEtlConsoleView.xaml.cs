@@ -39,7 +39,7 @@ namespace Bau.DbStudio.Views.EtlProjects
 			udtEditor.EditorFontSize = MainWindow.MainController.ConfigurationController.EditorFontSize;
 			udtEditor.ShowLinesNumber = MainWindow.MainController.ConfigurationController.EditorShowLinesNumber;
 			// Carga el contenido en el editor
-			if (string.IsNullOrWhiteSpace(fileName))
+			if (string.IsNullOrWhiteSpace(fileName) || !System.IO.File.Exists(fileName))
 			{
 				udtEditor.FileName = string.Empty;
 				udtEditor.Text = string.Empty;

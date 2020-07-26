@@ -117,8 +117,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 			switch (Options.Mode)
 			{
 				case ScriptsValidationOptions.ValidationMode.Files:
-					return generator.GetSqlValidateFile(table, Options.DataBaseComputeVariable, Options.MountPathVariable, Options.SubpathValidate, Options.TablePrefixes, 
-														Options.FormatType, prepareCountTables, Options.CompareString, Options.DateFormat, Options.DecimalSeparator);
+					return generator.GetSqlValidateFile(table, prepareCountTables, Options);
 				default:
 					throw new Exception("Not implemented");
 			}

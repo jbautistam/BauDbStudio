@@ -99,7 +99,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 		/// </summary>
 		private void OpenQuery(ConnectionTableModel table)
 		{
-			SolutionViewModel.MainViewModel.MainController.OpenWindow(new Details.Connections.ExecuteQueryViewModel(SolutionViewModel, table?.Connection.Name, GetQuery(table)));
+			SolutionViewModel.MainViewModel.MainController.OpenWindow(new Details.Queries.ExecuteQueryViewModel(SolutionViewModel, table?.Connection.Name, GetQuery(table)));
 		}
 
 		/// <summary>
@@ -220,17 +220,15 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 						// Ejecuta la exportación
 						SolutionViewModel.MainViewModel.Manager.ExportToDataBricks(deployment);
 						// Mensaje
-						SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
-																														"Distribución", "Fin de la copia de archivos",
-																														TimeSpan.FromSeconds(10));
+						SolutionViewModel.MainViewModel.MainController.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
+																						"Distribución", "Fin de la copia de archivos");
 					}
 					catch (Exception exception)
 					{
 						SolutionViewModel.MainViewModel.Manager.Logger.Default.LogItems.Error($"Error al copiar los archivos: {exception.Message}");
-						SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Error,
-																														"Distribución", 
-																														$"Error en la copia de archivos. {exception.Message}",
-																														TimeSpan.FromSeconds(10));
+						SolutionViewModel.MainViewModel.MainController.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Error,
+																						"Distribución", 
+																						$"Error en la copia de archivos. {exception.Message}");
 					}
 					// Limpia el log
 					SolutionViewModel.MainViewModel.Manager.Logger.Flush();
@@ -264,6 +262,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 				SolutionViewModel.Solution.Connections.Remove(connection);
 				// Graba la solución
 				SolutionViewModel.MainViewModel.SaveSolution();
+				// Actualiza el combo de conexiones
+				SolutionViewModel.ConnectionExecutionViewModel.Load();
 				// Actualiza el árbol
 				Load();
 			}

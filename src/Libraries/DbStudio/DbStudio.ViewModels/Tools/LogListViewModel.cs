@@ -47,8 +47,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Tools
 											SelectedItem = Items[0];
 											// Lanza una notificación
 											if (item.Type == LogModel.LogType.Error || item.Type == LogModel.LogType.AssertError)
-												MainViewModel.MainController.HostController.SystemController.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Error,
-																															  "Error", item.Message, TimeSpan.FromSeconds(10));
+												MainViewModel.MainController.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Error,
+																							  "Error", item.Message);
 										  }, 
 									state);
 			}

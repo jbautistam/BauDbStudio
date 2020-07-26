@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Solutions\Details\Connections\ConnectionParametersExecutionViewModel.cs" />
     <Compile Remove="Solutions\Explorers\Connections\NodeSchemaViewModel.cs" />
     <Compile Remove="Solutions\Explorers\Connections\TreeDetailsNodeViewModel.cs" />
     <Compile Remove="Solutions\Explorers\Connections\TreeNodeViewModel.cs" />
@@ -30,6 +31,7 @@
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Cloud\LibCloudStorage\src\LibCloudStorage\LibCloudStorage.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibLogger\src\LibLogger.Core\LibLogger.Core.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibSystem.Windows\LibSystem.Windows.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Formats\LibExcelFiles\src\LibExcelFiles.csproj" />
     <ProjectReference Include="..\..\JobEtlProcessor\LibJobProcessor.Cloud\LibJobProcessor.Cloud.csproj" />
     <ProjectReference Include="..\..\JobEtlProcessor\LibJobProcessor.Database\LibJobProcessor.Database.csproj" />
     <ProjectReference Include="..\..\JobEtlProcessor\LibJobProcessor.FilesShell\LibJobProcessor.FilesShell.csproj" />

@@ -46,6 +46,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 		private CancellationToken _cancellationToken = CancellationToken.None;
 		private System.Timers.Timer _timer;
 		private System.Diagnostics.Stopwatch _stopwatch;
+		private BauMvvm.ViewModels.Forms.ControlItems.ControlGenericListViewModel<LastParameterFileViewModel> _lastParametersFileViewModel;
 
 		public ConnectionExecutionViewModel(SolutionViewModel solutionViewModel)
 		{
@@ -65,7 +66,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 		/// <summary>
 		///		Inicializa el viewModel (cuando ya se ha cargado la solución)
 		/// </summary>
-		public void Initialize()
+		public void Load()
 		{
 			ConnectionModel selectedConnection = GetSelectedConnection();
 
@@ -110,6 +111,34 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 																			}
 																	}
 																 };
+				// Inicializa la lista de parámetros
+				LastParameterFiles = new BauMvvm.ViewModels.Forms.ControlItems.ControlGenericListViewModel<LastParameterFileViewModel>();
+				LoadListParameterFiles();
+				LastParameterFiles.PropertyChanged += (sender, args) =>
+															{
+																if (args.PropertyName.Equals(nameof(LastParameterFiles.SelectedItem), StringComparison.CurrentCultureIgnoreCase))
+																	UpdateParametersFile(LastParameterFiles.SelectedItem?.Tag as string);
+															};
+		}
+
+		/// <summary>
+		///		Carga la lista de parámetros
+		/// </summary>
+		private void LoadListParameterFiles()
+		{
+			System.Collections.Generic.List<string> files = new System.Collections.Generic.List<string>();
+
+				// Limpia la lista
+				LastParameterFiles.Items.Clear();
+				// Añade los elementos a la lista intermedia
+				foreach (string fileName in SolutionViewModel.Solution.QueueConnectionParameters.Enumerate())
+					if (!string.IsNullOrWhiteSpace(fileName) && System.IO.File.Exists(fileName))
+						files.Add(fileName);
+				// Ordena la lista
+				files.Sort((first, second) => System.IO.Path.GetFileName(first).CompareTo(System.IO.Path.GetFileName(second)));
+				// Añade los nombres de archivo al listview
+				foreach (string fileName in files)
+					LastParameterFiles.Items.Add(new LastParameterFileViewModel(fileName));
 		}
 
 		/// <summary>
@@ -199,11 +228,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 																	viewModel.DataBase, viewModel.OutputPath, viewModel.FormatType, viewModel.BlockSize, CancellationToken.None))
 									{
 										block.Info($"Fin de la exportación de la base de datos {viewModel.DataBase}");
-										SolutionViewModel.MainViewModel.MainController.HostController.SystemController
+										SolutionViewModel.MainViewModel.MainController
 												.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
 																  "Explotación de archivos",
-																  "Ha terminado correctamente la exportación de archivos",
-																  TimeSpan.FromSeconds(10));
+																  "Ha terminado correctamente la exportación de archivos");
 									}
 									else
 										block.Error($"Error en la exportación de datos. {generator.Errors.Concatenate()}");
@@ -308,11 +336,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 								// Ejecuta el script
 								await ExecuteScriptSqlAsync(viewModel, connection, arguments, _cancellationToken);
 								// Mensaje al usuario
-								SolutionViewModel.MainViewModel.MainController.HostController.SystemController
+								SolutionViewModel.MainViewModel.MainController
 										.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
 														  "Ejecución de script SQL",
-														  "Ha terminado correctamente la ejecución del script SQL", 
-														  TimeSpan.FromSeconds(10));
+														  "Ha terminado correctamente la ejecución del script SQL");
 							}
 							catch (Exception exception)
 							{
@@ -351,10 +378,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 						// Ejecuta el script XML
 						await fileViewModel.ExecuteXmlScriptAsync(EtlParametersFileName, _cancellationToken);
 						// Muestra el mensaje al usuario
-						SolutionViewModel.MainViewModel.MainController.HostController.SystemController
+						SolutionViewModel.MainViewModel.MainController
 								.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
 													"Ejecución de script XML",
-													"Ha terminado correctamente la ejecución del script", TimeSpan.FromSeconds(10));
+													"Ha terminado correctamente la ejecución del script");
 					}
 					catch (Exception exception)
 					{
@@ -391,10 +418,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 						// Ejecuta el script XML
 						await etlViewModel.ExecuteXmlScriptAsync(_cancellationToken);
 						// Muestra el mensaje al usuario
-						SolutionViewModel.MainViewModel.MainController.HostController.SystemController
+						SolutionViewModel.MainViewModel.MainController
 								.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
 													"Ejecución de script XML",
-													"Ha terminado correctamente la ejecución del script", TimeSpan.FromSeconds(10));
+													"Ha terminado correctamente la ejecución del script");
 					}
 					catch (Exception exception)
 					{
@@ -441,7 +468,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 					// Cancela las tareas
 					_tokenSource.Cancel();
 					// Log
-					SolutionViewModel.MainViewModel.MainController.Logger.Default.LogItems.Error("Consulta cancelada");
+					SolutionViewModel.MainViewModel.MainController.Logger.Default.LogItems.Info("Consulta cancelada");
 					// Indica que ya no está en ejecución
 					StopExecuting();
 				}
@@ -493,17 +520,26 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 		/// </summary>
 		private void UpdateParametersFile()
 		{
-			ConnectionParametersExecutionViewModel parametersViewModel = new ConnectionParametersExecutionViewModel(this);
+			UpdateParametersFile(SolutionViewModel.MainViewModel.MainController.HostController.DialogsController.OpenDialogLoad
+										(SolutionViewModel.MainViewModel.LastPathSelected,
+										 "Archivos de parámetros (*.json)|*.json|Todos los archivos (*.*)|*.*"));
+		}
 
-				if (SolutionViewModel.MainViewModel.MainController.OpenDialog(parametersViewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
-				{
-					// Guarda los nombres de archivos en la solución
-					SolutionViewModel.Solution.LastConnectionParametersFileName = parametersViewModel.ConnectionParametersFileName;
-					SolutionViewModel.Solution.LastEtlParametersFileName = parametersViewModel.EtlParametersFileName;
-					SolutionViewModel.MainViewModel.SaveSolution();
-					// Carga los nombres de archivos en el viewModel
-					LoadConnectionFileNames();
-				}
+		/// <summary>
+		///		Modifica el archivo de parámetros seleccionado
+		/// </summary>
+		private void UpdateParametersFile(string fileName)
+		{
+			if (!string.IsNullOrWhiteSpace(fileName) && System.IO.File.Exists(fileName))
+			{
+				// Guarda el nombre de archivo en la solución
+				SolutionViewModel.Solution.LastConnectionParametersFileName = fileName;
+				SolutionViewModel.MainViewModel.SaveSolution();
+				// Carga los nombres de archivos en el viewModel
+				LoadConnectionFileNames();
+				// Actualiza el directorio seleccionado
+				SolutionViewModel.MainViewModel.LastPathSelected = System.IO.Path.GetDirectoryName(fileName);
+			}
 		}
 
 		/// <summary>
@@ -611,6 +647,15 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 		}
 
 		/// <summary>
+		///		Ultimos archivos de parámetros
+		/// </summary>
+		public BauMvvm.ViewModels.Forms.ControlItems.ControlGenericListViewModel<LastParameterFileViewModel> LastParameterFiles
+		{
+			get { return _lastParametersFileViewModel; }
+			set { CheckObject(ref _lastParametersFileViewModel, value); }
+		}
+
+		/// <summary>
 		///		Comando de ejecución de un script
 		/// </summary>
 		public BaseCommand ExecuteScripCommand { get; }
@@ -634,5 +679,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 		///		Exportar las tablas de base de datos
 		/// </summary>
 		public BaseCommand ExportDataBaseCommand { get; }
+
+		// SolutionViewModel.ConnectionExecutionViewModel.LastParameterFiles
 	}
 }

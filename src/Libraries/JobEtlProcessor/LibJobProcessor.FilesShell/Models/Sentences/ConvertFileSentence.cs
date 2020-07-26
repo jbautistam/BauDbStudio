@@ -34,6 +34,16 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Models.Sentences
 		internal string FileNameTarget { get; set; }
 
 		/// <summary>
+		///		Indice de la hoja de los archivos Excel
+		/// </summary>
+		internal int ExcelSheetIndex { get; set; } = 1;
+
+		/// <summary>
+		///		Indica si los archivos Excel tienen cabecera
+		/// </summary>
+		internal bool ExcelWithHeader { get; set; } = true;
+
+		/// <summary>
 		///		Columnas del archivo
 		/// </summary>
 		internal List<FileColumnModel> Columns { get; } = new List<FileColumnModel>();

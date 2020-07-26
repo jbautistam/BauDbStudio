@@ -2,9 +2,9 @@
 using System.Windows.Controls;
 
 using Bau.Libraries.BauMvvm.Views.Wpf.Forms.Trees;
-using Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections;
+using Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Queries;
 
-namespace Bau.DbStudio.Views.Connections
+namespace Bau.DbStudio.Views.Queries
 {
 	/// <summary>
 	///		Ventana para ejecutar una consulta

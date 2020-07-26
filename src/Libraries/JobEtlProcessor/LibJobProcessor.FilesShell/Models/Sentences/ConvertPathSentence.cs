@@ -19,7 +19,9 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Models.Sentences
 			/// <summary>Archivo CSV</summary>
 			Csv,
 			/// <summary>Archivo parquet</summary>
-			Parquet
+			Parquet,
+			/// <summary>Archivo Excel</summary>
+			Excel
 		}
 
 		/// <summary>
@@ -38,6 +40,24 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Models.Sentences
 		}
 
 		/// <summary>
+		///		Obtiene la extensión de archivo asociada a un tipo de archivo
+		/// </summary>
+		private string GetExtension(FileType type)
+		{
+			switch (type)
+			{
+				case FileType.Csv:
+					return ".csv";
+				case FileType.Parquet:
+					return ".parquet";
+				case FileType.Excel:
+					return ".xlsx";
+				default:
+					return string.Empty;
+			}
+		}
+
+		/// <summary>
 		///		Directorio
 		/// </summary>
 		internal string Path { get; set; }
@@ -48,8 +68,34 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Models.Sentences
 		internal FileType Source { get; set; }
 
 		/// <summary>
+		///		Extensión de los archivos origen
+		/// </summary>
+		internal string SourceExtension 
+		{
+			get { return GetExtension(Source); }
+		}
+
+		/// <summary>
 		///		Tipo del archivo destino
 		/// </summary>
 		internal FileType Target { get; set; }
+
+		/// <summary>
+		///		Extensión de los archivos destino
+		/// </summary>
+		internal string TargetExtension 
+		{
+			get { return GetExtension(Target); }
+		}
+
+		/// <summary>
+		///		Indice de la hoja de los archivos Excel
+		/// </summary>
+		internal int ExcelSheetIndex { get; set; } = 1;
+
+		/// <summary>
+		///		Indica si los archivos Excel tienen cabecera
+		/// </summary>
+		internal bool ExcelWithHeader { get; set; } = true;
 	}
 }

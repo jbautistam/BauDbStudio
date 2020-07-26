@@ -82,7 +82,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 		public bool GenerateQvs { get; set; }
 
 		/// <summary>
-		///		Prefijos a eliminar en las tablas al compararlas con archivos separadas por punto y coma (por ejemplo, SRC_, TMP_...)
+		///		Prefijos a eliminar en las tablas al compararlas con archivos separadas por punto y coma (por ejemplo, SRC_; TMP_...)
 		/// </summary>
 		public string TablePrefixes { get; set; }
 
@@ -100,5 +100,20 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 		///		Separador decimal
 		/// </summary>
 		public string DecimalSeparator { get; set; }
+
+		/// <summary>
+		///		Tipo para los coampos decimales
+		/// </summary>
+		public string DecimalType { get; set; }
+
+		/// <summary>
+		///		Campos de tipo bit (se comparan utilizando ABS)
+		/// </summary>
+		public string BitFields { get; set; }
+		
+		/// <summary>
+		///		Indica si las cadenas se deben comparar utilizando una expresión regular para sólo caracters alfabéticos y dígitos
+		/// </summary>
+		public bool CompareOnlyAlphaAndDigits { get; set; }
 	}
 }

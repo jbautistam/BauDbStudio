@@ -55,8 +55,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 		/// <summary>
 		///		Obtiene la cadena de validación sobre un archivo
 		/// </summary>
-		internal string GetSqlValidateFile(ConnectionTableModel table, string dataBaseComputeVariable, string mountPathVariable, string pathValidate, string tablePrefixes, 
-										   SolutionManager.FormatType formatType, bool countRecords, bool compareStrings, string dateFormat, string decimalSeparator)
+		internal string GetSqlValidateFile(ConnectionTableModel table, bool countRecords, ScriptsValidationOptions options)
 		{
 			string sql = string.Empty;
 
@@ -67,9 +66,9 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 						sql = "\tSELECT COUNT(*) AS Number";
 					else
 						sql = "\t" + GetSqlHeaderCompare(table, "Test", "Target");
-					sql += Environment.NewLine + $"\t\tFROM {GetFileNameTable(mountPathVariable, pathValidate, table.Name, formatType, tablePrefixes)} AS Test";
-					sql += Environment.NewLine + "\t\tFULL OUTER JOIN {{" + dataBaseComputeVariable + "}}." + Provider.SqlHelper.FormatName(table.Name) + " AS Target";
-					sql += Environment.NewLine + "\t\t\tON " + GetSqlCompareFields(table, compareStrings, dateFormat, decimalSeparator).Trim();
+					sql += Environment.NewLine + $"\t\tFROM {GetFileNameTable(options.MountPathVariable, options.SubpathValidate, table.Name, options.FormatType, options.TablePrefixes)} AS Test";
+					sql += Environment.NewLine + "\t\tFULL OUTER JOIN {{" + options.DataBaseComputeVariable + "}}." + Provider.SqlHelper.FormatName(table.Name) + " AS Target";
+					sql += Environment.NewLine + "\t\t\tON " + GetSqlCompareFields(table, options).Trim();
 					sql += Environment.NewLine + $"\t\tWHERE {Provider.SqlHelper.FormatName("Target", table.Fields[0].Name)} IS NULL";
 					sql += Environment.NewLine + $"\t\t\tOR {Provider.SqlHelper.FormatName("Test", table.Fields[0].Name)} IS NULL";
 					sql += Environment.NewLine;
@@ -88,8 +87,8 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 				// Crea la cabecera con los nombres de campos
 				foreach (ConnectionTableFieldModel field in table.Fields)
 				{
-					sql = sql.AddWithSeparator(Provider.SqlHelper.FormatName(sourceAlias, field.Name), ",");
-					sql = sql.AddWithSeparator(Provider.SqlHelper.FormatName(targetAlias, field.Name), ",");
+					sql = sql.AddWithSeparator(Provider.SqlHelper.FormatName(sourceAlias, field.Name + "_" + sourceAlias), ",");
+					sql = sql.AddWithSeparator(Provider.SqlHelper.FormatName(targetAlias, field.Name + "_" + targetAlias), ",");
 				}
 				// Devuelve la cadena creada
 				return "SELECT " + sql;
@@ -146,7 +145,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 		/// <summary>
 		///		Obtiene la cadena de comparación de campos
 		/// </summary>
-		private string GetSqlCompareFields(ConnectionTableModel table, bool compareStrings, string dateFormat, string decimalSeparator)
+		private string GetSqlCompareFields(ConnectionTableModel table, ScriptsValidationOptions options)
 		{
 			string sql = string.Empty;
 
@@ -154,13 +153,20 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 				foreach (ConnectionTableFieldModel field in table.Fields)
 				{
 					string nullValue = GetDefaultNullValue(field.Type);
+					string sourceField = $"IfNull({Provider.SqlHelper.FormatName("Target", field.Name)}, {nullValue})";
+					string targetField = $"IfNull({GetSqlReplaceField("Test", field, options)}, {nullValue})";
 
 						// Añade el operador si es necesario
 						if (!string.IsNullOrWhiteSpace(sql))
 							sql += "\t\t\t\tAND ";
+						// Si estamos comparando texto, en caso que queramos sólo comparar caracteres alfanuméricos o dígitos le añade el RegEx
+						if (field.Type == ConnectionTableFieldModel.Fieldtype.String && options.CompareOnlyAlphaAndDigits)
+						{
+							sourceField = GetSqlRegexAlphaAndDigits(sourceField);
+							targetField = GetSqlRegexAlphaAndDigits(targetField);
+						}
 						// Añade la comparación
-						sql += $"IfNull({Provider.SqlHelper.FormatName("Target", field.Name)}, {nullValue}) =";
-						sql += $" IfNull({GetSqlReplaceField("Test", field, compareStrings, dateFormat, decimalSeparator)}, {nullValue})" + Environment.NewLine;
+						sql += $"{sourceField} = {targetField}" + Environment.NewLine;
 				}
 				// Devuelve la cadena SQL
 				return sql;
@@ -187,27 +193,68 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 		/// <summary>
 		///		Cuando se compara por cadenas, obtiene la cadena de reemplazo junto al nombre de campo
 		/// </summary>
-		private string GetSqlReplaceField(string tableAlias, ConnectionTableFieldModel field, bool compareStrings, string dateFormat, string decimalSeparator)
+		private string GetSqlReplaceField(string tableAlias, ConnectionTableFieldModel field, ScriptsValidationOptions options)
 		{
 			string sql = Provider.SqlHelper.FormatName(tableAlias, field.Name);
 
 				// Si son cadenas, hace la conversión adecuada
-				if (compareStrings)
+				if (options.CompareString)
 				{
 					switch (field.Type)
 					{
 						case ConnectionTableFieldModel.Fieldtype.Date:
-								if (!string.IsNullOrWhiteSpace(dateFormat))
-									sql = $"to_date({sql}, '{dateFormat}')";
+								if (!string.IsNullOrWhiteSpace(options.DateFormat))
+									sql = $"to_date({sql}, '{options.DateFormat}')";
 							break;
 						case ConnectionTableFieldModel.Fieldtype.Decimal:
-								if (!string.IsNullOrWhiteSpace(decimalSeparator))
-									sql = $"CAST(REPLACE({sql}, '{decimalSeparator}', '.') AS float)";
+								if (!string.IsNullOrWhiteSpace(options.DecimalSeparator))
+									sql = $"CAST(REPLACE({sql}, '{options.DecimalSeparator}', '.') AS {GetDecimalType(options)})";
+							break;
+						case ConnectionTableFieldModel.Fieldtype.Integer:
+								if (IsFieldBit(field.Name, options.BitFields))
+									sql = $"ABS({sql})";
 							break;
 					}
 				}
 				// Devuelve la cadena SQL
 				return sql;
+		}
+
+		/// <summary>
+		///		Obtiene el tipo decimal
+		/// </summary>
+		private string GetDecimalType(ScriptsValidationOptions options)
+		{
+			if (string.IsNullOrWhiteSpace(options.DecimalType))
+				return "float";
+			else
+				return options.DecimalType;
+		}
+
+		/// <summary>
+		///		Comprueba si el campo está entre los campos señalados como bit
+		/// </summary>
+		private bool IsFieldBit(string name, string bitFields)
+		{
+			// Comprueba si es un campo de bit
+			if (!string.IsNullOrWhiteSpace(bitFields))
+			{
+				string [] fields = bitFields.Split(';');
+
+					foreach (string field in fields)
+						if (!string.IsNullOrWhiteSpace(field) && field.Trim().Equals(name, StringComparison.CurrentCultureIgnoreCase))
+							return true;
+			}
+			// Si ha llegado hasta aquí es porque no es un nombre de campo de bit
+			return false;
+		}
+
+		/// <summary>
+		///		Obtiene una cadena SQL para hacer una consulta Regex para sólo caracteres alfabéticos y dígitos
+		/// </summary>
+		private string GetSqlRegexAlphaAndDigits(string sql)
+		{
+			return $"regexp_replace({sql}, '[^a-zA-Z0-9]', '')";
 		}
 
 		/// <summary>

@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.DbStudio.Models.Connections;
 using Bau.Libraries.DbStudio.ViewModels.Controllers.Exporter;
+using Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections;
 
-namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
+namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Queries
 {
 	/// <summary>
 	///		ViewModel para ejecución de una consulta
@@ -234,7 +235,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 					// Cancela las tareas
 					_tokenSource.Cancel();
 					// Log
-					SolutionViewModel.MainViewModel.MainController.Logger.Default.LogItems.Error("Consulta cancelada");
+					SolutionViewModel.MainViewModel.MainController.Logger.Default.LogItems.Info("Consulta cancelada");
 					// Indica que ya no está en ejecución
 					StopQuery();
 				}
@@ -274,6 +275,14 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 				// Indica que no ha habido modificaciones
 				IsUpdated = false;
 			}
+		}
+
+		/// <summary>
+		///		Obtiene el mensaje que se debe mostrar al cerrar la ventana
+		/// </summary>
+		public string GetSaveAndCloseMessage()
+		{
+			return "¿Desea grabar la consulta antes de continuar?";
 		}
 
 		/// <summary>

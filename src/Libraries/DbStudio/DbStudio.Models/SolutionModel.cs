@@ -8,6 +8,9 @@ namespace Bau.Libraries.DbStudio.Models
 	/// </summary>
 	public class SolutionModel : LibDataStructures.Base.BaseExtendedModel
 	{
+		// Variables privadas
+		private string _lastConnectionParameters = string.Empty;
+
 		/// <summary>
 		///		Añade una carpeta a la solución
 		/// </summary>
@@ -40,6 +43,15 @@ namespace Bau.Libraries.DbStudio.Models
 		}
 
 		/// <summary>
+		///		Añade el parámetro
+		/// </summary>
+		private void AddConnectionParameter(string parametersFile)
+		{
+			if (!string.IsNullOrWhiteSpace(parametersFile))
+				QueueConnectionParameters.Add(parametersFile);
+		}
+
+		/// <summary>
 		///		Nombre de archivo
 		/// </summary>
 		public string FileName { get; set; }
@@ -61,10 +73,25 @@ namespace Bau.Libraries.DbStudio.Models
 		/// <summary>
 		///		Nombre del último archivo de parámetros de conexión seleccionado
 		/// </summary>
-		public string LastConnectionParametersFileName { get; set; }
+		public string LastConnectionParametersFileName 
+		{ 
+			get { return _lastConnectionParameters; }
+			set
+			{
+				// Guarda el parámetro
+				_lastConnectionParameters = value;
+				// lo añade a la cola
+				AddConnectionParameter(_lastConnectionParameters);
+			}
+		}
 
 		/// <summary>
-		///		Nombre del último archivo de parámetros de proyectos de ETL seleccionado
+		///		Cola de los últimos archivos de parámetros
+		/// </summary>
+		public LibDataStructures.Collections.QueueLimited<string> QueueConnectionParameters { get; } = new LibDataStructures.Collections.QueueLimited<string>();
+
+		/// <summary>
+		///		Nombre del último archivo de parámetros para proyectos ETL seleccionado
 		/// </summary>
 		public string LastEtlParametersFileName { get; set; }
 

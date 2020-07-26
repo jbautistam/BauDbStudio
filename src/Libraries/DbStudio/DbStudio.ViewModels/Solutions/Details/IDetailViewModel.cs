@@ -8,6 +8,11 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details
 	public interface IDetailViewModel
 	{
 		/// <summary>
+		///		Obtiene el mensaje que se debe mostrar al cerrar la ventana
+		/// </summary>
+		string GetSaveAndCloseMessage();
+
+		/// <summary>
 		///		Graba los datos
 		/// </summary>
 		void SaveDetails(bool newName);

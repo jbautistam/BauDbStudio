@@ -47,7 +47,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 			Solution = MainViewModel.Manager.LoadConfiguration(Workspace);
 			// Carga los exploradores
 			TreeConnectionsViewModel.Load();
-			ConnectionExecutionViewModel.Initialize();
+			ConnectionExecutionViewModel.Load();
 			TreeFoldersViewModel.Load();
 			TreeStoragesViewModel.Load();
 		}
@@ -123,10 +123,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 								else
 								{
 									block.Info("Fin de la creación de proyectos de pruebas");
-									MainViewModel.MainController.HostController.SystemController.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
-																												  "Generación de proyectos XML",
-																												  "Ha terminado correctamente la generación del archivo de pruebas",
-																												  TimeSpan.FromSeconds(10));
+									MainViewModel.MainController.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
+																				  "Generación de proyectos XML",
+																				  "Ha terminado correctamente la generación del archivo de pruebas");
 								}
 							}
 							catch (Exception exception)
@@ -165,7 +164,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 																		TablePrefixes = viewModel.TablePrefixes,
 																		CompareString = viewModel.CompareString,
 																		DateFormat = viewModel.DateFormat,
-																		DecimalSeparator = viewModel.DecimalSeparator
+																		DecimalSeparator = viewModel.DecimalSeparator,
+																		DecimalType = viewModel.DecimalType,
+																		BitFields = viewModel.BitFields,
+																		CompareOnlyAlphaAndDigits = viewModel.CompareOnlyAlphaAndDigits
 																	};
 						ScriptsValidationGenerator generator = new ScriptsValidationGenerator(MainViewModel.Manager, options);
 
@@ -177,10 +179,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 								else
 								{
 									block.Info("Fin de la creación de archivos de validación");
-									MainViewModel.MainController.HostController.SystemController.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
-																												  "Generación de archivos de validación",
-																												  "Ha terminado correctamente la generación de los archivos de validación",
-																												  TimeSpan.FromSeconds(10));
+									MainViewModel.MainController.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
+																				  "Generación de archivos de validación",
+																				  "Ha terminado correctamente la generación de los archivos de validación");
 								}
 							}
 							catch (Exception exception)
@@ -222,10 +223,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 								else
 								{
 									block.Info("Fin de la creación de archivos de importación");
-									MainViewModel.MainController.HostController.SystemController.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
-																												  "Generación de archivos de importación",
-																												  "Ha terminado correctamente la generación de los archivos de importación",
-																												  TimeSpan.FromSeconds(10));
+									MainViewModel.MainController.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
+																				  "Generación de archivos de importación",
+																				  "Ha terminado correctamente la generación de los archivos de importación");
 								}
 							}
 							catch (Exception exception)

@@ -21,6 +21,7 @@ namespace Bau.DbStudio.Controllers
 			ConsoleExecutable = Properties.Settings.Default.ConsoleExecutable;
 			LastWorkSpace = Properties.Settings.Default.LastWorkSpace;
 			LastFiles = Properties.Settings.Default.LastFiles;
+			ShowWindowNotifications = Properties.Settings.Default.ShowWindowNotifications;
 		}
 
 		/// <summary>
@@ -38,6 +39,7 @@ namespace Bau.DbStudio.Controllers
 			Properties.Settings.Default.ConsoleExecutable = ConsoleExecutable;
 			Properties.Settings.Default.LastWorkSpace = LastWorkSpace;
 			Properties.Settings.Default.LastFiles = LastFiles;
+			Properties.Settings.Default.ShowWindowNotifications = ShowWindowNotifications;
 			// Graba la configuración
 			Properties.Settings.Default.Save();
 		}
@@ -86,5 +88,10 @@ namespace Bau.DbStudio.Controllers
 		///		Ultimos archivos abiertos
 		/// </summary>
 		public string LastFiles { get; set; }
+
+		/// <summary>
+		///		Indica si se deben mostrar las notificaciones de sistema
+		/// </summary>
+		public bool ShowWindowNotifications { get; set; }
 	}
 }

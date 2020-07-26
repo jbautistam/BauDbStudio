@@ -11,9 +11,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 	{
 		// Variables privadas
 		private string _dataBaseValidateVariable, _dataBaseComputeVariable, _mountPathVariable, _mountPathContent, _pathValidate;
-		private string _outputPath, _dataBaseTarget, _tablePrefixes;
-		private string _dateFormat, _decimalSeparator;
-		private bool _validateFiles, _generateQvs, _compareString;
+		private string _outputPath, _dataBaseTarget, _tablePrefixes, _bitFields;
+		private string _dateFormat, _decimalSeparator, _decimalType;
+		private bool _validateFiles, _generateQvs, _compareString, _compareOnlyAlphaAndDigits;
 		private Connections.ComboConnectionsViewModel _comboConnections;
 		private Explorers.Connections.TreeConnectionTablesViewModel _treeConnection;
 		private Application.SolutionManager.FormatType _formatType;
@@ -56,6 +56,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 			CompareString = true;
 			DateFormat = "d/M/yyyy";
 			DecimalSeparator = ",";
+			DecimalType = "decimal(10, 2)";
+			CompareOnlyAlphaAndDigits = true;
 			// Carga el árbol de conexiones
 			TreeConnection.LoadConnection(ComboConnections.GetSelectedConnection());
 			// Indica que no ha habido modificaciones
@@ -276,6 +278,33 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 		{
 			get { return _decimalSeparator; }
 			set { CheckProperty(ref _decimalSeparator, value); }
+		}
+
+		/// <summary>
+		///		Tipo para los campos decimales
+		/// </summary>
+		public string DecimalType
+		{
+			get { return _decimalType; }
+			set { CheckProperty(ref _decimalType, value); }
+		}
+
+		/// <summary>
+		///		Campos de tipo bit (se sustituirán por ABS)
+		/// </summary>
+		public string BitFields
+		{
+			get { return _bitFields; }
+			set { CheckProperty(ref _bitFields, value); }
+		}
+
+		/// <summary>
+		///		Indica si en las cadenas se tienen que comparar sólo los caracteres alfabéticos y dígitos
+		/// </summary>
+		public bool CompareOnlyAlphaAndDigits
+		{
+			get { return _compareOnlyAlphaAndDigits; }
+			set { CheckProperty(ref _compareOnlyAlphaAndDigits, value); }
 		}
 	}
 }

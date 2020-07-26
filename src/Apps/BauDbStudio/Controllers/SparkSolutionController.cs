@@ -15,9 +15,10 @@ namespace Bau.DbStudio.Controllers
 		// Eventos públicos
 		public event EventHandler<IDetailViewModel> OpenWindowRequired;
 
-		public SparkSolutionController(string applicationName, MainWindow mainWindow, string appPath)
+		public SparkSolutionController(AppController appController, string applicationName, MainWindow mainWindow, string appPath)
 		{
 			// Asigna las propiedades
+			AppController = appController;
 			HostController = new HostController(applicationName, mainWindow);
 			HostHelperController = new HostHelperController(mainWindow);
 			MainWindow = mainWindow;
@@ -65,9 +66,6 @@ namespace Bau.DbStudio.Controllers
 						break;
 					case Libraries.DbStudio.ViewModels.Solutions.Details.Connections.ConnectionViewModel viewModel:
 							result = HostHelperController.ShowDialog(MainWindow, new Views.Connections.ConnectionView(viewModel));
-						break;
-					case Libraries.DbStudio.ViewModels.Solutions.Details.Connections.ConnectionParametersExecutionViewModel viewModel:
-							result = HostHelperController.ShowDialog(MainWindow, new Views.Connections.ConnectionParametersView(viewModel));
 						break;
 					case Libraries.DbStudio.ViewModels.Solutions.Details.Files.CsvFilePropertiesViewModel viewModel:
 							result = HostHelperController.ShowDialog(MainWindow, new Views.Files.CsvFilePropertiesView(viewModel));
@@ -137,8 +135,25 @@ namespace Bau.DbStudio.Controllers
 		/// </summary>
 		public string GetEtlConsoleFileName()
 		{
-			return MainWindow.MainController.ConfigurationController.ConsoleExecutable;
+			return AppController.ConfigurationController.ConsoleExecutable;
 		}
+
+		/// <summary>
+		///		Muestra una notificación: si está marcada como error o si la configuración así lo permite
+		/// </summary>
+		public void ShowNotification(SystemControllerEnums.NotificationType type, string title, string message)
+		{
+			if (AppController.ConfigurationController.ShowWindowNotifications || type == SystemControllerEnums.NotificationType.Error)
+				AppController.SparkSolutionController.HostController.SystemController.ShowNotification(type, title, message, TimeSpan.FromSeconds(5));
+			else
+				AppController.SparkSolutionController.Logger.Default.LogItems.Add(new Libraries.LibLogger.Models.Log.LogModel(null, Libraries.LibLogger.Models.Log.LogModel.LogType.Info,
+																															  title + ". " + message));
+		}
+
+		/// <summary>
+		///		Controlador de aplicación
+		/// </summary>
+		internal AppController AppController { get; }
 
 		/// <summary>
 		///		Controlador principal

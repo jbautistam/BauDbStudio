@@ -82,6 +82,14 @@ namespace Bau.DbStudio
 		}
 
 		/// <summary>
+		///		Abre una ventana con un archivo
+		/// </summary>
+		private void OpenFile(string fileName)
+		{
+			OpenWindow(new Libraries.DbStudio.ViewModels.Solutions.Details.Files.FileViewModel(ViewModel.SolutionViewModel, fileName));
+		}
+
+		/// <summary>
 		///		Abre la ventana de detalles
 		/// </summary>
 		private void OpenWindow(IDetailViewModel detailsViewModel)
@@ -94,8 +102,8 @@ namespace Bau.DbStudio
 				case Libraries.DbStudio.ViewModels.Solutions.Details.Files.BaseFileViewModel viewModel:
 						AddTab(new DataTableFileView(viewModel), viewModel);
 					break;
-				case Libraries.DbStudio.ViewModels.Solutions.Details.Connections.ExecuteQueryViewModel viewModel:
-						AddTab(new Views.Connections.ExecuteQueryView(viewModel), viewModel);
+				case Libraries.DbStudio.ViewModels.Solutions.Details.Queries.ExecuteQueryViewModel viewModel:
+						AddTab(new Views.Queries.ExecuteQueryView(viewModel), viewModel);
 					break;
 				case Libraries.DbStudio.ViewModels.Solutions.Details.Connections.ExecuteFilesViewModel viewModel:
 						AddTab(new Views.Connections.ExecuteFilesView(viewModel), viewModel);
@@ -138,7 +146,7 @@ namespace Bau.DbStudio
 			if (args.Document != null && args.Document.Tag != null && args.Document.Tag is IDetailViewModel detailViewModel && detailViewModel.IsUpdated)
 			{
 				Libraries.BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType result = MainController.SparkSolutionController.HostController.SystemController.ShowQuestionCancel
-																											("¿Desea grabar los datos antes de cerrar la ventana?");
+																											(detailViewModel.GetSaveAndCloseMessage());
 				
 					switch (result)
 					{
@@ -386,6 +394,18 @@ namespace Bau.DbStudio
 		}
 
 		/// <summary>
+		///		Abre la ventana Acerca de
+		/// </summary>
+		private void OpenAboutWindow()
+		{
+			Views.Tools.AboutView view = new Views.Tools.AboutView(GetAssemblyVersion());
+
+				// Muestra la ventana
+				view.Owner = this;
+				view.ShowDialog();
+		}
+
+		/// <summary>
 		///		ViewModel principal
 		/// </summary>
 		public MainViewModel ViewModel { get; private set; }
@@ -478,6 +498,31 @@ namespace Bau.DbStudio
 		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
 		{
 			e.Cancel = !CanExitApp();
+		}
+
+		private void dckManager_Drop(object sender, DragEventArgs e)
+		{
+			if (e.Data.GetDataPresent(DataFormats.FileDrop))
+				try
+				{
+					string [] files = (string []) e.Data.GetData(DataFormats.FileDrop);
+
+						// Abre los archivos
+						foreach (string file in files)
+							if (!string.IsNullOrWhiteSpace(file) && System.IO.File.Exists(file))
+								OpenFile(file);
+						// Indica que se ha tratado el evento
+						e.Handled = true;
+				}
+				catch (Exception exception)
+				{
+					MainController.SparkSolutionController.Logger.Default.LogItems.Error("Error when drop files", exception);
+				}
+		}
+
+		private void AboutMenuItem_Click(object sender, RoutedEventArgs e)
+		{
+			OpenAboutWindow();
 		}
 	}
 }

@@ -70,6 +70,24 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 		}
 
 		/// <summary>
+		///		Copia archivos desde el explorador
+		/// </summary>
+		public void CopyFromExplorer(string path, string[] files)
+		{
+			if (string.IsNullOrWhiteSpace(path) || !System.IO.Directory.Exists(path))
+				SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Seleccione la carpeta donde desea copiar los archivos");
+			else
+			{
+				// Copia los archivos
+				foreach (string file in files)
+					if (!string.IsNullOrWhiteSpace(file) && System.IO.File.Exists(file))
+						LibHelper.Files.HelperFiles.CopyFile(file, System.IO.Path.Combine(path, System.IO.Path.GetFileName(file)));
+				// Actualiza el árbol
+				Load();
+			}
+		}
+
+		/// <summary>
 		///		Comprueba si se puede crear una carpeta o un achivo
 		/// </summary>
 		private bool CanCreateFileOrFolder()
@@ -123,6 +141,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 					SolutionViewModel.MainViewModel.MainController.OpenWindow(new Details.Files.ParquetFileViewModel(SolutionViewModel, node.FileName));
 				else if (node.FileName.EndsWith(".csv", StringComparison.CurrentCultureIgnoreCase))
 					SolutionViewModel.MainViewModel.MainController.OpenWindow(new Details.Files.CsvFileViewModel(SolutionViewModel, node.FileName));
+				else if (node.FileName.EndsWith(".xlsx", StringComparison.CurrentCultureIgnoreCase) ||
+						 node.FileName.EndsWith(".xls", StringComparison.CurrentCultureIgnoreCase))
+					SolutionViewModel.MainViewModel.MainController.OpenWindow(new Details.Files.ExcelFileViewModel(SolutionViewModel, node.FileName));
 				else
 					SolutionViewModel.MainViewModel.MainController.OpenWindow(new Details.Files.FileViewModel(SolutionViewModel, node.FileName));
 			}

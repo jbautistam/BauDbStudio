@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using Bau.Libraries.LibHelper.Processes;
 using Bau.Libraries.LibLogger.Models.Log;
 
 namespace Bau.Libraries.LibJobProcessor.FilesShell.Manager.Controllers

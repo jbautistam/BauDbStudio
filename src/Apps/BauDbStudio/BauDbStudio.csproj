@@ -7,15 +7,19 @@
     <RootNamespace>Bau.DbStudio</RootNamespace>
     <Authors>Jose Antonio Bautista</Authors>
     <ApplicationIcon>Resources\BauDbStudio.ico</ApplicationIcon>
-    <AssemblyVersion>1.0.9.0</AssemblyVersion>
-    <FileVersion>1.0.9.0</FileVersion>
-    <Version>1.0.9</Version>
+    <AssemblyVersion>1.0.10.0</AssemblyVersion>
+    <FileVersion>1.0.10.0</FileVersion>
+    <Version>1.0.10</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Views\Connections\ConnectionParametersView.xaml.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Remove="Resources\BauDbStudio.ico" />
@@ -31,6 +35,7 @@
     <None Remove="Resources\Images\File.png" />
     <None Remove="Resources\Images\FileCsharp.png" />
     <None Remove="Resources\Images\FileCsv.png" />
+    <None Remove="Resources\Images\FileExcel.png" />
     <None Remove="Resources\Images\FileJson.png" />
     <None Remove="Resources\Images\FileParquet.png" />
     <None Remove="Resources\Images\FilePowershell.png" />
@@ -56,6 +61,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Remove="Views\Connections\ConnectionParametersView.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Extended.Wpf.Toolkit" Version="3.8.2" />
   </ItemGroup>
 
@@ -78,6 +87,7 @@
     <Resource Include="Resources\Images\DataError.png" />
     <Resource Include="Resources\Images\ExecutionPlan.png" />
     <Resource Include="Resources\Images\Export.png" />
+    <Resource Include="Resources\Images\FileExcel.png" />
     <Resource Include="Resources\Images\Loading.png" />
     <Resource Include="Resources\Images\Schema.png" />
     <Resource Include="Resources\Images\Storage.png" />
@@ -139,9 +149,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Page Update="Views\Connections\ConnectionParametersView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
     <Page Update="Views\EtlProjects\CreateImportFilesScriptView.xaml">
       <SubType>Designer</SubType>
     </Page>

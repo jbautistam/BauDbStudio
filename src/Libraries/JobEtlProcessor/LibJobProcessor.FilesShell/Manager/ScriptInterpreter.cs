@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -8,6 +9,7 @@ using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.LibJobProcessor.FilesShell.Models.Sentences;
 using Bau.Libraries.LibJobProcessor.Core.Models.Jobs;
 using Bau.Libraries.LibLogger.Models.Log;
+using Bau.Libraries.LibJobProcessor.FilesShell.Manager.Controllers;
 
 namespace Bau.Libraries.LibJobProcessor.FilesShell.Manager
 {
@@ -58,10 +60,13 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Manager
 								await ProcessExecuteAsync(block, sentence);
 							break;
 						case ConvertFileSentence sentence:
-								await ConvertFileAsync(block, sentence, cancellationToken);
+								await ProcessConvertFileAsync(block, sentence, cancellationToken);
 							break;
 						case ConvertPathSentence sentence:
-								await ConvertPathAsync(block, sentence, cancellationToken);
+								await ProcessConvertPathAsync(block, sentence, cancellationToken);
+							break;
+						case IfExistsSentence sentence:
+								await ProcessExistsAsync(block, sentence, cancellationToken);
 							break;
 					}
 		}
@@ -78,6 +83,24 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Manager
 		}
 
 		/// <summary>
+		///		Procesa la sentencia que compureba si existe un archivo o directorio
+		/// </summary>
+		private async Task ProcessExistsAsync(BlockLogModel block, IfExistsSentence sentence, CancellationToken cancellationToken)
+		{
+			if (string.IsNullOrEmpty(sentence.Path))
+				AddError(block, "Path is empty");
+			else 
+			{
+				string path = Step.Project.GetFullFileName(sentence.Path);
+
+					if (Directory.Exists(path) || File.Exists(path))
+						await ExecuteAsync(block, sentence.IfSentences, cancellationToken);
+					else
+						await ExecuteAsync(block, sentence.ElseSentences, cancellationToken);
+			}
+		}
+
+		/// <summary>
 		///		Procesa una copia de archivos
 		/// </summary>
 		private async Task ProcessCopyAsync(BlockLogModel parent, CopySentence sentence)
@@ -89,10 +112,15 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Manager
 
 					try
 					{
-						if (System.IO.Directory.Exists(source))
+						if (Directory.Exists(source))
 							await LibHelper.Files.HelperFiles.CopyPathAsync(source, target, sentence.Mask, sentence.Recursive, sentence.FlattenPaths);
-						else if (System.IO.File.Exists(source))
-							await LibHelper.Files.HelperFiles.CopyFileAsync(source, target);
+						else if (File.Exists(source))
+						{
+							if (!string.IsNullOrWhiteSpace(Path.GetExtension(target)))
+								await LibHelper.Files.HelperFiles.CopyFileAsync(source, target);
+							else
+								await LibHelper.Files.HelperFiles.CopyFileAsync(source, Path.Combine(target, Path.GetFileName(source)));
+						}
 						else
 							AddError(block, $"Cant find source file or path '{source}'");
 					}
@@ -117,14 +145,14 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Manager
 
 					try
 					{
-						if (System.IO.Directory.Exists(path))
+						if (Directory.Exists(path))
 						{
 							if (!string.IsNullOrWhiteSpace(sentence.Mask))
 								LibHelper.Files.HelperFiles.KillFiles(path, sentence.Mask);
 							else
 								LibHelper.Files.HelperFiles.KillPath(path);
 						}
-						else if (System.IO.File.Exists(path))
+						else if (File.Exists(path))
 							LibHelper.Files.HelperFiles.KillFile(path);
 						else
 							block.Info($"Cant find file or path '{path}' for delete");
@@ -196,77 +224,70 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Manager
 		/// <summary>
 		///		Convierte los archivos de un directorio
 		/// </summary>
-		private async Task ConvertPathAsync(BlockLogModel parent, ConvertPathSentence sentence, CancellationToken cancellationToken)
+		private async Task ProcessConvertPathAsync(BlockLogModel parent, ConvertPathSentence sentence, CancellationToken cancellationToken)
 		{
 			using (BlockLogModel block = parent.CreateBlock(LogModel.LogType.Info, $"Start convert path '{sentence.Path}' from {sentence.Source} to {sentence.Target}"))
 			{
 				string path = Step.Project.GetFullFileName(sentence.Path);
 
-					if (!System.IO.Directory.Exists(path))
+					if (!Directory.Exists(path))
 						AddError(block, $"Cant find the path '{path}'");
 					else
-						switch (sentence.Source)
-						{
-							case ConvertPathSentence.FileType.Csv:
-									if (sentence.Target == ConvertPathSentence.FileType.Parquet)
-										foreach (string source in System.IO.Directory.GetFiles(path, "*.csv"))
-											if (!cancellationToken.IsCancellationRequested && !HasError)
-											{
-												string target = System.IO.Path.Combine(path, System.IO.Path.GetFileNameWithoutExtension(source) + ".parquet");
-
-													// Log
-													block.Info($"Exporting '{source}' to '{target}'");
-													// Convierte el archivo
-													if (!await new Controllers.CsvToParquetConversor().ConvertAsync(block, source, target, cancellationToken))
-														AddError(block, $"Error when convert '{source}' to '{target}'");
-											}
-									else
-										AddError(block, $"Cant convert '{sentence.Source}' to '{sentence.Target}'");
-								break;
-							case ConvertPathSentence.FileType.Parquet:
-									if (sentence.Target == ConvertPathSentence.FileType.Csv)
-										foreach (string source in System.IO.Directory.GetFiles(path, "*.parquet"))
-											if (!cancellationToken.IsCancellationRequested && !HasError)
-											{
-												string target = System.IO.Path.Combine(path, System.IO.Path.GetFileNameWithoutExtension(source) + ".csv");
-
-													// Log
-													block.Info($"Exporting '{source}' to '{target}'");
-													// Convierte el archivo
-													if (!await new Controllers.ParquetToCsvConversor().ConvertAsync(block, source, target, cancellationToken))
-														AddError(block, $"Error when convert '{source}' to '{target}'");
-											}
-									else
-										AddError(block, $"Cant convert '{sentence.Source}' to '{sentence.Target}'");
-								break;
-							default:
-									AddError(block, $"Cant convert '{sentence.Source}' to '{sentence.Target}'");
-								break;
-						}
+						foreach (string source in Directory.GetFiles(path, "*" + sentence.SourceExtension))
+							if (!cancellationToken.IsCancellationRequested && !HasError)
+								await ConvertFileAsync(block, source, Path.Combine(path, Path.GetFileNameWithoutExtension(source) + sentence.TargetExtension),
+													   GetExcelOptions(sentence.ExcelWithHeader, sentence.ExcelSheetIndex), cancellationToken);
 			}
 		}
 
 		/// <summary>
 		///		Convierte un archivo
 		/// </summary>
-		private async Task ConvertFileAsync(BlockLogModel parent, ConvertFileSentence sentence, CancellationToken cancellationToken)
+		private async Task ProcessConvertFileAsync(BlockLogModel parent, ConvertFileSentence sentence, CancellationToken cancellationToken)
 		{
 			using (BlockLogModel block = parent.CreateBlock(LogModel.LogType.Info, $"Start convert file '{sentence.FileNameSource}' to {sentence.FileNameTarget}"))
 			{
 				string source = Step.Project.GetFullFileName(sentence.FileNameSource);
 				string target = Step.Project.GetFullFileName(sentence.FileNameTarget);
 
-					if (!System.IO.File.Exists(source))
+					if (!File.Exists(source))
 						AddError(block, $"Cant find the file '{source}'");
-					else if (source.EndsWith(".csv", StringComparison.CurrentCultureIgnoreCase) && target.EndsWith(".parquet", StringComparison.CurrentCultureIgnoreCase))
-						if (!await new Controllers.CsvToParquetConversor().ConvertAsync(block, source, target, cancellationToken))
-							AddError(block, $"Cant convert '{source}' to '{target}'");
-					else if (source.EndsWith(".parquet", StringComparison.CurrentCultureIgnoreCase) && target.EndsWith(".csv", StringComparison.CurrentCultureIgnoreCase))
-						if (!await new Controllers.ParquetToCsvConversor().ConvertAsync(block, source, target, cancellationToken))
-							AddError(block, $"Cant convert '{source}' to '{target}'");
-					else
-						AddError(block, $"Cant convert file '{source}' to '{target}'");
+					else 
+						await ConvertFileAsync(block, source, target, GetExcelOptions(sentence.ExcelWithHeader, sentence.ExcelSheetIndex), cancellationToken);
 			}
+		}
+
+		/// <summary>
+		///		Obtiene las opciones de los archivos Excel
+		/// </summary>
+		private ExcelfileOptions GetExcelOptions(bool withHeader, int sheetIndex)
+		{
+			return new ExcelfileOptions
+							{
+								WithHeader = withHeader,
+								SheetIndex = sheetIndex
+							};
+		}
+
+		/// <summary>
+		///		Convierte un archivo
+		/// </summary>
+		private async Task ConvertFileAsync(BlockLogModel block, string source, string target, Controllers.ExcelfileOptions options, CancellationToken cancellationToken)
+		{
+			bool converted = false;
+
+				// Log
+				block.Info($"Converting '{source}' to '{target}'");
+				// Convierte el archivo
+				if (source.EndsWith(".csv", StringComparison.CurrentCultureIgnoreCase) && target.EndsWith(".parquet", StringComparison.CurrentCultureIgnoreCase))
+					converted = await new Controllers.CsvToParquetConversor().ConvertAsync(block, source, target, cancellationToken);
+				else if (source.EndsWith(".parquet", StringComparison.CurrentCultureIgnoreCase) && target.EndsWith(".csv", StringComparison.CurrentCultureIgnoreCase))
+					converted = await new Controllers.ParquetToCsvConversor().ConvertAsync(block, source, target, cancellationToken);
+				else if (source.EndsWith(".xlsx", StringComparison.CurrentCultureIgnoreCase) && target.EndsWith(".parquet", StringComparison.CurrentCultureIgnoreCase))
+					converted = await new Controllers.ExcelToParquetConversor().ConvertAsync(block, source, target, options, cancellationToken);
+				// Indica el error si es necesario
+				if (!converted)
+					AddError(block, $"Cant convert file '{source}' to '{target}'");
 		}
 
 		/// <summary>

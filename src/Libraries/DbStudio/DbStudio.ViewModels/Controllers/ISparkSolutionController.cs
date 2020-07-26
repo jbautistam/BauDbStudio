@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Bau.Libraries.BauMvvm.ViewModels.Controllers;
 using Bau.Libraries.DbStudio.ViewModels.Solutions.Details;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Controllers
@@ -68,5 +69,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Controllers
 		///		Obtiene el nombre del archivo de la consola de ejecución de proyectos ETL
 		/// </summary>
 		string GetEtlConsoleFileName();
+
+		/// <summary>
+		///		Muestra una notificación (sólo si la configuración lo permite
+		/// </summary>
+		void ShowNotification(SystemControllerEnums.NotificationType type, string title, string message);
 	}
 }

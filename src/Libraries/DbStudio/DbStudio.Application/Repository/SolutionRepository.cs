@@ -5,6 +5,7 @@ using Bau.Libraries.LibMarkupLanguage;
 using Bau.Libraries.DbStudio.Models;
 using Bau.Libraries.DbStudio.Models.Connections;
 using Bau.Libraries.DbStudio.Models.Deployments;
+using System.Collections.Generic;
 
 namespace Bau.Libraries.DbStudio.Application.Repository
 {
@@ -36,6 +37,7 @@ namespace Bau.Libraries.DbStudio.Application.Repository
 		private const string TagStorage = "Storage";
 		private const string TagConnectionSring = "ConnectionString";
 		private const string TagConnectionSelected = "ConnectionSelected";
+		private const string TagQueueJsonParameters = "QueueJsonParameter";
 
 		/// <summary>
 		///		Carga los datos de una solución
@@ -63,6 +65,7 @@ namespace Bau.Libraries.DbStudio.Application.Repository
 							LoadDeployments(solution, rootML);
 							LoadStorages(solution, rootML);
 							LoadFolders(solution, rootML);
+							LoadQueueConnectionParameters(solution, rootML);
 						}
 				// Devuelve la solución
 				return solution;
@@ -151,6 +154,19 @@ namespace Bau.Libraries.DbStudio.Application.Repository
 		}
 
 		/// <summary>
+		///		Carga la cola de parámetros de conexión
+		/// </summary>
+		private void LoadQueueConnectionParameters(SolutionModel solution, MLNode rootML)
+		{
+			// Limpia la cola de conexiones
+			solution.QueueConnectionParameters.Clear();
+			// Carga la cola de conexiones
+			foreach (MLNode nodeML in rootML.Nodes)
+				if (nodeML.Name == TagQueueJsonParameters)
+					solution.QueueConnectionParameters.Add(nodeML.Value);
+		}
+
+		/// <summary>
 		///		Graba los datos de una solución
 		/// </summary>
 		internal void Save(SolutionModel solution, string fileName)
@@ -170,6 +186,7 @@ namespace Bau.Libraries.DbStudio.Application.Repository
 				rootML.Nodes.AddRange(GetDeploymentsNodes(solution));
 				rootML.Nodes.AddRange(GetFoldersNodes(solution));
 				rootML.Nodes.AddRange(GetStoragesNodes(solution));
+				rootML.Nodes.AddRange(GetQueueConnectionsNodes(solution));
 				// Graba el archivo
 				new LibMarkupLanguage.Services.XML.XMLWriter().Save(fileName, fileML);
 		}
@@ -268,6 +285,21 @@ namespace Bau.Libraries.DbStudio.Application.Repository
 					nodesML.Add(TagFolder, folder);
 				// Devuelve la colección de nodos
 				return nodesML;
+		}
+
+		/// <summary>
+		///		Obtiene los nodos de la cola de parámetros de conexión
+		/// </summary>
+		private MLNodesCollection GetQueueConnectionsNodes(SolutionModel solution)
+		{
+			MLNodesCollection nodes = new MLNodesCollection();
+
+				// Añade los nodos con os parámetrosde la cola
+				foreach (string connectionParameters in solution.QueueConnectionParameters.Enumerate())
+					if (!string.IsNullOrWhiteSpace(connectionParameters))
+						nodes.Add(new MLNode(TagQueueJsonParameters, connectionParameters));
+				// Devuelve la colección de nodos
+				return nodes;
 		}
 	}
 }

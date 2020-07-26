@@ -13,7 +13,8 @@
 				ItemsSource="{Binding Path=Children}"
 				SelectedItemChanged="trvExplorer_SelectedItemChanged"
 				MouseDoubleClick="trvExplorer_MouseDoubleClick" MouseDown="trvExplorer_MouseDown"
-				PreviewMouseLeftButtonDown="trvExplorer_PreviewMouseLeftButtonDown" PreviewMouseMove="trvExplorer_PreviewMouseMove" >
+				PreviewMouseLeftButtonDown="trvExplorer_PreviewMouseLeftButtonDown" PreviewMouseMove="trvExplorer_PreviewMouseMove"
+				Drop="trvExplorer_Drop" AllowDrop="True">
 			<TreeView.Resources>
 				<!-- Plantilla de los nodos -->
 				<HierarchicalDataTemplate DataType="{x:Type ViewModel:BaseTreeNodeViewModel}" ItemsSource="{Binding Children}">

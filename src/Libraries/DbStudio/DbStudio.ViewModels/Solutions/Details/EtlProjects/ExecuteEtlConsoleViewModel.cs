@@ -54,9 +54,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 				// Comprueba los datos introducidos
 				if (string.IsNullOrWhiteSpace(EtlConsoleFileName) || !System.IO.File.Exists(EtlConsoleFileName))
 					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Introduzca un nombre de archivo válido para la consola de ejecución");
-				else if (string.IsNullOrWhiteSpace(ProjectFileName))
+				else if (string.IsNullOrWhiteSpace(ProjectFileName) || !System.IO.File.Exists(ProjectFileName))
 					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Introduzca un nombre de archivo válido para el proyecto");
-				else if (string.IsNullOrWhiteSpace(ContextFileName))
+				else if (string.IsNullOrWhiteSpace(ContextFileName) || !System.IO.File.Exists(ContextFileName))
 					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Introduzca un nombre de archivo válido para el contexto");
 				else 
 					validated = true;
@@ -73,6 +73,14 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 		}
 
 		/// <summary>
+		///		Obtiene el mensaje que se debe mostrar al cerrar la ventana
+		/// </summary>
+		public string GetSaveAndCloseMessage()
+		{
+			return "¿Desea grabar la consulta antes de continuar?";
+		}
+
+		/// <summary>
 		///		Ejecuta el script sobre una consola
 		/// </summary>
 		private void ExecuteConsole()
@@ -83,6 +91,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 
 					// Guarda el archivo de contexto
 					SolutionViewModel.ConnectionExecutionViewModel.EtlParametersFileName = ContextFileName;
+					SolutionViewModel.MainViewModel.SaveSolution();
 					// Ejecuta la consola
 					processor.ExecuteApplication(EtlConsoleFileName,
 												 $"--project \"{ProjectFileName}\" --context \"{ContextFileName}\"",

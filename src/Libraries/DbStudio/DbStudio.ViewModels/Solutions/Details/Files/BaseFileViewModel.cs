@@ -131,6 +131,14 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 		protected abstract void SaveFile(LibLogger.Models.Log.BlockLogModel block, string fileName);
 
 		/// <summary>
+		///		Obtiene el mensaje que se debe mostrar al cerrar la ventana
+		/// </summary>
+		public string GetSaveAndCloseMessage()
+		{
+			return "¿Desea grabar el archivo antes de continuar?";
+		}
+
+		/// <summary>
 		///		Solución
 		/// </summary>
 		public SolutionViewModel SolutionViewModel { get; }

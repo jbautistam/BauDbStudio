@@ -29,6 +29,7 @@ namespace Bau.DbStudio.Views.Tools
 			txtFontSize.Value = MainWindow.MainController.ConfigurationController.EditorFontSize;
 			chkShowLineNumber.IsChecked = MainWindow.MainController.ConfigurationController.EditorShowLinesNumber;
 			fnConsole.FileName = MainWindow.MainController.ConfigurationController.ConsoleExecutable;
+			chkShowNotifications.IsChecked = MainWindow.MainController.ConfigurationController.ShowWindowNotifications;
 		}
 
 		/// <summary>
@@ -60,6 +61,7 @@ namespace Bau.DbStudio.Views.Tools
 				MainWindow.MainController.ConfigurationController.EditorFontSize = txtFontSize.Value ?? 10;
 				MainWindow.MainController.ConfigurationController.EditorShowLinesNumber = chkShowLineNumber.IsChecked ?? false;
 				MainWindow.MainController.ConfigurationController.ConsoleExecutable = fnConsole.FileName;
+				MainWindow.MainController.ConfigurationController.ShowWindowNotifications = chkShowNotifications.IsChecked ?? false;
 				// Graba la configuración
 				MainWindow.MainController.ConfigurationController.Save();
 				// Cierra la ventana

@@ -37,6 +37,11 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Repository
 		private const string TagName = "Name";
 		private const string TagType = "Type";
 		private const string TagConvertPath = "ConvertPath";
+		private const string TagIfExists = "IfExists";
+		private const string TagThen = "Then";
+		private const string TagElse = "Else";
+		private const string TagExcelSheetIndex = "ExcelSheetIndex";
+		private const string TagExcelWithHeader = "ExcelWithHeader";
 
 		/// <summary>
 		///		Carga los datos del proceso
@@ -68,29 +73,40 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Repository
 
 				// Carga las sentencias
 				foreach (MLNode nodeML in rootML.Nodes)
-					switch (nodeML.Name)
-					{
-						case TagBlock:
-								sentences.Add(LoadBlockSentence(nodeML));
-							break;
-						case TagCopy:
-								sentences.Add(LoadCopySentence(nodeML));
-							break;
-						case TagDelete:
-								sentences.Add(LoadDeleteSentence(nodeML));
-							break;
-						case TagExecute:
-								sentences.Add(LoadExecuteSentence(nodeML));
-							break;
-						case TagConvertFile:
-								sentences.Add(LoadConvertFileSentence(nodeML));
-							break;
-						case TagConvertPath:
-								sentences.Add(LoadConvertPathSentence(nodeML));
-							break;
-					}
+				{
+					BaseSentence sentence = LoadSentence(nodeML);
+
+						if (sentence != null)
+							sentences.Add(sentence);
+				}
 				// Devuelve la lista de sentencias
 				return sentences;
+		}
+
+		/// <summary>
+		///		Carga los datos de una sentencia
+		/// </summary>
+		private BaseSentence LoadSentence(MLNode rootML)
+		{
+			switch (rootML.Name)
+			{
+				case TagBlock:
+					return LoadBlockSentence(rootML);
+				case TagCopy:
+					return LoadCopySentence(rootML);
+				case TagDelete:
+					return LoadDeleteSentence(rootML);
+				case TagExecute:
+					return LoadExecuteSentence(rootML);
+				case TagConvertFile:
+					return LoadConvertFileSentence(rootML);
+				case TagConvertPath:
+					return LoadConvertPathSentence(rootML);
+				case TagIfExists:
+					return LoadIfExistSentence(rootML);
+				default:
+					return null;
+			}
 		}
 
 		/// <summary>
@@ -215,6 +231,8 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Repository
 				AssignSentence(sentence, rootML);
 				sentence.FileNameSource = rootML.Attributes[TagFrom].Value.TrimIgnoreNull();
 				sentence.FileNameTarget = rootML.Attributes[TagTo].Value.TrimIgnoreNull();
+				sentence.ExcelSheetIndex = rootML.Attributes[TagExcelSheetIndex].Value.GetInt(1);
+				sentence.ExcelWithHeader = rootML.Attributes[TagExcelWithHeader].Value.GetBool(true);
 				// Carga las columnas
 				sentence.Columns.AddRange(LoadColumns(rootML));
 				// Devuelve la sentencia
@@ -253,6 +271,33 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Repository
 				sentence.Path = rootML.Attributes[TagPath].Value.TrimIgnoreNull();
 				sentence.Source = rootML.Attributes[TagFrom].Value.GetEnum(ConvertPathSentence.FileType.Unknown);
 				sentence.Target = rootML.Attributes[TagTo].Value.GetEnum(ConvertPathSentence.FileType.Unknown);
+				sentence.ExcelSheetIndex = rootML.Attributes[TagExcelSheetIndex].Value.GetInt(1);
+				sentence.ExcelWithHeader = rootML.Attributes[TagExcelWithHeader].Value.GetBool(true);
+				// Devuelve la sentencia
+				return sentence;
+		}
+
+		/// <summary>
+		///		Carga una sentencia IfExists
+		/// </summary>
+		private BaseSentence LoadIfExistSentence(MLNode rootML)
+		{
+			IfExistsSentence sentence = new IfExistsSentence();
+
+				// Carga los datos
+				AssignSentence(sentence, rootML);
+				sentence.Path = rootML.Attributes[TagPath].Value.TrimIgnoreNull();
+				// Carga las sentencias
+				foreach (MLNode nodeML in rootML.Nodes)
+					switch (nodeML.Name)
+					{
+						case TagThen:
+								sentence.IfSentences.AddRange(LoadSentences(nodeML));
+							break;
+						case TagElse:
+								sentence.ElseSentences.AddRange(LoadSentences(nodeML));
+							break;
+					}
 				// Devuelve la sentencia
 				return sentence;
 		}

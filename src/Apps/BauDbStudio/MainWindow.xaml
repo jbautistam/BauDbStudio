@@ -206,7 +206,16 @@
 					</MenuItem.Icon>
 				</MenuItem>
 			</MenuItem>
+
+			<MenuItem Header="A_yuda">
+				<MenuItem Header="Acerca de ..." Click="AboutMenuItem_Click">
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" />
+					</MenuItem.Icon>
+				</MenuItem>
+			</MenuItem>
 		</Menu>
+
 		<ToolBar Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
 			<Button ToolTip="Añadir carpeta" Command="{Binding Path=SolutionViewModel.TreeFoldersViewModel.NewFolderFilesCommand}" Margin="2">
 				<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Folder.png" />
@@ -229,16 +238,67 @@
 				<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Refresh.png" />
 			</Button>
 			<Separator Margin="2"/>
-			<Button ToolTip="Consulta" Command="{Binding Path=SolutionViewModel.TreeConnectionsViewModel.NewQueryCommand}" Margin="2">
-				<Image Width="16" Height="16" Source="/Resources/Images/Script.png" />
-			</Button>
 			<ComboBox HorizontalAlignment="Right" Width="200" MinWidth="200" Margin="20,2,0,2" 
 						  ItemsSource="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.Connections.Items}" DisplayMemberPath="Text" 
 						  SelectedItem="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.Connections.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-			<Button Content="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.ConnectionShortFileName}" Margin="2"
-					ToolTip="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.ConnectionParametersFileName}"
-					Command="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.OpenParametersFileCommand}"
-					Foreground="Black" FontWeight="Normal" />
+
+			<ToggleButton x:Name="cmdParametersPopup" IsChecked="False" HorizontalContentAlignment="Stretch" Margin="2" 
+					Grid.Row="0" Grid.Column="0" Foreground="Black">
+				<ToggleButton.Content>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="Auto"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Row="0" Grid.Column="0" Content="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.ConnectionShortFileName}" 
+							    ToolTip="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.ConnectionParametersFileName}"
+								Command="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.OpenParametersFileCommand}"
+							    FontWeight="Normal" Background="Transparent" BorderThickness="0" Margin="2"/>
+						<Image Width="20" Height="20" Grid.Row="0" Grid.Column="1" Margin="0" Source="/BauControls;component/Themes/Images/ArrowDown.png" />
+					</Grid>
+				</ToggleButton.Content>
+			</ToggleButton>
+
+			<Popup IsOpen="{Binding ElementName=cmdParametersPopup,Path=IsChecked}" PlacementTarget="{Binding ElementName=cmdParametersPopup}" 
+				   Placement="Bottom" PopupAnimation="Slide" StaysOpen="False" Width="700">
+				<Grid Background="#FFDADADA">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="200" />
+					</Grid.RowDefinitions>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*" />
+					</Grid.ColumnDefinitions>
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto" />
+							<RowDefinition Height="*" />
+						</Grid.RowDefinitions>
+						<ListView Grid.Row="1" Grid.Column="0" 
+								  ItemsSource="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.LastParameterFiles.Items}" 
+								  SelectedItem="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.LastParameterFiles.SelectedItem}">
+							<ListView.View>
+								<GridView>
+									<GridViewColumn Width="Auto" Header="Archivo">
+										<GridViewColumn.CellTemplate>
+											<DataTemplate>
+												<TextBlock Text="{Binding Path=File}" />
+											</DataTemplate>
+										</GridViewColumn.CellTemplate>
+									</GridViewColumn>
+									<GridViewColumn Width="Auto" Header="Directorio">
+										<GridViewColumn.CellTemplate>
+											<DataTemplate>
+												<TextBlock Text="{Binding Path=Path}" />
+											</DataTemplate>
+										</GridViewColumn.CellTemplate>
+									</GridViewColumn>
+								</GridView>
+							</ListView.View>
+						</ListView>
+					</Grid>
+				</Grid>
+			</Popup>
+
 			<Button Margin="5,0,0,0" ToolTip="Seleccionar archivo de parámetros" 
 					Command="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.UpdateParametersFileCommand}">
 				<Image Width="16" Height="16" Source="/Resources/Images/File.png" />
@@ -253,9 +313,13 @@
 			</Button>
 			<Label Content="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.ExecutionTime}" Margin="2"
 				   Foreground="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.ExecutionTimeColor,Converter={StaticResource MVVMColorConverter}}"/>
+			<Separator/>
+			<Button ToolTip="Consulta" Command="{Binding Path=SolutionViewModel.TreeConnectionsViewModel.NewQueryCommand}" Margin="2">
+				<Image Width="16" Height="16" Source="/Resources/Images/Script.png" />
+			</Button>
 		</ToolBar>
 
-		<avalonDockExtended:DockLayout x:Name="dckManager" Grid.Row="2" Grid.Column="0">
+		<avalonDockExtended:DockLayout x:Name="dckManager" Grid.Row="2" Grid.Column="0" Drop="dckManager_Drop" AllowDrop="True">
 			<avalonDock:DockingManager.Theme>
 				<avalonDock:AeroTheme></avalonDock:AeroTheme>
 			</avalonDock:DockingManager.Theme>
