@@ -537,6 +537,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 				SolutionViewModel.MainViewModel.SaveSolution();
 				// Carga los nombres de archivos en el viewModel
 				LoadConnectionFileNames();
+				// y actualiza la lista de archivos de parámetros seleccionado
+				LoadListParameterFiles();
 				// Actualiza el directorio seleccionado
 				SolutionViewModel.MainViewModel.LastPathSelected = System.IO.Path.GetDirectoryName(fileName);
 			}
