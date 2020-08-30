@@ -63,6 +63,8 @@ namespace Bau.Libraries.LibJobProcessor.Core.Models
 					errors.Add(this, null, $"{nameof(ProjectWorkPath)} is not defined");
 				else if (!System.IO.Directory.Exists(ProjectWorkPath))
 					errors.Add(this, null, $"The path '{ProjectWorkPath}' doesn't exists");
+				else if (Jobs.Count == 0)
+					errors.Add(this, null, "There is no steps in this project");
 				else // Valida los pasos
 					foreach (Jobs.JobStepModel job in Jobs)
 						errors.AddRange(job.Validate(1));

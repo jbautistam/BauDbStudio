@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.ComboItems;
-using Bau.Libraries.DbStudio.Application.Connections.Models;
+using Bau.Libraries.DbScripts.Manager.Connections.Models;
 using Bau.Libraries.DbStudio.Models.Connections;
 using Bau.Libraries.LibLogger.Models.Log;
 using Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects;
@@ -27,6 +27,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 			Unknown,
 			/// <summary>Script de SQL</summary>
 			ScriptSql,
+			/// <summary>Script de SQL extendido (interpretado)</summary>
+			ScriptSqlExtended,
 			/// <summary>Xml de procesos</summary>
 			JobsXml,
 			/// <summary>Lote de scripts SQL</summary>
@@ -187,6 +189,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 							break;
 						case ExecutionMode.BatchSql:
 						case ExecutionMode.ScriptSql:
+						case ExecutionMode.ScriptSqlExtended:
 								await PrepareExecuteScriptSqlAsync(selectedViewModel);
 							break;
 						case ExecutionMode.JobsXml:
@@ -295,13 +298,15 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 			switch (viewModel)
 			{
 				case Files.FileViewModel fileViewModel:
-					if (fileViewModel.FileName.EndsWith(".sql", StringComparison.CurrentCultureIgnoreCase))
+					if (fileViewModel.FileName.EndsWith(".sqlx", StringComparison.CurrentCultureIgnoreCase))
+						return ExecutionMode.ScriptSqlExtended;
+					else if (fileViewModel.FileName.EndsWith(".sql", StringComparison.CurrentCultureIgnoreCase))
 						return ExecutionMode.ScriptSql;
 					else if (fileViewModel.FileName.EndsWith(".xml", StringComparison.CurrentCultureIgnoreCase))
 						return ExecutionMode.JobsXml;
 					else
 						return ExecutionMode.Unknown;
-				case ExecuteEtlConsoleViewModel consoleViewModel:
+				case ExecuteEtlConsoleViewModel _:
 					return ExecutionMode.BatchEtl;
 				case ExecuteFilesViewModel _:
 					return ExecutionMode.BatchSql;
@@ -363,7 +368,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 				else if (fileViewModel.IsUpdated)
 					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Grabe el contenido del archivo antes de ejecutar");
 				else if (string.IsNullOrWhiteSpace(fileViewModel.Content))
-					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Introduzca el proyecto para ejecutar");
+					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("El archivo está vacío");
 				else if (string.IsNullOrWhiteSpace(EtlParametersFileName) || !System.IO.File.Exists(EtlParametersFileName))
 					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Seleccione un archivo de contexto");
 				else

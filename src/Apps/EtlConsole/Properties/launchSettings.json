@@ -2,7 +2,7 @@
   "profiles": {
     "EtlConsole": {
       "commandName": "Project",
-      "commandLineArgs": "--project \"C:\\Projects\\Repos\\Foundation\\SqlScripts\\src\\SparkSqlScripts\\XmlScripts\\Engine stocks\\Validation\\Stock validation.xml\" --context \"C:\\Projects\\Repos\\Foundation\\SqlScripts\\src\\SparkSqlScripts\\XmlScripts\\Engine stocks\\Parameters\\Vidal.Context.xml\""
+      "commandLineArgs": "--Project \"C:\\Projects\\Repos\\Foundation\\EngineScripts\\src\\XmlScripts\\DemoClient\\CreateScripts\\00_CreateDemo.Process.xml\" --Context \"C:\\Projects\\Repos\\Foundation\\EngineScripts\\src\\XmlScripts\\DemoClient\\Clents\\Agatha\\Agatha.CreateDemo.Context.xml\""
     }
   }
 }

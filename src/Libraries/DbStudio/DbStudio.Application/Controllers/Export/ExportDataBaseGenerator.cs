@@ -30,7 +30,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Export
 			// Limpia los errores
 			Errors.Clear();
 			// Carga el esquema
-			await Manager.ConnectionManager.LoadSchemaAsync(connection, cancellationToken);
+			await Manager.DbScriptsManager.LoadSchemaAsync(connection, cancellationToken);
 			// Crea el directorio
 			LibHelper.Files.HelperFiles.MakePath(path);
 			// Genera los archivos
@@ -61,7 +61,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Export
 		private void ExportTable(BlockLogModel block, ConnectionModel connection, ConnectionTableModel table, string path, 
 								 SolutionManager.FormatType formatType, long blockSize)
 		{
-			IDbProvider provider = Manager.ConnectionManager.GetDbProvider(connection);
+			IDbProvider provider = Manager.DbScriptsManager.GetDbProvider(connection);
 			long records = 0;
 			int totalPages = 1;
 

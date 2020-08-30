@@ -27,7 +27,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 		/// </summary>
 		public async Task<bool> GenerateAsync(CancellationToken cancellationToken)
 		{
-			IDbProvider provider = Manager.ConnectionManager.GetDbProvider(Options.Connection);
+			IDbProvider provider = Manager.DbScriptsManager.GetDbProvider(Options.Connection);
 
 				// Evita el warning
 				await Task.Delay(1);

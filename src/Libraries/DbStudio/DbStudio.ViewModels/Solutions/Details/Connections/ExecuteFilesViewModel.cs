@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.DbStudio.Models.Connections;
 using Bau.Libraries.LibLogger.Models.Log;
+using Bau.Libraries.DbScripts.Manager.Connections.Models;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 {
@@ -55,7 +56,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 		/// <summary>
 		///		Ejecuta el script
 		/// </summary>
-		internal async Task ExecuteScriptAsync(ConnectionModel connection, Application.Connections.Models.ArgumentListModel arguments, System.Threading.CancellationToken cancellationToken)
+		internal async Task ExecuteScriptAsync(ConnectionModel connection, ArgumentListModel arguments, System.Threading.CancellationToken cancellationToken)
 		{
 			// Marca el estado de los scripts
 			InitFileStatus();
@@ -93,7 +94,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 		///		Ejecuta un archivo
 		/// </summary>
 		private async Task<bool> ExecuteFileAsync(BlockLogModel block, ExecuteFilesItemViewModel file, ConnectionModel connection, 
-												  Application.Connections.Models.ArgumentListModel arguments, System.Threading.CancellationToken cancellationToken)
+												  ArgumentListModel arguments, System.Threading.CancellationToken cancellationToken)
 		{
 			bool executed = false;
 			System.Timers.Timer timer = new System.Timers.Timer(TimeSpan.FromMilliseconds(500).TotalMilliseconds);

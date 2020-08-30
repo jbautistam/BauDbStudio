@@ -52,6 +52,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files.ScriptsManag
 				manager.AddProcessor(new LibJobProcessor.Database.JobDatabaseManager(Logger));
 				manager.AddProcessor(new LibJobProcessor.Powershell.JobPowershellManager(Logger));
 				manager.AddProcessor(new LibJobProcessor.FilesShell.JobFileShellManager(Logger));
+				manager.AddProcessor(new LibJobProcessor.Rest.JobRestManager(Logger));
 				// Ejecuta el proyecto
 				await manager.ProcessAsync(project, context, cancellationToken);
 				// Asigna los errores

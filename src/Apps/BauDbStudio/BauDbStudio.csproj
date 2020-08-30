@@ -41,6 +41,7 @@
     <None Remove="Resources\Images\FilePowershell.png" />
     <None Remove="Resources\Images\FilePython.png" />
     <None Remove="Resources\Images\FileSql.png" />
+    <None Remove="Resources\Images\FileSqlExtended.png" />
     <None Remove="Resources\Images\FileXml.png" />
     <None Remove="Resources\Images\FolderNode.png" />
     <None Remove="Resources\Images\Key.png" />
@@ -88,6 +89,7 @@
     <Resource Include="Resources\Images\ExecutionPlan.png" />
     <Resource Include="Resources\Images\Export.png" />
     <Resource Include="Resources\Images\FileExcel.png" />
+    <Resource Include="Resources\Images\FileSqlExtended.png" />
     <Resource Include="Resources\Images\Loading.png" />
     <Resource Include="Resources\Images\Schema.png" />
     <Resource Include="Resources\Images\Storage.png" />
@@ -162,6 +164,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\EtlProjects\CreateTestXmlView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Tools\CreateFileView.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

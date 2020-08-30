@@ -85,6 +85,9 @@ namespace Bau.DbStudio.Controllers
 					case Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects.ExportDatabaseViewModel viewModel:
 							result = HostHelperController.ShowDialog(MainWindow, new Views.EtlProjects.ExportDatabaseView(viewModel));
 						break;
+					case Libraries.DbStudio.ViewModels.Tools.CreateFileViewModel viewModel:
+							result = HostHelperController.ShowDialog(MainWindow, new Views.Tools.CreateFileView(viewModel));
+						break;
 				}
 				// Devuelve el resultado
 				return result;

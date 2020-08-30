@@ -25,7 +25,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 		/// </summary>
 		public async Task<bool> GenerateAsync(CancellationToken cancellationToken)
 		{
-			IDbProvider provider = Manager.ConnectionManager.GetDbProvider(Options.Connection);
+			IDbProvider provider = Manager.DbScriptsManager.GetDbProvider(Options.Connection);
 
 				// Limpia los errores
 				Errors.Clear();
@@ -41,7 +41,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 						// Genera el archivo de creación de la base de datos
 						generator.WriteFileCreateConnection(Options.DataBaseValidateVariable, Options.MountPathVariable, "00. Create database.sql");
 						// Carga el esquema
-						await Manager.ConnectionManager.LoadSchemaAsync(Options.Connection, cancellationToken);
+						await Manager.DbScriptsManager.LoadSchemaAsync(Options.Connection, cancellationToken);
 						// Prepara los archivos de validación de tablas
 						foreach ((string schema, List<ConnectionTableModel> tables) in schemaTables.Enumerate())
 							if (!cancellationToken.IsCancellationRequested)

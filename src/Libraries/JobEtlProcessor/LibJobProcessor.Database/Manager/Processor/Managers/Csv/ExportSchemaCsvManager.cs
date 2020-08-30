@@ -116,7 +116,7 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Managers.Csv
 					fields += $"[{field.Name}]";
 				}
 				// Añade la cadena SQL al comando
-				return new Sentences.Parameters.ProviderSentenceModel($"SELECT {fields} FROM {table.FullName}");
+				return new Sentences.Parameters.ProviderSentenceModel($"SELECT {fields} FROM {table.FullName}", TimeSpan.FromMinutes(5));
 		}
 	}
 }

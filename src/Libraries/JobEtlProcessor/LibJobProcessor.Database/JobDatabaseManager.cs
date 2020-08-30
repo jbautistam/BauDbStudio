@@ -138,19 +138,24 @@ namespace Bau.Libraries.LibJobProcessor.Database
 				// Asigna las propiedades básicas a la conexión
 				connection.Type = node.Attributes["Type"].GetValueString();
 				connection.GlobalId = node.Attributes["Key"].GetValueString();
-				connection.Name = node.Attributes["Name"].GetValueString();
-				connection.Description = node.Attributes["Description"].GetValueString();
 				// Asigna el resto de propiedades
 				foreach (LibDataStructures.Trees.TreeNodeModel child in node.Nodes)
 					if (!string.IsNullOrWhiteSpace(child.Id))
 					{
 						string value = child.Value?.ToString();
 
-							// Si el parámetro identifica un nombre de archivo, le añade el directorio
-							if (child.Id.EqualsIgnoreCase("FileName") && !System.IO.File.Exists(value))
-								value = project.GetFullFileName(value);
-							// Añade un parámetro a la conexión
-							connection.Parameters.Add(child.Id, value);
+							if (child.Id.Equals("Name", StringComparison.CurrentCultureIgnoreCase))
+								connection.Name = value;
+							else if (child.Id.Equals("Description", StringComparison.CurrentCultureIgnoreCase))
+								connection.Description = value;
+							else // Parámetros correspondientes a la conexión
+							{
+								// Si el parámetro identifica un nombre de archivo, le añade el directorio
+								if (child.Id.EqualsIgnoreCase("FileName") && !System.IO.File.Exists(value))
+									value = project.GetFullFileName(value);
+								// Añade un parámetro a la conexión
+								connection.Parameters.Add(child.Id, value);
+							}
 					}
 				// Devuelve la conexión
 				return connection;

@@ -13,28 +13,23 @@ namespace Bau.Libraries.LibJobProcessor.Rest.Repository
 	internal class JobRestRepository
 	{
 		// Constantes privadas
-		private const string TagRoot = "ShellScript";
+		private const string TagRoot = "RestScript";
 		private const string TagBlock = "Block";
 		private const string TagEnabled = "Enabled";
 		private const string TagTimeout = "Timeout";
 		private const string TagMessage = "Message";
-		private const string TagCopy = "Copy";
-		private const string TagDelete = "Delete";
+		private const string TagCallApiSentence = "CallApi";
+		private const string TagUrl = "Url";
+		private const string TagUser = "User";
+		private const string TagPassword = "Password";
+		private const string TagMethod = "Method";
+		private const string TagType = "Type";
+		private const string TagEndPoint = "EndPoint";
+		private const string TagBody = "Body";
+		private const string TagResult = "Result";
 		private const string TagFrom = "From";
 		private const string TagTo = "To";
-		private const string TagMask = "Mask";
-		private const string TagPath = "Path";
-		private const string TagExecute = "Execute";
-		private const string TagProcess = "Process";
-		private const string TagArgument = "Argument";
-		private const string TagKey = "Key";
-		private const string TagValue = "Value";
-		private const string TagTransformFileName = "TransformFileName";
-		private const string TagConvertFile = "ConvertFile";
-		private const string TagColumn = "Column";
-		private const string TagName = "Name";
-		private const string TagType = "Type";
-		private const string TagConvertPath = "ConvertPath";
+		private const string TagException = "Exception";
 
 		/// <summary>
 		///		Carga los datos del proceso
@@ -71,24 +66,32 @@ namespace Bau.Libraries.LibJobProcessor.Rest.Repository
 						case TagBlock:
 								sentences.Add(LoadBlockSentence(nodeML));
 							break;
-						case TagCopy:
-								sentences.Add(LoadCopySentence(nodeML));
+						case TagCallApiSentence:
+								sentences.Add(LoadApiDefinitionSentence(nodeML));
 							break;
-						case TagDelete:
-								sentences.Add(LoadDeleteSentence(nodeML));
-							break;
-						case TagExecute:
-								sentences.Add(LoadExecuteSentence(nodeML));
-							break;
-						case TagConvertFile:
-								sentences.Add(LoadConvertFileSentence(nodeML));
-							break;
-						case TagConvertPath:
-								sentences.Add(LoadConvertPathSentence(nodeML));
+						case TagException:
+								sentences.Add(LoadExceptionSentence(nodeML));
 							break;
 					}
 				// Devuelve la lista de sentencias
 				return sentences;
+		}
+
+		/// <summary>
+		///		Carga los datos de una excepción
+		/// </summary>
+		private BaseSentence LoadExceptionSentence(MLNode rootML)
+		{
+			ExceptionSentence sentence = new ExceptionSentence();
+
+				// Asigna las propiedades
+				AssignDefaultProperties(sentence, rootML);
+				if (string.IsNullOrWhiteSpace(rootML.Attributes[TagMessage].Value))
+					sentence.Message = rootML.Value.TrimIgnoreNull();
+				else
+					sentence.Message = rootML.Attributes[TagMessage].Value.TrimIgnoreNull();
+				// Devuelve la sentencia
+				return sentence;
 		}
 
 		/// <summary>
@@ -99,12 +102,77 @@ namespace Bau.Libraries.LibJobProcessor.Rest.Repository
 			BlockSentence sentence = new BlockSentence();
 
 				// Asigna las propiedades
-				AssignSentence(sentence, rootML);
+				AssignDefaultProperties(sentence, rootML);
 				sentence.Message = rootML.Attributes[TagMessage].Value;
 				// Carga las sentencias del bloque
 				sentence.Sentences.AddRange(LoadSentences(rootML));
 				// Devuelve la sentencia leida
 				return sentence;
+		}
+
+		/// <summary>
+		///		Carga una sentencia de deifinición de API
+		/// </summary>
+		private BaseSentence LoadApiDefinitionSentence(MLNode rootML)
+		{
+			CallApiSentence sentence = new CallApiSentence();
+
+				// Asigna las propiedades
+				AssignDefaultProperties(sentence, rootML);
+				sentence.Url = rootML.Attributes[TagUrl].Value.TrimIgnoreNull();
+				sentence.User = rootML.Attributes[TagUser].Value.TrimIgnoreNull();
+				sentence.Password = rootML.Attributes[TagPassword].Value.TrimIgnoreNull();
+				// Obtiene los métodos
+				foreach (MLNode nodeML in rootML.Nodes)
+					if (nodeML.Name == TagMethod)
+						sentence.Methods.Add(LoadMethod(nodeML));
+				// Devuelve la sentencia
+				return sentence;
+		}
+
+		/// <summary>
+		///		Carga los datos de un método
+		/// </summary>
+		private CallApiMethodSentence LoadMethod(MLNode rootML)
+		{
+			CallApiMethodSentence sentence = new CallApiMethodSentence();
+
+				// Asigna las propiedades
+				AssignDefaultProperties(sentence, rootML);
+				sentence.EndPoint = rootML.Attributes[TagEndPoint].Value.TrimIgnoreNull();
+				sentence.Method = rootML.Attributes[TagType].Value.GetEnum(CallApiMethodSentence.MethodType.Unkwnown);
+				sentence.Body = rootML.Nodes[TagBody].Value.TrimIgnoreNull();
+				// Obtiene los resultados
+				foreach (MLNode nodeML in rootML.Nodes)
+					if (nodeML.Name == TagResult)
+						sentence.Results.Add(LoadResult(nodeML));
+				// Devuelve la sentencia
+				return sentence;
+		}
+
+		/// <summary>
+		///		Carga la sentencia de tratamiento de resultados
+		/// </summary>
+		private CallApiResultSentence LoadResult(MLNode rootML)
+		{
+			CallApiResultSentence sentence = new CallApiResultSentence();
+
+				// Obtiene los resultados
+				sentence.ResultFrom = rootML.Attributes[TagFrom].Value.GetInt(0);
+				sentence.ResultTo = rootML.Attributes[TagTo].Value.GetInt(0);
+				// Carga las sentencias
+				sentence.Sentences.AddRange(LoadSentences(rootML));
+				// Devuelve la sentencia
+				return sentence;
+		}
+
+		/// <summary>
+		///		Asigna los datos básicos de una sentencia
+		/// </summary>
+		private void AssignDefaultProperties(BaseSentence sentence, MLNode rootML)
+		{
+			sentence.Enabled = rootML.Attributes[TagEnabled].Value.GetBool(true);
+			sentence.Timeout = GetTimeout(rootML, TimeSpan.FromMinutes(5));
 		}
 
 		/// <summary>
@@ -143,123 +211,6 @@ namespace Bau.Libraries.LibJobProcessor.Rest.Repository
 				}
 				// Devuelve el timeout de la sentencia
 				return timeout ?? defaultTimeOut;
-		}
-
-		/// <summary>
-		///		Carga la sentencia para descargar un archivo
-		/// </summary>
-		private BaseSentence LoadCopySentence(MLNode rootML)
-		{
-			CopySentence sentence = new CopySentence();
-
-				// Carga los datos de la sentencia
-				AssignSentence(sentence, rootML);
-				sentence.Source = rootML.Attributes[TagFrom].Value.TrimIgnoreNull();
-				sentence.Target = rootML.Attributes[TagTo].Value.TrimIgnoreNull();
-				sentence.Mask = rootML.Attributes[TagMask].Value.TrimIgnoreNull();
-				// Devuelve la sentencia
-				return sentence;
-		}
-
-		/// <summary>
-		///		Carga una sentencia de borrado
-		/// </summary>
-		private BaseSentence LoadDeleteSentence(MLNode rootML)
-		{
-			DeleteSentence sentence = new DeleteSentence();
-
-				// Carga los datos de la sentencia
-				AssignSentence(sentence, rootML);
-				sentence.Path = rootML.Attributes[TagPath].Value.TrimIgnoreNull();
-				sentence.Mask = rootML.Attributes[TagMask].Value.TrimIgnoreNull();
-				// Devuelve la sentencia
-				return sentence;
-		}
-
-		/// <summary>
-		///		Carga una sentencia de ejecución de un proceso
-		/// </summary>
-		private BaseSentence LoadExecuteSentence(MLNode rootML)
-		{
-			ExecuteSentence sentence = new ExecuteSentence();
-
-				// Carga los datos
-				AssignSentence(sentence, rootML);
-				sentence.Process = rootML.Attributes[TagProcess].Value.TrimIgnoreNull();
-				// Carga los argumentos
-				foreach (MLNode nodeML in rootML.Nodes)
-					if (nodeML.Name == TagArgument)
-						sentence.Arguments.Add(new ExecuteSentenceArgument
-														{
-															Key = nodeML.Attributes[TagKey].Value.TrimIgnoreNull(),
-															Value = nodeML.Attributes[TagValue].Value.TrimIgnoreNull(),
-															TransformFileName = nodeML.Attributes[TagTransformFileName].Value.GetBool()
-														}
-											  );
-				// Devuelve la sentencia
-				return sentence;
-		}
-
-		/// <summary>
-		///		Carga una sentencia de conversión de archivo
-		/// </summary>
-		private BaseSentence LoadConvertFileSentence(MLNode rootML)
-		{
-			ConvertFileSentence sentence = new ConvertFileSentence();
-
-				// Carga los datos
-				AssignSentence(sentence, rootML);
-				sentence.FileNameSource = rootML.Attributes[TagFrom].Value.TrimIgnoreNull();
-				sentence.FileNameTarget = rootML.Attributes[TagTo].Value.TrimIgnoreNull();
-				// Carga las columnas
-				sentence.Columns.AddRange(LoadColumns(rootML));
-				// Devuelve la sentencia
-				return sentence;
-		}
-
-		/// <summary>
-		///		Carga la definición de columnas de un archivo
-		/// </summary>
-		private List<FileColumnModel> LoadColumns(MLNode rootML)
-		{
-			List<FileColumnModel> columns = new List<FileColumnModel>();
-
-				// Carga la lista de columnas
-				foreach (MLNode nodeML in rootML.Nodes)
-					if (nodeML.Name == TagColumn)
-						columns.Add(new FileColumnModel
-											{
-												Name = rootML.Attributes[TagName].Value,
-												Type = rootML.Attributes[TagType].Value.GetEnum(FileColumnModel.ColumnType.String)
-											}
-									);
-				// Devuelve la lista de columnas
-				return columns;
-		}
-
-		/// <summary>
-		///		Carga la sentencia de conversión de archivos de un directorio
-		/// </summary>
-		private BaseSentence LoadConvertPathSentence(MLNode rootML)
-		{
-			ConvertPathSentence sentence = new ConvertPathSentence();
-
-				// Carga los datos
-				AssignSentence(sentence, rootML);
-				sentence.Path = rootML.Attributes[TagPath].Value.TrimIgnoreNull();
-				sentence.Source = rootML.Attributes[TagFrom].Value.GetEnum(ConvertPathSentence.FileType.Unknown);
-				sentence.Target = rootML.Attributes[TagTo].Value.GetEnum(ConvertPathSentence.FileType.Unknown);
-				// Devuelve la sentencia
-				return sentence;
-		}
-
-		/// <summary>
-		///		Asigna los datos de una sentencia asociada con un blob
-		/// </summary>
-		private void AssignSentence(BaseSentence sentence, MLNode rootML)
-		{
-			sentence.Enabled = rootML.Attributes[TagEnabled].Value.GetBool(true);
-			sentence.Timeout = GetTimeout(rootML, TimeSpan.FromMinutes(5));
 		}
 	}
 }

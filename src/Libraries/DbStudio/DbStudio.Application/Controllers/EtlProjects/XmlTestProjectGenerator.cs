@@ -30,7 +30,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 			// Limpia los errores
 			Errors.Clear();
 			// Carga el esquema
-			await Manager.ConnectionManager.LoadSchemaAsync(Connection, cancellationToken);
+			await Manager.DbScriptsManager.LoadSchemaAsync(Connection, cancellationToken);
 			// Genera los archivos
 			if (!cancellationToken.IsCancellationRequested)
 			{

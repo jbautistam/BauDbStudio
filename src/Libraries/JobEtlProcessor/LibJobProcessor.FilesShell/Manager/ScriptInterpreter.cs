@@ -272,7 +272,7 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Manager
 		/// <summary>
 		///		Convierte un archivo
 		/// </summary>
-		private async Task ConvertFileAsync(BlockLogModel block, string source, string target, Controllers.ExcelfileOptions options, CancellationToken cancellationToken)
+		private async Task ConvertFileAsync(BlockLogModel block, string source, string target, ExcelfileOptions options, CancellationToken cancellationToken)
 		{
 			bool converted = false;
 
@@ -280,11 +280,11 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Manager
 				block.Info($"Converting '{source}' to '{target}'");
 				// Convierte el archivo
 				if (source.EndsWith(".csv", StringComparison.CurrentCultureIgnoreCase) && target.EndsWith(".parquet", StringComparison.CurrentCultureIgnoreCase))
-					converted = await new Controllers.CsvToParquetConversor().ConvertAsync(block, source, target, cancellationToken);
+					converted = await new CsvToParquetConversor().ConvertAsync(block, source, target, cancellationToken);
 				else if (source.EndsWith(".parquet", StringComparison.CurrentCultureIgnoreCase) && target.EndsWith(".csv", StringComparison.CurrentCultureIgnoreCase))
-					converted = await new Controllers.ParquetToCsvConversor().ConvertAsync(block, source, target, cancellationToken);
+					converted = await new ParquetToCsvConversor().ConvertAsync(block, source, target, cancellationToken);
 				else if (source.EndsWith(".xlsx", StringComparison.CurrentCultureIgnoreCase) && target.EndsWith(".parquet", StringComparison.CurrentCultureIgnoreCase))
-					converted = await new Controllers.ExcelToParquetConversor().ConvertAsync(block, source, target, options, cancellationToken);
+					converted = await new ExcelToParquetConversor().ConvertAsync(block, source, target, options, cancellationToken);
 				// Indica el error si es necesario
 				if (!converted)
 					AddError(block, $"Cant convert file '{source}' to '{target}'");

@@ -182,25 +182,18 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 
 				if (!string.IsNullOrWhiteSpace(path))
 				{
-					string fileName = "Nuevo archivo.sql";
-
-						if (SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowInputString("Nombre del archivo", ref fileName) 
-										== BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+					Tools.CreateFileViewModel createFileViewModel = new Tools.CreateFileViewModel(SolutionViewModel, path);
+					
+						if (SolutionViewModel.MainViewModel.MainController.OpenDialog(createFileViewModel)
+										== BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes &&
+							!string.IsNullOrWhiteSpace(createFileViewModel.FileName))
 						{
-							// Quita los espacios
-							fileName = fileName.TrimIgnoreNull();
-							// Crea el archivo, abre el documento y actualiza el árbol
-							if (!string.IsNullOrWhiteSpace(fileName))
-							{
-								// Obtiene el nombre completo
-								fileName = System.IO.Path.Combine(path, fileName);
-								// Graba el archivo
-								LibHelper.Files.HelperFiles.SaveTextFile(fileName, string.Empty, System.Text.Encoding.UTF8);
-								// Abre la ventana
-								SolutionViewModel.MainViewModel.MainController.OpenWindow(new Details.Files.FileViewModel(SolutionViewModel, fileName));
-								// Actualiza el árbol
-								Load();
-							}
+							// Graba el archivo
+							LibHelper.Files.HelperFiles.SaveTextFile(createFileViewModel.FullFileName, string.Empty, System.Text.Encoding.UTF8);
+							// Abre la ventana
+							SolutionViewModel.MainViewModel.MainController.OpenWindow(new Details.Files.FileViewModel(SolutionViewModel, createFileViewModel.FullFileName));
+							// Actualiza el árbol
+							Load();
 						}
 				}
 		}

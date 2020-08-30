@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.DbStudio.Models.Connections;
+using Bau.Libraries.DbScripts.Manager.Connections.Models;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 {
@@ -65,8 +66,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 		/// <summary>
 		///		Ejecuta el script
 		/// </summary>
-		internal async Task ExecuteSqlScriptAsync(ConnectionModel connection, Application.Connections.Models.ArgumentListModel arguments,
-												  System.Threading.CancellationToken cancellationToken)
+		internal async Task ExecuteSqlScriptAsync(ConnectionModel connection, ArgumentListModel arguments, System.Threading.CancellationToken cancellationToken)
 		{
 			if (string.IsNullOrWhiteSpace(Content))
 				SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Introduzca una consulta para ejecutar");
@@ -78,13 +78,17 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 				{
 					string selectedText = GetEditorSelectedText();
 
+						// Si no hay nada seleccionado, se ejecuta todo el contenido
+						if (string.IsNullOrWhiteSpace(selectedText))
+							selectedText = Content;
 						// Ejecuta la consulta
-						if (!string.IsNullOrEmpty(selectedText))
+						if (FileName.EndsWith(".sql", StringComparison.CurrentCultureIgnoreCase))
 							await SolutionViewModel.MainViewModel.Manager.ExecuteQueryAsync(connection, selectedText, arguments, 
 																							connection.TimeoutExecuteScript, cancellationToken);
+						else if (FileName.EndsWith(".sqlx", StringComparison.CurrentCultureIgnoreCase))
+							await SolutionViewModel.MainViewModel.Manager.ExecuteInterpretedQueryAsync(connection, selectedText, arguments, cancellationToken);
 						else
-							await SolutionViewModel.MainViewModel.Manager.ExecuteQueryAsync(connection, Content, arguments, 
-																							connection.TimeoutExecuteScript, cancellationToken);
+							block.Error("No se reconoce el tipo de archivo coo SQL");
 						// Muestra el tiempo de ejecución
 						block.Info($"Tiempo de ejecución: {SolutionViewModel.ConnectionExecutionViewModel.ExecutionTime}");
 				}

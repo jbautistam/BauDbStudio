@@ -7,6 +7,7 @@ using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.DbStudio.Models.Connections;
 using Bau.Libraries.DbStudio.ViewModels.Controllers.Exporter;
 using Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections;
+using Bau.Libraries.DbScripts.Manager.Connections.Models;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Queries
 {
@@ -81,7 +82,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Queries
 							SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Seleccione una conexión");
 						else
 						{
-							(Application.Connections.Models.ArgumentListModel arguments, string error) = SolutionViewModel.ConnectionExecutionViewModel.GetParameters();
+							(ArgumentListModel arguments, string error) = SolutionViewModel.ConnectionExecutionViewModel.GetParameters();
 
 								if (!string.IsNullOrWhiteSpace(error))
 									SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage(error);
@@ -138,7 +139,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Queries
 							SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Seleccione una conexión");
 						else
 						{
-							(Application.Connections.Models.ArgumentListModel arguments, string error) = SolutionViewModel.ConnectionExecutionViewModel.GetParameters();
+							(ArgumentListModel arguments, string error) = SolutionViewModel.ConnectionExecutionViewModel.GetParameters();
 
 								if (!string.IsNullOrWhiteSpace(error))
 									SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage(error);
@@ -300,7 +301,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Queries
 						SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Seleccione una conexión");
 					else
 					{
-						(Application.Connections.Models.ArgumentListModel arguments, string error) = SolutionViewModel.ConnectionExecutionViewModel.GetParameters();
+						(ArgumentListModel arguments, string error) = SolutionViewModel.ConnectionExecutionViewModel.GetParameters();
 
 							if (!string.IsNullOrWhiteSpace(error))
 								SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage(error);
@@ -340,7 +341,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Queries
 		/// <summary>
 		///		Exporta el resultado de una consulta a un archivo 
 		/// </summary>
-		private async Task<(bool exported, string error)> ExportAsync(ConnectionModel connection, Application.Connections.Models.ArgumentListModel arguments, 
+		private async Task<(bool exported, string error)> ExportAsync(ConnectionModel connection, ArgumentListModel arguments, 
 																	  string fileName, CancellationToken cancellationToken)
 		{
 			using (System.Data.Common.DbDataReader reader = await SolutionViewModel.MainViewModel.Manager.ExecuteReaderAsync(connection, Query, arguments,

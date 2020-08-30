@@ -1,12 +1,12 @@
 ﻿using System;
+using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
 
 using Bau.Libraries.LibLogger.Core;
 using Bau.Libraries.DbStudio.Models;
 using Bau.Libraries.DbStudio.Models.Connections;
-using System.Data;
-using Bau.Libraries.DbStudio.Application.Connections.Models;
+using Bau.Libraries.DbScripts.Manager.Connections.Models;
 
 namespace Bau.Libraries.DbStudio.Application
 {
@@ -33,7 +33,7 @@ namespace Bau.Libraries.DbStudio.Application
 		{
 			Logger = logger;
 			PathConfiguration = pathConfiguration;
-			ConnectionManager = new Connections.ConnectionManager(this);
+			DbScriptsManager = new DbScripts.Manager.DbScriptsManager(logger);
 		}
 
 		/// <summary>
@@ -85,7 +85,7 @@ namespace Bau.Libraries.DbStudio.Application
 		/// </summary>
 		public async Task LoadSchemaAsync(ConnectionModel connection, CancellationToken cancellationToken)
 		{
-			await ConnectionManager.LoadSchemaAsync(connection, cancellationToken);
+			await DbScriptsManager.LoadSchemaAsync(connection, cancellationToken);
 		}
 
 		/// <summary>
@@ -94,16 +94,24 @@ namespace Bau.Libraries.DbStudio.Application
 		public async Task ExecuteQueryAsync(ConnectionModel connection, string query, ArgumentListModel arguments, 
 											TimeSpan timeout, CancellationToken cancellationToken)
 		{
-			await ConnectionManager.ExecuteQueryAsync(connection, query, arguments, timeout, cancellationToken);
+			await DbScriptsManager.ExecuteQueryAsync(connection, query, arguments, timeout, cancellationToken);
 		}
 
 		/// <summary>
-		///		Obtiene un <see cref="System.Data.DataTable"/> paginada con una consulta sobre una conexión
+		///		Ejecuta una consulta interpretada sobre una conexión
+		/// </summary>
+		public async Task ExecuteInterpretedQueryAsync(ConnectionModel connection, string query, ArgumentListModel arguments, CancellationToken cancellationToken)
+		{
+			await DbScriptsManager.ExecuteInterpretedQueryAsync(connection, query, arguments, cancellationToken);
+		}
+
+		/// <summary>
+		///		Obtiene un <see cref="DataTable"/> paginada con una consulta sobre una conexión
 		/// </summary>
 		public async Task<DataTable> GetDatatableQueryAsync(ConnectionModel connection, string query, ArgumentListModel arguments, 
 															int actualPage, int pageSize, TimeSpan timeout, CancellationToken cancellationToken)
 		{
-			return await ConnectionManager.GetDatatableQueryAsync(connection, query, arguments, actualPage, pageSize, timeout, cancellationToken);
+			return await DbScriptsManager.GetDatatableQueryAsync(connection, query, arguments, actualPage, pageSize, timeout, cancellationToken);
 		}
 
 		/// <summary>
@@ -112,15 +120,16 @@ namespace Bau.Libraries.DbStudio.Application
 		public async Task<System.Data.Common.DbDataReader> ExecuteReaderAsync(ConnectionModel connection, string query, ArgumentListModel arguments, 
 																			  TimeSpan timeout, CancellationToken cancellationToken)
 		{
-			return await ConnectionManager.ExecuteReaderAsync(connection, query, arguments, timeout, cancellationToken);
+			return await DbScriptsManager.ExecuteReaderAsync(connection, query, arguments, timeout, cancellationToken);
 		}
 
 		/// <summary>
 		///		Obtiene el plan de ejecución de una consulta
 		/// </summary>
-		public async Task<DataTable> GetExecutionPlanAsync(ConnectionModel connection, string query, ArgumentListModel arguments, TimeSpan timeout, CancellationToken cancellationToken)
+		public async Task<DataTable> GetExecutionPlanAsync(ConnectionModel connection, string query, ArgumentListModel arguments, 
+														   TimeSpan timeout, CancellationToken cancellationToken)
 		{
-			return await ConnectionManager.GetExecutionPlanAsync(connection, query, arguments, timeout, cancellationToken);
+			return await DbScriptsManager.GetExecutionPlanAsync(connection, query, arguments, timeout, cancellationToken);
 		}
 
 		/// <summary>
@@ -147,8 +156,8 @@ namespace Bau.Libraries.DbStudio.Application
 		public string WorkSpace { get; private set; }
 
 		/// <summary>
-		///		Manager de conexiones
+		///		Manager para el tratamiento de scripts
 		/// </summary>
-		internal Connections.ConnectionManager ConnectionManager { get; }
+		internal DbScripts.Manager.DbScriptsManager DbScriptsManager { get; }
 	}
 }

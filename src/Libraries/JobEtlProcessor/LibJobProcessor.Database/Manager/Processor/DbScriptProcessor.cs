@@ -233,29 +233,44 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor
 							// Ejecuta el comando
 							if (!string.IsNullOrWhiteSpace(error))
 								AddError($"Error when convert command. {error}");
-							else
+							else 
 							{
-								IEnumerator<DataTable> tableEnumerator = GetDataTable(provider, command).GetEnumerator();
+								bool exists = ExistsData(provider, command, sentence.Command.Timeout);
 
-									if (tableEnumerator.MoveNext())
-										try
-										{
-											DataTable table = tableEnumerator.Current;
-
-												if (table.Rows.Count > 0 && sentence.SentencesThen.Count > 0)
-													ExecuteWithContext(sentence.SentencesThen);
-												else if (table.Rows.Count == 0 && sentence.SentencesElse.Count > 0)
-													ExecuteWithContext(sentence.SentencesElse);
-										}
-										catch (Exception exception)
-										{
-											AddError($"Error when load data. {exception.Message}");
-										}
-									else if (sentence.SentencesElse.Count > 0) // ... no había ningún recordset para la tabla
-										ExecuteWithContext(sentence.SentencesElse);
+									if (!Stopped)
+									{
+										if (exists && sentence.SentencesThen.Count > 0)
+											ExecuteWithContext(sentence.SentencesThen);
+										else if (!exists && sentence.SentencesElse.Count > 0)
+											ExecuteWithContext(sentence.SentencesElse);
+									}
 							}
 					}
 			}
+		}
+
+		/// <summary>
+		///		Comprueba si existen datas para un consulta
+		/// </summary>
+		private bool ExistsData(ProviderModel provider, CommandModel command, TimeSpan timeout)
+		{
+			bool exists = false;
+
+				// Comprueba si existen datos
+				try
+				{
+					using (IDataReader reader = provider.OpenReader(command, timeout))
+					{
+						if (reader.Read())
+							exists = true;
+					}
+				}
+				catch (Exception exception)
+				{
+					AddError($"Error when check data exists {command.Sql}", exception);
+				}
+				// Devuelve el valor que indica si existen datos
+				return exists;
 		}
 
 		/// <summary>
@@ -308,32 +323,63 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor
 
 							if (!System.IO.File.Exists(fileName))
 								AddError($"Cant find the file '{fileName}'");
-							else 
-							{
-								List<SqlSectionModel> sections = new SqlParser().TokenizeByFile(fileName, MapVariables(GetVariables(), sentence.Mapping), out string error);
-
-									// Si no hay ningún error, ejecuta el script
-									if (string.IsNullOrWhiteSpace(error))
-									{
-										// Recorre las seccionaes
-										foreach (SqlSectionModel section in sections)
-											if (string.IsNullOrWhiteSpace(error) && section.Type == SqlSectionModel.SectionType.Sql && 
-													!string.IsNullOrWhiteSpace(section.Content))
-												try
-												{
-													provider.Execute(CreateDataProviderCommand(section.Content));
-												}
-												catch (Exception exception)
-												{
-													error = $"Error when execute script {System.IO.Path.GetFileName(fileName)}. {exception.Message}";
-												}
-									}
-									// Añade el error
-									if (!string.IsNullOrWhiteSpace(error))
-										AddError(error);
-							}
+							else if (!sentence.MustParse)
+								ExecuteScriptSqlRaw(provider, fileName, sentence.Timeout, sentence.SkipParameters);
+							else
+								ExecuteScriptSqlParsed(provider, fileName, sentence);
 					}
 			}
+		}
+
+		/// <summary>
+		///		Ejecuta un script SQL (sin interpretarlo)
+		/// </summary>
+		private void ExecuteScriptSqlRaw(ProviderModel provider, string fileName, TimeSpan timeout, bool skipParameters)
+		{
+			string error = string.Empty;
+
+				// Ejecuta el comando completo del archivo SQL
+				try
+				{
+					string sql = LibHelper.Files.HelperFiles.LoadTextFile(fileName);
+
+						provider.Execute(CreateDataProviderCommand(sql, timeout, skipParameters));
+				}
+				catch (Exception exception)
+				{
+					error = $"Error when execute script {System.IO.Path.GetFileName(fileName)}. {exception.Message}";
+				}
+				// Añade el error
+				if (!string.IsNullOrWhiteSpace(error))
+					AddError(error);
+		}
+
+		/// <summary>
+		///		Ejecuta un script SQL interpretándolo antes
+		/// </summary>
+		private void ExecuteScriptSqlParsed(ProviderModel provider, string fileName, SentenceExecuteScript sentence)
+		{
+			List<SqlSectionModel> sections = new SqlParser().TokenizeByFile(fileName, MapVariables(GetVariables(), sentence.Mapping), out string error);
+
+				// Si no hay ningún error, ejecuta el script
+				if (string.IsNullOrWhiteSpace(error))
+				{
+					// Recorre las seccionaes
+					foreach (SqlSectionModel section in sections)
+						if (string.IsNullOrWhiteSpace(error) && section.Type == SqlSectionModel.SectionType.Sql && 
+								!string.IsNullOrWhiteSpace(section.Content))
+							try
+							{
+								provider.Execute(CreateDataProviderCommand(section.Content, sentence.Timeout));
+							}
+							catch (Exception exception)
+							{
+								error = $"Error when execute script {System.IO.Path.GetFileName(fileName)}. {exception.Message}";
+							}
+				}
+				// Añade el error
+				if (!string.IsNullOrWhiteSpace(error))
+					AddError(error);
 		}
 
 		/// <summary>
@@ -361,13 +407,13 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor
 		/// </summary>
 		internal CommandModel ConvertProviderCommand(ProviderSentenceModel sentence, out string error)
 		{
-			string sql = new LibDbScripts.Parser.SqlParser().ParseCommand(sentence.Sql, GetVariables().ToDictionary(), out error);
+			string sql = new SqlParser().ParseCommand(sentence.Sql, GetVariables().ToDictionary(), out error);
 			CommandModel command = null;
 
 				if (string.IsNullOrWhiteSpace(error))
 				{
 					// Genera el comando
-					command = new CommandModel(sql);
+					command = new CommandModel(sql, sentence.Timeout);
 					// Añade los filtros y las variables del contexto
 					if (string.IsNullOrWhiteSpace(error))
 					{
@@ -387,14 +433,15 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor
 		/// <summary>
 		///		Convierte una cadena SQL en un comando del proveedor
 		/// </summary>
-		internal CommandModel CreateDataProviderCommand(string sql)
+		internal CommandModel CreateDataProviderCommand(string sql, TimeSpan timeout, bool skipParameters = false)
 		{
-			CommandModel command = new CommandModel(sql);
+			CommandModel command = new CommandModel(sql, timeout);
 
 				// Añade las variables del contexto
-				foreach (KeyValuePair<string, VariableModel> variable in Context.Actual.GetVariablesRecursive().GetAll())
-					if (!command.Parameters.ContainsKey(variable.Key))
-						command.Parameters.Add(variable.Key, variable.Value.Value);
+				if (!skipParameters)
+					foreach (KeyValuePair<string, VariableModel> variable in Context.Actual.GetVariablesRecursive().GetAll())
+						if (!command.Parameters.ContainsKey(variable.Key))
+							command.Parameters.Add(variable.Key, variable.Value.Value);
 				// Devuelve el comando del proveedor
 				return command;
 		}
@@ -628,7 +675,6 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor
 									}
 									else
 									{
-										AddDebug("Execute (converted)", command);
 										try
 										{
 											result = provider.Execute(command);
@@ -639,7 +685,7 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor
 										}
 									}
 								}
-					}
+							}
 				}
 				// Devuelve el error
 				return (result, error);
@@ -691,10 +737,9 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor
 		private void AddDebug(string header, CommandModel command, [CallerFilePath] string fileName = null, 
 							  [CallerMemberName] string methodName = null, [CallerLineNumber] int lineNumber = 0)
 		{
-			Manager.Logger.Default.LogItems.Debug(header, fileName, methodName, lineNumber);
-			Manager.Logger.Default.LogItems.AddParameter("Sql", command.Sql);
-			foreach (KeyValuePair<string, object> paramenter in command.Parameters)
-				Manager.Logger.Default.LogItems.AddParameter("\t" + paramenter.Key, paramenter.Value);
+			Manager.Logger.Default.LogItems.Debug($"{header}. Sql {command.Sql}", fileName, methodName, lineNumber);
+			foreach (KeyValuePair<string, object> parameter in command.Parameters)
+				Manager.Logger.Default.LogItems.Debug($"\t{parameter.Key}: {parameter.Value}");
 		}
 
 		/// <summary>
@@ -703,10 +748,9 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor
 		private void AddDebug(string header, ProviderSentenceModel command, [CallerFilePath] string fileName = null, 
 							  [CallerMemberName] string methodName = null, [CallerLineNumber] int lineNumber = 0)
 		{
-			Manager.Logger.Default.LogItems.Debug(header, fileName, methodName, lineNumber);
-			Manager.Logger.Default.LogItems.AddParameter("Sql", command.Sql);
+			Manager.Logger.Default.LogItems.Debug($"{header}. Sql {command.Sql}", fileName, methodName, lineNumber);
 			foreach (FilterModel filter in command.Filters)
-				Manager.Logger.Default.LogItems.AddParameter("\t" + filter.Parameter, filter.Default);
+				Manager.Logger.Default.LogItems.Debug($"\t{filter.Parameter}: {filter.Default}");
 		}
 
 		/// <summary>

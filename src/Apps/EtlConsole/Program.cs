@@ -31,12 +31,15 @@ namespace Bau.EtlConsole
 		static async Task Main(string[] args)
 		{
 			Dictionary<ArgumentType, string> parameters = GetParameters(args);
+			bool processed = false;
 
 				// Crea el manejador de log
 				Logger = CreateLogger();
 				// Recoge los argumentos y procesa el archivo
 				if (parameters.Count == 2)
-					await ProcessAsync(parameters, System.Threading.CancellationToken.None);
+				{
+					processed = await ProcessAsync(parameters, System.Threading.CancellationToken.None);
+				}
 				else
 				{
 					Console.WriteLine("Process parameters:");
@@ -50,6 +53,8 @@ namespace Bau.EtlConsole
 					Console.WriteLine("Press any key...");
 					Console.ReadKey();
 				#endif
+				// Si ha habido errores, devuelve un código de error
+				Environment.Exit(processed ? 0 : -1);
 		}
 
 		/// <summary>
@@ -97,11 +102,13 @@ namespace Bau.EtlConsole
 		/// <summary>
 		///		Procesa un archivo de contexto con los archivos del directorio general
 		/// </summary>
-		private static async Task ProcessAsync(Dictionary<ArgumentType, string> parameters, System.Threading.CancellationToken cancellationToken)
+		private static async Task<bool> ProcessAsync(Dictionary<ArgumentType, string> parameters, System.Threading.CancellationToken cancellationToken)
 		{
 			string contextFileName = parameters[ArgumentType.Context].TrimIgnoreNull();
 			string projectFileName = parameters[ArgumentType.Project].TrimIgnoreNull();
+			bool processed = false;
 
+				// Ejecuta el proyecto
 				using (BlockLogModel block = Logger.Default.CreateBlock(LogModel.LogType.Info, $"Process '{projectFileName}'"))
 				{
 					if (string.IsNullOrWhiteSpace(projectFileName) || !System.IO.File.Exists(projectFileName))
@@ -124,6 +131,9 @@ namespace Bau.EtlConsole
 											error = error.AddWithSeparator(innerError, Environment.NewLine);
 										// Muestra el error
 										block.Error(error.TrimIgnoreNull());
+										// Indica si se ha procesado correctamente
+										if (manager.Errors.Count == 0)
+											processed = true;
 								}
 							}
 							catch (Exception exception)
@@ -134,6 +144,8 @@ namespace Bau.EtlConsole
 							block.Info($"End process '{projectFileName}' with context '{contextFileName}'");
 					}
 				}
+				// Devuelve el valor que indica si se ha procesado
+				return processed;
 		}
 
 		/// <summary>

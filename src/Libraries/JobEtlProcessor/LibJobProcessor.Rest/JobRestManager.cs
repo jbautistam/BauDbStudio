@@ -13,9 +13,9 @@ namespace Bau.Libraries.LibJobProcessor.Rest
 	/// <summary>
 	///		Procesador de trabajos sobre REST
 	/// </summary>
-	public class JobFileShellManager : Core.Interfaces.BaseJobProcessor
+	public class JobRestManager : Core.Interfaces.BaseJobProcessor
 	{
-		public JobFileShellManager(LibLogger.Core.LogManager logger) : base("RestManager")
+		public JobRestManager(LibLogger.Core.LogManager logger) : base("RestManager")
 		{
 			Logger = logger;
 		}

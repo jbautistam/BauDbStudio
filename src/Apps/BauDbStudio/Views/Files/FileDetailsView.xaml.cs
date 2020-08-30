@@ -51,6 +51,9 @@ namespace Bau.DbStudio.Views.Files
 					}
 					// Asigna el manejador de eventos
 					ViewModel.SelectedTextRequired += (sender, args) => args.SelectedText = udtEditor.GetSelectedText();
+					// Cambia el resaltado en los archivo SQLx
+					if (!string.IsNullOrWhiteSpace(ViewModel.FileName) && ViewModel.FileName.EndsWith(".sqlx", StringComparison.CurrentCultureIgnoreCase))
+						udtEditor.ChangeHighLightByExtension(".sql");
 					// Indica que no ha habido modificaciones y que se ha cargado el archivo, si no se lanza
 					ViewModel.IsUpdated = false;
 					IsLoadedViewModel = true;

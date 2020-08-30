@@ -13,7 +13,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Connections\DatabaseProvidersTools.cs" />
+    <Compile Remove="Connections\**" />
+    <EmbeddedResource Remove="Connections\**" />
+    <None Remove="Connections\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,6 +33,7 @@
     <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DbScripts\LibDbScripts.Parser\LibDbScripts.Parser.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Formats\LibCsvFiles\src\LibCsvFiles.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Formats\LibParquetFiles\src\LibParquetFiles.csproj" />
+    <ProjectReference Include="..\..\DbScripts\DbScripts.Manager\DbScripts.Manager.csproj" />
     <ProjectReference Include="..\DbStudio.Conversor\DbStudio.Conversor.csproj" />
     <ProjectReference Include="..\DbStudio.Models\DbStudio.Models.csproj" />
   </ItemGroup>

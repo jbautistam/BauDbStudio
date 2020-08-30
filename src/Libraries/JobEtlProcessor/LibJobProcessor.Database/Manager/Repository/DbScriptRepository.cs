@@ -72,6 +72,8 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Repository
 		private const string TagMessage = "Message";
 		private const string TagResult = "Result";
 		private const string TagSentenceExecuteScript = "ExecuteScript";
+		private const string TagMustParse = "MustParse";
+		private const string TagSkipParameters = "SkipParameters";
 		private const string TagMap = "Map";
 		private const string TagFrom = "From";
 		private const string TagTo = "To";
@@ -140,99 +142,101 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Repository
 			SentenceCollection sentences = new SentenceCollection();
 
 				// Lee las instrucciones
-				foreach (MLNode rootML in nodesML)
-					switch (rootML.Name)
+				foreach (MLNode nodeML in nodesML)
+					switch (nodeML.Name)
 					{
 						case TagImport:
-								sentences.AddRange(LoadByFile(System.IO.Path.Combine(pathBase, rootML.Attributes[TagFileName].Value)).Sentences);
+								sentences.AddRange(LoadByFile(System.IO.Path.Combine(pathBase, nodeML.Attributes[TagFileName].Value)).Sentences);
 							break;
 						case TagSentenceBlock:
-								sentences.Add(LoadSentenceBlock(rootML, pathBase));
+								sentences.Add(LoadSentenceBlock(nodeML, pathBase));
 							break;
 						case TagSentenceExecute:
-								sentences.Add(LoadSentenceExecute(rootML));
+								sentences.Add(LoadSentenceExecute(nodeML));
 							break;
 						case TagSentenceException:
-								sentences.Add(LoadSentenceException(rootML));
+								sentences.Add(LoadSentenceException(nodeML));
 							break;
 						case TagSentenceBulkCopy:
-								sentences.Add(LoadSentenceBulkCopy(rootML));
+								sentences.Add(LoadSentenceBulkCopy(nodeML));
 							break;
 						case TagSentenceCopy:
-								sentences.Add(LoadSentenceCopy(rootML));
+								sentences.Add(LoadSentenceCopy(nodeML));
 							break;
 						case TagSentenceForEach:
-								sentences.Add(LoadSentenceForEach(rootML, pathBase));
+								sentences.Add(LoadSentenceForEach(nodeML, pathBase));
 							break;
 						case TagSentenceIfExists:
-								sentences.Add(LoadSentenceIfExists(rootML, pathBase));
+								sentences.Add(LoadSentenceIfExists(nodeML, pathBase));
 							break;
 						case TagSentenceIf:
-								sentences.Add(LoadSentenceIf(rootML, pathBase));
+								sentences.Add(LoadSentenceIf(nodeML, pathBase));
 							break;
 						case TagSentenceString:
-								sentences.Add(LoadSentenceDeclare(rootML, VariableModel.VariableType.String));
+								sentences.Add(LoadSentenceDeclare(nodeML, VariableModel.VariableType.String));
 							break;
 						case TagSentenceNumeric:
-								sentences.Add(LoadSentenceDeclare(rootML, VariableModel.VariableType.Numeric));
+								sentences.Add(LoadSentenceDeclare(nodeML, VariableModel.VariableType.Numeric));
 							break;
 						case TagSentenceBoolean:
-								sentences.Add(LoadSentenceDeclare(rootML, VariableModel.VariableType.Boolean));
+								sentences.Add(LoadSentenceDeclare(nodeML, VariableModel.VariableType.Boolean));
 							break;
 						case TagSentenceDate:
-								sentences.Add(LoadSentenceDeclare(rootML, VariableModel.VariableType.Date));
+								sentences.Add(LoadSentenceDeclare(nodeML, VariableModel.VariableType.Date));
 							break;
 						case TagSentenceLet:
-								sentences.Add(LoadSentenceLet(rootML));
+								sentences.Add(LoadSentenceLet(nodeML));
 							break;
 						case TagSentenceFor:
-								sentences.Add(LoadSentenceFor(rootML, pathBase));
+								sentences.Add(LoadSentenceFor(nodeML, pathBase));
 							break;
 						case TagSentenceWhile:
-								sentences.Add(LoadSentenceWhile(rootML, pathBase));
+								sentences.Add(LoadSentenceWhile(nodeML, pathBase));
 							break;
 						case TagSentencePrint:
-								sentences.Add(LoadSentencePrint(rootML));
+								sentences.Add(LoadSentencePrint(nodeML));
 							break;
 						case TagSentenceBeginTransaction:
-								sentences.Add(LoadSentenceBatch(rootML, SentenceDataBatch.BatchCommand.BeginTransaction));
+								sentences.Add(LoadSentenceBatch(nodeML, SentenceDataBatch.BatchCommand.BeginTransaction));
 							break;
 						case TagSentenceCommitTransaction:
-								sentences.Add(LoadSentenceBatch(rootML, SentenceDataBatch.BatchCommand.CommitTransaction));
+								sentences.Add(LoadSentenceBatch(nodeML, SentenceDataBatch.BatchCommand.CommitTransaction));
 							break;
 						case TagSentenceRollbackTransaction:
-								sentences.Add(LoadSentenceBatch(rootML, SentenceDataBatch.BatchCommand.RollbackTransaction));
+								sentences.Add(LoadSentenceBatch(nodeML, SentenceDataBatch.BatchCommand.RollbackTransaction));
 							break;
 						case TagSentenceAssertExecute:
-								sentences.Add(LoadSentenceAssertExecute(rootML));
+								sentences.Add(LoadSentenceAssertExecute(nodeML));
 							break;
 						case TagSentenceAssertScalar:
-								sentences.Add(LoadSentenceAssertScalar(rootML));
+								sentences.Add(LoadSentenceAssertScalar(nodeML));
 							break;
 						case TagSentenceExecuteScript:
-								sentences.Add(LoadSentenceExecuteScript(rootML));
+								sentences.Add(LoadSentenceExecuteScript(nodeML));
 							break;
 						case TagSentenceImportCsv:
-								sentences.Add(LoadSentenceImportCsv(rootML));
+								sentences.Add(LoadSentenceImportCsv(nodeML));
 							break;
 						case TagSentenceImportSchemaCsv:
-								sentences.Add(LoadSentenceImportSchema(rootML));
+								sentences.Add(LoadSentenceImportSchema(nodeML));
 							break;
 						case TagSentenceExportSchemaCsv:
-								sentences.Add(LoadSentenceExportSchema(rootML));
+								sentences.Add(LoadSentenceExportSchema(nodeML));
 							break;
 						case TagSentenceExportCsv:
-								sentences.Add(LoadSentenceExportCsv(rootML));
+								sentences.Add(LoadSentenceExportCsv(nodeML));
 							break;
 						case TagSentenceExportPartitionedCsv:
-								sentences.Add(LoadSentenceExportPartitionedCsv(rootML));
+								sentences.Add(LoadSentenceExportPartitionedCsv(nodeML));
 							break;
 						case TagSentenceExportParquet:
-								sentences.Add(LoadSentenceExportParquet(rootML));
+								sentences.Add(LoadSentenceExportParquet(nodeML));
 							break;
 						case TagSentenceImportParquet:
-								sentences.Add(LoadSentenceImportParquet(rootML));
+								sentences.Add(LoadSentenceImportParquet(nodeML));
 							break;
+						default:
+							throw new ArgumentException($"Node unkwnown: {nodeML.Name}");
 					}
 				// Devuelve la colección
 				return sentences;
@@ -370,6 +374,8 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Repository
 				// Asigna las propiedades
 				sentence.Target = rootML.Attributes[TagTarget].Value.TrimIgnoreNull();
 				sentence.FileName = rootML.Attributes[TagFileName].Value.TrimIgnoreNull();
+				sentence.MustParse = rootML.Attributes[TagMustParse].Value.GetBool();
+				sentence.SkipParameters = rootML.Attributes[TagSkipParameters].Value.GetBool();
 				// Asigna los mapeos de variables
 				foreach (MLNode nodeML in rootML.Nodes)
 					if (nodeML.Name == TagMap)
@@ -535,7 +541,7 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Repository
 		private ProviderSentenceModel GetProviderCommand(MLNode rootML, string tagCommand)
 		{
 			if (rootML.Nodes.Count == 0 && !string.IsNullOrWhiteSpace(rootML.Value))
-				return new ProviderSentenceModel(rootML.Value.TrimIgnoreNull());
+				return new ProviderSentenceModel(rootML.Value.TrimIgnoreNull(), GetTimeout(rootML, TimeSpan.FromMinutes(5)));
 			else
 			{
 				ProviderSentenceModel sentence = null;
@@ -543,7 +549,7 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Repository
 					// Primero obtiene el comando
 					foreach (MLNode nodeML in rootML.Nodes)
 						if (nodeML.Name == tagCommand)
-							sentence = new ProviderSentenceModel(nodeML.Value);
+							sentence = new ProviderSentenceModel(nodeML.Value, GetTimeout(rootML, TimeSpan.FromMinutes(5)));
 					// Si ha generado la sentencia, añade los argumentos
 					if (sentence != null)
 						foreach (MLNode nodeML in rootML.Nodes)

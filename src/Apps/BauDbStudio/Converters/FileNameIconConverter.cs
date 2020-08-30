@@ -35,6 +35,8 @@ namespace Bau.DbStudio.Converters
 						icon = "/Resources/Images/FileParquet.png";
 					else if (fileName.EndsWith(".csv", StringComparison.CurrentCultureIgnoreCase))
 						icon = "/Resources/Images/FileCsv.png";
+					else if (fileName.EndsWith(".sqlx", StringComparison.CurrentCultureIgnoreCase))
+						icon = "/Resources/Images/FileSqlExtended.png";
 					else if (fileName.EndsWith(".sql", StringComparison.CurrentCultureIgnoreCase))
 						icon = "/Resources/Images/FileSql.png";
 					else if (fileName.EndsWith(".json", StringComparison.CurrentCultureIgnoreCase))
