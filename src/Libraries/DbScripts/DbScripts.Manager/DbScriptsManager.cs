@@ -4,7 +4,8 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Bau.Libraries.DbStudio.Models.Connections;
-using Bau.Libraries.DbScripts.Manager.Connections.Models;
+using Bau.Libraries.DbScripts.Manager.Interpreter;
+using Bau.Libraries.DbScripts.Manager.Models;
 using Bau.Libraries.LibLogger.Core;
 
 namespace Bau.Libraries.DbScripts.Manager
@@ -34,7 +35,7 @@ namespace Bau.Libraries.DbScripts.Manager
 		public async Task ExecuteQueryAsync(ConnectionModel connection, string query, ArgumentListModel arguments, 
 											TimeSpan timeout, CancellationToken cancellationToken)
 		{
-			await ConnectionManager.ExecuteQueryAsync(connection, query, arguments, timeout, cancellationToken);
+			await Task.Run(() => new SqlCommandController(this).ExecuteAsync(GetDbProvider(connection), query, arguments, timeout, cancellationToken));
 		}
 
 		/// <summary>
@@ -42,7 +43,8 @@ namespace Bau.Libraries.DbScripts.Manager
 		/// </summary>
 		public async Task ExecuteInterpretedQueryAsync(ConnectionModel connection, string query, ArgumentListModel arguments, CancellationToken cancellationToken)
 		{
-			await ConnectionManager.ExecuteInterpretedQueryAsync(connection, query, arguments, cancellationToken);
+			await Task.Run(() => new SqlScriptInterpreter(this).ExecuteAsync(GetDbProvider(connection), query, arguments, connection.TimeoutExecuteScript, 
+																			 cancellationToken));
 		}
 
 		/// <summary>
@@ -51,7 +53,9 @@ namespace Bau.Libraries.DbScripts.Manager
 		public async Task<DataTable> GetDatatableQueryAsync(ConnectionModel connection, string query, ArgumentListModel arguments, 
 															int actualPage, int pageSize, TimeSpan timeout, CancellationToken cancellationToken)
 		{
-			return await ConnectionManager.GetDatatableQueryAsync(connection, query, arguments, actualPage, pageSize, timeout, cancellationToken);
+			return await Task.Run(() => new SqlCommandController(this).GetDataTableAsync(GetDbProvider(connection), 
+																						 query, arguments, 
+																						 actualPage, pageSize, timeout, cancellationToken));
 		}
 
 		/// <summary>
@@ -60,7 +64,8 @@ namespace Bau.Libraries.DbScripts.Manager
 		public async Task<System.Data.Common.DbDataReader> ExecuteReaderAsync(ConnectionModel connection, string query, ArgumentListModel arguments, 
 																			  TimeSpan timeout, CancellationToken cancellationToken)
 		{
-			return await ConnectionManager.ExecuteReaderAsync(connection, query, arguments, timeout, cancellationToken);
+			return await Task.Run(() => new SqlCommandController(this).ExecuteReaderAsync(GetDbProvider(connection), 
+																						  query, arguments, timeout, cancellationToken));
 		}
 
 		/// <summary>
@@ -68,7 +73,7 @@ namespace Bau.Libraries.DbScripts.Manager
 		/// </summary>
 		public async Task<DataTable> GetExecutionPlanAsync(ConnectionModel connection, string query, ArgumentListModel arguments, TimeSpan timeout, CancellationToken cancellationToken)
 		{
-			return await ConnectionManager.GetExecutionPlanAsync(connection, query, arguments, timeout, cancellationToken);
+			return await Task.Run(() => new SqlCommandController(this).GetExecutionPlanAsync(GetDbProvider(connection), query, arguments, timeout, cancellationToken));
 		}
 
 		/// <summary>

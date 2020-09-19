@@ -72,13 +72,13 @@ namespace Bau.DbStudio.Controls
 						// Añade el contenido
 						layoutPane.Content = control;
 						layoutPane.ContentId = id;
+						// Asigna los parámetros del panel
+						layoutPane.FloatingHeight = 200;
+						layoutPane.FloatingWidth = 200;
 						// Añade el contenido al grupo
 						layoutGroup.Children.Add(layoutPane);
 						layoutPane.IsActive = true;
 						layoutPane.IsVisible = true;
-						// Asigna los parámetros del grupo
-						layoutPane.FloatingHeight = 400;
-						layoutPane.FloatingWidth = 400;
 						// Añade el panel a la lista de documentos del controlador
 						AddDocument(id, header, DockLayoutDocument.DocumentType.Panel, layoutPane, control, tag);
 				}
@@ -99,6 +99,7 @@ namespace Bau.DbStudio.Controls
 					{
 						case DockPosition.Left:
 						case DockPosition.Right:
+								layoutGroup.Children[0].FloatingWidth = ActualWidth / 4;
 								layoutGroup.Children[0].AutoHideWidth = ActualWidth / 4;
 								layoutGroup.Children[0].AutoHideMinWidth = 200;
 							break;

@@ -24,6 +24,7 @@ namespace Bau.DbStudio
 		/// </summary>
 		private void InitForm()
 		{	
+
 			// Asigna el icono a la ventana
 			Icon = System.Windows.Media.Imaging.BitmapFrame.Create(new Uri("pack://application:,,,./Resources/BauDbStudio.ico", UriKind.RelativeOrAbsolute)); 
 			// Inicializa el controlador
@@ -291,6 +292,7 @@ namespace Bau.DbStudio
 																			CheckWorkSpaceMenu();
 																   };
 						mnuNewWorkspace.Checked += (sender, args) => CheckWorkSpaceMenu();
+						mnuNewWorkspace.IsChecked = false;
 				}
 				// Muestra el separador
 				if (workspaces.Count == 0)

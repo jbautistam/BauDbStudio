@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Bau.Libraries.DbScripts.Manager.Connections.Models
+namespace Bau.Libraries.DbScripts.Manager.Models
 {
 	/// <summary>
 	///		Lista de argumentos que se pasa a una conexión para hacer una consulta

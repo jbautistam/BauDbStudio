@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Bau.Libraries.LibLogger.Core;
 using Bau.Libraries.DbStudio.Models;
 using Bau.Libraries.DbStudio.Models.Connections;
-using Bau.Libraries.DbScripts.Manager.Connections.Models;
+using Bau.Libraries.DbScripts.Manager.Models;
 
 namespace Bau.Libraries.DbStudio.Application
 {

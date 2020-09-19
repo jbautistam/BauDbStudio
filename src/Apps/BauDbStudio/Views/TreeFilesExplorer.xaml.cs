@@ -107,6 +107,7 @@ namespace Bau.DbStudio.Views
 				Vector vctDifference = _startDrag - pntMouse;
 
 					if (pntMouse.X < trvExplorer.ActualWidth - 50 &&
+						pntMouse.Y < trvExplorer.ActualHeight - 50 &&
 							(Math.Abs(vctDifference.X) > SystemParameters.MinimumHorizontalDragDistance ||
 							 Math.Abs(vctDifference.Y) > SystemParameters.MinimumVerticalDragDistance))
 						_dragDropController.InitDragOperation(trvExplorer, trvExplorer.SelectedItem as IHierarchicalViewModel);

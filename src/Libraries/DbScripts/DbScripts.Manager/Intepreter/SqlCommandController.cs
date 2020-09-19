@@ -12,14 +12,14 @@ using Bau.Libraries.LibDbProviders.Base;
 using Bau.Libraries.LibDbProviders.Base.Parameters;
 using Bau.Libraries.LibDbScripts.Parser;
 
-namespace Bau.Libraries.DbScripts.Manager.Connections
+namespace Bau.Libraries.DbScripts.Manager.Interpreter
 {
 	/// <summary>
 	///		Controlador para el proceso de scripts de SQL
 	/// </summary>
-	internal class ScriptSqlController
+	internal class SqlCommandController
 	{
-		internal ScriptSqlController(ConnectionManager manager)
+		internal SqlCommandController(DbScriptsManager manager)
 		{
 			Manager = manager;
 		}
@@ -33,7 +33,7 @@ namespace Bau.Libraries.DbScripts.Manager.Connections
 			DataTable result = null;
 
 				// Obtiene la tabla
-				using (BlockLogModel block = Manager.Manager.Logger.Default.CreateBlock(LogModel.LogType.Info, "Execute query"))
+				using (BlockLogModel block = Manager.Logger.Default.CreateBlock(LogModel.LogType.Info, "Execute query"))
 				{
 					if (string.IsNullOrWhiteSpace(query))
 						block.Error("The query is empty");
@@ -133,7 +133,7 @@ namespace Bau.Libraries.DbScripts.Manager.Connections
 		/// </summary>
 		internal async Task ExecuteAsync(IDbProvider provider, string sql, Models.ArgumentListModel arguments, TimeSpan timeout, CancellationToken cancellationToken)
 		{
-			using (BlockLogModel block = Manager.Manager.Logger.Default.CreateBlock(LogModel.LogType.Info, "Execute script"))
+			using (BlockLogModel block = Manager.Logger.Default.CreateBlock(LogModel.LogType.Info, "Execute script"))
 			{
 				if (string.IsNullOrWhiteSpace(sql))
 					block.Error("The query is empty");
@@ -196,7 +196,7 @@ namespace Bau.Libraries.DbScripts.Manager.Connections
 			DataTable result = null;
 
 				// Obtiene la tabla
-				using (BlockLogModel block = Manager.Manager.Logger.Default.CreateBlock(LogModel.LogType.Info, "Get execution plan"))
+				using (BlockLogModel block = Manager.Logger.Default.CreateBlock(LogModel.LogType.Info, "Get execution plan"))
 				{
 					if (string.IsNullOrWhiteSpace(query))
 						block.Error("The query is empty");
@@ -248,8 +248,8 @@ namespace Bau.Libraries.DbScripts.Manager.Connections
 		}
 
 		/// <summary>
-		///		Manager de conexiones
+		///		Manager
 		/// </summary>
-		internal ConnectionManager Manager { get; }
+		internal DbScriptsManager Manager { get; }
 	}
 }

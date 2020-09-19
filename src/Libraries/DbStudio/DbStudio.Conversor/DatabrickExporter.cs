@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 
-using Bau.Libraries.LibDataStructures.Collections;
-using Bau.Libraries.LibDbScripts.Parser;
-using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.LibHelper.Files;
 using Bau.Libraries.LibLogger.Models.Log;
 
@@ -65,28 +61,22 @@ namespace Bau.Libraries.DbStudio.Conversor
 			// Copia los archivos
 			foreach (string file in System.IO.Directory.EnumerateFiles(sourcePath))
 				if (MustCopy(file))
-				{
-					string targetFile = System.IO.Path.Combine(targetPath, System.IO.Path.GetFileName(file));
-
-						// Copia los archivos de Python sin cambios, los de SQL los convierte
-						if (file.EndsWith(".py", StringComparison.CurrentCultureIgnoreCase))
-							SaveFileWithoutBom(targetFile, HelperFiles.LoadTextFile(file));
-						else if (file.EndsWith(".sql", StringComparison.CurrentCultureIgnoreCase))
-							SaveFileWithoutBom(targetFile, TransformSql(file));
-				}
+					GetFileTransformer(targetPath, file).Transform();
 		}
 
 		/// <summary>
-		///		Graba un texto en un archivo con codificación UTF8 pero sin los caracteres iniciales de BOM. 
+		///		Obtiene el transformador de archivos adecuado
 		/// </summary>
-		/// <remarks>
-		///		Databricks no reconoce en los notebook los archivos de texto UTF8 que se graban con los caracteres iniciales
-		///	que indican que el archivo es UTF8, por eso se tiene que indicar en la codificación que se omitan estos caracteres
-		///	<see cref="https://stackoverflow.com/questions/2502990/create-text-file-without-bom"/>
-		/// </remarks>
-		private void SaveFileWithoutBom(string fileName, string content)
+		private Transformers.BaseTransformer GetFileTransformer(string targetPath, string fileName)
 		{
-			HelperFiles.SaveTextFile(fileName, content, new System.Text.UTF8Encoding(false));
+			if (fileName.EndsWith(".py", StringComparison.CurrentCultureIgnoreCase))
+				return new Transformers.PythonFileTransformer(this, targetPath, fileName);
+			else if (fileName.EndsWith(".sql", StringComparison.CurrentCultureIgnoreCase))
+				return new Transformers.SqlFileTransformer(this, targetPath, fileName);
+			else if (fileName.EndsWith(".sqlx", StringComparison.CurrentCultureIgnoreCase))
+				return new Transformers.SqlExtendedFileTransformer(this, targetPath, fileName);
+			else
+				throw new NotImplementedException($"Unknown file extension: {fileName}");
 		}
 
 		/// <summary>
@@ -95,243 +85,8 @@ namespace Bau.Libraries.DbStudio.Conversor
 		private bool MustCopy(string fileName)
 		{
 			return fileName.EndsWith(".sql", StringComparison.CurrentCultureIgnoreCase) ||
+				   fileName.EndsWith(".sqlx", StringComparison.CurrentCultureIgnoreCase) ||
 				   fileName.EndsWith(".py", StringComparison.CurrentCultureIgnoreCase);
-		}
-
-		/// <summary>
-		///		Transforma la SQL para un notebook
-		/// </summary>
-		private string TransformSql(string sourceFile)
-		{
-			System.Text.StringBuilder sbResult = new System.Text.StringBuilder();
-			string content = NormalizeNotebookContent(sourceFile);
-			List<SqlSectionModel> scriptSqlParts = new SqlParser().Tokenize(content, Options.Parameters.ToDictionary(), out string error);
-
-				if (!string.IsNullOrWhiteSpace(error))
-					throw new Exception(error);
-				else
-				{
-					bool isFirst = true;
-
-						// Cabecera
-						sbResult.AppendLine("-- Databricks notebook source");
-						// Añade los scripts al resultado
-						foreach (SqlSectionModel scriptSqlPart in scriptSqlParts)
-							if (!string.IsNullOrWhiteSpace(scriptSqlPart.Content))
-							{
-								// Añade el separador de comandos
-								if (!isFirst)
-								{
-									sbResult.AppendLine();
-									sbResult.AppendLine("-- COMMAND ----------");
-									sbResult.AppendLine();
-								}
-								// Añade el contenido
-								switch (scriptSqlPart.Type)
-								{
-									case SqlSectionModel.SectionType.Sql:
-											sbResult.AppendLine(scriptSqlPart.Content);
-										break;
-									case SqlSectionModel.SectionType.Comment:
-											if (Options.WriteComments && !string.IsNullOrWhiteSpace(scriptSqlPart.Content))
-											{
-												string [] parts = scriptSqlPart.Content.Split('\r', '\n');
-												bool firstComment = true;
-
-													foreach (string part in parts)
-													{
-														string comment = RemoveComment(part);
-
-															if (!string.IsNullOrWhiteSpace(comment))
-															{
-																// Añade la cadena mágica de markdown
-																sbResult.Append("-- MAGIC ");
-																if (firstComment)
-																	sbResult.Append("%md ");
-																// Añade la línea de contenido
-																sbResult.AppendLine(comment);
-																// Indica que no es la primera vez
-																firstComment = false;
-															}
-													}
-											}
-										break;
-								}
-								// Indica que ya no es el primero
-								isFirst = false;
-							}
-				}
-				// Devuelve la cadena
-				return sbResult.ToString();
-		}
-
-		/// <summary>
-		///		Obtiene el contenido normalizado de un notebook
-		/// </summary>
-		private string NormalizeNotebookContent(string fileName)
-		{
-			string content = HelperFiles.LoadTextFile(fileName);
-
-				// Reemplaza las constantes
-				content = ReplaceConstants(content, Options.Parameters);
-				// Sustituye los argumentos de tipo $Xxxx por getArgument("xxxx")
-				if (Options.ReplaceArguments)
-					content = ConvertArgumentsToGetArgument(content, "$", Options.Parameters);
-				// Pasa los nombres de archivo a minúsculas
-				if (Options.LowcaseFileNames)
-					content = ConvertFileNameToLower(content);
-				// Devuelve la cadena normalizada
-				return content;
-		}
-
-		/// <summary>
-		///		Reemplaza las constantes
-		/// </summary>
-		private string ReplaceConstants(string content, NormalizedDictionary<object> parameters)
-		{
-			// Reemplaza las constantes
-			foreach ((string key, object value) in parameters.Enumerate())
-			{
-				string parameter = (value ?? "").ToString();
-
-					// Reemplaza el contenido
-					content = content.ReplaceWithStringComparison("{{" + key + "}}", parameter);
-			}
-			// Devuelve el contenido
-			return content;
-		}
-
-		/// <summary>
-		///		Pasa los argumentos $xxxx de la cadena SQL a la función getArgument("xxxx")
-		/// </summary>
-		private string ConvertArgumentsToGetArgument(string value, string parameterPrefix, NormalizedDictionary<object> constants)
-		{
-			System.Text.RegularExpressions.Match match = System.Text.RegularExpressions.Regex.Match(value, "\\" + parameterPrefix + "\\w*",
-																									System.Text.RegularExpressions.RegexOptions.IgnoreCase,
-																									TimeSpan.FromSeconds(10));
-			string output = string.Empty;
-			int lastIndex = 0;
-
-				// Mientras haya una coincidencia
-				while (match.Success)
-				{
-					(string argument, string additional) = NormalizeArgument(value.Substring(match.Index + 1, match.Length).ToLower());
-
-						// Añade la parte anterior a la cadena de salida y cambia el índice de último elemento encontrado
-						output += value.Substring(lastIndex, match.Index - lastIndex);
-						lastIndex = match.Index + match.Length + 1;
-						// Añade el valor del parámetro a la cadena de salida (siempre que no sea una constante que hay que dejarla igual)
-						if (!constants.ContainsKey(argument))
-							output += " getArgument(\"" + argument + "\") " + additional;
-						else
-							output += $"${argument.ToLower()}" + additional;
-						// Pasa a la siguiente coincidencia
-						match = match.NextMatch();
-				}
-				// Añade el resto de la cadena inicial
-				if (lastIndex < value.Length)
-					output += value.Substring(lastIndex);
-				// Devuelve el resultado
-				return output;
-		}
-
-		/// <summary>
-		///		Quita del final del argumento todo lo que no sean caracteres alfabéticos / numéricos, por ejemplo las comas
-		///	puede que el argumento esté en una cadena del tipo: CONCAT($dateWeek,7), en ese caso, la variable argument contiene
-		/// '$dateWeek,' y hay que dejarlo como argument = '$dateweek' y additional = ',7'
-		/// </summary>
-		private (string argument, string additional) NormalizeArgument(string value)
-		{
-			string argument = string.Empty;
-			string additional = string.Empty;
-			bool found = false;
-				
-				// Separa los datos adicionales del argumento
-				foreach (char chr in value)
-					if (found)
-						additional += chr;
-					else 
-					{
-						if (char.IsLetterOrDigit(chr) || chr == '_')
-							argument += chr;
-						else
-						{
-							// Añade el carácter a la cadena adicional
-							additional += chr;
-							// Indica que se ha encontrado un separador
-							found = true;
-						}
-					}	
-				// Devuelve los dos valores
-				return (argument, additional);
-		}
-
-		/// <summary>
-		///		Pasa los nombre de archivo de la cadena SQL a minúsculas (los nombres de archivo están entre ` y `
-		///	Databricks distingue entre mayúsculas y minúsculas y se ha decidido que todos los argumentos estarán en minúsculas
-		/// </summary>
-		private string ConvertFileNameToLower(string sql)
-		{
-			return ConvertToLower(sql,  System.Text.RegularExpressions.Regex.Match(sql, "`.*?`",
-																				   System.Text.RegularExpressions.RegexOptions.IgnoreCase,
-																				   TimeSpan.FromSeconds(10)));
-		}
-
-		/// <summary>
-		///		Convierte una serie de coincidencias a minúsculas en una cadena
-		/// </summary>
-		private string ConvertToLower(string value, System.Text.RegularExpressions.Match match)
-		{
-			string output = string.Empty;
-			int lastIndex = 0;
-
-				// Mientras haya una coincidencia
-				while (match.Success)
-				{
-					// Añade la parte anterior a la cadena de salida y cambia el índice de último elemento encontrado
-					output += value.Substring(lastIndex, match.Index - lastIndex);
-					lastIndex = match.Index + match.Length;
-					// Añade el valor del parámetro a la cadena de salida
-					output += value.Substring(match.Index, match.Length).ToLower();
-					// Pasa a la siguiente coincidencia
-					match = match.NextMatch();
-				}
-				// Añade el resto de la cadena inicial
-				if (lastIndex < value.Length)
-					output += value.Substring(lastIndex);
-				// Devuelve la colección de parámetros para la base de datos
-				return output;
-		}
-
-		/// <summary>
-		///		Elimina los caracteres de comentario (/* */ --)
-		/// </summary>
-		private string RemoveComment(string part)
-		{
-			// Le quita los comentarios
-			if (!string.IsNullOrWhiteSpace(part))
-			{
-				// Quita los espacios
-				part = part.Trim();
-				// Quita los caracteres iniciales
-				if (part.StartsWith("--") || part.StartsWith("/*"))
-				{
-					if (part.Length > 2)
-						part = part.Substring(2);
-					else
-						part = string.Empty;
-				}
-				// Quita los caracteres finales
-				if (!string.IsNullOrWhiteSpace(part) && part.EndsWith("*/"))
-				{
-					if (part.Length > 2)
-						part = part.Substring(0, part.Length - 2);
-					else
-						part = string.Empty;
-				}
-			}
-			// Devuelve la cadena
-			return part.TrimIgnoreNull();
 		}
 
 		/// <summary>

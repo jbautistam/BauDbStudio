@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.DbStudio.Models.Connections;
-using Bau.Libraries.DbScripts.Manager.Connections.Models;
+using Bau.Libraries.DbScripts.Manager.Models;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 {

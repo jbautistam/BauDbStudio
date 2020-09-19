@@ -8,7 +8,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibHelper\src\LibHelper.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibLogger\src\LibLogger.Core\LibLogger.Core.csproj" />
-    <ProjectReference Include="..\..\..\..\..\..\Libraries\Compiler\src\Interpreters\DbScripts\LibDbScripts.Interpreter\LibDbScripts.Interpreter.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DataBaseProviders\LibDbProviders.Base\LibDbProviders.Base.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DataBaseProviders\LibDbProviders.MySql\LibDbProviders.MySql.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DataBaseProviders\LibDbProviders.Odbc\LibDbProviders.Odbc.csproj" />
@@ -17,6 +16,7 @@
     <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DataBaseProviders\LibDbProviders.SqLite\LibDbProviders.SqLite.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DataBaseProviders\LibDbProviders.SqlServer\LibDbProviders.SqlServer.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DbScripts\LibDbScripts.Parser\LibDbScripts.Parser.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Interpreters\src\Interpreters\DbScripts\LibDbScripts.Interpreter\LibDbScripts.Interpreter.csproj" />
     <ProjectReference Include="..\..\DbStudio\DbStudio.Models\DbStudio.Models.csproj" />
   </ItemGroup>
 

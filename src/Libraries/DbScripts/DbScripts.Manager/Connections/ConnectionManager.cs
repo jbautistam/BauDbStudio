@@ -7,7 +7,6 @@ using Bau.Libraries.LibDbProviders.Spark;
 using Bau.Libraries.DbStudio.Models.Connections;
 using Bau.Libraries.LibDbProviders.Base.Schema;
 using Bau.Libraries.LibDbProviders.Base;
-using Bau.Libraries.DbScripts.Manager.Connections.Models;
 
 namespace Bau.Libraries.DbScripts.Manager.Connections
 {
@@ -125,54 +124,6 @@ namespace Bau.Libraries.DbScripts.Manager.Connections
 					provider.Open();
 				// Devuelve el proveedor
 				return provider;
-		}
-
-		/// <summary>
-		///		Ejecuta una consulta
-		/// </summary>
-		internal async Task<DataTable> GetDatatableQueryAsync(ConnectionModel connection, string query, 
-															  Models.ArgumentListModel arguments, 
-															  int actualPage, int pageSize, TimeSpan timeout, CancellationToken cancellationToken)
-		{	
-			return await Task.Run(() => new ScriptSqlController(this).GetDataTableAsync(GetDbProvider(connection), 
-																						query, arguments, 
-																						actualPage, pageSize, timeout, cancellationToken));
-		}
-
-		/// <summary>
-		///		Obtiene el datareader de una consulta
-		/// </summary>
-		internal async Task<System.Data.Common.DbDataReader> ExecuteReaderAsync(ConnectionModel connection, string query, Models.ArgumentListModel arguments, 
-																				TimeSpan timeout, CancellationToken cancellationToken)
-		{
-			return await Task.Run(() => new ScriptSqlController(this).ExecuteReaderAsync(GetDbProvider(connection), 
-																						 query, arguments, timeout, cancellationToken));
-		}
-
-		/// <summary>
-		///		Ejecuta una consulta
-		/// </summary>
-		internal async Task ExecuteQueryAsync(ConnectionModel connection, string query, ArgumentListModel arguments, 
-											  TimeSpan timeout, CancellationToken cancellationToken)
-		{	
-			await Task.Run(() => new ScriptSqlController(this).ExecuteAsync(GetDbProvider(connection), query, arguments, timeout, cancellationToken));
-		}
-
-		/// <summary>
-		///		Ejecuta una consulta SQL interpretada
-		/// </summary>
-		internal async Task ExecuteInterpretedQueryAsync(ConnectionModel connection, string query, ArgumentListModel arguments, CancellationToken cancellationToken)
-		{
-			await Task.Run(() => new Interpreter.ScriptSqlInterpreter(this).ExecuteAsync(GetDbProvider(connection), query, arguments, connection.TimeoutExecuteScript, 
-																						 cancellationToken));
-		}
-
-		/// <summary>
-		///		Obtiene el plan de ejecución de una consulta
-		/// </summary>
-		internal async Task<DataTable> GetExecutionPlanAsync(ConnectionModel connection, string query, ArgumentListModel arguments, TimeSpan timeout, CancellationToken cancellationToken)
-		{
-			return await Task.Run(() => new ScriptSqlController(this).GetExecutionPlanAsync(GetDbProvider(connection), query, arguments, timeout, cancellationToken));
 		}
 
 		/// <summary>

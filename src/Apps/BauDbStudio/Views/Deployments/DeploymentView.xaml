@@ -7,7 +7,7 @@
 		x:Class="Bau.DbStudio.Views.Deployments.DeploymentView"
 		xmlns:BauControls="clr-namespace:Bau.Controls.Files;assembly=BauControls"
         mc:Ignorable="d"
-        Title="Datos de la conexión" Height="550" Width="800" ResizeMode="NoResize" ShowInTaskbar="False"
+        Title="Datos de la distribución" Height="550" Width="800" ResizeMode="NoResize" ShowInTaskbar="False"
 		xmlns:Behaviors="clr-namespace:Bau.DbStudio.Converters"
 		Behaviors:FocusBehavior.FocusFirst="true">
 	<Grid>

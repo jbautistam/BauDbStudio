@@ -7,7 +7,7 @@ using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.DbStudio.Models.Connections;
 using Bau.Libraries.DbStudio.ViewModels.Controllers.Exporter;
 using Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections;
-using Bau.Libraries.DbScripts.Manager.Connections.Models;
+using Bau.Libraries.DbScripts.Manager.Models;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Queries
 {

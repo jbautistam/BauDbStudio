@@ -3,21 +3,21 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-using Bau.Libraries.DbScripts.Manager.Connections.Models;
+using Bau.Libraries.DbScripts.Manager.Models;
 using Bau.Libraries.LibDbProviders.Base;
 using Bau.Libraries.LibDbScripts.Interpreter;
 using Bau.Libraries.LibLogger.Models.Log;
 
-namespace Bau.Libraries.DbScripts.Manager.Connections.Interpreter
+namespace Bau.Libraries.DbScripts.Manager.Interpreter
 {
 	/// <summary>
 	///		Intérprete de ejecución de consultas SQL
 	/// </summary>
-	internal class ScriptSqlInterpreter
+	internal class SqlScriptInterpreter
 	{
-		internal ScriptSqlInterpreter(ConnectionManager manager)
+		internal SqlScriptInterpreter(DbScriptsManager manager)
 		{
-			ConnectionManager = manager;
+			Manager = manager;
 		}
 
 		/// <summary>
@@ -25,10 +25,10 @@ namespace Bau.Libraries.DbScripts.Manager.Connections.Interpreter
 		/// </summary>
 		internal async Task ExecuteAsync(IDbProvider dbProvider, string query, ArgumentListModel arguments, TimeSpan timeout, CancellationToken cancellationToken)
 		{
-			using (BlockLogModel block = ConnectionManager.Manager.Logger.Default.CreateBlock(LogModel.LogType.Info, "Start script execution"))
+			using (BlockLogModel block = Manager.Logger.Default.CreateBlock(LogModel.LogType.Info, "Start script execution"))
 			{
-				ScriptSqlProcessor executor = new ScriptSqlProcessor(this, dbProvider, arguments, timeout);
-				DbScriptsInterpreter interpreter = new DbScriptsInterpreter(executor, ConnectionManager.Manager.Logger);
+				SqlScriptExecutor executor = new SqlScriptExecutor(Manager, dbProvider, arguments, timeout);
+				DbScriptsInterpreter interpreter = new DbScriptsInterpreter(executor, Manager.Logger);
 
 					// Ejecuta el archivo
 					await interpreter.ExecuteAsync(query, null, cancellationToken);
@@ -51,9 +51,9 @@ namespace Bau.Libraries.DbScripts.Manager.Connections.Interpreter
 		}
 
 		/// <summary>
-		///		Manager principal
+		///		Manager
 		/// </summary>
-		internal ConnectionManager ConnectionManager { get; }
+		internal DbScriptsManager Manager { get; }
 
 		/// <summary>
 		///		Errores

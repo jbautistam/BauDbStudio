@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.DbStudio.Models.Connections;
 using Bau.Libraries.LibLogger.Models.Log;
-using Bau.Libraries.DbScripts.Manager.Connections.Models;
+using Bau.Libraries.DbScripts.Manager.Models;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 {
@@ -15,7 +15,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 	public class ExecuteFilesViewModel : BaseObservableObject, IDetailViewModel
 	{
 		// Variables privadas
-		private string _header;
+		private string _header, _fileName;
 		private BauMvvm.ViewModels.Forms.ControlItems.ControlItemCollectionViewModel<ExecuteFilesItemViewModel> _files;
 
 		public ExecuteFilesViewModel(SolutionViewModel solutionViewModel, List<string> files) : base(false)
@@ -168,7 +168,57 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 		/// </summary>
 		public void SaveDetails(bool newName)
 		{
-			IsUpdated = false;
+			string newFileName = string.Empty;
+
+				// Obtiene el nombre de archivo si es necesario
+				if (newName || string.IsNullOrWhiteSpace(FileName))
+					newFileName = SolutionViewModel.MainViewModel.MainController.HostController.DialogsController.OpenDialogSave
+											(SolutionViewModel.MainViewModel.LastPathSelected,
+											 "Archivos de log (*.log)|*.log|Todos los archivos (*.*)|*.*",
+											 $"Execution_Log_{DateTime.Now:yyyy_MM_dd_HH_mm_ss}.log", ".log");
+				else 
+					newFileName = FileName;
+				// Graba el archivo
+				if (!string.IsNullOrWhiteSpace(newFileName))
+				{
+					// Cambia el nombre de archivo
+					FileName = newFileName;
+					// y lo graba
+					Save(FileName);
+					// Indica que no ha habido modificaciones
+					IsUpdated = false;
+				}
+		}
+
+		/// <summary>
+		///		Guarda el archivo de log
+		/// </summary>
+		private void Save(string fileName)
+		{
+			System.Text.StringBuilder builder = new System.Text.StringBuilder();
+
+				// Añade los elementos
+				builder.Append("Path\t");
+				builder.Append("FileName\t");
+				builder.Append("Status\t");
+				builder.Append("Time\t");
+				builder.Append("Message");
+				// Añade un salto de línea
+				builder.AppendLine();
+				// Añade los elementos al archivo
+				foreach (ExecuteFilesItemViewModel file in Files)
+				{
+					// Añade los elementos
+					builder.Append(file.Path + '\t');
+					builder.Append(file.FileName + '\t');
+					builder.Append(file.StatusText + '\t');
+					builder.Append(file.ExecutionTime + '\t');
+					builder.Append(file.Message);
+					// Añade un salto de línea
+					builder.AppendLine();
+				}
+				// Graba el archivo
+				LibHelper.Files.HelperFiles.SaveTextFile(fileName, builder.ToString());
 		}
 
 		/// <summary>
@@ -176,7 +226,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 		/// </summary>
 		public string GetSaveAndCloseMessage()
 		{
-			return "¿Desea grabar la consulta antes de continuar?";
+			return "¿Desea grabar el log de ejecución antes de continuar?";
 		}
 
 		/// <summary>
@@ -191,6 +241,15 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 		{
 			get { return _header; }
 			set { CheckProperty(ref _header, value); }
+		}
+
+		/// <summary>
+		///		Nombre de archivo en el que se ha grabado el log
+		/// </summary>
+		public string FileName
+		{
+			get { return _fileName; }
+			set { CheckProperty(ref _fileName, value); }
 		}
 
 		/// <summary>

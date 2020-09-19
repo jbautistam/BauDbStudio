@@ -327,6 +327,7 @@
 			<avalonDock:LayoutRoot>
 			</avalonDock:LayoutRoot>
 		</avalonDockExtended:DockLayout>
+
 		<!-- Barra de estado -->
 		<StatusBar Grid.Row="3" Grid.Column="0">
 			<StatusBarItem>
