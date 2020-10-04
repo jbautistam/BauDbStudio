@@ -13,7 +13,7 @@ Con **BauDbStudio** puede:
 * Visualizar archivos de tipo parquet y CSV.
 * Mantener conexiones a Azure blob storage.
 
-Consulte la Wiki para más información o el [tutorial](http://jbautistam.com/Aplicaciones/BauDbStudio/Manual.htm).
+Consulte la [Wiki](https://github.com/jbautistam/BauDbStudio/wiki) para más información o el [tutorial](http://jbautistam.com/Aplicaciones/BauDbStudio/Manual.htm).
 
 ## Descarga de la aplicación
 Las diferentes versiones del ejecutable de esta aplicación, se pueden encontrar en Github: [Versiones de BauDbStudio](https://github.com/jbautistam/BauDbStudio/releases).
