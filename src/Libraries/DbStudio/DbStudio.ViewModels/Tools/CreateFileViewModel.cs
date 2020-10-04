@@ -16,6 +16,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Tools
 			SqlExtended,
 			Json,
 			Xml,
+			Python,
+			Markdown,
 			Other
 		}
 		// Variables privadas
@@ -41,6 +43,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Tools
 			ComboTypes.AddItem((int) FileType.SqlExtended, "Sql extendido");
 			ComboTypes.AddItem((int) FileType.Json, "Json");
 			ComboTypes.AddItem((int) FileType.Xml, "Xml");
+			ComboTypes.AddItem((int) FileType.Python, "Python");
+			ComboTypes.AddItem((int) FileType.Markdown, "Markdown");
 			ComboTypes.AddItem((int) FileType.Other, "Otros");
 			// Asigna el manejador de eventos
 			ComboTypes.PropertyChanged += (sender, args) =>
@@ -86,6 +90,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Tools
 					return ".sqlx";
 				case FileType.Xml:
 					return ".xml";
+				case FileType.Python:
+					return ".py";
+				case FileType.Markdown:
+					return ".md";
 				default:
 					return ".sql";
 			}

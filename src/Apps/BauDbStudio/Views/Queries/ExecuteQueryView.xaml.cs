@@ -25,6 +25,8 @@ namespace Bau.DbStudio.Views.Queries
 		/// </summary>
 		private void InitForm()
 		{
+			// Inicializa el gráfico
+			udtChart.InitControl(ViewModel.ChartViewModel);
 			// Asigna la configuración al editor
 			udtEditor.EditorFontName = MainWindow.MainController.ConfigurationController.EditorFontName;
 			udtEditor.EditorFontSize = MainWindow.MainController.ConfigurationController.EditorFontSize;

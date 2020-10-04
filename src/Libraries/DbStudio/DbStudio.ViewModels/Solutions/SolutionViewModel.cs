@@ -50,6 +50,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 			ConnectionExecutionViewModel.Load();
 			TreeFoldersViewModel.Load();
 			TreeStoragesViewModel.Load();
+			// Carga las carpetas en la ventana de búsqueda
+			MainViewModel.SearchFilesViewModel.LoadFolders();
 		}
 
 		/// <summary>

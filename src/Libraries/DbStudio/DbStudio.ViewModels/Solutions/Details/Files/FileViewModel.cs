@@ -13,6 +13,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 	public class FileViewModel : BaseObservableObject, IDetailViewModel
 	{
 		// Eventos públicos
+		public event EventHandler<Controllers.EventArguments.EditorGoToLineEventArgs> GoToLineRequired;
 		public event EventHandler<Controllers.EventArguments.EditorSelectedTextRequiredEventArgs> SelectedTextRequired;
 		// Variables privadas
 		private string _header, _fileName, _content;
@@ -118,6 +119,14 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 				SelectedTextRequired?.Invoke(this, eventArgs);
 				// Recupera el texto
 				return eventArgs.SelectedText;
+		}
+
+		/// <summary>
+		///		Lanza un evento para colocar el editor en una línea
+		/// </summary>
+		internal void GoToLine(string textSelected, int line)
+		{
+			GoToLineRequired?.Invoke(this, new Controllers.EventArguments.EditorGoToLineEventArgs(textSelected, line));
 		}
 
 		/// <summary>

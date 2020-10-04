@@ -33,8 +33,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Queries
 
 		public ExecuteQueryViewModel(SolutionViewModel solutionViewModel, string selectedConnection, string query) : base(false)
 		{
-			// Asigna las propiedades
+			// Asigna los viewModel
 			SolutionViewModel = solutionViewModel;
+			ChartViewModel = new ChartViewModel(this);
+			// Asigna las propiedades
 			Query = query;
 			Header = "Consulta";
 			PaginateQuery = false;
@@ -205,6 +207,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Queries
 			// Obtiene el token de cancelación
 			_tokenSource = new CancellationTokenSource();
 			_cancellationToken = _tokenSource.Token;
+			// Prepara el gráfico
+			PrepareDraw();
 		}
 
 		/// <summary>
@@ -222,6 +226,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Queries
 			IsExecuting = false;
 			// Log
 			SolutionViewModel.MainViewModel.Manager.Logger.Flush();
+			// Prepara el gráfico
+			PrepareDraw();
 		}
 
 		/// <summary>
@@ -241,6 +247,17 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Queries
 					StopQuery();
 				}
 			}
+		}
+
+		/// <summary>
+		///		Prepara el dibujo
+		/// </summary>
+		private void PrepareDraw()
+		{
+			if (IsExecuting || DataResults == null || DataResults.Rows?.Count == 0)
+				ChartViewModel.CanDraw = false;
+			else 
+				ChartViewModel.PrepareSeries();
 		}
 
 		/// <summary>
@@ -356,6 +373,11 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Queries
 		///		Solución
 		/// </summary>
 		public SolutionViewModel SolutionViewModel { get; }
+
+		/// <summary>
+		///		ViewModel para el gráfico
+		/// </summary>
+		public ChartViewModel ChartViewModel { get; }
 
 		/// <summary>
 		///		Cabecera

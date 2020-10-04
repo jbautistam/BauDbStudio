@@ -63,7 +63,7 @@ namespace Bau.Libraries.DbStudio.Conversor.Transformers
 
 		/// <summary>
 		///		Pasa los nombre de archivo de la cadena SQL a minúsculas (los nombres de archivo están entre ` y `
-		///	Databricks distingue entre mayúsculas y minúsculas y se ha decidido que todos los argumentos estarán en minúsculas
+		///	Databricks distingue entre mayúsculas y minúsculas. Para evitar problemas, se ha decidido que todos los argumentos estarán en minúsculas
 		/// </summary>
 		private string ConvertFileNameToLower(string sql)
 		{

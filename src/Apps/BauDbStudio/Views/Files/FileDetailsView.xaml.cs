@@ -49,9 +49,14 @@ namespace Bau.DbStudio.Views.Files
 						udtEditor.IsEnabled = false;
 						ViewModel.SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage($"Error al abrir el archivo {exception.Message}");
 					}
-					// Asigna el manejador de eventos
+					// Asigna los manejadores de eventos
 					ViewModel.SelectedTextRequired += (sender, args) => args.SelectedText = udtEditor.GetSelectedText();
-					// Cambia el resaltado en los archivo SQLx
+					ViewModel.GoToLineRequired += (sender, args) => {
+																		Focus();
+																		udtEditor.Focus();
+																		udtEditor.GoToLine(args.Line, args.TextSelected);
+																	};
+					// Cambia el resaltado en los archivos SQLx
 					if (!string.IsNullOrWhiteSpace(ViewModel.FileName) && ViewModel.FileName.EndsWith(".sqlx", StringComparison.CurrentCultureIgnoreCase))
 						udtEditor.ChangeHighLightByExtension(".sql");
 					// Indica que no ha habido modificaciones y que se ha cargado el archivo, si no se lanza

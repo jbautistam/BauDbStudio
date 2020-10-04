@@ -17,7 +17,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers
 		private ObservableCollection<IHierarchicalViewModel> _children;
 		private BaseTreeNodeViewModel _selectedNode;
 
-		public BaseTreeViewModel(SolutionViewModel solutionViewModel)
+		protected BaseTreeViewModel(SolutionViewModel solutionViewModel)
 		{
 			// Asigna las propiedades
 			SolutionViewModel = solutionViewModel;

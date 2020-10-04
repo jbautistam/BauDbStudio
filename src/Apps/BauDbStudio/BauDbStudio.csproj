@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <Compile Remove="Views\Connections\ConnectionParametersView.xaml.cs" />
+    <Compile Remove="Views\Queries\ChartView.xaml.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,6 +27,8 @@
     <None Remove="Resources\Images\ArrowDown.png" />
     <None Remove="Resources\Images\ArrowRight.png" />
     <None Remove="Resources\Images\ArrowUp.png" />
+    <None Remove="Resources\Images\CaseSensitive.png" />
+    <None Remove="Resources\Images\Chart.png" />
     <None Remove="Resources\Images\Connection.png" />
     <None Remove="Resources\Images\Deployment.png" />
     <None Remove="Resources\Images\Download.png" />
@@ -59,10 +62,18 @@
     <None Remove="Resources\Images\Storage.png" />
     <None Remove="Resources\Images\Table.png" />
     <None Remove="Resources\Images\Upload.png" />
+    <None Remove="Resources\Images\WholeWord.png" />
+    <None Remove="Resources\Images\Wildcards.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Page Remove="Views\Connections\ConnectionParametersView.xaml" />
+    <Page Remove="Views\Queries\ChartView.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Images\CaseSensitive.png" />
+    <Resource Include="Resources\Images\Chart.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -70,11 +81,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Controls\WPF\BauCharts\BauCharts.csproj" />
     <ProjectReference Include="..\..\..\..\..\Controls\WPF\BauControls\src\BauControls.csproj" />
     <ProjectReference Include="..\..\..\..\..\Controls\WPF\CodeEditor\src\CodeEditor.csproj" />
     <ProjectReference Include="..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.ViewModels\BauMvvm.ViewModels.csproj" />
     <ProjectReference Include="..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.Views.Wpf\BauMvvm.Views.Wpf.csproj" />
     <ProjectReference Include="..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.Views\BauMvvm.Views.csproj" />
+    <ProjectReference Include="..\..\..\..\..\Libraries\Charts\LibCharts\LibCharts.csproj" />
     <ProjectReference Include="..\..\..\..\..\Libraries\Common\LibSystem.Windows\LibSystem.Windows.csproj" />
     <ProjectReference Include="..\..\Libraries\DbStudio\DbStudio.ViewModels\DbStudio.ViewModels.csproj" />
   </ItemGroup>
@@ -117,6 +130,8 @@
     <Resource Include="Resources\Images\StepDisabled.png" />
     <Resource Include="Resources\Images\Stop.png" />
     <Resource Include="Resources\Images\Table.png" />
+    <Resource Include="Resources\Images\WholeWord.png" />
+    <Resource Include="Resources\Images\Wildcards.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -167,6 +182,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Tools\CreateFileView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Tools\Search\SearchView.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

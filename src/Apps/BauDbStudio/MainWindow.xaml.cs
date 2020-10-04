@@ -47,6 +47,8 @@ namespace Bau.DbStudio
 			dckManager.AddPane("TreeStorageExplorer", "Storage", new Views.TreeStoragesExplorer(ViewModel.SolutionViewModel.TreeStoragesViewModel), 
 							   null, Controls.DockLayout.DockPosition.Right);
 			dckManager.AddPane("LogView", "Log", new Views.Tools.LogView(ViewModel.LogViewModel), null, Controls.DockLayout.DockPosition.Bottom);
+			dckManager.AddPane("SearchVew", "Buscar", new Views.Tools.Search.SearchView(ViewModel.SearchFilesViewModel), 
+							   null, Controls.DockLayout.DockPosition.Right);
 			// Abre los paneles predefinidos
 			dckManager.OpenGroup(Controls.DockLayout.DockPosition.Left);
 			// Asigna los manejadores de eventos
