@@ -39,7 +39,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Tools
 		// Variables privadas
 		private string _fileName;
 		private ComboViewModel _comboTypes, _comboEncoding;
-		private bool _withBom;
 
 		public CreateFileViewModel(Solutions.SolutionViewModel solutionViewModel, string path)
 		{
