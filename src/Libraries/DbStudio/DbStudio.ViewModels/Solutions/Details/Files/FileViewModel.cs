@@ -17,6 +17,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 		public event EventHandler<Controllers.EventArguments.EditorSelectedTextRequiredEventArgs> SelectedTextRequired;
 		// Variables privadas
 		private string _header, _fileName, _content;
+		private System.Text.Encoding _fileEncoding;
+		private bool _fileWithBom;
 
 		public FileViewModel(SolutionViewModel solutionViewModel, string fileName)
 		{
@@ -31,7 +33,19 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 		{
 			// Carga el archivo
 			if (!string.IsNullOrWhiteSpace(FileName) && System.IO.File.Exists(FileName))
+			{
+				// Obtiene la codificación del archivo (para grabarlo después con la misma codificación)
+				FileEncoding = LibHelper.Files.HelperFiles.GetFileEncoding(FileName);
+				if (FileEncoding == null)
+				{
+					FileEncoding = System.Text.Encoding.UTF8;
+					FileWithBom = false;
+				}
+				else
+					FileWithBom = true;
+				// Carga el archivo
 				Content = LibHelper.Files.HelperFiles.LoadTextFile(FileName);
+			}
 			// Añade el archivo a los últimos archivos abiertos
 			SolutionViewModel.MainViewModel.LastFilesViewModel.Add(FileName);
 		}
@@ -54,7 +68,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 			if (!string.IsNullOrWhiteSpace(FileName))
 			{
 				// Graba el archivo
-				LibHelper.Files.HelperFiles.SaveTextFile(FileName, Content, System.Text.Encoding.UTF8);
+				if (FileWithBom)
+					LibHelper.Files.HelperFiles.SaveTextFile(FileName, Content, FileEncoding);
+				else
+					LibHelper.Files.HelperFiles.SaveTextFileWithoutBom(FileName, Content);
 				// Actualiza el árbol
 				SolutionViewModel.TreeFoldersViewModel.Load();
 				// Añade el archivo a los últimos archivos abiertos
@@ -178,6 +195,24 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 						Header = "Archivo";
 				}
 			}
+		}
+
+		/// <summary>
+		///		Codificación del archivo
+		/// </summary>
+		public System.Text.Encoding FileEncoding
+		{
+			get { return _fileEncoding; }
+			set { CheckObject(ref _fileEncoding, value); }
+		}
+
+		/// <summary>
+		///		Indica si el archivo tiene una cabecera BOM
+		/// </summary>
+		public bool FileWithBom
+		{
+			get { return _fileWithBom; }
+			set { CheckProperty(ref _fileWithBom, value); }
 		}
 
 		/// <summary>

@@ -55,9 +55,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 		}
 
 		/// <summary>
-		///		Obtiene la cadena SQL asociada al nombre del archivo o a una SELECT con los nombres de campo o simplemente el nombre de archivo
+		///		Obtiene la cadena que se debe insertar en un cuadro de texto dependiendo del tipo de nodo seleccionado
 		/// </summary>
-		public string GetSqlSelect(bool fullSql)
+		public string GetDroppedText(bool fullSql)
 		{
 			string result = string.Empty;
 
@@ -73,6 +73,32 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 					result += $"csv.`{FileName}`";
 				else
 					result += FileName;
+				// Devuelve el resultado
+				return result;
+		}
+
+		/// <summary>
+		///		Obtiene la cadena que se debe insertar en un cuadro de texto dependiendo del tipo de nodo seleccionado
+		/// </summary>
+		public string GetAdvancedDroppedText(Details.Files.FileViewModel droppedFileViewModel, bool fullSql)
+		{
+			string result = GetDroppedText(fullSql);
+
+				// Si como resultado tenemos el nombre de archivo, es porque aún no se ha convertido nada
+				if (!string.IsNullOrWhiteSpace(result) || result.Equals(FileName, StringComparison.CurrentCultureIgnoreCase))
+				{
+					// Si lo estamos dejando sobre un archivo de markdown
+					if (!string.IsNullOrWhiteSpace(droppedFileViewModel.FileName) && 
+						droppedFileViewModel.FileName.EndsWith(".md", StringComparison.CurrentCultureIgnoreCase))
+					{
+						string name = System.IO.Path.GetFileName(FileName);
+
+							if (LibHelper.Files.HelperFiles.CheckIsImage(FileName))
+								result = $"![{name}]({FileName.Replace('\\', '/')} \"{name}\")";
+							else
+								result = $"[{name}]({System.IO.Path.Combine(System.IO.Path.GetDirectoryName(FileName), System.IO.Path.GetFileNameWithoutExtension(FileName)).Replace('\\', '/')})";
+					}
+				}
 				// Devuelve el resultado
 				return result;
 		}

@@ -22,6 +22,7 @@ namespace Bau.DbStudio.Controllers
 			LastWorkSpace = Properties.Settings.Default.LastWorkSpace;
 			LastFiles = Properties.Settings.Default.LastFiles;
 			ShowWindowNotifications = Properties.Settings.Default.ShowWindowNotifications;
+			LastEncodingIndex = Properties.Settings.Default.LastEncodingIndex;
 		}
 
 		/// <summary>
@@ -40,6 +41,7 @@ namespace Bau.DbStudio.Controllers
 			Properties.Settings.Default.LastWorkSpace = LastWorkSpace;
 			Properties.Settings.Default.LastFiles = LastFiles;
 			Properties.Settings.Default.ShowWindowNotifications = ShowWindowNotifications;
+			Properties.Settings.Default.LastEncodingIndex = LastEncodingIndex;
 			// Graba la configuración
 			Properties.Settings.Default.Save();
 		}
@@ -93,5 +95,10 @@ namespace Bau.DbStudio.Controllers
 		///		Indica si se deben mostrar las notificaciones de sistema
 		/// </summary>
 		public bool ShowWindowNotifications { get; set; }
+
+		/// <summary>
+		///		Indice de la codificación seleccionada al grabar un archivo 
+		/// </summary>
+		public int LastEncodingIndex { get; set; }
 	}
 }

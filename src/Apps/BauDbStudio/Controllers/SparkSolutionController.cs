@@ -154,6 +154,34 @@ namespace Bau.DbStudio.Controllers
 		}
 
 		/// <summary>
+		///		Comprueba si en el portapapeles hay alguna imagen
+		/// </summary>
+		public bool ClipboardContainImage()
+		{
+			return new Helpers.ClipboardHelper().ContainsImage();
+		}
+
+		/// <summary>
+		///		Graba la imagen del portapapeles
+		/// </summary>
+		public bool SaveClipboardImage(string fileName)
+		{
+			bool saved = false;
+
+				// Graba la imagen
+				try
+				{
+					saved = new Helpers.ClipboardHelper().SaveImage(fileName);
+				}
+				catch (Exception exception)
+				{
+					Logger.Default.LogItems.Error("Error al graba el archivo del portapapeles", exception);
+				}
+				// Devuelve el valor que indica si se ha grabado
+				return saved;
+		}
+
+		/// <summary>
 		///		Controlador de aplicación
 		/// </summary>
 		internal AppController AppController { get; }

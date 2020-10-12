@@ -10,6 +10,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Tools
 	public class CreateFileViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewModel
 	{
 		// Enumerados privados
+		/// <summary>
+		///		Tipo de archivo
+		/// </summary>
 		private enum FileType
 		{
 			Sql,
@@ -20,15 +23,30 @@ namespace Bau.Libraries.DbStudio.ViewModels.Tools
 			Markdown,
 			Other
 		}
+
+		/// <summary>
+		///		Codificación del archivo
+		/// </summary>
+		public enum Encoding
+		{
+			Utf8,
+			Utf8NoBom,
+			Unicode,
+			Utf32,
+			Utf7,
+			Ascii
+		}
 		// Variables privadas
 		private string _fileName;
-		private ComboViewModel _comboTypes;
+		private ComboViewModel _comboTypes, _comboEncoding;
+		private bool _withBom;
 
 		public CreateFileViewModel(Solutions.SolutionViewModel solutionViewModel, string path)
 		{
 			SolutionViewModel = solutionViewModel;
 			Path = path;
 			LoadComboTypes();
+			LoadComboEncoding();
 		}
 
 		/// <summary>
@@ -54,6 +72,33 @@ namespace Bau.Libraries.DbStudio.ViewModels.Tools
 												};
 			// Selecciona el primer elemento
 			ComboTypes.SelectedItem = ComboTypes.Items[0];
+		}
+
+		/// <summary>
+		///		Carga el combo de tipo codificación
+		/// </summary>
+		private void LoadComboEncoding()
+		{
+			// Crea el combo
+			ComboEncoding = new ComboViewModel(this);
+			// Añade los elementos
+			ComboEncoding.AddItem((int) Encoding.Utf8, "Utf 8");
+			ComboEncoding.AddItem((int) Encoding.Utf8NoBom, "Utf 8 (sin BOM)");
+			ComboEncoding.AddItem((int) Encoding.Utf32, "Utf 32");
+			ComboEncoding.AddItem((int) Encoding.Utf7, "Utf 7");
+			ComboEncoding.AddItem((int) Encoding.Unicode, "Unicode");
+			ComboEncoding.AddItem((int) Encoding.Ascii, "Ascii");
+			// Selecciona el primer elemento
+			ComboEncoding.SelectedItem = ComboEncoding.Items[0];
+		}
+
+		/// <summary>
+		///		Selecciona una codificación en el combo
+		/// </summary>
+		public void SelectEncoding(int encodingIndex)
+		{
+			if (encodingIndex >= 0 && encodingIndex < ComboEncoding.Items.Count)
+				ComboEncoding.SelectedItem = ComboEncoding.Items[encodingIndex];
 		}
 
 		/// <summary>
@@ -105,6 +150,14 @@ namespace Bau.Libraries.DbStudio.ViewModels.Tools
 		private FileType GetSelectedType()
 		{
 			return (FileType) (ComboTypes.SelectedID ?? 0);
+		}
+
+		/// <summary>
+		///		Obtiene la codificación seleccionada en el combo
+		/// </summary>
+		public Encoding GetSelectedEncoding()
+		{
+			return (Encoding) (ComboEncoding.SelectedID ?? 0);
 		}
 
 		/// <summary>
@@ -174,6 +227,15 @@ namespace Bau.Libraries.DbStudio.ViewModels.Tools
 		{
 			get { return _comboTypes; }
 			set { CheckObject(ref _comboTypes, value); }
+		}
+
+		/// <summary>
+		///		Combo de codificación
+		/// </summary>
+		public ComboViewModel ComboEncoding
+		{
+			get { return _comboEncoding; }
+			set { CheckObject(ref _comboEncoding, value); }
 		}
 	}
 }

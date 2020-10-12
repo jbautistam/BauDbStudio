@@ -143,27 +143,11 @@ namespace Bau.DbStudio.Views.Files
 		}
 
 		/// <summary>
-		///		Busca la siguiente coincidencia con el texto
+		///		Abre / cierra la ventana de búsqueda
 		/// </summary>
-		public bool SearchNext(string textToFind, bool upToDown, bool caseSensitive, bool wholeWord, bool useRegex, bool useWildcards)
+		internal void OpenSearch(bool show)
 		{
-			return udtEditor.SearchNext(textToFind, upToDown, caseSensitive, wholeWord, useRegex, useWildcards);
-		}
-
-		/// <summary>
-		///		Reemplaza el texto
-		/// </summary>
-		internal bool Replace(string textToFind, string textToReplace, bool caseSensitive, bool wholeWord, bool useRegex, bool useWildcards)
-		{
-			return udtEditor.Replace(textToFind, textToReplace, caseSensitive, wholeWord, useRegex, useWildcards);
-		}
-
-		/// <summary>
-		///		Reemplaza todas las coincidencias
-		/// </summary>
-		internal void ReplaceAll(string textToFind, string textToReplace, bool caseSensitive, bool wholeWord, bool useRegex, bool useWildcards)
-		{
-			udtEditor.ReplaceAll(textToFind, textToReplace, caseSensitive, wholeWord, useRegex, useWildcards);
+			udtEditor.ShowSearch(show);
 		}
 
 		/// <summary>
@@ -201,7 +185,7 @@ namespace Bau.DbStudio.Views.Files
 				udtEditor.InsertText(fieldNodeViewModel.GetSqlSelect(e.KeyStates == System.Windows.DragDropKeyStates.ShiftKey), 
 									 e.GetPosition(udtEditor));
 			else if (_dragDropController.GetDragDropFileNode(e.Data) is Libraries.DbStudio.ViewModels.Solutions.Explorers.Files.NodeFileViewModel fileNodeViewModel)
-				udtEditor.InsertText(fileNodeViewModel.GetSqlSelect(e.KeyStates == System.Windows.DragDropKeyStates.ShiftKey), 
+				udtEditor.InsertText(fileNodeViewModel.GetAdvancedDroppedText(ViewModel, e.KeyStates == System.Windows.DragDropKeyStates.ShiftKey), 
 									 e.GetPosition(udtEditor));
 		}
 

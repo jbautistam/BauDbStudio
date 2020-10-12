@@ -19,6 +19,7 @@
 				<Grid.RowDefinitions>
 					<RowDefinition Height="Auto"/>
 					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
 				</Grid.RowDefinitions>
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto"/>
@@ -31,6 +32,10 @@
 				<Label Grid.Row="1" Grid.Column="0" Margin="5" Content="Nombre de archivo::"/>
 				<TextBox Grid.Row="1" Grid.Column="1" 
 						Text="{Binding Path=FileName, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+				<Label Grid.Row="2" Grid.Column="0" Margin="5" Content="Codificación:"/>
+				<ComboBox Grid.Row="2" Grid.Column="1" Margin="5" 
+						  ItemsSource="{Binding ComboEncoding.Items}" DisplayMemberPath="Text" 
+						  SelectedItem="{Binding ComboEncoding.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 			</Grid>
 		</GroupBox>
 		<StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">

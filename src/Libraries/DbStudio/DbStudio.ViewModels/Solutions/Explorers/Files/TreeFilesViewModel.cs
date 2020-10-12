@@ -29,6 +29,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 										.AddListener(this, nameof(SelectedNode));
 			PasteCommand = new BaseCommand(_ => PasteFile(), _ => CanExecuteAction(nameof(PasteCommand)))
 										.AddListener(this, nameof(SelectedNode));
+			PasteClipboardImageCommand = new BaseCommand(_ => PasteClipboardImage(), _ => CanExecuteAction(nameof(PasteClipboardImageCommand)))
+											.AddListener(this, nameof(SelectedNode));
 			SeeAtExplorerCommand = new BaseCommand(_ => OpenFileExplorer());
 		}
 
@@ -112,6 +114,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 						return type == BaseTreeNodeViewModel.NodeType.File;
 					case nameof(PasteCommand):
 						return _nodeToCopy != null && SelectedNode != null && isFolder;
+					case nameof(PasteClipboardImageCommand):
+						return isFolder && SolutionViewModel.MainViewModel.MainController.ClipboardContainImage();
 					default:
 						return true;
 				}
@@ -144,9 +148,24 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 				else if (node.FileName.EndsWith(".xlsx", StringComparison.CurrentCultureIgnoreCase) ||
 						 node.FileName.EndsWith(".xls", StringComparison.CurrentCultureIgnoreCase))
 					SolutionViewModel.MainViewModel.MainController.OpenWindow(new Details.Files.ExcelFileViewModel(SolutionViewModel, node.FileName));
+				else if (IsImage(node.FileName))
+					SolutionViewModel.MainViewModel.MainController.OpenWindow(new Details.Files.ImageViewModel(SolutionViewModel, node.FileName));
 				else
 					SolutionViewModel.MainViewModel.MainController.OpenWindow(new Details.Files.FileViewModel(SolutionViewModel, node.FileName));
 			}
+		}
+
+		/// <summary>
+		///		Comprueba si es un archivo de imagen
+		/// </summary>
+		private bool IsImage(string fileName)
+		{
+			return fileName.EndsWith(".bmp", StringComparison.CurrentCultureIgnoreCase) ||
+				   fileName.EndsWith(".gif", StringComparison.CurrentCultureIgnoreCase) ||
+				   fileName.EndsWith(".jpg", StringComparison.CurrentCultureIgnoreCase) ||
+				   fileName.EndsWith(".jpeg", StringComparison.CurrentCultureIgnoreCase) ||
+				   fileName.EndsWith(".tiff", StringComparison.CurrentCultureIgnoreCase) ||
+				   fileName.EndsWith(".png", StringComparison.CurrentCultureIgnoreCase);
 		}
 
 		/// <summary>
@@ -189,13 +208,35 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 							!string.IsNullOrWhiteSpace(createFileViewModel.FileName))
 						{
 							// Graba el archivo
-							LibHelper.Files.HelperFiles.SaveTextFile(createFileViewModel.FullFileName, string.Empty, System.Text.Encoding.UTF8);
+							LibHelper.Files.HelperFiles.SaveTextFile(createFileViewModel.FullFileName, string.Empty, GetEncoder(createFileViewModel.GetSelectedEncoding()));
 							// Abre la ventana
 							SolutionViewModel.MainViewModel.MainController.OpenWindow(new Details.Files.FileViewModel(SolutionViewModel, createFileViewModel.FullFileName));
 							// Actualiza el árbol
 							Load();
 						}
 				}
+		}
+
+		/// <summary>
+		///		Obtiene la codificación adecuada para el archivo
+		/// </summary>
+		private System.Text.Encoding GetEncoder(Tools.CreateFileViewModel.Encoding encoding)
+		{
+			switch (encoding)
+			{
+				case Tools.CreateFileViewModel.Encoding.Utf8:
+					return System.Text.Encoding.UTF8;
+				case Tools.CreateFileViewModel.Encoding.Utf8NoBom:
+					return new System.Text.UTF8Encoding(false);
+				case Tools.CreateFileViewModel.Encoding.Utf7:
+					return System.Text.Encoding.UTF7;
+				case Tools.CreateFileViewModel.Encoding.Utf32:
+					return System.Text.Encoding.UTF32;
+				case Tools.CreateFileViewModel.Encoding.Unicode:
+					return System.Text.Encoding.Unicode;
+				default:
+					return System.Text.Encoding.ASCII;
+			}
 		}
 
 		/// <summary>
@@ -268,6 +309,29 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 					// ... y vacía el nodo de copia
 					_nodeToCopy = null;
 			}	
+		}
+
+		/// <summary>
+		///		Comando para pegar la imagen del portapapeles
+		/// </summary>
+		private void PasteClipboardImage()
+		{
+			if (!SolutionViewModel.MainViewModel.MainController.ClipboardContainImage())
+				SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("No hay ninguna imagen en el portapapeles");
+			else
+			{
+				string fileName = SolutionViewModel.MainViewModel.MainController.HostController.DialogsController.OpenDialogSave(GetSelectedFolder(),
+																																 "Archivos de imagen (*.jpg)|*.jpg",
+																																 "NewImage.jpg");
+
+					if (!string.IsNullOrWhiteSpace(fileName))
+					{
+						if (!SolutionViewModel.MainViewModel.MainController.SaveClipboardImage(fileName))
+							SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("No se ha podido grabar la imagen");
+						else
+							Load();
+					}
+			}
 		}
 
 		/// <summary>
@@ -648,6 +712,11 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 		///		Comando para pegar un nodo
 		/// </summary>
 		public BaseCommand PasteCommand { get; }
+
+		/// <summary>
+		///		Comando para pegar una imagen
+		/// </summary>
+		public BaseCommand PasteClipboardImageCommand { get; }
 
 		/// <summary>
 		///		Comando para abrir en el explorador

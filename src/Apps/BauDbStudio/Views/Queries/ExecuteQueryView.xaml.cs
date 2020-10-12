@@ -84,7 +84,7 @@ namespace Bau.DbStudio.Views.Queries
 				udtEditor.InsertText(fieldNodeViewModel.GetSqlSelect(e.KeyStates == System.Windows.DragDropKeyStates.ShiftKey), 
 									 e.GetPosition(udtEditor));
 			else if (_dragDropController.GetDragDropFileNode(e.Data) is Libraries.DbStudio.ViewModels.Solutions.Explorers.Files.NodeFileViewModel fileNodeViewModel)
-				udtEditor.InsertText(fileNodeViewModel.GetSqlSelect(e.KeyStates == System.Windows.DragDropKeyStates.ShiftKey), 
+				udtEditor.InsertText(fileNodeViewModel.GetDroppedText(e.KeyStates == System.Windows.DragDropKeyStates.ShiftKey), 
 									 e.GetPosition(udtEditor));
 		}
 

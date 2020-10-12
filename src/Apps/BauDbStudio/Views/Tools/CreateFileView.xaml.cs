@@ -14,8 +14,15 @@ namespace Bau.DbStudio.Views.Tools
 		{
 			InitializeComponent();
 			DataContext = ViewModel = viewModel;
+			ViewModel.SelectEncoding(MainWindow.MainController.ConfigurationController.LastEncodingIndex);
 			ViewModel.Close += (sender, eventArgs) => 
 									{
+										// Guarda la codificación
+										if (eventArgs.IsAccepted)
+										{
+											MainWindow.MainController.ConfigurationController.LastEncodingIndex = (int) ViewModel.GetSelectedEncoding();
+											MainWindow.MainController.ConfigurationController.Save();
+										}
 										DialogResult = eventArgs.IsAccepted; 
 										Close();
 									};

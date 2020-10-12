@@ -24,7 +24,6 @@ namespace Bau.DbStudio
 		/// </summary>
 		private void InitForm()
 		{	
-
 			// Asigna el icono a la ventana
 			Icon = System.Windows.Media.Imaging.BitmapFrame.Create(new Uri("pack://application:,,,./Resources/BauDbStudio.ico", UriKind.RelativeOrAbsolute)); 
 			// Inicializa el controlador
@@ -99,6 +98,9 @@ namespace Bau.DbStudio
 		{
 			switch (detailsViewModel)
 			{
+				case Libraries.DbStudio.ViewModels.Solutions.Details.Files.ImageViewModel viewModel:
+						AddTab(new ImageView(viewModel), viewModel);
+					break;
 				case Libraries.DbStudio.ViewModels.Solutions.Details.Files.FileViewModel viewModel:
 						AddTab(new FileDetailsView(viewModel), viewModel);
 					break;
@@ -239,29 +241,8 @@ namespace Bau.DbStudio
 		/// </summary>
 		private void OpenSearchWindow()
 		{
-			// Crea el viewModel de las ventanas de búsqueda si no existía
-			if (FindViewModel == null)
-				FindViewModel = new Views.Tools.FindViewModel(this);
-			// Muestra el cuadro de búsqueda
-			if (!FindViewModel.IsOpened && dckManager.ActiveDocument?.UserControl is FileDetailsView fileView)
-			{
-				Views.Tools.FindView view = new Views.Tools.FindView(FindViewModel);
-
-					// Muestra el formulario activo
-					view.Owner = this;
-					view.ShowActivated = true;
-					view.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-					view.WindowStyle = WindowStyle.ToolWindow;
-					view.ShowInTaskbar = false;
-					view.ResizeMode = ResizeMode.NoResize;
-					view.Top = Top;
-					view.Left = Left + Width - view.Height;
-					// view.IsActive = true;
-					// Muestra la venta
-					view.Show();
-					// Inicializa el viewModel
-					FindViewModel.Open(fileView);
-			}
+			if (dckManager.ActiveDocument?.UserControl is FileDetailsView fileView)
+				fileView.OpenSearch(true);
 		}
 
 		/// <summary>
@@ -418,11 +399,6 @@ namespace Bau.DbStudio
 		///		Controlador principal
 		/// </summary>
 		public static Controllers.AppController MainController { get; private set; }
-
-		/// <summary>
-		///		ViewModel del cuadro de diálogo de búsqueda
-		/// </summary>
-		private Views.Tools.FindViewModel FindViewModel { get; set; }
 
 		private void Window_Loaded(object sender, RoutedEventArgs e)
 		{

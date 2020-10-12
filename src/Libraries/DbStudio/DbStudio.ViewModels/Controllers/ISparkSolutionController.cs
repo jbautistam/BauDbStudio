@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using Bau.Libraries.BauMvvm.ViewModels.Controllers;
 using Bau.Libraries.DbStudio.ViewModels.Solutions.Details;
 
@@ -13,7 +14,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Controllers
 		/// <summary>
 		///		Controlador principal
 		/// </summary>
-		BauMvvm.ViewModels.Controllers.IHostController HostController { get; }
+		IHostController HostController { get; }
 
 		/// <summary>
 		///		Controlador de log
@@ -33,12 +34,12 @@ namespace Bau.Libraries.DbStudio.ViewModels.Controllers
 		/// <summary>
 		///		Abre una ventana de detalles
 		/// </summary>
-		BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType OpenWindow(IDetailViewModel detailsViewModel);
+		SystemControllerEnums.ResultType OpenWindow(IDetailViewModel detailsViewModel);
 
 		/// <summary>
 		///		Abre un cuadro de diálogo
 		/// </summary>
-		BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType OpenDialog(BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewModel dialogViewModel);
+		SystemControllerEnums.ResultType OpenDialog(BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewModel dialogViewModel);
 
 		/// <summary>
 		///		Abre el explorador sobre un directorio
@@ -74,5 +75,15 @@ namespace Bau.Libraries.DbStudio.ViewModels.Controllers
 		///		Muestra una notificación (sólo si la configuración lo permite
 		/// </summary>
 		void ShowNotification(SystemControllerEnums.NotificationType type, string title, string message);
+
+		/// <summary>
+		///		Comprueba si en el portapapeles hay una imagen
+		/// </summary>
+		bool ClipboardContainImage();
+
+		/// <summary>
+		///		Graba la imagen del portapapeles
+		/// </summary>
+		bool SaveClipboardImage(string fileName);
 	}
 }
