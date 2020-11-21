@@ -26,6 +26,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 			// Asigna las propiedades
 			MainViewModel = mainViewModel;
 			Workspace = workspace;
+			// Asigna las soluciones hija
+			ReportingSolutionViewModel = new Details.Reporting.ReportingSolutionViewModel(this);
+			// Asigna los árboles de exploración
 			TreeConnectionsViewModel = new Explorers.Connections.TreeConnectionsViewModel(this);
 			TreeFoldersViewModel = new Explorers.Files.TreeFilesViewModel(this);
 			TreeStoragesViewModel = new Explorers.Cloud.TreeStorageViewModel(this);
@@ -36,6 +39,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 			CreateTestXmlCommand = new BaseCommand(async _ => await CreateTestXmlAsync());
 			CreateValidationScriptsCommand = new BaseCommand(async _ => await CreateValidationScriptsAsync());
 			CreateImportFilesScriptsCommand = new BaseCommand(async _ => await CreateImportFilesScriptsAsync());
+			CreateSchemaXmlCommand  = new BaseCommand(async _ => await CreateSchemaXmlAsync());
+			CreateSchemaReportingXmlCommand = new BaseCommand(_ => CreateSchemaReportingXml());
 		}
 
 		/// <summary>
@@ -50,6 +55,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 			ConnectionExecutionViewModel.Load();
 			TreeFoldersViewModel.Load();
 			TreeStoragesViewModel.Load();
+			// Carga la solución de informes
+			ReportingSolutionViewModel.Load(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Solution.FileName), $"Reporting.{Workspace}.Solution.xml"));
 			// Carga las carpetas en la ventana de búsqueda
 			MainViewModel.SearchFilesViewModel.LoadFolders();
 		}
@@ -60,7 +67,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 		private void NewWorkspace()
 		{
 			string workspace = string.Empty;
-			
+
 				if (MainViewModel.MainController.HostController.SystemController.ShowInputString("Nombre del espacio de trabajo", ref workspace) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 				{
 					if (!string.IsNullOrWhiteSpace(workspace))
@@ -238,6 +245,69 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 							MainViewModel.MainController.Logger.Flush();
 					}
 		}
+
+		/// <summary>
+		///		Crea los archivos XML de un esquema
+		/// </summary>
+		private async Task CreateSchemaXmlAsync()
+		{
+			Details.EtlProjects.CreateSchemaXmlViewModel viewModel = new Details.EtlProjects.CreateSchemaXmlViewModel(this);
+
+				if (MainViewModel.MainController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+					using (BlockLogModel block = MainViewModel.MainController.Logger.Default.CreateBlock(LogModel.LogType.Info, "Comienzo de la creación de archivos de esquema"))
+					{
+						// Crea los archivos de esquema
+						try
+						{
+							// Crea los archivos
+							await new Application.Controllers.Schema.SchemaManager(MainViewModel.Manager).SaveAsync(viewModel.ComboConnections.GetSelectedConnection(), viewModel.OutputFileName);
+							// Log
+							block.Info("Fin de la creación de archivos de esquema");
+							MainViewModel.MainController.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
+																		  "Generación de archivos de esquema",
+																		  "Ha terminado correctamente la generación de los archivos de esquema");
+						}
+						catch (Exception exception)
+						{
+							block.Error($"Error en la generación de archivos de esqu{exception.Message}");
+						}
+						// Log
+						MainViewModel.MainController.Logger.Flush();
+					}
+		}
+
+		/// <summary>
+		///		Crea los archivos XML de un esquema para reporting
+		/// </summary>
+		private void CreateSchemaReportingXml()
+		{
+			Details.Reporting.Tools.CreateSchemaReportingXmlViewModel viewModel = new Details.Reporting.Tools.CreateSchemaReportingXmlViewModel(this);
+
+				if (MainViewModel.MainController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+					using (BlockLogModel block = MainViewModel.MainController.Logger.Default.CreateBlock(LogModel.LogType.Info, "Comienzo de la creación de archivos de informes"))
+					{
+						// Crea los archivos de esquema
+						try
+						{
+							LibReporting.Application.ReportingManager manager = new LibReporting.Application.ReportingManager();
+
+								// Graba el archivo
+								manager.SaveDataWarehouse(manager.ConvertSchemaDbToDataWarehouse(viewModel.Name, viewModel.SchemaFileName), viewModel.OutputFileName);
+								// Log
+								block.Info("Fin de la creación de archivos de esquema para informes");
+								MainViewModel.MainController.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
+																			  "Generación de archivos de esquema para informes",
+																			  "Ha terminado correctamente la generación de los archivos de esquema para informes");
+						}
+						catch (Exception exception)
+						{
+							block.Error($"Error en la generación de archivos de esquema. {exception.Message}");
+						}
+						// Log
+						MainViewModel.MainController.Logger.Flush();
+					}
+		}
+
 		/// <summary>
 		///		ViewModel de la ventana principal
 		/// </summary>
@@ -247,6 +317,11 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 		///		Solución
 		/// </summary>
 		public SolutionModel Solution { get; private set; }
+
+		/// <summary>
+		///		ViewModel para la solución de reporting
+		/// </summary>
+		public Details.Reporting.ReportingSolutionViewModel ReportingSolutionViewModel { get; }
 
 		/// <summary>
 		///		Espacio de trabajo
@@ -322,5 +397,15 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 		///		Crea los archivos SQL de importación de archivos a una base de datos
 		/// </summary>
 		public BaseCommand CreateImportFilesScriptsCommand { get; }
+
+		/// <summary>
+		///		Crea los archivos XML de un esquema de base de datos
+		/// </summary>
+		public BaseCommand CreateSchemaXmlCommand { get; }
+
+		/// <summary>
+		///		Crea los archivos XML de reporting a partir de un esquema de base de datos
+		/// </summary>
+		public BaseCommand CreateSchemaReportingXmlCommand { get; }
 	}
 }

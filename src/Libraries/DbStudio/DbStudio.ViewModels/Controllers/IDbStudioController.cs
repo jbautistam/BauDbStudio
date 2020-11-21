@@ -9,7 +9,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Controllers
 	/// <summary>
 	///		Interface para los controladores de solución
 	/// </summary>
-	public interface ISparkSolutionController
+	public interface IDbStudioController
 	{
 		/// <summary>
 		///		Controlador principal

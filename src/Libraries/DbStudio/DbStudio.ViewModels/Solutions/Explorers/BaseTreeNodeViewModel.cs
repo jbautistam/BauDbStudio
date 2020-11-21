@@ -38,7 +38,21 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers
 			/// <summary>Contenedor de storage</summary>
 			StorageContainer,
 			/// <summary>Mensaje (transitorio)</summary>
-			Message
+			Message,
+			/// <summary>Almacén de datos</summary>
+			DataWarehouse,
+			/// <summary>Raíz de origen de datos</summary>
+			DataSourcesRoot,
+			/// <summary>Origen de datos</summary>
+			DataSource,
+			/// <summary>Raíz de dimensiones</summary>
+			DimensionsRoot,
+			/// <summary>Dimensión</summary>
+			Dimension,
+			/// <summary>Raíz de informes</summary>
+			ReportsRoot,
+			/// <summary>Informe</summary>
+			Report
 		}
 		/// <summary>
 		///		Tipo de icono

@@ -9,13 +9,13 @@ namespace Bau.DbStudio.Controllers
 	{
 		public AppController(string applicationName, MainWindow mainWindow, string appPath)
 		{
-			SparkSolutionController = new SparkSolutionController(this, applicationName, mainWindow, appPath);
+			SparkSolutionController = new DbStudioController(this, applicationName, mainWindow, appPath);
 		}
 
 		/// <summary>
 		///		Controlador de la solución
 		/// </summary>
-		public SparkSolutionController SparkSolutionController { get; }
+		public DbStudioController SparkSolutionController { get; }
 
 		/// <summary>
 		///		Controlador de configuración de la aplicación

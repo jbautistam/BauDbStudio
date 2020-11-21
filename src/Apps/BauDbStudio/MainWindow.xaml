@@ -173,14 +173,25 @@
 						<Image Width="16" Height="16" Source="/Resources/Images/Export.png" />
 					</MenuItem.Icon>
 				</MenuItem>
-				<MenuItem Header="_Crear scripts validación" Command="{Binding Path=SolutionViewModel.CreateValidationScriptsCommand}">
+				<MenuItem Header="_Crear scripts validación ..." Command="{Binding Path=SolutionViewModel.CreateValidationScriptsCommand}">
 					<MenuItem.Icon>
 						<Image Width="16" Height="16" Source="/Resources/Images/FileSql.png" />
 					</MenuItem.Icon>
 				</MenuItem>
-				<MenuItem Header="Crear script de importación de archivos" Command="{Binding Path=SolutionViewModel.CreateImportFilesScriptsCommand}">
+				<MenuItem Header="Crear script de importación de archivos ..." Command="{Binding Path=SolutionViewModel.CreateImportFilesScriptsCommand}">
 					<MenuItem.Icon>
 						<Image Width="16" Height="16" Source="/Resources/Images/FileSql.png" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<Separator/>
+				<MenuItem Header="Generar XML de esquema ..." Command="{Binding Path=SolutionViewModel.CreateSchemaXmlCommand}">
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/Resources/Images/FileXml.png" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<MenuItem Header="Generar XML de reporting ..." Command="{Binding Path=SolutionViewModel.CreateSchemaReportingXmlCommand}">
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/Resources/Images/FileXml.png" />
 					</MenuItem.Icon>
 				</MenuItem>
 				<Separator/>

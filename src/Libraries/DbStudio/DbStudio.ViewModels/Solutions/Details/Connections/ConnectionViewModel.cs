@@ -42,7 +42,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 			if (string.IsNullOrWhiteSpace(Name))
 				Name = "Nueva conexión";
 			Description = Connection.Description;
-			ComboTypes.SelectedID = (int) Connection.Type;
+			ComboTypes.SelectedId = (int) Connection.Type;
 			Server = Connection.Parameters[nameof(Server)];
 			Port = Connection.Parameters[nameof(Port)].GetInt(1433);
 			User = Connection.Parameters[nameof(User)];
@@ -78,7 +78,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 												{
 													if (args.PropertyName.Equals(nameof(ComboTypes.SelectedItem)))
 													{
-														ConnectionModel.ConnectionType type = (ConnectionModel.ConnectionType) ComboTypes.SelectedID;
+														ConnectionModel.ConnectionType type = (ConnectionModel.ConnectionType) ComboTypes.SelectedId;
 
 															IsServerConnection = type == ConnectionModel.ConnectionType.SqlServer ||
 																				 type == ConnectionModel.ConnectionType.PostgreSql ||
@@ -99,7 +99,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 				// Comprueba los datos introducidos
 				if (string.IsNullOrWhiteSpace(Name))
 					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Introduzca el nombre de la conexión");
-				else if (ComboTypes.SelectedID == null)
+				else if (ComboTypes.SelectedId == null)
 					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Seleccione un tipo");
 				else if (ValidateConnection())
 					validated = true;
@@ -156,7 +156,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 				// Asigna los datos al proyecto
 				Connection.Name = Name;
 				Connection.Description = Description;
-				Connection.Type = (ConnectionModel.ConnectionType) (ComboTypes.SelectedID ?? 0);
+				Connection.Type = (ConnectionModel.ConnectionType) (ComboTypes.SelectedId ?? 0);
 				Connection.Parameters[nameof(Server)] = Server;
 				Connection.Parameters[nameof(Port)] = Port.ToString();
 				Connection.Parameters[nameof(User)] = User;

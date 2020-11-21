@@ -72,6 +72,28 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers
 		}
 
 		/// <summary>
+		///		Expande todos los nodos
+		/// </summary>
+		protected void ExpandAll()
+		{
+			ExpandAll(Children);
+		}
+
+		/// <summary>
+		///		Expande todos los nodos
+		/// </summary>
+		private void ExpandAll(ObservableCollection<IHierarchicalViewModel> nodes)
+		{
+			foreach (IHierarchicalViewModel node in nodes)
+			{
+				// Expande el nodo
+				node.IsExpanded = true;
+				// Expande los hijos
+				ExpandAll(node.Children);
+			}
+		}
+
+		/// <summary>
 		///		Expande los nodos que se le pasan en la colección <param name="nodesExpanded" />
 		/// </summary>
 		private void ExpandNodes(ObservableCollection<IHierarchicalViewModel> nodes, List<IHierarchicalViewModel> nodesExpanded)

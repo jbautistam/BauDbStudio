@@ -85,6 +85,14 @@ namespace Bau.Libraries.DbScripts.Manager
 		}
 
 		/// <summary>
+		///		Obtiene el esquema de una conexión
+		/// </summary>
+		public async Task<LibDbProviders.Base.Schema.SchemaDbModel> GetDbSchemaAsync(ConnectionModel connection, CancellationToken cancellationToken)
+		{
+			return await ConnectionManager.GetSchemaAsync(connection, cancellationToken);
+		}
+
+		/// <summary>
 		///		Manager de log
 		/// </summary>
 		internal LogManager Logger { get; }

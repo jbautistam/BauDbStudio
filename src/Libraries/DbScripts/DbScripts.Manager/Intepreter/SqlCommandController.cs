@@ -32,6 +32,9 @@ namespace Bau.Libraries.DbScripts.Manager.Interpreter
 		{
 			DataTable result = null;
 
+				// Normaliza los argumentos
+				if (arguments == null)
+					arguments = new Models.ArgumentListModel();
 				// Obtiene la tabla
 				using (BlockLogModel block = Manager.Logger.Default.CreateBlock(LogModel.LogType.Info, "Execute query"))
 				{

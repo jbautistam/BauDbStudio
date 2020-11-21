@@ -431,7 +431,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Queries
 			get { return _executionTime; }
 			set { CheckProperty(ref _executionTime, value); }
 		}
-		
+
 		/// <summary>
 		///		Color del texto del tiempo de ejecución
 		/// </summary>

@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <RootNamespace>Bau.Libraries.LibReporting.Models</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="DataBases\**" />
+    <Compile Remove="Metadata\**" />
+    <EmbeddedResource Remove="DataBases\**" />
+    <EmbeddedResource Remove="Metadata\**" />
+    <None Remove="DataBases\**" />
+    <None Remove="Metadata\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="DataWarehouses\DataSets\SqlSelectModel.cs" />
+    <Compile Remove="DataWarehouses\Dimensions\DimensionRelationColumnModel.cs" />
+    <Compile Remove="DataWarehouses\Reports\ReportDataSourceExpressionModel.cs" />
+    <Compile Remove="DataWarehouses\Reports\ReportDataSourceRelationColumnModel.cs" />
+    <Compile Remove="DataWarehouses\Reports\ReportDataSourceRelationModel.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibDataStructures\src\LibDataStructures.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DataBaseProviders\LibDbProviders.Base\LibDbProviders.Base.csproj" />
+  </ItemGroup>
+
+</Project>

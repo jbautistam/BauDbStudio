@@ -21,7 +21,7 @@ namespace Bau.Libraries.DbStudio.ViewModels
 		private Tools.LastFilesListViewModel _lastFilesViewModel;
 		private Tools.Search.SearchFilesViewModel _searchFilesViewModel;
 
-		public MainViewModel(Controllers.ISparkSolutionController mainController, string workspace)
+		public MainViewModel(Controllers.IDbStudioController mainController, string workspace)
 		{
 			// Título de la aplicación
 			Text = mainController.AppName;
@@ -83,12 +83,9 @@ namespace Bau.Libraries.DbStudio.ViewModels
 		/// </summary>
 		private void SaveAll()
 		{
-			System.Collections.Generic.List<Solutions.Details.IDetailViewModel> viewModels = MainController.GetOpenedDetails();
-
-				// Graba el contenido de los viewModels abiertos
-				foreach (Solutions.Details.IDetailViewModel viewModel in viewModels)
-					if (viewModel.IsUpdated)
-						viewModel.SaveDetails(false);
+			foreach (Solutions.Details.IDetailViewModel viewModel in MainController.GetOpenedDetails())
+				if (viewModel.IsUpdated)
+					viewModel.SaveDetails(false);
 		}
 
 		/// <summary>
@@ -139,12 +136,12 @@ namespace Bau.Libraries.DbStudio.ViewModels
 		/// <summary>
 		///		Instancia principal 
 		/// </summary>
-		public MainViewModel Instance { get; private set; }
+		public MainViewModel Instance { get; }
 
 		/// <summary>
 		///		Controlador principal
 		/// </summary>
-		public Controllers.ISparkSolutionController MainController { get; }
+		public Controllers.IDbStudioController MainController { get; }
 
 		/// <summary>
 		///		Manager de solución

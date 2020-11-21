@@ -20,6 +20,7 @@
   <ItemGroup>
     <Compile Remove="Views\Connections\ConnectionParametersView.xaml.cs" />
     <Compile Remove="Views\Queries\ChartView.xaml.cs" />
+    <Compile Remove="Views\Reporting\Queries\FilterColumnView.xaml.cs" />
     <Compile Remove="Views\Tools\FindView.xaml.cs" />
     <Compile Remove="Views\Tools\FindViewModel.cs" />
   </ItemGroup>
@@ -48,15 +49,19 @@
     <None Remove="Resources\Images\FileSql.png" />
     <None Remove="Resources\Images\FileSqlExtended.png" />
     <None Remove="Resources\Images\FileXml.png" />
+    <None Remove="Resources\Images\Filter.png" />
     <None Remove="Resources\Images\FolderNode.png" />
     <None Remove="Resources\Images\Key.png" />
     <None Remove="Resources\Images\Loading.png" />
+    <None Remove="Resources\Images\NoSort.png" />
     <None Remove="Resources\Images\Project.png" />
     <None Remove="Resources\Images\ProjectDisabled.png" />
     <None Remove="Resources\Images\Schema.png" />
     <None Remove="Resources\Images\Script.png" />
     <None Remove="Resources\Images\ScriptDisabled.png" />
     <None Remove="Resources\Images\Search.png" />
+    <None Remove="Resources\Images\SortAscending.png" />
+    <None Remove="Resources\Images\SortDescending.png" />
     <None Remove="Resources\Images\SplashScreenImage.png" />
     <None Remove="Resources\Images\Step.png" />
     <None Remove="Resources\Images\StepDisabled.png" />
@@ -71,6 +76,7 @@
   <ItemGroup>
     <Page Remove="Views\Connections\ConnectionParametersView.xaml" />
     <Page Remove="Views\Queries\ChartView.xaml" />
+    <Page Remove="Views\Reporting\Queries\FilterColumnView.xaml" />
     <Page Remove="Views\Tools\FindView.xaml" />
   </ItemGroup>
 
@@ -106,8 +112,12 @@
     <Resource Include="Resources\Images\Export.png" />
     <Resource Include="Resources\Images\FileExcel.png" />
     <Resource Include="Resources\Images\FileSqlExtended.png" />
+    <Resource Include="Resources\Images\Filter.png" />
     <Resource Include="Resources\Images\Loading.png" />
+    <Resource Include="Resources\Images\NoSort.png" />
     <Resource Include="Resources\Images\Schema.png" />
+    <Resource Include="Resources\Images\SortAscending.png" />
+    <Resource Include="Resources\Images\SortDescending.png" />
     <Resource Include="Resources\Images\Storage.png" />
     <Resource Include="Resources\Images\Upload.png" />
     <Resource Include="Resources\Images\Download.png" />
@@ -172,6 +182,9 @@
     <Page Update="Views\EtlProjects\CreateImportFilesScriptView.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Views\EtlProjects\CreateSchemaXmlView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\EtlProjects\CreateValidationScriptView.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -182,6 +195,39 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\EtlProjects\CreateTestXmlView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Reporting\Details\DataSources\DataSourceSqlView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Reporting\Details\Relations\DimensionRelationView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Reporting\Details\DataSources\ListDataSourceColumnsView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Reporting\Details\DataSources\DataSourceTableView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Reporting\Details\Dimensions\DimensionView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Reporting\Details\Reports\ReportView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Reporting\Explorers\TreeReportingExplorer.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Reporting\Queries\ListFilterColumnView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Reporting\Queries\ReportView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Reporting\Queries\TreeReportColumnsControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Reporting\Tools\CreateSchemaReportingXmlView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Tools\CreateFileView.xaml">

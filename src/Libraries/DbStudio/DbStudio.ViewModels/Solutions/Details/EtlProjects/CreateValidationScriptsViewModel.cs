@@ -114,7 +114,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 				// Guarda el directorio seleccionado
 				SolutionViewModel.MainViewModel.LastPathSelected = OutputPath;
 				// Guarda las propiedades
-				FormatType = (Application.SolutionManager.FormatType) (ComboFormat.SelectedID ?? (int) Application.SolutionManager.FormatType.Parquet);
+				FormatType = (Application.SolutionManager.FormatType) (ComboFormat.SelectedId ?? (int) Application.SolutionManager.FormatType.Parquet);
 				// Indica que ya no es nuevo y está grabado
 				IsUpdated = false;
 				// Cierra la ventana

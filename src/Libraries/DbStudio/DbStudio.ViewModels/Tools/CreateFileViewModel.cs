@@ -148,7 +148,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Tools
 		/// </summary>
 		private FileType GetSelectedType()
 		{
-			return (FileType) (ComboTypes.SelectedID ?? 0);
+			return (FileType) (ComboTypes.SelectedId ?? 0);
 		}
 
 		/// <summary>
@@ -156,7 +156,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Tools
 		/// </summary>
 		public Encoding GetSelectedEncoding()
 		{
-			return (Encoding) (ComboEncoding.SelectedID ?? 0);
+			return (Encoding) (ComboEncoding.SelectedId ?? 0);
 		}
 
 		/// <summary>

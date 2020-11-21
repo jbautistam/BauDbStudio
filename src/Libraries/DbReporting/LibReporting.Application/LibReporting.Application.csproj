@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <RootNamespace>Bau.Libraries.LibReporting.Application</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\Queries\Models\QueryGroupFieldModel.cs" />
+    <Compile Remove="Repositories\DataBaseRepository.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibHelper\src\LibHelper.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibMarkup\src\LibMarkup.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\Schema\LibDbSchema.Repository.Xml\LibDbSchema.Repository.Xml.csproj" />
+    <ProjectReference Include="..\LibReporting.Models\LibReporting.Models.csproj" />
+    <ProjectReference Include="..\LibReporting.Requests\LibReporting.Requests.csproj" />
+  </ItemGroup>
+
+</Project>

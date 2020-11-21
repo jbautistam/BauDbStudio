@@ -88,7 +88,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Queries
 			ComboChartTypes.AddItem((int) ChartType.Pie, "Tarta");
 			ComboChartTypes.AddItem((int) ChartType.Radar, "Radar");
 			// Selecciona el primer elemento
-			ComboChartTypes.SelectedID = (int) ChartType.Bar;
+			ComboChartTypes.SelectedId = (int) ChartType.Bar;
 		}
 
 		/// <summary>
@@ -102,7 +102,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Queries
 			ComboOrientationTypes.AddItem((int) ChartOrientationType.Vertical, "Vertical");
 			ComboOrientationTypes.AddItem((int) ChartOrientationType.Horizontal, "Horizontal");
 			// Selecciona el primer elemento
-			ComboOrientationTypes.SelectedID = (int) ChartOrientationType.Vertical;
+			ComboOrientationTypes.SelectedId = (int) ChartOrientationType.Vertical;
 		}
 
 		/// <summary>
@@ -123,7 +123,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Queries
 			ComboLegend.AddItem((int) LegendLocationType.UpperLeft, "Superior izquierda");
 			ComboLegend.AddItem((int) LegendLocationType.UpperRight, "Superior derecha");
 			// Selecciona el primer elemento
-			ComboLegend.SelectedID = (int) LegendLocationType.None;
+			ComboLegend.SelectedId = (int) LegendLocationType.None;
 		}
 
 		/// <summary>
@@ -184,7 +184,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Queries
 		/// </summary>
 		private LegendLocationType GetSelectedLegend()
 		{
-			return (LegendLocationType) (ComboLegend.SelectedID ?? (int) LegendLocationType.None);
+			return (LegendLocationType) (ComboLegend.SelectedId ?? (int) LegendLocationType.None);
 		}
 
 		/// <summary>
@@ -336,7 +336,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Queries
 		/// </summary>
 		private ChartType GetSelectedChartType()
 		{
-			return (ChartType) (ComboChartTypes.SelectedID ?? (int) ChartType.Bar);
+			return (ChartType) (ComboChartTypes.SelectedId ?? (int) ChartType.Bar);
 		}
 
 		/// <summary>
@@ -344,7 +344,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Queries
 		/// </summary>
 		private ChartOrientationType GetSelectedChartOrientation()
 		{
-			return (ChartOrientationType) (ComboOrientationTypes.SelectedID ?? (int) ChartOrientationType.Vertical);
+			return (ChartOrientationType) (ComboOrientationTypes.SelectedId ?? (int) ChartOrientationType.Vertical);
 		}
 
 /*

@@ -37,7 +37,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Deployments
 			if (string.IsNullOrWhiteSpace(Name))
 				Name = "Nueva distribución";
 			Description = Deployment.Description;
-			ComboTypes.SelectedID = (int) Deployment.Type;
+			ComboTypes.SelectedId = (int) Deployment.Type;
 			SourcePath = Deployment.SourcePath;
 			TargetPath = Deployment.TargetPath;
 			JsonParameters = Deployment.JsonParameters;
@@ -80,7 +80,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Deployments
 				// Comprueba los datos introducidos
 				if (string.IsNullOrWhiteSpace(Name))
 					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Introduzca el nombre de la distribución");
-				else if (ComboTypes.SelectedID == null)
+				else if (ComboTypes.SelectedId == null)
 					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Seleccione un tipo");
 				else if (string.IsNullOrWhiteSpace(SourcePath))
 					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Seleccione el directorio origen");
@@ -104,7 +104,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Deployments
 				// Asigna los datos al objeto
 				Deployment.Name = Name;
 				Deployment.Description = Description;
-				Deployment.Type = (DeploymentModel.DeploymentType) (ComboTypes.SelectedID ?? 0);
+				Deployment.Type = (DeploymentModel.DeploymentType) (ComboTypes.SelectedId ?? 0);
 				Deployment.SourcePath = SourcePath;
 				Deployment.TargetPath = TargetPath;
 				Deployment.JsonParameters = JsonParameters;

@@ -21,6 +21,14 @@ namespace Bau.Libraries.DbScripts.Manager.Connections
 		}
 
 		/// <summary>
+		///		Obtiene el esquema de la conexión
+		/// </summary>
+		internal async Task<SchemaDbModel> GetSchemaAsync(ConnectionModel connection, CancellationToken cancellationToken)
+		{
+			return await GetDbProvider(connection).GetSchemaAsync(TimeSpan.FromMinutes(5), cancellationToken);
+		}
+
+		/// <summary>
 		///		Carga el esquema de la conexión
 		/// </summary>
 		internal async Task LoadSchemaAsync(ConnectionModel connection, CancellationToken cancellationToken)

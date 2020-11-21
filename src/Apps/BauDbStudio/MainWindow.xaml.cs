@@ -43,6 +43,9 @@ namespace Bau.DbStudio
 							   null, Controls.DockLayout.DockPosition.Left);
 			dckManager.AddPane("TreeConnectionsExplorer", "Conexiones", new Views.TreeConnectionsExplorer(ViewModel.SolutionViewModel.TreeConnectionsViewModel), 
 							   null, Controls.DockLayout.DockPosition.Left);
+			dckManager.AddPane("TreeReportingExplorer", "Informes", 
+							   new Views.Reporting.Explorers.TreeReportingExplorer(ViewModel.SolutionViewModel.ReportingSolutionViewModel.TreeReportingViewModel), 
+							   null, Controls.DockLayout.DockPosition.Left);
 			dckManager.AddPane("TreeStorageExplorer", "Storage", new Views.TreeStoragesExplorer(ViewModel.SolutionViewModel.TreeStoragesViewModel), 
 							   null, Controls.DockLayout.DockPosition.Right);
 			dckManager.AddPane("LogView", "Log", new Views.Tools.LogView(ViewModel.LogViewModel), null, Controls.DockLayout.DockPosition.Bottom);
@@ -115,6 +118,21 @@ namespace Bau.DbStudio
 					break;
 				case Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects.ExecuteEtlConsoleViewModel viewModel:
 						AddTab(new Views.EtlProjects.ExecuteEtlConsoleView(viewModel), viewModel);
+					break;
+				case Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.DataSources.DataSourceSqlViewModel viewModel:
+						AddTab(new Views.Reporting.Details.DataSources.DataSourceSqlView(viewModel), viewModel);
+					break;
+				case Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.DataSources.DataSourceTableViewModel viewModel:
+						AddTab(new Views.Reporting.Details.DataSources.DataSourceTableView(viewModel), viewModel);
+					break;
+				case Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Dimension.DimensionViewModel viewModel:
+						AddTab(new Views.Reporting.Details.Dimensions.DimensionView(viewModel), viewModel);
+					break;
+				case Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries.ReportViewModel viewModel:
+						AddTab(new Views.Reporting.Queries.ReportView(viewModel), viewModel);
+					break;
+				case Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Reports.ReportViewModel viewModel:
+						AddTab(new Views.Reporting.Details.Reports.ReportView(viewModel), viewModel);
 					break;
 			}
 		}

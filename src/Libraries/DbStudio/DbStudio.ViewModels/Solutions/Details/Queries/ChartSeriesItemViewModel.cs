@@ -43,7 +43,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Queries
 			ComboOperations.AddItem((int) Operation.Count, "Contar");
 			ComboOperations.AddItem((int) Operation.CountDistinct, "Contar distintos");
 			// Selecciona el primer elemento
-			ComboOperations.SelectedID = (int) Operation.Sum;
+			ComboOperations.SelectedId = (int) Operation.Sum;
 		}
 
 		/// <summary>
@@ -51,7 +51,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Queries
 		/// </summary>
 		internal Operation GetSelectedOperation()
 		{
-			return (Operation) (ComboOperations.SelectedID ?? (int) Operation.Sum);
+			return (Operation) (ComboOperations.SelectedId ?? (int) Operation.Sum);
 		}
 
 		/// <summary>

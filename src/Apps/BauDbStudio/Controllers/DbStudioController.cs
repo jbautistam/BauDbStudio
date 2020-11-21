@@ -10,12 +10,12 @@ namespace Bau.DbStudio.Controllers
 	/// <summary>
 	///		Controlador principal
 	/// </summary>
-	public class SparkSolutionController : Libraries.DbStudio.ViewModels.Controllers.ISparkSolutionController
+	public class DbStudioController : Libraries.DbStudio.ViewModels.Controllers.IDbStudioController
 	{
 		// Eventos públicos
 		public event EventHandler<IDetailViewModel> OpenWindowRequired;
 
-		public SparkSolutionController(AppController appController, string applicationName, MainWindow mainWindow, string appPath)
+		public DbStudioController(AppController appController, string applicationName, MainWindow mainWindow, string appPath)
 		{
 			// Asigna las propiedades
 			AppController = appController;
@@ -85,8 +85,20 @@ namespace Bau.DbStudio.Controllers
 					case Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects.ExportDatabaseViewModel viewModel:
 							result = HostHelperController.ShowDialog(MainWindow, new Views.EtlProjects.ExportDatabaseView(viewModel));
 						break;
+					case Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects.CreateSchemaXmlViewModel viewModel:
+							result = HostHelperController.ShowDialog(MainWindow, new Views.EtlProjects.CreateSchemaXmlView(viewModel));
+						break;
 					case Libraries.DbStudio.ViewModels.Tools.CreateFileViewModel viewModel:
 							result = HostHelperController.ShowDialog(MainWindow, new Views.Tools.CreateFileView(viewModel));
+						break;
+					case Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Relations.DimensionRelationViewModel viewModel:
+							result = HostHelperController.ShowDialog(MainWindow, new Views.Reporting.Details.Relations.DimensionRelationView(viewModel));
+						break;
+					case Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Tools.CreateSchemaReportingXmlViewModel viewModel:
+							result = HostHelperController.ShowDialog(MainWindow, new Views.Reporting.Tools.CreateSchemaReportingXmlView(viewModel));
+						break;
+					case Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries.ListReportColumnFilterViewModel viewModel:
+							result = HostHelperController.ShowDialog(MainWindow, new Views.Reporting.Queries.ListFilterColumnView(viewModel));
 						break;
 				}
 				// Devuelve el resultado
