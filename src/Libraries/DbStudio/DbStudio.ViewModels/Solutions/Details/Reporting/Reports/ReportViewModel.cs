@@ -123,9 +123,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Reports
 					foreach (ReportDataSourceViewModel dataSource in DataSources)
 						if (!dataSource.ValidateData())
 							validated = false;
-					// Si alguno de los orígenes de datos no es correcto, muestra el mensaje
-					if (!validated)
-						ReportingSolutionViewModel.SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Seleccione todos los orígenes de datos");
 				}
 				// Devuelve el valor que indica si los datos son correctos
 				return validated;
