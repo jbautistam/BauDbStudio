@@ -72,6 +72,12 @@
 							<Image Width="16" Height="16" Source="/Resources/Images/FileXml.png" />
 						</MenuItem.Icon>
 					</MenuItem>
+					<Separator/>
+					<MenuItem Header="Ventana del explorador" Click="OpenWebBrowser_Click" >
+						<MenuItem.Icon>
+							<Image Width="16" Height="16" Source="/Resources/Images/FileXml.png" />
+						</MenuItem.Icon>
+					</MenuItem>
 				</MenuItem>
 				<MenuItem Header="_Guardar" InputGestureText="Ctrl+S" Command="Save" >
 					<MenuItem.Icon>

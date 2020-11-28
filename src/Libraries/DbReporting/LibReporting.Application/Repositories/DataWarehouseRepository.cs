@@ -94,6 +94,8 @@ namespace Bau.Libraries.LibReporting.Application.Repositories
 				// Asigna el esquema y la tabla
 				dataSource.Schema = rootML.Attributes[TagSchema].Value.TrimIgnoreNull();
 				dataSource.Table = rootML.Attributes[TagTable].Value.TrimIgnoreNull();
+				if (string.IsNullOrWhiteSpace(dataSource.Name))
+					dataSource.Name = dataSource.Table;
 				// El Id del origen de datos es el nombre completo de la tabla
 				dataSource.GlobalId = dataSource.FullName;
 				// Carga las columnas
@@ -134,6 +136,8 @@ namespace Bau.Libraries.LibReporting.Application.Repositories
 				LoadProperties(rootML, column);
 				// Carga las propiedades
 				column.GlobalId = rootML.Attributes[TagSourceId].Value.TrimIgnoreNull();
+				if (string.IsNullOrWhiteSpace(column.Name))
+					column.Name = column.GlobalId;
 				column.Type = rootML.Attributes[TagType].Value.GetEnum(DataSourceColumnModel.Fieldtype.Unknown);
 				column.Required = rootML.Attributes[TagRequired].Value.GetBool();
 				column.IsPrimaryKey = rootML.Attributes[TagPrimaryKey].Value.GetBool();

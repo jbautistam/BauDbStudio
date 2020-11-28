@@ -64,7 +64,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 							{
 								foreach (ControlHierarchicalViewModel child in nodeSchema.Children)
 									if (child.IsChecked && child is NodeTableViewModel nodeTable && nodeTable.Table != null)
-										
 										tables.Add(nodeTable.Table);
 							}
 							else if (childRoot is NodeTableViewModel nodeTableNoSchema)

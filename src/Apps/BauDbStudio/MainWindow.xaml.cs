@@ -522,5 +522,10 @@ namespace Bau.DbStudio
 		{
 			OpenAboutWindow();
 		}
+
+		private void OpenWebBrowser_Click(object sender, RoutedEventArgs e)
+		{
+			dckManager.AddDocument("192830489", "Web", new Views.Web.WebExplorerView(null), null);
+		}
 	}
 }

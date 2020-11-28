@@ -39,8 +39,13 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 						schemas = GetSchemas(Connection);
 						// Mete las tablas en la lista
 						if (schemas.Count == 0)
+						{
+							// Ordena las tablas
+							Connection.Tables.Sort((first, second) => first.FullName.CompareTo(second.FullName));
+							// Añade las tablas
 							foreach (ConnectionTableModel table in Connection.Tables)
 								nodes.Add(new NodeTableViewModel(TreeViewModel, this, table));
+						}
 						else
 						{
 							// Ordena los esquemas
@@ -50,6 +55,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 							{
 								NodeRootViewModel root = new NodeRootViewModel(TreeViewModel, this, NodeType.SchemaRoot, schema, false);
 
+									// Ordena las tablas
+									Connection.Tables.Sort((first, second) => first.FullName.CompareTo(second.FullName));
 									// Añade las tablas al nodo
 									foreach (ConnectionTableModel table in Connection.Tables)
 										if (table.Schema.Equals(schema, StringComparison.CurrentCultureIgnoreCase))

@@ -236,6 +236,9 @@
     <Page Update="Views\Tools\Search\SearchView.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Views\Web\WebExplorerView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
 
 </Project>

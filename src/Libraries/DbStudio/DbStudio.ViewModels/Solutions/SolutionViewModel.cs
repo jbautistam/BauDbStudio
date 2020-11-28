@@ -56,7 +56,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 			TreeFoldersViewModel.Load();
 			TreeStoragesViewModel.Load();
 			// Carga la solución de informes
-			ReportingSolutionViewModel.Load(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Solution.FileName), $"Reporting.{Workspace}.Solution.xml"));
+			if (!string.IsNullOrWhiteSpace(Solution.FileName))
+				ReportingSolutionViewModel.Load(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Solution.FileName), $"Reporting.{Workspace}.Solution.xml"));
 			// Carga las carpetas en la ventana de búsqueda
 			MainViewModel.SearchFilesViewModel.LoadFolders();
 		}
