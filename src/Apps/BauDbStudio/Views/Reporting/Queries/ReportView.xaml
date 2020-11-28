@@ -21,14 +21,21 @@
 				Margin="15,2,5,2" Background="AliceBlue" Width="7" />
 		<Grid Grid.Row="0" Grid.Column="1">
 			<Grid.RowDefinitions>
-				<RowDefinition Height="Auto" />
 				<RowDefinition Height="*" />
+				<RowDefinition Height="2*" />
 			</Grid.RowDefinitions>
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="*" />
 			</Grid.ColumnDefinitions>
-			<Grid>
-				<ToolBar Grid.Column="0" Grid.Row="0">
+			<CodeEditor:ctlEditor  Grid.Row="0" Grid.Column="0" x:Name="udtSql" />
+			<GridSplitter Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Bottom"
+				Margin="2, 5, 2, 5" Background="AliceBlue" Height="8" />
+			<Grid Grid.Row="1" Grid.Column="0">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="*"/>
+				</Grid.RowDefinitions>
+				<ToolBar Grid.Row="0" Grid.Column="0">
 					<ComboBox Grid.Row="0" Grid.Column="1" Margin="5" Width="400"
 						ItemsSource="{Binding Path=ComboConnections.Connections.Items}" DisplayMemberPath="Text" 
 						SelectedItem="{Binding Path=ComboConnections.Connections.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -45,20 +52,12 @@
 					<Button Grid.Row="0" Grid.Column="11" Command="{Binding Path=ExportCommand}" Margin="5">
 						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Save.png" />
 					</Button>
-					<Separator/>
 				</ToolBar>
+				<DataGrid Grid.Row="1" Grid.Column="0" Margin="5" CanUserResizeColumns="True" AutoGenerateColumns="True" 
+					LoadingRow="DataGrid_LoadingRow" ItemsSource="{Binding Path=DataResults}" FontWeight="Normal" CanUserAddRows="False"
+					IsReadOnly="True" CanUserDeleteRows="False" ClipboardCopyMode="IncludeHeader" VerticalContentAlignment="Center" VerticalAlignment="Stretch"
+					AutoGeneratingColumn="DataGrid_AutoGeneratingColumn"/>
 			</Grid>
-			<TabControl Grid.Row="1" Grid.Column="0">
-				<TabItem Header="Resultado">
-					<DataGrid Margin="5" CanUserResizeColumns="True" AutoGenerateColumns="True" 
-							  LoadingRow="DataGrid_LoadingRow" ItemsSource="{Binding Path=DataResults}" FontWeight="Normal" CanUserAddRows="False"
-							  IsReadOnly="True" CanUserDeleteRows="False" ClipboardCopyMode="IncludeHeader" VerticalContentAlignment="Center" VerticalAlignment="Stretch"
-							  AutoGeneratingColumn="DataGrid_AutoGeneratingColumn"/>
-				</TabItem>
-				<TabItem Header="Sql">
-					<CodeEditor:ctlEditor x:Name="udtSql" ReadOnly="True" />
-				</TabItem>
-			</TabControl>
 		</Grid>
 	</Grid>
 </UserControl>

@@ -15,19 +15,25 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 	/// </summary>
 	public class NodeRootViewModel : BaseTreeNodeViewModel
 	{
-		public NodeRootViewModel(BaseTreeViewModel trvTree, IHierarchicalViewModel parent, NodeType type, string text, bool lazyLoad = true) :
-					base(trvTree, parent, text, type, IconType.Connection, type, lazyLoad, true, MvvmColor.Red)
+		public NodeRootViewModel(BaseTreeViewModel trvTree, IHierarchicalViewModel parent, NodeType type, string text, bool lazyLoad = true, bool bold = true, MvvmColor color = null) :
+					base(trvTree, parent, text, type, IconType.Connection, type, lazyLoad, bold, color ?? MvvmColor.Red)
 		{
 			switch (type)
 			{
 				case NodeType.DimensionsRoot:
-						Icon = IconType.Connection;
+						Icon = IconType.Dimension;
 					break;
 				case NodeType.DataSourcesRoot:
 						Icon = IconType.Schema;
 					break;
 				case NodeType.ReportsRoot:
-						Icon = IconType.Deployment;
+						Icon = IconType.Report;
+					break;
+				case NodeType.File:
+						Icon = IconType.Field;
+					break;
+				case NodeType.Table:
+						Icon = IconType.Path;
 					break;
 			}
 		}

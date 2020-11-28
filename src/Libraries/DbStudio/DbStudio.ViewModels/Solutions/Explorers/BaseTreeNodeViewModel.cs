@@ -70,7 +70,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers
 			Field,
 			Error,
 			Loading,
-			Storage
+			Storage,
+			Report,
+			DataSourceSql,
+			Dimension
 		}
 		// Variables privadas
 		private IconType _icon;

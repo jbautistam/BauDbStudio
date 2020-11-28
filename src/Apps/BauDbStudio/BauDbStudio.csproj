@@ -56,6 +56,8 @@
     <None Remove="Resources\Images\NoSort.png" />
     <None Remove="Resources\Images\Project.png" />
     <None Remove="Resources\Images\ProjectDisabled.png" />
+    <None Remove="Resources\Images\Report.png" />
+    <None Remove="Resources\Images\ReportDimension.png" />
     <None Remove="Resources\Images\Schema.png" />
     <None Remove="Resources\Images\Script.png" />
     <None Remove="Resources\Images\ScriptDisabled.png" />
@@ -115,6 +117,8 @@
     <Resource Include="Resources\Images\Filter.png" />
     <Resource Include="Resources\Images\Loading.png" />
     <Resource Include="Resources\Images\NoSort.png" />
+    <Resource Include="Resources\Images\Report.png" />
+    <Resource Include="Resources\Images\ReportDimension.png" />
     <Resource Include="Resources\Images\Schema.png" />
     <Resource Include="Resources\Images\SortAscending.png" />
     <Resource Include="Resources\Images\SortDescending.png" />

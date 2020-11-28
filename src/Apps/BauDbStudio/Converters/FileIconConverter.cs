@@ -52,6 +52,12 @@ namespace Bau.DbStudio.Converters
 					return "/Resources/Images/DataError.png";
 				case BaseTreeNodeViewModel.IconType.Loading:
 					return "/Resources/Images/Loading.png";
+				case BaseTreeNodeViewModel.IconType.DataSourceSql:
+					return "/Resources/Images/FileSql.png";
+				case BaseTreeNodeViewModel.IconType.Report:
+					return "/Resources/Images/Report.png";
+				case BaseTreeNodeViewModel.IconType.Dimension:
+					return "/Resources/Images/ReportDimension.png";
 				default:
 					return null;
 			}

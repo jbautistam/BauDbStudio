@@ -23,7 +23,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 							Text = table.FullName;
 					break;
 				case DataSourceSqlModel sql:
-						Icon = IconType.Deployment;
+						Icon = IconType.DataSourceSql;
 						if (string.IsNullOrWhiteSpace(dataSource.Name))
 							Text = sql.GlobalId;
 					break;
