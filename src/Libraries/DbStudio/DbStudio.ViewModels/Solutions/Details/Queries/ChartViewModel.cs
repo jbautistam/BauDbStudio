@@ -60,7 +60,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Queries
 		private ComboViewModel _comboFieldSeries;
 		private ChartSeriesViewModel _seriesViewModel;
 
-		public ChartViewModel(ExecuteQueryViewModel queryViewModel) : base(false)
+		public ChartViewModel(QueryViewModel queryViewModel) : base(false)
 		{
 			// Asigna las propiedades
 			QueryViewModel = queryViewModel;
@@ -222,17 +222,21 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Queries
 		{
 			List<string> labels = new List<string>();
 
-				// Obtiene las etiquetas de un campo
-				foreach (DataRow row in QueryViewModel.DataResults.Rows)
+				// Obtiene las etiquetas
+				if (!string.IsNullOrWhiteSpace(field))
 				{
-					string label = GetString(row[field]);
+					// Obtiene las etiquetas de un campo
+					foreach (DataRow row in QueryViewModel.DataResults.Rows)
+					{
+						string label = GetString(row[field]);
 
-						// Añade la etiqueta si no existía
-						if (labels.FirstOrDefault(item => item.Equals(label, StringComparison.CurrentCultureIgnoreCase)) == null)
-							labels.Add(label);
+							// Añade la etiqueta si no existía
+							if (labels.FirstOrDefault(item => item.Equals(label, StringComparison.CurrentCultureIgnoreCase)) == null)
+								labels.Add(label);
+					}
+					// Ordena las etiquetas
+					labels.Sort((first, second) => first.CompareTo(second));
 				}
-				// Ordena las etiquetas
-				labels.Sort((first, second) => first.CompareTo(second));
 				// Devuelve la colección de etiquetas
 				return labels;
 		}
@@ -347,34 +351,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Queries
 			return (ChartOrientationType) (ComboOrientationTypes.SelectedId ?? (int) ChartOrientationType.Vertical);
 		}
 
-/*
-		/// <summary>
-		///		Prepara un gráfico
-		/// </summary>
-		private ChartBuilder PrepareChart(string name, ChartModel.ChartType type, ChartModel.OrientationType orientation, ChartModel.LegendLocationType location)
-		{
-			return new ChartBuilder(name, type, orientation)
-											.WithLabels(new List<string> { "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten" })
-											.WithXLabel("Label Axis X")
-											.WithYLabel("Label Axis Y")
-											.WithLegend(location)
-											.WithSerie("S1")
-												.WithRandomItems(10, 5, 20)
-												.Back()
-											.WithSerie("S2")
-												.WithRandomItems(10, 0, 20)
-												.Back()
-											.WithSerie("S3")
-												.WithRandomItems(10, 0, 30)
-												.Back()
-												;
-		}
-*/
-
 		/// <summary>
 		///		ViewModel de consulta
 		/// </summary>
-		public ExecuteQueryViewModel QueryViewModel { get; }
+		public QueryViewModel QueryViewModel { get; }
 
 		/// <summary>
 		///		ViewModel del combo de tipo de gráficos

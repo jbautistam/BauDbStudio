@@ -201,6 +201,9 @@
     <Page Update="Views\EtlProjects\CreateTestXmlView.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Views\Queries\QueryViewControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\Reporting\Details\DataSources\DataSourceSqlView.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -243,6 +246,10 @@
     <Page Update="Views\Web\WebExplorerView.xaml">
       <SubType>Designer</SubType>
     </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Queries\NewFolder\" />
   </ItemGroup>
 
 </Project>

@@ -43,13 +43,13 @@ namespace Bau.Libraries.DbStudio.ViewModels.Tools
 					// Añade el mensaje
 					_contextUi.Send(_ => {
 											// Crea un elemento al principio de la lista y lo selecciona
-											Items.Insert(0, new LogListItemViewModel(this, item.Type.ToString(), GetLogMessage(item), GetColor(item.Type)));
+											Items.Insert(0, new LogListItemViewModel(this, item.Type.ToString(), GetLogMessage(item), item.CreatedAt, GetColor(item.Type)));
 											SelectedItem = Items[0];
 											// Lanza una notificación
 											if (item.Type == LogModel.LogType.Error || item.Type == LogModel.LogType.AssertError)
 												MainViewModel.MainController.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Error,
 																							  "Error", item.Message);
-										  }, 
+										  },
 									state);
 			}
 		}

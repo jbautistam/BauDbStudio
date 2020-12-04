@@ -11,7 +11,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Tools
 		private string _type, _content, _formattedHour;
 		private DateTime _createdAt;
 
-		public LogListItemViewModel(LogListViewModel listViewModel, string type, string content, BauMvvm.ViewModels.Media.MvvmColor color) : base(content, null, false, color)
+		public LogListItemViewModel(LogListViewModel listViewModel, string type, string content, DateTime createdAt, BauMvvm.ViewModels.Media.MvvmColor color) : base(content, null, false, color)
 		{
 			// Asigna las propiedades
 			ListViewModel = listViewModel;
@@ -27,7 +27,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Tools
 				Text = Text.Replace("\r", " ");
 				Text = Text.Replace("\n", " ");
 			}
-			CreatedAt = DateTime.Now;
+			CreatedAt = createdAt;
 			// Asigna los comandos
 			ShowDetailsCommand = new BauMvvm.ViewModels.BaseCommand(_ => ShowDetails());
 		}
