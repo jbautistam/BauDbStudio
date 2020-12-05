@@ -248,8 +248,4 @@
     </Page>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Views\Queries\NewFolder\" />
-  </ItemGroup>
-
 </Project>

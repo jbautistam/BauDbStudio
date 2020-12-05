@@ -41,7 +41,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 		/// </summary>
 		private void AddDimensionNodes(ReportModel report)
 		{
-			NodeColumnViewModel root = new NodeColumnViewModel(this, null, "Dimensiones", null);
+			NodeColumnViewModel root = new NodeColumnViewModel(this, null, NodeColumnViewModel.NodeColumnType.DimensionsRoot, "Dimensiones", null);
 			BaseExtendedModelCollection<DimensionModel> dimensions = GetDimensions(report);
 
 				// Ordena las dimensiones
@@ -58,11 +58,14 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 		/// </summary>
 		private void AddDimensionNodes(NodeColumnViewModel root, DimensionModel dimension)
 		{
-			NodeColumnViewModel node = new NodeColumnViewModel(this, root, string.IsNullOrEmpty(dimension.Name) ? dimension.GlobalId : dimension.Name, null);
+			NodeColumnViewModel node = new NodeColumnViewModel(this, root, NodeColumnViewModel.NodeColumnType.Dimension, 
+															   string.IsNullOrEmpty(dimension.Name) ? dimension.GlobalId : dimension.Name, null);
 			BaseExtendedModelCollection<DimensionModel> childs = new BaseExtendedModelCollection<DimensionModel>();
 
+				// Asigna el código de dimensión
+				node.DimensionId = dimension.GlobalId;
 				// Añade los campos de la dimensión
-				AddColumnNodes(node, dimension.DataSource.Columns, dimension.GlobalId, string.Empty);
+				AddColumnNodes(node, dimension.DataSource.Columns, NodeColumnViewModel.NodeColumnType.DimensionColumn, dimension.GlobalId, string.Empty);
 				// Crea la colección de dimensiones hija a partir de las relaciones
 				foreach (DimensionRelationModel relation in dimension.Relations)
 					if (relation.Dimension != null)
@@ -84,7 +87,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 			BaseExtendedModelCollection<DimensionModel> dimensions = new BaseExtendedModelCollection<DimensionModel>();
 
 				// Añade las dimensiones
-				foreach (ReportDataSourceModel dataSource in report.Expressions)
+				foreach (ReportDataSourceModel dataSource in report.ReportDataSources)
 					foreach (DimensionRelationModel relation in dataSource.Relations)
 						if (dimensions.Search(relation.Dimension.GlobalId) == null)
 							dimensions.Add(relation.Dimension);
@@ -97,15 +100,18 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 		/// </summary>
 		private void AddExpressionNodes(ReportModel report)
 		{
-			NodeColumnViewModel root = new NodeColumnViewModel(this, null, "Expresiones", null);
+			NodeColumnViewModel root = new NodeColumnViewModel(this, null, NodeColumnViewModel.NodeColumnType.ExpressionsRoot, "Expresiones", null);
 
 				// Añade los orígenes de datos
-				foreach (ReportDataSourceModel dataSource in report.Expressions)
+				foreach (ReportDataSourceModel dataSource in report.ReportDataSources)
 				{
-					NodeColumnViewModel node = new NodeColumnViewModel(this, root, dataSource.DataSource.Name, null);
+					NodeColumnViewModel node = new NodeColumnViewModel(this, root, NodeColumnViewModel.NodeColumnType.Expression, dataSource.DataSource.Name, null);
 
+						// Asigna el Id del origen de datos
+						node.DataSourceId = dataSource.DataSource.GlobalId;
 						// Añade las columnas
-						AddColumnNodes(node, dataSource.DataSource.Columns, string.Empty, dataSource.DataSource.GlobalId);
+						AddColumnNodes(node, dataSource.DataSource.Columns, NodeColumnViewModel.NodeColumnType.Expression, 
+									   string.Empty, dataSource.DataSource.GlobalId);
 						// Añade el nodo a la raíz
 						root.Children.Add(node);
 				}
@@ -116,7 +122,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 		/// <summary>
 		///		Añade los nodos de columnas
 		/// </summary>
-		private void AddColumnNodes(NodeColumnViewModel root, BaseExtendedModelCollection<DataSourceColumnModel> columns, string dimensionId, string dataSourceId)
+		private void AddColumnNodes(NodeColumnViewModel root, BaseExtendedModelCollection<DataSourceColumnModel> columns, 
+									NodeColumnViewModel.NodeColumnType nodeColumnType, string dimensionId, string dataSourceId)
 		{
 			// Ordena las columnas
 			columns.SortByName();
@@ -124,7 +131,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 			foreach (DataSourceColumnModel column in columns)
 				if (!column.IsPrimaryKey && column.Visible)
 				{
-					NodeColumnViewModel node = new NodeColumnViewModel(this, root, string.IsNullOrWhiteSpace(column.Name) ? column.ColumnId : column.Name, column);
+					NodeColumnViewModel node = new NodeColumnViewModel(this, root, nodeColumnType, string.IsNullOrWhiteSpace(column.Name) ? column.ColumnId : column.Name, column);
 
 						// Asigna las propiedades
 						node.DimensionId = dimensionId;
@@ -144,51 +151,120 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 				// Asigna el código de informe
 				request.ReportId = ReportViewModel.Report.GlobalId;
 				// Obtiene las columnas de dimensión y de expresión
-				request.Columns.AddRange(GetRequestColumns(Children));
+				request.Dimensions.AddRange(GetRequestDimensions(Children));
+				request.Expressions.AddRange(GetRequestExpressions(Children));
 				// Devuelve la solicitud
 				return request;
 		}
 
 		/// <summary>
-		///		Obtiene las columnas solicitadas
+		///		Obtiene las columnas de las dimensiones solicitadas
 		/// </summary>
-		private List<BaseColumnRequestModel> GetRequestColumns(ObservableCollection<IHierarchicalViewModel> nodes)
+		private List<DimensionRequestModel> GetRequestDimensions(ObservableCollection<IHierarchicalViewModel> nodes)
 		{
-			List<BaseColumnRequestModel> requestColumns = new List<BaseColumnRequestModel>();
+			List<DimensionRequestModel> dimensions = new List<DimensionRequestModel>();
 
 				// Obtiene las columnas seleccionadas de los nodos
-				foreach (IHierarchicalViewModel baseNode in nodes)
-					if (baseNode is NodeColumnViewModel node && MustIncludeAtQuery(node))
-					{
-						BaseColumnRequestModel requestColumn = null;
-
-							// Obtiene la solicitud de dimensión o expresión
-							if (!string.IsNullOrWhiteSpace(node.DimensionId))
-								requestColumn = new DimensionRequestModel
-																{
-																	DimensionId = node.DimensionId,
-																	ColumnId = node.Column.GlobalId
-																};
-							else if (!string.IsNullOrWhiteSpace(node.DataSourceId))
-								requestColumn = new ExpressionRequestModel
-																{
-																	ReportDataSourceId = node.DataSourceId,
-																	ColumnId = node.Column.GlobalId,
-																	AggregatedBy = node.GeSelectedAggregation()
-																};
-							// Si es una columna de solicitud, la añade a la colección
-							if (requestColumn != null)
+				foreach (IHierarchicalViewModel baseNodeRoot in nodes)
+					if (baseNodeRoot is NodeColumnViewModel root && root.ColumnNodeType == NodeColumnViewModel.NodeColumnType.DimensionsRoot)
+						foreach (IHierarchicalViewModel baseNodeDimension in root.Children)
+							if (baseNodeDimension is NodeColumnViewModel nodeDimension &&
+								nodeDimension.ColumnNodeType == NodeColumnViewModel.NodeColumnType.Dimension)
 							{
-								// Asigna las propiedades adicionales a la dimensión: filtros, ordenación ....
-								AssignProperties(requestColumn, node, !string.IsNullOrWhiteSpace(node.DataSourceId));
-								// Añade la dimensión solicitada a las columnas
-								requestColumns.Add(requestColumn);
+								DimensionRequestModel dimension = GetRequestDimension(nodeDimension);
+
+									if (dimension != null)
+										dimensions.Add(dimension);
+							}
+				// Devuelve las columnas de dimensión
+				return dimensions;
+		}
+
+		/// <summary>
+		///		Obtiene la dimensión asociada a un nodo
+		/// </summary>
+		private DimensionRequestModel GetRequestDimension(NodeColumnViewModel root)
+		{
+			DimensionRequestModel dimension = null;
+
+				// Obtiene los datos de la dimensión
+				if (MustIncludeAtQuery(root))
+				{
+					// Crea la dimensión
+					dimension = new DimensionRequestModel
+											{
+												DimensionId = root.DimensionId,
+											};
+					// Añade las columnas y dimensiones hija
+					foreach (IHierarchicalViewModel baseChild in root.Children)
+						if (baseChild is NodeColumnViewModel node && MustIncludeAtQuery(node))
+								switch (node.ColumnNodeType)
+								{
+									case NodeColumnViewModel.NodeColumnType.DimensionColumn:
+											DimensionColumnRequestModel column = new DimensionColumnRequestModel
+																						{
+																							ColumnId = node.Column.ColumnId,
+																							Visible = node.IsChecked
+																						};
+
+												// Asigna las propiedades adicionales a la columna: filtros, ordenación ....
+												AssignProperties(column, node, !string.IsNullOrWhiteSpace(root.DataSourceId));
+												// Añade la columna a las dimensiones
+												dimension.Columns.Add(column);
+										break;
+									case NodeColumnViewModel.NodeColumnType.Dimension:
+											DimensionRequestModel child = GetRequestDimension(node);
+
+												if (child != null)
+													dimension.Childs.Add(child);
+										break;
+								}
+				}
+				// Devuelve la dimensión
+				return dimension;
+		}
+
+		/// <summary>
+		///		Obtiene las columnas de las expresiones solicitadas
+		/// </summary>
+		private List<ExpressionRequestModel> GetRequestExpressions(ObservableCollection<IHierarchicalViewModel> nodes)
+		{
+			List<ExpressionRequestModel> expressions = new List<ExpressionRequestModel>();
+
+				// Obtiene las columnas seleccionadas de los nodos
+				foreach (IHierarchicalViewModel baseNodeRoot in nodes)
+					if (baseNodeRoot is NodeColumnViewModel root && root.ColumnNodeType == NodeColumnViewModel.NodeColumnType.ExpressionsRoot)
+					{
+						foreach (IHierarchicalViewModel baseNodeExpression in root.Children)
+							if (baseNodeExpression is NodeColumnViewModel nodeNameExpression && 
+								nodeNameExpression.ColumnNodeType == NodeColumnViewModel.NodeColumnType.Expression &&
+								MustIncludeAtQuery(nodeNameExpression))
+							{
+								ExpressionRequestModel expression = new ExpressionRequestModel();
+
+									// Asigna el identificador del origen de datos
+									expression.ReportDataSourceId = nodeNameExpression.DataSourceId;
+									// Carga las columnas
+									foreach (IHierarchicalViewModel baseExpression in nodeNameExpression.Children)
+										if (baseExpression is NodeColumnViewModel nodeExpression && MustIncludeAtQuery(nodeExpression))
+										{
+											ExpressionColumnRequestModel column = new ExpressionColumnRequestModel
+																					{
+																						ColumnId = nodeExpression.Column.GlobalId,
+																						AggregatedBy = nodeExpression.GeSelectedAggregation()
+																					};
+
+												// Asigna las propiedades adicionales a la dimensión: filtros, ordenación ....
+												AssignProperties(column, nodeExpression, !string.IsNullOrWhiteSpace(nodeExpression.DataSourceId));
+												// Añade la columna a la solicitud de expresión
+												expression.Columns.Add(column);
+										}
+									// Asigna la expresión
+									expressions.Add(expression);
 							}
 					}
-					else
-						requestColumns.AddRange(GetRequestColumns(baseNode.Children));
 				// Devuelve las columnas
-				return requestColumns;
+				return expressions;
 		}
 
 		/// <summary>
@@ -197,7 +273,15 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 		/// </summary>
 		private bool MustIncludeAtQuery(NodeColumnViewModel node)
 		{
-			return node.Column != null && (node.IsChecked || node.FilterWhere.FiltersViewModel.Count > 0 || node.FilterHaving.FiltersViewModel.Count > 0);
+			bool mustInclude = node.Column != null && (node.IsChecked || node.FilterWhere.FiltersViewModel.Count > 0 || node.FilterHaving.FiltersViewModel.Count > 0);
+
+				// Si no se debe incluir, se comprueba si se debe incluir alguno de los nodos hijo
+				if (!mustInclude)
+					foreach (IHierarchicalViewModel baseNode in node.Children)
+						if (!mustInclude && baseNode is NodeColumnViewModel child && MustIncludeAtQuery(child))
+							mustInclude = true;
+				// Devuelve el valor que indica si se debe incluir
+				return mustInclude;
 		}
 
 		/// <summary>

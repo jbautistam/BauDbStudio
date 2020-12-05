@@ -57,7 +57,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Reports
 			// Inicializa la lista
 			DataSources = new ObservableCollection<ReportDataSourceViewModel>();
 			// Carga los orígenes de datos
-			foreach (ReportDataSourceModel dataSource in Report.Expressions)
+			foreach (ReportDataSourceModel dataSource in Report.ReportDataSources)
 				DataSources.Add(new ReportDataSourceViewModel(ReportingSolutionViewModel, Report, dataSource));
 		}
 
@@ -148,8 +148,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Reports
 					_isNew = false;
 				}
 				// Añade los orígenes de datos
-				Report.Expressions.Clear();
-				Report.Expressions.AddRange(GetDataSources());
+				Report.ReportDataSources.Clear();
+				Report.ReportDataSources.AddRange(GetDataSources());
 				// Graba la solución
 				ReportingSolutionViewModel.SaveDataWarehouse(Report.DataWarehouse);
 				// Indica que no ha habido modificaciones

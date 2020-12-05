@@ -20,7 +20,7 @@ namespace Bau.Libraries.LibReporting.Requests.Builders
 			Having
 		}
 
-		public FilterRequestBuilder(ColumnRequestBuilder builder, FilterRequestModel.ConditionType condition, FilterEvaluation mode)
+		public FilterRequestBuilder(DimensionRequestBuilder builder, FilterRequestModel.ConditionType condition, FilterEvaluation mode)
 		{
 			// Obtiene los objetos
 			Builder = builder;
@@ -54,7 +54,7 @@ namespace Bau.Libraries.LibReporting.Requests.Builders
 		/// <summary>
 		///		Salta al generador padre
 		/// </summary>
-		public ColumnRequestBuilder Back()
+		public DimensionRequestBuilder Back()
 		{
 			return Builder;
 		}
@@ -62,7 +62,7 @@ namespace Bau.Libraries.LibReporting.Requests.Builders
 		/// <summary>
 		///		Generador padre
 		/// </summary>
-		private ColumnRequestBuilder Builder { get; }
+		private DimensionRequestBuilder Builder { get; }
 
 		/// <summary>
 		///		Filtro

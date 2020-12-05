@@ -20,9 +20,9 @@ namespace Bau.Libraries.LibReporting.Requests.Builders
 		/// <summary>
 		///		Añade una <see cref="DimensionRequestModel"/> a la solicitud
 		/// </summary>
-		public ColumnRequestBuilder WithDimension(string dimensionId, string columnId)
+		public DimensionRequestBuilder WithDimension(string dimensionId, string columnId)
 		{
-			return new ColumnRequestBuilder(this, new DimensionRequestModel
+			return new DimensionRequestBuilder(this, new DimensionRequestModel
 																{
 																	DimensionId = dimensionId,
 																	ColumnId = columnId
@@ -33,9 +33,9 @@ namespace Bau.Libraries.LibReporting.Requests.Builders
 		/// <summary>
 		///		Añade una <see cref="ExpressionRequestModel"/> a la solicitud
 		/// </summary>
-		public ColumnRequestBuilder WithExpression(string reportDataSourceId, string columnId)
+		public DimensionRequestBuilder WithExpression(string reportDataSourceId, string columnId)
 		{
-			return new ColumnRequestBuilder(this, new ExpressionRequestModel
+			return new DimensionRequestBuilder(this, new ExpressionRequestModel
 															{
 																ReportDataSourceId = reportDataSourceId,
 																ColumnId = columnId,

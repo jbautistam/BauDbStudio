@@ -15,8 +15,13 @@ namespace Bau.Libraries.LibReporting.Requests.Models
 		public string ReportId { get; set; }
 
 		/// <summary>
-		///		Columnas solicitadas
+		///		Dimensiones solicitadas
 		/// </summary>
-		public List<BaseColumnRequestModel> Columns { get; } = new List<BaseColumnRequestModel>();
+		public List<DimensionRequestModel> Dimensions { get; } = new List<DimensionRequestModel>();
+
+		/// <summary>
+		///		Expresiones solicitadas
+		/// </summary>
+		public List<ExpressionRequestModel> Expressions { get; } = new List<ExpressionRequestModel>();
 	}
 }

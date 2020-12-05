@@ -94,16 +94,16 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 						sqlFields = sqlFields.AddWithSeparator($"[{FromAlias}].[{field.Field}]", ",");
 				// Añade los campos
 				foreach (QueryFieldModel field in Fields)
-					if (!field.IsPrimaryKey && field.Visible && field.Aggregation == Requests.Models.ExpressionRequestModel.AggregationType.NoAggregated)
+					if (!field.IsPrimaryKey && field.Visible && field.Aggregation == Requests.Models.ExpressionColumnRequestModel.AggregationType.NoAggregated)
 						sqlFields = sqlFields.AddWithSeparator(GetSqlField(FromAlias, field), ",");
 				// Añade los campos (no clave) de los JOIN hijo (dimensiones hija) que no estén agregados
 				foreach (QueryJoinModel join in Joins)
 					foreach (QueryFieldModel field in join.Query.Fields)
-						if (!field.IsPrimaryKey && field.Visible && field.Aggregation == Requests.Models.ExpressionRequestModel.AggregationType.NoAggregated)
+						if (!field.IsPrimaryKey && field.Visible && field.Aggregation == Requests.Models.ExpressionColumnRequestModel.AggregationType.NoAggregated)
 							sqlFields = sqlFields.AddWithSeparator(GetSqlField(join.Query.FromAlias, field), ",");
 				// Añade los campos agrupados
 				foreach (QueryFieldModel field in Fields)
-					if (field.Aggregation != Requests.Models.ExpressionRequestModel.AggregationType.NoAggregated)
+					if (field.Aggregation != Requests.Models.ExpressionColumnRequestModel.AggregationType.NoAggregated)
 						sqlFields = sqlFields.AddWithSeparator($"{field.GetAggregation(FromAlias)} AS [{field.Alias}]", ",");
 				// Devuelve los campos
 				return sqlFields;
@@ -231,7 +231,8 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 				{
 					// Añade los campos de agrupación
 					foreach (QueryFieldModel field in Fields)
-						if (field.IsPrimaryKey)
+						if (field.IsPrimaryKey || (field.Aggregation == Requests.Models.ExpressionColumnRequestModel.AggregationType.NoAggregated && 
+												   field.Visible))
 							sqlFields = sqlFields.AddWithSeparator($"[{FromAlias}].[{field.Field}]", ",");
 					// Si hay algún campo de agrupación, le añade la cláusula
 					if (!string.IsNullOrWhiteSpace(sqlFields))
@@ -248,7 +249,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 		{
 			// Recorre los campos buscando si hay algún agregado
 			foreach (QueryFieldModel field in Fields)
-				if (field.Aggregation != Requests.Models.ExpressionRequestModel.AggregationType.NoAggregated)
+				if (field.Aggregation != Requests.Models.ExpressionColumnRequestModel.AggregationType.NoAggregated)
 					return true;
 			// Si ha llegado hasta aquí es porque no hay ningún campo agregado
 			return false;

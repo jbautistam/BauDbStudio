@@ -84,7 +84,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Reports
 					System.Collections.Generic.List<DimensionRelationModel> relations = new System.Collections.Generic.List<DimensionRelationModel>();
 
 						// Busca las relaciones
-						foreach (ReportDataSourceModel reportDataSource in Report.Expressions)
+						foreach (ReportDataSourceModel reportDataSource in Report.ReportDataSources)
 							if (reportDataSource.DataSource.GlobalId.Equals(dataSource.GlobalId))
 								relations.AddRange(reportDataSource.Relations);
 						// Asocia la lista de relaciones

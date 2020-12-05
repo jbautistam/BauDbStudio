@@ -24,7 +24,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 		/// </summary>
 		protected override void LoadNodes()
 		{
-			foreach (ReportDataSourceModel expression in Report.Expressions)
+			foreach (ReportDataSourceModel expression in Report.ReportDataSources)
 			{
 				NodeRootViewModel parentDataSource = new NodeRootViewModel(TreeViewModel, this, NodeType.Table, expression.DataSource.Name, false);
 

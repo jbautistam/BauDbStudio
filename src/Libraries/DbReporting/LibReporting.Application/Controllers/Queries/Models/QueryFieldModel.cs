@@ -10,7 +10,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 	/// </summary>
 	internal class QueryFieldModel
 	{
-		internal QueryFieldModel(bool primaryKey, string field, string alias, ExpressionRequestModel.AggregationType aggregation, bool visible)
+		internal QueryFieldModel(bool primaryKey, string field, string alias, ExpressionColumnRequestModel.AggregationType aggregation, bool visible)
 		{
 			IsPrimaryKey = primaryKey;
 			Field = field;
@@ -25,19 +25,19 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 		/// <summary>
 		///		Obtiene un alias dependiendo de la agregación
 		/// </summary>
-		private string GetAliasFromAggregation(ExpressionRequestModel.AggregationType aggregation)
+		private string GetAliasFromAggregation(ExpressionColumnRequestModel.AggregationType aggregation)
 		{ 
 			switch (aggregation)
 			{
-				case ExpressionRequestModel.AggregationType.Average:
+				case ExpressionColumnRequestModel.AggregationType.Average:
 					return $"Average {Field}";
-				case ExpressionRequestModel.AggregationType.Max:
+				case ExpressionColumnRequestModel.AggregationType.Max:
 					return $"Max {Field}";
-				case ExpressionRequestModel.AggregationType.Min:
+				case ExpressionColumnRequestModel.AggregationType.Min:
 					return $"Min {Field}";
-				case ExpressionRequestModel.AggregationType.StandardDeviation:
+				case ExpressionColumnRequestModel.AggregationType.StandardDeviation:
 					return $"Standard deviation {Field}";
-				case ExpressionRequestModel.AggregationType.Sum:
+				case ExpressionColumnRequestModel.AggregationType.Sum:
 					return $"Sum {Field}";
 				default:
 					return Field;
@@ -61,15 +61,15 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 
 				switch (Aggregation)
 				{
-					case ExpressionRequestModel.AggregationType.Average:
+					case ExpressionColumnRequestModel.AggregationType.Average:
 						return $"AVG({computed})";
-					case ExpressionRequestModel.AggregationType.Max:
+					case ExpressionColumnRequestModel.AggregationType.Max:
 						return $"MAX({computed})";
-					case ExpressionRequestModel.AggregationType.Min:
+					case ExpressionColumnRequestModel.AggregationType.Min:
 						return $"MIN({computed})";
-					case ExpressionRequestModel.AggregationType.StandardDeviation:
+					case ExpressionColumnRequestModel.AggregationType.StandardDeviation:
 						return $"STDDEV({computed})";
-					case ExpressionRequestModel.AggregationType.Sum:
+					case ExpressionColumnRequestModel.AggregationType.Sum:
 						return $"SUM({computed})";
 					default:
 						return computed;
@@ -94,7 +94,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 		/// <summary>
 		///		Agregación
 		/// </summary>
-		internal ExpressionRequestModel.AggregationType Aggregation { get; }
+		internal ExpressionColumnRequestModel.AggregationType Aggregation { get; }
 
 		/// <summary>
 		///		Indica si la columna es visible en la consulta

@@ -7,9 +7,9 @@ namespace Bau.Libraries.LibReporting.Requests.Builders
 	/// <summary>
 	///		Generador para <see cref="BaseColumnRequestModel"/>
 	/// </summary>
-	public class ColumnRequestBuilder
+	public class DimensionRequestBuilder
 	{
-		public ColumnRequestBuilder(ReportRequestBuilder builder, BaseColumnRequestModel column)
+		public DimensionRequestBuilder(ReportRequestBuilder builder, DimensionRequestModel dimension)
 		{
 			// Obtiene los objetos
 			Builder = builder;
@@ -21,7 +21,7 @@ namespace Bau.Libraries.LibReporting.Requests.Builders
 		/// <summary>
 		///		Indica si esta columna debe estar oculta en el resultado final (sólo se utiliza para los filtros)
 		/// </summary>
-		public ColumnRequestBuilder Hidden()
+		public DimensionRequestBuilder Hidden()
 		{
 			// Asigna la ordenación
 			Column.Visible = false;
@@ -32,7 +32,7 @@ namespace Bau.Libraries.LibReporting.Requests.Builders
 		/// <summary>
 		///		Asigna el ORDER BY
 		/// </summary>
-		public ColumnRequestBuilder WithOrderBy(BaseColumnRequestModel.SortOrder orderBy = BaseColumnRequestModel.SortOrder.Undefined)
+		public DimensionRequestBuilder WithOrderBy(BaseColumnRequestModel.SortOrder orderBy = BaseColumnRequestModel.SortOrder.Undefined)
 		{
 			// Asigna la ordenación
 			Column.OrderBy = orderBy;
@@ -43,7 +43,7 @@ namespace Bau.Libraries.LibReporting.Requests.Builders
 		/// <summary>
 		///		Asigna la agregación
 		/// </summary>
-		public ColumnRequestBuilder WithAggregation(ExpressionRequestModel.AggregationType aggregation)
+		public DimensionRequestBuilder WithAggregation(ExpressionRequestModel.AggregationType aggregation)
 		{
 			// Asigna la agregación
 			if (Column is ExpressionRequestModel expression)
@@ -55,7 +55,7 @@ namespace Bau.Libraries.LibReporting.Requests.Builders
 		/// <summary>
 		///		Añade un filtro a la columna en el WHERE
 		/// </summary>
-		public ColumnRequestBuilder WithWhere(FilterRequestModel.ConditionType condition, object value)
+		public DimensionRequestBuilder WithWhere(FilterRequestModel.ConditionType condition, object value)
 		{
 			FilterRequestBuilder filter = GetFilter(condition, FilterRequestBuilder.FilterEvaluation.Where);
 
@@ -76,7 +76,7 @@ namespace Bau.Libraries.LibReporting.Requests.Builders
 		/// <summary>
 		///		Añade un filtro a la columna en el HAVIG
 		/// </summary>
-		public ColumnRequestBuilder WithHaving(FilterRequestModel.ConditionType condition, object value)
+		public DimensionRequestBuilder WithHaving(FilterRequestModel.ConditionType condition, object value)
 		{
 			FilterRequestBuilder filter = GetFilter(condition, FilterRequestBuilder.FilterEvaluation.Having);
 

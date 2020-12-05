@@ -12,14 +12,13 @@ using Bau.Libraries.LibReporting.Requests.Models;
 namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 {
 	/// <summary>
-	///		Clase baase para los generadores de consultas
+	///		Clase base para los generadores de consultas
 	/// </summary>
 	internal abstract class BaseQueryGenerator
 	{
-		protected BaseQueryGenerator(ReportQueryGenerator generator, List<DimensionModel> dimensionsRequested)
+		protected BaseQueryGenerator(ReportQueryGenerator generator)
 		{
 			Generator = generator;
-			DimensionsRequested = dimensionsRequested;
 		}
 
 		/// <summary>
@@ -68,11 +67,25 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 		}
 
 		/// <summary>
+		///		Obtiene la dimensión
+		/// </summary>
+		protected DimensionModel GetDimension(DimensionRequestModel dimensionRequest)
+		{
+			DimensionModel dimension = Generator.Report.DataWarehouse.Dimensions.Search(dimensionRequest.DimensionId);
+
+				// Devuelve la dimensión localizada o lanza una excepción
+				if (dimension == null)
+					throw new LibReporting.Models.Exceptions.ReportingException($"Cant find the dimension {dimensionRequest.DimensionId}");
+				else
+					return dimension;
+		}
+
+		/// <summary>
 		///		Añade un campo de clave primaria a la consulta
 		/// </summary>
 		protected void AddPrimaryKey(QueryModel query, string column)
 		{
-			query.Fields.Add(new QueryFieldModel(true, column, string.Empty, ExpressionRequestModel.AggregationType.NoAggregated, false));
+			query.Fields.Add(new QueryFieldModel(true, column, string.Empty, ExpressionColumnRequestModel.AggregationType.NoAggregated, false));
 		}
 
 		/// <summary>
@@ -80,13 +93,13 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 		/// </summary>
 		protected void AddColumn(QueryModel query, string columnId, string alias, BaseColumnRequestModel requestColumn)
 		{
-			AddColumn(query, columnId, alias, ExpressionRequestModel.AggregationType.NoAggregated, requestColumn);
+			AddColumn(query, columnId, alias, ExpressionColumnRequestModel.AggregationType.NoAggregated, requestColumn);
 		}
 
 		/// <summary>
 		///		Añade un campo a la consulta
 		/// </summary>
-		protected void AddColumn(QueryModel query, string columnId, string alias, ExpressionRequestModel.AggregationType aggregatedBy, BaseColumnRequestModel requestColumn)
+		protected void AddColumn(QueryModel query, string columnId, string alias, ExpressionColumnRequestModel.AggregationType aggregatedBy, BaseColumnRequestModel requestColumn)
 		{
 			QueryFieldModel field = new QueryFieldModel(false, columnId, alias, aggregatedBy, requestColumn.Visible);
 
@@ -115,10 +128,5 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 		///		Generador del informe
 		/// </summary>
 		protected ReportQueryGenerator Generator { get; }
-
-		/// <summary>
-		///		Dimensiones solicitadas
-		/// </summary>
-		protected List<DimensionModel> DimensionsRequested { get; }
 	}
 }

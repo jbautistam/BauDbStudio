@@ -5,4 +5,10 @@
     <RootNamespace>Bau.Libraries.LibReporting.Requests</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Builders\**" />
+    <EmbeddedResource Remove="Builders\**" />
+    <None Remove="Builders\**" />
+  </ItemGroup>
+
 </Project>

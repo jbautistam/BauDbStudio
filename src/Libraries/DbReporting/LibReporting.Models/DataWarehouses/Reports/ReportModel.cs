@@ -23,6 +23,6 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses.Reports
 		/// <summary>
 		///		Orígenes de datos de las expresiones del informe
 		/// </summary>
-		public List<ReportDataSourceModel> Expressions { get; } = new List<ReportDataSourceModel>();
+		public List<ReportDataSourceModel> ReportDataSources { get; } = new List<ReportDataSourceModel>();
 	}
 }

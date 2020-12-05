@@ -15,16 +15,33 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 	/// </summary>
 	public class NodeColumnViewModel : BaseTreeNodeViewModel
 	{
+		// Tipo de nodo
+		public enum NodeColumnType
+		{
+			/// <summary>Raíz de dimensiones</summary>
+			DimensionsRoot,
+			/// <summary>Nombre de dimensión</summary>
+			Dimension,
+			/// <summary>Columna de dimensión</summary>
+			DimensionColumn,
+			/// <summary>Raíz de expresiones</summary>
+			ExpressionsRoot,
+			/// <summary>Nombre de expresión</summary>
+			Expression,
+			/// <summary>Columna de expresión</summary>
+			ExpressionColumn
+		}
 		// Variables privadas
 		private bool _canSelect, _canSort, _canFilterWhere, _canAggregate, _canFilterHaving;
 		private BaseColumnRequestModel.SortOrder _sortOrder;
 		private ComboViewModel _comboAggregationTypes;
 		private ListReportColumnFilterViewModel _filterWhere, _filterHaving;
 
-		public NodeColumnViewModel(BaseTreeViewModel trvTree, IHierarchicalViewModel parent, string text, DataSourceColumnModel column) :
+		public NodeColumnViewModel(BaseTreeViewModel trvTree, IHierarchicalViewModel parent, NodeColumnType columnNodeType, string text, DataSourceColumnModel column) :
 					base(trvTree, parent, text, NodeType.ConnectionRoot, IconType.Connection, column, false, false, MvvmColor.Black)
 		{
 			// Asigna la columna
+			ColumnNodeType = columnNodeType;
 			Column = column;
 			// Asigna las propiedades
 			if (column == null) // ... si no es una columna, es una cabecera
@@ -74,7 +91,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 			CanFilterWhere = CanSelect;
 			CanSort = IsChecked;
 			CanAggregate = IsChecked && !string.IsNullOrWhiteSpace(DataSourceId);
-			CanFilterHaving = CanAggregate && GeSelectedAggregation() != ExpressionRequestModel.AggregationType.NoAggregated;
+			CanFilterHaving = CanAggregate && GeSelectedAggregation() != ExpressionColumnRequestModel.AggregationType.NoAggregated;
 		}
 
 		/// <summary>
@@ -83,12 +100,12 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 		private void LoadComboAggregation()
 		{
 			ComboAggregationTypes = new ComboViewModel(this);
-			ComboAggregationTypes.AddItem((int) ExpressionRequestModel.AggregationType.NoAggregated, "No agregado");
-			ComboAggregationTypes.AddItem((int) ExpressionRequestModel.AggregationType.Sum, "Suma");
-			ComboAggregationTypes.AddItem((int) ExpressionRequestModel.AggregationType.Average, "Media");
-			ComboAggregationTypes.AddItem((int) ExpressionRequestModel.AggregationType.Max, "Máximo");
-			ComboAggregationTypes.AddItem((int) ExpressionRequestModel.AggregationType.Min, "Mínimo");
-			ComboAggregationTypes.AddItem((int) ExpressionRequestModel.AggregationType.StandardDeviation, "Desviación estándar");
+			ComboAggregationTypes.AddItem((int) ExpressionColumnRequestModel.AggregationType.NoAggregated, "No agregado");
+			ComboAggregationTypes.AddItem((int) ExpressionColumnRequestModel.AggregationType.Sum, "Suma");
+			ComboAggregationTypes.AddItem((int) ExpressionColumnRequestModel.AggregationType.Average, "Media");
+			ComboAggregationTypes.AddItem((int) ExpressionColumnRequestModel.AggregationType.Max, "Máximo");
+			ComboAggregationTypes.AddItem((int) ExpressionColumnRequestModel.AggregationType.Min, "Mínimo");
+			ComboAggregationTypes.AddItem((int) ExpressionColumnRequestModel.AggregationType.StandardDeviation, "Desviación estándar");
 			ComboAggregationTypes.SelectedItem = ComboAggregationTypes.Items[0];
 		}
 
@@ -114,9 +131,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 		/// <summary>
 		///		Obtiene el tipo de agregación seleccionado en el combo
 		/// </summary>
-		internal ExpressionRequestModel.AggregationType GeSelectedAggregation()
+		internal ExpressionColumnRequestModel.AggregationType GeSelectedAggregation()
 		{
-			return (ExpressionRequestModel.AggregationType) (ComboAggregationTypes.SelectedId ?? 0);
+			return (ExpressionColumnRequestModel.AggregationType) (ComboAggregationTypes.SelectedId ?? 0);
 		}
 
 		/// <summary>
@@ -151,6 +168,11 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 		///		Columna
 		/// </summary>
 		public DataSourceColumnModel Column { get; }
+
+		/// <summary>
+		///		Tipo de nodo de la columna
+		/// </summary>
+		public NodeColumnType ColumnNodeType { get; }
 
 		/// <summary>
 		///		Id de la dimensión (para poder hacer la solicitud de informe)

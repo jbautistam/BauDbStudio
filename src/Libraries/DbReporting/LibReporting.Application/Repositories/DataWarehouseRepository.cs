@@ -201,7 +201,7 @@ namespace Bau.Libraries.LibReporting.Application.Repositories
 					switch (nodeML.Name)
 					{
 						case TagDataSource:
-								report.Expressions.Add(LoadReportDataSource(nodeML, report));
+								report.ReportDataSources.Add(LoadReportDataSource(nodeML, report));
 							break;
 					}
 				// Devuelve el objeto
@@ -400,7 +400,7 @@ namespace Bau.Libraries.LibReporting.Application.Repositories
 				rootML.Nodes.Add(TagName, report.Name);
 				rootML.Nodes.Add(TagDescription, report.Description);
 				// Añade las expresiones
-				foreach (ReportDataSourceModel dataSource in report.Expressions)
+				foreach (ReportDataSourceModel dataSource in report.ReportDataSources)
 				{
 					MLNode nodeML = rootML.Nodes.Add(TagDataSource);
 

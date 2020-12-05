@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.LibReporting.Models;
@@ -48,9 +47,8 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 		/// </remarks>
 		internal string GetSql()
 		{
-			List<DimensionModel> dimensionsRequested = GetDimensionsRequested(Report, Request);
-			List<QueryModel> dimensionQueries = GetDimensionQueries(dimensionsRequested);
-			QueryModel expressionQuery = new QueryExpressionsGenerator(this, dimensionsRequested).GetQuery();
+			List<QueryModel> dimensionQueries = GetDimensionQueries(Request);
+			QueryModel expressionQuery = new QueryExpressionsGenerator(this).GetQuery();
 			string sql = string.Empty;
 
 				// Obtiene las dimensiones de las consultas
@@ -130,10 +128,10 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 				foreach (QueryModel query in dimensionQueries)
 				{
 					// Añade los campos de la consulta
-					sqlFields = sqlFields.AddWithSeparator(GetSqlVisibleFields(query), ",");
+					sqlFields = sqlFields.AddWithSeparator(GetSqlVisibleFields(query, query.Alias), ",");
 					// Añade los campos de las consultas hija
 					foreach (QueryJoinModel join in query.Joins)
-						sqlFields = sqlFields.AddWithSeparator(GetSqlVisibleFields(join.Query), ",");
+						sqlFields = sqlFields.AddWithSeparator(GetSqlVisibleFields(join.Query, query.Alias), ",");
 				}
 				// Obtiene los campos de las expresiones
 				foreach (QueryFieldModel field in expressionQuery.Fields)
@@ -146,7 +144,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 		/// <summary>
 		///		Obtiene una cadena con los campos visibles de una consulta
 		/// </summary>
-		private string GetSqlVisibleFields(QueryModel query)
+		private string GetSqlVisibleFields(QueryModel query, string tableAliasAtWith)
 		{
 			string sqlFields = string.Empty;
 
@@ -154,7 +152,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 				// estarán en la consulta únicamente por los filtros)
 				foreach (QueryFieldModel field in query.Fields)
 					if (!field.IsPrimaryKey && field.Visible)
-						sqlFields = sqlFields.AddWithSeparator($"[{query.Alias}].[{field.Alias}]", ",");
+						sqlFields = sqlFields.AddWithSeparator($"[{tableAliasAtWith}].[{field.Alias}]", ",");
 				// Devuelve la cadena con los campos
 				return sqlFields;
 		}
@@ -162,44 +160,15 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 		/// <summary>
 		///		Obtiene las consultas de dimensión solicitadas
 		/// </summary>
-		private List<QueryModel> GetDimensionQueries(List<DimensionModel> dimensions)
+		private List<QueryModel> GetDimensionQueries(ReportRequestModel request)
 		{
 			List<QueryModel> queries = new List<QueryModel>();
 
-				// Obtiene las consutlas de dimensiones
-				foreach (DimensionModel dimension in dimensions)
-					queries.Add(new QueryDimensionGenerator(this, dimensions).GetQuery(dimension));
+				// Obtiene las consultas de las dimensiones
+				foreach (DimensionRequestModel dimensionRequested in request.Dimensions)
+					queries.Add(new QueryDimensionGenerator(this).GetQuery(dimensionRequested));
 				// Devuelve las consultas
 				return queries;
-		}
-
-		/// <summary>
-		///		Obtiene las dimensiones solicitadas
-		/// </summary>
-		private List<DimensionModel> GetDimensionsRequested(ReportModel report, ReportRequestModel request)
-		{
-			List<DimensionModel> requestedDimensions = new List<DimensionModel>();
-
-				// Recorre las dimensiones solicitadas
-				foreach (ReportDataSourceModel dataSource in report.Expressions)
-					foreach (DimensionRelationModel relation in dataSource.Relations)
-						if (IsRequested(relation.Dimension, request) && requestedDimensions.FirstOrDefault(item => item.GlobalId == relation.Dimension.GlobalId) == null)
-							requestedDimensions.Add(relation.Dimension);
-				// Devuelve las dimensiones solicitadas
-				return requestedDimensions;
-		}
-
-		/// <summary>
-		///		Comprueba si se ha solicitado una dimensión
-		/// </summary>
-		private bool IsRequested(DimensionModel dimension, ReportRequestModel request)
-		{
-			// Comprueba si se ha solicitado alguna columna de esta dimensión
-			foreach (BaseColumnRequestModel baseColumnRequest in request.Columns)
-				if (baseColumnRequest is DimensionRequestModel requestColumn && dimension.HasColumn(requestColumn.DimensionId, requestColumn.ColumnId))
-					return true;
-			// Si ha llegado hasta aquí es porque no ha encontrado nada
-			return false;
 		}
 
 		/// <summary>
