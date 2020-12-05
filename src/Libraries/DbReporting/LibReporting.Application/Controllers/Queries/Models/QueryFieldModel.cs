@@ -10,7 +10,8 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 	/// </summary>
 	internal class QueryFieldModel
 	{
-		internal QueryFieldModel(bool primaryKey, string field, string alias, ExpressionColumnRequestModel.AggregationType aggregation, bool visible)
+		internal QueryFieldModel(bool primaryKey, string field, string alias, BaseColumnRequestModel.SortOrder orderBy, 
+								 ExpressionColumnRequestModel.AggregationType aggregation, bool visible)
 		{
 			IsPrimaryKey = primaryKey;
 			Field = field;
@@ -20,6 +21,8 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 				Alias = alias;
 			Aggregation = aggregation;
 			Visible = visible;
+			if (Visible)
+				OrderBy = orderBy;
 		}
 
 		/// <summary>
@@ -95,6 +98,11 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 		///		Agregación
 		/// </summary>
 		internal ExpressionColumnRequestModel.AggregationType Aggregation { get; }
+
+		/// <summary>
+		///		Ordenación
+		/// </summary>
+		internal BaseColumnRequestModel.SortOrder OrderBy { get; }
 
 		/// <summary>
 		///		Indica si la columna es visible en la consulta

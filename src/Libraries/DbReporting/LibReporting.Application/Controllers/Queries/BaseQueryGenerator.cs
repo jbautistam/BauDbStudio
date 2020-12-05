@@ -85,7 +85,8 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 		/// </summary>
 		protected void AddPrimaryKey(QueryModel query, string column)
 		{
-			query.Fields.Add(new QueryFieldModel(true, column, string.Empty, ExpressionColumnRequestModel.AggregationType.NoAggregated, false));
+			query.Fields.Add(new QueryFieldModel(true, column, string.Empty, BaseColumnRequestModel.SortOrder.Undefined, 
+												 ExpressionColumnRequestModel.AggregationType.NoAggregated, false));
 		}
 
 		/// <summary>
@@ -99,9 +100,10 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 		/// <summary>
 		///		Añade un campo a la consulta
 		/// </summary>
-		protected void AddColumn(QueryModel query, string columnId, string alias, ExpressionColumnRequestModel.AggregationType aggregatedBy, BaseColumnRequestModel requestColumn)
+		protected void AddColumn(QueryModel query, string columnId, string alias, 
+								 ExpressionColumnRequestModel.AggregationType aggregatedBy, BaseColumnRequestModel requestColumn)
 		{
-			QueryFieldModel field = new QueryFieldModel(false, columnId, alias, aggregatedBy, requestColumn.Visible);
+			QueryFieldModel field = new QueryFieldModel(false, columnId, alias, requestColumn.OrderBy, aggregatedBy, requestColumn.Visible);
 
 				// Añade los filtros
 				field.FiltersWhere.AddRange(GetFilters(requestColumn.FiltersWhere));

@@ -1,0 +1,144 @@
+﻿using System;
+using System.Text;
+
+using Bau.Libraries.LibHelper.Extensors;
+
+namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Prettifier
+{
+	/// <summary>
+	///		Generador de cadenas
+	/// </summary>
+	public class StringPrettifier
+	{
+		// Variables privadas
+		private int _indent;
+
+		/// <summary>
+		///		Añade una cadena
+		/// </summary>
+		public void Append(string text)
+		{
+			AppendText(text, 0, string.Empty);
+		}
+
+		/// <summary>
+		///		Añade una cadena con un máximo de caracteres por fila
+		/// </summary>
+		public void Append(string text, int maxCharactersLength, string separator)
+		{
+			AppendText(text, maxCharactersLength, separator);
+		}
+
+		/// <summary>
+		///		Añade una nueva línea
+		/// </summary>
+		public void NewLine()
+		{
+			Builder.Append(Environment.NewLine);
+		}
+
+		/// <summary>
+		///		Incrementa la indentación
+		/// </summary>
+		public void Indent()
+		{
+			_indent++;
+		}
+
+		/// <summary>
+		///		Decrementa la indentación
+		/// </summary>
+		public void Unindent()
+		{
+			// Quita la indentación
+			_indent--;
+			// y la normaliza
+			if (_indent < 0)
+				_indent = 0;
+		}
+
+		/// <summary>
+		///		Obtiene la indentación
+		/// </summary>
+		private string GetIndent(int? newIndent = null)
+		{
+			int indent = newIndent ?? _indent;
+
+				// Devuelve la cadena de indentación
+				if (indent == 0)
+					return string.Empty;
+				else
+					return new string('\t', indent);
+		}
+
+		/// <summary>
+		///		Formatea un texto para que tenga una indentación y se parta por un separador cuando tiene longitud máxima
+		/// </summary>
+		private void AppendText(string text, int maxCharactersLength, string separator)
+		{
+			if (!string.IsNullOrWhiteSpace(text))
+				foreach (string part in text.Split('\r'))
+					if (!string.IsNullOrWhiteSpace(part))
+					{
+						// Indenta
+						Builder.Append(GetIndent());
+						// Añade el texto (sin partir o partido)
+						if (maxCharactersLength == 0)
+							Builder.Append(part.TrimIgnoreNull());
+						else
+							AppendTextLength(part.TrimIgnoreNull(), _indent + 1, maxCharactersLength, separator);
+					}
+		}
+
+		/// <summary>
+		///		Formatea la cadena SQL con su longitud
+		/// </summary>
+		private void AppendTextLength(string text, int indent, int maxCharactersLength, string separator)
+		{
+			if (!string.IsNullOrWhiteSpace(text))
+			{
+				if (text.Length < maxCharactersLength)
+					Builder.Append(text);
+				else
+				{
+					int lengthUsed = 0;
+					string [] parts = text.Split(separator);
+
+						// Separa la línea por comas y las va añadiendo hasta que ya no tienen espacio
+						for (int index = 0; index < parts.Length; index++)
+						{
+							string part = parts[index].TrimIgnoreNull();
+
+								// Añade la cadena y la coma de separación (AddWithSeparator nos pondría la coma en la línea siguiente)
+								Builder.Append(part.TrimIgnoreNull());
+								if (index < parts.Length - 1)
+									Builder.Append(separator + " ");
+								// Añade la longitud e indica que ya no es la primera vez
+								lengthUsed += part.TrimIgnoreNull().Length + separator.Length + 1;
+								// Si hemos superado la longitud máxima, saltamos de línea
+								if (lengthUsed > maxCharactersLength)
+								{
+									// Añade un salto de línea
+									Builder.Append(Environment.NewLine + GetIndent(indent));
+									// Indica que se ha iniciado la línea
+									lengthUsed = 0;
+								}
+						}
+				}
+			}
+		}
+
+		/// <summary>
+		///		Obtiene la cadena resultante
+		/// </summary>
+		public override string ToString()
+		{
+			return Builder.ToString();
+		}
+
+		/// <summary>
+		///		Generador de cadenas
+		/// </summary>
+		private StringBuilder Builder { get; } = new StringBuilder();
+	}
+}

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets;
+using Bau.Libraries.LibReporting.Requests.Models;
 
 namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 {
@@ -253,6 +254,38 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 					return true;
 			// Si ha llegado hasta aquí es porque no hay ningún campo agregado
 			return false;
+		}
+
+		/// <summary>
+		///		Obtiene la cadena de ordenación
+		/// </summary>
+		internal string GetOrderByFields(string tableAliasAtWith = null)
+		{
+			string sql = string.Empty;
+
+				// Normaliza el nombre del alias de la tabla que
+				if (string.IsNullOrWhiteSpace(tableAliasAtWith))
+					tableAliasAtWith = Alias;
+				// Añade los campos a ordenar
+				foreach (QueryFieldModel field in Fields)
+					if (field.Visible && field.OrderBy != BaseColumnRequestModel.SortOrder.Undefined)
+						sql = sql.AddWithSeparator($"[{tableAliasAtWith}].[{field.Field}] {GetSortClause(field.OrderBy)}", ",");
+				// Añade los campos a ordenar de las consultas hijo
+				foreach (QueryJoinModel join in Joins)
+					sql = sql.AddWithSeparator(join.Query.GetOrderByFields(tableAliasAtWith), ",");
+				// Devuelve la cadena
+				return sql;
+		}
+
+		/// <summary>
+		///		Obtiene la cláusula de ordenación
+		/// </summary>
+		private string GetSortClause(BaseColumnRequestModel.SortOrder orderBy)
+		{
+			if (orderBy == BaseColumnRequestModel.SortOrder.Ascending)
+				return "ASC";
+			else
+				return "DESC";
 		}
 
 		/// <summary>
