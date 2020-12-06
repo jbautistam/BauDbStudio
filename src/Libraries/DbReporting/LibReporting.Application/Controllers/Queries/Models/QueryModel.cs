@@ -62,23 +62,36 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 		/// </summary>
 		internal string Build()
 		{
-			string sql = "SELECT ";
+			Prettifier.StringPrettifier prettifier = new Prettifier.StringPrettifier();
 
-				// Añade los campos (los de ésta y los de mis JOIN hija)
-				sql += GetSqlFields();
+				// Añade la cláusula SELECT con los campos (los de ésta y los de mis JOIN hija)
+				prettifier.Append("SELECT " + GetSqlFields(), 100, ",");
 				// Añade la cláusula FROM
-				sql += Environment.NewLine + $"FROM {FromTable} AS [{FromAlias}]";
+				prettifier.NewLine();
+				prettifier.Indent();
+				prettifier.Append($"FROM {FromTable} AS [{FromAlias}]");
 				// Añade los JOIN
 				if (Joins.Count > 0)
-					sql += Environment.NewLine + GetSqlJoins();
+				{
+					prettifier.NewLine();
+					prettifier.Append(GetSqlJoins());
+				}
+				prettifier.Unindent();
+				prettifier.NewLine();
 				// Añade los WHERE
-				sql = sql.AddWithSeparator(GetSqlClauseFilters(true), Environment.NewLine, false);
+				prettifier.Indent();
+				prettifier.Append(GetSqlClauseFilters(true));
+				prettifier.Unindent();
 				// Añade los GROUP BY
-				sql = sql.AddWithSeparator(GetSqlGroupBy(),  Environment.NewLine, false);
+				prettifier.Indent();
+				prettifier.Append(GetSqlGroupBy(), 100, ",");
+				prettifier.Unindent();
 				// Añade los HAVING
-				sql = sql.AddWithSeparator(GetSqlClauseFilters(false), Environment.NewLine, false);
+				prettifier.Indent();
+				prettifier.Append(GetSqlClauseFilters(false));
+				prettifier.Unindent();
 				// Devuelve la consulta SQL
-				return sql;
+				return prettifier.ToString();
 		}
 
 		/// <summary>
@@ -95,16 +108,16 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 						sqlFields = sqlFields.AddWithSeparator($"[{FromAlias}].[{field.Field}]", ",");
 				// Añade los campos
 				foreach (QueryFieldModel field in Fields)
-					if (!field.IsPrimaryKey && field.Visible && field.Aggregation == Requests.Models.ExpressionColumnRequestModel.AggregationType.NoAggregated)
+					if (!field.IsPrimaryKey && field.Visible && field.Aggregation == ExpressionColumnRequestModel.AggregationType.NoAggregated)
 						sqlFields = sqlFields.AddWithSeparator(GetSqlField(FromAlias, field), ",");
 				// Añade los campos (no clave) de los JOIN hijo (dimensiones hija) que no estén agregados
 				foreach (QueryJoinModel join in Joins)
 					foreach (QueryFieldModel field in join.Query.Fields)
-						if (!field.IsPrimaryKey && field.Visible && field.Aggregation == Requests.Models.ExpressionColumnRequestModel.AggregationType.NoAggregated)
+						if (!field.IsPrimaryKey && field.Visible && field.Aggregation == ExpressionColumnRequestModel.AggregationType.NoAggregated)
 							sqlFields = sqlFields.AddWithSeparator(GetSqlField(join.Query.FromAlias, field), ",");
 				// Añade los campos agrupados
 				foreach (QueryFieldModel field in Fields)
-					if (field.Aggregation != Requests.Models.ExpressionColumnRequestModel.AggregationType.NoAggregated)
+					if (field.Aggregation != ExpressionColumnRequestModel.AggregationType.NoAggregated)
 						sqlFields = sqlFields.AddWithSeparator($"{field.GetAggregation(FromAlias)} AS [{field.Alias}]", ",");
 				// Devuelve los campos
 				return sqlFields;
@@ -135,9 +148,9 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 				if (!string.IsNullOrWhiteSpace(sql))
 				{
 					if (whereClause)
-						sql = $"WHERE {sql}";
+						sql = $"WHERE {sql}" + Environment.NewLine;
 					else
-						sql = $"HAVING {sql}";
+						sql = $"HAVING {sql}" + Environment.NewLine;
 				}
 				// Devuelve la cadena SQL del filtro
 				return sql;
@@ -232,12 +245,12 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 				{
 					// Añade los campos de agrupación
 					foreach (QueryFieldModel field in Fields)
-						if (field.IsPrimaryKey || (field.Aggregation == Requests.Models.ExpressionColumnRequestModel.AggregationType.NoAggregated && 
+						if (field.IsPrimaryKey || (field.Aggregation == ExpressionColumnRequestModel.AggregationType.NoAggregated && 
 												   field.Visible))
 							sqlFields = sqlFields.AddWithSeparator($"[{FromAlias}].[{field.Field}]", ",");
 					// Si hay algún campo de agrupación, le añade la cláusula
 					if (!string.IsNullOrWhiteSpace(sqlFields))
-						sqlFields = $"GROUP BY {sqlFields}";
+						sqlFields = $"GROUP BY {sqlFields}" + Environment.NewLine;
 				}
 				// Devuelve la cadena de agrupación
 				return sqlFields;

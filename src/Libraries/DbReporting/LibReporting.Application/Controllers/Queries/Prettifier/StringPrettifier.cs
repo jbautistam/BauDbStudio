@@ -77,17 +77,29 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Prettifier
 		private void AppendText(string text, int maxCharactersLength, string separator)
 		{
 			if (!string.IsNullOrWhiteSpace(text))
-				foreach (string part in text.Split('\r'))
-					if (!string.IsNullOrWhiteSpace(part))
+			{
+				string [] parts = text.Split('\r');
+
+					for (int index = 0; index < parts.Length; index++)
 					{
-						// Indenta
-						Builder.Append(GetIndent());
-						// Añade el texto (sin partir o partido)
-						if (maxCharactersLength == 0)
-							Builder.Append(part.TrimIgnoreNull());
-						else
-							AppendTextLength(part.TrimIgnoreNull(), _indent + 1, maxCharactersLength, separator);
+						string part = parts[index].TrimIgnoreNull();
+
+							if (!string.IsNullOrWhiteSpace(part))
+							{
+								// Indenta
+								Builder.Append(GetIndent());
+								// Añade el texto (sin partir o partido)
+								if (maxCharactersLength == 0)
+								{
+									Builder.Append(part.TrimIgnoreNull());
+									if (index < parts.Length - 1)
+										NewLine();
+								}
+								else
+									AppendTextLength(part.TrimIgnoreNull(), _indent + 2, maxCharactersLength, separator);
+							}
 					}
+			}
 		}
 
 		/// <summary>
@@ -109,12 +121,6 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Prettifier
 						{
 							string part = parts[index].TrimIgnoreNull();
 
-								// Añade la cadena y la coma de separación (AddWithSeparator nos pondría la coma en la línea siguiente)
-								Builder.Append(part.TrimIgnoreNull());
-								if (index < parts.Length - 1)
-									Builder.Append(separator + " ");
-								// Añade la longitud e indica que ya no es la primera vez
-								lengthUsed += part.TrimIgnoreNull().Length + separator.Length + 1;
 								// Si hemos superado la longitud máxima, saltamos de línea
 								if (lengthUsed > maxCharactersLength)
 								{
@@ -123,6 +129,12 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Prettifier
 									// Indica que se ha iniciado la línea
 									lengthUsed = 0;
 								}
+								// Añade la cadena y la coma de separación (AddWithSeparator nos pondría la coma en la línea siguiente)
+								Builder.Append(part.TrimIgnoreNull());
+								if (index < parts.Length - 1)
+									Builder.Append(separator + " ");
+								// Añade la longitud e indica que ya no es la primera vez
+								lengthUsed += part.TrimIgnoreNull().Length + separator.Length + 1;
 						}
 				}
 			}

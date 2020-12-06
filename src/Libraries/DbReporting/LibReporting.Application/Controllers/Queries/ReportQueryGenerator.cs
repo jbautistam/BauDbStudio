@@ -55,7 +55,6 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 				sql = GetSqlWithBlocks(dimensionQueries, expressionQuery);
 				// Obtiene la consulta de unión de los bloques WITH
 				sql += Environment.NewLine + GetSqlJoinBlocks(dimensionQueries, expressionQuery);
-				sql += Environment.NewLine + Prettify(GetSqlOrderBy(dimensionQueries, expressionQuery));
 				// Devuelve la cadena SQL
 				return sql;
 		}
@@ -127,6 +126,10 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 					prettifier.Append($"ON {GetSqlOnConditions(dimensionQuery, expressionQuery)}", 100, Environment.NewLine);
 					prettifier.Unindent();
 				}
+				// Añade el ORDER BY
+				prettifier.NewLine();
+				prettifier.Append(GetSqlOrderBy(dimensionQueries, expressionQuery), 100, ",");
+				prettifier.NewLine();
 				// Quita la indentación de FROM y JOINS y la general
 				prettifier.Unindent();
 				prettifier.Unindent();
