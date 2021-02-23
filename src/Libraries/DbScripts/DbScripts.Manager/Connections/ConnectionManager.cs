@@ -35,37 +35,66 @@ namespace Bau.Libraries.DbScripts.Manager.Connections
 		{
 			SchemaDbModel schema = await GetDbProvider(connection).GetSchemaAsync(TimeSpan.FromMinutes(5), cancellationToken);
 
-				// Limpia las tablas de la conexión
-				connection.Tables.Clear();
-				// Agrega los campos
-				foreach (TableDbModel tableSchema in schema.Tables)
+				// Carga las tablas
+				LoadSchemaTables(connection, schema);
+				// Carga las vistas
+				LoadSchemaViews(connection, schema);
+		}
+
+		/// <summary>
+		///		Carga las tablas del esquema
+		/// </summary>
+		private void LoadSchemaTables(ConnectionModel connection, SchemaDbModel schema)
+		{
+			// Limpia las tablas de la conexión
+			connection.Tables.Clear();
+			// Agrega los campos
+			foreach (TableDbModel tableSchema in schema.Tables)
+				connection.Tables.Add(Convert(connection, tableSchema));
+		}
+
+		/// <summary>
+		///		Carga las vistas del esquema
+		/// </summary>
+		private void LoadSchemaViews(ConnectionModel connection, SchemaDbModel schema)
+		{
+			// Limpia las vistas de la conexión
+			connection.Views.Clear();
+			// Agrega los campos
+			foreach (ViewDbModel viewSchema in schema.Views)
+				connection.Views.Add(Convert(connection, viewSchema));
+		}
+
+		/// <summary>
+		///		Convierte una vista / tabla
+		/// </summary>
+		private ConnectionTableModel Convert(ConnectionModel connection, BaseTableDbModel baseTableView)
+		{
+			ConnectionTableModel view = new ConnectionTableModel(connection);
+
+				// Asigna las propiedades
+				view.Name = baseTableView.Name;
+				view.Description = baseTableView.Description;
+				view.Schema = baseTableView.Schema;
+				// Asigna los campos
+				foreach (FieldDbModel fieldSchema in baseTableView.Fields)
 				{
-					ConnectionTableModel table = new ConnectionTableModel(connection);
+					ConnectionTableFieldModel field = new ConnectionTableFieldModel(view);
 
 						// Asigna las propiedades
-						table.Name = tableSchema.Name;
-						table.Description = tableSchema.Description;
-						table.Schema = tableSchema.Schema;
-						// Asigna los campos
-						foreach (FieldDbModel fieldSchema in tableSchema.Fields)
-						{
-							ConnectionTableFieldModel field = new ConnectionTableFieldModel(table);
-
-								// Asigna las propiedades
-								field.Name = fieldSchema.Name;
-								field.Description = fieldSchema.Description;
-								field.TypeText = fieldSchema.DbType; // fieldSchema.Type.ToString();
-								field.Type = Convert(fieldSchema.Type);
-								field.Length = fieldSchema.Length;
-								field.IsRequired = fieldSchema.IsRequired;
-								field.IsKey = fieldSchema.IsKey;
-								field.IsIdentity = fieldSchema.IsIdentity;
-								// Añade el campo
-								table.Fields.Add(field);
-						}
-						// Añade la tabla a la colección
-						connection.Tables.Add(table);
+						field.Name = fieldSchema.Name;
+						field.Description = fieldSchema.Description;
+						field.TypeText = fieldSchema.DbType; // fieldSchema.Type.ToString();
+						field.Type = Convert(fieldSchema.Type);
+						field.Length = fieldSchema.Length;
+						field.IsRequired = fieldSchema.IsRequired;
+						field.IsKey = fieldSchema.IsKey;
+						field.IsIdentity = fieldSchema.IsIdentity;
+						// Añade el campo
+						view.Fields.Add(field);
 				}
+				// Devuelve los datos
+				return view;
 		}
 
 		/// <summary>

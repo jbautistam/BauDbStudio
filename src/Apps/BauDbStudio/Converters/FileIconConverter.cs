@@ -44,6 +44,8 @@ namespace Bau.DbStudio.Converters
 					return "/Resources/Images/File.png";
 				case BaseTreeNodeViewModel.IconType.Table:
 					return "/Resources/Images/Table.png";
+				case BaseTreeNodeViewModel.IconType.View:
+					return "/Resources/Images/View.png";
 				case BaseTreeNodeViewModel.IconType.Key:
 					return "/Resources/Images/Key.png";
 				case BaseTreeNodeViewModel.IconType.Field:

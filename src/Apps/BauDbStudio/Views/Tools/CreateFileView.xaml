@@ -29,7 +29,7 @@
 				<ComboBox Grid.Row="0" Grid.Column="1" Margin="5" 
 						  ItemsSource="{Binding ComboTypes.Items}" DisplayMemberPath="Text" 
 						  SelectedItem="{Binding ComboTypes.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-				<Label Grid.Row="1" Grid.Column="0" Margin="5" Content="Nombre de archivo::"/>
+				<Label Grid.Row="1" Grid.Column="0" Margin="5" Content="Nombre de archivo:"/>
 				<TextBox Grid.Row="1" Grid.Column="1" 
 						Text="{Binding Path=FileName, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
 				<Label Grid.Row="2" Grid.Column="0" Margin="5" Content="Codificación:"/>

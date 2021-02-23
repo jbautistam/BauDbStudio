@@ -55,5 +55,10 @@ namespace Bau.Libraries.DbStudio.Models.Connections
 		///		Tablas
 		/// </summary>
 		public System.Collections.Generic.List<ConnectionTableModel> Tables { get; } = new System.Collections.Generic.List<ConnectionTableModel>();
+
+		/// <summary>
+		///		Tablas
+		/// </summary>
+		public System.Collections.Generic.List<ConnectionTableModel> Views { get; } = new System.Collections.Generic.List<ConnectionTableModel>();
 	}
 }

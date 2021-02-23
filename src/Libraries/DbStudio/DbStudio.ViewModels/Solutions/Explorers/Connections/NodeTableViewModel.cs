@@ -9,10 +9,13 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 	/// </summary>
 	public class NodeTableViewModel : BaseTreeNodeViewModel
 	{
-		public NodeTableViewModel(BaseTreeViewModel trvTree, NodeConnectionViewModel parent, ConnectionTableModel table) : 
-					base(trvTree, parent, table.Name, NodeType.Table, IconType.Table, table, true, true, BauMvvm.ViewModels.Media.MvvmColor.Navy)
+		public NodeTableViewModel(BaseTreeViewModel trvTree, NodeConnectionViewModel parent, ConnectionTableModel table, bool isTable) : 
+					base(trvTree, parent, table.FullName, NodeType.Table, IconType.Table, table, true, true, BauMvvm.ViewModels.Media.MvvmColor.Navy)
 		{
 			Table = table;
+			IsTable = isTable;
+			if (!IsTable)
+				Icon = IconType.View;
 		}
 
 		/// <summary>
@@ -39,5 +42,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 		///		Tabla asociada al nodo
 		/// </summary>
 		public ConnectionTableModel Table { get; }
+
+		/// <summary>
+		///		Indica si es una tabla o una vista
+		/// </summary>
+		public bool IsTable { get; }
 	}
 }

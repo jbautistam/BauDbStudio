@@ -66,6 +66,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers
 			File,
 			Schema,
 			Table,
+			View,
 			Key,
 			Field,
 			Error,

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -31,66 +30,33 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 				// Carga el esquema de las conexiones
 				try
 				{
-					List<string> schemas;
+					NodeRootViewModel rootTables = new NodeRootViewModel(TreeViewModel, this, NodeType.SchemaRoot, "Tables", false);
+					NodeRootViewModel rootViews = new NodeRootViewModel(TreeViewModel, this, NodeType.SchemaRoot, "Views", false);
 
 						// Carga el esquema
 						await TreeViewModel.SolutionViewModel.MainViewModel.Manager.LoadSchemaAsync(Connection, cancellationToken);
-						// Obtiene los esquemas
-						schemas = GetSchemas(Connection);
-						// Mete las tablas en la lista
-						if (schemas.Count == 0)
-						{
-							// Ordena las tablas
-							Connection.Tables.Sort((first, second) => first.FullName.CompareTo(second.FullName));
-							// Añade las tablas
-							foreach (ConnectionTableModel table in Connection.Tables)
-								nodes.Add(new NodeTableViewModel(TreeViewModel, this, table));
-						}
-						else
-						{
-							// Ordena los esquemas
-							schemas.Sort((first, second) => first.CompareTo(second));
-							// Añade los nodos de esquema
-							foreach (string schema in schemas)
-							{
-								NodeRootViewModel root = new NodeRootViewModel(TreeViewModel, this, NodeType.SchemaRoot, schema, false);
-
-									// Ordena las tablas
-									Connection.Tables.Sort((first, second) => first.FullName.CompareTo(second.FullName));
-									// Añade las tablas al nodo
-									foreach (ConnectionTableModel table in Connection.Tables)
-										if (table.Schema.Equals(schema, StringComparison.CurrentCultureIgnoreCase))
-											root.Children.Add(new NodeTableViewModel(TreeViewModel, this, table));
-									// Añade el nodo de esquema a la raíz
-									nodes.Add(root);
-							}
-						}
+						// Añade los nodos raíz
+						nodes.Add(rootTables);
+						nodes.Add(rootViews);
+						// Ordena las tablas
+						Connection.Tables.Sort((first, second) => first.FullName.CompareTo(second.FullName));
+						// Añade las tablas al nodo
+						foreach (ConnectionTableModel table in Connection.Tables)
+							rootTables.Children.Add(new NodeTableViewModel(TreeViewModel, this, table, true));
+						// Ordena las vistas
+						Connection.Views.Sort((first, second) => first.FullName.CompareTo(second.FullName));
+						// Añade las tablas al nodo
+						foreach (ConnectionTableModel view in Connection.Views)
+							rootViews.Children.Add(new NodeTableViewModel(TreeViewModel, this, view, false));
 				}
 				catch (Exception exception)
 				{
 					nodes.Add(new NodeMessageViewModel(TreeViewModel, this, "No se puede cargar el esquema de la conexión", IconType.Error));
-					System.Diagnostics.Trace.TraceError($"Error when load schema {exception.Message}");
 					TreeViewModel.SolutionViewModel.MainViewModel.MainController.Logger.Default.LogItems.Error("Error when load schema", exception);
 					TreeViewModel.SolutionViewModel.MainViewModel.MainController.Logger.Flush();
 				}
 				// Devuelve la colección de nodos
 				return nodes;
-		}
-
-		/// <summary>
-		///		Obtiene los esquemas asociados a una conexión
-		/// </summary>
-		private List<string> GetSchemas(ConnectionModel connection)
-		{
-			List<string> schemas = new List<string>();
-
-				// Añade los esquemas de las tablas
-				foreach (ConnectionTableModel table in connection.Tables)
-					if (!string.IsNullOrWhiteSpace(table.Schema) && 
-							schemas.FirstOrDefault(item => item.Equals(table.Schema, StringComparison.CurrentCultureIgnoreCase)) == null)
-						schemas.Add(table.Schema);
-				// Devuelve la lista de esquemas
-				return schemas;
 		}
 
 		/// <summary>
