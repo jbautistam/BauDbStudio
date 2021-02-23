@@ -71,6 +71,7 @@
     <None Remove="Resources\Images\Storage.png" />
     <None Remove="Resources\Images\Table.png" />
     <None Remove="Resources\Images\Upload.png" />
+    <None Remove="Resources\Images\View.png" />
     <None Remove="Resources\Images\WholeWord.png" />
     <None Remove="Resources\Images\Wildcards.png" />
   </ItemGroup>
@@ -147,6 +148,7 @@
     <Resource Include="Resources\Images\StepDisabled.png" />
     <Resource Include="Resources\Images\Stop.png" />
     <Resource Include="Resources\Images\Table.png" />
+    <Resource Include="Resources\Images\View.png" />
     <Resource Include="Resources\Images\WholeWord.png" />
     <Resource Include="Resources\Images\Wildcards.png" />
   </ItemGroup>
