@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
 using System.Windows.Controls;
-using Xceed.Wpf.AvalonDock.Layout;
+
+using AvalonDock;
+using AvalonDock.Layout;
 
 namespace Bau.DbStudio.Controls
 {
 	/// <summary>
 	///		Control que extiende DockingManager para ofrecer algunas funciones interesantes como el control activo
 	/// </summary>
-	public class DockLayout : Xceed.Wpf.AvalonDock.DockingManager
+	public class DockLayout : DockingManager
 	{
 		// Eventos públicos
 		public event EventHandler<ClosingEventArgs> Closing;
@@ -36,7 +37,12 @@ namespace Bau.DbStudio.Controls
 		{
 			Aero,
 			Metro,
-			VS2010Theme
+			VS2010Theme,
+			ExpressionDark,
+			ExpressionLight,
+			VS2013LightTheme,
+			VS2013BlueTheme,
+			VS2013DarkTheme
 		}
 		// Variables privadas
 		private DockLayoutDocument _activeDocument;
@@ -321,13 +327,28 @@ namespace Bau.DbStudio.Controls
 			switch (theme)
 			{
 				case DockTheme.Aero:
-						Theme = new Xceed.Wpf.AvalonDock.Themes.AeroTheme();
+						Theme = new AvalonDock.Themes.AeroTheme();
+					break;
+				case DockTheme.ExpressionDark:
+						Theme = new AvalonDock.Themes.ExpressionDarkTheme();
+					break;
+				case DockTheme.ExpressionLight:
+						Theme = new AvalonDock.Themes.ExpressionLightTheme();
 					break;
 				case DockTheme.Metro:
-						Theme = new Xceed.Wpf.AvalonDock.Themes.MetroTheme();
+						Theme = new AvalonDock.Themes.MetroTheme();
+					break;
+				case DockTheme.VS2013LightTheme:
+						Theme = new AvalonDock.Themes.Vs2013LightTheme();
+					break;
+				case DockTheme.VS2013BlueTheme:
+						Theme = new AvalonDock.Themes.Vs2013BlueTheme();
+					break;
+				case DockTheme.VS2013DarkTheme:
+						Theme = new AvalonDock.Themes.Vs2013DarkTheme();
 					break;
 				default:
-						Theme = new Xceed.Wpf.AvalonDock.Themes.VS2010Theme();
+						Theme = new AvalonDock.Themes.VS2010Theme();
 					break;
 			}
 		}

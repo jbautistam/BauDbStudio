@@ -58,7 +58,7 @@ namespace Bau.DbStudio.Views.Tools
 				// Cambia los valores
 				if (cboFontChooser.SelectedItem != null)
 					MainWindow.MainController.ConfigurationController.EditorFontName = cboFontChooser.SelectedItem.ToString();
-				MainWindow.MainController.ConfigurationController.EditorFontSize = txtFontSize.Value ?? 10;
+				MainWindow.MainController.ConfigurationController.EditorFontSize = txtFontSize.Value;
 				MainWindow.MainController.ConfigurationController.EditorShowLinesNumber = chkShowLineNumber.IsChecked ?? false;
 				MainWindow.MainController.ConfigurationController.ConsoleExecutable = fnConsole.FileName;
 				MainWindow.MainController.ConfigurationController.ShowWindowNotifications = chkShowNotifications.IsChecked ?? false;

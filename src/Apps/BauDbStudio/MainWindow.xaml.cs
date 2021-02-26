@@ -242,6 +242,11 @@ namespace Bau.DbStudio
 			mnuThemeAero.IsChecked = newTheme == Controls.DockLayout.DockTheme.Aero;
 			mnuThemeMetro.IsChecked = newTheme == Controls.DockLayout.DockTheme.Metro;
 			mnuThemeVs2010.IsChecked = newTheme == Controls.DockLayout.DockTheme.VS2010Theme;
+			mnuThemeExpressionDark.IsChecked = newTheme == Controls.DockLayout.DockTheme.ExpressionDark;
+			mnuThemeExpressionLight.IsChecked = newTheme == Controls.DockLayout.DockTheme.ExpressionLight;
+			mnuThemeVs2013Blue.IsChecked = newTheme == Controls.DockLayout.DockTheme.VS2013BlueTheme;
+			mnuThemeVs2013Dark.IsChecked = newTheme == Controls.DockLayout.DockTheme.VS2013DarkTheme;
+			mnuThemeVs2013Light.IsChecked = newTheme == Controls.DockLayout.DockTheme.VS2013LightTheme;
 			// Cambia la configuración
 			MainController.ConfigurationController.LastThemeSelected = (int) newTheme;
 		}
@@ -446,6 +451,31 @@ namespace Bau.DbStudio
 		private void ThemeVS2010_Click(object sender, RoutedEventArgs e)
 		{
 			SetTheme(Controls.DockLayout.DockTheme.VS2010Theme);
+		}
+
+		private void mnuThemeExpressionDark_Click(object sender, RoutedEventArgs e)
+		{
+			SetTheme(Controls.DockLayout.DockTheme.ExpressionDark);
+		}
+
+		private void mnuThemeExpressionLight_Click(object sender, RoutedEventArgs e)
+		{
+			SetTheme(Controls.DockLayout.DockTheme.ExpressionLight);
+		}
+
+		private void mnuThemeVs2013Light_Click(object sender, RoutedEventArgs e)
+		{
+			SetTheme(Controls.DockLayout.DockTheme.VS2013LightTheme);
+		}
+
+		private void mnuThemeVs2013Blue_Click(object sender, RoutedEventArgs e)
+		{
+			SetTheme(Controls.DockLayout.DockTheme.VS2013BlueTheme);
+		}
+
+		private void mnuThemeVs2013Dark_Click(object sender, RoutedEventArgs e)
+		{
+			SetTheme(Controls.DockLayout.DockTheme.VS2013DarkTheme);
 		}
 
 		private void Window_Unloaded(object sender, RoutedEventArgs e)

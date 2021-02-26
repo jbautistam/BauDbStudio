@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bau.DbStudio.Views.Reporting.Queries"
-		xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
+		xmlns:Editors="clr-namespace:Bau.Controls.Editors;assembly=BauControls"
 		x:Class="Bau.DbStudio.Views.Reporting.Queries.ListFilterColumnView"
         mc:Ignorable="d"
         Title="Filtros de la columna" Height="550" Width="800" ResizeMode="NoResize" ShowInTaskbar="False"
@@ -66,7 +66,7 @@
 										<StackPanel Orientation="Horizontal">
 											<TextBox Text="{Binding Path=Value1,UpdateSourceTrigger=PropertyChanged}" Margin="5" Width="180"
 													Visibility="{Binding Path=IsString,Converter={StaticResource BoolToVisibilityConverter}}"/>
-											<toolkit:DoubleUpDown Value="{Binding Path=Value1,UpdateSourceTrigger=PropertyChanged}" Margin="5" Width="180"
+											<Editors:DoubleUpDown Value="{Binding Path=Value1,UpdateSourceTrigger=PropertyChanged}" Margin="5" Width="180"
 													Visibility="{Binding Path=IsNumber,Converter={StaticResource BoolToVisibilityConverter}}"/>
 											<DatePicker SelectedDate="{Binding Path=Value1,UpdateSourceTrigger=PropertyChanged}" Margin="5" Width="180"
 													Visibility="{Binding Path=IsDateTime,Converter={StaticResource BoolToVisibilityConverter}}"/>
@@ -82,7 +82,7 @@
 										<StackPanel Orientation="Horizontal">
 											<TextBox Text="{Binding Path=Value2,UpdateSourceTrigger=PropertyChanged}" Margin="5" Width="180"
 													Visibility="{Binding Path=IsString,Converter={StaticResource BoolToVisibilityConverter}}"/>
-											<toolkit:DoubleUpDown Value="{Binding Path=Value2,UpdateSourceTrigger=PropertyChanged}" Margin="5" Width="180"
+											<Editors:DoubleUpDown Value="{Binding Path=Value2,UpdateSourceTrigger=PropertyChanged}" Margin="5" Width="180"
 													Visibility="{Binding Path=IsNumber,Converter={StaticResource BoolToVisibilityConverter}}"/>
 											<DatePicker SelectedDate="{Binding Path=Value2,UpdateSourceTrigger=PropertyChanged}" Margin="5" Width="180"
 													Visibility="{Binding Path=IsDateTime,Converter={StaticResource BoolToVisibilityConverter}}"/>

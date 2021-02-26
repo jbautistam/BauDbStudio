@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Bau.DbStudio.Views.Queries"
 			 xmlns:CodeEditor="clr-namespace:Bau.Controls.CodeEditor;assembly=CodeEditor"
-			 xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
+			 xmlns:Editors="clr-namespace:Bau.Controls.Editors;assembly=BauControls"
 			 x:Class="Bau.DbStudio.Views.Queries.QueryViewControl"
              mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
 	<Grid>
@@ -54,7 +54,7 @@
 					<Separator/>
 					<CheckBox Margin="5" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Paginar consulta" IsChecked="{Binding Path=PaginateQuery}"/>
 					<Label Margin="5" Content="Registros por página:"/>
-					<toolkit:IntegerUpDown Margin="5" Minimum="1" Maximum="900000" Value="{Binding Path=PageSize,UpdateSourceTrigger=PropertyChanged}"/>
+					<Editors:IntegerUpDown Margin="5" Minimum="1" Maximum="900000" Value="{Binding Path=PageSize,UpdateSourceTrigger=PropertyChanged}"/>
 					<Button Command="{Binding Path=FirstPageCommand}" >
 						<Button.Content>
 							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/ArrowFirst.png" />

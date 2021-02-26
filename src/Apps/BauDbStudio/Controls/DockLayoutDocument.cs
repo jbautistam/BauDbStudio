@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Controls;
-using Xceed.Wpf.AvalonDock.Layout;
+
+using AvalonDock.Layout;
 
 namespace Bau.DbStudio.Controls
 {

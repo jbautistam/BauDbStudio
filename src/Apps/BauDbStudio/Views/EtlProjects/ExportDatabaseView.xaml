@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-		xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
+		xmlns:Editors="clr-namespace:Bau.Controls.Editors;assembly=BauControls"
         xmlns:Files="clr-namespace:Bau.Controls.Files;assembly=BauControls"
 		x:Class="Bau.DbStudio.Views.EtlProjects.ExportDatabaseView"
         mc:Ignorable="d"
@@ -37,9 +37,8 @@
 				<TextBox Grid.Row="1" Grid.Column="1" 
 							Text="{Binding Path=DataBase, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
 				<Label Grid.Row="1" Grid.Column="2" Margin="5" Content="Tamaño bloque grabación:"/>
-				<toolkit:LongUpDown Grid.Row="1" Grid.Column="3" Minimum="1000000" Maximum="100000000"
+				<Editors:LongUpDown Grid.Row="1" Grid.Column="3" Minimum="1000000" Maximum="100000000"
 					Value="{Binding Path=BlockSize, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
-
 			</Grid>
 		</GroupBox>
 		<GroupBox Header="Archivos de salida" Grid.Row="2" Grid.Column="0">

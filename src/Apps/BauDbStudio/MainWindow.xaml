@@ -6,7 +6,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bau.DbStudio"
 		xmlns:commandsLocal="clr-namespace:Bau.DbStudio.Converters"
-		xmlns:avalonDock="http://schemas.xceed.com/wpf/xaml/avalondock"
+		xmlns:avalonDock="https://github.com/Dirkster99/AvalonDock"
+		xmlns:avalonDockLayout="clr-namespace:AvalonDock.Layout;assembly=AvalonDock"
 		xmlns:avalonDockExtended="clr-namespace:Bau.DbStudio.Controls"
         mc:Ignorable="d"
         Title="{Binding Path=Text}" Height="450" Width="800" Loaded="Window_Loaded" Unloaded="Window_Unloaded" WindowStartupLocation="CenterScreen" WindowState="Maximized" Closing="Window_Closing">
@@ -215,7 +216,12 @@
 					</MenuItem.Icon>
 					<MenuItem Header="Aero" Click="ThemeAero_Click" IsCheckable="True" x:Name="mnuThemeAero"/>
 					<MenuItem Header="Metro" Click="ThemeMetro_Click" IsCheckable="True" x:Name="mnuThemeMetro"/>
+					<MenuItem Header="Expression dark" Click="mnuThemeExpressionDark_Click" IsCheckable="True" x:Name="mnuThemeExpressionDark"/>
+					<MenuItem Header="Expression light" Click="mnuThemeExpressionLight_Click" IsCheckable="True" x:Name="mnuThemeExpressionLight"/>
 					<MenuItem Header="VS 2010" Click="ThemeVS2010_Click" IsCheckable="True" x:Name="mnuThemeVs2010"/>
+					<MenuItem Header="VS 2013 light" Click="mnuThemeVs2013Light_Click" IsCheckable="True" x:Name="mnuThemeVs2013Light"/>
+					<MenuItem Header="VS 2013 blue" Click="mnuThemeVs2013Blue_Click" IsCheckable="True" x:Name="mnuThemeVs2013Blue"/>
+					<MenuItem Header="VS 2013 dark" Click="mnuThemeVs2013Dark_Click" IsCheckable="True" x:Name="mnuThemeVs2013Dark"/>
 				</MenuItem>
 				<MenuItem Header="_Cerrar todos los documentos" Click="CloseAllWindows_Click">
 					<MenuItem.Icon>
@@ -341,8 +347,14 @@
 				<avalonDock:AeroTheme></avalonDock:AeroTheme>
 			</avalonDock:DockingManager.Theme>
 
-			<avalonDock:LayoutRoot>
-			</avalonDock:LayoutRoot>
+			<avalonDockLayout:LayoutRoot>
+				<avalonDockLayout:LayoutPanel x:Name="VerticalPanel" Orientation="Vertical">
+					<avalonDockLayout:LayoutPanel x:Name="HorizontalPanel" Orientation="Horizontal">
+						<avalonDockLayout:LayoutDocumentPane />
+					</avalonDockLayout:LayoutPanel>
+				</avalonDockLayout:LayoutPanel>
+			</avalonDockLayout:LayoutRoot>
+
 		</avalonDockExtended:DockLayout>
 
 		<!-- Barra de estado -->

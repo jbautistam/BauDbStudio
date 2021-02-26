@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bau.DbStudio.Views.Connections"
-		xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
+		xmlns:Editors="clr-namespace:Bau.Controls.Editors;assembly=BauControls"
         xmlns:Files="clr-namespace:Bau.Controls.Files;assembly=BauControls"
 		x:Class="Bau.DbStudio.Views.Connections.ConnectionView"
         mc:Ignorable="d"
@@ -58,7 +58,7 @@
 						  ItemsSource="{Binding ComboTypes.Items}" DisplayMemberPath="Text" 
 						  SelectedItem="{Binding ComboTypes.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 				<Label Grid.Row="0" Grid.Column="2" Margin="5" Content="Tiempo de espera de ejecución scripts:"/>
-				<toolkit:IntegerUpDown Grid.Row="0" Grid.Column="3" 
+				<Editors:IntegerUpDown Grid.Row="0" Grid.Column="3" 
 					Value="{Binding Path=TimeoutExecuteScriptMinutes, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
 				<Label Grid.Row="0" Grid.Column="4" Margin="5" Content="minutos"/>
 				<Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5" Margin="50,0,0,0"
@@ -92,7 +92,7 @@
 					<TextBox Grid.Row="0" Grid.Column="1" 
 							Text="{Binding Server, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
 					<Label Grid.Row="0" Grid.Column="2" Margin="5" Content="Puerto:"/>
-					<toolkit:IntegerUpDown Grid.Row="0" Grid.Column="3" 
+					<Editors:IntegerUpDown Grid.Row="0" Grid.Column="3" 
 						Value="{Binding Port, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
 					<Label Grid.Row="1" Grid.Column="0" Margin="5" Content="Usuario:"/>
 					<TextBox Grid.Row="1" Grid.Column="1" 
