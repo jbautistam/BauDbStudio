@@ -81,6 +81,7 @@ namespace Bau.DbStudio.Controls
 						// Asigna los parámetros del panel
 						layoutPane.FloatingHeight = 200;
 						layoutPane.FloatingWidth = 200;
+						layoutPane.AutoHideWidth = 400;
 						// Añade el contenido al grupo
 						layoutGroup.Children.Add(layoutPane);
 						layoutPane.IsActive = true;
