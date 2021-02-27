@@ -6,9 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bau.DbStudio"
 		xmlns:commandsLocal="clr-namespace:Bau.DbStudio.Converters"
-		xmlns:avalonDock="https://github.com/Dirkster99/AvalonDock"
-		xmlns:avalonDockLayout="clr-namespace:AvalonDock.Layout;assembly=AvalonDock"
-		xmlns:avalonDockExtended="clr-namespace:Bau.DbStudio.Controls"
+		xmlns:dockLayout="clr-namespace:Bau.Controls.DockLayout;assembly=DockLayout"
         mc:Ignorable="d"
         Title="{Binding Path=Text}" Height="450" Width="800" Loaded="Window_Loaded" Unloaded="Window_Unloaded" WindowStartupLocation="CenterScreen" WindowState="Maximized" Closing="Window_Closing">
 	<Window.CommandBindings>
@@ -342,20 +340,8 @@
 			</Button>
 		</ToolBar>
 
-		<avalonDockExtended:DockLayout x:Name="dckManager" Grid.Row="2" Grid.Column="0" Drop="dckManager_Drop" AllowDrop="True">
-			<avalonDock:DockingManager.Theme>
-				<avalonDock:AeroTheme></avalonDock:AeroTheme>
-			</avalonDock:DockingManager.Theme>
-
-			<avalonDockLayout:LayoutRoot>
-				<avalonDockLayout:LayoutPanel x:Name="VerticalPanel" Orientation="Vertical">
-					<avalonDockLayout:LayoutPanel x:Name="HorizontalPanel" Orientation="Horizontal">
-						<avalonDockLayout:LayoutDocumentPane />
-					</avalonDockLayout:LayoutPanel>
-				</avalonDockLayout:LayoutPanel>
-			</avalonDockLayout:LayoutRoot>
-
-		</avalonDockExtended:DockLayout>
+		<dockLayout:DockLayoutManager x:Name="dckManager" Grid.Row="2" Grid.Column="0" OpenFileRequired="dckManager_OpenFileRequired" >
+		</dockLayout:DockLayoutManager>
 
 		<!-- Barra de estado -->
 		<StatusBar Grid.Row="3" Grid.Column="0">

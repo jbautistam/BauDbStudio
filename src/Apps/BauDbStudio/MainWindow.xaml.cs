@@ -23,7 +23,7 @@ namespace Bau.DbStudio
 		///		Inicializa el formulario
 		/// </summary>
 		private void InitForm()
-		{	
+		{
 			// Asigna el icono a la ventana
 			Icon = System.Windows.Media.Imaging.BitmapFrame.Create(new Uri("pack://application:,,,./Resources/BauDbStudio.ico", UriKind.RelativeOrAbsolute)); 
 			// Inicializa el controlador
@@ -40,26 +40,26 @@ namespace Bau.DbStudio
 			ViewModel.WorkspacesChanged += (sender, args) => ShowMenuWorkspaces();
 			// Añade los paneles
 			dckManager.AddPane("TreeFilesExplorer", "Archivos", new Views.TreeFilesExplorer(ViewModel.SolutionViewModel.TreeFoldersViewModel), 
-							   null, Controls.DockLayout.DockPosition.Left);
+							   null, Controls.DockLayout.DockLayoutManager.DockPosition.Left);
 			dckManager.AddPane("TreeConnectionsExplorer", "Conexiones", new Views.TreeConnectionsExplorer(ViewModel.SolutionViewModel.TreeConnectionsViewModel), 
-							   null, Controls.DockLayout.DockPosition.Left);
+							   null, Controls.DockLayout.DockLayoutManager.DockPosition.Left);
 			dckManager.AddPane("TreeReportingExplorer", "Informes", 
 							   new Views.Reporting.Explorers.TreeReportingExplorer(ViewModel.SolutionViewModel.ReportingSolutionViewModel.TreeReportingViewModel), 
-							   null, Controls.DockLayout.DockPosition.Left);
+							   null, Controls.DockLayout.DockLayoutManager.DockPosition.Left);
 			dckManager.AddPane("TreeStorageExplorer", "Storage", new Views.TreeStoragesExplorer(ViewModel.SolutionViewModel.TreeStoragesViewModel), 
-							   null, Controls.DockLayout.DockPosition.Right);
-			dckManager.AddPane("LogView", "Log", new Views.Tools.LogView(ViewModel.LogViewModel), null, Controls.DockLayout.DockPosition.Bottom);
+							   null, Controls.DockLayout.DockLayoutManager.DockPosition.Right);
+			dckManager.AddPane("LogView", "Log", new Views.Tools.LogView(ViewModel.LogViewModel), null, Controls.DockLayout.DockLayoutManager.DockPosition.Bottom);
 			dckManager.AddPane("SearchVew", "Buscar", new Views.Tools.Search.SearchView(ViewModel.SearchFilesViewModel), 
-							   null, Controls.DockLayout.DockPosition.Right);
+							   null, Controls.DockLayout.DockLayoutManager.DockPosition.Right);
 			// Abre los paneles predefinidos
-			dckManager.OpenGroup(Controls.DockLayout.DockPosition.Left);
+			dckManager.OpenGroup(Controls.DockLayout.DockLayoutManager.DockPosition.Left);
 			// Asigna los manejadores de eventos
 			MainController.SparkSolutionController.OpenWindowRequired += (sender, args) => OpenWindow(args);
 			// Asigna los manejadores de eventos del docker de documentos
 			dckManager.Closing += (sender, args) => CloseWindow(args);
 			dckManager.ActiveDocumentChanged += (sender, args) => UpdateSelectedTab();
 			// Cambia el tema
-			SetTheme((Controls.DockLayout.DockTheme) MainController.ConfigurationController.LastThemeSelected);
+			SetTheme((Controls.DockLayout.DockLayoutManager.DockTheme) MainController.ConfigurationController.LastThemeSelected);
 			// Muestra el número de versión
 			lblVersion.Text = GetAssemblyVersion();
 			// Carga los menús de espacios de trabajo
@@ -164,13 +164,13 @@ namespace Bau.DbStudio
 		/// <summary>
 		///		Cierra una ficha
 		/// </summary>
-		private void CloseWindow(Controls.ClosingEventArgs args)
+		private void CloseWindow(Controls.DockLayout.EventArguments.ClosingEventArgs args)
 		{
 			if (args.Document != null && args.Document.Tag != null && args.Document.Tag is IDetailViewModel detailViewModel && detailViewModel.IsUpdated)
 			{
 				Libraries.BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType result = MainController.SparkSolutionController.HostController.SystemController.ShowQuestionCancel
 																											(detailViewModel.GetSaveAndCloseMessage());
-				
+
 					switch (result)
 					{
 						case Libraries.BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes:
@@ -189,7 +189,7 @@ namespace Bau.DbStudio
 		private void UpdateSelectedTab()
 		{
 			IDetailViewModel details = null;
-			
+
 				// Obtiene los detalles de la ficha seleccionada
 				if (dckManager.ActiveDocument != null)
 					details = dckManager.ActiveDocument.Tag as IDetailViewModel;
@@ -234,19 +234,19 @@ namespace Bau.DbStudio
 		/// <summary>
 		///		Cambia el tema del layout
 		/// </summary>
-		private void SetTheme(Controls.DockLayout.DockTheme newTheme)
+		private void SetTheme(Bau.Controls.DockLayout.DockLayoutManager.DockTheme newTheme)
 		{
 			// Cambia el tema
 			dckManager.SetTheme(newTheme);
 			// Cambia los menús
-			mnuThemeAero.IsChecked = newTheme == Controls.DockLayout.DockTheme.Aero;
-			mnuThemeMetro.IsChecked = newTheme == Controls.DockLayout.DockTheme.Metro;
-			mnuThemeVs2010.IsChecked = newTheme == Controls.DockLayout.DockTheme.VS2010Theme;
-			mnuThemeExpressionDark.IsChecked = newTheme == Controls.DockLayout.DockTheme.ExpressionDark;
-			mnuThemeExpressionLight.IsChecked = newTheme == Controls.DockLayout.DockTheme.ExpressionLight;
-			mnuThemeVs2013Blue.IsChecked = newTheme == Controls.DockLayout.DockTheme.VS2013BlueTheme;
-			mnuThemeVs2013Dark.IsChecked = newTheme == Controls.DockLayout.DockTheme.VS2013DarkTheme;
-			mnuThemeVs2013Light.IsChecked = newTheme == Controls.DockLayout.DockTheme.VS2013LightTheme;
+			mnuThemeAero.IsChecked = newTheme == Controls.DockLayout.DockLayoutManager.DockTheme.Aero;
+			mnuThemeMetro.IsChecked = newTheme == Controls.DockLayout.DockLayoutManager.DockTheme.Metro;
+			mnuThemeVs2010.IsChecked = newTheme == Controls.DockLayout.DockLayoutManager.DockTheme.VS2010Theme;
+			mnuThemeExpressionDark.IsChecked = newTheme == Controls.DockLayout.DockLayoutManager.DockTheme.ExpressionDark;
+			mnuThemeExpressionLight.IsChecked = newTheme == Controls.DockLayout.DockLayoutManager.DockTheme.ExpressionLight;
+			mnuThemeVs2013Blue.IsChecked = newTheme == Controls.DockLayout.DockLayoutManager.DockTheme.VS2013BlueTheme;
+			mnuThemeVs2013Dark.IsChecked = newTheme == Controls.DockLayout.DockLayoutManager.DockTheme.VS2013DarkTheme;
+			mnuThemeVs2013Light.IsChecked = newTheme == Controls.DockLayout.DockLayoutManager.DockTheme.VS2013LightTheme;
 			// Cambia la configuración
 			MainController.ConfigurationController.LastThemeSelected = (int) newTheme;
 		}
@@ -371,19 +371,17 @@ namespace Bau.DbStudio
 		/// </summary>
 		private bool CanExitApp()
 		{
-			List<object> views = dckManager.GetOpenedViews();
-
-				// Comprueba si alguna de las vistas tiene modificaciones pendientes
-				foreach (object view in views)
-					if (view is IDetailViewModel viewModel && viewModel.IsUpdated)
-					{
-						// Mensaje para el usuario
-						ViewModel.MainController.HostController.SystemController.ShowMessage("Grabe las últimas modificaciones antes de cerrar la aplicación");
-						// Indica que no puede salir de la aplicación
-						return false;
-					}
-				// Si ha llegado hasta aquí, se puede cerrar
-				return true;
+			// Comprueba si alguna de las vistas tiene modificaciones pendientes
+			foreach (object view in dckManager.GetOpenedViews())
+				if (view is IDetailViewModel viewModel && viewModel.IsUpdated)
+				{
+					// Mensaje para el usuario
+					ViewModel.MainController.HostController.SystemController.ShowMessage("Grabe las últimas modificaciones antes de cerrar la aplicación");
+					// Indica que no puede salir de la aplicación
+					return false;
+				}
+			// Si ha llegado hasta aquí, se puede cerrar
+			return true;
 		}
 
 		/// <summary>
@@ -440,42 +438,42 @@ namespace Bau.DbStudio
 
 		private void ThemeAero_Click(object sender, RoutedEventArgs e)
 		{
-			SetTheme(Controls.DockLayout.DockTheme.Aero);
+			SetTheme(Bau.Controls.DockLayout.DockLayoutManager.DockTheme.Aero);
 		}
 
 		private void ThemeMetro_Click(object sender, RoutedEventArgs e)
 		{
-			SetTheme(Controls.DockLayout.DockTheme.Metro);
+			SetTheme(Bau.Controls.DockLayout.DockLayoutManager.DockTheme.Metro);
 		}
 
 		private void ThemeVS2010_Click(object sender, RoutedEventArgs e)
 		{
-			SetTheme(Controls.DockLayout.DockTheme.VS2010Theme);
+			SetTheme(Bau.Controls.DockLayout.DockLayoutManager.DockTheme.VS2010Theme);
 		}
 
 		private void mnuThemeExpressionDark_Click(object sender, RoutedEventArgs e)
 		{
-			SetTheme(Controls.DockLayout.DockTheme.ExpressionDark);
+			SetTheme(Bau.Controls.DockLayout.DockLayoutManager.DockTheme.ExpressionDark);
 		}
 
 		private void mnuThemeExpressionLight_Click(object sender, RoutedEventArgs e)
 		{
-			SetTheme(Controls.DockLayout.DockTheme.ExpressionLight);
+			SetTheme(Bau.Controls.DockLayout.DockLayoutManager.DockTheme.ExpressionLight);
 		}
 
 		private void mnuThemeVs2013Light_Click(object sender, RoutedEventArgs e)
 		{
-			SetTheme(Controls.DockLayout.DockTheme.VS2013LightTheme);
+			SetTheme(Bau.Controls.DockLayout.DockLayoutManager.DockTheme.VS2013LightTheme);
 		}
 
 		private void mnuThemeVs2013Blue_Click(object sender, RoutedEventArgs e)
 		{
-			SetTheme(Controls.DockLayout.DockTheme.VS2013BlueTheme);
+			SetTheme(Bau.Controls.DockLayout.DockLayoutManager.DockTheme.VS2013BlueTheme);
 		}
 
 		private void mnuThemeVs2013Dark_Click(object sender, RoutedEventArgs e)
 		{
-			SetTheme(Controls.DockLayout.DockTheme.VS2013DarkTheme);
+			SetTheme(Bau.Controls.DockLayout.DockLayoutManager.DockTheme.VS2013DarkTheme);
 		}
 
 		private void Window_Unloaded(object sender, RoutedEventArgs e)
@@ -528,24 +526,11 @@ namespace Bau.DbStudio
 			e.Cancel = !CanExitApp();
 		}
 
-		private void dckManager_Drop(object sender, DragEventArgs e)
-		{
-			if (e.Data.GetDataPresent(DataFormats.FileDrop))
-				try
-				{
-					string [] files = (string []) e.Data.GetData(DataFormats.FileDrop);
 
-						// Abre los archivos
-						foreach (string file in files)
-							if (!string.IsNullOrWhiteSpace(file) && System.IO.File.Exists(file))
-								OpenFile(file);
-						// Indica que se ha tratado el evento
-						e.Handled = true;
-				}
-				catch (Exception exception)
-				{
-					MainController.SparkSolutionController.Logger.Default.LogItems.Error("Error when drop files", exception);
-				}
+		private void dckManager_OpenFileRequired(object sender, Bau.Controls.DockLayout.EventArguments.OpenFileRequiredArgs e)
+		{
+			if (!string.IsNullOrWhiteSpace(e.FileName) && System.IO.File.Exists(e.FileName))
+				OpenFile(e.FileName);
 		}
 
 		private void AboutMenuItem_Click(object sender, RoutedEventArgs e)

@@ -18,6 +18,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controls\**" />
+    <EmbeddedResource Remove="Controls\**" />
+    <None Remove="Controls\**" />
+    <Page Remove="Controls\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Views\Connections\ConnectionParametersView.xaml.cs" />
     <Compile Remove="Views\Queries\ChartView.xaml.cs" />
     <Compile Remove="Views\Reporting\Queries\FilterColumnView.xaml.cs" />
@@ -86,15 +93,6 @@
   <ItemGroup>
     <Resource Include="Resources\Images\CaseSensitive.png" />
     <Resource Include="Resources\Images\Chart.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Dirkster.AvalonDock" Version="4.50.2" />
-    <PackageReference Include="Dirkster.AvalonDock.Themes.Aero" Version="4.50.1" />
-    <PackageReference Include="Dirkster.AvalonDock.Themes.Expression" Version="4.50.2" />
-    <PackageReference Include="Dirkster.AvalonDock.Themes.Metro" Version="4.50.2" />
-    <PackageReference Include="Dirkster.AvalonDock.Themes.VS2010" Version="4.50.2" />
-    <PackageReference Include="Dirkster.AvalonDock.Themes.VS2013" Version="4.50.2" />
   </ItemGroup>
 
   <ItemGroup>
