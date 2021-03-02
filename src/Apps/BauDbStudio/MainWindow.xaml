@@ -208,7 +208,7 @@
 			</MenuItem>
 
 			<MenuItem Header="_Ventana">
-				<MenuItem Header="Cambiar tema" Click="CloseAllWindows_Click">
+				<MenuItem Header="Cambiar tema">
 					<MenuItem.Icon>
 						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
 					</MenuItem.Icon>

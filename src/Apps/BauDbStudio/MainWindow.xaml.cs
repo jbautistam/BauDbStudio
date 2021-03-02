@@ -234,7 +234,7 @@ namespace Bau.DbStudio
 		/// <summary>
 		///		Cambia el tema del layout
 		/// </summary>
-		private void SetTheme(Bau.Controls.DockLayout.DockLayoutManager.DockTheme newTheme)
+		private void SetTheme(Controls.DockLayout.DockLayoutManager.DockTheme newTheme)
 		{
 			// Cambia el tema
 			dckManager.SetTheme(newTheme);
@@ -438,42 +438,42 @@ namespace Bau.DbStudio
 
 		private void ThemeAero_Click(object sender, RoutedEventArgs e)
 		{
-			SetTheme(Bau.Controls.DockLayout.DockLayoutManager.DockTheme.Aero);
+			SetTheme(Controls.DockLayout.DockLayoutManager.DockTheme.Aero);
 		}
 
 		private void ThemeMetro_Click(object sender, RoutedEventArgs e)
 		{
-			SetTheme(Bau.Controls.DockLayout.DockLayoutManager.DockTheme.Metro);
+			SetTheme(Controls.DockLayout.DockLayoutManager.DockTheme.Metro);
 		}
 
 		private void ThemeVS2010_Click(object sender, RoutedEventArgs e)
 		{
-			SetTheme(Bau.Controls.DockLayout.DockLayoutManager.DockTheme.VS2010Theme);
+			SetTheme(Controls.DockLayout.DockLayoutManager.DockTheme.VS2010Theme);
 		}
 
 		private void mnuThemeExpressionDark_Click(object sender, RoutedEventArgs e)
 		{
-			SetTheme(Bau.Controls.DockLayout.DockLayoutManager.DockTheme.ExpressionDark);
+			SetTheme(Controls.DockLayout.DockLayoutManager.DockTheme.ExpressionDark);
 		}
 
 		private void mnuThemeExpressionLight_Click(object sender, RoutedEventArgs e)
 		{
-			SetTheme(Bau.Controls.DockLayout.DockLayoutManager.DockTheme.ExpressionLight);
+			SetTheme(Controls.DockLayout.DockLayoutManager.DockTheme.ExpressionLight);
 		}
 
 		private void mnuThemeVs2013Light_Click(object sender, RoutedEventArgs e)
 		{
-			SetTheme(Bau.Controls.DockLayout.DockLayoutManager.DockTheme.VS2013LightTheme);
+			SetTheme(Controls.DockLayout.DockLayoutManager.DockTheme.VS2013LightTheme);
 		}
 
 		private void mnuThemeVs2013Blue_Click(object sender, RoutedEventArgs e)
 		{
-			SetTheme(Bau.Controls.DockLayout.DockLayoutManager.DockTheme.VS2013BlueTheme);
+			SetTheme(Controls.DockLayout.DockLayoutManager.DockTheme.VS2013BlueTheme);
 		}
 
 		private void mnuThemeVs2013Dark_Click(object sender, RoutedEventArgs e)
 		{
-			SetTheme(Bau.Controls.DockLayout.DockLayoutManager.DockTheme.VS2013DarkTheme);
+			SetTheme(Controls.DockLayout.DockLayoutManager.DockTheme.VS2013DarkTheme);
 		}
 
 		private void Window_Unloaded(object sender, RoutedEventArgs e)
@@ -526,8 +526,7 @@ namespace Bau.DbStudio
 			e.Cancel = !CanExitApp();
 		}
 
-
-		private void dckManager_OpenFileRequired(object sender, Bau.Controls.DockLayout.EventArguments.OpenFileRequiredArgs e)
+		private void dckManager_OpenFileRequired(object sender, Controls.DockLayout.EventArguments.OpenFileRequiredArgs e)
 		{
 			if (!string.IsNullOrWhiteSpace(e.FileName) && System.IO.File.Exists(e.FileName))
 				OpenFile(e.FileName);
