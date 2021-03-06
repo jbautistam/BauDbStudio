@@ -39,11 +39,11 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 			{
 				case DataSourceTableModel dataSource:
 						FromTable = dataSource.FullName;
-						FromAlias = dataSource.Name;
+						FromAlias = dataSource.Id;
 					break;
 				case DataSourceSqlModel dataSource:
 						FromTable = $"({dataSource.Sql})"; 
-						FromAlias = dataSource.GlobalId;
+						FromAlias = dataSource.Id;
 					break;
 			}
 		}

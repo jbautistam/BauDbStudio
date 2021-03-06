@@ -7,7 +7,7 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets
 	/// <summary>
 	///		Clase base para los orígenes de datos
 	/// </summary>
-	public abstract class BaseDataSourceModel : BaseExtendedModel
+	public abstract class BaseDataSourceModel : Base.BaseReportingModel
 	{
 		protected BaseDataSourceModel(DataWarehouseModel dataWarehouse)
 		{

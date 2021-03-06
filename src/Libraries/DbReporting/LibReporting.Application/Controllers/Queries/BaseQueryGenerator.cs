@@ -58,7 +58,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 			// Busca el origen de datos
 			foreach (DataWarehouseModel dataWarehouse in Generator.Schema.DataWarehouses.EnumerateValues())
 			{
-				BaseDataSourceModel dataSource = dataWarehouse.DataSources.Search(dataSourceId);
+				BaseDataSourceModel dataSource = dataWarehouse.DataSources[dataSourceId];
 
 					if (dataSource != null)
 						return dataSource;
@@ -72,7 +72,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 		/// </summary>
 		protected DimensionModel GetDimension(DimensionRequestModel dimensionRequest)
 		{
-			DimensionModel dimension = Generator.Report.DataWarehouse.Dimensions.Search(dimensionRequest.DimensionId);
+			DimensionModel dimension = Generator.Report.DataWarehouse.Dimensions[dimensionRequest.DimensionId];
 
 				// Devuelve la dimensión localizada o lanza una excepción
 				if (dimension == null)

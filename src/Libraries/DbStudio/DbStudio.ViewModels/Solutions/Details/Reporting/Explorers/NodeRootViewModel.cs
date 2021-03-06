@@ -67,9 +67,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 				if (dataWarehouse != null)
 				{
 					// Ordena los orígenes de datos
-					dataWarehouse.DataSources.SortByName();
+					// dataWarehouse.DataSources.SortByName();
 					// Carga los nodos
-					foreach (BaseDataSourceModel dataSource in dataWarehouse.DataSources)
+					foreach (BaseDataSourceModel dataSource in dataWarehouse.DataSources.EnumerateValues())
 						Children.Add(new NodeDataSourceViewModel(TreeViewModel, this, dataSource));
 				}
 		}
@@ -84,9 +84,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 				if (dataWarehouse != null)
 				{
 					// Ordena las dimensiones
-					dataWarehouse.Dimensions.SortByName();
+					// dataWarehouse.Dimensions.SortByName();
 					// Carga los nodos
-					foreach (DimensionModel dimension in dataWarehouse.Dimensions)
+					foreach (DimensionModel dimension in dataWarehouse.Dimensions.EnumerateValues())
 						Children.Add(new NodeDimensionViewModel(TreeViewModel, this, dimension));
 			}
 		}

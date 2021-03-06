@@ -44,7 +44,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 
 							// Asigna las relaciones
 							foreach (DimensionRelationModel relation in dimension.Relations)
-								if (relation.Dimension.GlobalId.Equals(childQuery.SourceId, StringComparison.CurrentCultureIgnoreCase))
+								if (relation.Dimension.Id.Equals(childQuery.SourceId, StringComparison.CurrentCultureIgnoreCase))
 									foreach (RelationForeignKey foreignKey in relation.ForeignKeys)
 										join.Relations.Add(new QueryRelationModel(foreignKey.ColumnId, childQuery.FromAlias, foreignKey.TargetColumnId));
 							// Añade la unión
@@ -60,7 +60,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 		private QueryModel GetChildQuery(DimensionRequestModel dimensionRequest)
 		{
 			DimensionModel dimension = GetDimension(dimensionRequest);
-			QueryModel query = new QueryModel(dimensionRequest.DimensionId, QueryModel.QueryType.Dimension, dimension.GlobalId);
+			QueryModel query = new QueryModel(dimensionRequest.DimensionId, QueryModel.QueryType.Dimension, dimension.Id);
 
 				// Prepara la consulta
 				query.Prepare(dimension.DataSource);

@@ -31,12 +31,12 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses
 		/// <summary>
 		///		Dimensiones del esquema
 		/// </summary>
-		public BaseExtendedModelCollection<Dimensions.DimensionModel> Dimensions { get; } = new BaseExtendedModelCollection<Dimensions.DimensionModel>();
+		public Base.BaseReportingDictionaryModel<Dimensions.DimensionModel> Dimensions { get; } = new Base.BaseReportingDictionaryModel<Dimensions.DimensionModel>();
 
 		/// <summary>
 		///		Orígenes de datos
 		/// </summary>
-		public BaseExtendedModelCollection<DataSets.BaseDataSourceModel> DataSources { get; } = new BaseExtendedModelCollection<DataSets.BaseDataSourceModel>();
+		public Base.BaseReportingDictionaryModel<DataSets.BaseDataSourceModel> DataSources { get; } = new Base.BaseReportingDictionaryModel<DataSets.BaseDataSourceModel>();
 
 		/// <summary>
 		///		Informes

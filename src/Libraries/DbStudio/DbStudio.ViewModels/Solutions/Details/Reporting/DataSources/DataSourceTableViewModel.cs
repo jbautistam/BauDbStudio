@@ -11,7 +11,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.DataSour
 	public class DataSourceTableViewModel : BaseObservableObject, IDetailViewModel
 	{
 		// Variables privadas
-		private string _schema, _table, _name, _description;
+		private string _schema, _table;
 		private ListDataSourceColumnsViewModel _columns;
 
 		public DataSourceTableViewModel(ReportingSolutionViewModel reportingSolutionViewModel, DataSourceTableModel dataSource)
@@ -31,8 +31,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.DataSour
 			// Asigna las propiedades
 			Schema = DataSource.Schema;
 			Table = DataSource.Table;
-			Name = DataSource.Name;
-			Description = DataSource.Description;
 			// Carga las columnas
 			ColumnsViewModel = new ListDataSourceColumnsViewModel(ReportingSolutionViewModel, DataSource, false);
 			// Indica que por ahora no ha habido modificaciones
@@ -70,9 +68,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.DataSour
 		{
 			if (ValidateData())
 			{
-				// Asigna las propiedades
-				DataSource.Name = Name;
-				DataSource.Description = Description;
 				// Asigna las columnas
 				DataSource.Columns.Clear();
 				DataSource.Columns.AddRange(ColumnsViewModel.GetColumns());
@@ -106,7 +101,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.DataSour
 		/// </summary>
 		public string TabId
 		{
-			get { return $"{GetType().ToString()}_{DataSource.GlobalId}"; }
+			get { return $"{GetType().ToString()}_{DataSource.Id}"; }
 		}
 
 		/// <summary>
@@ -125,24 +120,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.DataSour
 		{
 			get { return _table; }
 			set { CheckProperty(ref _table, value); }
-		}
-
-		/// <summary>
-		///		Nombre
-		/// </summary>
-		public string Name
-		{
-			get { return _name; }
-			set { CheckProperty(ref _name, value); }
-		}
-
-		/// <summary>
-		///		Descripción
-		/// </summary>
-		public string Description
-		{
-			get { return _description; }
-			set { CheckProperty(ref _description, value); }
 		}
 
 		/// <summary>

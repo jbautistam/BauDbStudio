@@ -56,16 +56,16 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Relation
 			// Inicializa el combo
 			ComboDimensions = new ComboViewModel(this);
 			// Ordena las dimensiones por nombre
-			DataSource.DataWarehouse.Dimensions.SortByName();
+			//DataSource.DataWarehouse.Dimensions.SortByName();
 			// Añade los elementos
 			ComboDimensions.AddItem(-1, "<Seleccione una dimensión>");
-			foreach (DimensionModel dimension in DataSource.DataWarehouse.Dimensions)
+			foreach (DimensionModel dimension in DataSource.DataWarehouse.Dimensions.EnumerateValues())
 			{
 				// Añade el elemento
 				ComboDimensions.AddItem(ComboDimensions.Items.Count + 1, dimension.Name, dimension);
 				// Selecciona el elemento si es la misma dimensión
 				if (Relation != null && Relation.Dimension != null && 
-						dimension.GlobalId.Equals(Relation.Dimension.GlobalId, StringComparison.CurrentCultureIgnoreCase))
+						dimension.Id.Equals(Relation.Dimension.Id, StringComparison.CurrentCultureIgnoreCase))
 					ComboDimensions.SelectedItem = ComboDimensions.Items[ComboDimensions.Items.Count - 1];
 			}
 			// Selecciona el primer elemento

@@ -25,7 +25,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 			//TODO escogidas en la solicitud, para las primeras pruebas, cogemos directamente la primera solicitud
 			ReportDataSourceModel reportDataSource = Generator.Report.ReportDataSources[0];
 			BaseDataSourceModel baseDataSource = reportDataSource.DataSource;
-			QueryModel query = new QueryModel(baseDataSource.GlobalId, QueryModel.QueryType.Expressions, "tmpExpressions");
+			QueryModel query = new QueryModel(baseDataSource.Id, QueryModel.QueryType.Expressions, "tmpExpressions");
 
 				// Prepara la consulta
 				query.Prepare(baseDataSource);
@@ -50,7 +50,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 
 					// Añade las relaciones
 					foreach (DimensionRelationModel relation in dataSource.Relations)
-						if (relation.Dimension.GlobalId.Equals(dimension.GlobalId, StringComparison.CurrentCultureIgnoreCase))
+						if (relation.Dimension.Id.Equals(dimension.Id, StringComparison.CurrentCultureIgnoreCase))
 						{
 							// Añade la dimensión al JOIN
 							query.Joins.Add(CreateJoin(dimension, relation));
@@ -71,14 +71,14 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 		/// </summary>
 		private QueryJoinModel CreateJoin(DimensionModel dimension, DimensionRelationModel relation)
 		{
-			QueryModel query = new QueryModel(dimension.GlobalId, QueryModel.QueryType.Dimension, dimension.GlobalId);
-			QueryJoinModel join = new QueryJoinModel(QueryJoinModel.JoinType.Inner, query, dimension.GlobalId);
+			QueryModel query = new QueryModel(dimension.Id, QueryModel.QueryType.Dimension, dimension.Id);
+			QueryJoinModel join = new QueryJoinModel(QueryJoinModel.JoinType.Inner, query, dimension.Id);
 
 				// Asigna los datos apropiados a la consulta (sólo necesitamos los nombres de tabla
-				query.Prepare(dimension.GlobalId, dimension.GlobalId);
+				query.Prepare(dimension.Id, dimension.Id);
 				// Añade las relaciones
 				foreach (RelationForeignKey column in relation.ForeignKeys)
-					join.Relations.Add(new QueryRelationModel(column.ColumnId, dimension.GlobalId, column.TargetColumnId));
+					join.Relations.Add(new QueryRelationModel(column.ColumnId, dimension.Id, column.TargetColumnId));
 				// Devuelve el join
 				return join;
 		}
@@ -89,7 +89,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 		private void ComputeFieldsGrouped(QueryModel query, ReportRequestModel request, BaseDataSourceModel dataSource)
 		{
 			foreach (ExpressionRequestModel expression in request.Expressions)
-				if (expression.ReportDataSourceId == dataSource.GlobalId)
+				if (expression.ReportDataSourceId == dataSource.Id)
 					foreach (ExpressionColumnRequestModel requestColumn in expression.Columns)
 						foreach (DataSourceColumnModel column in dataSource.Columns)
 							if (requestColumn.ColumnId.Equals(column.ColumnId, StringComparison.CurrentCultureIgnoreCase))

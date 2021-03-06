@@ -241,7 +241,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 		/// </summary>
 		private void DeleteDataSourceSql(DataSourceSqlModel dataSource)
 		{
-			if (SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowQuestion($"¿Realmente desea borrar los datos del origen de datos {dataSource.Name}?"))
+			if (SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowQuestion($"¿Realmente desea borrar los datos del origen de datos {dataSource.Id}?"))
 			{
 				// Borra el origen de datos
 				dataSource.DataWarehouse.DataSources.Remove(dataSource);

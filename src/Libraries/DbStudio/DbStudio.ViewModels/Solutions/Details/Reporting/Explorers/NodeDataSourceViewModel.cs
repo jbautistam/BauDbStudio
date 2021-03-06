@@ -11,23 +11,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 	public class NodeDataSourceViewModel : BaseTreeNodeViewModel
 	{
 		public NodeDataSourceViewModel(BaseTreeViewModel trvTree, BaseTreeNodeViewModel parent, BaseDataSourceModel dataSource) : 
-					base(trvTree, parent, dataSource.Name, NodeType.DataSource, IconType.Table, dataSource, true, true, BauMvvm.ViewModels.Media.MvvmColor.Navy)
+					base(trvTree, parent, dataSource.Id, NodeType.DataSource, IconType.Table, dataSource, true, true, BauMvvm.ViewModels.Media.MvvmColor.Navy)
 		{
-			// Asigna las propiedades
 			DataSource = dataSource;
-			// Ajusta el nombre y los iconos dependiendo del tipo
-			switch (dataSource)
-			{
-				case DataSourceTableModel table:
-						if (string.IsNullOrWhiteSpace(dataSource.Name))
-							Text = table.FullName;
-					break;
-				case DataSourceSqlModel sql:
-						Icon = IconType.DataSourceSql;
-						if (string.IsNullOrWhiteSpace(dataSource.Name))
-							Text = sql.GlobalId;
-					break;
-			}
 		}
 
 		/// <summary>

@@ -43,20 +43,20 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Dimensio
 				{
 					case LibReporting.Models.DataWarehouses.DataSets.DataSourceTableModel dataSourceTable:
 							Name = $"Dim{dataSourceTable.Table}";
-							DataSourceId = dataSourceTable.GlobalId;
+							DataSourceId = dataSourceTable.Id;
 						break;
 					case LibReporting.Models.DataWarehouses.DataSets.DataSourceSqlModel dataSourceSql:
-							Name = $"Dim{dataSourceSql.Name}";
-							DataSourceId = dataSourceSql.GlobalId;
+							Name = $"Dim{dataSourceSql.Id}";
+							DataSourceId = dataSourceSql.Id;
 						break;
 				}
 				Key = Name;
 			}
 			else
 			{
-				Key = Dimension.GlobalId;
+				Key = Dimension.Id;
 				Name = Dimension.Name;
-				DataSourceId = Dimension.DataSource.GlobalId;
+				DataSourceId = Dimension.DataSource.Id;
 			}
 			// Asigna el resto de propiedades
 			Description = Dimension.Description;
@@ -102,7 +102,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Dimensio
 			if (ValidateData())
 			{
 				// Asigna las propiedades a la dimensión
-				Dimension.GlobalId = Key;
+				Dimension.Id = Key;
 				Dimension.Name = Name;
 				Dimension.Description = Description;
 				// Si es nuevo se añade a la colección
@@ -147,7 +147,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Dimensio
 		/// </summary>
 		public string TabId
 		{
-			get { return $"{GetType().ToString()}_{Dimension.GlobalId}"; }
+			get { return $"{GetType().ToString()}_{Dimension.Id}"; }
 		}
 
 		/// <summary>

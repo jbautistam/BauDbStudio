@@ -118,7 +118,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Relation
 					DimensionRelationModel relation = new DimensionRelationModel(DataSource.DataWarehouse);
 
 						// Asigna las propiedades
-						relation.DimensionId = dimensionRelation.GetDimension().GlobalId;
+						relation.DimensionId = dimensionRelation.GetDimension().Id;
 						// Asigna las claves foráneas
 						foreach (ListItemForeignKeyViewModel foreignKeyViewModel in dimensionRelation.ForeignKeys)
 						{

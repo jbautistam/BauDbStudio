@@ -16,7 +16,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 		{
 			Dimension = dimension;
 			if (string.IsNullOrWhiteSpace(dimension.Name))
-				Text = dimension.GlobalId;
+				Text = dimension.Id;
 		}
 
 		/// <summary>

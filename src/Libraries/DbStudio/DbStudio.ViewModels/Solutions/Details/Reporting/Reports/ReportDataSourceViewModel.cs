@@ -53,16 +53,16 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Reports
 			// Inicializa el combo
 			ComboDataSources = new ComboViewModel(this);
 			// Ordena las dimensiones por nombre
-			Report.DataWarehouse.DataSources.SortByName();
+			//Report.DataWarehouse.DataSources.SortByName();
 			// Añade los elementos
 			ComboDataSources.AddItem(-1, "<Seleccione un origen de datos>");
-			foreach (BaseDataSourceModel dataSource in Report.DataWarehouse.DataSources)
+			foreach (BaseDataSourceModel dataSource in Report.DataWarehouse.DataSources.EnumerateValues())
 			{
 				// Añade el elemento
-				ComboDataSources.AddItem(ComboDataSources.Items.Count + 1, dataSource.Name, dataSource);
+				ComboDataSources.AddItem(ComboDataSources.Items.Count + 1, dataSource.Id, dataSource);
 				// Selecciona el elemento si es la misma dimensión
 				if (ReportDataSource != null && ReportDataSource.DataSource != null && 
-						dataSource.GlobalId.Equals(ReportDataSource.DataSource.GlobalId, StringComparison.CurrentCultureIgnoreCase))
+						dataSource.Id.Equals(ReportDataSource.DataSource.Id, StringComparison.CurrentCultureIgnoreCase))
 					ComboDataSources.SelectedItem = ComboDataSources.Items[ComboDataSources.Items.Count - 1];
 			}
 			// Selecciona el primer elemento
@@ -85,7 +85,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Reports
 
 						// Busca las relaciones
 						foreach (ReportDataSourceModel reportDataSource in Report.ReportDataSources)
-							if (reportDataSource.DataSource.GlobalId.Equals(dataSource.GlobalId))
+							if (reportDataSource.DataSource.Id.Equals(dataSource.Id))
 								relations.AddRange(reportDataSource.Relations);
 						// Asocia la lista de relaciones
 						ListRelationsViewModel = new Relations.ListRelationViewModel(ReportingSolutionViewModel, dataSource, ReportDataSource.Relations);

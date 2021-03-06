@@ -91,15 +91,11 @@ namespace Bau.Libraries.LibReporting.Application.Repositories
 		{
 			DataSourceTableModel dataSource = new DataSourceTableModel(dataWarehouse);
 
-				// Carga las propiedades			
-				LoadProperties(rootML, dataSource);
 				// Asigna el esquema y la tabla
 				dataSource.Schema = rootML.Attributes[TagSchema].Value.TrimIgnoreNull();
 				dataSource.Table = rootML.Attributes[TagTable].Value.TrimIgnoreNull();
-				if (string.IsNullOrWhiteSpace(dataSource.Name))
-					dataSource.Name = dataSource.Table;
 				// El Id del origen de datos es el nombre completo de la tabla
-				dataSource.GlobalId = dataSource.FullName;
+				dataSource.Id = dataSource.FullName;
 				// Carga las columnas
 				foreach (MLNode nodeML in rootML.Nodes)
 					if (nodeML.Name == TagColumn)
@@ -116,7 +112,7 @@ namespace Bau.Libraries.LibReporting.Application.Repositories
 			DataSourceSqlModel dataSource = new DataSourceSqlModel(dataWarehouse);
 
 				// Carga las propiedades
-				LoadProperties(rootML, dataSource);
+				dataSource.Id = rootML.Attributes[TagId].Value.TrimIgnoreNull();
 				// Asigna la base de datos y la cadena SQL
 				dataSource.Sql = rootML.Nodes[TagSql].Value.TrimIgnoreNull();
 				// Carga las columnas
@@ -175,9 +171,11 @@ namespace Bau.Libraries.LibReporting.Application.Repositories
 			DimensionModel dimension =  new DimensionModel(dataWarehouse);
 
 				// Carga las propiedades básicas
-				LoadProperties(rootML, dimension);
+				dimension.Id = rootML.Attributes[TagId].Value.TrimIgnoreNull();
+				dimension.Name = rootML.Nodes[TagName].Value.TrimIgnoreNull();
+				dimension.Description = rootML.Nodes[TagDescription].Value.TrimIgnoreNull();
 				// Carga los datos de la dimensión
-				dimension.DataSource = dataWarehouse.DataSources.Search(rootML.Attributes[TagSourceId].Value.TrimIgnoreNull());
+				dimension.DataSource = dataWarehouse.DataSources[rootML.Attributes[TagSourceId].Value.TrimIgnoreNull()];
 				// Carga las dimensiones hija
 				foreach (MLNode nodeML in rootML.Nodes)
 					if (nodeML.Name == TagRelation)
@@ -239,7 +237,7 @@ namespace Bau.Libraries.LibReporting.Application.Repositories
 			ReportDataSourceModel dataSource = new ReportDataSourceModel(report);
 
 				// Asigna las propiedades
-				dataSource.DataSource = report.DataWarehouse.DataSources.Search(rootML.Attributes[TagSourceId].Value.TrimIgnoreNull());
+				dataSource.DataSource = report.DataWarehouse.DataSources[rootML.Attributes[TagSourceId].Value.TrimIgnoreNull()];
 				// Carga las expresiones
 				foreach (MLNode childML in rootML.Nodes)
 					switch (childML.Name)
@@ -288,7 +286,7 @@ namespace Bau.Libraries.LibReporting.Application.Repositories
 				rootML.Nodes.Add(TagName, dataWarehouse.Name);
 				rootML.Nodes.Add(TagDescription, dataWarehouse.Description);
 				// Añade los nodos de orígenes de datos
-				foreach (BaseDataSourceModel baseDataSource in dataWarehouse.DataSources)
+				foreach (BaseDataSourceModel baseDataSource in dataWarehouse.DataSources.EnumerateValues())
 					switch (baseDataSource)
 					{
 						case DataSourceTableModel dataSource:
@@ -299,7 +297,7 @@ namespace Bau.Libraries.LibReporting.Application.Repositories
 							break;
 					}
 				// Añade los nodos de dimensión
-				foreach (DimensionModel dimension in dataWarehouse.Dimensions)
+				foreach (DimensionModel dimension in dataWarehouse.Dimensions.EnumerateValues())
 					rootML.Nodes.Add(GetNodeDimension(dimension));
 				// Añade los informes
 				foreach (ReportModel report in dataWarehouse.Reports.EnumerateValues())
@@ -317,8 +315,6 @@ namespace Bau.Libraries.LibReporting.Application.Repositories
 
 				// Asigna las propiedades
 				nodeML.Attributes.Add(TagId, dataSource.FullName);
-				nodeML.Nodes.Add(TagName, dataSource.Name);
-				nodeML.Nodes.Add(TagDescription, dataSource.Description);
 				nodeML.Attributes.Add(TagSchema, dataSource.Schema);
 				nodeML.Attributes.Add(TagTable, dataSource.Table);
 				// Añade las columnas visibles
@@ -335,9 +331,7 @@ namespace Bau.Libraries.LibReporting.Application.Repositories
 			MLNode nodeML = new MLNode(TagDataSourceSql);
 
 				// Asigna las propiedades
-				nodeML.Attributes.Add(TagId, dataSource.GlobalId);
-				nodeML.Nodes.Add(TagName, dataSource.Name);
-				nodeML.Nodes.Add(TagDescription, dataSource.Description);
+				nodeML.Attributes.Add(TagId, dataSource.Id);
 				nodeML.Nodes.Add(TagSql, dataSource.Sql);
 				// Añade las columnas y los parámetros
 				nodeML.Nodes.AddRange(GetNodesColumns(dataSource.Columns));
@@ -400,10 +394,10 @@ namespace Bau.Libraries.LibReporting.Application.Repositories
 			MLNode nodeML = new MLNode(TagDimension);
 
 				// Asigna las propiedades
-				nodeML.Attributes.Add(TagId, dimension.GlobalId);
+				nodeML.Attributes.Add(TagId, dimension.Id);
 				nodeML.Nodes.Add(TagName, dimension.Name);
 				nodeML.Nodes.Add(TagDescription, dimension.Description);
-				nodeML.Attributes.Add(TagSourceId, dimension.DataSource.GlobalId);
+				nodeML.Attributes.Add(TagSourceId, dimension.DataSource.Id);
 				// Añade las relaciones hija
 				foreach (DimensionRelationModel relation in dimension.Relations)
 					if (relation.Dimension != null)
@@ -420,7 +414,7 @@ namespace Bau.Libraries.LibReporting.Application.Repositories
 			MLNode rootML = new MLNode(TagRelation);
 
 				// Añade los atributos
-				rootML.Attributes.Add(TagSourceId, relation.Dimension.GlobalId);
+				rootML.Attributes.Add(TagSourceId, relation.Dimension.Id);
 				// Añade las claves foráneas
 				foreach (RelationForeignKey foreignKey in relation.ForeignKeys)
 				{
@@ -450,7 +444,7 @@ namespace Bau.Libraries.LibReporting.Application.Repositories
 					MLNode nodeML = rootML.Nodes.Add(TagDataSource);
 
 						// Asigna las propiedades
-						nodeML.Attributes.Add(TagSourceId, dataSource.DataSource.GlobalId);
+						nodeML.Attributes.Add(TagSourceId, dataSource.DataSource.Id);
 						// Añade las relaciones
 						foreach (DimensionRelationModel relation in dataSource.Relations)
 							nodeML.Nodes.Add(GetNodeRelation(relation));

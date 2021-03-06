@@ -146,7 +146,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 
 				// Añade la comparación de las claves foráneas
 				foreach (QueryForeignKeyFieldModel foreignKey in expressionQuery.ForeignKeys)
-					if (foreignKey.Dimension.GlobalId.Equals(dimensionQuery.SourceId, StringComparison.CurrentCultureIgnoreCase))
+					if (foreignKey.Dimension.Id.Equals(dimensionQuery.SourceId, StringComparison.CurrentCultureIgnoreCase))
 					{
 						// Añade la cláusula AND si es necesario
 						if (!string.IsNullOrWhiteSpace(sql))

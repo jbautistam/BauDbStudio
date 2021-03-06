@@ -26,7 +26,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 		{
 			foreach (ReportDataSourceModel expression in Report.ReportDataSources)
 			{
-				NodeRootViewModel parentDataSource = new NodeRootViewModel(TreeViewModel, this, NodeType.Table, expression.DataSource.Name, false);
+				NodeRootViewModel parentDataSource = new NodeRootViewModel(TreeViewModel, this, NodeType.Table, expression.DataSource.Id, false);
 
 					// Añade el nodo raíz
 					Children.Add(parentDataSource);
