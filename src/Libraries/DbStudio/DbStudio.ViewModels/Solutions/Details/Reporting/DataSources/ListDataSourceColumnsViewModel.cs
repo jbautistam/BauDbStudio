@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 
-using Bau.Libraries.LibDataStructures.Base;
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets;
 
@@ -38,7 +37,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.DataSour
 			// Crea los elementos de la lista
 			Items = new ObservableCollection<ListItemDataSourceColumnViewModel>();
 			// Añade las columnas
-			foreach (DataSourceColumnModel column in DataSource.Columns)
+			foreach (DataSourceColumnModel column in DataSource.Columns.EnumerateValuesSorted())
 				Items.Add(new ListItemDataSourceColumnViewModel(ReportingSolutionViewModel, column, Updatable));
 		}
 
@@ -58,9 +57,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.DataSour
 		/// <summary>
 		///		Obtiene las columnas
 		/// </summary>
-		internal BaseExtendedModelCollection<DataSourceColumnModel> GetColumns()
+		internal LibReporting.Models.Base.BaseReportingDictionaryModel<DataSourceColumnModel> GetColumns()
 		{
-			BaseExtendedModelCollection<DataSourceColumnModel> columns = new BaseExtendedModelCollection<DataSourceColumnModel>();
+			LibReporting.Models.Base.BaseReportingDictionaryModel<DataSourceColumnModel> columns = new LibReporting.Models.Base.BaseReportingDictionaryModel<DataSourceColumnModel>();
 
 				// Añade las columnas
 				foreach (ListItemDataSourceColumnViewModel column in Items)

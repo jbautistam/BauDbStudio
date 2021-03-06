@@ -45,10 +45,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 			NodeColumnViewModel root = new NodeColumnViewModel(this, null, NodeColumnViewModel.NodeColumnType.DimensionsRoot, "Dimensiones", null);
 			BaseReportingDictionaryModel<DimensionModel> dimensions = GetDimensions(report);
 
-				// Ordena las dimensiones
-				//dimensions.SortByName();
 				// Añade las dimensiones
-				foreach (DimensionModel dimension in dimensions.EnumerateValues())
+				foreach (DimensionModel dimension in dimensions.EnumerateValuesSorted())
 					AddDimensionNodes(root, dimension);
 				// Añade el nodo raíz al árbol
 				Children.Add(root);
@@ -71,10 +69,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 				foreach (DimensionRelationModel relation in dimension.Relations)
 					if (relation.Dimension != null)
 						childs.Add(relation.Dimension);
-				// Ordena las dimensiones hija
-				// childs.SortByName();
 				// Añade los nodos de dimensión hija
-				foreach (DimensionModel child in childs.EnumerateValues())
+				foreach (DimensionModel child in childs.EnumerateValuesSorted())
 					AddDimensionNodes(node, child);
 				// Añade el nodo a la raíz
 				root.Children.Add(node);
@@ -123,16 +119,14 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 		/// <summary>
 		///		Añade los nodos de columnas
 		/// </summary>
-		private void AddColumnNodes(NodeColumnViewModel root, BaseExtendedModelCollection<DataSourceColumnModel> columns, 
+		private void AddColumnNodes(NodeColumnViewModel root, BaseReportingDictionaryModel<DataSourceColumnModel> columns, 
 									NodeColumnViewModel.NodeColumnType nodeColumnType, string dimensionId, string dataSourceId)
 		{
-			// Ordena las columnas
-			columns.SortByName();
 			// Añade las columnas adecuadas al árbol
-			foreach (DataSourceColumnModel column in columns)
+			foreach (DataSourceColumnModel column in columns.EnumerateValuesSorted())
 				if (column.Visible)
 				{
-					NodeColumnViewModel node = new NodeColumnViewModel(this, root, nodeColumnType, string.IsNullOrWhiteSpace(column.Name) ? column.ColumnId : column.Name, column);
+					NodeColumnViewModel node = new NodeColumnViewModel(this, root, nodeColumnType, column.Id, column);
 
 						// Asigna las propiedades
 						node.DimensionId = dimensionId;
@@ -204,7 +198,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 									case NodeColumnViewModel.NodeColumnType.DimensionColumn:
 											DimensionColumnRequestModel column = new DimensionColumnRequestModel
 																						{
-																							ColumnId = node.Column.ColumnId,
+																							ColumnId = node.Column.Id,
 																							Visible = node.IsChecked
 																						};
 
@@ -251,7 +245,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 										{
 											ExpressionColumnRequestModel column = new ExpressionColumnRequestModel
 																					{
-																						ColumnId = nodeExpression.Column.GlobalId,
+																						ColumnId = nodeExpression.Column.Id,
 																						AggregatedBy = nodeExpression.GeSelectedAggregation()
 																					};
 

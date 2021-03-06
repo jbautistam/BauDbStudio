@@ -47,7 +47,7 @@ namespace Bau.Libraries.LibReporting.Application.Converters
 					DataSourceColumnModel column = new DataSourceColumnModel(dataSource);
 
 						// Asigna las propiedades
-						column.ColumnId = field.Name;
+						column.Id = field.Name;
 						column.IsPrimaryKey = field.IsKey;
 						column.Type = Convert(field.Type);
 						column.Required = field.IsRequired;

@@ -1,7 +1,5 @@
 ﻿using System;
 
-using Bau.Libraries.LibDataStructures.Collections;
-
 namespace Bau.Libraries.LibReporting.Models
 {
 	/// <summary>

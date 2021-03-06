@@ -124,6 +124,23 @@ namespace Bau.Libraries.LibReporting.Models.Base
 		}
 
 		/// <summary>
+		///		Obtiene los valores del diccionario ordenados
+		/// </summary>
+		public IEnumerable<TypeData> EnumerateValuesSorted()
+		{
+			List<TypeData> items = new List<TypeData>();
+
+				// Añade los elementos
+				foreach (TypeData item in EnumerateValues())
+					items.Add(item);
+				// Ordena los elementos
+				items.Sort((first, second) => first.CompareTo(second));
+				// Devuelve los elementos ordenados
+				foreach (TypeData item in items)
+					yield return item;
+		}
+
+		/// <summary>
 		///		Obtiene un valor
 		/// </summary>
 		public TypeData this[string key]

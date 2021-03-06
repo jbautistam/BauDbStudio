@@ -1,7 +1,5 @@
 ﻿using System;
 
-using Bau.Libraries.LibDataStructures.Base;
-
 namespace Bau.Libraries.LibReporting.Models.DataWarehouses
 {
 	/// <summary>
@@ -13,6 +11,18 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses
 		{
 			Schema = schema;
 		}
+
+		/// <summary>
+		///		Compara el valor de dos elementos para ordenarlo
+		/// </summary>
+		public override int CompareTo(Base.BaseReportingModel item)
+		{
+			if (item is DataWarehouseModel dataWarehouse)
+				return Name.CompareTo(dataWarehouse.Name);
+			else
+				return -1;
+		}
+
 		/// <summary>
 		///		Esquema
 		/// </summary>

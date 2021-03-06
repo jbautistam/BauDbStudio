@@ -52,11 +52,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Reports
 		{
 			// Inicializa el combo
 			ComboDataSources = new ComboViewModel(this);
-			// Ordena las dimensiones por nombre
-			//Report.DataWarehouse.DataSources.SortByName();
 			// Añade los elementos
 			ComboDataSources.AddItem(-1, "<Seleccione un origen de datos>");
-			foreach (BaseDataSourceModel dataSource in Report.DataWarehouse.DataSources.EnumerateValues())
+			foreach (BaseDataSourceModel dataSource in Report.DataWarehouse.DataSources.EnumerateValuesSorted())
 			{
 				// Añade el elemento
 				ComboDataSources.AddItem(ComboDataSources.Items.Count + 1, dataSource.Id, dataSource);

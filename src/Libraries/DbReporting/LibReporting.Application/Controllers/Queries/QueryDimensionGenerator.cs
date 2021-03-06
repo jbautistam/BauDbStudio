@@ -65,9 +65,9 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 				// Prepara la consulta
 				query.Prepare(dimension.DataSource);
 				// Añade los campos clave
-				foreach (DataSourceColumnModel column in dimension.DataSource.Columns)
+				foreach (DataSourceColumnModel column in dimension.DataSource.Columns.EnumerateValues())
 					if (column.IsPrimaryKey)
-						AddPrimaryKey(query, column.ColumnId);
+						AddPrimaryKey(query, column.Id);
 				// Asigna los campos
 				foreach (DimensionColumnRequestModel columnRequest in dimensionRequest.Columns)
 					AddColumn(query, columnRequest.ColumnId, string.Empty, columnRequest);

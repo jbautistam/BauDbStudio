@@ -1,6 +1,5 @@
 ﻿using System;
 
-using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.LibReporting.Models.DataWarehouses;
 using Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers;
@@ -33,7 +32,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 		/// </summary>
 		protected override void AddRootNodes()
 		{
-			foreach (DataWarehouseModel dataWarehouse in ReportingSolutionViewModel.ReportingManager.Schema.DataWarehouses.EnumerateValues())
+			foreach (DataWarehouseModel dataWarehouse in ReportingSolutionViewModel.ReportingManager.Schema.DataWarehouses.EnumerateValuesSorted())
 				Children.Add(new NodeDataWarehouseViewModel(this, null, dataWarehouse));
 		}
 
@@ -324,17 +323,17 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 		private string GetSql(DataSourceTableModel dataSourceTable)
 		{
 			string fields = string.Empty;
-			int charsFromLastNewLine = 0;
+			int charsFromLastNewLine = 0, index = 0;
 
 				// Añade las columnas
-				foreach (DataSourceColumnModel column in dataSourceTable.Columns)
+				foreach (DataSourceColumnModel column in dataSourceTable.Columns.EnumerateValuesSorted())
 				{
 					// Cuenta el número de caracteres
-					charsFromLastNewLine += dataSourceTable.Table.Length + column.ColumnId.Length + 2;
+					charsFromLastNewLine += dataSourceTable.Table.Length + column.Id.Length + 2;
 					// Añade el nombre de columna
-					fields += $"[{dataSourceTable.Table}].[{column.ColumnId}]";
+					fields += $"[{dataSourceTable.Table}].[{column.Id}]";
 					// Añade la coma si es necesario
-					if (dataSourceTable.Columns.IndexOf(column) < dataSourceTable.Columns.Count - 1)
+					if (index++ < dataSourceTable.Columns.Count - 1)
 						fields += ", ";
 					// Añade un salto de línea si es necesario
 					if (charsFromLastNewLine > 80)

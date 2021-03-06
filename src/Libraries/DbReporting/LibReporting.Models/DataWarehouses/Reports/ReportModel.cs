@@ -14,6 +14,17 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses.Reports
 		}
 
 		/// <summary>
+		///		Compara el valor de dos elementos para ordenarlo
+		/// </summary>
+		public override int CompareTo(Base.BaseReportingModel item)
+		{
+			if (item is ReportModel report)
+				return Name.CompareTo(report.Name);
+			else
+				return -1;
+		}
+
+		/// <summary>
 		///		Nombre del <see cref="ReportModel"/>
 		/// </summary>
 		public string Name { get; set; }

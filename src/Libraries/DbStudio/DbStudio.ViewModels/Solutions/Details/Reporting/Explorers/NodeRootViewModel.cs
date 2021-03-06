@@ -65,13 +65,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 			DataWarehouseModel dataWarehouse = GetDataWarehouse();
 
 				if (dataWarehouse != null)
-				{
-					// Ordena los orígenes de datos
-					// dataWarehouse.DataSources.SortByName();
-					// Carga los nodos
-					foreach (BaseDataSourceModel dataSource in dataWarehouse.DataSources.EnumerateValues())
+					foreach (BaseDataSourceModel dataSource in dataWarehouse.DataSources.EnumerateValuesSorted())
 						Children.Add(new NodeDataSourceViewModel(TreeViewModel, this, dataSource));
-				}
 		}
 
 		/// <summary>
@@ -82,13 +77,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 			DataWarehouseModel dataWarehouse = GetDataWarehouse();
 
 				if (dataWarehouse != null)
-				{
-					// Ordena las dimensiones
-					// dataWarehouse.Dimensions.SortByName();
-					// Carga los nodos
-					foreach (DimensionModel dimension in dataWarehouse.Dimensions.EnumerateValues())
+					foreach (DimensionModel dimension in dataWarehouse.Dimensions.EnumerateValuesSorted())
 						Children.Add(new NodeDimensionViewModel(TreeViewModel, this, dimension));
-			}
 		}
 
 		/// <summary>
@@ -99,13 +89,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 			DataWarehouseModel dataWarehouse = GetDataWarehouse();
 
 				if (dataWarehouse != null)
-				{
-					// Ordena los informes
-					// dataWarehouse.Reports.SortByName();
-					// Carga los nodos
-					foreach (ReportModel report in dataWarehouse.Reports.EnumerateValues())
+					foreach (ReportModel report in dataWarehouse.Reports.EnumerateValuesSorted())
 						Children.Add(new NodeReportViewModel(TreeViewModel, this, report));
-			}
 		}
 
 		/// <summary>

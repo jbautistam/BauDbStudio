@@ -44,7 +44,7 @@ namespace Bau.Libraries.LibReporting.Application
 					// Añade el almacén de datos
 					Schema.DataWarehouses.Add(dataWarehouse);
 					// Añade el archivo al diccionario
-					ReportingSolution.DataWarehousesFiles.Add(dataWarehouse.Id, fileName);
+					ReportingSolution.DataWarehousesFiles.Add((dataWarehouse.Id, fileName));
 					// Añade el archivo a la lista
 					if (ReportingSolution.Files.FirstOrDefault(item => item.Equals(fileName, StringComparison.CurrentCultureIgnoreCase)) == null)
 						ReportingSolution.Files.Add(fileName);
@@ -56,20 +56,24 @@ namespace Bau.Libraries.LibReporting.Application
 		/// </summary>
 		public void RemoveDataWarehouse(Models.DataWarehouses.DataWarehouseModel dataWarehouse)
 		{
-			string file = ReportingSolution.DataWarehousesFiles[dataWarehouse.Id];
+			// Elimina el archivo de la lista
+			for (int index = ReportingSolution.DataWarehousesFiles.Count - 1; index >= 0; index--)
+			{
+				(string dataWarehouseId, string file) = ReportingSolution.DataWarehousesFiles[index];
 
-				// Elimina el archivo
-				if (!string.IsNullOrWhiteSpace(file))
-				{
-					// Elimina el origen de datos del diccionario
-					ReportingSolution.DataWarehousesFiles.Remove(dataWarehouse.Id);
 					// Elimina el archivo
-					for (int index = ReportingSolution.Files.Count - 1; index >= 0; index--)
-						if (ReportingSolution.Files[index].Equals(file, StringComparison.CurrentCultureIgnoreCase))
-							ReportingSolution.Files.RemoveAt(index);
-				}
-				// Elimina el origen de datos del esquema
-				Schema.DataWarehouses.Remove(dataWarehouse);
+					if (dataWarehouse.Id.Equals(dataWarehouseId, StringComparison.CurrentCultureIgnoreCase) && !string.IsNullOrWhiteSpace(file))
+					{
+						// Elimina el archivo
+						for (int indexFile = ReportingSolution.Files.Count - 1; indexFile >= 0; indexFile--)
+							if (ReportingSolution.Files[indexFile].Equals(file, StringComparison.CurrentCultureIgnoreCase))
+								ReportingSolution.Files.RemoveAt(indexFile);
+						// Elimina el origen de datos del diccionario
+						ReportingSolution.DataWarehousesFiles.RemoveAt(index);
+					}
+			}
+			// Elimina el origen de datos del esquema
+			Schema.DataWarehouses.Remove(dataWarehouse);
 		}
 
 		/// <summary>

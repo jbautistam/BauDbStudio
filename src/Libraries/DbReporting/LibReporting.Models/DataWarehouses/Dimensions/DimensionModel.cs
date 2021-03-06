@@ -15,6 +15,17 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses.Dimensions
 		}
 
 		/// <summary>
+		///		Compara el valor de dos elementos para ordenarlo
+		/// </summary>
+		public override int CompareTo(Base.BaseReportingModel item)
+		{
+			if (item is DimensionModel dimension)
+				return Name.CompareTo(dimension.Name);
+			else
+				return -1;
+		}
+
+		/// <summary>
 		///		Nombre de la <see cref="DimensionModel"/>
 		/// </summary>
 		public string Name { get; set; }

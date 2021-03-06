@@ -1,7 +1,5 @@
 ﻿using System;
 
-using Bau.Libraries.LibDataStructures.Base;
-
 namespace Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets
 {
 	/// <summary>
@@ -19,7 +17,7 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets
 		/// </summary>
 		public bool HasColumn(string columnId)
 		{
-			return Columns.Search(columnId) != null;
+			return Columns[columnId] != null;
 		}
 
 		/// <summary>
@@ -30,6 +28,6 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets
 		/// <summary>
 		///		Columnas visibles de la tabla
 		/// </summary>
-		public BaseExtendedModelCollection<DataSourceColumnModel> Columns { get; } = new BaseExtendedModelCollection<DataSourceColumnModel>();
+		public Base.BaseReportingDictionaryModel<DataSourceColumnModel> Columns { get; } = new Base.BaseReportingDictionaryModel<DataSourceColumnModel>();
 	}
 }

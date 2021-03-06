@@ -31,7 +31,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Relation
 		private void InitViewModel()
 		{
 			// Asigna las propiedades
-			ColumnName = SourceColumn.GetTitle();
+			ColumnName = SourceColumn.Id;
 			// Carga el combo de columnas relacionadas
 			LoadComboColumns();
 		}
@@ -46,12 +46,12 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Relation
 			// Añade los elementos
 			ComboTargetColumns.AddItem(-1, "<Seleccione una columna>", null);
 			if (TargetDimension != null)
-				foreach (DataSourceColumnModel column in TargetDimension.DataSource.Columns)
+				foreach (DataSourceColumnModel column in TargetDimension.DataSource.Columns.EnumerateValuesSorted())
 				{
 					// Añade la columna destino
-					ComboTargetColumns.AddItem(-1, column.ColumnId, column);
+					ComboTargetColumns.AddItem(-1, column.Id, column);
 					// Selecciona la columna destino
-					if (!string.IsNullOrWhiteSpace(TargetColumnId) && TargetColumnId.Equals(column.ColumnId, StringComparison.CurrentCultureIgnoreCase))
+					if (!string.IsNullOrWhiteSpace(TargetColumnId) && TargetColumnId.Equals(column.Id, StringComparison.CurrentCultureIgnoreCase))
 						ComboTargetColumns.SelectedItem = ComboTargetColumns.Items[ComboTargetColumns.Items.Count - 1];
 				}
 			// Si no se ha seleccionado nada, se selecciona el primer elemento

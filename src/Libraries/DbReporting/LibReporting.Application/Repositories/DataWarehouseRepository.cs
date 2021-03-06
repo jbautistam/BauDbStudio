@@ -1,6 +1,5 @@
 ﻿using System;
 
-using Bau.Libraries.LibDataStructures.Base;
 using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.LibMarkupLanguage;
 using Bau.Libraries.LibReporting.Models.DataWarehouses;
@@ -80,7 +79,7 @@ namespace Bau.Libraries.LibReporting.Application.Repositories
 										}
 								}
 				}
-				// Devuelve los datos del dashboard
+				// Devuelve los datos del almacén de datos
 				return dataWarehouse;
 		}
 
@@ -134,12 +133,8 @@ namespace Bau.Libraries.LibReporting.Application.Repositories
 		{
 			DataSourceColumnModel column = new DataSourceColumnModel(dataSource);
 
-				// Carga las propiedades básicas
-				LoadProperties(rootML, column);
 				// Carga las propiedades
-				column.GlobalId = rootML.Attributes[TagSourceId].Value.TrimIgnoreNull();
-				if (string.IsNullOrWhiteSpace(column.Name))
-					column.Name = column.GlobalId;
+				column.Id = rootML.Attributes[TagSourceId].Value.TrimIgnoreNull();
 				column.Type = rootML.Attributes[TagType].Value.GetEnum(DataSourceColumnModel.Fieldtype.Unknown);
 				column.Required = rootML.Attributes[TagRequired].Value.GetBool();
 				column.IsPrimaryKey = rootML.Attributes[TagPrimaryKey].Value.GetBool();
@@ -251,29 +246,6 @@ namespace Bau.Libraries.LibReporting.Application.Repositories
 		}
 
 		/// <summary>
-		///		Carga las propiedades básicas del nodo
-		/// </summary>
-		private TypeData LoadProperties<TypeData>(MLNode nodeML) where TypeData : BaseExtendedModel, new()
-		{
-			TypeData model = new TypeData();
-
-				// Carga las propiedades
-				LoadProperties(nodeML, model);
-				// Devuelve el objeto
-				return model;
-		}
-
-		/// <summary>
-		///		Carga las propiedades básicas de un modelo
-		/// </summary>
-		private void LoadProperties(MLNode nodeML, BaseExtendedModel model)
-		{
-			model.GlobalId = nodeML.Attributes[TagId].Value.TrimIgnoreNull();
-			model.Name = nodeML.Nodes[TagName].Value.TrimIgnoreNull();
-			model.Description = nodeML.Nodes[TagDescription].Value.TrimIgnoreNull();
-		}
-
-		/// <summary>
 		///		Graba los datos de un <see cref="DataWarehouseModel"/>
 		/// </summary>
 		internal void Save(DataWarehouseModel dataWarehouse, string fileName)
@@ -364,23 +336,21 @@ namespace Bau.Libraries.LibReporting.Application.Repositories
 		/// <summary>
 		///		Obtiene los nodos de las columnas
 		/// </summary>
-		private MLNodesCollection GetNodesColumns(BaseExtendedModelCollection<DataSourceColumnModel> columns)
+		private MLNodesCollection GetNodesColumns(Models.Base.BaseReportingDictionaryModel<DataSourceColumnModel> columns)
 		{
 			MLNodesCollection nodesML = new MLNodesCollection();
 
 				// Añade los nodos
-				foreach (DataSourceColumnModel column in columns)
+				foreach (DataSourceColumnModel column in columns.EnumerateValues())
 				{
 					MLNode nodeML = nodesML.Add(TagColumn);
 
 						// Añade los datos
-						nodeML.Attributes.Add(TagSourceId, column.GlobalId);
+						nodeML.Attributes.Add(TagSourceId, column.Id);
 						nodeML.Attributes.Add(TagPrimaryKey, column.IsPrimaryKey);
 						nodeML.Attributes.Add(TagVisible, column.Visible);
 						nodeML.Attributes.Add(TagType, column.Type.ToString());
 						nodeML.Attributes.Add(TagRequired, column.Required);
-						nodeML.Nodes.Add(TagName, column.Name);
-						nodeML.Nodes.Add(TagDescription, column.Description);
 				}
 				// Devuelve la colección de nodos
 				return nodesML;

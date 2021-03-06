@@ -21,7 +21,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 		/// </summary>
 		protected override void LoadNodes()
 		{
-			foreach (DataSourceColumnModel column in DataSource.Columns)
+			foreach (DataSourceColumnModel column in DataSource.Columns.EnumerateValuesSorted())
 				Children.Add(new NodeDataSourceColumnViewModel(TreeViewModel, this, column));
 		}
 

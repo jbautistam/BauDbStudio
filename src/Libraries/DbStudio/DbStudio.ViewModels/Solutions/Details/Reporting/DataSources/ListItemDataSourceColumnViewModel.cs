@@ -11,7 +11,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.DataSour
 	public class ListItemDataSourceColumnViewModel : BauMvvm.ViewModels.BaseObservableObject
 	{
 		// Variables privadas
-		private string _columnId, _name, _type;
+		private string _columnId, _type;
 		private bool _isPrimaryKey, _visible, _required, _isUpdatable;
 		private ComboViewModel _comboTypes;
 
@@ -33,8 +33,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.DataSour
 			// Carga el combo
 			LoadComboTypes();
 			// Asigna las propiedades
-			ColumnId = Column.ColumnId;
-			Name = Column.Name;
+			ColumnId = Column.Id;
 			Type = Column.Type.ToString();
 			IsPrimaryKey = Column.IsPrimaryKey;
 			Required = Column.Required;
@@ -87,8 +86,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.DataSour
 		{
 			return new DataSourceColumnModel(Column.DataSource)
 							{
-								ColumnId = ColumnId,
-								Name = Name,
+								Id = ColumnId,
 								Type = GetSelectedType(),
 								IsPrimaryKey = IsPrimaryKey,
 								Required = Required,
@@ -124,15 +122,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.DataSour
 		{
 			get { return _columnId; }
 			set { CheckProperty(ref _columnId, value); }
-		}
-
-		/// <summary>
-		///		Nombre de la columna
-		/// </summary>
-		public string Name
-		{
-			get { return _name; }
-			set { CheckProperty(ref _name, value); }
 		}
 
 		/// <summary>

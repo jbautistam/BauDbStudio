@@ -91,9 +91,9 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 			foreach (ExpressionRequestModel expression in request.Expressions)
 				if (expression.ReportDataSourceId == dataSource.Id)
 					foreach (ExpressionColumnRequestModel requestColumn in expression.Columns)
-						foreach (DataSourceColumnModel column in dataSource.Columns)
-							if (requestColumn.ColumnId.Equals(column.ColumnId, StringComparison.CurrentCultureIgnoreCase))
-								AddColumn(query, column.ColumnId, string.Empty, requestColumn.AggregatedBy, requestColumn);
+						foreach (DataSourceColumnModel column in dataSource.Columns.EnumerateValues())
+							if (requestColumn.ColumnId.Equals(column.Id, StringComparison.CurrentCultureIgnoreCase))
+								AddColumn(query, column.Id, string.Empty, requestColumn.AggregatedBy, requestColumn);
 		}
 	}
 }
