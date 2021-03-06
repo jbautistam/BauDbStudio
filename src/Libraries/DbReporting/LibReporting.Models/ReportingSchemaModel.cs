@@ -16,7 +16,7 @@ namespace Bau.Libraries.LibReporting.Models
 		}
 
 		/// <summary>
-		///		Capa de almacenes de datos
+		///		Almacenes de datos
 		/// </summary>
 		public Base.BaseReportingDictionaryModel<DataWarehouses.DataWarehouseModel> DataWarehouses { get; } = new Base.BaseReportingDictionaryModel<DataWarehouses.DataWarehouseModel>();
 	}

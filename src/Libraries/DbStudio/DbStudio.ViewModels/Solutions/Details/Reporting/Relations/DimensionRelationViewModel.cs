@@ -44,7 +44,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Relation
 			// Carga la lista de claves foráneas
 			LoadListForeignKeys();
 			// Asigna las propiedades
-			TargetDimensionName = Relation?.Dimension?.Name;
+			TargetDimensionName = Relation?.Dimension?.Id;
 			ForeignKeysTitle = GetForeignKeysName();
 		}
 
@@ -60,7 +60,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Relation
 			foreach (DimensionModel dimension in DataSource.DataWarehouse.Dimensions.EnumerateValuesSorted())
 			{
 				// Añade el elemento
-				ComboDimensions.AddItem(ComboDimensions.Items.Count + 1, dimension.Name, dimension);
+				ComboDimensions.AddItem(ComboDimensions.Items.Count + 1, dimension.Id, dimension);
 				// Selecciona el elemento si es la misma dimensión
 				if (Relation != null && Relation.Dimension != null && 
 						dimension.Id.Equals(Relation.Dimension.Id, StringComparison.CurrentCultureIgnoreCase))
@@ -132,7 +132,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Relation
 			if (ValidateData())
 			{
 				// Asigna las propiedades que se van a mostrar en la lista
-				TargetDimensionName = GetDimension().Name;
+				TargetDimensionName = GetDimension().Id;
 				ForeignKeysTitle = GetForeignKeysName();
 				// Indica que ya no es nuevo y está grabado
 				IsUpdated = false;

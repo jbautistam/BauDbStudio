@@ -12,11 +12,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 	public class NodeReportViewModel : BaseTreeNodeViewModel
 	{
 		public NodeReportViewModel(BaseTreeViewModel trvTree, BaseTreeNodeViewModel parent, ReportModel report) : 
-					base(trvTree, parent, report.Name, NodeType.Report, IconType.Report, report, true, true, BauMvvm.ViewModels.Media.MvvmColor.Navy)
+					base(trvTree, parent, report.Id, NodeType.Report, IconType.Report, report, true, true, BauMvvm.ViewModels.Media.MvvmColor.Navy)
 		{
 			Report = report;
-			if (string.IsNullOrWhiteSpace(report.Name))
-				Text = report.Id;
 		}
 
 		/// <summary>
@@ -44,7 +42,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 		{
 			foreach (DimensionRelationModel relation in expression.Relations)
 			{
-				NodeRootViewModel parentDimension = new NodeRootViewModel(TreeViewModel, parentDataSource, NodeType.DimensionsRoot, relation.Dimension.Name, false,
+				NodeRootViewModel parentDimension = new NodeRootViewModel(TreeViewModel, parentDataSource, NodeType.DimensionsRoot, relation.Dimension.Id, false,
 																		  true, BauMvvm.ViewModels.Media.MvvmColor.Navy);
 
 					// Añade el campo raíz al árbol

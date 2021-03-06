@@ -48,13 +48,6 @@
 							</DataTemplate>
 						</GridViewColumn.CellTemplate>
 					</GridViewColumn>
-					<GridViewColumn Width="200" Header="Nombre">
-						<GridViewColumn.CellTemplate>
-							<DataTemplate>
-								<TextBox Text="{Binding Path=Name,UpdateSourceTrigger=PropertyChanged}" Width="170" VerticalAlignment="Center"/>
-							</DataTemplate>
-						</GridViewColumn.CellTemplate>
-					</GridViewColumn>
 					<GridViewColumn Width="100" Header="Clave primaria">
 						<GridViewColumn.CellTemplate>
 							<DataTemplate>

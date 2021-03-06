@@ -22,8 +22,4 @@
     <Compile Remove="DataWarehouses\Reports\ReportDataSourceRelationModel.cs" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DataBaseProviders\LibDbProviders.Base\LibDbProviders.Base.csproj" />
-  </ItemGroup>
-
 </Project>

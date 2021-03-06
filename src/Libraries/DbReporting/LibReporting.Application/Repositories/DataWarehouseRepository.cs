@@ -167,7 +167,6 @@ namespace Bau.Libraries.LibReporting.Application.Repositories
 
 				// Carga las propiedades básicas
 				dimension.Id = rootML.Attributes[TagId].Value.TrimIgnoreNull();
-				dimension.Name = rootML.Nodes[TagName].Value.TrimIgnoreNull();
 				dimension.Description = rootML.Nodes[TagDescription].Value.TrimIgnoreNull();
 				// Carga los datos de la dimensión
 				dimension.DataSource = dataWarehouse.DataSources[rootML.Attributes[TagSourceId].Value.TrimIgnoreNull()];
@@ -210,7 +209,6 @@ namespace Bau.Libraries.LibReporting.Application.Repositories
 
 				// Carga el informe
 				report.Id = rootML.Attributes[TagId].Value.TrimIgnoreNull();
-				report.Name = rootML.Nodes[TagName].Value.TrimIgnoreNull();
 				report.Description = rootML.Nodes[TagDescription].Value.TrimIgnoreNull();
 				// Carga los datos
 				foreach (MLNode nodeML in rootML.Nodes)
@@ -365,7 +363,6 @@ namespace Bau.Libraries.LibReporting.Application.Repositories
 
 				// Asigna las propiedades
 				nodeML.Attributes.Add(TagId, dimension.Id);
-				nodeML.Nodes.Add(TagName, dimension.Name);
 				nodeML.Nodes.Add(TagDescription, dimension.Description);
 				nodeML.Attributes.Add(TagSourceId, dimension.DataSource.Id);
 				// Añade las relaciones hija
@@ -406,7 +403,6 @@ namespace Bau.Libraries.LibReporting.Application.Repositories
 
 				// Asigna las propiedades
 				rootML.Attributes.Add(TagId, report.Id);
-				rootML.Nodes.Add(TagName, report.Name);
 				rootML.Nodes.Add(TagDescription, report.Description);
 				// Añade las expresiones
 				foreach (ReportDataSourceModel dataSource in report.ReportDataSources)

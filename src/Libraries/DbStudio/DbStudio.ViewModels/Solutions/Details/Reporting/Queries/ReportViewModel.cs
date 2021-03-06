@@ -22,7 +22,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 			ReportingSolutionViewModel = reportingSolutionViewModel;
 			QueryViewModel = new QueryViewModel(ReportingSolutionViewModel.SolutionViewModel, string.Empty, string.Empty, true);
 			Report = report;
-			Header = report.Name;
+			Header = report.Id;
 			// Inicializa el árbol de campos
 			TreeColumns = new TreeQueryReportViewModel(this);
 			// Apunta al manejador de eventos de la consulta

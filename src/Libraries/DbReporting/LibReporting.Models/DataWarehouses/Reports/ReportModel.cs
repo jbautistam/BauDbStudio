@@ -19,15 +19,10 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses.Reports
 		public override int CompareTo(Base.BaseReportingModel item)
 		{
 			if (item is ReportModel report)
-				return Name.CompareTo(report.Name);
+				return Id.CompareTo(report.Id);
 			else
 				return -1;
 		}
-
-		/// <summary>
-		///		Nombre del <see cref="ReportModel"/>
-		/// </summary>
-		public string Name { get; set; }
 
 		/// <summary>
 		///		Descripción del <see cref="ReportModel"/>

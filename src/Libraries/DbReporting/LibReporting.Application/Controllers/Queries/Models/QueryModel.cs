@@ -39,7 +39,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 			{
 				case DataSourceTableModel dataSource:
 						FromTable = dataSource.FullName;
-						FromAlias = dataSource.Id;
+						FromAlias = dataSource.Table;
 					break;
 				case DataSourceSqlModel dataSource:
 						FromTable = $"({dataSource.Sql})"; 
@@ -49,7 +49,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 		}
 
 		/// <summary>
-		///		Prepara la consulta únicamente con un nombre de tabla / alias (lo utiliza el generador de expresiones para los INNER JOIN con las consultas de dimensión
+		///		Prepara la consulta únicamente con un nombre de tabla / alias (lo utiliza el generador de expresiones para los INNER JOIN con las consultas de dimensión)
 		/// </summary>
 		internal void Prepare(string table, string alias)
 		{

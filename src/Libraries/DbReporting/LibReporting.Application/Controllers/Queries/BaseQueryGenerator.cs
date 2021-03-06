@@ -82,10 +82,10 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 		/// <summary>
 		///		Añade un campo de clave primaria a la consulta
 		/// </summary>
-		protected void AddPrimaryKey(QueryModel query, string column)
+		protected void AddPrimaryKey(QueryModel query, string column, bool visible)
 		{
 			query.Fields.Add(new QueryFieldModel(true, column, string.Empty, BaseColumnRequestModel.SortOrder.Undefined, 
-												 ExpressionColumnRequestModel.AggregationType.NoAggregated, false));
+												 ExpressionColumnRequestModel.AggregationType.NoAggregated, visible));
 		}
 
 		/// <summary>

@@ -67,12 +67,30 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 				// Añade los campos clave
 				foreach (DataSourceColumnModel column in dimension.DataSource.Columns.EnumerateValues())
 					if (column.IsPrimaryKey)
-						AddPrimaryKey(query, column.Id);
+						AddPrimaryKey(query, column.Id, CheckIsColumnAtColumnRequested(column, dimensionRequest.Columns));
 				// Asigna los campos
 				foreach (DimensionColumnRequestModel columnRequest in dimensionRequest.Columns)
-					AddColumn(query, columnRequest.ColumnId, string.Empty, columnRequest);
+				{
+					DataSourceColumnModel column = dimension.DataSource.Columns[columnRequest.ColumnId];
+
+						if (column != null && !column.IsPrimaryKey)
+							AddColumn(query, columnRequest.ColumnId, string.Empty, columnRequest);
+				}
 				// Devuelve la consulta
 				return query;
+		}
+
+		/// <summary>
+		///		Comprueba si la columna está entre las columnas solicitadas
+		/// </summary>
+		private bool CheckIsColumnAtColumnRequested(DataSourceColumnModel column, List<DimensionColumnRequestModel> columnRequests)
+		{
+			// Busca la columna entre las columnas solicitadas
+			foreach (DimensionColumnRequestModel columnRequest in columnRequests)
+				if (column.Id.Equals(columnRequest.ColumnId, StringComparison.CurrentCultureIgnoreCase))
+					return true;
+			// Si llega hasta aquí es porque no lo ha encontrado
+			return false;
 		}
 	}
 }

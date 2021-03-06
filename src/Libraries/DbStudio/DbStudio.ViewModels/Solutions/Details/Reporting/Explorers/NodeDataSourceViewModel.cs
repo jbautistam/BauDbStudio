@@ -14,6 +14,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 					base(trvTree, parent, dataSource.Id, NodeType.DataSource, IconType.Table, dataSource, true, true, BauMvvm.ViewModels.Media.MvvmColor.Navy)
 		{
 			DataSource = dataSource;
+			if (dataSource is DataSourceSqlModel)
+				Icon = IconType.DataSourceSql;
 		}
 
 		/// <summary>

@@ -3,8 +3,6 @@ using System.Collections.Generic;
 
 using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.LibReporting.Models;
-using Bau.Libraries.LibReporting.Models.DataWarehouses.Dimensions;
-using Bau.Libraries.LibReporting.Models.DataWarehouses.Relations;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.Reports;
 using Bau.Libraries.LibReporting.Requests.Models;
 using Bau.Libraries.LibReporting.Application.Controllers.Queries.Models;
@@ -57,21 +55,6 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 				sql += Environment.NewLine + GetSqlJoinBlocks(dimensionQueries, expressionQuery);
 				// Devuelve la cadena SQL
 				return sql;
-		}
-
-		/// <summary>
-		///		Pone una cadena en bonito
-		/// </summary>
-		private string Prettify(string sql)
-		{
-			Prettifier.StringPrettifier prettifier = new Prettifier.StringPrettifier();
-
-				// Asigna la indentación
-				prettifier.Indent();
-				// Añade la cadena
-				prettifier.Append(sql, 100, ",");
-				// Devuevle la cadena
-				return prettifier.ToString();
 		}
 
 		/// <summary>
@@ -192,7 +175,8 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 				// Añade los campos visualizables: los que no son clave primaria y están marcados como visibles (porque algunos
 				// estarán en la consulta únicamente por los filtros)
 				foreach (QueryFieldModel field in query.Fields)
-					if (!field.IsPrimaryKey && field.Visible)
+					//if (!field.IsPrimaryKey && field.Visible)
+					if (field.Visible)
 						sqlFields = sqlFields.AddWithSeparator($"[{tableAliasAtWith}].[{field.Alias}]", ",");
 				// Devuelve la cadena con los campos
 				return sqlFields;

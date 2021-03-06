@@ -20,15 +20,10 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses.Dimensions
 		public override int CompareTo(Base.BaseReportingModel item)
 		{
 			if (item is DimensionModel dimension)
-				return Name.CompareTo(dimension.Name);
+				return Id.CompareTo(dimension.Id);
 			else
 				return -1;
 		}
-
-		/// <summary>
-		///		Nombre de la <see cref="DimensionModel"/>
-		/// </summary>
-		public string Name { get; set; }
 
 		/// <summary>
 		///		Descripción de la <see cref="DimensionModel"/>

@@ -58,7 +58,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 							foreach (RelationForeignKey column in relation.ForeignKeys)
 							{
 								// Añade el campo destino del origen de datos del informe a la lista de campos clave
-								AddPrimaryKey(query, column.ColumnId);
+								AddPrimaryKey(query, column.ColumnId, false);
 								// Añade el campo a la lista de claves foráneas
 								query.ForeignKeys.Add(new QueryForeignKeyFieldModel(dimension, column.TargetColumnId, column.ColumnId));
 							}

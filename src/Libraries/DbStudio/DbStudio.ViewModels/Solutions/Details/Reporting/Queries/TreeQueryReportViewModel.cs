@@ -58,7 +58,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 		private void AddDimensionNodes(NodeColumnViewModel root, DimensionModel dimension)
 		{
 			NodeColumnViewModel node = new NodeColumnViewModel(this, root, NodeColumnViewModel.NodeColumnType.Dimension, 
-															   string.IsNullOrEmpty(dimension.Name) ? dimension.Id : dimension.Name, null);
+															   dimension.Id, null);
 			BaseReportingDictionaryModel<DimensionModel> childs = new BaseReportingDictionaryModel<DimensionModel>();
 
 				// Asigna el código de dimensión

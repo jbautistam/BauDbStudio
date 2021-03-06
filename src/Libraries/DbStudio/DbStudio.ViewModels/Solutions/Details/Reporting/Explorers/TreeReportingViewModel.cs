@@ -127,7 +127,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 		{
 			if (node is NodeDataWarehouseViewModel nodeDataWarehouse)
 				return nodeDataWarehouse.DataWarehouse;
-			else if (node.Parent != null)
+			else if (node?.Parent != null)
 				return GetSelectedDataWarehouse(node.Parent as BaseTreeNodeViewModel);
 			else
 				return null;
@@ -170,8 +170,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 					// Crea el informe
 					report = new LibReporting.Models.DataWarehouses.Reports.ReportModel(GetSelectedDataWarehouse(SelectedNode))
 												{
-													Id = "RptNewReport",
-													Name = "Nuevo informe"
+													Id = "RptNewReport"
 												};
 					// Indica que es nuevo
 					isNew = true;
@@ -254,7 +253,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 		/// </summary>
 		private void DeleteDimension(LibReporting.Models.DataWarehouses.Dimensions.DimensionModel dimension)
 		{
-			if (SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowQuestion($"¿Realmente desea borrar los datos de la dimensión {dimension.Name}?"))
+			if (SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowQuestion($"¿Realmente desea borrar los datos de la dimensión {dimension.Id}?"))
 			{
 				// Borra la dimensión
 				dimension.DataWarehouse.Dimensions.Remove(dimension);
@@ -268,7 +267,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 		/// </summary>
 		private void DeleteReport(LibReporting.Models.DataWarehouses.Reports.ReportModel report)
 		{
-			if (SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowQuestion($"¿Realmente desea borrar los datos del informe {report.Name}?"))
+			if (SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowQuestion($"¿Realmente desea borrar los datos del informe {report.Id}?"))
 			{
 				// Borra el informe
 				report.DataWarehouse.Reports.Remove(report);
