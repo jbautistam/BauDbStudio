@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Bau.Libraries.LibDataStructures.Collections;
 using Bau.Libraries.LibHelper.Extensors;
@@ -55,7 +56,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 		protected BaseDataSourceModel SearchDataSource(string dataSourceId)
 		{
 			// Busca el origen de datos
-			foreach (DataWarehouseModel dataWarehouse in Generator.Schema.DataWarehouses)
+			foreach (DataWarehouseModel dataWarehouse in Generator.Schema.DataWarehouses.EnumerateValues())
 			{
 				BaseDataSourceModel dataSource = dataWarehouse.DataSources.Search(dataSourceId);
 
@@ -103,13 +104,28 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 		protected void AddColumn(QueryModel query, string columnId, string alias, 
 								 ExpressionColumnRequestModel.AggregationType aggregatedBy, BaseColumnRequestModel requestColumn)
 		{
-			QueryFieldModel field = new QueryFieldModel(false, columnId, alias, requestColumn.OrderBy, aggregatedBy, requestColumn.Visible);
+			QueryFieldModel field = GetQueryField(query, columnId, alias, aggregatedBy, requestColumn);
 
 				// Añade los filtros
 				field.FiltersWhere.AddRange(GetFilters(requestColumn.FiltersWhere));
 				field.FilterHaving.AddRange(GetFilters(requestColumn.FiltersHaving));
 				// Añade la columna a la consulta
 				query.Fields.Add(field);
+		}
+
+		/// <summary>
+		///		Obtiene el campo de la consulta
+		/// </summary>
+		private QueryFieldModel GetQueryField(QueryModel query, string columnId, string alias,
+											  ExpressionColumnRequestModel.AggregationType aggregatedBy, BaseColumnRequestModel requestColumn)
+		{
+			QueryFieldModel field = query.Fields.FirstOrDefault(item => item.CompareWith(columnId, alias));
+
+				// Si no existía, lo añade
+				if (field == null)
+					field = new QueryFieldModel(false, columnId, alias, requestColumn.OrderBy, aggregatedBy, requestColumn.Visible);
+				// Devuelve el campo
+				return field;
 		}
 
 		/// <summary>

@@ -13,6 +13,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.DataSour
 		// Variables privadas
 		private string _key, _name, _description, _sql, _header;
 		private ListDataSourceColumnsViewModel _columns;
+		private ListDataSourceParametersViewModel _parameters;
 
 		public DataSourceSqlViewModel(ReportingSolutionViewModel reportingSolutionViewModel, DataSourceSqlModel dataSource)
 		{
@@ -44,6 +45,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.DataSour
 			Description = DataSource.Description;
 			// Carga las columnas
 			ColumnsViewModel = new ListDataSourceColumnsViewModel(ReportingSolutionViewModel, DataSource, true);
+			ParametersViewModel = new ListDataSourceParametersViewModel(ReportingSolutionViewModel, DataSource, true);
 			// Indica que por ahora no ha habido modificaciones
 			IsUpdated = false;
 		}
@@ -72,7 +74,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.DataSour
 					ReportingSolutionViewModel.SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Introduzca el comando SQL del origen de datos");
 				else if (ColumnsViewModel.Items.Count == 0)
 					ReportingSolutionViewModel.SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("No se ha definido ninguna columna");
-				else if (ColumnsViewModel.ValidateData())
+				else if (ColumnsViewModel.ValidateData() && ParametersViewModel.ValidateData())
 					validated = true;
 				// Devuelve el valor que indica si se ha podido grabar
 				return validated;
@@ -96,6 +98,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.DataSour
 				// Asigna las columnas
 				DataSource.Columns.Clear();
 				DataSource.Columns.AddRange(ColumnsViewModel.GetColumns());
+				// Asigna los parámetros
+				DataSource.Parameters.Clear();
+				DataSource.Parameters.AddRange(ParametersViewModel.GetParameters());
 				// Graba la solución
 				ReportingSolutionViewModel.SaveDataWarehouse(DataSource.DataWarehouse);
 				// Cambia la cabecera
@@ -175,6 +180,15 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.DataSour
 		{
 			get { return _columns; }
 			set { CheckProperty(ref _columns, value); }
+		}
+
+		/// <summary>
+		///		Parámetros
+		/// </summary>
+		public ListDataSourceParametersViewModel ParametersViewModel
+		{
+			get { return _parameters; }
+			set { CheckProperty(ref _parameters, value); }
 		}
 	}
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-using Bau.Libraries.LibDataStructures.Base;
+using Bau.Libraries.LibDataStructures.Collections;
 
 namespace Bau.Libraries.LibReporting.Models
 {
@@ -20,6 +20,6 @@ namespace Bau.Libraries.LibReporting.Models
 		/// <summary>
 		///		Capa de almacenes de datos
 		/// </summary>
-		public BaseExtendedModelCollection<DataWarehouses.DataWarehouseModel> DataWarehouses { get; } = new BaseExtendedModelCollection<DataWarehouses.DataWarehouseModel>();
+		public Base.BaseReportingDictionaryModel<DataWarehouses.DataWarehouseModel> DataWarehouses { get; } = new Base.BaseReportingDictionaryModel<DataWarehouses.DataWarehouseModel>();
 	}
 }

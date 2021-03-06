@@ -12,6 +12,7 @@
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*"/>
@@ -40,14 +41,19 @@
 							AcceptsReturn="True" MaxLines="5" MinLines="5" VerticalContentAlignment="Top"/>
 			</Grid>
 		</GroupBox>
-		<GroupBox Grid.Row="1" Grid.Column="0" Header="Sql" Margin="0,0,15,0">
+		<GroupBox Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Header="Sql" Margin="0,0,15,0">
 			<CodeEditor:ctlEditor Grid.Row="0" Grid.Column="0" x:Name="udtEditor" TextChanged="udtEditor_TextChanged" 
 			BorderThickness="1" BorderBrush="Black"/>
 		</GroupBox>
-		<GridSplitter Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Stretch"
+		<GridSplitter Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" HorizontalAlignment="Right" VerticalAlignment="Stretch"
 				Margin="15,2,5,2" Background="AliceBlue" Width="7" />
-		<GroupBox Grid.Row="1" Grid.Column="1" Header="Columnas">
+		<GroupBox Grid.Row="1" Grid.Column="1" Header="Columnas" Margin="5">
 			<local:ListDataSourceColumnsView x:Name="lstColumns"/>
+		</GroupBox>
+		<GridSplitter Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Bottom"
+				 Margin="5" Background="AliceBlue" Height="7" />
+		<GroupBox Grid.Row="2" Grid.Column="1" Header="Parámetros" Margin="5">
+			<local:ListDataSourceParametersView x:Name="lstParameters" />
 		</GroupBox>
 	</Grid>
 </UserControl>

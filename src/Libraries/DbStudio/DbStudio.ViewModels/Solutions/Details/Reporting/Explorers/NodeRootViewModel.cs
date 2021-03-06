@@ -101,9 +101,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 				if (dataWarehouse != null)
 				{
 					// Ordena los informes
-					dataWarehouse.Reports.SortByName();
+					// dataWarehouse.Reports.SortByName();
 					// Carga los nodos
-					foreach (ReportModel report in dataWarehouse.Reports)
+					foreach (ReportModel report in dataWarehouse.Reports.EnumerateValues())
 						Children.Add(new NodeReportViewModel(TreeViewModel, this, report));
 			}
 		}

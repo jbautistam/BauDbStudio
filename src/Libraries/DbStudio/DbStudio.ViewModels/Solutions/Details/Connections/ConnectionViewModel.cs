@@ -15,7 +15,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 		private string _name, _description, _connectionString;
 		private string _server, _user, _password, _database, _fileName;
 		private int _port;
-		private bool _useIntegratedSecurity, _isServerConnection, _isOdbcConnection, _hasFileName;
+		private bool _useIntegratedSecurity, _multipleActiveResultSets, _isServerConnection, _isOdbcConnection, _hasFileName;
 		private int _timeoutExecuteScriptMinutes;
 		private bool _isNew;
 		private ComboViewModel _comboTypes;
@@ -49,6 +49,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 			Password = Connection.Parameters[nameof(Password)];
 			Database = Connection.Parameters[nameof(Database)];
 			UseIntegratedSecurity = Connection.Parameters[nameof(UseIntegratedSecurity)].GetBool();
+			MultipleActiveResultSets = Connection.Parameters[nameof(MultipleActiveResultSets)].GetBool();
 			ConnectionString = Connection.Parameters[nameof(ConnectionString)];
 			FileName = Connection.Parameters[nameof(FileName)];
 			TimeoutExecuteScriptMinutes = (int) Connection.TimeoutExecuteScript.TotalMinutes;
@@ -163,6 +164,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 				Connection.Parameters[nameof(Password)] = Password;
 				Connection.Parameters[nameof(Database)] = Database;
 				Connection.Parameters[nameof(UseIntegratedSecurity)] = UseIntegratedSecurity.ToString();
+				Connection.Parameters[nameof(MultipleActiveResultSets)] = MultipleActiveResultSets.ToString();
 				Connection.Parameters[nameof(ConnectionString)] = ConnectionString;
 				Connection.Parameters[nameof(FileName)] = FileName;
 				Connection.TimeoutExecuteScript = TimeSpan.FromMinutes(TimeoutExecuteScriptMinutes);
@@ -306,6 +308,15 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 		{
 			get { return _useIntegratedSecurity; }
 			set { CheckProperty(ref _useIntegratedSecurity, value); }
+		}
+
+		/// <summary>
+		///		Indica si se pueden utilizar varios conjuntos de resultados en las consultas
+		/// </summary>
+		public bool MultipleActiveResultSets
+		{
+			get { return _multipleActiveResultSets; }
+			set { CheckProperty(ref _multipleActiveResultSets, value); }
 		}
 
 		/// <summary>

@@ -34,7 +34,8 @@
 				<TextBox Grid.Row="0" Grid.Column="1" 
 						Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
 				<Label Grid.Row="1" Grid.Column="0" Margin="5" Content="Descripción:"/>
-				<TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Top"
+				<TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Top" VerticalContentAlignment="Top" VerticalScrollBarVisibility="Auto" 
+						MinLines="4" MaxLines="5"
 						Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
 			</Grid>
 		</GroupBox>
@@ -102,6 +103,8 @@
 							Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
 					<CheckBox Grid.Row="2" Grid.Column="1" Content="Utilizar seguridad integrada" Margin="5" VerticalAlignment="Center"
 							IsChecked="{Binding UseIntegratedSecurity, UpdateSourceTrigger=PropertyChanged}"/>
+					<CheckBox Grid.Row="2" Grid.Column="2" Content="Utilizar varios conjuntos de resultados" Margin="5" VerticalAlignment="Center"
+							IsChecked="{Binding MultipleActiveResultSets, UpdateSourceTrigger=PropertyChanged}"/>
 					<Label Grid.Row="3" Grid.Column="0" Margin="5" Content="Base de datos:"/>
 					<TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3"
 							Text="{Binding Database, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>

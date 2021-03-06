@@ -16,7 +16,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 		{
 			Report = report;
 			if (string.IsNullOrWhiteSpace(report.Name))
-				Text = report.GlobalId;
+				Text = report.Id;
 		}
 
 		/// <summary>

@@ -21,8 +21,9 @@ namespace Bau.DbStudio.Views.Reporting.Details.DataSources
 		/// </summary>
 		private void InitForm()
 		{
-			// Carga las columnas
+			// Carga las columnas y los parámetros
 			lstColumns.Load(ViewModel.ColumnsViewModel);
+			lstParameters.Load(ViewModel.ParametersViewModel);
 			// Asigna la configuración al editor
 			udtEditor.EditorFontName = MainWindow.MainController.ConfigurationController.EditorFontName;
 			udtEditor.EditorFontSize = MainWindow.MainController.ConfigurationController.EditorFontSize;

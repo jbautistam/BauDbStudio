@@ -80,6 +80,21 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 		}
 
 		/// <summary>
+		///		Compara los datos del campo
+		/// </summary>
+		internal bool CompareWith(string columnId, string alias)
+		{
+			bool equal = Field.Equals(columnId, StringComparison.CurrentCultureIgnoreCase);
+
+				// Si el nombre de columna es igual, compara los alias
+				//? Concatena un carácter # para evitar tener que hacer comparaciones con cadenas vacías
+				if (equal)
+					equal = (Alias + "#").Equals(alias + "#", StringComparison.CurrentCultureIgnoreCase);
+				// Devuelve el valor que indica si los datos son iguales
+				return equal;
+		}
+
+		/// <summary>
 		///		Indica si es una clave primaria
 		/// </summary>
 		internal bool IsPrimaryKey { get; }

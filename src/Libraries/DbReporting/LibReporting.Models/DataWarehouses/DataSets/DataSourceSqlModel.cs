@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets
 {
@@ -13,5 +14,10 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets
 		///		Comando SQL de consulta
 		/// </summary>
 		public string Sql { get; set; }
+
+		/// <summary>
+		///		Parámetros asociados a la consulta
+		/// </summary>
+		public List<DataSourceSqlParameterModel> Parameters { get; } = new List<DataSourceSqlParameterModel>();
 	}
 }

@@ -44,7 +44,7 @@ namespace Bau.Libraries.LibReporting.Application
 					// Añade el almacén de datos
 					Schema.DataWarehouses.Add(dataWarehouse);
 					// Añade el archivo al diccionario
-					ReportingSolution.DataWarehouses.Add(dataWarehouse.GlobalId, fileName);
+					ReportingSolution.DataWarehousesFiles.Add(dataWarehouse.Id, fileName);
 					// Añade el archivo a la lista
 					if (ReportingSolution.Files.FirstOrDefault(item => item.Equals(fileName, StringComparison.CurrentCultureIgnoreCase)) == null)
 						ReportingSolution.Files.Add(fileName);
@@ -56,13 +56,13 @@ namespace Bau.Libraries.LibReporting.Application
 		/// </summary>
 		public void RemoveDataWarehouse(Models.DataWarehouses.DataWarehouseModel dataWarehouse)
 		{
-			string file = ReportingSolution.DataWarehouses[dataWarehouse.GlobalId];
+			string file = ReportingSolution.DataWarehousesFiles[dataWarehouse.Id];
 
 				// Elimina el archivo
 				if (!string.IsNullOrWhiteSpace(file))
 				{
 					// Elimina el origen de datos del diccionario
-					ReportingSolution.DataWarehouses.Remove(dataWarehouse.GlobalId);
+					ReportingSolution.DataWarehousesFiles.Remove(dataWarehouse.Id);
 					// Elimina el archivo
 					for (int index = ReportingSolution.Files.Count - 1; index >= 0; index--)
 						if (ReportingSolution.Files[index].Equals(file, StringComparison.CurrentCultureIgnoreCase))

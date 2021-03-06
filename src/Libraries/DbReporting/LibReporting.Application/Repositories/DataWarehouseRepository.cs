@@ -38,6 +38,8 @@ namespace Bau.Libraries.LibReporting.Application.Repositories
 		private const string TagTable = "Table";
 		private const string TagType = "Type";
 		private const string TagRequired = "Required";
+		private const string TagParameter = "Parameter";
+		private const string TagValue = "Value";
 
 		/// <summary>
 		///		Carga los datos de un <see cref="DataWarehouseModel"/>
@@ -56,7 +58,7 @@ namespace Bau.Libraries.LibReporting.Application.Repositories
 								if (rootML.Name == TagRoot)
 								{
 									// Asigna las propiedades
-									dataWarehouse.GlobalId = rootML.Attributes[TagId].Value.TrimIgnoreNull();
+									dataWarehouse.Id = rootML.Attributes[TagId].Value.TrimIgnoreNull();
 									dataWarehouse.Name = rootML.Nodes[TagName].Value.TrimIgnoreNull();
 									dataWarehouse.Description = rootML.Nodes[TagDescription].Value.TrimIgnoreNull();
 									// Carga las dimensiones y orígenes de datos
@@ -121,6 +123,10 @@ namespace Bau.Libraries.LibReporting.Application.Repositories
 				foreach (MLNode nodeML in rootML.Nodes)
 					if (nodeML.Name == TagColumn)
 						dataSource.Columns.Add(LoadColumn(dataSource, nodeML));
+				// Carga los parámetros de consulta
+				foreach (MLNode nodeML in rootML.Nodes)
+					if (nodeML.Name == TagParameter)
+						dataSource.Parameters.Add(LoadParameter(nodeML));
 				// Devuelve el origen de datos
 				return dataSource;
 		}
@@ -144,6 +150,21 @@ namespace Bau.Libraries.LibReporting.Application.Repositories
 				column.Visible = rootML.Attributes[TagVisible].Value.GetBool(true);
 				// Devuelve el objeto
 				return column;
+		}
+
+		/// <summary>
+		///		Carga los datos de un parámetros
+		/// </summary>
+		private DataSourceSqlParameterModel LoadParameter(MLNode rootML)
+		{
+			DataSourceSqlParameterModel parameter = new DataSourceSqlParameterModel();
+
+				// Carga las propiedades
+				parameter.Name = rootML.Attributes[TagName].Value.TrimIgnoreNull();
+				parameter.Type = rootML.Attributes[TagType].Value.GetEnum(DataSourceColumnModel.Fieldtype.Unknown);
+				parameter.DefaultValue = rootML.Attributes[TagValue].Value.TrimIgnoreNull();
+				// Devuelve el parámetro
+				return parameter;
 		}
 
 		/// <summary>
@@ -195,7 +216,9 @@ namespace Bau.Libraries.LibReporting.Application.Repositories
 			ReportModel report = new ReportModel(dataWarehouse);
 
 				// Carga el informe
-				LoadProperties(rootML, report);
+				report.Id = rootML.Attributes[TagId].Value.TrimIgnoreNull();
+				report.Name = rootML.Nodes[TagName].Value.TrimIgnoreNull();
+				report.Description = rootML.Nodes[TagDescription].Value.TrimIgnoreNull();
 				// Carga los datos
 				foreach (MLNode nodeML in rootML.Nodes)
 					switch (nodeML.Name)
@@ -261,7 +284,7 @@ namespace Bau.Libraries.LibReporting.Application.Repositories
 			MLNode rootML = fileML.Nodes.Add(TagRoot);
 
 				// Añade las propiedades básicas
-				rootML.Attributes.Add(TagId, dataWarehouse.GlobalId);
+				rootML.Attributes.Add(TagId, dataWarehouse.Id);
 				rootML.Nodes.Add(TagName, dataWarehouse.Name);
 				rootML.Nodes.Add(TagDescription, dataWarehouse.Description);
 				// Añade los nodos de orígenes de datos
@@ -279,7 +302,7 @@ namespace Bau.Libraries.LibReporting.Application.Repositories
 				foreach (DimensionModel dimension in dataWarehouse.Dimensions)
 					rootML.Nodes.Add(GetNodeDimension(dimension));
 				// Añade los informes
-				foreach (ReportModel report in dataWarehouse.Reports)
+				foreach (ReportModel report in dataWarehouse.Reports.EnumerateValues())
 					rootML.Nodes.Add(GetNodeReport(report));
 				// Graba el archivo
 				new LibMarkupLanguage.Services.XML.XMLWriter().Save(fileName, fileML);
@@ -316,10 +339,32 @@ namespace Bau.Libraries.LibReporting.Application.Repositories
 				nodeML.Nodes.Add(TagName, dataSource.Name);
 				nodeML.Nodes.Add(TagDescription, dataSource.Description);
 				nodeML.Nodes.Add(TagSql, dataSource.Sql);
-				// Añade las columnas
+				// Añade las columnas y los parámetros
 				nodeML.Nodes.AddRange(GetNodesColumns(dataSource.Columns));
+				nodeML.Nodes.AddRange(GetNodesParameters(dataSource.Parameters));
 				// Devuelve el nodo
 				return nodeML;
+		}
+
+		/// <summary>
+		///		Obtiene los nodos de una serie de parámetros
+		/// </summary>
+		private MLNodesCollection GetNodesParameters(System.Collections.Generic.List<DataSourceSqlParameterModel> parameters)
+		{
+			MLNodesCollection nodesML = new MLNodesCollection();
+
+				// Añade los parámetros
+				foreach (DataSourceSqlParameterModel parameter in parameters)
+				{
+					MLNode nodeML = nodesML.Add(TagParameter);
+
+						// Asigna los atributos
+						nodeML.Attributes.Add(TagName, parameter.Name);
+						nodeML.Attributes.Add(TagType, parameter.Type.ToString());
+						nodeML.Attributes.Add(TagValue, parameter.DefaultValue);
+				}
+				// Devuelve la colección de nodos
+				return nodesML;
 		}
 
 		/// <summary>
@@ -396,7 +441,7 @@ namespace Bau.Libraries.LibReporting.Application.Repositories
 			MLNode rootML = new MLNode(TagReport);
 
 				// Asigna las propiedades
-				rootML.Attributes.Add(TagId, report.GlobalId);
+				rootML.Attributes.Add(TagId, report.Id);
 				rootML.Nodes.Add(TagName, report.Name);
 				rootML.Nodes.Add(TagDescription, report.Description);
 				// Añade las expresiones

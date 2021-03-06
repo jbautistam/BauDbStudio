@@ -64,7 +64,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Dimensio
 			ListRelationsViewModel = new Relations.ListRelationViewModel(ReportingSolutionViewModel, Dimension.DataSource, Dimension.Relations);
 			ListRelationsViewModel.Load();
 			// Indica que por ahora no ha habido modificaciones
-			IsUpdated = false;
+			IsUpdated = _isNew;
 			ListRelationsViewModel.IsUpdated = false;
 		}
 

@@ -101,7 +101,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 		/// </summary>
 		public string TabId
 		{
-			get { return $"{GetType().ToString()}_{Report.GlobalId}"; }
+			get { return $"{GetType().ToString()}_{Report.Id}"; }
 		}
 
 		/// <summary>

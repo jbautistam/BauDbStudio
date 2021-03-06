@@ -39,7 +39,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Reports
 		private void InitViewModel()
 		{
 			// Asigna las propiedades básicas
-			Key = Report.GlobalId;
+			Key = Report.Id;
 			Name = Report.Name;
 			Description = Report.Description;
 			Header = Report.Name;
@@ -136,7 +136,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Reports
 			if (ValidateData())
 			{
 				// Asigna las propiedades a la dimensión
-				Report.GlobalId = Key;
+				Report.Id = Key;
 				Report.Name = Name;
 				Report.Description = Description;
 				// Si es nuevo se añade a la colección
@@ -195,7 +195,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Reports
 		/// </summary>
 		public string TabId
 		{
-			get { return $"{GetType().ToString()}_{Report.GlobalId}"; }
+			get { return $"{GetType().ToString()}_{Report.Id}"; }
 		}
 
 		/// <summary>

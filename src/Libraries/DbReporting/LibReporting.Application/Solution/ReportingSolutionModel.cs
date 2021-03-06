@@ -17,7 +17,7 @@ namespace Bau.Libraries.LibReporting.Models
 		public void Clear()
 		{
 			Files.Clear();
-			DataWarehouses.Clear();
+			DataWarehousesFiles.Clear();
 		}
 
 		/// <summary>
@@ -26,8 +26,8 @@ namespace Bau.Libraries.LibReporting.Models
 		internal string GetFileName(DataWarehouseModel dataWarehouse)
 		{
 			// Busca el nombre de archivo
-			foreach ((string solutionDataWarehouse, string file) in DataWarehouses.Enumerate())
-				if (solutionDataWarehouse.Equals(dataWarehouse.GlobalId, StringComparison.CurrentCultureIgnoreCase))
+			foreach ((string solutionDataWarehouse, string file) in DataWarehousesFiles.Enumerate())
+				if (solutionDataWarehouse.Equals(dataWarehouse.Id, StringComparison.CurrentCultureIgnoreCase))
 					return file;
 			// Si ha llegado hasta aquí es porque no ha encontrado nada
 			return string.Empty;
@@ -46,6 +46,6 @@ namespace Bau.Libraries.LibReporting.Models
 		/// <summary>
 		///		Dicionario de relación entre almacenes de datos y archivos
 		/// </summary>
-		public NormalizedDictionary<string> DataWarehouses { get; } = new NormalizedDictionary<string>();
+		public NormalizedDictionary<string> DataWarehousesFiles { get; } = new NormalizedDictionary<string>();
 	}
 }

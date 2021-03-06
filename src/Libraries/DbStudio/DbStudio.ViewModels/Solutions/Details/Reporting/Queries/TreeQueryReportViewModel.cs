@@ -129,7 +129,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 			columns.SortByName();
 			// Añade las columnas adecuadas al árbol
 			foreach (DataSourceColumnModel column in columns)
-				if (!column.IsPrimaryKey && column.Visible)
+				if (column.Visible)
 				{
 					NodeColumnViewModel node = new NodeColumnViewModel(this, root, nodeColumnType, string.IsNullOrWhiteSpace(column.Name) ? column.ColumnId : column.Name, column);
 
@@ -149,7 +149,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 			ReportRequestModel request = new ReportRequestModel();
 
 				// Asigna el código de informe
-				request.ReportId = ReportViewModel.Report.GlobalId;
+				request.ReportId = ReportViewModel.Report.Id;
 				// Obtiene las columnas de dimensión y de expresión
 				request.Dimensions.AddRange(GetRequestDimensions(Children));
 				request.Expressions.AddRange(GetRequestExpressions(Children));
