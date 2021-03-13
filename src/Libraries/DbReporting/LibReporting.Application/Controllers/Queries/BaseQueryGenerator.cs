@@ -69,27 +69,33 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 		/// <summary>
 		///		Añade un campo de clave primaria a la consulta
 		/// </summary>
-		protected void AddPrimaryKey(QueryModel query, string column, bool visible)
+		protected void AddPrimaryKey(QueryModel query, BaseColumnRequestModel requestColumn, string column, bool visible)
 		{
-			query.Fields.Add(new QueryFieldModel(true, column, string.Empty, BaseColumnRequestModel.SortOrder.Undefined, 
-												 ExpressionColumnRequestModel.AggregationType.NoAggregated, visible));
+			QueryFieldModel field = new QueryFieldModel(true, column, string.Empty, BaseColumnRequestModel.SortOrder.Undefined, 
+														ExpressionColumnRequestModel.AggregationType.NoAggregated, visible);
+
+				// Añade los filtros
+				if (requestColumn != null)
+					field.FiltersWhere.AddRange(GetFilters(requestColumn.FiltersWhere));
+				// Añade el campo a la colección de campos de la consulta
+				query.Fields.Add(field);
 		}
 
 		/// <summary>
 		///		Añade un campo a la consulta
 		/// </summary>
-		protected void AddColumn(QueryModel query, string columnId, string alias, BaseColumnRequestModel requestColumn)
+		protected void AddColumn(QueryModel query, string column, string alias, BaseColumnRequestModel requestColumn)
 		{
-			AddColumn(query, columnId, alias, ExpressionColumnRequestModel.AggregationType.NoAggregated, requestColumn);
+			AddColumn(query, column, alias, ExpressionColumnRequestModel.AggregationType.NoAggregated, requestColumn);
 		}
 
 		/// <summary>
 		///		Añade un campo a la consulta
 		/// </summary>
-		protected void AddColumn(QueryModel query, string columnId, string alias, 
+		protected void AddColumn(QueryModel query, string column, string alias, 
 								 ExpressionColumnRequestModel.AggregationType aggregatedBy, BaseColumnRequestModel requestColumn)
 		{
-			QueryFieldModel field = GetQueryField(query, columnId, alias, aggregatedBy, requestColumn);
+			QueryFieldModel field = GetQueryField(query, column, alias, aggregatedBy, requestColumn);
 
 				// Añade los filtros
 				field.FiltersWhere.AddRange(GetFilters(requestColumn.FiltersWhere));

@@ -82,14 +82,17 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 				prettifier.Indent();
 				prettifier.Append(GetSqlClauseFilters(true));
 				prettifier.Unindent();
+				prettifier.NewLine();
 				// Añade los GROUP BY
 				prettifier.Indent();
 				prettifier.Append(GetSqlGroupBy(), 100, ",");
 				prettifier.Unindent();
+				prettifier.NewLine();
 				// Añade los HAVING
 				prettifier.Indent();
 				prettifier.Append(GetSqlClauseFilters(false));
 				prettifier.Unindent();
+				prettifier.NewLine();
 				// Devuelve la consulta SQL
 				return prettifier.ToString();
 		}

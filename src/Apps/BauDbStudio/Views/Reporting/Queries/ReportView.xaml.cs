@@ -12,8 +12,8 @@ namespace Bau.DbStudio.Views.Reporting.Queries
 	{
 		public ReportView(ReportViewModel viewModel)
 		{
-			InitializeComponent();
 			DataContext = ViewModel = viewModel;
+			InitializeComponent();
 		}
 
 		/// <summary>
@@ -34,7 +34,7 @@ namespace Bau.DbStudio.Views.Reporting.Queries
 		/// </summary>
 		public ReportViewModel ViewModel { get; }
 
-		private void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
+		private void UserControl_Initialized(object sender, EventArgs e)
 		{
 			InitForm();
 		}
