@@ -263,7 +263,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 		{
 			// Recorre los campos buscando si hay algún agregado
 			foreach (QueryFieldModel field in Fields)
-				if (field.Aggregation != Requests.Models.ExpressionColumnRequestModel.AggregationType.NoAggregated)
+				if (field.Aggregation != ExpressionColumnRequestModel.AggregationType.NoAggregated)
 					return true;
 			// Si ha llegado hasta aquí es porque no hay ningún campo agregado
 			return false;

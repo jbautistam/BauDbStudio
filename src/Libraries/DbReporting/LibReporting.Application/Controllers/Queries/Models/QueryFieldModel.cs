@@ -33,15 +33,15 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 			switch (aggregation)
 			{
 				case ExpressionColumnRequestModel.AggregationType.Average:
-					return $"Average {Field}";
+					return $"{Field}_AVG";
 				case ExpressionColumnRequestModel.AggregationType.Max:
-					return $"Max {Field}";
+					return $"{Field}_MAX";
 				case ExpressionColumnRequestModel.AggregationType.Min:
-					return $"Min {Field}";
+					return $"{Field}_MIN";
 				case ExpressionColumnRequestModel.AggregationType.StandardDeviation:
-					return $"Standard deviation {Field}";
+					return $"{Field}_STD";
 				case ExpressionColumnRequestModel.AggregationType.Sum:
-					return $"Sum {Field}";
+					return $"{Field}_SUM";
 				default:
 					return Field;
 			}

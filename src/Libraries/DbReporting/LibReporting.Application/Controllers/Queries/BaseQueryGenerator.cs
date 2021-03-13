@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.LibReporting.Models.DataWarehouses;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets;
@@ -33,20 +34,6 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 				// Devuelve la cadena
 				return sql;
 		}
-
-		///// <summary>
-		/////		Obtiene una cadena concatenada con campos
-		///// </summary>
-		//protected string GetSqlFields(NormalizedDictionary<string> keyFields)
-		//{
-		//	string sql = string.Empty;
-
-		//		// Crea la cadena SQL con los campos de dimensión
-		//		foreach ((string key, string field) in keyFields.Enumerate())
-		//			sql = sql.AddWithSeparator($"[{field}]", ",");
-		//		// Devuelve la cadena
-		//		return sql;
-		//}
 
 		/// <summary>
 		///		Busca un origen de datos

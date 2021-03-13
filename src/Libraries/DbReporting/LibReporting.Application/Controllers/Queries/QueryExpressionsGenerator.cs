@@ -25,7 +25,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 			//TODO escogidas en la solicitud, para las primeras pruebas, cogemos directamente la primera solicitud
 			ReportDataSourceModel reportDataSource = Generator.Report.ReportDataSources[0];
 			BaseDataSourceModel baseDataSource = reportDataSource.DataSource;
-			QueryModel query = new QueryModel(baseDataSource.Id, QueryModel.QueryType.Expressions, "tmpExpressions");
+			QueryModel query = new QueryModel(baseDataSource.Id, QueryModel.QueryType.Expressions, GetDataSourceAlias(baseDataSource));
 
 				// Prepara la consulta
 				query.Prepare(baseDataSource);
@@ -38,12 +38,27 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 		}
 
 		/// <summary>
+		///		Obtiene el alias del origen de datos
+		/// </summary>
+		private string GetDataSourceAlias(BaseDataSourceModel baseDataSource)
+		{
+			switch (baseDataSource)
+			{
+				case DataSourceTableModel dataSource:
+					return dataSource.Table;
+				case DataSourceSqlModel dataSource:
+					return dataSource.Id;
+				default:
+					return baseDataSource.Id;
+			}
+		}
+
+		/// <summary>
 		///		Obtiene los campos de dimensión por los que se va a agrupar (no se recojen directamente de las dimensiones solicitadas porque el
 		///	orden de solicitud importa): estos campos de dimensión son los campos clave
 		/// </summary>
 		private void ComputeFieldsGroupBy(QueryModel query, ReportDataSourceModel dataSource)
 		{
-			// 
 			foreach (DimensionRequestModel dimensionRequest in Generator.Request.Dimensions)
 			{
 				DimensionModel dimension = GetDimension(dimensionRequest);
