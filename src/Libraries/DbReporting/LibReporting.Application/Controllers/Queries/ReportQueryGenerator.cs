@@ -160,7 +160,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 				// Obtiene los campos de las expresiones
 				foreach (QueryFieldModel field in expressionQuery.Fields)
 					if (!field.IsPrimaryKey && field.Visible)
-						sqlFields = sqlFields.AddWithSeparator($"[{expressionQuery.Alias}].[{field.Alias}]", ",");
+						sqlFields = sqlFields.AddWithSeparator($"[{expressionQuery.Alias}].[{field.Alias}] AS [{GetSqlFinalFieldName(expressionQuery.Alias, field.Alias)}]", ",");
 				// Devuelve la cadena SQL
 				return sqlFields;
 		}
@@ -175,11 +175,23 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 				// Añade los campos visualizables: los que no son clave primaria y están marcados como visibles (porque algunos
 				// estarán en la consulta únicamente por los filtros)
 				foreach (QueryFieldModel field in query.Fields)
-					//if (!field.IsPrimaryKey && field.Visible)
 					if (field.Visible)
-						sqlFields = sqlFields.AddWithSeparator($"[{tableAliasAtWith}].[{field.Alias}]", ",");
+						sqlFields = sqlFields.AddWithSeparator($"[{tableAliasAtWith}].[{field.Alias}] AS [{GetSqlFinalFieldName(tableAliasAtWith, field.Alias)}]", ",");
 				// Devuelve la cadena con los campos
 				return sqlFields;
+		}
+
+		/// <summary>
+		///		Obtinee el nombre final de un campo: nombre de tabla + alias, todo sin espacios
+		/// </summary>
+		private string GetSqlFinalFieldName(string tableAlias, string fieldAlias)
+		{
+			string result = $"{tableAlias}_{fieldAlias}";
+
+				// Quita los espacios
+				result = result.Replace(' ', '_');
+				// Devuelve el nombre final del campo
+				return result;
 		}
 
 		/// <summary>

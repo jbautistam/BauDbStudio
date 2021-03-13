@@ -282,7 +282,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 				// Añade los campos a ordenar
 				foreach (QueryFieldModel field in Fields)
 					if (field.Visible && field.OrderBy != BaseColumnRequestModel.SortOrder.Undefined)
-						sql = sql.AddWithSeparator($"[{tableAliasAtWith}].[{field.Field}] {GetSortClause(field.OrderBy)}", ",");
+						sql = sql.AddWithSeparator($"[{tableAliasAtWith}].[{field.Alias}] {GetSortClause(field.OrderBy)}", ",");
 				// Añade los campos a ordenar de las consultas hijo
 				foreach (QueryJoinModel join in Joins)
 					sql = sql.AddWithSeparator(join.Query.GetOrderByFields(tableAliasAtWith), ",");
