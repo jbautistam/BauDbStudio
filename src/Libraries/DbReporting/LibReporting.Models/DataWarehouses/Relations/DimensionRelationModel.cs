@@ -28,7 +28,7 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses.Relations
 		/// </summary>
 		public Dimensions.DimensionModel Dimension 
 		{ 
-			get { return DataWarehouse.Dimensions.Search(DimensionId); }
+			get { return DataWarehouse.Dimensions[DimensionId]; }
 		}
 
 		/// <summary>

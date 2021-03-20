@@ -44,7 +44,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 
 							// Asigna las relaciones
 							foreach (DimensionRelationModel relation in dimension.Relations)
-								if (relation.Dimension.GlobalId.Equals(childQuery.SourceId, StringComparison.CurrentCultureIgnoreCase))
+								if (relation.Dimension.Id.Equals(childQuery.SourceId, StringComparison.CurrentCultureIgnoreCase))
 									foreach (RelationForeignKey foreignKey in relation.ForeignKeys)
 										join.Relations.Add(new QueryRelationModel(foreignKey.ColumnId, childQuery.FromAlias, foreignKey.TargetColumnId));
 							// Añade la unión
@@ -60,19 +60,37 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 		private QueryModel GetChildQuery(DimensionRequestModel dimensionRequest)
 		{
 			DimensionModel dimension = GetDimension(dimensionRequest);
-			QueryModel query = new QueryModel(dimensionRequest.DimensionId, QueryModel.QueryType.Dimension, dimension.GlobalId);
+			QueryModel query = new QueryModel(dimensionRequest.DimensionId, QueryModel.QueryType.Dimension, dimension.Id);
 
 				// Prepara la consulta
 				query.Prepare(dimension.DataSource);
 				// Añade los campos clave
-				foreach (DataSourceColumnModel column in dimension.DataSource.Columns)
+				foreach (DataSourceColumnModel column in dimension.DataSource.Columns.EnumerateValues())
 					if (column.IsPrimaryKey)
-						AddPrimaryKey(query, column.ColumnId);
+						AddPrimaryKey(query, dimensionRequest.GetRequestColumn(column.Id), column.Id, CheckIsColumnAtColumnRequested(column, dimensionRequest.Columns));
 				// Asigna los campos
 				foreach (DimensionColumnRequestModel columnRequest in dimensionRequest.Columns)
-					AddColumn(query, columnRequest.ColumnId, string.Empty, columnRequest);
+				{
+					DataSourceColumnModel column = dimension.DataSource.Columns[columnRequest.ColumnId];
+
+						if (column != null && !column.IsPrimaryKey)
+							AddColumn(query, columnRequest.ColumnId, string.Empty, columnRequest);
+				}
 				// Devuelve la consulta
 				return query;
+		}
+
+		/// <summary>
+		///		Comprueba si la columna está entre las columnas solicitadas
+		/// </summary>
+		private bool CheckIsColumnAtColumnRequested(DataSourceColumnModel column, List<DimensionColumnRequestModel> columnRequests)
+		{
+			// Busca la columna entre las columnas solicitadas
+			foreach (DimensionColumnRequestModel columnRequest in columnRequests)
+				if (column.Id.Equals(columnRequest.ColumnId, StringComparison.CurrentCultureIgnoreCase))
+					return true;
+			// Si llega hasta aquí es porque no lo ha encontrado
+			return false;
 		}
 	}
 }

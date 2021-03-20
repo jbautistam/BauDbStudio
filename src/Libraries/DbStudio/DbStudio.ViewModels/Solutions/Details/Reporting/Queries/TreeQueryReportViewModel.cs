@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
+using Bau.Libraries.LibReporting.Models.Base;
 using Bau.Libraries.LibDataStructures.Base;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.Dimensions;
@@ -42,12 +43,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 		private void AddDimensionNodes(ReportModel report)
 		{
 			NodeColumnViewModel root = new NodeColumnViewModel(this, null, NodeColumnViewModel.NodeColumnType.DimensionsRoot, "Dimensiones", null);
-			BaseExtendedModelCollection<DimensionModel> dimensions = GetDimensions(report);
+			BaseReportingDictionaryModel<DimensionModel> dimensions = GetDimensions(report);
 
-				// Ordena las dimensiones
-				dimensions.SortByName();
 				// Añade las dimensiones
-				foreach (DimensionModel dimension in dimensions)
+				foreach (DimensionModel dimension in dimensions.EnumerateValuesSorted())
 					AddDimensionNodes(root, dimension);
 				// Añade el nodo raíz al árbol
 				Children.Add(root);
@@ -59,21 +58,19 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 		private void AddDimensionNodes(NodeColumnViewModel root, DimensionModel dimension)
 		{
 			NodeColumnViewModel node = new NodeColumnViewModel(this, root, NodeColumnViewModel.NodeColumnType.Dimension, 
-															   string.IsNullOrEmpty(dimension.Name) ? dimension.GlobalId : dimension.Name, null);
-			BaseExtendedModelCollection<DimensionModel> childs = new BaseExtendedModelCollection<DimensionModel>();
+															   dimension.Id, null);
+			BaseReportingDictionaryModel<DimensionModel> childs = new BaseReportingDictionaryModel<DimensionModel>();
 
 				// Asigna el código de dimensión
-				node.DimensionId = dimension.GlobalId;
+				node.DimensionId = dimension.Id;
 				// Añade los campos de la dimensión
-				AddColumnNodes(node, dimension.DataSource.Columns, NodeColumnViewModel.NodeColumnType.DimensionColumn, dimension.GlobalId, string.Empty);
+				AddColumnNodes(node, dimension.DataSource.Columns, NodeColumnViewModel.NodeColumnType.DimensionColumn, dimension.Id, string.Empty);
 				// Crea la colección de dimensiones hija a partir de las relaciones
 				foreach (DimensionRelationModel relation in dimension.Relations)
 					if (relation.Dimension != null)
 						childs.Add(relation.Dimension);
-				// Ordena las dimensiones hija
-				childs.SortByName();
 				// Añade los nodos de dimensión hija
-				foreach (DimensionModel child in childs)
+				foreach (DimensionModel child in childs.EnumerateValuesSorted())
 					AddDimensionNodes(node, child);
 				// Añade el nodo a la raíz
 				root.Children.Add(node);
@@ -82,14 +79,14 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 		/// <summary>
 		///		Obtiene las dimensiones de un informe
 		/// </summary>
-		private BaseExtendedModelCollection<DimensionModel> GetDimensions(ReportModel report)
+		private BaseReportingDictionaryModel<DimensionModel> GetDimensions(ReportModel report)
 		{
-			BaseExtendedModelCollection<DimensionModel> dimensions = new BaseExtendedModelCollection<DimensionModel>();
+			BaseReportingDictionaryModel<DimensionModel> dimensions = new BaseReportingDictionaryModel<DimensionModel>();
 
 				// Añade las dimensiones
 				foreach (ReportDataSourceModel dataSource in report.ReportDataSources)
 					foreach (DimensionRelationModel relation in dataSource.Relations)
-						if (dimensions.Search(relation.Dimension.GlobalId) == null)
+						if (dimensions[relation.Dimension.Id] == null)
 							dimensions.Add(relation.Dimension);
 				// Devuelve las dimensiones
 				return dimensions;
@@ -105,13 +102,13 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 				// Añade los orígenes de datos
 				foreach (ReportDataSourceModel dataSource in report.ReportDataSources)
 				{
-					NodeColumnViewModel node = new NodeColumnViewModel(this, root, NodeColumnViewModel.NodeColumnType.Expression, dataSource.DataSource.Name, null);
+					NodeColumnViewModel node = new NodeColumnViewModel(this, root, NodeColumnViewModel.NodeColumnType.Expression, dataSource.DataSource.Id, null);
 
 						// Asigna el Id del origen de datos
-						node.DataSourceId = dataSource.DataSource.GlobalId;
+						node.DataSourceId = dataSource.DataSource.Id;
 						// Añade las columnas
 						AddColumnNodes(node, dataSource.DataSource.Columns, NodeColumnViewModel.NodeColumnType.Expression, 
-									   string.Empty, dataSource.DataSource.GlobalId);
+									   string.Empty, dataSource.DataSource.Id);
 						// Añade el nodo a la raíz
 						root.Children.Add(node);
 				}
@@ -122,16 +119,14 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 		/// <summary>
 		///		Añade los nodos de columnas
 		/// </summary>
-		private void AddColumnNodes(NodeColumnViewModel root, BaseExtendedModelCollection<DataSourceColumnModel> columns, 
+		private void AddColumnNodes(NodeColumnViewModel root, BaseReportingDictionaryModel<DataSourceColumnModel> columns, 
 									NodeColumnViewModel.NodeColumnType nodeColumnType, string dimensionId, string dataSourceId)
 		{
-			// Ordena las columnas
-			columns.SortByName();
 			// Añade las columnas adecuadas al árbol
-			foreach (DataSourceColumnModel column in columns)
-				if (!column.IsPrimaryKey && column.Visible)
+			foreach (DataSourceColumnModel column in columns.EnumerateValuesSorted())
+				if (column.Visible)
 				{
-					NodeColumnViewModel node = new NodeColumnViewModel(this, root, nodeColumnType, string.IsNullOrWhiteSpace(column.Name) ? column.ColumnId : column.Name, column);
+					NodeColumnViewModel node = new NodeColumnViewModel(this, root, nodeColumnType, column.Id, column);
 
 						// Asigna las propiedades
 						node.DimensionId = dimensionId;
@@ -149,7 +144,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 			ReportRequestModel request = new ReportRequestModel();
 
 				// Asigna el código de informe
-				request.ReportId = ReportViewModel.Report.GlobalId;
+				request.ReportId = ReportViewModel.Report.Id;
 				// Obtiene las columnas de dimensión y de expresión
 				request.Dimensions.AddRange(GetRequestDimensions(Children));
 				request.Expressions.AddRange(GetRequestExpressions(Children));
@@ -203,7 +198,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 									case NodeColumnViewModel.NodeColumnType.DimensionColumn:
 											DimensionColumnRequestModel column = new DimensionColumnRequestModel
 																						{
-																							ColumnId = node.Column.ColumnId,
+																							ColumnId = node.Column.Id,
 																							Visible = node.IsChecked
 																						};
 
@@ -250,7 +245,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 										{
 											ExpressionColumnRequestModel column = new ExpressionColumnRequestModel
 																					{
-																						ColumnId = nodeExpression.Column.GlobalId,
+																						ColumnId = nodeExpression.Column.Id,
 																						AggregatedBy = nodeExpression.GeSelectedAggregation()
 																					};
 

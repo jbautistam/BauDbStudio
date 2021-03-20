@@ -44,7 +44,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Relation
 			// Carga la lista de claves foráneas
 			LoadListForeignKeys();
 			// Asigna las propiedades
-			TargetDimensionName = Relation?.Dimension?.Name;
+			TargetDimensionName = Relation?.Dimension?.Id;
 			ForeignKeysTitle = GetForeignKeysName();
 		}
 
@@ -55,17 +55,15 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Relation
 		{
 			// Inicializa el combo
 			ComboDimensions = new ComboViewModel(this);
-			// Ordena las dimensiones por nombre
-			DataSource.DataWarehouse.Dimensions.SortByName();
 			// Añade los elementos
 			ComboDimensions.AddItem(-1, "<Seleccione una dimensión>");
-			foreach (DimensionModel dimension in DataSource.DataWarehouse.Dimensions)
+			foreach (DimensionModel dimension in DataSource.DataWarehouse.Dimensions.EnumerateValuesSorted())
 			{
 				// Añade el elemento
-				ComboDimensions.AddItem(ComboDimensions.Items.Count + 1, dimension.Name, dimension);
+				ComboDimensions.AddItem(ComboDimensions.Items.Count + 1, dimension.Id, dimension);
 				// Selecciona el elemento si es la misma dimensión
 				if (Relation != null && Relation.Dimension != null && 
-						dimension.GlobalId.Equals(Relation.Dimension.GlobalId, StringComparison.CurrentCultureIgnoreCase))
+						dimension.Id.Equals(Relation.Dimension.Id, StringComparison.CurrentCultureIgnoreCase))
 					ComboDimensions.SelectedItem = ComboDimensions.Items[ComboDimensions.Items.Count - 1];
 			}
 			// Selecciona el primer elemento
@@ -81,14 +79,14 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Relation
 			// Limpia la lista
 			ForeignKeys = new ObservableCollection<ListItemForeignKeyViewModel>();
 			// Añade los elementos a la lista
-			foreach (DataSourceColumnModel column in DataSource.Columns)
+			foreach (DataSourceColumnModel column in DataSource.Columns.EnumerateValuesSorted())
 			{
 				string targetColumnId = string.Empty;
 
 					// Obtiene la columna relacionada
 					if (Relation != null)
 						foreach (RelationForeignKey relationKey in Relation.ForeignKeys)
-							if (relationKey.ColumnId.Equals(column.ColumnId, StringComparison.CurrentCultureIgnoreCase))
+							if (relationKey.ColumnId.Equals(column.Id, StringComparison.CurrentCultureIgnoreCase))
 								targetColumnId = relationKey.TargetColumnId;
 					// Añade la columna
 					ForeignKeys.Add(new ListItemForeignKeyViewModel(column, GetDimension(), targetColumnId));
@@ -134,7 +132,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Relation
 			if (ValidateData())
 			{
 				// Asigna las propiedades que se van a mostrar en la lista
-				TargetDimensionName = GetDimension().Name;
+				TargetDimensionName = GetDimension().Id;
 				ForeignKeysTitle = GetForeignKeysName();
 				// Indica que ya no es nuevo y está grabado
 				IsUpdated = false;
@@ -157,7 +155,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Relation
 
 						// Añade el título a la cadena
 						if (relatedColumn != null)
-							title = title.AddWithSeparator($"{foreignKey.ColumnName} -> {relatedColumn.ColumnId}", ",");
+							title = title.AddWithSeparator($"{foreignKey.ColumnName} -> {relatedColumn.Id}", ",");
 				}
 				// Si ha llegado hasta aquí es porque no se ha seleccionado ninguna clave foránea
 				return title;

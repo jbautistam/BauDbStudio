@@ -11,8 +11,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.DataSour
 	public class DataSourceSqlViewModel : BaseObservableObject, IDetailViewModel
 	{
 		// Variables privadas
-		private string _key, _name, _description, _sql, _header;
+		private string _key, _sql, _header;
 		private ListDataSourceColumnsViewModel _columns;
+		private ListDataSourceParametersViewModel _parameters;
 
 		public DataSourceSqlViewModel(ReportingSolutionViewModel reportingSolutionViewModel, DataSourceSqlModel dataSource)
 		{
@@ -29,21 +30,12 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.DataSour
 		private void InitViewModel()
 		{
 			// Asigna las propiedades
-			if (string.IsNullOrWhiteSpace(DataSource.Name))
-			{
-				Header = "Nuevo origen de datos";
-				Key = string.Empty;
-			}
-			else
-			{
-				Header = DataSource.Name;
-				Key = DataSource.GlobalId;
-			}
-			Name = DataSource.Name;
+			Header = DataSource.Id;
+			Key = DataSource.Id;
 			Sql = DataSource.Sql;
-			Description = DataSource.Description;
 			// Carga las columnas
 			ColumnsViewModel = new ListDataSourceColumnsViewModel(ReportingSolutionViewModel, DataSource, true);
+			ParametersViewModel = new ListDataSourceParametersViewModel(ReportingSolutionViewModel, DataSource, true);
 			// Indica que por ahora no ha habido modificaciones
 			IsUpdated = false;
 		}
@@ -53,7 +45,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.DataSour
 		/// </summary>
 		public string GetSaveAndCloseMessage()
 		{
-			return $"¿Desea grabar las modificaciones del origen de datos '{Name}'?";
+			return $"¿Desea grabar las modificaciones del origen de datos '{Key}'?";
 		}
 
 		/// <summary>
@@ -66,13 +58,11 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.DataSour
 				// Comprueba los datos
 				if (string.IsNullOrWhiteSpace(Key))
 					ReportingSolutionViewModel.SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Introduzca la clave del origen de datos");
-				else if (string.IsNullOrWhiteSpace(Name))
-					ReportingSolutionViewModel.SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Introduzca el nombre del origen de datos");
 				else if (string.IsNullOrWhiteSpace(Sql))
 					ReportingSolutionViewModel.SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Introduzca el comando SQL del origen de datos");
 				else if (ColumnsViewModel.Items.Count == 0)
 					ReportingSolutionViewModel.SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("No se ha definido ninguna columna");
-				else if (ColumnsViewModel.ValidateData())
+				else if (ColumnsViewModel.ValidateData() && ParametersViewModel.ValidateData())
 					validated = true;
 				// Devuelve el valor que indica si se ha podido grabar
 				return validated;
@@ -86,20 +76,21 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.DataSour
 			if (ValidateData())
 			{
 				// Añade el origen de datos si es nuevo
-				if (DataSource.DataWarehouse.DataSources.Search(DataSource.GlobalId) == null)
+				if (DataSource.DataWarehouse.DataSources[DataSource.Id] == null)
 					DataSource.DataWarehouse.DataSources.Add(DataSource);
 				// Asigna las propiedades
-				DataSource.GlobalId = Key;
-				DataSource.Name = Name;
-				DataSource.Description = Description;
+				DataSource.Id = Key;
 				DataSource.Sql = Sql;
 				// Asigna las columnas
 				DataSource.Columns.Clear();
 				DataSource.Columns.AddRange(ColumnsViewModel.GetColumns());
+				// Asigna los parámetros
+				DataSource.Parameters.Clear();
+				DataSource.Parameters.AddRange(ParametersViewModel.GetParameters());
 				// Graba la solución
 				ReportingSolutionViewModel.SaveDataWarehouse(DataSource.DataWarehouse);
 				// Cambia la cabecera
-				Header = DataSource.Name;
+				Header = DataSource.Id;
 				// Indica que no ha habido modificaciones
 				IsUpdated = false;
 			}
@@ -129,7 +120,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.DataSour
 		/// </summary>
 		public string TabId
 		{
-			get { return $"{GetType().ToString()}_{DataSource.GlobalId}"; }
+			get { return $"{GetType().ToString()}_{DataSource.Id}"; }
 		}
 
 		/// <summary>
@@ -139,24 +130,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.DataSour
 		{
 			get { return _key; }
 			set { CheckProperty(ref _key, value); }
-		}
-
-		/// <summary>
-		///		Nombre
-		/// </summary>
-		public string Name
-		{
-			get { return _name; }
-			set { CheckProperty(ref _name, value); }
-		}
-
-		/// <summary>
-		///		Descripción
-		/// </summary>
-		public string Description
-		{
-			get { return _description; }
-			set { CheckProperty(ref _description, value); }
 		}
 
 		/// <summary>
@@ -175,6 +148,15 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.DataSour
 		{
 			get { return _columns; }
 			set { CheckProperty(ref _columns, value); }
+		}
+
+		/// <summary>
+		///		Parámetros
+		/// </summary>
+		public ListDataSourceParametersViewModel ParametersViewModel
+		{
+			get { return _parameters; }
+			set { CheckProperty(ref _parameters, value); }
 		}
 	}
 }

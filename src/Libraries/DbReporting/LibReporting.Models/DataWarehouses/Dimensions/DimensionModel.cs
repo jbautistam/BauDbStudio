@@ -1,6 +1,5 @@
 ﻿using System;
 
-using Bau.Libraries.LibDataStructures.Base;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.Relations;
 
 namespace Bau.Libraries.LibReporting.Models.DataWarehouses.Dimensions
@@ -8,7 +7,7 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses.Dimensions
 	/// <summary>
 	///		Clase con los datos de una dimensión
 	/// </summary>
-	public class DimensionModel : BaseExtendedModel
+	public class DimensionModel : Base.BaseReportingModel
 	{
 		public DimensionModel(DataWarehouseModel dataWarehouse)
 		{
@@ -16,12 +15,28 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses.Dimensions
 		}
 
 		/// <summary>
+		///		Compara el valor de dos elementos para ordenarlo
+		/// </summary>
+		public override int CompareTo(Base.BaseReportingModel item)
+		{
+			if (item is DimensionModel dimension)
+				return Id.CompareTo(dimension.Id);
+			else
+				return -1;
+		}
+
+		/// <summary>
+		///		Descripción de la <see cref="DimensionModel"/>
+		/// </summary>
+		public string Description { get; set; }
+
+		/// <summary>
 		///		Comprueba si una columna está en esta dimensión o en alguna de sus hijas
 		/// </summary>
 		public bool HasColumn(string dimensionId, string columnId)
 		{
 			// Si la columna está en esta dimensión ...
-			if (GlobalId.Equals(dimensionId, StringComparison.CurrentCultureIgnoreCase) && DataSource.HasColumn(columnId))
+			if (Id.Equals(dimensionId, StringComparison.CurrentCultureIgnoreCase) && DataSource.HasColumn(columnId))
 				return true;
 			else // ... si la columna está en alguna dimensión de la jerarquía
 				foreach (DimensionRelationModel relation in Relations)

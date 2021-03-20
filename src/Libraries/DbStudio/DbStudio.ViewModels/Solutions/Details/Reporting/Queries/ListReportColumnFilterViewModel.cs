@@ -36,7 +36,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 			// Limpia la lista
 			FiltersViewModel = new ControlItemCollectionViewModel<ListItemReportColumnFilterViewModel>();
 			// Asigna las propiedades
-			Name = NodeColumnViewModel.Column.Name;
+			Name = NodeColumnViewModel.Column.Id;
 			Type = NodeColumnViewModel.Column.Type.ToString();
 			// Indica que no ha habido modificaciones
 			IsUpdated = false;

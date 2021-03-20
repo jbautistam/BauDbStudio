@@ -11,7 +11,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Dimensio
 	public class DimensionViewModel : BaseObservableObject, IDetailViewModel
 	{
 		// Variables privadas
-		private string _key, _dataSourceId, _name, _description;
+		private string _key, _dataSourceId, _description;
 		private bool _isNew;
 		private Relations.ListRelationViewModel _listRelationsViewModel;
 
@@ -38,33 +38,17 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Dimensio
 		{
 			// Asigna las propiedades básicas
 			if (_isNew)
-			{
-				switch (Dimension.DataSource)
-				{
-					case LibReporting.Models.DataWarehouses.DataSets.DataSourceTableModel dataSourceTable:
-							Name = $"Dim{dataSourceTable.Table}";
-							DataSourceId = dataSourceTable.GlobalId;
-						break;
-					case LibReporting.Models.DataWarehouses.DataSets.DataSourceSqlModel dataSourceSql:
-							Name = $"Dim{dataSourceSql.Name}";
-							DataSourceId = dataSourceSql.GlobalId;
-						break;
-				}
-				Key = Name;
-			}
+				Key = string.Empty;
 			else
-			{
-				Key = Dimension.GlobalId;
-				Name = Dimension.Name;
-				DataSourceId = Dimension.DataSource.GlobalId;
-			}
+				Key = Dimension.Id;
+			DataSourceId = Dimension.DataSource.Id;
 			// Asigna el resto de propiedades
 			Description = Dimension.Description;
 			// Carga las relaciones hijas
 			ListRelationsViewModel = new Relations.ListRelationViewModel(ReportingSolutionViewModel, Dimension.DataSource, Dimension.Relations);
 			ListRelationsViewModel.Load();
 			// Indica que por ahora no ha habido modificaciones
-			IsUpdated = false;
+			IsUpdated = _isNew;
 			ListRelationsViewModel.IsUpdated = false;
 		}
 
@@ -73,7 +57,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Dimensio
 		/// </summary>
 		public string GetSaveAndCloseMessage()
 		{
-			return $"¿Desea grabar las modificaciones de la dimensión '{Name}'?";
+			return $"¿Desea grabar las modificaciones de la dimensión '{Key}'?";
 		}
 
 		/// <summary>
@@ -86,8 +70,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Dimensio
 				// Comprueba los datos
 				if (string.IsNullOrWhiteSpace(Key))
 					ReportingSolutionViewModel.SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Introduzca la clave de la dimensión");
-				else if (string.IsNullOrWhiteSpace(Name))
-					ReportingSolutionViewModel.SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Introduzca el nombre de la dimensión");
 				else
 					validated = true;
 				// Devuelve el valor que indica si se ha podido grabar
@@ -102,8 +84,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Dimensio
 			if (ValidateData())
 			{
 				// Asigna las propiedades a la dimensión
-				Dimension.GlobalId = Key;
-				Dimension.Name = Name;
+				Dimension.Id = Key;
 				Dimension.Description = Description;
 				// Si es nuevo se añade a la colección
 				if (_isNew)
@@ -139,7 +120,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Dimensio
 		/// </summary>
 		public string Header
 		{
-			get { return Name; }
+			get { return Dimension.Id; }
 		}
 
 		/// <summary>
@@ -147,7 +128,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Dimensio
 		/// </summary>
 		public string TabId
 		{
-			get { return $"{GetType().ToString()}_{Dimension.GlobalId}"; }
+			get { return $"{GetType().ToString()}_{Dimension.Id}"; }
 		}
 
 		/// <summary>
@@ -166,15 +147,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Dimensio
 		{
 			get { return _dataSourceId; }
 			set { CheckProperty(ref _dataSourceId, value); }
-		}
-
-		/// <summary>
-		///		Nombre
-		/// </summary>
-		public string Name
-		{
-			get { return _name; }
-			set { CheckProperty(ref _name, value); }
 		}
 
 		/// <summary>

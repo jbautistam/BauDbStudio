@@ -25,15 +25,11 @@
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto"/>
 					<ColumnDefinition Width="*"/>
-					<ColumnDefinition Width="Auto"/>
-					<ColumnDefinition Width="2*"/>
 				</Grid.ColumnDefinitions>
 				<Label Grid.Row="0" Grid.Column="0" Content="Clave:" Margin="5"/>
 				<TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=Key,UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
-				<Label Grid.Row="0" Grid.Column="2" Content="Nombre:" Margin="5"/>
-				<TextBox Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="3" Text="{Binding Path=Name,UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
 				<Label Grid.Row="2" Grid.Column="0" Content="Descripción:" Margin="5"/>
-				<TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding Path=Description,UpdateSourceTrigger=PropertyChanged}" Margin="5"
+				<TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Path=Description,UpdateSourceTrigger=PropertyChanged}" Margin="5"
 							AcceptsReturn="True" MaxLines="5" MinLines="5" VerticalContentAlignment="Top"/>
 			</Grid>
 		</GroupBox>

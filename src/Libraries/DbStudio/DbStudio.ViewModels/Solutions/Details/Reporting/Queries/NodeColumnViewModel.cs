@@ -51,7 +51,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 			}
 			else // ... es una columna, le asigna sus propiedades
 			{
-				CanSelect = !column.IsPrimaryKey;
+				CanSelect = true;
 				SortOrder = BaseColumnRequestModel.SortOrder.Undefined;
 			}
 			// Asigna los filtros

@@ -32,7 +32,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 		/// </summary>
 		protected override void AddRootNodes()
 		{
-			foreach (DataWarehouseModel dataWarehouse in ReportingSolutionViewModel.ReportingManager.Schema.DataWarehouses)
+			foreach (DataWarehouseModel dataWarehouse in ReportingSolutionViewModel.ReportingSolutionManager.Manager.Schema.DataWarehouses.EnumerateValuesSorted())
 				Children.Add(new NodeDataWarehouseViewModel(this, null, dataWarehouse));
 		}
 
@@ -47,7 +47,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 					return true;
 				case nameof(NewDataSourceCommand):
 				case nameof(NewReportCommand):
-					return SelectedNode is NodeDataWarehouseViewModel;
+					return ReportingSolutionViewModel.ReportingSolutionManager.Manager.Schema.DataWarehouses.Count > 0;
 				case nameof(NewDimensionCommand):
 					return SelectedNode is NodeDataSourceViewModel;
 				case nameof(OpenCommand):
@@ -55,7 +55,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 				case nameof(QueryCommand):
 					return SelectedNode is NodeReportViewModel || SelectedNode is NodeDataSourceViewModel;
 				case nameof(DeleteCommand):
-					return SelectedNode is NodeDataWarehouseViewModel;
+					return SelectedNode is NodeDataWarehouseViewModel || SelectedNode is NodeReportViewModel || SelectedNode is NodeDimensionViewModel ||
+						   (SelectedNode is NodeDataSourceViewModel nodeDataSource && nodeDataSource.DataSource is DataSourceSqlModel);
 				default:
 					return false;
 			}
@@ -92,11 +93,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 				if (!string.IsNullOrWhiteSpace(fileName) && System.IO.File.Exists(fileName))
 				{
 					// Añade un almacén de datos a la solución
-					ReportingSolutionViewModel.ReportingManager.AddDataWarehouse(fileName);
-					// Graba los datos de la solución
-					ReportingSolutionViewModel.SaveSolution();
-					// Y actualiza el árbol
-					Load();
+					ReportingSolutionViewModel.ReportingSolutionManager.AddDataWarehouse(fileName);
+					// Graba la solución y actualiza el árbol
+					SaveSolution();
 				}
 		}
 
@@ -128,7 +127,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 		{
 			if (node is NodeDataWarehouseViewModel nodeDataWarehouse)
 				return nodeDataWarehouse.DataWarehouse;
-			else if (node.Parent != null)
+			else if (node?.Parent != null)
 				return GetSelectedDataWarehouse(node.Parent as BaseTreeNodeViewModel);
 			else
 				return null;
@@ -171,8 +170,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 					// Crea el informe
 					report = new LibReporting.Models.DataWarehouses.Reports.ReportModel(GetSelectedDataWarehouse(SelectedNode))
 												{
-													GlobalId = "RptNewReport",
-													Name = "Nuevo informe"
+													Id = "RptNewReport"
 												};
 					// Indica que es nuevo
 					isNew = true;
@@ -194,6 +192,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 						ReportingSolutionViewModel.SolutionViewModel.MainViewModel.MainController.OpenWindow
 								(new Queries.ReportViewModel(ReportingSolutionViewModel, node.Report));
 					break;
+				case NodeDataSourceViewModel node:
+						OpenQueryDataSource(node.DataSource);
+					break;
 			}
 		}
 
@@ -207,6 +208,15 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 				case DataWarehouseModel item:
 						DeleteDataWarehouse(item);
 					break;
+				case LibReporting.Models.DataWarehouses.Dimensions.DimensionModel item:
+						DeleteDimension(item);
+					break;
+				case DataSourceSqlModel item:
+						DeleteDataSourceSql(item);
+					break;
+				case LibReporting.Models.DataWarehouses.Reports.ReportModel item:
+						DeleteReport(item);
+					break;
 			}
 		}
 
@@ -218,12 +228,123 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 			if (SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowQuestion($"¿Realmente desea borrar los datos del almacén de datos {dataWarehouse.Name}?"))
 			{
 				// Borra el almacén de datos
-				ReportingSolutionViewModel.ReportingManager.RemoveDataWarehouse(dataWarehouse);
-				// Graba la solución
-				ReportingSolutionViewModel.SaveSolution();
-				// Actualiza el árbol
-				Load();
+				ReportingSolutionViewModel.ReportingSolutionManager.RemoveDataWarehouse(dataWarehouse);
+				// Graba la solución y actualiza el árbol
+				SaveSolution();
 			}
+		}
+
+		/// <summary>
+		///		Borra un origen de datos de SQL
+		/// </summary>
+		private void DeleteDataSourceSql(DataSourceSqlModel dataSource)
+		{
+			if (SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowQuestion($"¿Realmente desea borrar los datos del origen de datos {dataSource.Id}?"))
+			{
+				// Borra el origen de datos
+				dataSource.DataWarehouse.DataSources.Remove(dataSource);
+				// Graba la solución y actualiza el árbol
+				SaveDataWarehouse(dataSource.DataWarehouse);
+			}
+		}
+
+		/// <summary>
+		///		Borra los datos de una dimensión
+		/// </summary>
+		private void DeleteDimension(LibReporting.Models.DataWarehouses.Dimensions.DimensionModel dimension)
+		{
+			if (SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowQuestion($"¿Realmente desea borrar los datos de la dimensión {dimension.Id}?"))
+			{
+				// Borra la dimensión
+				dimension.DataWarehouse.Dimensions.Remove(dimension);
+				// Graba la solución y actualiza el árbol
+				SaveDataWarehouse(dimension.DataWarehouse);
+			}
+		}
+
+		/// <summary>
+		///		Borra los datos de un informe
+		/// </summary>
+		private void DeleteReport(LibReporting.Models.DataWarehouses.Reports.ReportModel report)
+		{
+			if (SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowQuestion($"¿Realmente desea borrar los datos del informe {report.Id}?"))
+			{
+				// Borra el informe
+				report.DataWarehouse.Reports.Remove(report);
+				// Graba la solución y actualiza el árbol
+				SaveDataWarehouse(report.DataWarehouse);
+			}
+		}
+
+		/// <summary>
+		///		Graba la solución y actualiza el árbo
+		/// </summary>
+		private void SaveSolution()
+		{
+			// Graba la solución
+			ReportingSolutionViewModel.SaveSolution();
+			// Actualiza el árbol
+			Load();
+		}
+
+		/// <summary>
+		///		Graba el archivo de esquema del dataWarehouse
+		/// </summary>
+		private void SaveDataWarehouse(DataWarehouseModel dataWarehouse)
+		{
+			// Graba la solución
+			ReportingSolutionViewModel.SaveDataWarehouse(dataWarehouse);
+			// Actualiza el árbol
+			Load();
+		}
+
+		/// <summary>
+		///		Abre una ventana de consulta de un origen de datos
+		/// </summary>
+		private void OpenQueryDataSource(BaseDataSourceModel dataSource)
+		{
+			string sql = string.Empty;
+
+				// Obtiene la cadena SQL para la consulta
+				if (dataSource is DataSourceSqlModel dataSourceSql)
+					sql = dataSourceSql.Sql;
+				else if (dataSource is DataSourceTableModel dataSourceTable)
+					sql = GetSql(dataSourceTable);
+				// Abre la consulta
+				if (!string.IsNullOrWhiteSpace(sql))
+					ReportingSolutionViewModel.SolutionViewModel.MainViewModel.MainController
+							.OpenWindow(new Details.Queries.ExecuteQueryViewModel(ReportingSolutionViewModel.SolutionViewModel, string.Empty, sql));
+		}
+
+		/// <summary>
+		///		Obtiene la cadena SQL asociada a una tabla
+		/// </summary>
+		private string GetSql(DataSourceTableModel dataSourceTable)
+		{
+			string fields = string.Empty;
+			int charsFromLastNewLine = 0, index = 0;
+
+				// Añade las columnas
+				foreach (DataSourceColumnModel column in dataSourceTable.Columns.EnumerateValuesSorted())
+				{
+					// Cuenta el número de caracteres
+					charsFromLastNewLine += dataSourceTable.Table.Length + column.Id.Length + 2;
+					// Añade el nombre de columna
+					fields += $"[{dataSourceTable.Table}].[{column.Id}]";
+					// Añade la coma si es necesario
+					if (index++ < dataSourceTable.Columns.Count - 1)
+						fields += ", ";
+					// Añade un salto de línea si es necesario
+					if (charsFromLastNewLine > 80)
+					{
+						// Añade el salto de línea
+						fields += Environment.NewLine + "\t\t";
+						// Inicializa el contador
+						charsFromLastNewLine = 0;
+					}
+				}
+				// Devuelve la cadena SQL
+				return $"SELECT {fields} {Environment.NewLine}\tFROM [{dataSourceTable.Schema}].[{dataSourceTable.Table}]";
 		}
 
 		/// <summary>

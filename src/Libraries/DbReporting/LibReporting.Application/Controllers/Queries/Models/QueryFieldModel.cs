@@ -33,15 +33,15 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 			switch (aggregation)
 			{
 				case ExpressionColumnRequestModel.AggregationType.Average:
-					return $"Average {Field}";
+					return $"{Field}_AVG";
 				case ExpressionColumnRequestModel.AggregationType.Max:
-					return $"Max {Field}";
+					return $"{Field}_MAX";
 				case ExpressionColumnRequestModel.AggregationType.Min:
-					return $"Min {Field}";
+					return $"{Field}_MIN";
 				case ExpressionColumnRequestModel.AggregationType.StandardDeviation:
-					return $"Standard deviation {Field}";
+					return $"{Field}_STD";
 				case ExpressionColumnRequestModel.AggregationType.Sum:
-					return $"Sum {Field}";
+					return $"{Field}_SUM";
 				default:
 					return Field;
 			}
@@ -77,6 +77,21 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 					default:
 						return computed;
 				}
+		}
+
+		/// <summary>
+		///		Compara los datos del campo
+		/// </summary>
+		internal bool CompareWith(string columnId, string alias)
+		{
+			bool equal = Field.Equals(columnId, StringComparison.CurrentCultureIgnoreCase);
+
+				// Si el nombre de columna es igual, compara los alias
+				//? Concatena un carácter # para evitar tener que hacer comparaciones con cadenas vacías
+				if (equal)
+					equal = (Alias + "#").Equals(alias + "#", StringComparison.CurrentCultureIgnoreCase);
+				// Devuelve el valor que indica si los datos son iguales
+				return equal;
 		}
 
 		/// <summary>

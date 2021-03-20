@@ -3,8 +3,6 @@ using System.Collections.Generic;
 
 using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.LibReporting.Models;
-using Bau.Libraries.LibReporting.Models.DataWarehouses.Dimensions;
-using Bau.Libraries.LibReporting.Models.DataWarehouses.Relations;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.Reports;
 using Bau.Libraries.LibReporting.Requests.Models;
 using Bau.Libraries.LibReporting.Application.Controllers.Queries.Models;
@@ -57,21 +55,6 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 				sql += Environment.NewLine + GetSqlJoinBlocks(dimensionQueries, expressionQuery);
 				// Devuelve la cadena SQL
 				return sql;
-		}
-
-		/// <summary>
-		///		Pone una cadena en bonito
-		/// </summary>
-		private string Prettify(string sql)
-		{
-			Prettifier.StringPrettifier prettifier = new Prettifier.StringPrettifier();
-
-				// Asigna la indentación
-				prettifier.Indent();
-				// Añade la cadena
-				prettifier.Append(sql, 100, ",");
-				// Devuevle la cadena
-				return prettifier.ToString();
 		}
 
 		/// <summary>
@@ -146,7 +129,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 
 				// Añade la comparación de las claves foráneas
 				foreach (QueryForeignKeyFieldModel foreignKey in expressionQuery.ForeignKeys)
-					if (foreignKey.Dimension.GlobalId.Equals(dimensionQuery.SourceId, StringComparison.CurrentCultureIgnoreCase))
+					if (foreignKey.Dimension.Id.Equals(dimensionQuery.SourceId, StringComparison.CurrentCultureIgnoreCase))
 					{
 						// Añade la cláusula AND si es necesario
 						if (!string.IsNullOrWhiteSpace(sql))
@@ -177,7 +160,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 				// Obtiene los campos de las expresiones
 				foreach (QueryFieldModel field in expressionQuery.Fields)
 					if (!field.IsPrimaryKey && field.Visible)
-						sqlFields = sqlFields.AddWithSeparator($"[{expressionQuery.Alias}].[{field.Alias}]", ",");
+						sqlFields = sqlFields.AddWithSeparator($"[{expressionQuery.Alias}].[{field.Alias}] AS [{GetSqlFinalFieldName(expressionQuery.Alias, field.Alias)}]", ",");
 				// Devuelve la cadena SQL
 				return sqlFields;
 		}
@@ -192,10 +175,23 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 				// Añade los campos visualizables: los que no son clave primaria y están marcados como visibles (porque algunos
 				// estarán en la consulta únicamente por los filtros)
 				foreach (QueryFieldModel field in query.Fields)
-					if (!field.IsPrimaryKey && field.Visible)
-						sqlFields = sqlFields.AddWithSeparator($"[{tableAliasAtWith}].[{field.Alias}]", ",");
+					if (field.Visible)
+						sqlFields = sqlFields.AddWithSeparator($"[{tableAliasAtWith}].[{field.Alias}] AS [{GetSqlFinalFieldName(tableAliasAtWith, field.Alias)}]", ",");
 				// Devuelve la cadena con los campos
 				return sqlFields;
+		}
+
+		/// <summary>
+		///		Obtinee el nombre final de un campo: nombre de tabla + alias, todo sin espacios
+		/// </summary>
+		private string GetSqlFinalFieldName(string tableAlias, string fieldAlias)
+		{
+			string result = $"{tableAlias}_{fieldAlias}";
+
+				// Quita los espacios
+				result = result.Replace(' ', '_');
+				// Devuelve el nombre final del campo
+				return result;
 		}
 
 		/// <summary>

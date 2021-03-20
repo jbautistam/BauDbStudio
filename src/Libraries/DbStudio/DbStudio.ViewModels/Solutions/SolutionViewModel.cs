@@ -41,6 +41,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 			CreateImportFilesScriptsCommand = new BaseCommand(async _ => await CreateImportFilesScriptsAsync());
 			CreateSchemaXmlCommand  = new BaseCommand(async _ => await CreateSchemaXmlAsync());
 			CreateSchemaReportingXmlCommand = new BaseCommand(_ => CreateSchemaReportingXml());
+			CreateSchemaReportingSqlCommand = new BaseCommand(_ => CreateSchemaReportingSql());
 		}
 
 		/// <summary>
@@ -290,7 +291,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 						// Crea los archivos de esquema
 						try
 						{
-							LibReporting.Application.ReportingManager manager = new LibReporting.Application.ReportingManager();
+							LibReporting.Solution.ReportingSolutionManager manager = new LibReporting.Solution.ReportingSolutionManager();
 
 								// Graba el archivo
 								manager.SaveDataWarehouse(manager.ConvertSchemaDbToDataWarehouse(viewModel.Name, viewModel.SchemaFileName), viewModel.OutputFileName);
@@ -299,6 +300,38 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 								MainViewModel.MainController.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
 																			  "Generación de archivos de esquema para informes",
 																			  "Ha terminado correctamente la generación de los archivos de esquema para informes");
+						}
+						catch (Exception exception)
+						{
+							block.Error($"Error en la generación de archivos de esquema. {exception.Message}");
+						}
+						// Log
+						MainViewModel.MainController.Logger.Flush();
+					}
+		}
+
+		/// <summary>
+		///		Crea los archivos SQL de creación de un esquema para reporting sobre una base de datos
+		/// </summary>
+		private void CreateSchemaReportingSql()
+		{
+			Details.Reporting.Tools.CreateScriptsSqlReportingViewModel viewModel = new Details.Reporting.Tools.CreateScriptsSqlReportingViewModel(this);
+
+				if (MainViewModel.MainController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+					using (BlockLogModel block = MainViewModel.MainController.Logger.Default.CreateBlock(LogModel.LogType.Info, "Comienzo de la creación de scripts SQL de reporting"))
+					{
+						// Crea los archivos de esquema
+						try
+						{
+							LibReporting.Solution.ReportingSolutionManager manager = new LibReporting.Solution.ReportingSolutionManager();
+
+								// Graba el archivo
+								manager.ConvertSchemaReportingToSql(viewModel.SchemaFileName, viewModel.OutputFileName);
+								// Log
+								block.Info("Fin de la creación de archivos de scripts SQL para informes");
+								MainViewModel.MainController.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
+																			  "Generación de archivos SQL para informes",
+																			  "Ha terminado correctamente la generación de los archivos SQL de esquema para informes");
 						}
 						catch (Exception exception)
 						{
@@ -408,5 +441,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 		///		Crea los archivos XML de reporting a partir de un esquema de base de datos
 		/// </summary>
 		public BaseCommand CreateSchemaReportingXmlCommand { get; }
+
+		/// <summary>
+		///		Crea los scripts SQL de una base de datos de reporting a partir de un esquema XML de reporting
+		/// </summary>
+		public BaseCommand CreateSchemaReportingSqlCommand { get; }
 	}
 }

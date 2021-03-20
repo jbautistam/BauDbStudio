@@ -1,10 +1,11 @@
 ﻿using System;
 
+using Bau.Libraries.LibReporting.Models;
 using Bau.Libraries.LibDbProviders.Base.Schema;
 using Bau.Libraries.LibReporting.Models.DataWarehouses;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets;
 
-namespace Bau.Libraries.LibReporting.Application.Converters
+namespace Bau.Libraries.LibReporting.Solution.Converters
 {
 	/// <summary>
 	///		Conversor de un esquema de base de datos a un <see cref="DataWarehouseModel"/>
@@ -14,7 +15,7 @@ namespace Bau.Libraries.LibReporting.Application.Converters
 		/// <summary>
 		///		Convierte un archivo de esquema de base de datos en un <see cref="DataWarehouseModel"/>
 		/// </summary>
-		internal DataWarehouseModel Convert(Models.ReportingSchemaModel schema, string name, string fileName)
+		internal DataWarehouseModel Convert(ReportingSchemaModel schema, string name, string fileName)
 		{
 			SchemaDbModel schemaDb = new LibDbSchema.Repository.Xml.SchemaXmlManager().Load(fileName);
 			DataWarehouseModel dataWarehouse = new DataWarehouseModel(schema);
@@ -47,7 +48,7 @@ namespace Bau.Libraries.LibReporting.Application.Converters
 					DataSourceColumnModel column = new DataSourceColumnModel(dataSource);
 
 						// Asigna las propiedades
-						column.ColumnId = field.Name;
+						column.Id = field.Name;
 						column.IsPrimaryKey = field.IsKey;
 						column.Type = Convert(field.Type);
 						column.Required = field.IsRequired;

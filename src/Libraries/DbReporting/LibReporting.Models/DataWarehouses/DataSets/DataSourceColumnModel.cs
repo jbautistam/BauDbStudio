@@ -5,7 +5,7 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets
 	/// <summary>
 	///		Clase con los datos de una columna
 	/// </summary>
-	public class DataSourceColumnModel : LibDataStructures.Base.BaseExtendedModel
+	public class DataSourceColumnModel : Base.BaseReportingModel
 	{
 		/// <summary>
 		///		Tipo de campo
@@ -34,29 +34,20 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets
 		}
 
 		/// <summary>
-		///		Obtiene el título de la columna: nombre de columna dado por el usuario o column Id
+		///		Compara el valor de dos elementos para ordenarlo
 		/// </summary>
-		public string GetTitle()
+		public override int CompareTo(Base.BaseReportingModel item)
 		{
-			if (string.IsNullOrEmpty(Name))
-				return ColumnId;
+			if (item is DataSourceColumnModel column)
+				return Id.CompareTo(column.Id);
 			else
-				return Name;
+				return -1;
 		}
 
 		/// <summary>
 		///		Origen de datos
 		/// </summary>
 		public BaseDataSourceModel DataSource { get; }
-
-		/// <summary>
-		///		Id de Columna en la base de datos (el mismo valor que en GlobalId para facilitar las búsquedas)
-		/// </summary>
-		public string ColumnId 
-		{ 
-			get { return GlobalId; }
-			set { GlobalId = value; }
-		}
 
 		/// <summary>
 		///		Indica si esta columna es clave primaria
@@ -72,21 +63,6 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets
 		///		Indica si la columna es visible
 		/// </summary>
 		public bool Visible { get; set; } = true;
-
-		/// <summary>
-		///		Indica si se puede ordenar por esta columna
-		/// </summary>
-		public bool CanSort { get; set; } = true;
-
-		/// <summary>
-		///		Indica si se puede filtrar por esta columna
-		/// </summary>
-		public bool CanFilter { get; set; } = true;
-
-		/// <summary>
-		///		Indica si se puede agrupar por esta columna
-		/// </summary>
-		public bool CanGroupBy { get; set; } = true;
 
 		/// <summary>
 		///		Indica si es obligatoria

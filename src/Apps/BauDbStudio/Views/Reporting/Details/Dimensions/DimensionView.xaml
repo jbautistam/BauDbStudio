@@ -15,8 +15,7 @@
 			<Grid>
 				<Grid.RowDefinitions>
 					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="*"/>
 				</Grid.RowDefinitions>
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto"/>
@@ -28,10 +27,8 @@
 				<TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=Key,UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
 				<Label Grid.Row="0" Grid.Column="2" Content="Origen de datos:" Margin="5"/>
 				<TextBlock Grid.Row="0" Grid.Column="3" Text="{Binding Path=DataSourceId}" Margin="5" VerticalAlignment="Center"/>
-				<Label Grid.Row="1" Grid.Column="0" Content="Nombre:" Margin="5"/>
-				<TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding Path=Name,UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
-				<Label Grid.Row="2" Grid.Column="0" Content="Descripción:" Margin="5"/>
-				<TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding Path=Description,UpdateSourceTrigger=PropertyChanged}" Margin="5"
+				<Label Grid.Row="1" Grid.Column="0" Content="Descripción:" Margin="5"/>
+				<TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding Path=Description,UpdateSourceTrigger=PropertyChanged}" Margin="5"
 							AcceptsReturn="True" MaxLines="5" MinLines="5" VerticalContentAlignment="Top"/>
 			</Grid>
 		</GroupBox>

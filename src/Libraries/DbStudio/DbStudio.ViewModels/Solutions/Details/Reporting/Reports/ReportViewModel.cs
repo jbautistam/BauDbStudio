@@ -13,7 +13,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Reports
 	public class ReportViewModel : BaseObservableObject, IDetailViewModel
 	{
 		// Variables privadas
-		private string _header, _key, _name, _description;
+		private string _header, _key, _description;
 		private ObservableCollection<ReportDataSourceViewModel> _dataSources;
 		private ReportDataSourceViewModel _selectedDataSource;
 		private bool _isNew;
@@ -39,10 +39,12 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Reports
 		private void InitViewModel()
 		{
 			// Asigna las propiedades básicas
-			Key = Report.GlobalId;
-			Name = Report.Name;
+			if (_isNew)
+				Key = string.Empty;
+			else
+				Key = Report.Id;
 			Description = Report.Description;
-			Header = Report.Name;
+			Header = Key;
 			// Carga la lista de orígenes de datos
 			LoadDataSources();
 			// Indica que por ahora no ha habido modificaciones
@@ -84,7 +86,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Reports
 		/// </summary>
 		public string GetSaveAndCloseMessage()
 		{
-			return $"¿Desea grabar las modificaciones del informe '{Name}'?";
+			return $"¿Desea grabar las modificaciones del informe '{Key}'?";
 		}
 
 		/// <summary>
@@ -97,8 +99,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Reports
 				// Comprueba los datos
 				if (string.IsNullOrWhiteSpace(Key))
 					ReportingSolutionViewModel.SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Introduzca la clave del informe");
-				else if (string.IsNullOrWhiteSpace(Name))
-					ReportingSolutionViewModel.SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Introduzca el nombre del informe");
 				else if (ValidateDataSources())
 					validated = true;
 				// Devuelve el valor que indica si se ha podido grabar
@@ -136,8 +136,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Reports
 			if (ValidateData())
 			{
 				// Asigna las propiedades a la dimensión
-				Report.GlobalId = Key;
-				Report.Name = Name;
+				Report.Id = Key;
 				Report.Description = Description;
 				// Si es nuevo se añade a la colección
 				if (_isNew)
@@ -195,7 +194,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Reports
 		/// </summary>
 		public string TabId
 		{
-			get { return $"{GetType().ToString()}_{Report.GlobalId}"; }
+			get { return $"{GetType().ToString()}_{Report.Id}"; }
 		}
 
 		/// <summary>
@@ -205,15 +204,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Reports
 		{
 			get { return _key; }
 			set { CheckProperty(ref _key, value); }
-		}
-
-		/// <summary>
-		///		Nombre
-		/// </summary>
-		public string Name
-		{
-			get { return _name; }
-			set { CheckProperty(ref _name, value); }
 		}
 
 		/// <summary>

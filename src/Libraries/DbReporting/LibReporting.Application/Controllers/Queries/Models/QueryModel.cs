@@ -39,17 +39,17 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 			{
 				case DataSourceTableModel dataSource:
 						FromTable = dataSource.FullName;
-						FromAlias = dataSource.Name;
+						FromAlias = dataSource.Table;
 					break;
 				case DataSourceSqlModel dataSource:
 						FromTable = $"({dataSource.Sql})"; 
-						FromAlias = dataSource.GlobalId;
+						FromAlias = dataSource.Id;
 					break;
 			}
 		}
 
 		/// <summary>
-		///		Prepara la consulta únicamente con un nombre de tabla / alias (lo utiliza el generador de expresiones para los INNER JOIN con las consultas de dimensión
+		///		Prepara la consulta únicamente con un nombre de tabla / alias (lo utiliza el generador de expresiones para los INNER JOIN con las consultas de dimensión)
 		/// </summary>
 		internal void Prepare(string table, string alias)
 		{
@@ -82,14 +82,17 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 				prettifier.Indent();
 				prettifier.Append(GetSqlClauseFilters(true));
 				prettifier.Unindent();
+				prettifier.NewLine();
 				// Añade los GROUP BY
 				prettifier.Indent();
 				prettifier.Append(GetSqlGroupBy(), 100, ",");
 				prettifier.Unindent();
+				prettifier.NewLine();
 				// Añade los HAVING
 				prettifier.Indent();
 				prettifier.Append(GetSqlClauseFilters(false));
 				prettifier.Unindent();
+				prettifier.NewLine();
 				// Devuelve la consulta SQL
 				return prettifier.ToString();
 		}
@@ -263,7 +266,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 		{
 			// Recorre los campos buscando si hay algún agregado
 			foreach (QueryFieldModel field in Fields)
-				if (field.Aggregation != Requests.Models.ExpressionColumnRequestModel.AggregationType.NoAggregated)
+				if (field.Aggregation != ExpressionColumnRequestModel.AggregationType.NoAggregated)
 					return true;
 			// Si ha llegado hasta aquí es porque no hay ningún campo agregado
 			return false;
@@ -282,7 +285,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 				// Añade los campos a ordenar
 				foreach (QueryFieldModel field in Fields)
 					if (field.Visible && field.OrderBy != BaseColumnRequestModel.SortOrder.Undefined)
-						sql = sql.AddWithSeparator($"[{tableAliasAtWith}].[{field.Field}] {GetSortClause(field.OrderBy)}", ",");
+						sql = sql.AddWithSeparator($"[{tableAliasAtWith}].[{field.Alias}] {GetSortClause(field.OrderBy)}", ",");
 				// Añade los campos a ordenar de las consultas hijo
 				foreach (QueryJoinModel join in Joins)
 					sql = sql.AddWithSeparator(join.Query.GetOrderByFields(tableAliasAtWith), ",");

@@ -1,7 +1,5 @@
 ﻿using System;
 
-using Bau.Libraries.LibDataStructures.Base;
-
 namespace Bau.Libraries.LibReporting.Models
 {
 	/// <summary>
@@ -18,8 +16,8 @@ namespace Bau.Libraries.LibReporting.Models
 		}
 
 		/// <summary>
-		///		Capa de almacenes de datos
+		///		Almacenes de datos
 		/// </summary>
-		public BaseExtendedModelCollection<DataWarehouses.DataWarehouseModel> DataWarehouses { get; } = new BaseExtendedModelCollection<DataWarehouses.DataWarehouseModel>();
+		public Base.BaseReportingDictionaryModel<DataWarehouses.DataWarehouseModel> DataWarehouses { get; } = new Base.BaseReportingDictionaryModel<DataWarehouses.DataWarehouseModel>();
 	}
 }

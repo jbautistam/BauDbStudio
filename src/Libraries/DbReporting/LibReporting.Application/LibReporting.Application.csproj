@@ -8,7 +8,6 @@
   <ItemGroup>
     <Compile Remove="Controllers\Queries\Models\QueryGroupFieldModel.cs" />
     <Compile Remove="Controllers\Queries\QueryDimensionGeneratorOld.cs" />
-    <Compile Remove="Repositories\DataBaseRepository.cs" />
   </ItemGroup>
 
   <ItemGroup>

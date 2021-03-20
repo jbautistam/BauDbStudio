@@ -36,9 +36,9 @@ namespace Bau.Libraries.LibReporting.Application.Controllers
 		private ReportModel SearchReport(string reportId)
 		{
 			// Busca el informe entre los diferentes almacenes del esquema
-			foreach (DataWarehouseModel dataWarehouse in Manager.Schema.DataWarehouses)
+			foreach (DataWarehouseModel dataWarehouse in Manager.Schema.DataWarehouses.EnumerateValues())
 			{
-				ReportModel report = dataWarehouse.Reports.Search(reportId);
+				ReportModel report = dataWarehouse.Reports[reportId];
 
 					if (report != null)
 						return report;

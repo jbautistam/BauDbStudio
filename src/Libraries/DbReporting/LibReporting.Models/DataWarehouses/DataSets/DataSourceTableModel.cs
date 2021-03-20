@@ -10,6 +10,17 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets
 		public DataSourceTableModel(DataWarehouseModel dataWarehouse) : base(dataWarehouse) {}
 
 		/// <summary>
+		///		Compara el valor de dos elementos para ordenarlo
+		/// </summary>
+		public override int CompareTo(Base.BaseReportingModel item)
+		{
+			if (item is DataSourceTableModel table)
+				return FullName.CompareTo(table.FullName);
+			else
+				return -1;
+		}
+
+		/// <summary>
 		///		Esquema origen
 		/// </summary>
 		public string Schema { get; set; }

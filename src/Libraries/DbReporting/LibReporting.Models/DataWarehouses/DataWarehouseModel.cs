@@ -1,17 +1,26 @@
 ﻿using System;
 
-using Bau.Libraries.LibDataStructures.Base;
-
 namespace Bau.Libraries.LibReporting.Models.DataWarehouses
 {
 	/// <summary>
 	///		Clase con los datos de un almacén de datos
 	/// </summary>
-	public class DataWarehouseModel : BaseExtendedModel
+	public class DataWarehouseModel : Base.BaseReportingModel
 	{
 		public DataWarehouseModel(ReportingSchemaModel schema)
 		{
 			Schema = schema;
+		}
+
+		/// <summary>
+		///		Compara el valor de dos elementos para ordenarlo
+		/// </summary>
+		public override int CompareTo(Base.BaseReportingModel item)
+		{
+			if (item is DataWarehouseModel dataWarehouse)
+				return Name.CompareTo(dataWarehouse.Name);
+			else
+				return -1;
 		}
 
 		/// <summary>
@@ -20,18 +29,28 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses
 		public ReportingSchemaModel Schema { get; }
 
 		/// <summary>
-		///		Dimensiones del esquema
+		///		Nombre del elemento
 		/// </summary>
-		public BaseExtendedModelCollection<Dimensions.DimensionModel> Dimensions { get; } = new BaseExtendedModelCollection<Dimensions.DimensionModel>();
+		public string Name { get; set; }
+
+		/// <summary>
+		///		Descripción del elemento
+		/// </summary>
+		public string Description { get; set; }
 
 		/// <summary>
 		///		Orígenes de datos
 		/// </summary>
-		public BaseExtendedModelCollection<DataSets.BaseDataSourceModel> DataSources { get; } = new BaseExtendedModelCollection<DataSets.BaseDataSourceModel>();
+		public Base.BaseReportingDictionaryModel<DataSets.BaseDataSourceModel> DataSources { get; } = new Base.BaseReportingDictionaryModel<DataSets.BaseDataSourceModel>();
+
+		/// <summary>
+		///		Dimensiones del esquema
+		/// </summary>
+		public Base.BaseReportingDictionaryModel<Dimensions.DimensionModel> Dimensions { get; } = new Base.BaseReportingDictionaryModel<Dimensions.DimensionModel>();
 
 		/// <summary>
 		///		Informes
 		/// </summary>
-		public BaseExtendedModelCollection<Reports.ReportModel> Reports { get; } = new BaseExtendedModelCollection<Reports.ReportModel>();
+		public Base.BaseReportingDictionaryModel<Reports.ReportModel> Reports { get; } = new Base.BaseReportingDictionaryModel<Reports.ReportModel>();
 	}
 }
