@@ -32,7 +32,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 		/// </summary>
 		protected override void AddRootNodes()
 		{
-			foreach (DataWarehouseModel dataWarehouse in ReportingSolutionViewModel.ReportingManager.Schema.DataWarehouses.EnumerateValuesSorted())
+			foreach (DataWarehouseModel dataWarehouse in ReportingSolutionViewModel.ReportingSolutionManager.Manager.Schema.DataWarehouses.EnumerateValuesSorted())
 				Children.Add(new NodeDataWarehouseViewModel(this, null, dataWarehouse));
 		}
 
@@ -47,7 +47,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 					return true;
 				case nameof(NewDataSourceCommand):
 				case nameof(NewReportCommand):
-					return ReportingSolutionViewModel.ReportingManager.Schema.DataWarehouses.Count > 0;
+					return ReportingSolutionViewModel.ReportingSolutionManager.Manager.Schema.DataWarehouses.Count > 0;
 				case nameof(NewDimensionCommand):
 					return SelectedNode is NodeDataSourceViewModel;
 				case nameof(OpenCommand):
@@ -93,7 +93,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 				if (!string.IsNullOrWhiteSpace(fileName) && System.IO.File.Exists(fileName))
 				{
 					// Añade un almacén de datos a la solución
-					ReportingSolutionViewModel.ReportingManager.AddDataWarehouse(fileName);
+					ReportingSolutionViewModel.ReportingSolutionManager.AddDataWarehouse(fileName);
 					// Graba la solución y actualiza el árbol
 					SaveSolution();
 				}
@@ -228,7 +228,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 			if (SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowQuestion($"¿Realmente desea borrar los datos del almacén de datos {dataWarehouse.Name}?"))
 			{
 				// Borra el almacén de datos
-				ReportingSolutionViewModel.ReportingManager.RemoveDataWarehouse(dataWarehouse);
+				ReportingSolutionViewModel.ReportingSolutionManager.RemoveDataWarehouse(dataWarehouse);
 				// Graba la solución y actualiza el árbol
 				SaveSolution();
 			}

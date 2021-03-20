@@ -97,6 +97,9 @@ namespace Bau.DbStudio.Controllers
 					case Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Tools.CreateSchemaReportingXmlViewModel viewModel:
 							result = HostHelperController.ShowDialog(MainWindow, new Views.Reporting.Tools.CreateSchemaReportingXmlView(viewModel));
 						break;
+					case Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Tools.CreateScriptsSqlReportingViewModel viewModel:
+							result = HostHelperController.ShowDialog(MainWindow, new Views.Reporting.Tools.CreateReportingSqlView(viewModel));
+						break;
 					case Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries.ListReportColumnFilterViewModel viewModel:
 							result = HostHelperController.ShowDialog(MainWindow, new Views.Reporting.Queries.ListFilterColumnView(viewModel));
 						break;

@@ -3,7 +3,7 @@
 using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.LibMarkupLanguage;
 
-namespace Bau.Libraries.LibReporting.Application.Repositories
+namespace Bau.Libraries.LibReporting.Solution.Repositories
 {
 	/// <summary>
 	///		Repositorio de <see cref="Models.ReportingSolutionModel"/>
@@ -14,7 +14,7 @@ namespace Bau.Libraries.LibReporting.Application.Repositories
 		private const string TagRoot = "Reporting";
 		private const string TagFile = "File";
 
-		internal ReportingRepository(ReportingManager manager)
+		internal ReportingRepository(ReportingSolutionManager manager)
 		{
 			Manager = manager;
 		}
@@ -63,6 +63,6 @@ namespace Bau.Libraries.LibReporting.Application.Repositories
 		/// <summary>
 		///		Manager
 		/// </summary>
-		internal ReportingManager Manager { get; }
+		internal ReportingSolutionManager Manager { get; }
 	}
 }

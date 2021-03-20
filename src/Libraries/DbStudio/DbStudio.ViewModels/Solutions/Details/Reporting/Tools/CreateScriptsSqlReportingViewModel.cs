@@ -1,0 +1,109 @@
+﻿using System;
+
+namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Tools
+{
+	/// <summary>
+	///		ViewModel de creación de archivos de scripts SQL a partir de un archivo de reporting
+	/// </summary>
+	public class CreateScriptsSqlReportingViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewModel
+	{
+		// Variables privadas
+		private string _schemaFileName, _outputFileName, _maskFiles, _maskSqlFiles;
+
+		public CreateScriptsSqlReportingViewModel(SolutionViewModel solutionViewModel)
+		{
+			// Inicializa las propiedades
+			SolutionViewModel = solutionViewModel;
+			// Inicializa el viewModel
+			InitViewModel();
+		}
+
+		/// <summary>
+		///		Inicializa el ViewModel
+		/// </summary>
+		private void InitViewModel()
+		{
+			// Asigna las propiedades
+			MaskFiles = "Archivos XML (*.xml)|*.xml|Todos los archivos (*.*)|*.*";
+			MaskSqlFiles = "Archivos SQL (*.sql)|*.sql|Todos los archivos (*.*)|*.*";
+			OutputFileName = System.IO.Path.Combine(SolutionViewModel.MainViewModel.LastPathSelected, "ScriptReporting.sql");
+			// Indica que no ha habido modificaciones
+			IsUpdated = false;
+		}
+
+		/// <summary>
+		///		Comprueba los datos introducidos
+		/// </summary>
+		private bool ValidateData()
+		{
+			bool validated = false;
+
+				// Comprueba los datos introducidos
+				if (string.IsNullOrWhiteSpace(SchemaFileName) || !System.IO.File.Exists(SchemaFileName))
+					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Seleccione el archivo de esquema");
+				else if (string.IsNullOrWhiteSpace(OutputFileName))
+					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Seleccione el nombre de archivo");
+				else 
+					validated = true;
+				// Devuelve el valor que indica si los datos son correctos
+				return validated;
+		}
+
+		/// <summary>
+		///		Graba los datos
+		/// </summary>
+		protected override void Save()
+		{
+			if (ValidateData())
+			{
+				// Guarda el directorio seleccionado
+				SolutionViewModel.MainViewModel.LastPathSelected = System.IO.Path.GetDirectoryName(OutputFileName);
+				// Indica que ya no es nuevo y está grabado
+				IsUpdated = false;
+				// Cierra la ventana
+				RaiseEventClose(true);
+			}
+		}
+
+		/// <summary>
+		///		ViewModel de la solución
+		/// </summary>
+		public SolutionViewModel SolutionViewModel { get; }
+
+		/// <summary>
+		///		Nombre del archivo de esquema
+		/// </summary>
+		public string SchemaFileName
+		{
+			get { return _schemaFileName; }
+			set { CheckProperty(ref _schemaFileName, value); }
+		}
+
+		/// <summary>
+		///		Nombre del archivo de salida
+		/// </summary>
+		public string OutputFileName
+		{
+			get { return _outputFileName; }
+			set { CheckProperty(ref _outputFileName, value); }
+		}
+
+		/// <summary>
+		///		Máscara de archivos
+		/// </summary>
+		public string MaskFiles
+		{
+			get { return _maskFiles; }
+			set { CheckProperty(ref _maskFiles, value); }
+		}
+
+		/// <summary>
+		///		Máscara de archivos SQL
+		/// </summary>
+		public string MaskSqlFiles
+		{
+			get { return _maskSqlFiles; }
+			set { CheckProperty(ref _maskSqlFiles, value); }
+		}
+	}
+}

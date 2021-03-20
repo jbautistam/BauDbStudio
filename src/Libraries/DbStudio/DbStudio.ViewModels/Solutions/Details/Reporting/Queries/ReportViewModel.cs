@@ -53,7 +53,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 		/// </summary>
 		private string GetQueryRequested()
 		{
-			return ReportingSolutionViewModel.ReportingManager.GetSqlResponse(TreeColumns.GetReportRequest());
+			return ReportingSolutionViewModel.ReportingSolutionManager.GetSqlResponse(TreeColumns.GetReportRequest());
 		}
 
 		/// <summary>

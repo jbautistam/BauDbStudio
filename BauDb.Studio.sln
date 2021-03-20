@@ -99,7 +99,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibPowerShellManager", "..\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibJobProcessor.FilesShell", "src\Libraries\JobEtlProcessor\LibJobProcessor.FilesShell\LibJobProcessor.FilesShell.csproj", "{D7AF6379-565A-48AD-A6F5-3724D5AF3BE8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibSystem.Windows", "..\..\Libraries\Common\LibSystem.Windows\LibSystem.Windows.csproj", "{5611C077-29FB-4570-B1DB-059EC39E3989}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibSystem.Windows", "..\..\Libraries\Common\LibSystem.Windows\LibSystem.Windows.csproj", "{5611C077-29FB-4570-B1DB-059EC39E3989}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EtlConsole", "src\Apps\EtlConsole\EtlConsole.csproj", "{7049C62B-E69E-447B-8FD7-A190C7958E10}"
 EndProject
@@ -154,6 +154,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibReporting.Application", "src\Libraries\DbReporting\LibReporting.Application\LibReporting.Application.csproj", "{F55DB753-5835-4A52-A4A6-9ECCA003CCA7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DockLayout", "..\..\Controls\WPF\DockLayout\src\DockLayout.csproj", "{49F1DB65-C7EB-4F04-8B50-DF8ECF71A451}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibReporting.Solution", "src\Libraries\DbReporting\LibReporting.Solution\LibReporting.Solution.csproj", "{5A83A631-14B9-45CC-B47B-32E8D2867FC3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1359,6 +1361,26 @@ Global
 		{49F1DB65-C7EB-4F04-8B50-DF8ECF71A451}.Release|x64.Build.0 = Release|Any CPU
 		{49F1DB65-C7EB-4F04-8B50-DF8ECF71A451}.Release|x86.ActiveCfg = Release|Any CPU
 		{49F1DB65-C7EB-4F04-8B50-DF8ECF71A451}.Release|x86.Build.0 = Release|Any CPU
+		{5A83A631-14B9-45CC-B47B-32E8D2867FC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A83A631-14B9-45CC-B47B-32E8D2867FC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A83A631-14B9-45CC-B47B-32E8D2867FC3}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{5A83A631-14B9-45CC-B47B-32E8D2867FC3}.Debug|ARM.Build.0 = Debug|Any CPU
+		{5A83A631-14B9-45CC-B47B-32E8D2867FC3}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{5A83A631-14B9-45CC-B47B-32E8D2867FC3}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{5A83A631-14B9-45CC-B47B-32E8D2867FC3}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5A83A631-14B9-45CC-B47B-32E8D2867FC3}.Debug|x64.Build.0 = Debug|Any CPU
+		{5A83A631-14B9-45CC-B47B-32E8D2867FC3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5A83A631-14B9-45CC-B47B-32E8D2867FC3}.Debug|x86.Build.0 = Debug|Any CPU
+		{5A83A631-14B9-45CC-B47B-32E8D2867FC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A83A631-14B9-45CC-B47B-32E8D2867FC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A83A631-14B9-45CC-B47B-32E8D2867FC3}.Release|ARM.ActiveCfg = Release|Any CPU
+		{5A83A631-14B9-45CC-B47B-32E8D2867FC3}.Release|ARM.Build.0 = Release|Any CPU
+		{5A83A631-14B9-45CC-B47B-32E8D2867FC3}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{5A83A631-14B9-45CC-B47B-32E8D2867FC3}.Release|ARM64.Build.0 = Release|Any CPU
+		{5A83A631-14B9-45CC-B47B-32E8D2867FC3}.Release|x64.ActiveCfg = Release|Any CPU
+		{5A83A631-14B9-45CC-B47B-32E8D2867FC3}.Release|x64.Build.0 = Release|Any CPU
+		{5A83A631-14B9-45CC-B47B-32E8D2867FC3}.Release|x86.ActiveCfg = Release|Any CPU
+		{5A83A631-14B9-45CC-B47B-32E8D2867FC3}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1434,6 +1456,7 @@ Global
 		{BAA4BCDC-2BE0-4FFB-BB7B-882DA0C37884} = {E199818E-422C-4CC8-8B6E-8D6B86A2D563}
 		{F55DB753-5835-4A52-A4A6-9ECCA003CCA7} = {E199818E-422C-4CC8-8B6E-8D6B86A2D563}
 		{49F1DB65-C7EB-4F04-8B50-DF8ECF71A451} = {09DAD0DE-2075-4326-8208-00BBD0FE1FF1}
+		{5A83A631-14B9-45CC-B47B-32E8D2867FC3} = {E199818E-422C-4CC8-8B6E-8D6B86A2D563}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A8389148-0008-4F6C-ADF4-15B8FEC0277F}

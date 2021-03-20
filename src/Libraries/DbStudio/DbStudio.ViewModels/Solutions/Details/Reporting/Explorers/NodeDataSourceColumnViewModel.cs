@@ -16,6 +16,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 			Column = column;
 			if (column.IsPrimaryKey)
 				Icon = IconType.Key;
+			if (!column.Visible)
+				Foreground = BauMvvm.ViewModels.Media.MvvmColor.Gray;
 		}
 
 		/// <summary>

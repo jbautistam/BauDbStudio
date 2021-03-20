@@ -39,14 +39,14 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses
 		public string Description { get; set; }
 
 		/// <summary>
-		///		Dimensiones del esquema
-		/// </summary>
-		public Base.BaseReportingDictionaryModel<Dimensions.DimensionModel> Dimensions { get; } = new Base.BaseReportingDictionaryModel<Dimensions.DimensionModel>();
-
-		/// <summary>
 		///		Orígenes de datos
 		/// </summary>
 		public Base.BaseReportingDictionaryModel<DataSets.BaseDataSourceModel> DataSources { get; } = new Base.BaseReportingDictionaryModel<DataSets.BaseDataSourceModel>();
+
+		/// <summary>
+		///		Dimensiones del esquema
+		/// </summary>
+		public Base.BaseReportingDictionaryModel<Dimensions.DimensionModel> Dimensions { get; } = new Base.BaseReportingDictionaryModel<Dimensions.DimensionModel>();
 
 		/// <summary>
 		///		Informes

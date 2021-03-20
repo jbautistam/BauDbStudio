@@ -1,6 +1,6 @@
 ﻿using System;
 
-using Bau.Libraries.LibReporting.Application;
+using Bau.Libraries.LibReporting.Solution;
 using Bau.Libraries.LibReporting.Models.DataWarehouses;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting
@@ -16,7 +16,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting
 		public ReportingSolutionViewModel(SolutionViewModel solutionViewModel)
 		{
 			SolutionViewModel = solutionViewModel;
-			ReportingManager = new ReportingManager();
+			ReportingSolutionManager = new ReportingSolutionManager();
 			TreeReportingViewModel = new Explorers.TreeReportingViewModel(this);
 		}
 
@@ -26,7 +26,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting
 		public void Load(string fileName)
 		{
 			// Carga la solución
-			ReportingManager.LoadSolution(fileName);
+			ReportingSolutionManager.LoadSolution(fileName);
 			// Carga el árbol del explorador
 			TreeReportingViewModel.Load();
 		}
@@ -36,7 +36,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting
 		/// </summary>
 		internal void SaveSolution()
 		{
-			ReportingManager.SaveSolution();
+			ReportingSolutionManager.SaveSolution();
 		}
 
 		/// <summary>
@@ -45,7 +45,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting
 		internal void SaveDataWarehouse(DataWarehouseModel dataWarehouse)
 		{
 			// Graba el archivo
-			ReportingManager.SaveDataWarehouse(dataWarehouse);
+			ReportingSolutionManager.SaveDataWarehouse(dataWarehouse);
 			// Actualiza el árbol
 			TreeReportingViewModel.Load();
 		}
@@ -56,9 +56,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting
 		public SolutionViewModel SolutionViewModel { get; }
 
 		/// <summary>
-		///		Manager de reporting
+		///		Manager de la solución de reporting
 		/// </summary>
-		public ReportingManager ReportingManager { get; }
+		public ReportingSolutionManager ReportingSolutionManager { get; }
 
 		/// <summary>
 		///		ViewModel del árbol de informes

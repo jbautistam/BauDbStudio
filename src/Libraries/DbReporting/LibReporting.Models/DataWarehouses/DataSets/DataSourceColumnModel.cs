@@ -65,21 +65,6 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets
 		public bool Visible { get; set; } = true;
 
 		/// <summary>
-		///		Indica si se puede ordenar por esta columna
-		/// </summary>
-		public bool CanSort { get; set; } = true;
-
-		/// <summary>
-		///		Indica si se puede filtrar por esta columna
-		/// </summary>
-		public bool CanFilter { get; set; } = true;
-
-		/// <summary>
-		///		Indica si se puede agrupar por esta columna
-		/// </summary>
-		public bool CanGroupBy { get; set; } = true;
-
-		/// <summary>
 		///		Indica si es obligatoria
 		/// </summary>
 		public bool Required { get; set; }

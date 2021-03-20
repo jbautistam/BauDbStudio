@@ -199,6 +199,11 @@
 						<Image Width="16" Height="16" Source="/Resources/Images/FileXml.png" />
 					</MenuItem.Icon>
 				</MenuItem>
+				<MenuItem Header="Generar scripts SQL de reporting ..." Command="{Binding Path=SolutionViewModel.CreateSchemaReportingSqlCommand}">
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/Resources/Images/FileXml.png" />
+					</MenuItem.Icon>
+				</MenuItem>
 				<Separator/>
 				<MenuItem Header="_Configuración ..." Click="Configuration_Click">
 					<MenuItem.Icon>

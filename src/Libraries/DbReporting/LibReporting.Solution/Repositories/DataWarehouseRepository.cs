@@ -2,13 +2,14 @@
 
 using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.LibMarkupLanguage;
+using Bau.Libraries.LibReporting.Models;
 using Bau.Libraries.LibReporting.Models.DataWarehouses;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.Dimensions;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.Reports;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.Relations;
 
-namespace Bau.Libraries.LibReporting.Application.Repositories
+namespace Bau.Libraries.LibReporting.Solution.Repositories
 {
 	/// <summary>
 	///		Repositorio para <see cref="DataWarehouseModel"/>
@@ -43,7 +44,7 @@ namespace Bau.Libraries.LibReporting.Application.Repositories
 		/// <summary>
 		///		Carga los datos de un <see cref="DataWarehouseModel"/>
 		/// </summary>
-		internal DataWarehouseModel Load(Models.ReportingSchemaModel schema, string fileName)
+		internal DataWarehouseModel Load(ReportingSchemaModel schema, string fileName)
 		{
 			DataWarehouseModel dataWarehouse = new DataWarehouseModel(schema);
 
@@ -334,7 +335,7 @@ namespace Bau.Libraries.LibReporting.Application.Repositories
 		/// <summary>
 		///		Obtiene los nodos de las columnas
 		/// </summary>
-		private MLNodesCollection GetNodesColumns(Models.Base.BaseReportingDictionaryModel<DataSourceColumnModel> columns)
+		private MLNodesCollection GetNodesColumns(LibReporting.Models.Base.BaseReportingDictionaryModel<DataSourceColumnModel> columns)
 		{
 			MLNodesCollection nodesML = new MLNodesCollection();
 

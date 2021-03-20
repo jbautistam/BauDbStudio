@@ -13,8 +13,8 @@
 		Behaviors:FocusBehavior.FocusFirst="true">
 	<Grid>
 		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="*"/>
-			<RowDefinition Height="2*"/>
 			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
 		<GroupBox Grid.Row="0" Grid.Column="0" Header="Propiedades">
@@ -22,9 +22,6 @@
 				<Grid.RowDefinitions>
 					<RowDefinition Height="Auto"/>
 					<RowDefinition Height="*"/>
-					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="Auto"/>
 				</Grid.RowDefinitions>
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto"/>

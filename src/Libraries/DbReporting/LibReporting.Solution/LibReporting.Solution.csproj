@@ -2,20 +2,16 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <RootNamespace>Bau.Libraries.LibReporting.Application</RootNamespace>
+    <RootNamespace>Bau.Libraries.LibReporting.Solution</RootNamespace>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="Controllers\Queries\Models\QueryGroupFieldModel.cs" />
-    <Compile Remove="Controllers\Queries\QueryDimensionGeneratorOld.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibHelper\src\LibHelper.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibMarkup\src\LibMarkup.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DataBaseProviders\LibDbProviders.Base\LibDbProviders.Base.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\Schema\LibDbSchema.Repository.Xml\LibDbSchema.Repository.Xml.csproj" />
+    <ProjectReference Include="..\LibReporting.Application\LibReporting.Application.csproj" />
     <ProjectReference Include="..\LibReporting.Models\LibReporting.Models.csproj" />
-    <ProjectReference Include="..\LibReporting.Requests\LibReporting.Requests.csproj" />
   </ItemGroup>
 
 </Project>

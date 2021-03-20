@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using Bau.Libraries.LibReporting.Models.DataWarehouses;
 
-namespace Bau.Libraries.LibReporting.Models
+namespace Bau.Libraries.LibReporting.Solution.Models
 {
 	/// <summary>
 	///		Clase con los datos de una solución para reporting
