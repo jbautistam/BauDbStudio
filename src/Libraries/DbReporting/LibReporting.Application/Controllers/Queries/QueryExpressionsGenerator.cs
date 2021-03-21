@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 using Bau.Libraries.LibReporting.Models.DataWarehouses.Reports;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets;
@@ -19,7 +21,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 		/// <summary>
 		///		Obtiene la consulta de las expresiones
 		/// </summary>
-		internal QueryModel GetQuery()
+		internal QueryModel GetQuery(List<QueryModel> dimensionQueries)
 		{
 			//TODO En realidad, un informe puede tener varios orígenes de datos, cuál de los orígenes de datos se escoge, depende de ciertas condiciones como las dimensiones
 			//TODO escogidas en la solicitud, para las primeras pruebas, cogemos directamente la primera solicitud
@@ -29,12 +31,37 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 
 				// Prepara la consulta
 				query.Prepare(baseDataSource);
+				// Añade los campos que vienen de otras dimensiones
+				ComputeDimensionFields(query, dimensionQueries);
 				// Obtiene los campos por los que vamos a agrupar y los añade a la colección de claves de dimensión de la consulta
-				ComputeFieldsGroupBy(query, reportDataSource);
+				ComputeFieldsGroupBy(query, reportDataSource, dimensionQueries);
 				// Obtiene los campos agrupados
 				ComputeFieldsGrouped(query, Generator.Request, baseDataSource);
 				// Devuelve la consulta
 				return query;
+		}
+
+		/// <summary>
+		///		Obtiene los campos que se deben añadir de las consultas de dimensión
+		/// </summary>
+		private void ComputeDimensionFields(QueryModel query, List<QueryModel> dimensionQueries)
+		{
+			foreach (QueryModel dimensionQuery in dimensionQueries)
+				ComputeDimensionFields(query, dimensionQuery, dimensionQuery.Alias);
+		}
+
+		/// <summary>
+		///		Obtiene los campos que se deben añadir de una consulta de dimensión
+		/// </summary>
+		private void ComputeDimensionFields(QueryModel query, QueryModel dimensionQuery, string dimensionAlias)
+		{
+			// Agrega los campos de la dimensión
+			foreach (QueryFieldModel field in dimensionQuery.Fields)
+				if (field.Visible)
+					query.Fields.Add(new QueryFieldModel(query, field.IsPrimaryKey, dimensionAlias, field.Alias, field.OrderBy, field.Aggregation, field.Visible));
+			// Añade los campos de las dimensiones hija
+			foreach (QueryJoinModel queryJoin in dimensionQuery.Joins)
+				ComputeDimensionFields(query, queryJoin.Query, dimensionAlias);
 		}
 
 		/// <summary>
@@ -57,7 +84,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 		///		Obtiene los campos de dimensión por los que se va a agrupar (no se recojen directamente de las dimensiones solicitadas porque el
 		///	orden de solicitud importa): estos campos de dimensión son los campos clave
 		/// </summary>
-		private void ComputeFieldsGroupBy(QueryModel query, ReportDataSourceModel dataSource)
+		private void ComputeFieldsGroupBy(QueryModel query, ReportDataSourceModel dataSource, List<QueryModel> dimensionQueries)
 		{
 			foreach (DimensionRequestModel dimensionRequest in Generator.Request.Dimensions)
 			{
@@ -66,34 +93,30 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 					// Añade las relaciones
 					foreach (DimensionRelationModel relation in dataSource.Relations)
 						if (relation.Dimension.Id.Equals(dimension.Id, StringComparison.CurrentCultureIgnoreCase))
-						{
-							// Añade la dimensión al JOIN
-							query.Joins.Add(CreateJoin(dimension, relation));
-							// Añade las columnas de clave para el GROUP BY y las claves foráneas
-							foreach (RelationForeignKey column in relation.ForeignKeys)
-							{
-								// Añade el campo destino del origen de datos del informe a la lista de campos clave
-								AddPrimaryKey(query, null, column.ColumnId, false);
-								// Añade el campo a la lista de claves foráneas
-								query.ForeignKeys.Add(new QueryForeignKeyFieldModel(dimension, column.TargetColumnId, column.ColumnId));
-							}
-						}
+							query.Joins.Add(CreateJoin(dimension, relation, dimensionQueries));
 			}
 		}
 
 		/// <summary>
 		///		Crea un JOIN con una dimensión
 		/// </summary>
-		private QueryJoinModel CreateJoin(DimensionModel dimension, DimensionRelationModel relation)
+		private QueryJoinModel CreateJoin(DimensionModel dimension, DimensionRelationModel relation, List<QueryModel> dimensionQueries)
 		{
 			QueryModel query = new QueryModel(dimension.Id, QueryModel.QueryType.Dimension, dimension.Id);
 			QueryJoinModel join = new QueryJoinModel(QueryJoinModel.JoinType.Inner, query, dimension.Id);
+			QueryModel relatedQuery = dimensionQueries.FirstOrDefault(item => item.SourceId.Equals(dimension.Id, StringComparison.CurrentCultureIgnoreCase));
 
-				// Asigna los datos apropiados a la consulta (sólo necesitamos los nombres de tabla
+				// Asigna los datos apropiados a la consulta (sólo necesitamos los nombres de tabla)
 				query.Prepare(dimension.Id, dimension.Id);
 				// Añade las relaciones
-				foreach (RelationForeignKey column in relation.ForeignKeys)
-					join.Relations.Add(new QueryRelationModel(column.ColumnId, dimension.Id, column.TargetColumnId));
+				if (relatedQuery != null)
+					foreach (RelationForeignKey column in relation.ForeignKeys)
+					{
+						QueryFieldModel relatedField = relatedQuery.Fields.FirstOrDefault(item => item.Field.Equals(column.TargetColumnId, StringComparison.CurrentCultureIgnoreCase));
+
+							if (relatedField != null)
+								join.Relations.Add(new QueryRelationModel(column.ColumnId, relatedQuery.Alias, relatedField.Alias));
+					}
 				// Devuelve el join
 				return join;
 		}
@@ -108,7 +131,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 					foreach (ExpressionColumnRequestModel requestColumn in expression.Columns)
 						foreach (DataSourceColumnModel column in dataSource.Columns.EnumerateValues())
 							if (requestColumn.ColumnId.Equals(column.Id, StringComparison.CurrentCultureIgnoreCase))
-								AddColumn(query, column.Id, string.Empty, requestColumn.AggregatedBy, requestColumn);
+								query.AddColumn(column.Id, requestColumn.AggregatedBy, requestColumn);
 		}
 	}
 }

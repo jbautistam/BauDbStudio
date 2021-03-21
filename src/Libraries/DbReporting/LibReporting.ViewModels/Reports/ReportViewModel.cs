@@ -5,12 +5,12 @@ using System.Collections.ObjectModel;
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.Reports;
 
-namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Reports
+namespace Bau.Libraries.LibReporting.ViewModels.Reports
 {
 	/// <summary>
 	///		ViewModel de mantenimiento de un <see cref="ReportModel"/>
 	/// </summary>
-	public class ReportViewModel : BaseObservableObject, IDetailViewModel
+	public class ReportViewModel : BaseObservableObject, DbStudio.ViewModels.Core.Interfaces.IDetailViewModel
 	{
 		// Variables privadas
 		private string _header, _key, _description;

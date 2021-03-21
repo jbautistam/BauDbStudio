@@ -3,12 +3,12 @@
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.Dimensions;
 
-namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Dimension
+namespace Bau.Libraries.LibReporting.ViewModels.Dimension
 {
 	/// <summary>
 	///		ViewModel de mantenimiento de un <see cref="DimensionModel"/>
 	/// </summary>
-	public class DimensionViewModel : BaseObservableObject, IDetailViewModel
+	public class DimensionViewModel : BaseObservableObject, DbStudio.ViewModels.Core.Interfaces.IDetailViewModel
 	{
 		// Variables privadas
 		private string _header, _key, _dataSourceId, _description;

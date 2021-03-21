@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets;
@@ -58,6 +59,71 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 		}
 
 		/// <summary>
+		///		Añade un campo de clave primaria a la consulta
+		/// </summary>
+		internal void AddPrimaryKey(BaseColumnRequestModel requestColumn, string column, bool visible)
+		{
+			QueryFieldModel field = new QueryFieldModel(this, true, FromAlias, column, BaseColumnRequestModel.SortOrder.Undefined, 
+														ExpressionColumnRequestModel.AggregationType.NoAggregated, visible);
+
+				// Añade los filtros
+				if (requestColumn != null)
+					field.FiltersWhere.AddRange(GetFilters(requestColumn.FiltersWhere));
+				// Añade el campo a la colección de campos de la consulta
+				Fields.Add(field);
+		}
+
+		/// <summary>
+		///		Añade un campo a la consulta
+		/// </summary>
+		internal void AddColumn(string column, BaseColumnRequestModel requestColumn)
+		{
+			AddColumn(column, ExpressionColumnRequestModel.AggregationType.NoAggregated, requestColumn);
+		}
+
+		/// <summary>
+		///		Añade un campo a la consulta
+		/// </summary>
+		internal void AddColumn(string column, ExpressionColumnRequestModel.AggregationType aggregatedBy, BaseColumnRequestModel requestColumn)
+		{
+			QueryFieldModel field = GetQueryField(column, aggregatedBy, requestColumn);
+
+				// Añade los filtros
+				field.FiltersWhere.AddRange(GetFilters(requestColumn.FiltersWhere));
+				field.FilterHaving.AddRange(GetFilters(requestColumn.FiltersHaving));
+				// Añade la columna a la consulta
+				Fields.Add(field);
+		}
+
+		/// <summary>
+		///		Obtiene el campo de la consulta
+		/// </summary>
+		private QueryFieldModel GetQueryField(string columnId, ExpressionColumnRequestModel.AggregationType aggregatedBy, BaseColumnRequestModel requestColumn)
+		{
+			QueryFieldModel field = Fields.FirstOrDefault(item => item.Field.Equals(columnId, StringComparison.CurrentCultureIgnoreCase));
+
+				// Si no existía, lo añade
+				if (field == null)
+					field = new QueryFieldModel(this, false, FromAlias, columnId, requestColumn.OrderBy, aggregatedBy, requestColumn.Visible);
+				// Devuelve el campo
+				return field;
+		}
+
+		/// <summary>
+		///		Convierte los filtros
+		/// </summary>
+		private List<QueryFilterModel> GetFilters(List<FilterRequestModel> filters)
+		{
+			List<QueryFilterModel> converted = new List<QueryFilterModel>();
+
+				// Convierte los filtros
+				foreach (FilterRequestModel filter in filters)
+					converted.Add(new QueryFilterModel(filter.Condition, filter.Values));
+				// Devuelve los filtros convertidos
+				return converted;
+		}
+
+		/// <summary>
 		///		Genera la consulta SQL de esta clase
 		/// </summary>
 		internal string Build()
@@ -108,16 +174,16 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 				// Añade las claves
 				foreach (QueryFieldModel field in Fields)
 					if (field.IsPrimaryKey)
-						sqlFields = sqlFields.AddWithSeparator($"[{FromAlias}].[{field.Field}]", ",");
+						sqlFields = sqlFields.AddWithSeparator(GetSqlField(field), ",");
 				// Añade los campos
 				foreach (QueryFieldModel field in Fields)
 					if (!field.IsPrimaryKey && field.Visible && field.Aggregation == ExpressionColumnRequestModel.AggregationType.NoAggregated)
-						sqlFields = sqlFields.AddWithSeparator(GetSqlField(FromAlias, field), ",");
+						sqlFields = sqlFields.AddWithSeparator(GetSqlField(field), ",");
 				// Añade los campos (no clave) de los JOIN hijo (dimensiones hija) que no estén agregados
 				foreach (QueryJoinModel join in Joins)
 					foreach (QueryFieldModel field in join.Query.Fields)
 						if (!field.IsPrimaryKey && field.Visible && field.Aggregation == ExpressionColumnRequestModel.AggregationType.NoAggregated)
-							sqlFields = sqlFields.AddWithSeparator(GetSqlField(join.Query.FromAlias, field), ",");
+							sqlFields = sqlFields.AddWithSeparator(GetSqlField(field), ",");
 				// Añade los campos agrupados
 				foreach (QueryFieldModel field in Fields)
 					if (field.Aggregation != ExpressionColumnRequestModel.AggregationType.NoAggregated)
@@ -129,9 +195,9 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 		/// <summary>
 		///		Obtiene el nombre de un campo con el AS
 		/// </summary>
-		private string GetSqlField(string table, QueryFieldModel field)
+		private string GetSqlField(QueryFieldModel field)
 		{
-			string fieldName = $"[{table}].[{field.Field}]";
+			string fieldName = $"[{field.Table}].[{field.Field}]";
 
 				// Añade el alias
 				if (!string.IsNullOrWhiteSpace(field.Alias))
@@ -248,9 +314,8 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 				{
 					// Añade los campos de agrupación
 					foreach (QueryFieldModel field in Fields)
-						if (field.IsPrimaryKey || (field.Aggregation == ExpressionColumnRequestModel.AggregationType.NoAggregated && 
-												   field.Visible))
-							sqlFields = sqlFields.AddWithSeparator($"[{FromAlias}].[{field.Field}]", ",");
+						if (field.Aggregation == ExpressionColumnRequestModel.AggregationType.NoAggregated && field.Visible)
+							sqlFields = sqlFields.AddWithSeparator($"[{field.Table}].[{field.Field}]", ",");
 					// Si hay algún campo de agrupación, le añade la cláusula
 					if (!string.IsNullOrWhiteSpace(sqlFields))
 						sqlFields = $"GROUP BY {sqlFields}" + Environment.NewLine;

@@ -32,21 +32,20 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 		///				WHERE [Filtros]
 		///			),
 		///			tmpExpression AS
-		///			(SELECT DimensionId1, AGGREGATE(Expression1) AS Aggregate_Expresion1, ...
+		///			(SELECT DimensionField11, DimensionField2, ... , AGGREGATE(Expression1) AS Aggregate_Expresion1, ...
 		///				FROM DataSource
 		///				WHERE [Filtros]
-		///				GROUP BY DimensionId1
+		///				GROUP BY DimensionField1, DimensionField2, ...
 		///				HAVING [Filtros]
 		///			)
 		///			SELECT Fields
-		///				FROM tmpExpressions INNER JOIN tmpDimension
-		///					ON Conditions
+		///				FROM tmpExpressions
 		///				ORDER BY Fields
 		/// </remarks>
 		internal string GetSql()
 		{
 			List<QueryModel> dimensionQueries = GetDimensionQueries(Request);
-			QueryModel expressionQuery = new QueryExpressionsGenerator(this).GetQuery();
+			QueryModel expressionQuery = new QueryExpressionsGenerator(this).GetQuery(dimensionQueries);
 			string sql = string.Empty;
 
 				// Obtiene las dimensiones de las consultas
@@ -91,24 +90,12 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 				// Añade una indentación
 				prettifier.Indent();
 				// Añade la SELECT con los campos
-				prettifier.Append("SELECT " + GetSqlFinalFields(dimensionQueries, expressionQuery), 100, ",");
+				prettifier.Append("SELECT " + GetSqlExpressionFields(expressionQuery), 100, ",");
 				prettifier.NewLine();
 				// Indenta para FROM y JOINS
 				prettifier.Indent();
 				// Añade el from
 				prettifier.Append($"FROM [{expressionQuery.Alias}]");
-				// Añade los joins con las dimensiones
-				foreach (QueryModel dimensionQuery in dimensionQueries)
-				{
-					// Añade el INNER JOIN
-					prettifier.NewLine();
-					prettifier.Append($"INNER JOIN [{dimensionQuery.Alias}]");
-					// Añade la cláusula ON a la cadena SQL
-					prettifier.NewLine();
-					prettifier.Indent();
-					prettifier.Append($"ON {GetSqlOnConditions(dimensionQuery, expressionQuery)}", 100, Environment.NewLine);
-					prettifier.Unindent();
-				}
 				// Añade el ORDER BY
 				prettifier.NewLine();
 				prettifier.Append(GetSqlOrderBy(dimensionQueries, expressionQuery), 100, ",");
@@ -144,19 +131,10 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 		/// <summary>
 		///		Obtiene la cadena SQL con los campos de salida: aquellos que no son clave en las diferentes consultas
 		/// </summary>
-		private string GetSqlFinalFields(List<QueryModel> dimensionQueries, QueryModel expressionQuery)
+		private string GetSqlExpressionFields(QueryModel expressionQuery)
 		{
 			string sqlFields = string.Empty;
 
-				// Obtiene los campos de las dimensiones
-				foreach (QueryModel query in dimensionQueries)
-				{
-					// Añade los campos de la consulta
-					sqlFields = sqlFields.AddWithSeparator(GetSqlVisibleFields(query, query.Alias), ",");
-					// Añade los campos de las consultas hija
-					foreach (QueryJoinModel join in query.Joins)
-						sqlFields = sqlFields.AddWithSeparator(GetSqlVisibleFields(join.Query, query.Alias), ",");
-				}
 				// Obtiene los campos de las expresiones
 				foreach (QueryFieldModel field in expressionQuery.Fields)
 					if (!field.IsPrimaryKey && field.Visible)
@@ -182,7 +160,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 		}
 
 		/// <summary>
-		///		Obtinee el nombre final de un campo: nombre de tabla + alias, todo sin espacios
+		///		Obtiene el nombre final de un campo: nombre de tabla + alias, todo sin espacios
 		/// </summary>
 		private string GetSqlFinalFieldName(string tableAlias, string fieldAlias)
 		{

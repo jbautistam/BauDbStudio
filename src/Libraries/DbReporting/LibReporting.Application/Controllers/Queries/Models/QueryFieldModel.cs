@@ -10,49 +10,17 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 	/// </summary>
 	internal class QueryFieldModel
 	{
-		internal QueryFieldModel(bool primaryKey, string field, string alias, BaseColumnRequestModel.SortOrder orderBy, 
+		internal QueryFieldModel(QueryModel query, bool primaryKey, string table, string field, BaseColumnRequestModel.SortOrder orderBy, 
 								 ExpressionColumnRequestModel.AggregationType aggregation, bool visible)
 		{
+			Query = query;
 			IsPrimaryKey = primaryKey;
+			Table = table;
 			Field = field;
-			if (string.IsNullOrWhiteSpace(alias))
-				Alias = GetAliasFromAggregation(aggregation);
-			else
-				Alias = alias;
 			Aggregation = aggregation;
 			Visible = visible;
 			if (Visible)
 				OrderBy = orderBy;
-		}
-
-		/// <summary>
-		///		Obtiene un alias dependiendo de la agregación
-		/// </summary>
-		private string GetAliasFromAggregation(ExpressionColumnRequestModel.AggregationType aggregation)
-		{ 
-			switch (aggregation)
-			{
-				case ExpressionColumnRequestModel.AggregationType.Average:
-					return $"{Field}_AVG";
-				case ExpressionColumnRequestModel.AggregationType.Max:
-					return $"{Field}_MAX";
-				case ExpressionColumnRequestModel.AggregationType.Min:
-					return $"{Field}_MIN";
-				case ExpressionColumnRequestModel.AggregationType.StandardDeviation:
-					return $"{Field}_STD";
-				case ExpressionColumnRequestModel.AggregationType.Sum:
-					return $"{Field}_SUM";
-				default:
-					return Field;
-			}
-		}
-
-		/// <summary>
-		///		Obtiene el alias de un campo para una consulta
-		/// </summary>
-		internal string GetTableFieldAlias(string table)
-		{
-			return $"[{table}].[{Alias}]";
 		}
 
 		/// <summary>
@@ -80,24 +48,19 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 		}
 
 		/// <summary>
-		///		Compara los datos del campo
+		///		Cosulta a la que se asocia el campo
 		/// </summary>
-		internal bool CompareWith(string columnId, string alias)
-		{
-			bool equal = Field.Equals(columnId, StringComparison.CurrentCultureIgnoreCase);
-
-				// Si el nombre de columna es igual, compara los alias
-				//? Concatena un carácter # para evitar tener que hacer comparaciones con cadenas vacías
-				if (equal)
-					equal = (Alias + "#").Equals(alias + "#", StringComparison.CurrentCultureIgnoreCase);
-				// Devuelve el valor que indica si los datos son iguales
-				return equal;
-		}
+		internal QueryModel Query { get; }
 
 		/// <summary>
 		///		Indica si es una clave primaria
 		/// </summary>
 		internal bool IsPrimaryKey { get; }
+
+		/// <summary>
+		///		Nombre o alias de la tabla
+		/// </summary>
+		internal string Table { get; }
 
 		/// <summary>
 		///		Nombre del campo
@@ -107,7 +70,35 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 		/// <summary>
 		///		Alias
 		/// </summary>
-		internal string Alias { get; }
+		internal string Alias 
+		{ 
+			get
+			{
+				string alias = $"{Table}_{Field}";
+
+					// Añade la agregación si es necesario
+					switch (Aggregation)
+					{
+						case ExpressionColumnRequestModel.AggregationType.Average:
+								alias += "_AVG";
+							break;
+						case ExpressionColumnRequestModel.AggregationType.Max:
+								alias += "_MAX";
+							break;
+						case ExpressionColumnRequestModel.AggregationType.Min:
+								alias += "_MIN";
+							break;
+						case ExpressionColumnRequestModel.AggregationType.StandardDeviation:
+								alias += "_STD";
+							break;
+						case ExpressionColumnRequestModel.AggregationType.Sum:
+								alias += "_SUM";
+							break;
+					}
+					// Devuelve el alias
+					return alias;
+			}
+		}
 
 		/// <summary>
 		///		Agregación

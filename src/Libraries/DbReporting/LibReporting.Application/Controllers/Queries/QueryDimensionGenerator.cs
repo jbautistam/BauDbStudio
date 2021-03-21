@@ -67,14 +67,14 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 				// Añade los campos clave
 				foreach (DataSourceColumnModel column in dimension.DataSource.Columns.EnumerateValues())
 					if (column.IsPrimaryKey)
-						AddPrimaryKey(query, dimensionRequest.GetRequestColumn(column.Id), column.Id, CheckIsColumnAtColumnRequested(column, dimensionRequest.Columns));
+						query.AddPrimaryKey(dimensionRequest.GetRequestColumn(column.Id), column.Id, CheckIsColumnAtColumnRequested(column, dimensionRequest.Columns));
 				// Asigna los campos
 				foreach (DimensionColumnRequestModel columnRequest in dimensionRequest.Columns)
 				{
 					DataSourceColumnModel column = dimension.DataSource.Columns[columnRequest.ColumnId];
 
 						if (column != null && !column.IsPrimaryKey)
-							AddColumn(query, columnRequest.ColumnId, string.Empty, columnRequest);
+							query.AddColumn(columnRequest.ColumnId, columnRequest);
 				}
 				// Devuelve la consulta
 				return query;

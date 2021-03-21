@@ -67,7 +67,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 		private string GetValues()
 		{
 			if (Values.Count < 1)
-				throw new LibReporting.Models.Exceptions.ReportingException($"Not defined values for filter");
+				throw new LibReporting.Models.Exceptions.ReportingException("Not defined values for filter");
 			else
 				switch (Condition)
 				{
@@ -88,7 +88,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 		private string GetValuesBetween()
 		{
 			if (Values.Count < 2)
-				throw new LibReporting.Models.Exceptions.ReportingException($"Not enough values defined for filter BETWEEN");
+				throw new LibReporting.Models.Exceptions.ReportingException("Not enough values defined for filter BETWEEN");
 			else
 				return $"{GetValue(Values[0])} AND {GetValue(Values[1])}";
 		}
