@@ -1,23 +1,23 @@
 ﻿using System;
-
 using Bau.Libraries.LibCsvFiles.Models;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 {
 	/// <summary>
-	///		ViewModel con las propieddes de un archivo CSV
+	///		ViewModel con las propiedades de un archivo CSV
 	/// </summary>
 	public class CsvFilePropertiesViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewModel
 	{
 		// Variables privadas
 		private string _dateFormat, _decimalSeparator, _thousandsSeparator, _trueValue, _falseValue, _separator;
 		private bool _skipFirstLine;
+		private ListFileColumnsViewModel _listColumnsViewModel;
 
-		public CsvFilePropertiesViewModel(SolutionViewModel solutionViewModel, FileModel fileParameters)
+		public CsvFilePropertiesViewModel(SolutionViewModel solutionViewModel, CsvFileViewModel fileViewModel)
 		{
 			// Inicializa las propiedades
 			SolutionViewModel = solutionViewModel;
-			FileParameters = fileParameters;
+			FileViewModel = fileViewModel;
 			// Inicializa el viewModel
 			InitViewModel();
 		}
@@ -28,13 +28,15 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 		private void InitViewModel()
 		{
 			// Asigna las propiedades
-			DateFormat = FileParameters.DateFormat;
-			DecimalSeparator = FileParameters.DecimalSeparator;
-			ThousandsSeparator = FileParameters.ThousandsSeparator;
-			TrueValue = FileParameters.TrueValue;
-			FalseValue = FileParameters.FalseValue;
-			Separator = FileParameters.Separator;
-			SkipFirstLine = FileParameters.WithHeader;
+			DateFormat = FileViewModel.FileParameters.DateFormat;
+			DecimalSeparator = FileViewModel.FileParameters.DecimalSeparator;
+			ThousandsSeparator = FileViewModel.FileParameters.ThousandsSeparator;
+			TrueValue = FileViewModel.FileParameters.TrueValue;
+			FalseValue = FileViewModel.FileParameters.FalseValue;
+			Separator = FileViewModel.FileParameters.Separator;
+			SkipFirstLine = FileViewModel.FileParameters.WithHeader;
+			// Lista de columnas
+			ListColumnsViewModel = new ListFileColumnsViewModel(FileViewModel);
 			// Indica que no ha habido modificaciones
 			IsUpdated = false;
 		}
@@ -63,17 +65,45 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 			if (ValidateData())
 			{
 				// Asigna las propiedades seleccionadas
-				FileParameters.DateFormat = DateFormat;
-				FileParameters.DecimalSeparator = DecimalSeparator;
-				FileParameters.ThousandsSeparator = ThousandsSeparator;
-				FileParameters.TrueValue = TrueValue;
-				FileParameters.FalseValue = FalseValue;
-				FileParameters.Separator = Separator;
-				FileParameters.WithHeader = SkipFirstLine;
+				FileViewModel.FileParameters.DateFormat = DateFormat;
+				FileViewModel.FileParameters.DecimalSeparator = DecimalSeparator;
+				FileViewModel.FileParameters.ThousandsSeparator = ThousandsSeparator;
+				FileViewModel.FileParameters.TrueValue = TrueValue;
+				FileViewModel.FileParameters.FalseValue = FalseValue;
+				FileViewModel.FileParameters.Separator = Separator;
+				FileViewModel.FileParameters.WithHeader = SkipFirstLine;
+				// Asigna las columnas
+				FileViewModel.FileColumns.Clear();
+				foreach (ListItemFileColumnViewModel columnViewModel in ListColumnsViewModel.Items)
+					FileViewModel.FileColumns.Add(new ColumnModel
+															{
+																Name = columnViewModel.ColumnId,
+																Type = ConvertColumnType(columnViewModel.GetSelectedType())
+															}
+												 );
 				// Indica que ya no es nuevo y está grabado
 				IsUpdated = false;
 				// Cierra la ventana
 				RaiseEventClose(true);
+			}
+		}
+
+		/// <summary>
+		///		Convierte el tipo de columna
+		/// </summary>
+		private ColumnModel.ColumnType ConvertColumnType(BaseFileViewModel.FieldType fieldType)
+		{
+			switch (fieldType)
+			{
+				case BaseFileViewModel.FieldType.Boolean:
+					return ColumnModel.ColumnType.Boolean;
+				case BaseFileViewModel.FieldType.Integer:
+				case BaseFileViewModel.FieldType.Decimal:
+					return ColumnModel.ColumnType.Numeric;
+				case BaseFileViewModel.FieldType.Date:
+					return ColumnModel.ColumnType.DateTime;
+				default:
+					return ColumnModel.ColumnType.String;
 			}
 		}
 
@@ -83,9 +113,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 		public SolutionViewModel SolutionViewModel { get; }
 
 		/// <summary>
-		///		Parámetros del archivo
+		///		ViewModel del archivo
 		/// </summary>
-		public FileModel FileParameters { get; }
+		public CsvFileViewModel FileViewModel { get; }
 
 		/// <summary>
 		///		Formato de fecha
@@ -148,6 +178,15 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 		{
 			get { return _skipFirstLine; }
 			set { CheckProperty(ref _skipFirstLine, value); }
+		}
+
+		/// <summary>
+		///		Lista de columnas
+		/// </summary>
+		public ListFileColumnsViewModel ListColumnsViewModel
+		{
+			get { return _listColumnsViewModel; }
+			set { CheckObject(ref _listColumnsViewModel, value); }
 		}
 	}
 }

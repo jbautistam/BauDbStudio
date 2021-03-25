@@ -136,7 +136,7 @@ namespace Bau.Libraries.LibReporting.Solution.Repositories
 
 				// Carga las propiedades
 				column.Id = rootML.Attributes[TagSourceId].Value.TrimIgnoreNull();
-				column.Type = rootML.Attributes[TagType].Value.GetEnum(DataSourceColumnModel.Fieldtype.Unknown);
+				column.Type = rootML.Attributes[TagType].Value.GetEnum(DataSourceColumnModel.FieldType.Unknown);
 				column.Required = rootML.Attributes[TagRequired].Value.GetBool();
 				column.IsPrimaryKey = rootML.Attributes[TagPrimaryKey].Value.GetBool();
 				column.Visible = rootML.Attributes[TagVisible].Value.GetBool(true);
@@ -153,7 +153,7 @@ namespace Bau.Libraries.LibReporting.Solution.Repositories
 
 				// Carga las propiedades
 				parameter.Name = rootML.Attributes[TagName].Value.TrimIgnoreNull();
-				parameter.Type = rootML.Attributes[TagType].Value.GetEnum(DataSourceColumnModel.Fieldtype.Unknown);
+				parameter.Type = rootML.Attributes[TagType].Value.GetEnum(DataSourceColumnModel.FieldType.Unknown);
 				parameter.DefaultValue = rootML.Attributes[TagValue].Value.TrimIgnoreNull();
 				// Devuelve el parámetro
 				return parameter;

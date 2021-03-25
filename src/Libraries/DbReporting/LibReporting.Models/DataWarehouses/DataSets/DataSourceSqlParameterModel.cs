@@ -15,7 +15,7 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets
 		/// <summary>
 		///		Tipo del parámetro
 		/// </summary>
-		public DataSourceColumnModel.Fieldtype Type { get; set; }
+		public DataSourceColumnModel.FieldType Type { get; set; }
 
 		/// <summary>
 		///		Valor predeterminado

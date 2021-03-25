@@ -62,24 +62,24 @@ namespace Bau.Libraries.LibReporting.Solution.Converters
 		/// <summary>
 		///		Convierte el tipo
 		/// </summary>
-		private DataSourceColumnModel.Fieldtype Convert(FieldDbModel.Fieldtype type)
+		private DataSourceColumnModel.FieldType Convert(FieldDbModel.Fieldtype type)
 		{
 			switch (type)
 			{
 				case FieldDbModel.Fieldtype.Binary:
-					return DataSourceColumnModel.Fieldtype.Binary;
+					return DataSourceColumnModel.FieldType.Binary;
 				case FieldDbModel.Fieldtype.Boolean:
-					return DataSourceColumnModel.Fieldtype.Boolean;
+					return DataSourceColumnModel.FieldType.Boolean;
 				case FieldDbModel.Fieldtype.Date:
-					return DataSourceColumnModel.Fieldtype.Date;
+					return DataSourceColumnModel.FieldType.Date;
 				case FieldDbModel.Fieldtype.Decimal:
-					return DataSourceColumnModel.Fieldtype.Decimal;
+					return DataSourceColumnModel.FieldType.Decimal;
 				case FieldDbModel.Fieldtype.Integer:
-					return DataSourceColumnModel.Fieldtype.Integer;
+					return DataSourceColumnModel.FieldType.Integer;
 				case FieldDbModel.Fieldtype.String:
-					return DataSourceColumnModel.Fieldtype.String;
+					return DataSourceColumnModel.FieldType.String;
 				default:
-					return DataSourceColumnModel.Fieldtype.Unknown;
+					return DataSourceColumnModel.FieldType.Unknown;
 			}
 		}
 	}

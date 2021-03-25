@@ -32,14 +32,14 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 			// Cambia el tipo de columna
 			switch (ListViewModel.NodeColumnViewModel.Column.Type)
 			{
-				case LibReporting.Models.DataWarehouses.DataSets.DataSourceColumnModel.Fieldtype.Boolean:
+				case LibReporting.Models.DataWarehouses.DataSets.DataSourceColumnModel.FieldType.Boolean:
 						IsBool = true;
 					break;
-				case LibReporting.Models.DataWarehouses.DataSets.DataSourceColumnModel.Fieldtype.Date:
+				case LibReporting.Models.DataWarehouses.DataSets.DataSourceColumnModel.FieldType.Date:
 						IsDateTime = true;
 					break;
-				case LibReporting.Models.DataWarehouses.DataSets.DataSourceColumnModel.Fieldtype.Decimal:
-				case LibReporting.Models.DataWarehouses.DataSets.DataSourceColumnModel.Fieldtype.Integer:
+				case LibReporting.Models.DataWarehouses.DataSets.DataSourceColumnModel.FieldType.Decimal:
+				case LibReporting.Models.DataWarehouses.DataSets.DataSourceColumnModel.FieldType.Integer:
 						IsNumber = true;
 					break;
 				default:
@@ -72,7 +72,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 			ComboConditions.AddItem((int) FilterRequestModel.ConditionType.LessOrEqual, "Menor o igual");
 			ComboConditions.AddItem((int) FilterRequestModel.ConditionType.In, "En estos valores");
 			ComboConditions.AddItem((int) FilterRequestModel.ConditionType.Between, "Entre estos valores");
-			if (ListViewModel.NodeColumnViewModel.Column.Type == LibReporting.Models.DataWarehouses.DataSets.DataSourceColumnModel.Fieldtype.String)
+			if (ListViewModel.NodeColumnViewModel.Column.Type == LibReporting.Models.DataWarehouses.DataSets.DataSourceColumnModel.FieldType.String)
 				ComboConditions.AddItem((int) FilterRequestModel.ConditionType.Contains, "Contiene");
 			ComboConditions.SelectedId = (int) FilterRequestModel.ConditionType.Undefined;
 		}

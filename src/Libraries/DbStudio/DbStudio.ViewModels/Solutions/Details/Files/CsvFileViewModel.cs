@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 
 using Bau.Libraries.LibCsvFiles;
@@ -28,7 +29,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 		protected override void SaveFile(LibLogger.Models.Log.BlockLogModel block, string fileName)
 		{
 			// Graba el archivo
-			using (CsvReader reader = new CsvReader(FileName, FileParameters, null))
+			using (CsvReader reader = new CsvReader(FileName, FileParameters, FileColumns))
 			{
 				using (ParquetWriter writer = new ParquetWriter(fileName))
 				{
@@ -49,7 +50,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 		/// </summary>
 		protected override void OpenFileProperties()
 		{
-			if (SolutionViewModel.MainViewModel.MainController.OpenDialog(new CsvFilePropertiesViewModel(SolutionViewModel, FileParameters)) == 
+			if (SolutionViewModel.MainViewModel.MainController.OpenDialog(new CsvFilePropertiesViewModel(SolutionViewModel, this)) == 
 					BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 				LoadFile();
 		}
@@ -58,5 +59,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 		///		Parámetros del archivo
 		/// </summary>
 		public LibCsvFiles.Models.FileModel FileParameters { get; } = new LibCsvFiles.Models.FileModel();
+
+		/// <summary>
+		///		Columnas del archivo
+		/// </summary>
+		public List<LibCsvFiles.Models.ColumnModel> FileColumns { get; } = new List<LibCsvFiles.Models.ColumnModel>();
 	}
 }

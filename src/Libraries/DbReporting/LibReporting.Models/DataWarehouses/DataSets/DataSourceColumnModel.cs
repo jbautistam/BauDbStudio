@@ -10,7 +10,7 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets
 		/// <summary>
 		///		Tipo de campo
 		/// </summary>
-		public enum Fieldtype
+		public enum FieldType
 		{
 			/// <summary>Desconocido. No se debería utilizar</summary>
 			Unknown,
@@ -57,7 +57,7 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets
 		/// <summary>
 		///		Tipo del campo
 		/// </summary>
-		public Fieldtype Type { get; set; }
+		public FieldType Type { get; set; }
 
 		/// <summary>
 		///		Indica si la columna es visible

@@ -23,8 +23,7 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Managers.Parq
 			bool exported = false;
 
 				// Procesa la sentencia
-				using (BlockLogModel block = Processor.Manager.Logger.Default.CreateBlock(LogModel.LogType.Info, 
-																						  $"Start exporting to '{fileName}'"))
+				using (BlockLogModel block = Processor.Manager.Logger.Default.CreateBlock(LogModel.LogType.Info, $"Start exporting to '{fileName}'"))
 				{
 					if (string.IsNullOrWhiteSpace(sentence.Command.Sql))
 						block.Error("There is not command at export sentence");

@@ -1,0 +1,97 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+
+using Bau.Libraries.BauMvvm.ViewModels;
+
+namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
+{
+	/// <summary>
+	///		Lista de <see cref="ListItemFileColumnViewModel"/>
+	/// </summary>
+	public class ListFileColumnsViewModel : BaseObservableObject 
+	{
+		// Variables privadas
+		private ObservableCollection<ListItemFileColumnViewModel> _items;
+		private ListItemFileColumnViewModel _selectedItem;
+
+		public ListFileColumnsViewModel(BaseFileViewModel fileViewModel)
+		{
+			// Asigna las propiedades
+			FileViewModel = fileViewModel;
+			// Inicializa el viewModel
+			InitViewModel();
+			// Inicializa los comandos
+			ResetFieldsCommand = new BaseCommand(_ => InitViewModel());
+		}
+
+		/// <summary>
+		///		Inicializa el viewModel
+		/// </summary>
+		private void InitViewModel()
+		{
+			// Crea los elementos de la lista
+			Items = new ObservableCollection<ListItemFileColumnViewModel>();
+			// Carga el archivo
+			FileViewModel.LoadFile();
+			// Añade las columnas
+			foreach (System.Data.DataColumn column in FileViewModel.DataResults.Columns)
+				Items.Add(new ListItemFileColumnViewModel(this, column.ColumnName));
+		}
+
+		/// <summary>
+		///		Comprueba los datos
+		/// </summary>
+		internal bool ValidateData()
+		{
+			// Comprueba las columnas
+			foreach (ListItemFileColumnViewModel column in Items)
+				if (!column.ValidataData())
+					return false;
+			// Si ha llegado hasta aquí es porque todo ha ido bien
+			return true;
+		}
+
+		/// <summary>
+		///		Obtiene las columnas
+		/// </summary>
+		internal List<(string column, BaseFileViewModel.FieldType type)> GetColumns()
+		{
+			List<(string column, BaseFileViewModel.FieldType type)> columns = new List<(string column, BaseFileViewModel.FieldType type)>();
+
+				// Añade las columnas
+				foreach (ListItemFileColumnViewModel column in Items)
+					columns.Add((column.ColumnId, column.GetSelectedType()));
+				// Devuelve las columnas
+				return columns;
+		}
+
+		/// <summary>
+		///		ViewModel del Archivo
+		/// </summary>
+		public BaseFileViewModel FileViewModel { get; }
+
+		/// <summary>
+		///		Elementos de la lista
+		/// </summary>
+		public ObservableCollection<ListItemFileColumnViewModel> Items
+		{
+			get { return _items; }
+			set { CheckObject(ref _items, value); }
+		}
+
+		/// <summary>
+		///		Elemento seleccionado
+		/// </summary>
+		public ListItemFileColumnViewModel SelectedItem
+		{
+			get { return _selectedItem; }
+			set { CheckObject(ref _selectedItem, value); }
+		}
+
+		/// <summary>
+		///		Comando para reiniciar los campos
+		/// </summary>
+		public BaseCommand ResetFieldsCommand { get; }
+	}
+}

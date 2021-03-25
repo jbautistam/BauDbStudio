@@ -47,15 +47,15 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.DataSour
 			// Inicializa el combo
 			ComboTypes = new ComboViewModel(this);
 			// Añade los elementos
-			ComboTypes.AddItem((int) DataSourceColumnModel.Fieldtype.Unknown, "<Seleccione un tipo>");
-			ComboTypes.AddItem((int) DataSourceColumnModel.Fieldtype.String, "Cadena");
-			ComboTypes.AddItem((int) DataSourceColumnModel.Fieldtype.Date, "Fecha / hora");
-			ComboTypes.AddItem((int) DataSourceColumnModel.Fieldtype.Integer, "Entero");
-			ComboTypes.AddItem((int) DataSourceColumnModel.Fieldtype.Decimal, "Decimal");
-			ComboTypes.AddItem((int) DataSourceColumnModel.Fieldtype.Boolean, "Lógico");
-			ComboTypes.AddItem((int) DataSourceColumnModel.Fieldtype.Binary, "Binario");
+			ComboTypes.AddItem((int) DataSourceColumnModel.FieldType.Unknown, "<Seleccione un tipo>");
+			ComboTypes.AddItem((int) DataSourceColumnModel.FieldType.String, "Cadena");
+			ComboTypes.AddItem((int) DataSourceColumnModel.FieldType.Date, "Fecha / hora");
+			ComboTypes.AddItem((int) DataSourceColumnModel.FieldType.Integer, "Entero");
+			ComboTypes.AddItem((int) DataSourceColumnModel.FieldType.Decimal, "Decimal");
+			ComboTypes.AddItem((int) DataSourceColumnModel.FieldType.Boolean, "Lógico");
+			ComboTypes.AddItem((int) DataSourceColumnModel.FieldType.Binary, "Binario");
 			// Selecciona el primer elemento
-			ComboTypes.SelectedId = (int) DataSourceColumnModel.Fieldtype.Unknown;
+			ComboTypes.SelectedId = (int) DataSourceColumnModel.FieldType.Unknown;
 		}
 
 		/// <summary>
@@ -68,7 +68,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.DataSour
 				// Comprueba los datos
 				if (string.IsNullOrWhiteSpace(Name))
 					ReportingSolutionViewModel.SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Introduzca el nombre del parámetro");
-				else if (GetSelectedType() == DataSourceColumnModel.Fieldtype.Unknown)
+				else if (GetSelectedType() == DataSourceColumnModel.FieldType.Unknown)
 					ReportingSolutionViewModel.SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Seleccione el tipo del parámetro");
 				else
 					validated = true;
@@ -92,12 +92,12 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.DataSour
 		/// <summary>
 		///		Obtiene el tipo seleccionado en el combo (o el de la columna si no es modificable)
 		/// </summary>
-		private DataSourceColumnModel.Fieldtype GetSelectedType()
+		private DataSourceColumnModel.FieldType GetSelectedType()
 		{
 			if (!Updatable)
 				return Parameter.Type;
 			else
-				return (DataSourceColumnModel.Fieldtype) (ComboTypes.SelectedId ?? (int) DataSourceColumnModel.Fieldtype.Unknown);
+				return (DataSourceColumnModel.FieldType) (ComboTypes.SelectedId ?? (int) DataSourceColumnModel.FieldType.Unknown);
 		}
 
 		/// <summary>

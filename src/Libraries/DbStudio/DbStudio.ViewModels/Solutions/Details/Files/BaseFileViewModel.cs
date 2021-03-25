@@ -11,6 +11,20 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 	/// </summary>
 	public abstract class BaseFileViewModel : BaseObservableObject, IDetailViewModel
 	{
+		// Enumerados públicos
+		/// <summary>
+		///		Tipo del campo
+		/// </summary>
+		public enum FieldType
+		{
+			Unknown,
+			String,
+			Date, 
+			Integer, 
+			Decimal, 
+			Boolean
+		}
+
 		// Variables privadas
 		private string _header, _fileName, _formattedPage;
 		private int _actualPage, _pages, _recordsPerPage;
