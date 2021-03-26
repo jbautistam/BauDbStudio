@@ -107,7 +107,7 @@ namespace Bau.DbStudio
 				case Libraries.DbStudio.ViewModels.Solutions.Details.Files.FileViewModel viewModel:
 						AddTab(new FileDetailsView(viewModel), viewModel);
 					break;
-				case Libraries.DbStudio.ViewModels.Solutions.Details.Files.BaseFileViewModel viewModel:
+				case Libraries.DbStudio.ViewModels.Solutions.Details.Files.Structured.BaseFileViewModel viewModel:
 						AddTab(new DataTableFileView(viewModel), viewModel);
 					break;
 				case Libraries.DbStudio.ViewModels.Solutions.Details.Queries.ExecuteQueryViewModel viewModel:

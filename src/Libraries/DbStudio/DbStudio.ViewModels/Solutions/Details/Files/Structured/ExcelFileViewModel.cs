@@ -4,7 +4,7 @@ using System.Data;
 using Bau.Libraries.LibExcelFiles.Data;
 using Bau.Libraries.LibParquetFiles.Writers;
 
-namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
+namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files.Structured
 {
 	/// <summary>
 	///		ViewModel para visualización de archivos Excel

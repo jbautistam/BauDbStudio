@@ -2,18 +2,18 @@
 
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.ComboItems;
 
-namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
+namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files.Structured
 {
 	/// <summary>
 	///		ViewModel para un <see cref="DataSourceColumnModel"/>
 	/// </summary>
-	public class ListItemFileColumnViewModel : BauMvvm.ViewModels.BaseObservableObject
+	public class CsvFileListItemColumnViewModel : BauMvvm.ViewModels.BaseObservableObject
 	{
 		// Variables privadas
 		private string _columnId, _type;
 		private ComboViewModel _comboTypes;
 
-		public ListItemFileColumnViewModel(ListFileColumnsViewModel listViewModel, string column)
+		public CsvFileListItemColumnViewModel(CsvFileListColumnsViewModel listViewModel, string column)
 		{
 			// Asigna las propiedades
 			ListViewModel = listViewModel;
@@ -67,7 +67,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 		/// <summary>
 		///		ViewModel de la lista
 		/// </summary>
-		public ListFileColumnsViewModel ListViewModel { get; }
+		public CsvFileListColumnsViewModel ListViewModel { get; }
 
 		/// <summary>
 		///		Código de columna

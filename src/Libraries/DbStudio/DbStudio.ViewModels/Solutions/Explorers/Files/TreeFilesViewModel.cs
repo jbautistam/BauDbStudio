@@ -142,12 +142,12 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 			if (SelectedNode is NodeFileViewModel node && !node.IsFolder)
 			{
 				if (node.FileName.EndsWith(".parquet", StringComparison.CurrentCultureIgnoreCase))
-					SolutionViewModel.MainViewModel.MainController.OpenWindow(new Details.Files.ParquetFileViewModel(SolutionViewModel, node.FileName));
+					SolutionViewModel.MainViewModel.MainController.OpenWindow(new Details.Files.Structured.ParquetFileViewModel(SolutionViewModel, node.FileName));
 				else if (node.FileName.EndsWith(".csv", StringComparison.CurrentCultureIgnoreCase))
-					SolutionViewModel.MainViewModel.MainController.OpenWindow(new Details.Files.CsvFileViewModel(SolutionViewModel, node.FileName));
+					SolutionViewModel.MainViewModel.MainController.OpenWindow(new Details.Files.Structured.CsvFileViewModel(SolutionViewModel, node.FileName));
 				else if (node.FileName.EndsWith(".xlsx", StringComparison.CurrentCultureIgnoreCase) ||
 						 node.FileName.EndsWith(".xls", StringComparison.CurrentCultureIgnoreCase))
-					SolutionViewModel.MainViewModel.MainController.OpenWindow(new Details.Files.ExcelFileViewModel(SolutionViewModel, node.FileName));
+					SolutionViewModel.MainViewModel.MainController.OpenWindow(new Details.Files.Structured.ExcelFileViewModel(SolutionViewModel, node.FileName));
 				else if (IsImage(node.FileName))
 					SolutionViewModel.MainViewModel.MainController.OpenWindow(new Details.Files.ImageViewModel(SolutionViewModel, node.FileName));
 				else
@@ -658,7 +658,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 					case Details.Files.FileViewModel fileViewModel:
 							viewModelFileName = fileViewModel.FileName;
 						break;
-					case Details.Files.BaseFileViewModel fileViewModel:
+					case Details.Files.Structured.BaseFileViewModel fileViewModel:
 							viewModelFileName = fileViewModel.FileName;
 						break;
 				}

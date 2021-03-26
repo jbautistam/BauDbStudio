@@ -6,11 +6,11 @@ using Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files.Structured;
 namespace Bau.DbStudio.Views.Files
 {
 	/// <summary>
-	///		Vista para mostrar las propiedades de un archivo
+	///		Vista para mostrar las propiedades de un archivo parquet
 	/// </summary>
-	public partial class CsvFilePropertiesView : Window
+	public partial class ParquetFilePropertiesView : Window
 	{
-		public CsvFilePropertiesView(CsvFilePropertiesViewModel viewModel)
+		public ParquetFilePropertiesView(ParquetFilePropertiesViewModel viewModel)
 		{
 			InitializeComponent();
 			DataContext = ViewModel = viewModel;
@@ -24,6 +24,6 @@ namespace Bau.DbStudio.Views.Files
 		/// <summary>
 		///		ViewModel del archivo
 		/// </summary>
-		public CsvFilePropertiesViewModel ViewModel { get; }
+		public ParquetFilePropertiesViewModel ViewModel { get; }
 	}
 }

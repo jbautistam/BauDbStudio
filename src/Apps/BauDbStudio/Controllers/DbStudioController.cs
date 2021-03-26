@@ -67,8 +67,11 @@ namespace Bau.DbStudio.Controllers
 					case Libraries.DbStudio.ViewModels.Solutions.Details.Connections.ConnectionViewModel viewModel:
 							result = HostHelperController.ShowDialog(MainWindow, new Views.Connections.ConnectionView(viewModel));
 						break;
-					case Libraries.DbStudio.ViewModels.Solutions.Details.Files.CsvFilePropertiesViewModel viewModel:
+					case Libraries.DbStudio.ViewModels.Solutions.Details.Files.Structured.CsvFilePropertiesViewModel viewModel:
 							result = HostHelperController.ShowDialog(MainWindow, new Views.Files.CsvFilePropertiesView(viewModel));
+						break;
+					case Libraries.DbStudio.ViewModels.Solutions.Details.Files.Structured.ParquetFilePropertiesViewModel viewModel:
+							result = HostHelperController.ShowDialog(MainWindow, new Views.Files.ParquetFilePropertiesView(viewModel));
 						break;
 					case Libraries.DbStudio.ViewModels.Solutions.Details.Deployments.DeploymentViewModel viewModel:
 							result = HostHelperController.ShowDialog(MainWindow, new Views.Deployments.DeploymentView(viewModel));

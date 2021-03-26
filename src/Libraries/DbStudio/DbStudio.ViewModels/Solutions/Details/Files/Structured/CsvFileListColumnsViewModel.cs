@@ -4,18 +4,18 @@ using System.Collections.ObjectModel;
 
 using Bau.Libraries.BauMvvm.ViewModels;
 
-namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
+namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files.Structured
 {
 	/// <summary>
-	///		Lista de <see cref="ListItemFileColumnViewModel"/>
+	///		Lista de <see cref="CsvFileListItemColumnViewModel"/>
 	/// </summary>
-	public class ListFileColumnsViewModel : BaseObservableObject 
+	public class CsvFileListColumnsViewModel : BaseObservableObject 
 	{
 		// Variables privadas
-		private ObservableCollection<ListItemFileColumnViewModel> _items;
-		private ListItemFileColumnViewModel _selectedItem;
+		private ObservableCollection<CsvFileListItemColumnViewModel> _items;
+		private CsvFileListItemColumnViewModel _selectedItem;
 
-		public ListFileColumnsViewModel(BaseFileViewModel fileViewModel)
+		public CsvFileListColumnsViewModel(BaseFileViewModel fileViewModel)
 		{
 			// Asigna las propiedades
 			FileViewModel = fileViewModel;
@@ -31,12 +31,12 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 		private void InitViewModel()
 		{
 			// Crea los elementos de la lista
-			Items = new ObservableCollection<ListItemFileColumnViewModel>();
+			Items = new ObservableCollection<CsvFileListItemColumnViewModel>();
 			// Carga el archivo
 			FileViewModel.LoadFile();
 			// Añade las columnas
 			foreach (System.Data.DataColumn column in FileViewModel.DataResults.Columns)
-				Items.Add(new ListItemFileColumnViewModel(this, column.ColumnName));
+				Items.Add(new CsvFileListItemColumnViewModel(this, column.ColumnName));
 		}
 
 		/// <summary>
@@ -45,7 +45,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 		internal bool ValidateData()
 		{
 			// Comprueba las columnas
-			foreach (ListItemFileColumnViewModel column in Items)
+			foreach (CsvFileListItemColumnViewModel column in Items)
 				if (!column.ValidataData())
 					return false;
 			// Si ha llegado hasta aquí es porque todo ha ido bien
@@ -60,7 +60,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 			List<(string column, BaseFileViewModel.FieldType type)> columns = new List<(string column, BaseFileViewModel.FieldType type)>();
 
 				// Añade las columnas
-				foreach (ListItemFileColumnViewModel column in Items)
+				foreach (CsvFileListItemColumnViewModel column in Items)
 					columns.Add((column.ColumnId, column.GetSelectedType()));
 				// Devuelve las columnas
 				return columns;
@@ -74,7 +74,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 		/// <summary>
 		///		Elementos de la lista
 		/// </summary>
-		public ObservableCollection<ListItemFileColumnViewModel> Items
+		public ObservableCollection<CsvFileListItemColumnViewModel> Items
 		{
 			get { return _items; }
 			set { CheckObject(ref _items, value); }
@@ -83,7 +83,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 		/// <summary>
 		///		Elemento seleccionado
 		/// </summary>
-		public ListItemFileColumnViewModel SelectedItem
+		public CsvFileListItemColumnViewModel SelectedItem
 		{
 			get { return _selectedItem; }
 			set { CheckObject(ref _selectedItem, value); }

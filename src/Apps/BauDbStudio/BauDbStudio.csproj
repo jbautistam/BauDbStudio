@@ -193,6 +193,10 @@
     <Page Update="Views\EtlProjects\CreateTestXmlView.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Views\Files\ParquetFilePropertiesView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\Queries\QueryViewControl.xaml">
       <SubType>Designer</SubType>
     </Page>

@@ -1,7 +1,8 @@
 ﻿using System;
+
 using Bau.Libraries.LibCsvFiles.Models;
 
-namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
+namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files.Structured
 {
 	/// <summary>
 	///		ViewModel con las propiedades de un archivo CSV
@@ -11,7 +12,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 		// Variables privadas
 		private string _dateFormat, _decimalSeparator, _thousandsSeparator, _trueValue, _falseValue, _separator;
 		private bool _skipFirstLine;
-		private ListFileColumnsViewModel _listColumnsViewModel;
+		private CsvFileListColumnsViewModel _listColumnsViewModel;
 
 		public CsvFilePropertiesViewModel(SolutionViewModel solutionViewModel, CsvFileViewModel fileViewModel)
 		{
@@ -36,7 +37,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 			Separator = FileViewModel.FileParameters.Separator;
 			SkipFirstLine = FileViewModel.FileParameters.WithHeader;
 			// Lista de columnas
-			ListColumnsViewModel = new ListFileColumnsViewModel(FileViewModel);
+			ListColumnsViewModel = new CsvFileListColumnsViewModel(FileViewModel);
 			// Indica que no ha habido modificaciones
 			IsUpdated = false;
 		}
@@ -74,7 +75,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 				FileViewModel.FileParameters.WithHeader = SkipFirstLine;
 				// Asigna las columnas
 				FileViewModel.FileColumns.Clear();
-				foreach (ListItemFileColumnViewModel columnViewModel in ListColumnsViewModel.Items)
+				foreach (CsvFileListItemColumnViewModel columnViewModel in ListColumnsViewModel.Items)
 					FileViewModel.FileColumns.Add(new ColumnModel
 															{
 																Name = columnViewModel.ColumnId,
@@ -98,8 +99,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 				case BaseFileViewModel.FieldType.Boolean:
 					return ColumnModel.ColumnType.Boolean;
 				case BaseFileViewModel.FieldType.Integer:
+					return ColumnModel.ColumnType.Integer;
 				case BaseFileViewModel.FieldType.Decimal:
-					return ColumnModel.ColumnType.Numeric;
+					return ColumnModel.ColumnType.Decimal;
 				case BaseFileViewModel.FieldType.Date:
 					return ColumnModel.ColumnType.DateTime;
 				default:
@@ -183,7 +185,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 		/// <summary>
 		///		Lista de columnas
 		/// </summary>
-		public ListFileColumnsViewModel ListColumnsViewModel
+		public CsvFileListColumnsViewModel ListColumnsViewModel
 		{
 			get { return _listColumnsViewModel; }
 			set { CheckObject(ref _listColumnsViewModel, value); }

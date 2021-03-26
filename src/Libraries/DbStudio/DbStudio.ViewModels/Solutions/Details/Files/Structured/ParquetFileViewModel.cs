@@ -3,7 +3,7 @@ using System.Data;
 
 using Bau.Libraries.LibParquetFiles.Readers;
 
-namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
+namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files.Structured
 {
 	/// <summary>
 	///		ViewModel para visualización de archivos parquet
@@ -46,7 +46,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 		/// </summary>
 		protected override void OpenFileProperties()
 		{
-			//TODO --> Por ahora no hace nada
+			SolutionViewModel.MainViewModel.MainController.OpenDialog(new ParquetFilePropertiesViewModel(SolutionViewModel, this));
 		}
 	}
 }

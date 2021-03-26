@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 using Bau.Libraries.BauMvvm.ViewModels;
 
-namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
+namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files.Structured
 {
 	/// <summary>
 	///		ViewModel para visualización de archivos utilizando dataTable

@@ -46,8 +46,10 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Managers.Csv
 		{
 			if (IsDataType(dataType, "byte[]")) // ... no vamos a convertir los arrays de bytes
 				return ColumnModel.ColumnType.Unknown;
-			else if (IsDataType(dataType, "int") || IsDataType(dataType, "decimal") || IsDataType(dataType, "double") || IsDataType(dataType, "float"))
-				return ColumnModel.ColumnType.Numeric;
+			else if (IsDataType(dataType, "int"))
+				return ColumnModel.ColumnType.Integer;
+			else if (IsDataType(dataType, "decimal") || IsDataType(dataType, "double") || IsDataType(dataType, "float"))
+				return ColumnModel.ColumnType.Decimal;
 			else if (IsDataType(dataType, "date"))
 				return ColumnModel.ColumnType.DateTime;
 			else if (IsDataType(dataType, "bool"))
