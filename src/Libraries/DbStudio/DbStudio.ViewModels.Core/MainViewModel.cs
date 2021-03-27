@@ -1,9 +1,8 @@
 ﻿using System;
 
 using Bau.Libraries.BauMvvm.ViewModels;
-using Bau.Libraries.DbStudio.Application;
 
-namespace Bau.Libraries.DbStudio.ViewModels
+namespace Bau.Libraries.DbStudio.ViewModels.Core
 {
 	/// <summary>
 	///		ViewModel principal
@@ -16,7 +15,7 @@ namespace Bau.Libraries.DbStudio.ViewModels
 		public event EventHandler WorkspacesChanged;
 		// Variables privadas
 		private string _text;
-		private Solutions.Details.IDetailViewModel _selectedDetailsViewModel;
+		private Interfaces.IDetailViewModel _selectedDetailsViewModel;
 		private Tools.LogListViewModel _logViewModel;
 		private Tools.LastFilesListViewModel _lastFilesViewModel;
 		private Tools.Search.SearchFilesViewModel _searchFilesViewModel;
@@ -83,7 +82,7 @@ namespace Bau.Libraries.DbStudio.ViewModels
 		/// </summary>
 		private void SaveAll()
 		{
-			foreach (Solutions.Details.IDetailViewModel viewModel in MainController.GetOpenedDetails())
+			foreach (Interfaces.IDetailViewModel viewModel in MainController.GetOpenedDetails())
 				if (viewModel.IsUpdated)
 					viewModel.SaveDetails(false);
 		}
@@ -144,19 +143,14 @@ namespace Bau.Libraries.DbStudio.ViewModels
 		public Controllers.IDbStudioController MainController { get; }
 
 		/// <summary>
-		///		Manager de solución
+		///		Manager de plugins
 		/// </summary>
-		internal SolutionManager Manager { get; }
-
-		/// <summary>
-		///		ViewModel de la solución
-		/// </summary>
-		public Solutions.SolutionViewModel SolutionViewModel { get; }
+		public Solutions.PluginsManager PluginsManager { get; }
 
 		/// <summary>
 		///		ViewModel de detalles seleccionado en la ventana principal
 		/// </summary>
-		public Solutions.Details.IDetailViewModel SelectedDetailsViewModel
+		public Interfaces.IDetailViewModel SelectedDetailsViewModel
 		{
 			get { return _selectedDetailsViewModel; }
 			set { CheckObject(ref _selectedDetailsViewModel, value); }

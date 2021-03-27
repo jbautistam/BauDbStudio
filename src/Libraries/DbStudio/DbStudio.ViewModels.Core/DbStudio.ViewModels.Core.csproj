@@ -7,6 +7,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.ViewModels\BauMvvm.ViewModels.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibHelper\src\LibHelper.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibLogger\src\LibLogger.Core\LibLogger.Core.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibLogger\src\LibLogger.Models\LibLogger.Models.csproj" />
   </ItemGroup>
 
 </Project>
