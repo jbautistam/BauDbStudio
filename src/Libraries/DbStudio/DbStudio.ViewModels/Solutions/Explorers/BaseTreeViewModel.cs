@@ -24,9 +24,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers
 			Children = new ObservableCollection<IHierarchicalViewModel>();
 			ContextUI = SynchronizationContext.Current;
 			// Asigna los comandos
-			OpenCommand = new BaseCommand(parameter => OpenProperties(), parameter => CanExecuteAction(nameof(OpenCommand)))
+			OpenCommand = new BaseCommand(_ => OpenProperties(), _ => CanExecuteAction(nameof(OpenCommand)))
 										.AddListener(this, nameof(SelectedNode));
-			DeleteCommand = new BaseCommand(parameter => DeleteItem(), parameter => CanExecuteAction(nameof(DeleteCommand)))
+			DeleteCommand = new BaseCommand(_ => DeleteItem(), _ => CanExecuteAction(nameof(DeleteCommand)))
 										.AddListener(this, nameof(SelectedNode));
 		}
 
