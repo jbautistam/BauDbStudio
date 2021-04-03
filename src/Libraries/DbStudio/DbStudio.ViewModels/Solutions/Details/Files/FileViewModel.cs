@@ -10,7 +10,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 	/// <summary>
 	///		ViewModel para un archivo
 	/// </summary>
-	public class FileViewModel : BaseObservableObject, IDetailViewModel
+	public class FileViewModel : BaseObservableObject, Core.Interfaces.IDetailViewModel
 	{
 		// Eventos públicos
 		public event EventHandler<Controllers.EventArguments.EditorGoToLineEventArgs> GoToLineRequired;

@@ -3,6 +3,7 @@
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
 using Bau.Libraries.BauMvvm.ViewModels.Media;
 using Bau.Libraries.DbStudio.Models.Deployments;
+using Bau.Libraries.DbStudio.ViewModels.Core.Explorers;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 {
@@ -11,7 +12,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 	/// </summary>
 	public class NodeDeploymentViewModel : BaseTreeNodeViewModel
 	{
-		public NodeDeploymentViewModel(BaseTreeViewModel trvTree, IHierarchicalViewModel parent, DeploymentModel deployment) : 
+		public NodeDeploymentViewModel(TreeSolutionBaseViewModel trvTree, IHierarchicalViewModel parent, DeploymentModel deployment) : 
 					base(trvTree, parent, deployment.Name, NodeType.Deployment, IconType.Deployment, deployment, false, false, MvvmColor.Black)
 		{
 			Deployment = deployment;

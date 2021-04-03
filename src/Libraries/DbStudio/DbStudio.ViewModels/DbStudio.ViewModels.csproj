@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
-    <TargetFramework>netstandard2.1</TargetFramework>
+	  <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>Bau.Libraries.DbStudio.ViewModels</RootNamespace>
   </PropertyGroup>
 
@@ -42,6 +42,7 @@
     <ProjectReference Include="..\..\JobEtlProcessor\LibJobProcessor.Rest\LibJobProcessor.Rest.csproj" />
     <ProjectReference Include="..\DbStudio.Application\DbStudio.Application.csproj" />
     <ProjectReference Include="..\DbStudio.Models\DbStudio.Models.csproj" />
+    <ProjectReference Include="..\DbStudio.ViewModels.Core\DbStudio.ViewModels.Core.csproj" />
   </ItemGroup>
 
 </Project>

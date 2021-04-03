@@ -10,7 +10,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Reports
 	/// <summary>
 	///		ViewModel de mantenimiento de un <see cref="ReportModel"/>
 	/// </summary>
-	public class ReportViewModel : BaseObservableObject, IDetailViewModel
+	public class ReportViewModel : BaseObservableObject, Core.Interfaces.IDetailViewModel
 	{
 		// Variables privadas
 		private string _header, _key, _description;

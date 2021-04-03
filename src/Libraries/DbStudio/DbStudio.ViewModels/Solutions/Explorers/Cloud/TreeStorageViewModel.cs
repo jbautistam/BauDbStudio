@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.LibBlobStorage;
 using Bau.Libraries.LibLogger.Models.Log;
+using Bau.Libraries.DbStudio.ViewModels.Core.Explorers;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Cloud
 {
@@ -14,8 +14,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Cloud
 	/// </summary>
 	public class TreeStorageViewModel : BaseTreeViewModel
 	{	
-		public TreeStorageViewModel(SolutionViewModel solutionViewModel) : base(solutionViewModel)
+		public TreeStorageViewModel(SolutionViewModel solutionViewModel)
 		{ 
+			SolutionViewModel = solutionViewModel;
 			NewStorageCommand = new BaseCommand(_ => OpenStorage(null));
 			NewContainerCommand = new BaseCommand(async _ => await NewContainerAsync(), _ => CanExecuteAction(nameof(NewContainerCommand)))
 										.AddListener(this, nameof(SelectedNode));
@@ -476,6 +477,11 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Cloud
 					return (string.Empty, false, string.Empty);
 			}
 		}
+
+		/// <summary>
+		///		ViewModel de la solución
+		/// </summary>
+		public SolutionViewModel SolutionViewModel { get; }
 
 		/// <summary>
 		///		Comando para crear una nueva conexión a storage

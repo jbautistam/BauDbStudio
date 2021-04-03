@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.ComboItems;
+using Bau.Libraries.DbStudio.ViewModels.Core.Interfaces;
 using Bau.Libraries.DbScripts.Manager.Models;
 using Bau.Libraries.DbStudio.Models.Connections;
 using Bau.Libraries.LibLogger.Models.Log;

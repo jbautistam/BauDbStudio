@@ -6,7 +6,7 @@ using System.Threading;
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
 
-namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers
+namespace Bau.Libraries.DbStudio.ViewModels.Core.Explorers
 {
 	/// <summary>
 	///		ViewModel base de los árboles de los exploradores de la solución
@@ -17,10 +17,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers
 		private ObservableCollection<IHierarchicalViewModel> _children;
 		private BaseTreeNodeViewModel _selectedNode;
 
-		protected BaseTreeViewModel(SolutionViewModel solutionViewModel)
+		protected BaseTreeViewModel()
 		{
 			// Asigna las propiedades
-			SolutionViewModel = solutionViewModel;
 			Children = new ObservableCollection<IHierarchicalViewModel>();
 			ContextUI = SynchronizationContext.Current;
 			// Asigna los comandos
@@ -145,11 +144,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers
 		///		Borra el elemento seleccionado
 		/// </summary>
 		protected abstract void DeleteItem();
-
-		/// <summary>
-		///		ViewModel de la solución
-		/// </summary>
-		public SolutionViewModel SolutionViewModel { get; }
 
 		/// <summary>
 		///		Nodos

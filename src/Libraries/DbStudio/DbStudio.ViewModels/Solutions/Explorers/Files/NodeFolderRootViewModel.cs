@@ -2,6 +2,7 @@
 
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
 using Bau.Libraries.BauMvvm.ViewModels.Media;
+using Bau.Libraries.DbStudio.ViewModels.Core.Explorers;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 {
@@ -13,7 +14,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 		// Variables privadas
 		private string _fileName;
 
-		public NodeFolderRootViewModel(BaseTreeViewModel trvTree, IHierarchicalViewModel parent, string path) 
+		public NodeFolderRootViewModel(TreeFilesViewModel trvTree, IHierarchicalViewModel parent, string path) 
 					: base(trvTree, parent, path, NodeType.FilesRoot, IconType.Project, path, true, true, MvvmColor.Red)
 		{
 			FileName = path;
@@ -42,7 +43,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 		/// </summary>
 		private void AddNode(string fileName, bool isFolder)
 		{
-			Children.Add(new NodeFileViewModel(TreeViewModel, this, fileName, isFolder));
+			Children.Add(new NodeFileViewModel(TreeViewModel as TreeFilesViewModel, this, fileName, isFolder));
 		}
 
 		/// <summary>

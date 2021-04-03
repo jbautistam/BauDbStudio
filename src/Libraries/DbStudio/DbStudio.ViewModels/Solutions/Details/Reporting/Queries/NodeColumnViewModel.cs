@@ -5,7 +5,7 @@ using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.BauMvvm.ViewModels.Media;
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.ComboItems;
-using Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers;
+using Bau.Libraries.DbStudio.ViewModels.Core.Explorers;
 using Bau.Libraries.LibReporting.Requests.Models;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
@@ -142,7 +142,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 		private void UpdateFilter(bool whereClause)
 		{
 			if (TreeViewModel is TreeQueryReportViewModel tree)
-				tree.SolutionViewModel.MainViewModel.MainController.OpenDialog(GetFilter(whereClause));
+				tree.ReportViewModel.ReportingSolutionViewModel.SolutionViewModel.MainViewModel.MainController.OpenDialog(GetFilter(whereClause));
 		}
 
 		/// <summary>

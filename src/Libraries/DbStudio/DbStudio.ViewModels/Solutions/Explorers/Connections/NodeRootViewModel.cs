@@ -2,6 +2,7 @@
 
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
 using Bau.Libraries.BauMvvm.ViewModels.Media;
+using Bau.Libraries.DbStudio.ViewModels.Core.Explorers;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 {
@@ -10,7 +11,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 	/// </summary>
 	public class NodeRootViewModel : BaseTreeNodeViewModel
 	{
-		public NodeRootViewModel(BaseTreeViewModel trvTree, IHierarchicalViewModel parent, NodeType type, string text, bool lazyLoad = true) :
+		public NodeRootViewModel(TreeSolutionBaseViewModel trvTree, IHierarchicalViewModel parent, NodeType type, string text, bool lazyLoad = true) :
 					base(trvTree, parent, text, type, IconType.Connection, type, lazyLoad, true, MvvmColor.Red)
 		{
 			switch (type)
@@ -53,10 +54,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 		private void LoadConnectionNodes()
 		{
 			// Ordena las conexiones
-			TreeViewModel.SolutionViewModel.Solution.Connections.SortByName();
+			(TreeViewModel as TreeSolutionBaseViewModel).SolutionViewModel.Solution.Connections.SortByName();
 			// Añade los nodos
-			foreach (Models.Connections.ConnectionModel connection in TreeViewModel.SolutionViewModel.Solution.Connections)
-				Children.Add(new NodeConnectionViewModel(TreeViewModel, this, connection));
+			foreach (Models.Connections.ConnectionModel connection in (TreeViewModel as TreeSolutionBaseViewModel).SolutionViewModel.Solution.Connections)
+				Children.Add(new NodeConnectionViewModel((TreeViewModel as TreeSolutionBaseViewModel), this, connection));
 		}
 
 		/// <summary>
@@ -65,10 +66,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 		private void LoadDeploymentNodes()
 		{
 			// Ordena las distribuciones
-			TreeViewModel.SolutionViewModel.Solution.Deployments.SortByName();
+			(TreeViewModel as TreeSolutionBaseViewModel).SolutionViewModel.Solution.Deployments.SortByName();
 			// Añade los nodos
-			foreach (Models.Deployments.DeploymentModel deployment in TreeViewModel.SolutionViewModel.Solution.Deployments)
-				Children.Add(new NodeDeploymentViewModel(TreeViewModel, this, deployment));
+			foreach (Models.Deployments.DeploymentModel deployment in (TreeViewModel as TreeSolutionBaseViewModel).SolutionViewModel.Solution.Deployments)
+				Children.Add(new NodeDeploymentViewModel(TreeViewModel as TreeSolutionBaseViewModel, this, deployment));
 		}
 
 		/// <summary>

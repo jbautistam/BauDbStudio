@@ -7,7 +7,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Queries
 	/// <summary>
 	///		ViewModel para ejecución de una consulta
 	/// </summary>
-	public class ExecuteQueryViewModel : BaseObservableObject, IDetailViewModel
+	public class ExecuteQueryViewModel : BaseObservableObject, Core.Interfaces.IDetailViewModel
 	{
 		// Variables privadas
 		private string _header;

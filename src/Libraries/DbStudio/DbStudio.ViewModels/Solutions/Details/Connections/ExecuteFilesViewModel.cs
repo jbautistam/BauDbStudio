@@ -12,7 +12,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 	/// <summary>
 	///		ViewModel para ejecución de una serie de archivos
 	/// </summary>
-	public class ExecuteFilesViewModel : BaseObservableObject, IDetailViewModel
+	public class ExecuteFilesViewModel : BaseObservableObject, Core.Interfaces.IDetailViewModel
 	{
 		// Variables privadas
 		private string _header, _fileName;

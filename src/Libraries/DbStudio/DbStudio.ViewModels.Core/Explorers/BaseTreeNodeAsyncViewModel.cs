@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
 using Bau.Libraries.BauMvvm.ViewModels.Media;
 
-namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers
+namespace Bau.Libraries.DbStudio.ViewModels.Core.Explorers
 {
 	/// <summary>
 	///		ViewModel base de un nodo del árbol de exploración de una solución con carga asíncrona de nodos
@@ -55,9 +55,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers
 													}
 													catch (Exception exception)
 													{
-														TreeViewModel.SolutionViewModel.MainViewModel.MainController.Logger.Default.LogItems.Error($"Error al cargar los nodos. {exception.Message}");
+														System.Diagnostics.Trace.TraceError($"Error al cargar los nodos. {exception.Message}");
 													}
-												 }, 
+												 },
 											state);
 		}
 

@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-using Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers;
+using Bau.Libraries.DbStudio.ViewModels.Core.Explorers;
 using Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries;
 
 namespace Bau.DbStudio.Views.Reporting.Queries

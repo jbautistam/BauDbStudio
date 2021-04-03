@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 
 using Bau.Libraries.DbStudio.ViewModels;
-using Bau.Libraries.DbStudio.ViewModels.Solutions.Details;
+using Bau.Libraries.DbStudio.ViewModels.Core.Interfaces;
 using Bau.DbStudio.Views.Files;
 
 namespace Bau.DbStudio

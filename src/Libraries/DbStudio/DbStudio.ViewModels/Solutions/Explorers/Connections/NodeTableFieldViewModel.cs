@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Bau.Libraries.DbStudio.Models.Connections;
+using Bau.Libraries.DbStudio.ViewModels.Core.Explorers;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 {
@@ -9,7 +10,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 	/// </summary>
 	public class NodeTableFieldViewModel : BaseTreeNodeViewModel
 	{
-		public NodeTableFieldViewModel(BaseTreeViewModel trvTree, NodeTableViewModel parent, ConnectionTableFieldModel field) : 
+		public NodeTableFieldViewModel(TreeSolutionBaseViewModel trvTree, NodeTableViewModel parent, ConnectionTableFieldModel field) : 
 					base(trvTree, parent, field.FullName, NodeType.Table, IconType.Field, field, false)
 		{
 			Field = field;

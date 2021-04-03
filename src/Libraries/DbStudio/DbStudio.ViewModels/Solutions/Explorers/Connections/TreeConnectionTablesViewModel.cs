@@ -9,11 +9,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 	/// <summary>
 	///		ViewModel para mostrar el esquema de tablas de una conexión
 	/// </summary>
-	public class TreeConnectionTablesViewModel : BaseTreeViewModel
+	public class TreeConnectionTablesViewModel : TreeSolutionBaseViewModel
 	{
-		public TreeConnectionTablesViewModel(SolutionViewModel solutionViewModel) : base(solutionViewModel)
-		{
-		}
+		public TreeConnectionTablesViewModel(SolutionViewModel solutionViewModel) : base(solutionViewModel) {}
 
 		/// <summary>
 		///		Carga el árbol de una conexión
@@ -77,7 +75,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 		///		Borra el elemento seleccionado
 		/// </summary>
 		protected override void DeleteItem()
-		{	
+		{
+			// ... no hace nada, sólo implementa la interface
 		}
 
 		/// <summary>

@@ -5,7 +5,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
 using Bau.Libraries.BauMvvm.Views.Wpf.Forms.Trees;
-using Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers;
+using Bau.Libraries.DbStudio.ViewModels.Core.Explorers;
 using Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files;
 
 namespace Bau.DbStudio.Views

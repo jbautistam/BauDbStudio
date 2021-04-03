@@ -9,7 +9,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files.Structured
 	/// <summary>
 	///		ViewModel para visualización de archivos utilizando dataTable
 	/// </summary>
-	public abstract class BaseFileViewModel : BaseObservableObject, IDetailViewModel
+	public abstract class BaseFileViewModel : BaseObservableObject, Core.Interfaces.IDetailViewModel
 	{
 		// Enumerados públicos
 		/// <summary>

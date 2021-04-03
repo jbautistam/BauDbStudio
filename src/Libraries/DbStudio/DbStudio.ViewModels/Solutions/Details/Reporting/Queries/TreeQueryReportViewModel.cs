@@ -10,7 +10,7 @@ using Bau.Libraries.LibReporting.Models.DataWarehouses.Relations;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.Reports;
 using Bau.Libraries.LibReporting.Requests.Models;
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
-using Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers;
+using Bau.Libraries.DbStudio.ViewModels.Core.Explorers;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 {
@@ -19,7 +19,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 	/// </summary>
 	public class TreeQueryReportViewModel : BaseTreeViewModel
 	{
-		public TreeQueryReportViewModel(ReportViewModel reportViewModel) : base(reportViewModel.ReportingSolutionViewModel.SolutionViewModel)
+		public TreeQueryReportViewModel(ReportViewModel reportViewModel)
 		{
 			ReportViewModel = reportViewModel;
 		}

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.BauMvvm.ViewModels;
+using Bau.Libraries.DbStudio.ViewModels.Core.Explorers;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 {
@@ -14,8 +15,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 		// Variables privadas
 		private NodeFileViewModel _nodeToCopy;
 
-		public TreeFilesViewModel(SolutionViewModel solutionViewModel) : base(solutionViewModel)
+		public TreeFilesViewModel(SolutionViewModel solutionViewModel)
 		{ 
+			SolutionViewModel = solutionViewModel;
 			NewFolderFilesCommand = new BaseCommand(_ => AddFolderToExplorer());
 			NewFolderCommand = new BaseCommand(_ => CreateFolder(), _ => CanCreateFileOrFolder())
 										.AddListener(this, nameof(SelectedNode));
@@ -595,36 +597,34 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 		/// </summary>
 		private void RenameOpenViewModels(string oldFileName, bool isFolder, string newFileName)
 		{
-			List<Details.IDetailViewModel> viewModels = SolutionViewModel.MainViewModel.MainController.GetOpenedDetails();
+			foreach (Core.Interfaces.IDetailViewModel viewModel in SolutionViewModel.MainViewModel.MainController.GetOpenedDetails())
+				if (viewModel is Details.Files.FileViewModel fileViewModel)
+				{
+					string newName = newFileName;
+					bool mustUpdate = false;
 
-				foreach (Details.IDetailViewModel viewModel in viewModels)
-					if (viewModel is Details.Files.FileViewModel fileViewModel)
-					{
-						string newName = newFileName;
-						bool mustUpdate = false;
+						// Cambia el nombre si se trata de un directorio
+						if (isFolder && System.IO.Path.GetDirectoryName(fileViewModel.FileName).Equals(oldFileName, StringComparison.CurrentCultureIgnoreCase))
+						{
+							newName = System.IO.Path.Combine(newFileName, System.IO.Path.GetFileName(fileViewModel.FileName));
+							mustUpdate = true;
+						}
+						else if (!isFolder && fileViewModel.FileName.Equals(oldFileName, StringComparison.CurrentCultureIgnoreCase))
+							mustUpdate = true;
+						// Si se debe modificar el nombre
+						if (mustUpdate)
+						{
+							bool isUpdated = fileViewModel.IsUpdated;
+							string oldWindowId = fileViewModel.TabId;
 
-							// Cambia el nombre si se trata de un directorio
-							if (isFolder && System.IO.Path.GetDirectoryName(fileViewModel.FileName).Equals(oldFileName, StringComparison.CurrentCultureIgnoreCase))
-							{
-								newName = System.IO.Path.Combine(newFileName, System.IO.Path.GetFileName(fileViewModel.FileName));
-								mustUpdate = true;
-							}
-							else if (!isFolder && fileViewModel.FileName.Equals(oldFileName, StringComparison.CurrentCultureIgnoreCase))
-								mustUpdate = true;
-							// Si se debe modificar el nombre
-							if (mustUpdate)
-							{
-								bool isUpdated = fileViewModel.IsUpdated;
-								string oldWindowId = fileViewModel.TabId;
-
-									// Cambia el viewModel
-									fileViewModel.FileName = newName;
-									// Avisa a la ventana principal para cambiar los datos del documento abierto
-									SolutionViewModel.MainViewModel.MainController.UpdateTabId(oldWindowId, fileViewModel.TabId, fileViewModel.Header);
-									// Recupera en el viewModel si ha habido modificaciones
-									fileViewModel.IsUpdated = isUpdated;
-							}
-					}
+								// Cambia el viewModel
+								fileViewModel.FileName = newName;
+								// Avisa a la ventana principal para cambiar los datos del documento abierto
+								SolutionViewModel.MainViewModel.MainController.UpdateTabId(oldWindowId, fileViewModel.TabId, fileViewModel.Header);
+								// Recupera en el viewModel si ha habido modificaciones
+								fileViewModel.IsUpdated = isUpdated;
+						}
+				}
 		}
 
 		/// <summary>
@@ -632,22 +632,20 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 		/// </summary>
 		private void CloseWindows(string fileName, bool isFolder)
 		{
-			List<Details.IDetailViewModel> viewModels = SolutionViewModel.MainViewModel.MainController.GetOpenedDetails();
-
-				foreach (Details.IDetailViewModel viewModel in viewModels)
-					if (MustClose(viewModel, fileName, isFolder))
-					{
-						// Indica que no se ha modificado (porque se ha borrado el archivo)
-						viewModel.IsUpdated = false;
-						// Cierra la ventana
-						SolutionViewModel.MainViewModel.MainController.CloseWindow(viewModel.TabId);
-					}
+			foreach (Core.Interfaces.IDetailViewModel viewModel in SolutionViewModel.MainViewModel.MainController.GetOpenedDetails())
+				if (MustClose(viewModel, fileName, isFolder))
+				{
+					// Indica que no se ha modificado (porque se ha borrado el archivo)
+					viewModel.IsUpdated = false;
+					// Cierra la ventana
+					SolutionViewModel.MainViewModel.MainController.CloseWindow(viewModel.TabId);
+				}
 		}
 
 		/// <summary>
 		///		Comprueba si debe cerrar una ficha de detalles
 		/// </summary>
-		private bool MustClose(Details.IDetailViewModel viewModel, string fileName, bool isFolder)
+		private bool MustClose(Core.Interfaces.IDetailViewModel viewModel, string fileName, bool isFolder)
 		{
 			string viewModelFileName = string.Empty;
 			bool mustClose = false;
@@ -677,6 +675,11 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 		{
 			return !string.IsNullOrEmpty(GetSelectedPath());
 		}
+
+		/// <summary>
+		///		ViewModel de la solución
+		/// </summary>
+		public SolutionViewModel SolutionViewModel { get; }
 
 		/// <summary>
 		///		Comando para añadir un directorio de archivos a la solución

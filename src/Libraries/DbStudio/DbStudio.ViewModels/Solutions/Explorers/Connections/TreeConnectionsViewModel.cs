@@ -2,13 +2,14 @@
 
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.DbStudio.Models.Connections;
+using Bau.Libraries.DbStudio.ViewModels.Core.Explorers;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 {
 	/// <summary>
 	///		ViewModel para el árbol de conexiones
 	/// </summary>
-	public class TreeConnectionsViewModel : BaseTreeViewModel
+	public class TreeConnectionsViewModel : TreeSolutionBaseViewModel
 	{
 		public TreeConnectionsViewModel(SolutionViewModel solutionViewModel) : base(solutionViewModel)
 		{

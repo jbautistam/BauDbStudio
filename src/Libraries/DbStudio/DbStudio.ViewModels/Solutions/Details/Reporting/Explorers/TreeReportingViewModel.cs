@@ -2,8 +2,8 @@
 
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.LibReporting.Models.DataWarehouses;
-using Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets;
+using Bau.Libraries.DbStudio.ViewModels.Core.Explorers;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorers
 {
@@ -12,7 +12,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 	/// </summary>
 	public class TreeReportingViewModel : BaseTreeViewModel
 	{
-		public TreeReportingViewModel(ReportingSolutionViewModel reportingSolutionViewModel) : base(reportingSolutionViewModel.SolutionViewModel)
+		public TreeReportingViewModel(ReportingSolutionViewModel reportingSolutionViewModel)
 		{
 			ReportingSolutionViewModel = reportingSolutionViewModel;
 			NewDataWarehouseCommand = new BaseCommand(_ => NewDataWarehouse(), _ => CanExecuteAction(nameof(NewDataWarehouseCommand)))
@@ -225,7 +225,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 		/// </summary>
 		private void DeleteDataWarehouse(DataWarehouseModel dataWarehouse)
 		{
-			if (SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowQuestion($"¿Realmente desea borrar los datos del almacén de datos {dataWarehouse.Name}?"))
+			if (ReportingSolutionViewModel.SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowQuestion($"¿Realmente desea borrar los datos del almacén de datos {dataWarehouse.Name}?"))
 			{
 				// Borra el almacén de datos
 				ReportingSolutionViewModel.ReportingSolutionManager.RemoveDataWarehouse(dataWarehouse);
@@ -239,7 +239,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 		/// </summary>
 		private void DeleteDataSourceSql(DataSourceSqlModel dataSource)
 		{
-			if (SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowQuestion($"¿Realmente desea borrar los datos del origen de datos {dataSource.Id}?"))
+			if (ReportingSolutionViewModel.SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowQuestion($"¿Realmente desea borrar los datos del origen de datos {dataSource.Id}?"))
 			{
 				// Borra el origen de datos
 				dataSource.DataWarehouse.DataSources.Remove(dataSource);
@@ -253,7 +253,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 		/// </summary>
 		private void DeleteDimension(LibReporting.Models.DataWarehouses.Dimensions.DimensionModel dimension)
 		{
-			if (SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowQuestion($"¿Realmente desea borrar los datos de la dimensión {dimension.Id}?"))
+			if (ReportingSolutionViewModel.SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowQuestion($"¿Realmente desea borrar los datos de la dimensión {dimension.Id}?"))
 			{
 				// Borra la dimensión
 				dimension.DataWarehouse.Dimensions.Remove(dimension);
@@ -267,7 +267,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 		/// </summary>
 		private void DeleteReport(LibReporting.Models.DataWarehouses.Reports.ReportModel report)
 		{
-			if (SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowQuestion($"¿Realmente desea borrar los datos del informe {report.Id}?"))
+			if (ReportingSolutionViewModel.SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowQuestion($"¿Realmente desea borrar los datos del informe {report.Id}?"))
 			{
 				// Borra el informe
 				report.DataWarehouse.Reports.Remove(report);

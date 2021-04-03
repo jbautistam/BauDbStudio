@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
 using Bau.Libraries.BauMvvm.ViewModels.Media;
 using Bau.Libraries.DbStudio.Models.Connections;
+using Bau.Libraries.DbStudio.ViewModels.Core.Explorers;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 {
@@ -14,7 +15,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 	/// </summary>
 	public class NodeConnectionViewModel : BaseTreeNodeAsyncViewModel
 	{
-		public NodeConnectionViewModel(BaseTreeViewModel trvTree, IHierarchicalViewModel parent, ConnectionModel connection) : 
+		public NodeConnectionViewModel(TreeSolutionBaseViewModel trvTree, IHierarchicalViewModel parent, ConnectionModel connection) : 
 					base(trvTree, parent, connection.Name, NodeType.Connection, IconType.Connection, connection, true, true, MvvmColor.Red)
 		{
 			Connection = connection;
@@ -30,11 +31,11 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 				// Carga el esquema de las conexiones
 				try
 				{
-					NodeRootViewModel rootTables = new NodeRootViewModel(TreeViewModel, this, NodeType.SchemaRoot, "Tables", false);
-					NodeRootViewModel rootViews = new NodeRootViewModel(TreeViewModel, this, NodeType.SchemaRoot, "Views", false);
+					NodeRootViewModel rootTables = new NodeRootViewModel(TreeViewModel as TreeSolutionBaseViewModel, this, NodeType.SchemaRoot, "Tables", false);
+					NodeRootViewModel rootViews = new NodeRootViewModel(TreeViewModel as TreeSolutionBaseViewModel, this, NodeType.SchemaRoot, "Views", false);
 
 						// Carga el esquema
-						await TreeViewModel.SolutionViewModel.MainViewModel.Manager.LoadSchemaAsync(Connection, cancellationToken);
+						await (TreeViewModel as TreeSolutionBaseViewModel).SolutionViewModel.MainViewModel.Manager.LoadSchemaAsync(Connection, cancellationToken);
 						// Añade los nodos raíz
 						nodes.Add(rootTables);
 						nodes.Add(rootViews);
@@ -42,18 +43,18 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 						Connection.Tables.Sort((first, second) => first.FullName.CompareTo(second.FullName));
 						// Añade las tablas al nodo
 						foreach (ConnectionTableModel table in Connection.Tables)
-							rootTables.Children.Add(new NodeTableViewModel(TreeViewModel, this, table, true));
+							rootTables.Children.Add(new NodeTableViewModel(TreeViewModel as TreeSolutionBaseViewModel, this, table, true));
 						// Ordena las vistas
 						Connection.Views.Sort((first, second) => first.FullName.CompareTo(second.FullName));
 						// Añade las tablas al nodo
 						foreach (ConnectionTableModel view in Connection.Views)
-							rootViews.Children.Add(new NodeTableViewModel(TreeViewModel, this, view, false));
+							rootViews.Children.Add(new NodeTableViewModel(TreeViewModel as TreeSolutionBaseViewModel, this, view, false));
 				}
 				catch (Exception exception)
 				{
 					nodes.Add(new NodeMessageViewModel(TreeViewModel, this, "No se puede cargar el esquema de la conexión", IconType.Error));
-					TreeViewModel.SolutionViewModel.MainViewModel.MainController.Logger.Default.LogItems.Error("Error when load schema", exception);
-					TreeViewModel.SolutionViewModel.MainViewModel.MainController.Logger.Flush();
+					(TreeViewModel as TreeSolutionBaseViewModel).SolutionViewModel.MainViewModel.MainController.Logger.Default.LogItems.Error("Error when load schema", exception);
+					(TreeViewModel as TreeSolutionBaseViewModel).SolutionViewModel.MainViewModel.MainController.Logger.Flush();
 				}
 				// Devuelve la colección de nodos
 				return nodes;

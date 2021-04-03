@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 
 using Bau.Libraries.BauMvvm.ViewModels.Controllers;
-using Bau.Libraries.DbStudio.ViewModels.Solutions.Details;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Controllers
 {
@@ -34,7 +33,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Controllers
 		/// <summary>
 		///		Abre una ventana de detalles
 		/// </summary>
-		SystemControllerEnums.ResultType OpenWindow(IDetailViewModel detailsViewModel);
+		SystemControllerEnums.ResultType OpenWindow(Core.Interfaces.IDetailViewModel detailsViewModel);
 
 		/// <summary>
 		///		Abre un cuadro de diálogo
@@ -49,12 +48,12 @@ namespace Bau.Libraries.DbStudio.ViewModels.Controllers
 		/// <summary>
 		///		Obtiene la ventana de detalles activa
 		/// </summary>
-		IDetailViewModel GetActiveDetails();
+		Core.Interfaces.IDetailViewModel GetActiveDetails();
 
 		/// <summary>
 		///		Obtiene la lista de ventanas de detalles abiertas
 		/// </summary>
-		List<IDetailViewModel> GetOpenedDetails();
+		List<Core.Interfaces.IDetailViewModel> GetOpenedDetails();
 
 		/// <summary>
 		///		Indica a la ventana principal que cambie el Id de un documento
@@ -72,7 +71,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Controllers
 		string GetEtlConsoleFileName();
 
 		/// <summary>
-		///		Muestra una notificación (sólo si la configuración lo permite
+		///		Muestra una notificación (sólo si la configuración lo permite)
 		/// </summary>
 		void ShowNotification(SystemControllerEnums.NotificationType type, string title, string message);
 

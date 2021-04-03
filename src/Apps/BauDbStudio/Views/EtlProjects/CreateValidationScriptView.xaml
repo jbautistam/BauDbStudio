@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bau.DbStudio.Views.EtlProjects"
         xmlns:Files="clr-namespace:Bau.Controls.Files;assembly=BauControls"
-		xmlns:ConnectionsViewModel="clr-namespace:Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers;assembly=DbStudio.ViewModels"
+		xmlns:ConnectionsViewModel="clr-namespace:Bau.Libraries.DbStudio.ViewModels.Core.Explorers;assembly=DbStudio.ViewModels.Core"
 		x:Class="Bau.DbStudio.Views.EtlProjects.CreateValidationScriptView"
         mc:Ignorable="d"
         Title="Creación de scripts de validación" Height="650" Width="1200" ResizeMode="NoResize" ShowInTaskbar="False"
