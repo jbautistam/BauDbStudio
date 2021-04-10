@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Bau.Libraries.DbStudio.Models.Core.Workspaces
+namespace Bau.Libraries.PluginsStudio.Models.Workspaces
 {
 	/// <summary>
 	///		Clase con los datos de un espacio de trabajo

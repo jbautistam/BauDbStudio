@@ -45,10 +45,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 		/// <summary>
 		///		Carga un archivo de solución
 		/// </summary>
-		internal void Load(Tools.Workspaces.WorkSpaceViewModel workSpaceViewModel)
+		internal void Load(string path)
 		{
 			// Carga la solución
-			Solution = Manager.LoadConfiguration(GetSolutionFileName(workSpaceViewModel, "DbStudio"));
+			Solution = Manager.LoadConfiguration(GetSolutionFileName(path, "DbStudio"));
 			// Carga los exploradores
 			TreeConnectionsViewModel.Load();
 			ConnectionExecutionViewModel.Load();
@@ -56,7 +56,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 			TreeStoragesViewModel.Load();
 			// Carga la solución de informes
 			if (!string.IsNullOrWhiteSpace(Solution.FileName))
-				ReportingSolutionViewModel.Load(GetSolutionFileName(workSpaceViewModel, "Reporting"));
+				ReportingSolutionViewModel.Load(GetSolutionFileName(path, "Reporting"));
 			// Carga las carpetas en la ventana de búsqueda
 			MainViewModel.SearchFilesViewModel.LoadFolders();
 		}
@@ -64,10 +64,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 		/// <summary>
 		///		Graba la solución
 		/// </summary>
-		internal void Save(Tools.Workspaces.WorkSpaceViewModel workSpaceViewModel)
+		internal void Save(string path)
 		{
 			// Graba la solución
-			Manager.SaveSolution(Solution, GetSolutionFileName(workSpaceViewModel, "DbStudio"));
+			Manager.SaveSolution(Solution, GetSolutionFileName(path, "DbStudio"));
 			// Carga la solución de informes
 			ReportingSolutionViewModel.SaveSolution();
 		}
@@ -75,9 +75,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 		/// <summary>
 		///		Obtiene el nombre del archivo de solución
 		/// </summary>
-		private string GetSolutionFileName(Tools.Workspaces.WorkSpaceViewModel workSpaceViewModel, string project)
+		private string GetSolutionFileName(string path, string project)
 		{
-			return System.IO.Path.Combine(workSpaceViewModel.Path, $"{project}.xml");
+			return System.IO.Path.Combine(path, $"{project}.xml");
 		}
 
 		/// <summary>

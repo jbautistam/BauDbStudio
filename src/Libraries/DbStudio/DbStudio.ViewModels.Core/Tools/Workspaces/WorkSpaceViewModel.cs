@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Bau.Libraries.DbStudio.ViewModels.Tools.Workspaces
+namespace Bau.Libraries.DbStudio.ViewModels.Core.Tools.Workspaces
 {
 	/// <summary>
 	///		ViewModel con los datos de un espacio de trabajo

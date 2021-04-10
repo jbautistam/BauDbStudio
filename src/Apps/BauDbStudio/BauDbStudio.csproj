@@ -98,6 +98,7 @@
     <ProjectReference Include="..\..\..\..\..\Libraries\Charts\LibCharts\LibCharts.csproj" />
     <ProjectReference Include="..\..\..\..\..\Libraries\Common\LibSystem.Windows\LibSystem.Windows.csproj" />
     <ProjectReference Include="..\..\Libraries\DbStudio\DbStudio.ViewModels\DbStudio.ViewModels.csproj" />
+    <ProjectReference Include="..\..\Libraries\PluginsStudio\PluginsStudio.Views\PluginsStudio.Views.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\BauDbStudio.ico" />

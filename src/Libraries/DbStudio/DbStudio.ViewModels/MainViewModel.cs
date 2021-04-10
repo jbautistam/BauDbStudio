@@ -11,31 +11,26 @@ namespace Bau.Libraries.DbStudio.ViewModels
 	{
 		// Constantes privadas
 		internal const string MaskFiles = "Archivos de solución (*.dbsln)|*.dbsln|Todos los archivos (*.*)|*.*";
-		// Eventos públicos
-		public event EventHandler WorkspacesChanged;
 		// Variables privadas
 		private string _text;
-		private string _workspace;
 		private Core.Interfaces.IDetailViewModel _selectedDetailsViewModel;
 		private Tools.LogListViewModel _logViewModel;
-		private Tools.Workspaces.WorkspaceListViewModel _workspacesViewModel;
 		private Tools.LastFilesListViewModel _lastFilesViewModel;
 		private Tools.Search.SearchFilesViewModel _searchFilesViewModel;
 
-		public MainViewModel(Controllers.IDbStudioController mainController, string workspace)
+		public MainViewModel(Core.PluginsStudioViewModel pluginsStudioViewModel, Controllers.IDbStudioController mainController)
 		{
 			// Título de la aplicación
 			Text = mainController.AppName;
 			// Asigna las propiedades
+			PluginsStudioViewModel = pluginsStudioViewModel;
 			MainController = mainController;
-			Workspace = workspace;
 			// Inicializa la solución
 			SolutionViewModel = new Solutions.SolutionViewModel(this);
 			// Inicializa los objetos principales
 			LogViewModel = new Tools.LogListViewModel(this);
 			LastFilesViewModel = new Tools.LastFilesListViewModel(this);
 			SearchFilesViewModel = new Tools.Search.SearchFilesViewModel(this);
-			WorkspacesViewModel = new Tools.Workspaces.WorkspaceListViewModel(this);
 			// Asigna los comandos
 			SaveCommand = new BaseCommand(_ => Save(false), _ => CanSave())
 									.AddListener(this, nameof(SelectedDetailsViewModel));
@@ -51,23 +46,7 @@ namespace Bau.Libraries.DbStudio.ViewModels
 		/// </summary>
 		public void Load()
 		{
-			// Carga los espacios de trabajo
-			WorkspacesViewModel.Load();
-			// Selecciona el espacio de trabajo
-			SelectWorkspace(Workspace);
-		}
-
-		/// <summary>
-		///		Lanza el evento de modificación de los workspaces
-		/// </summary>
-		internal void SelectWorkspace(string workspace)
-		{
-			// Selecciona el workspace
-			WorkspacesViewModel.Select(workspace);
-			// Carga la solución
-			SolutionViewModel.Load(WorkspacesViewModel.SelectedItem);
-			// Lanza el evento de modificación del espacio de trabajo seleccionado
-			WorkspacesChanged?.Invoke(this, EventArgs.Empty);
+			SolutionViewModel.Load(PluginsStudioViewModel.WorkspacesViewModel.SelectedItem.Path);
 		}
 
 		/// <summary>
@@ -75,7 +54,7 @@ namespace Bau.Libraries.DbStudio.ViewModels
 		/// </summary>
 		internal void SaveSolution()
 		{
-			SolutionViewModel.Save(WorkspacesViewModel.SelectedItem);
+			SolutionViewModel.Save(PluginsStudioViewModel.WorkspacesViewModel.SelectedItem.Path);
 		}
 
 		/// <summary>
@@ -83,7 +62,7 @@ namespace Bau.Libraries.DbStudio.ViewModels
 		/// </summary>
 		internal void Refresh()
 		{
-			SolutionViewModel.Load(WorkspacesViewModel.SelectedItem);
+			Load();
 		}
 
 		/// <summary>
@@ -151,6 +130,11 @@ namespace Bau.Libraries.DbStudio.ViewModels
 		}
 
 		/// <summary>
+		///		ViewModel de PluginsStudio
+		/// </summary>
+		public Core.PluginsStudioViewModel PluginsStudioViewModel { get; }
+
+		/// <summary>
 		///		Controlador principal
 		/// </summary>
 		public Controllers.IDbStudioController MainController { get; }
@@ -185,24 +169,6 @@ namespace Bau.Libraries.DbStudio.ViewModels
 		{
 			get { return _logViewModel; }
 			set { CheckObject(ref _logViewModel, value); }
-		}
-
-		/// <summary>
-		///		ViewModel de espacios de trabajo
-		/// </summary>
-		public Tools.Workspaces.WorkspaceListViewModel WorkspacesViewModel
-		{
-			get { return _workspacesViewModel; }
-			set { CheckObject(ref _workspacesViewModel, value); }
-		}
-
-		/// <summary>
-		///		Espacio de trabajo
-		/// </summary>
-		public string Workspace
-		{
-			get { return _workspace; }
-			set { CheckProperty(ref _workspace, value); }
 		}
 
 		/// <summary>

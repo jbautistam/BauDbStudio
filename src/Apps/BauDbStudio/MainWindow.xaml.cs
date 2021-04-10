@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 
-using Bau.Libraries.DbStudio.ViewModels;
 using Bau.Libraries.DbStudio.ViewModels.Core.Interfaces;
 using Bau.DbStudio.Views.Files;
 
@@ -29,13 +28,17 @@ namespace Bau.DbStudio
 			// Inicializa el controlador
 			MainController = new Controllers.AppController("Bau.DbStudio", this, 
 														   System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Bau.DbStudio"));
-			MainController.ConfigurationController.Load();
+			MainController.ConfigurationController.Load(MainController.SparkSolutionController.AppPath);
 			// Inicializa el contexto y los controles
-			DataContext = ViewModel = new MainViewModel(MainController.SparkSolutionController, MainController.ConfigurationController.LastWorkSpace);
-			// Carga la última solución
-			ViewModel.Load();
-			ViewModel.LastPathSelected = MainController.ConfigurationController.LastPathSelected;
-			ViewModel.LastFilesViewModel.Add(MainController.ConfigurationController.LastFiles);
+			PluginsStudioViews = new Libraries.PluginsStudio.Views.PluginsStudioViewManager(MainController.SparkSolutionController);
+			PluginsStudioViews.InitializePlugins();
+			// Inicializa el ViewModel
+			DataContext = ViewModel = PluginsStudioViews.PluginsStudioViewModel;
+			// Carga los datos
+			PluginsStudioViews.Load(MainController.ConfigurationController.PathData, MainController.ConfigurationController.LastWorkSpace);
+			//ViewModel.Load();
+			//ViewModel.LastPathSelected = MainController.ConfigurationController.LastPathSelected;
+			//ViewModel.LastFilesViewModel.Add(MainController.ConfigurationController.LastFiles);
 			// Añade los manejadores de eventos
 			ViewModel.WorkspacesChanged += (sender, args) => ShowMenuWorkspaces();
 			// Añade los paneles
@@ -279,7 +282,7 @@ namespace Bau.DbStudio
 				// Borra las opciones de menú que se hubiesen creado anteriormente
 				DeleteMenusBetween(mnuWorkspace, startIndex, indexEnd);
 				// Muestra los menús
-				foreach (Libraries.DbStudio.ViewModels.Tools.Workspaces.WorkSpaceViewModel workspace in ViewModel.WorkspacesViewModel.Items)
+				foreach (Libraries.DbStudio.ViewModels.Core.Tools.Workspaces.WorkSpaceViewModel workspace in ViewModel.WorkspacesViewModel.Items)
 				{
 					MenuItem mnuNewWorkspace = CreateMenu(workspace.Name, string.Empty, false, null, workspace);
 
@@ -287,11 +290,11 @@ namespace Bau.DbStudio
 						mnuWorkspace.Items.Insert(++startIndex, mnuNewWorkspace);
 						// Añade el manejador
 						mnuNewWorkspace.Click += (sender, args) => {
-																		Libraries.DbStudio.ViewModels.Tools.Workspaces.WorkSpaceViewModel workSpace = (sender as MenuItem).Tag as Libraries.DbStudio.ViewModels.Tools.Workspaces.WorkSpaceViewModel;
+																		Libraries.DbStudio.ViewModels.Core.Tools.Workspaces.WorkSpaceViewModel workSpace = (sender as MenuItem).Tag as Libraries.DbStudio.ViewModels.Core.Tools.Workspaces.WorkSpaceViewModel;
 
 																			// Selecciona el espacio de trabajo
 																			if (workSpace != null)
-																				ViewModel.WorkspacesViewModel.Select(workSpace.Name);
+																				PluginsStudioViews.SelectWorkspace(workSpace.Name);
 																			// Cambia las marcas de check de los menús
 																			CheckWorkSpaceMenu();
 																   };
@@ -317,7 +320,7 @@ namespace Bau.DbStudio
 
 				// Recorre los menús seleccionando / deseleccionando
 				for (int index = startIndex; index < indexEnd; index++)
-					if (mnuWorkspace.Items[index] is MenuItem child && child.Tag is Libraries.DbStudio.ViewModels.Tools.Workspaces.WorkSpaceViewModel workSpace)
+					if (mnuWorkspace.Items[index] is MenuItem child && child.Tag is Libraries.DbStudio.ViewModels.Core.Tools.Workspaces.WorkSpaceViewModel workSpace)
 						child.IsChecked = workSpace.Name.Equals(ViewModel.WorkspacesViewModel.SelectedItem.Name);
 		}
 
@@ -359,7 +362,7 @@ namespace Bau.DbStudio
 				if (view is IDetailViewModel viewModel && viewModel.IsUpdated)
 				{
 					// Mensaje para el usuario
-					ViewModel.MainController.HostController.SystemController.ShowMessage("Grabe las últimas modificaciones antes de cerrar la aplicación");
+					ViewModel.MainStudioController.HostController.SystemController.ShowMessage("Grabe las últimas modificaciones antes de cerrar la aplicación");
 					// Indica que no puede salir de la aplicación
 					return false;
 				}
@@ -373,8 +376,8 @@ namespace Bau.DbStudio
 		private void ExitApp()
 		{
 			// Graba la configuración
-			if (!string.IsNullOrWhiteSpace(ViewModel.LastPathSelected))
-				MainController.ConfigurationController.LastPathSelected = ViewModel.LastPathSelected;
+			if (!string.IsNullOrWhiteSpace(ViewModel.MainStudioController.HostController.DialogsController.LastPathSelected))
+				MainController.ConfigurationController.LastPathSelected = ViewModel.MainStudioController.HostController.DialogsController.LastPathSelected;
 			MainController.ConfigurationController.LastWorkSpace = ViewModel.WorkspacesViewModel.SelectedItem.Name;
 			MainController.ConfigurationController.LastFiles = ViewModel.LastFilesViewModel.GetFiles();
 			MainController.ConfigurationController.Save();
@@ -395,9 +398,14 @@ namespace Bau.DbStudio
 		}
 
 		/// <summary>
+		///		Manager de vistas de PluginsStudio
+		/// </summary>
+		public Libraries.PluginsStudio.Views.PluginsStudioViewManager PluginsStudioViews { get; private set; }
+
+		/// <summary>
 		///		ViewModel principal
 		/// </summary>
-		public MainViewModel ViewModel { get; private set; }
+		public Libraries.DbStudio.ViewModels.Core.PluginsStudioViewModel ViewModel { get; private set; }
 
 		/// <summary>
 		///		Controlador principal

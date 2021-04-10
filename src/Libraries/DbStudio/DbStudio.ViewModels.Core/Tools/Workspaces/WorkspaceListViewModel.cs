@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 
 using Bau.Libraries.BauMvvm.ViewModels;
 
-namespace Bau.Libraries.DbStudio.ViewModels.Tools.Workspaces
+namespace Bau.Libraries.DbStudio.ViewModels.Core.Tools.Workspaces
 {
 	/// <summary>
 	///		ViewModel con los datos de espacios de trabajo
@@ -17,7 +17,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Tools.Workspaces
 		private ObservableCollection<WorkSpaceViewModel> _items;
 		private WorkSpaceViewModel _selectedItem;
 
-		public WorkspaceListViewModel(MainViewModel mainViewModel)
+		public WorkspaceListViewModel(PluginsStudioViewModel mainViewModel)
 		{
 			// Asigna las propiedades
 			MainViewModel = mainViewModel;
@@ -30,18 +30,20 @@ namespace Bau.Libraries.DbStudio.ViewModels.Tools.Workspaces
 		/// <summary>
 		///		Obtiene la lista de espacios de trabajo
 		/// </summary>
-		public void Load()
+		public void Load(string path)
 		{
+			// Guarda el directorio
+			Path = path;
 			// Limpia los espacios de trabajo
 			Items.Clear();
 			// Añade el espacio de trabajo predeterminado
 			Add(DefaultWorkSpace);
 			// Obtiene los espacios de trabajo
-			if (System.IO.Directory.Exists(MainViewModel.MainController.AppPath))
-				foreach (string path in System.IO.Directory.EnumerateDirectories(MainViewModel.MainController.AppPath))
-					foreach (string fileName in System.IO.Directory.GetFiles(path, $"*.{WorkspaceExtension}"))
-						if (!System.IO.Path.GetFileName(path).Equals(DefaultWorkSpace, StringComparison.CurrentCultureIgnoreCase))
-							Add(System.IO.Path.GetFileName(path));
+			if (System.IO.Directory.Exists(path))
+				foreach (string childPath in System.IO.Directory.EnumerateDirectories(path))
+					foreach (string fileName in System.IO.Directory.GetFiles(childPath, $"*.{WorkspaceExtension}"))
+						if (!System.IO.Path.GetFileName(childPath).Equals(DefaultWorkSpace, StringComparison.CurrentCultureIgnoreCase))
+							Add(System.IO.Path.GetFileName(childPath));
 		}
 
 		/// <summary>
@@ -70,12 +72,12 @@ namespace Bau.Libraries.DbStudio.ViewModels.Tools.Workspaces
 		{
 			string workspace = string.Empty;
 
-				if (MainViewModel.MainController.HostController.SystemController.ShowInputString("Nombre del espacio de trabajo", ref workspace) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+				if (MainViewModel.MainStudioController.HostController.SystemController.ShowInputString("Nombre del espacio de trabajo", ref workspace) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 				{
 					if (!string.IsNullOrWhiteSpace(workspace))
 					{
 						// Crea el directorio
-						LibHelper.Files.HelperFiles.MakePath(System.IO.Path.Combine(MainViewModel.MainController.AppPath, workspace));
+						LibHelper.Files.HelperFiles.MakePath(System.IO.Path.Combine(Path, workspace));
 						// Añade el espacio de trabajo
 						Add(workspace);
 						// Cambia el Workspace
@@ -93,7 +95,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Tools.Workspaces
 		/// </summary>
 		private void Add(string name)
 		{
-			Items.Add(new WorkSpaceViewModel(this, name, System.IO.Path.Combine(MainViewModel.MainController.AppPath, name, $"{name}.{WorkspaceExtension}")));
+			Items.Add(new WorkSpaceViewModel(this, name, System.IO.Path.Combine(Path, name, $"{name}.{WorkspaceExtension}")));
 		}
 
 		/// <summary>
@@ -101,7 +103,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Tools.Workspaces
 		/// </summary>
 		private void DeleteWorkspace()
 		{
-			if (MainViewModel.MainController.HostController.SystemController.ShowQuestion($"¿Desea eliminar el espacio de trabajo '{SelectedItem.Name}'?"))
+			if (MainViewModel.MainStudioController.HostController.SystemController.ShowQuestion($"¿Desea eliminar el espacio de trabajo '{SelectedItem.Name}'?"))
 			{
 				// Borra el directorio
 				LibHelper.Files.HelperFiles.KillPath(SelectedItem.Path);
@@ -113,7 +115,12 @@ namespace Bau.Libraries.DbStudio.ViewModels.Tools.Workspaces
 		/// <summary>
 		///		ViewModel principal
 		/// </summary>
-		public MainViewModel MainViewModel { get; }
+		public PluginsStudioViewModel MainViewModel { get; }
+
+		/// <summary>
+		///		Directorio donde se encuentran los espacios de trabajo
+		/// </summary>
+		public string Path { get; private set; }
 
 		/// <summary>
 		///		Espacios de trabajo
