@@ -230,8 +230,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 					return System.Text.Encoding.UTF8;
 				case Tools.CreateFileViewModel.Encoding.Utf8NoBom:
 					return new System.Text.UTF8Encoding(false);
-				case Tools.CreateFileViewModel.Encoding.Utf7:
-					return System.Text.Encoding.UTF7;
 				case Tools.CreateFileViewModel.Encoding.Utf32:
 					return System.Text.Encoding.UTF32;
 				case Tools.CreateFileViewModel.Encoding.Unicode:

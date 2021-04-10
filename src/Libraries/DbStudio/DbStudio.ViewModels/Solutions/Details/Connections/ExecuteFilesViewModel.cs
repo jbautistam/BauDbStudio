@@ -66,8 +66,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 			else if (connection == null)
 				SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Seleccione una conexión");
 			else 
-				using (BlockLogModel block = SolutionViewModel.MainViewModel.Manager.Logger.Default.CreateBlock(LogModel.LogType.Info, 
-																												"Comienza la ejecución de los archivos"))
+				using (BlockLogModel block = SolutionViewModel.Manager.Logger.Default.CreateBlock(LogModel.LogType.Info, "Comienza la ejecución de los archivos"))
 				{
 					System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
 					bool hasError = false;
@@ -86,7 +85,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 						// Muestra el tiempo de ejecución
 						stopwatch.Stop();
 						block.Info($"Tiempo de ejecución: {stopwatch.Elapsed.ToString()}");
-						SolutionViewModel.MainViewModel.Manager.Logger.Flush();
+						SolutionViewModel.Manager.Logger.Flush();
 				}
 		}
 
@@ -115,8 +114,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 							// Arranca la ejecución
 							file.SetStatus(ExecuteFilesItemViewModel.Status.Start, "Ejecutando ...");
 							// Ejecuta la consulta
-							await SolutionViewModel.MainViewModel.Manager.ExecuteQueryAsync(connection, content, arguments, 
-																							connection.TimeoutExecuteScript, cancellationToken);
+							await SolutionViewModel.Manager.ExecuteQueryAsync(connection, content, arguments, connection.TimeoutExecuteScript, cancellationToken);
 							// Detiene la ejecución
 							file.SetStatus(ExecuteFilesItemViewModel.Status.End, "Fin de ejecución");
 						}

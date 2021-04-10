@@ -91,8 +91,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 			else if (connection == null)
 				SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Seleccione una conexión");
 			else 
-				using (LibLogger.Models.Log.BlockLogModel block = SolutionViewModel.MainViewModel.Manager.Logger.Default.CreateBlock(LibLogger.Models.Log.LogModel.LogType.Info,
-																																	 $"Comienza la ejecución de la consulta"))
+				using (LibLogger.Models.Log.BlockLogModel block = SolutionViewModel.Manager.Logger.Default.CreateBlock(LibLogger.Models.Log.LogModel.LogType.Info,
+																													   $"Comienza la ejecución de la consulta"))
 				{
 					string selectedText = GetEditorSelectedText();
 
@@ -101,10 +101,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 							selectedText = Content;
 						// Ejecuta la consulta
 						if (FileName.EndsWith(".sql", StringComparison.CurrentCultureIgnoreCase))
-							await SolutionViewModel.MainViewModel.Manager.ExecuteQueryAsync(connection, selectedText, arguments, 
-																							connection.TimeoutExecuteScript, cancellationToken);
+							await SolutionViewModel.Manager.ExecuteQueryAsync(connection, selectedText, arguments, 
+																			  connection.TimeoutExecuteScript, cancellationToken);
 						else if (FileName.EndsWith(".sqlx", StringComparison.CurrentCultureIgnoreCase))
-							await SolutionViewModel.MainViewModel.Manager.ExecuteInterpretedQueryAsync(connection, selectedText, arguments, cancellationToken);
+							await SolutionViewModel.Manager.ExecuteInterpretedQueryAsync(connection, selectedText, arguments, cancellationToken);
 						else
 							block.Error("No se reconoce el tipo de archivo coo SQL");
 						// Muestra el tiempo de ejecución
@@ -117,12 +117,12 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 		/// </summary>
 		internal async Task ExecuteXmlScriptAsync(string contextFileName, System.Threading.CancellationToken cancellationToken)
 		{
-			ScriptsManager.JobXmlProjectManager manager = new ScriptsManager.JobXmlProjectManager(SolutionViewModel.MainViewModel.Manager.Logger);
+			ScriptsManager.JobXmlProjectManager manager = new ScriptsManager.JobXmlProjectManager(SolutionViewModel.Manager.Logger);
 
 				// Ejecuta el script XML
 				await manager.ExecuteAsync(FileName, contextFileName, cancellationToken);
 				// Libera el log
-				SolutionViewModel.MainViewModel.Manager.Logger.Flush();
+				SolutionViewModel.Manager.Logger.Flush();
 		}
 
 		/// <summary>

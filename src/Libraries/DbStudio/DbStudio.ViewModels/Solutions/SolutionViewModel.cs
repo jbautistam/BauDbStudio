@@ -6,6 +6,7 @@ using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.DbStudio.Application.Controllers.EtlProjects;
 using Bau.Libraries.DbStudio.Models;
 using Bau.Libraries.LibLogger.Models.Log;
+using Bau.Libraries.DbStudio.Application;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 {
@@ -15,17 +16,16 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 	public class SolutionViewModel : BaseObservableObject
 	{
 		// Variables privadas
-		private string _workspace;
 		private Explorers.Connections.TreeConnectionsViewModel _treeConnectionsViewModel;
 		private Explorers.Files.TreeFilesViewModel _treeFoldersViewModel;
 		private Explorers.Cloud.TreeStorageViewModel _treeStoragesViewModel;
 		private Details.Connections.ConnectionExecutionViewModel _connectionsViewModel;
 
-		public SolutionViewModel(MainViewModel mainViewModel, string workspace)
+		public SolutionViewModel(MainViewModel mainViewModel)
 		{
 			// Asigna las propiedades
 			MainViewModel = mainViewModel;
-			Workspace = workspace;
+			Manager = new SolutionManager(MainViewModel.MainController.Logger);
 			// Asigna las soluciones hija
 			ReportingSolutionViewModel = new Details.Reporting.ReportingSolutionViewModel(this);
 			// Asigna los árboles de exploración
@@ -34,8 +34,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 			TreeStoragesViewModel = new Explorers.Cloud.TreeStorageViewModel(this);
 			ConnectionExecutionViewModel = new Details.Connections.ConnectionExecutionViewModel(this);
 			// Asigna los comandos
-			NewWorkspaceCommand = new BaseCommand(_ => NewWorkspace());
-			DeleteWorkspaceCommand = new BaseCommand(_ => DeleteWorkspace());
 			CreateTestXmlCommand = new BaseCommand(async _ => await CreateTestXmlAsync());
 			CreateValidationScriptsCommand = new BaseCommand(async _ => await CreateValidationScriptsAsync());
 			CreateImportFilesScriptsCommand = new BaseCommand(async _ => await CreateImportFilesScriptsAsync());
@@ -47,10 +45,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 		/// <summary>
 		///		Carga un archivo de solución
 		/// </summary>
-		public void Load()
+		internal void Load(Tools.Workspaces.WorkSpaceViewModel workSpaceViewModel)
 		{
 			// Carga la solución
-			Solution = MainViewModel.Manager.LoadConfiguration(Workspace);
+			Solution = Manager.LoadConfiguration(GetSolutionFileName(workSpaceViewModel, "DbStudio"));
 			// Carga los exploradores
 			TreeConnectionsViewModel.Load();
 			ConnectionExecutionViewModel.Load();
@@ -58,57 +56,28 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 			TreeStoragesViewModel.Load();
 			// Carga la solución de informes
 			if (!string.IsNullOrWhiteSpace(Solution.FileName))
-				ReportingSolutionViewModel.Load(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Solution.FileName), $"Reporting.{Workspace}.Solution.xml"));
+				ReportingSolutionViewModel.Load(GetSolutionFileName(workSpaceViewModel, "Reporting"));
 			// Carga las carpetas en la ventana de búsqueda
 			MainViewModel.SearchFilesViewModel.LoadFolders();
 		}
 
 		/// <summary>
-		///		Crea un nuevo espacio de trabajo
+		///		Graba la solución
 		/// </summary>
-		private void NewWorkspace()
+		internal void Save(Tools.Workspaces.WorkSpaceViewModel workSpaceViewModel)
 		{
-			string workspace = string.Empty;
-
-				if (MainViewModel.MainController.HostController.SystemController.ShowInputString("Nombre del espacio de trabajo", ref workspace) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
-				{
-					if (!string.IsNullOrWhiteSpace(workspace))
-					{
-						// Cambia el Workspace
-						UpdateWorkspace(workspace);
-						// Graba para que se cree el archivo
-						MainViewModel.SaveSolution();
-						// y lanza el evento de modificación
-						MainViewModel.RaiseEventWorkSpaceChanged();
-					}
-				}
+			// Graba la solución
+			Manager.SaveSolution(Solution, GetSolutionFileName(workSpaceViewModel, "DbStudio"));
+			// Carga la solución de informes
+			ReportingSolutionViewModel.SaveSolution();
 		}
 
 		/// <summary>
-		///		Modifica el espacio de trabajos
+		///		Obtiene el nombre del archivo de solución
 		/// </summary>
-		public void UpdateWorkspace(string workspace)
+		private string GetSolutionFileName(Tools.Workspaces.WorkSpaceViewModel workSpaceViewModel, string project)
 		{
-			// Cambia el espacio de trabajo
-			Workspace = workspace;
-			// Carga el espacio de trabajo
-			Load();
-		}
-
-		/// <summary>
-		///		Borra un espacio de trabajo
-		/// </summary>
-		private void DeleteWorkspace()
-		{
-			if (MainViewModel.MainController.HostController.SystemController.ShowQuestion($"¿Desea eliminar el espacio de trabajo '{Workspace}'?"))
-			{
-				// Borra el archivo
-				MainViewModel.Manager.DeleteConfiguration(Workspace);
-				// Pasa al workspace predeterminado
-				UpdateWorkspace(MainViewModel.Manager.WorkSpace);
-				// Lanza el evento de carga del menú
-				MainViewModel.RaiseEventWorkSpaceChanged();
-			}
+			return System.IO.Path.Combine(workSpaceViewModel.Path, $"{project}.xml");
 		}
 
 		/// <summary>
@@ -121,7 +90,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 				if (MainViewModel.MainController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 					using (BlockLogModel block = MainViewModel.MainController.Logger.Default.CreateBlock(LogModel.LogType.Info, "Comienzo de la creación de proyectos de pruebas"))
 					{
-						XmlTestProjectGenerator generator = new XmlTestProjectGenerator(MainViewModel.Manager, viewModel.ComboConnections.GetSelectedConnection(),
+						XmlTestProjectGenerator generator = new XmlTestProjectGenerator(Manager, viewModel.ComboConnections.GetSelectedConnection(),
 																						viewModel.DataBase, viewModel.OutputPath);
 
 							// Genera los archivos
@@ -180,7 +149,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 																		BitFields = viewModel.BitFields,
 																		CompareOnlyAlphaAndDigits = viewModel.CompareOnlyAlphaAndDigits
 																	};
-						ScriptsValidationGenerator generator = new ScriptsValidationGenerator(MainViewModel.Manager, options);
+						ScriptsValidationGenerator generator = new ScriptsValidationGenerator(Manager, options);
 
 							// Crea los archivos de prueba
 							try
@@ -224,7 +193,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 																		PathInputFiles = viewModel.PathInputFiles,
 																		OutputFileName = viewModel.OutputFileName
 																	};
-						ScriptsImportGenerator generator = new ScriptsImportGenerator(MainViewModel.Manager, options);
+						ScriptsImportGenerator generator = new ScriptsImportGenerator(Manager, options);
 
 							// Crea los archivos de prueba
 							try
@@ -262,7 +231,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 						try
 						{
 							// Crea los archivos
-							await new Application.Controllers.Schema.SchemaManager(MainViewModel.Manager).SaveAsync(viewModel.ComboConnections.GetSelectedConnection(), viewModel.OutputFileName);
+							await new Application.Controllers.Schema.SchemaManager(Manager).SaveAsync(viewModel.ComboConnections.GetSelectedConnection(), viewModel.OutputFileName);
 							// Log
 							block.Info("Fin de la creación de archivos de esquema");
 							MainViewModel.MainController.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
@@ -353,18 +322,14 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 		public SolutionModel Solution { get; private set; }
 
 		/// <summary>
+		///		Manager de solución
+		/// </summary>
+		internal SolutionManager Manager { get; }
+
+		/// <summary>
 		///		ViewModel para la solución de reporting
 		/// </summary>
 		public Details.Reporting.ReportingSolutionViewModel ReportingSolutionViewModel { get; }
-
-		/// <summary>
-		///		Espacio de trabajo
-		/// </summary>
-		public string Workspace
-		{
-			get { return _workspace; }
-			set { CheckProperty(ref _workspace, value); }
-		}
 
 		/// <summary>
 		///		ViewModel del árbol de conexiones
@@ -401,21 +366,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 			get { return _connectionsViewModel; }
 			set { CheckObject(ref _connectionsViewModel, value); }
 		}
-
-		/// <summary>
-		///		Crea un nuevo espacio de trabajo
-		/// </summary>
-		public BaseCommand NewWorkspaceCommand { get; }
-
-		/// <summary>
-		///		Modifica el espacio de trabajo seleccionado
-		/// </summary>
-		public BaseCommand UpdateWorkspaceCommand { get; }
-
-		/// <summary>
-		///		Borra el espacio de trabajo seleccionado
-		/// </summary>
-		public BaseCommand DeleteWorkspaceCommand { get; }
 
 		/// <summary>
 		///		Crea los archivos XML de proyecto de pruebas

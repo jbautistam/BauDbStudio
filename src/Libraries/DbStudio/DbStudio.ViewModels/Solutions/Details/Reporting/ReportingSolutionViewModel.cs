@@ -11,6 +11,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting
 	public class ReportingSolutionViewModel : BauMvvm.ViewModels.BaseObservableObject
 	{
 		// Variables privadas
+		private string _fileName;
 		private Explorers.TreeReportingViewModel _treeReportingViewModel;
 
 		public ReportingSolutionViewModel(SolutionViewModel solutionViewModel)
@@ -25,8 +26,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting
 		/// </summary>
 		public void Load(string fileName)
 		{
+			// Guarda el nombre de archivo
+			_fileName = fileName;
 			// Carga la solución
-			ReportingSolutionManager.LoadSolution(fileName);
+			ReportingSolutionManager.LoadSolution(_fileName);
 			// Carga el árbol del explorador
 			TreeReportingViewModel.Load();
 		}
@@ -36,7 +39,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting
 		/// </summary>
 		internal void SaveSolution()
 		{
-			ReportingSolutionManager.SaveSolution();
+			if (!string.IsNullOrWhiteSpace(_fileName))
+			ReportingSolutionManager.SaveSolution(_fileName);
 		}
 
 		/// <summary>

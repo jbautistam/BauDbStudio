@@ -114,20 +114,20 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Queries
 											ActualPage = 1;
 										// Carga la consulta
 										if (PaginateQuery)
-											DataResults = await SolutionViewModel.MainViewModel.Manager.GetDatatableQueryAsync(connection, querySelected, arguments, 
-																															   ActualPage, PageSize, 
-																															   connection.TimeoutExecuteScript, 
-																															   _cancellationToken);
+											DataResults = await SolutionViewModel.Manager.GetDatatableQueryAsync(connection, querySelected, arguments, 
+																												 ActualPage, PageSize, 
+																												 connection.TimeoutExecuteScript, 
+																												 _cancellationToken);
 										else
-											DataResults = await SolutionViewModel.MainViewModel.Manager.GetDatatableQueryAsync(connection, querySelected, arguments, 0, 0,
-																															   connection.TimeoutExecuteScript, 
-																															   _cancellationToken);
+											DataResults = await SolutionViewModel.Manager.GetDatatableQueryAsync(connection, querySelected, arguments, 0, 0,
+																												 connection.TimeoutExecuteScript, 
+																												 _cancellationToken);
 										// Guarda la consulta que se acaba de lanzar
 										_lastQuery = querySelected;
 									}
 									catch (Exception exception)
 									{
-										SolutionViewModel.MainViewModel.Manager.Logger.Default.LogItems.Error($"Error al ejecutar la consulta. {exception.Message}");
+										SolutionViewModel.Manager.Logger.Default.LogItems.Error($"Error al ejecutar la consulta. {exception.Message}");
 									}
 									// Detiene la ejecucion
 									StopQuery();
@@ -160,8 +160,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Queries
 								else
 									try
 									{
-										DataTable table = await SolutionViewModel.MainViewModel.Manager.GetExecutionPlanAsync(connection, query, arguments, 
-																															  connection.TimeoutExecuteScript, _cancellationToken);
+										DataTable table = await SolutionViewModel.Manager.GetExecutionPlanAsync(connection, query, arguments, 
+																												connection.TimeoutExecuteScript, _cancellationToken);
 										string plan = string.Empty;
 
 											// Obtiene el plan de ejecución
@@ -237,7 +237,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Queries
 			ExecutionTimeColor = BauMvvm.ViewModels.Media.MvvmColor.Black;
 			IsExecuting = false;
 			// Log
-			SolutionViewModel.MainViewModel.Manager.Logger.Flush();
+			SolutionViewModel.Manager.Logger.Flush();
 			// Prepara el gráfico
 			PrepareDraw();
 		}
@@ -247,17 +247,14 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Queries
 		/// </summary>
 		private void CancelQuery()
 		{
-			if (IsExecuting && _cancellationToken != null && _cancellationToken != CancellationToken.None)
+			if (IsExecuting && _cancellationToken != CancellationToken.None && _cancellationToken.CanBeCanceled)
 			{
-				if (_cancellationToken.CanBeCanceled)
-				{
-					// Cancela las tareas
-					_tokenSource.Cancel();
-					// Log
-					SolutionViewModel.MainViewModel.MainController.Logger.Default.LogItems.Info("Consulta cancelada");
-					// Indica que ya no está en ejecución
-					StopQuery();
-				}
+				// Cancela las tareas
+				_tokenSource.Cancel();
+				// Log
+				SolutionViewModel.MainViewModel.MainController.Logger.Default.LogItems.Info("Consulta cancelada");
+				// Indica que ya no está en ejecución
+				StopQuery();
 			}
 		}
 
@@ -373,9 +370,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Queries
 		private async Task<(bool exported, string error)> ExportAsync(ConnectionModel connection, ArgumentListModel arguments, 
 																	  string fileName, CancellationToken cancellationToken)
 		{
-			using (System.Data.Common.DbDataReader reader = await SolutionViewModel.MainViewModel.Manager.ExecuteReaderAsync(connection, Query, arguments,
-																															 connection.TimeoutExecuteScript,
-																															 cancellationToken))
+			using (System.Data.Common.DbDataReader reader = await SolutionViewModel.Manager.ExecuteReaderAsync(connection, Query, arguments,
+																											   connection.TimeoutExecuteScript,
+																											   cancellationToken))
 			{
 				return await new ExportDataController().ExportAsync(SolutionViewModel.MainViewModel.MainController.Logger, fileName, reader, cancellationToken);
 			}

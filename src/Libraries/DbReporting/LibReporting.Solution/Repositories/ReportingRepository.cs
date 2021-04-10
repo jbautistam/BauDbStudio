@@ -48,7 +48,7 @@ namespace Bau.Libraries.LibReporting.Solution.Repositories
 		/// <summary>
 		///		Graba los archivos de la solución
 		/// </summary>
-		internal void Save()
+		internal void Save(string fileName)
 		{
 			MLFile fileML = new MLFile();
 			MLNode rootML = fileML.Nodes.Add(TagRoot);
@@ -57,7 +57,7 @@ namespace Bau.Libraries.LibReporting.Solution.Repositories
 				foreach (string file in Manager.ReportingSolution.Files)
 					rootML.Nodes.Add(TagFile, file);
 				// Graba el archivo
-				new LibMarkupLanguage.Services.XML.XMLWriter().Save(Manager.ReportingSolution.FileName, fileML);
+				new LibMarkupLanguage.Services.XML.XMLWriter().Save(fileName, fileML);
 		}
 
 		/// <summary>

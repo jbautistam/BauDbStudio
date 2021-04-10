@@ -6,7 +6,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Workspaces\**" />
+    <EmbeddedResource Remove="Workspaces\**" />
+    <None Remove="Workspaces\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.ViewModels\BauMvvm.ViewModels.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibLogger\src\LibLogger.Core\LibLogger.Core.csproj" />
   </ItemGroup>
 
 </Project>

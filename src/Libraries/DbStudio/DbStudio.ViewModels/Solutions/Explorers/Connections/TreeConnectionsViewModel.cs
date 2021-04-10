@@ -219,20 +219,20 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 					try
 					{
 						// Ejecuta la exportación
-						SolutionViewModel.MainViewModel.Manager.ExportToDataBricks(deployment);
+						SolutionViewModel.Manager.ExportToDataBricks(deployment);
 						// Mensaje
 						SolutionViewModel.MainViewModel.MainController.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
 																						"Distribución", "Fin de la copia de archivos");
 					}
 					catch (Exception exception)
 					{
-						SolutionViewModel.MainViewModel.Manager.Logger.Default.LogItems.Error($"Error al copiar los archivos: {exception.Message}");
+						SolutionViewModel.Manager.Logger.Default.LogItems.Error($"Error al copiar los archivos: {exception.Message}");
 						SolutionViewModel.MainViewModel.MainController.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Error,
 																						"Distribución", 
 																						$"Error en la copia de archivos. {exception.Message}");
 					}
 					// Limpia el log
-					SolutionViewModel.MainViewModel.Manager.Logger.Flush();
+					SolutionViewModel.Manager.Logger.Flush();
 				}
 		}
 
@@ -240,7 +240,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 		///		Borra el elemento seleccionado
 		/// </summary>
 		protected override void DeleteItem()
-		{	
+		{
 			switch (SelectedNode?.Tag)
 			{
 				case ConnectionModel item:

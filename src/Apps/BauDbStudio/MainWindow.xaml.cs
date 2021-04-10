@@ -33,7 +33,7 @@ namespace Bau.DbStudio
 			// Inicializa el contexto y los controles
 			DataContext = ViewModel = new MainViewModel(MainController.SparkSolutionController, MainController.ConfigurationController.LastWorkSpace);
 			// Carga la última solución
-			ViewModel.SolutionViewModel.Load();
+			ViewModel.Load();
 			ViewModel.LastPathSelected = MainController.ConfigurationController.LastPathSelected;
 			ViewModel.LastFilesViewModel.Add(MainController.ConfigurationController.LastFiles);
 			// Añade los manejadores de eventos
@@ -273,27 +273,25 @@ namespace Bau.DbStudio
 		/// </summary>
 		private void ShowMenuWorkspaces()
 		{
-			List<string> workspaces = GetWorkspaces(ViewModel.MainController.AppPath);
 			int startIndex = mnuWorkspace.Items.IndexOf(mnuStartWorkspaces);
 			int indexEnd = mnuWorkspace.Items.IndexOf(mnuEndWorkspaces);
 
 				// Borra las opciones de menú que se hubiesen creado anteriormente
 				DeleteMenusBetween(mnuWorkspace, startIndex, indexEnd);
 				// Muestra los menús
-				foreach (string workspace in workspaces)
+				foreach (Libraries.DbStudio.ViewModels.Tools.Workspaces.WorkSpaceViewModel workspace in ViewModel.WorkspacesViewModel.Items)
 				{
-					MenuItem mnuNewWorkspace = CreateMenu(System.IO.Path.GetFileNameWithoutExtension(workspace), string.Empty, false,
-													      null, workspace);
+					MenuItem mnuNewWorkspace = CreateMenu(workspace.Name, string.Empty, false, null, workspace);
 
 						// Inserta el menú tras el separador
 						mnuWorkspace.Items.Insert(++startIndex, mnuNewWorkspace);
 						// Añade el manejador
 						mnuNewWorkspace.Click += (sender, args) => {
-																		string file = (sender as MenuItem).Tag as string;
+																		Libraries.DbStudio.ViewModels.Tools.Workspaces.WorkSpaceViewModel workSpace = (sender as MenuItem).Tag as Libraries.DbStudio.ViewModels.Tools.Workspaces.WorkSpaceViewModel;
 
 																			// Selecciona el espacio de trabajo
-																			if (!string.IsNullOrWhiteSpace(file))
-																				ViewModel.SolutionViewModel.UpdateWorkspace(System.IO.Path.GetFileNameWithoutExtension(file));
+																			if (workSpace != null)
+																				ViewModel.WorkspacesViewModel.Select(workSpace.Name);
 																			// Cambia las marcas de check de los menús
 																			CheckWorkSpaceMenu();
 																   };
@@ -301,7 +299,7 @@ namespace Bau.DbStudio
 						mnuNewWorkspace.IsChecked = false;
 				}
 				// Muestra el separador
-				if (workspaces.Count == 0)
+				if (ViewModel.WorkspacesViewModel.Items.Count == 0)
 					mnuEndWorkspaces.Visibility = Visibility.Collapsed;
 				else
 					mnuEndWorkspaces.Visibility = Visibility.Visible;
@@ -319,23 +317,8 @@ namespace Bau.DbStudio
 
 				// Recorre los menús seleccionando / deseleccionando
 				for (int index = startIndex; index < indexEnd; index++)
-					if (mnuWorkspace.Items[index] is MenuItem child && child.Tag is string file)
-						child.IsChecked = file.EndsWith(ViewModel.SolutionViewModel.Workspace + ".xml", StringComparison.CurrentCultureIgnoreCase);
-		}
-
-		/// <summary>
-		///		Obtiene la lista de espacios de trabajo
-		/// </summary>
-		private List<string> GetWorkspaces(string path)
-		{
-			List<string> workspaces = new List<string>();
-
-				// Obtiene los espacios de trabajo
-				if (System.IO.Directory.Exists(path))
-					foreach (string fileName in System.IO.Directory.GetFiles(path, "*.xml"))
-						workspaces.Add(fileName);
-				// Devuelve la lista de espacios de trabajo
-				return workspaces;
+					if (mnuWorkspace.Items[index] is MenuItem child && child.Tag is Libraries.DbStudio.ViewModels.Tools.Workspaces.WorkSpaceViewModel workSpace)
+						child.IsChecked = workSpace.Name.Equals(ViewModel.WorkspacesViewModel.SelectedItem.Name);
 		}
 
 		/// <summary>
@@ -392,7 +375,7 @@ namespace Bau.DbStudio
 			// Graba la configuración
 			if (!string.IsNullOrWhiteSpace(ViewModel.LastPathSelected))
 				MainController.ConfigurationController.LastPathSelected = ViewModel.LastPathSelected;
-			MainController.ConfigurationController.LastWorkSpace = ViewModel.SolutionViewModel.Workspace;
+			MainController.ConfigurationController.LastWorkSpace = ViewModel.WorkspacesViewModel.SelectedItem.Name;
 			MainController.ConfigurationController.LastFiles = ViewModel.LastFilesViewModel.GetFiles();
 			MainController.ConfigurationController.Save();
 			// Cierra la aplicación

@@ -277,7 +277,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 		}
 
 		/// <summary>
-		///		Graba la solución y actualiza el árbo
+		///		Graba la solución y actualiza el árbol
 		/// </summary>
 		private void SaveSolution()
 		{

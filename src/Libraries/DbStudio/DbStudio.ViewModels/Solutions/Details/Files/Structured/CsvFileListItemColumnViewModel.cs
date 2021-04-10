@@ -10,7 +10,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files.Structured
 	public class CsvFileListItemColumnViewModel : BauMvvm.ViewModels.BaseObservableObject
 	{
 		// Variables privadas
-		private string _columnId, _type;
+		private string _columnId;
 		private ComboViewModel _comboTypes;
 
 		public CsvFileListItemColumnViewModel(CsvFileListColumnsViewModel listViewModel, string column)

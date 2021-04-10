@@ -35,7 +35,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 					NodeRootViewModel rootViews = new NodeRootViewModel(TreeViewModel as TreeSolutionBaseViewModel, this, NodeType.SchemaRoot, "Views", false);
 
 						// Carga el esquema
-						await (TreeViewModel as TreeSolutionBaseViewModel).SolutionViewModel.MainViewModel.Manager.LoadSchemaAsync(Connection, cancellationToken);
+						await (TreeViewModel as TreeSolutionBaseViewModel).SolutionViewModel.Manager.LoadSchemaAsync(Connection, cancellationToken);
 						// Añade los nodos raíz
 						nodes.Add(rootTables);
 						nodes.Add(rootViews);

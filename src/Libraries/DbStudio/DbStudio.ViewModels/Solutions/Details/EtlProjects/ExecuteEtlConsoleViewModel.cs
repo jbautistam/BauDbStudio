@@ -114,14 +114,14 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 		/// </summary>
 		internal async Task ExecuteXmlScriptAsync(System.Threading.CancellationToken cancellationToken)
 		{
-			Files.ScriptsManager.JobXmlProjectManager manager = new Files.ScriptsManager.JobXmlProjectManager(SolutionViewModel.MainViewModel.Manager.Logger);
+			Files.ScriptsManager.JobXmlProjectManager manager = new Files.ScriptsManager.JobXmlProjectManager(SolutionViewModel.Manager.Logger);
 
 				// Guarda el archivo de contexto
 				SolutionViewModel.ConnectionExecutionViewModel.EtlParametersFileName = ContextFileName;
 				// Ejecuta el script XML
 				await manager.ExecuteAsync(ProjectFileName, ContextFileName, cancellationToken);
 				// Libera el log
-				SolutionViewModel.MainViewModel.Manager.Logger.Flush();
+				SolutionViewModel.Manager.Logger.Flush();
 		}
 
 		/// <summary>

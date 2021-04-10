@@ -33,7 +33,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Tools
 			Utf8NoBom,
 			Unicode,
 			Utf32,
-			Utf7,
 			Ascii
 		}
 		// Variables privadas
@@ -84,7 +83,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Tools
 			ComboEncoding.AddItem((int) Encoding.Utf8, "Utf 8");
 			ComboEncoding.AddItem((int) Encoding.Utf8NoBom, "Utf 8 (sin BOM)");
 			ComboEncoding.AddItem((int) Encoding.Utf32, "Utf 32");
-			ComboEncoding.AddItem((int) Encoding.Utf7, "Utf 7");
 			ComboEncoding.AddItem((int) Encoding.Unicode, "Unicode");
 			ComboEncoding.AddItem((int) Encoding.Ascii, "Ascii");
 			// Selecciona el primer elemento

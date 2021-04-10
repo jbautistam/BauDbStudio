@@ -1,7 +1,6 @@
 ﻿using System;
 
 using Bau.Libraries.BauMvvm.ViewModels;
-using Bau.Libraries.DbStudio.Application;
 
 namespace Bau.Libraries.DbStudio.ViewModels
 {
@@ -16,8 +15,10 @@ namespace Bau.Libraries.DbStudio.ViewModels
 		public event EventHandler WorkspacesChanged;
 		// Variables privadas
 		private string _text;
+		private string _workspace;
 		private Core.Interfaces.IDetailViewModel _selectedDetailsViewModel;
 		private Tools.LogListViewModel _logViewModel;
+		private Tools.Workspaces.WorkspaceListViewModel _workspacesViewModel;
 		private Tools.LastFilesListViewModel _lastFilesViewModel;
 		private Tools.Search.SearchFilesViewModel _searchFilesViewModel;
 
@@ -26,15 +27,15 @@ namespace Bau.Libraries.DbStudio.ViewModels
 			// Título de la aplicación
 			Text = mainController.AppName;
 			// Asigna las propiedades
-			Instance = this;
 			MainController = mainController;
-			Manager = new SolutionManager(mainController.Logger, mainController.AppPath);
-			// Inicializa los objetos
-			SolutionViewModel = new Solutions.SolutionViewModel(this, workspace);
-			// Inicializa el log
+			Workspace = workspace;
+			// Inicializa la solución
+			SolutionViewModel = new Solutions.SolutionViewModel(this);
+			// Inicializa los objetos principales
 			LogViewModel = new Tools.LogListViewModel(this);
 			LastFilesViewModel = new Tools.LastFilesListViewModel(this);
 			SearchFilesViewModel = new Tools.Search.SearchFilesViewModel(this);
+			WorkspacesViewModel = new Tools.Workspaces.WorkspaceListViewModel(this);
 			// Asigna los comandos
 			SaveCommand = new BaseCommand(_ => Save(false), _ => CanSave())
 									.AddListener(this, nameof(SelectedDetailsViewModel));
@@ -46,11 +47,35 @@ namespace Bau.Libraries.DbStudio.ViewModels
 		}
 
 		/// <summary>
+		///		Carga los datos
+		/// </summary>
+		public void Load()
+		{
+			// Carga los espacios de trabajo
+			WorkspacesViewModel.Load();
+			// Selecciona el espacio de trabajo
+			SelectWorkspace(Workspace);
+		}
+
+		/// <summary>
+		///		Lanza el evento de modificación de los workspaces
+		/// </summary>
+		internal void SelectWorkspace(string workspace)
+		{
+			// Selecciona el workspace
+			WorkspacesViewModel.Select(workspace);
+			// Carga la solución
+			SolutionViewModel.Load(WorkspacesViewModel.SelectedItem);
+			// Lanza el evento de modificación del espacio de trabajo seleccionado
+			WorkspacesChanged?.Invoke(this, EventArgs.Empty);
+		}
+
+		/// <summary>
 		///		Graba la solución
 		/// </summary>
 		internal void SaveSolution()
 		{
-			Manager.SaveSolution(SolutionViewModel.Solution);
+			SolutionViewModel.Save(WorkspacesViewModel.SelectedItem);
 		}
 
 		/// <summary>
@@ -58,7 +83,7 @@ namespace Bau.Libraries.DbStudio.ViewModels
 		/// </summary>
 		internal void Refresh()
 		{
-			SolutionViewModel.Load();
+			SolutionViewModel.Load(WorkspacesViewModel.SelectedItem);
 		}
 
 		/// <summary>
@@ -126,27 +151,9 @@ namespace Bau.Libraries.DbStudio.ViewModels
 		}
 
 		/// <summary>
-		///		Lanza el evento de modificación de los workspaces
-		/// </summary>
-		internal void RaiseEventWorkSpaceChanged()
-		{
-			WorkspacesChanged?.Invoke(this, EventArgs.Empty);
-		}
-
-		/// <summary>
-		///		Instancia principal 
-		/// </summary>
-		public MainViewModel Instance { get; }
-
-		/// <summary>
 		///		Controlador principal
 		/// </summary>
 		public Controllers.IDbStudioController MainController { get; }
-
-		/// <summary>
-		///		Manager de solución
-		/// </summary>
-		internal SolutionManager Manager { get; }
 
 		/// <summary>
 		///		ViewModel de la solución
@@ -178,6 +185,24 @@ namespace Bau.Libraries.DbStudio.ViewModels
 		{
 			get { return _logViewModel; }
 			set { CheckObject(ref _logViewModel, value); }
+		}
+
+		/// <summary>
+		///		ViewModel de espacios de trabajo
+		/// </summary>
+		public Tools.Workspaces.WorkspaceListViewModel WorkspacesViewModel
+		{
+			get { return _workspacesViewModel; }
+			set { CheckObject(ref _workspacesViewModel, value); }
+		}
+
+		/// <summary>
+		///		Espacio de trabajo
+		/// </summary>
+		public string Workspace
+		{
+			get { return _workspace; }
+			set { CheckProperty(ref _workspace, value); }
 		}
 
 		/// <summary>

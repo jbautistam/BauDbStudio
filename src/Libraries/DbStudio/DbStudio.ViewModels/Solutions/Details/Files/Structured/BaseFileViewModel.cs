@@ -121,7 +121,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files.Structured
 																				 $".{ExportFilesExtensions}");
 
 					if (!string.IsNullOrEmpty(fileName))
-						using (LibLogger.Models.Log.BlockLogModel block = SolutionViewModel.MainViewModel.Manager.Logger.Default.
+						using (LibLogger.Models.Log.BlockLogModel block = SolutionViewModel.Manager.Logger.Default.
 																				CreateBlock(LibLogger.Models.Log.LogModel.LogType.Debug,
 																							$"Comienzo de grabación del archivo {fileName}"))
 						{

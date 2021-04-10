@@ -226,7 +226,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 							// Ejecuta la exportación
 							try
 							{
-								Application.Controllers.Export.ExportDataBaseGenerator generator = new Application.Controllers.Export.ExportDataBaseGenerator(SolutionViewModel.MainViewModel.Manager);
+								Application.Controllers.Export.ExportDataBaseGenerator generator = new Application.Controllers.Export.ExportDataBaseGenerator(SolutionViewModel.Manager);
 
 									if (await generator.ExportAsync(block, viewModel.ComboConnections.GetSelectedConnection(),
 																	viewModel.DataBase, viewModel.OutputPath, viewModel.FormatType, viewModel.BlockSize, CancellationToken.None))
@@ -467,17 +467,14 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 		/// </summary>
 		private void CancelScriptExecution()
 		{
-			if (IsExecuting && _cancellationToken != null && _cancellationToken != CancellationToken.None)
+			if (IsExecuting && _cancellationToken != CancellationToken.None && _cancellationToken.CanBeCanceled)
 			{
-				if (_cancellationToken.CanBeCanceled)
-				{
-					// Cancela las tareas
-					_tokenSource.Cancel();
-					// Log
-					SolutionViewModel.MainViewModel.MainController.Logger.Default.LogItems.Info("Consulta cancelada");
-					// Indica que ya no está en ejecución
-					StopExecuting();
-				}
+				// Cancela las tareas
+				_tokenSource.Cancel();
+				// Log
+				SolutionViewModel.MainViewModel.MainController.Logger.Default.LogItems.Info("Consulta cancelada");
+				// Indica que ya no está en ejecución
+				StopExecuting();
 			}
 		}
 
