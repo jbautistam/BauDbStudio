@@ -3,7 +3,7 @@
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
 using Bau.Libraries.BauMvvm.ViewModels.Media;
 using Bau.Libraries.DbStudio.Models.Deployments;
-using Bau.Libraries.DbStudio.ViewModels.Core.Explorers;
+using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 {

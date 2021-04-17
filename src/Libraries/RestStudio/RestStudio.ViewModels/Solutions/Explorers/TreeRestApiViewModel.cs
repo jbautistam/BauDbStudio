@@ -5,7 +5,7 @@ namespace Bau.Libraries.RestStudio.ViewModels.Solutions.Explorers
 	/// <summary>
 	///		ViewModel del árbol de las Api Rest
 	/// </summary>
-	public class TreeRestApiViewModel : DbStudio.ViewModels.Core.Explorers.BaseTreeViewModel
+	public class TreeRestApiViewModel : PluginsStudio.ViewModels.Base.Explorers.BaseTreeViewModel
 	{
 		public TreeRestApiViewModel(SolutionViewModel solutionViewModel)
 		{

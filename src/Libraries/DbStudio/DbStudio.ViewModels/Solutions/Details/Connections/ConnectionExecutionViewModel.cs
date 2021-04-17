@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.ComboItems;
-using Bau.Libraries.DbStudio.ViewModels.Core.Interfaces;
+using Bau.Libraries.PluginsStudio.ViewModels.Base.Interfaces;
 using Bau.Libraries.DbScripts.Manager.Models;
 using Bau.Libraries.DbStudio.Models.Connections;
 using Bau.Libraries.LibLogger.Models.Log;
@@ -181,7 +181,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 				SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Ya se está ejecutando una consulta");
 			else
 			{
-				IDetailViewModel selectedViewModel = SolutionViewModel.MainViewModel.MainController.GetActiveDetails();
+				IDetailViewModel selectedViewModel = SolutionViewModel.MainViewModel.MainController.MainWindowController.GetActiveDetails();
 
 					switch (GetExecutionMode(selectedViewModel))
 					{
@@ -215,7 +215,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 			{
 				ExportDatabaseViewModel viewModel = new ExportDatabaseViewModel(SolutionViewModel);
 
-					if (SolutionViewModel.MainViewModel.MainController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+					if (SolutionViewModel.MainViewModel.MainController.MainWindowController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 					{
 						// Exporta los datos
 						using (BlockLogModel block = SolutionViewModel.MainViewModel.MainController.Logger.Default
@@ -232,7 +232,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 																	viewModel.DataBase, viewModel.OutputPath, viewModel.FormatType, viewModel.BlockSize, CancellationToken.None))
 									{
 										block.Info($"Fin de la exportación de la base de datos {viewModel.DataBase}");
-										SolutionViewModel.MainViewModel.MainController
+										SolutionViewModel.MainViewModel.MainController.MainWindowController
 												.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
 																  "Explotación de archivos",
 																  "Ha terminado correctamente la exportación de archivos");
@@ -342,7 +342,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 								// Ejecuta el script
 								await ExecuteScriptSqlAsync(viewModel, connection, arguments, _cancellationToken);
 								// Mensaje al usuario
-								SolutionViewModel.MainViewModel.MainController
+								SolutionViewModel.MainViewModel.MainController.MainWindowController
 										.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
 														  "Ejecución de script SQL",
 														  "Ha terminado correctamente la ejecución del script SQL");
@@ -374,8 +374,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("Seleccione un archivo de contexto");
 				else
 				{
-					// Cambia el último directorio seleccionado
-					SolutionViewModel.MainViewModel.LastPathSelected = System.IO.Path.GetDirectoryName(EtlParametersFileName);
 					// Arranca la ejecución
 					StartExecution();
 					// Ejecuta la tarea
@@ -384,7 +382,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 						// Ejecuta el script XML
 						await fileViewModel.ExecuteXmlScriptAsync(EtlParametersFileName, _cancellationToken);
 						// Muestra el mensaje al usuario
-						SolutionViewModel.MainViewModel.MainController
+						SolutionViewModel.MainViewModel.MainController.MainWindowController
 								.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
 													"Ejecución de script XML",
 													"Ha terminado correctamente la ejecución del script");
@@ -424,7 +422,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 						// Ejecuta el script XML
 						await etlViewModel.ExecuteXmlScriptAsync(_cancellationToken);
 						// Muestra el mensaje al usuario
-						SolutionViewModel.MainViewModel.MainController
+						SolutionViewModel.MainViewModel.MainController.MainWindowController
 								.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
 													"Ejecución de script XML",
 													"Ha terminado correctamente la ejecución del script");
@@ -524,7 +522,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 		private void UpdateParametersFile()
 		{
 			UpdateParametersFile(SolutionViewModel.MainViewModel.MainController.HostController.DialogsController.OpenDialogLoad
-										(SolutionViewModel.MainViewModel.LastPathSelected,
+										(SolutionViewModel.MainViewModel.MainController.HostController.DialogsController.LastPathSelected,
 										 "Archivos de parámetros (*.json)|*.json|Todos los archivos (*.*)|*.*"));
 		}
 
@@ -542,8 +540,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 				LoadConnectionFileNames();
 				// y actualiza la lista de archivos de parámetros seleccionado
 				LoadListParameterFiles();
-				// Actualiza el directorio seleccionado
-				SolutionViewModel.MainViewModel.LastPathSelected = System.IO.Path.GetDirectoryName(fileName);
 			}
 		}
 
@@ -553,7 +549,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 		private void OpenParametersFile()
 		{
 			if (!string.IsNullOrWhiteSpace(ConnectionParametersFileName))
-				SolutionViewModel.MainViewModel.MainController.OpenWindow(new Files.FileViewModel(SolutionViewModel, ConnectionParametersFileName));
+				SolutionViewModel.MainViewModel.MainController.MainWindowController.OpenWindow(new Files.FileViewModel(SolutionViewModel, ConnectionParametersFileName));
 		}
 
 		/// <summary>

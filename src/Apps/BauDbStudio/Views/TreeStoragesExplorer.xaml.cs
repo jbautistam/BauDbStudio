@@ -3,8 +3,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-using Bau.Libraries.DbStudio.ViewModels.Core.Explorers;
 using Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Cloud;
+using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
 
 namespace Bau.DbStudio.Views
 {

@@ -24,7 +24,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Tools
 		private void InitViewModel()
 		{
 			// Asigna las propiedades
-			OutputFileName = System.IO.Path.Combine(SolutionViewModel.MainViewModel.LastPathSelected, "Schema.xml");
+			OutputFileName = System.IO.Path.Combine(SolutionViewModel.MainViewModel.MainController.DialogsController.LastPathSelected, "Schema.xml");
 			MaskFiles = "Archivos XML (*.xml)|*.xml|Todos los archivos (*.*)|*.*";
 			// Indica que no ha habido modificaciones
 			IsUpdated = false;
@@ -57,8 +57,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Tools
 		{
 			if (ValidateData())
 			{
-				// Guarda el directorio seleccionado
-				SolutionViewModel.MainViewModel.LastPathSelected = System.IO.Path.GetDirectoryName(OutputFileName);
 				// Indica que ya no es nuevo y está grabado
 				IsUpdated = false;
 				// Cierra la ventana

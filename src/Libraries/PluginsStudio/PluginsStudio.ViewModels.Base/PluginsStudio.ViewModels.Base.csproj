@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>Bau.Libraries.PluginsStudio.ViewModels.Base</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.ViewModels\BauMvvm.ViewModels.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibHelper\src\LibHelper.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibLogger\src\LibLogger.Core\LibLogger.Core.csproj" />
+  </ItemGroup>
+
+</Project>

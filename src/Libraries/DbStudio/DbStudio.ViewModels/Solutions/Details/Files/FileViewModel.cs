@@ -10,7 +10,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 	/// <summary>
 	///		ViewModel para un archivo
 	/// </summary>
-	public class FileViewModel : BaseObservableObject, Core.Interfaces.IDetailViewModel
+	public class FileViewModel : BaseObservableObject, PluginsStudio.ViewModels.Base.Interfaces.IDetailViewModel
 	{
 		// Eventos públicos
 		public event EventHandler<Controllers.EventArguments.EditorGoToLineEventArgs> GoToLineRequired;
@@ -47,7 +47,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 				Content = LibHelper.Files.HelperFiles.LoadTextFile(FileName);
 			}
 			// Añade el archivo a los últimos archivos abiertos
-			SolutionViewModel.MainViewModel.LastFilesViewModel.Add(FileName);
+			SolutionViewModel.MainViewModel.MainController.HostPluginsController.AddFileUsed(FileName);
 		}
 
 		/// <summary>
@@ -75,7 +75,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 				// Actualiza el árbol
 				SolutionViewModel.TreeFoldersViewModel.Load();
 				// Añade el archivo a los últimos archivos abiertos
-				SolutionViewModel.MainViewModel.LastFilesViewModel.Add(FileName);
+				SolutionViewModel.MainViewModel.MainController.HostPluginsController.AddFileUsed(FileName);
 				// Indica que no ha habido modificaciones
 				IsUpdated = false;
 			}

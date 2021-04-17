@@ -1,7 +1,7 @@
 ﻿using System;
 
 using Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets;
-using Bau.Libraries.DbStudio.ViewModels.Core.Explorers;
+using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorers
 {

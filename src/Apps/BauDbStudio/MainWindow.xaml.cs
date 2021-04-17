@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 
-using Bau.Libraries.DbStudio.ViewModels.Core.Interfaces;
+using Bau.Libraries.PluginsStudio.ViewModels.Base.Interfaces;
 using Bau.DbStudio.Views.Files;
+using Bau.Controls.DockLayout;
 
 namespace Bau.DbStudio
 {
@@ -28,36 +29,33 @@ namespace Bau.DbStudio
 			// Inicializa el controlador
 			MainController = new Controllers.AppController("Bau.DbStudio", this, 
 														   System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Bau.DbStudio"));
-			MainController.ConfigurationController.Load(MainController.SparkSolutionController.AppPath);
+			MainController.ConfigurationController.Load(MainController.DbStudioController.AppPath);
 			// Inicializa el contexto y los controles
-			PluginsStudioViews = new Libraries.PluginsStudio.Views.PluginsStudioViewManager(MainController.SparkSolutionController);
+			PluginsStudioViews = new Libraries.PluginsStudio.Views.PluginsStudioViewManager(MainController.DbStudioController);
 			PluginsStudioViews.InitializePlugins();
 			// Inicializa el ViewModel
 			DataContext = ViewModel = PluginsStudioViews.PluginsStudioViewModel;
 			// Carga los datos
 			PluginsStudioViews.Load(MainController.ConfigurationController.PathData, MainController.ConfigurationController.LastWorkSpace);
-			//ViewModel.Load();
 			//ViewModel.LastPathSelected = MainController.ConfigurationController.LastPathSelected;
-			//ViewModel.LastFilesViewModel.Add(MainController.ConfigurationController.LastFiles);
+			ViewModel.LastFilesViewModel.Add(MainController.ConfigurationController.LastFiles);
 			// Añade los manejadores de eventos
 			ViewModel.WorkspacesChanged += (sender, args) => ShowMenuWorkspaces();
 			// Añade los paneles
-			dckManager.AddPane("TreeFilesExplorer", "Archivos", new Views.TreeFilesExplorer(ViewModel.SolutionViewModel.TreeFoldersViewModel), 
-							   null, Controls.DockLayout.DockLayoutManager.DockPosition.Left);
-			dckManager.AddPane("TreeConnectionsExplorer", "Conexiones", new Views.TreeConnectionsExplorer(ViewModel.SolutionViewModel.TreeConnectionsViewModel), 
-							   null, Controls.DockLayout.DockLayoutManager.DockPosition.Left);
-			dckManager.AddPane("TreeReportingExplorer", "Informes", 
-							   new Views.Reporting.Explorers.TreeReportingExplorer(ViewModel.SolutionViewModel.ReportingSolutionViewModel.TreeReportingViewModel), 
-							   null, Controls.DockLayout.DockLayoutManager.DockPosition.Left);
-			dckManager.AddPane("TreeStorageExplorer", "Storage", new Views.TreeStoragesExplorer(ViewModel.SolutionViewModel.TreeStoragesViewModel), 
-							   null, Controls.DockLayout.DockLayoutManager.DockPosition.Right);
-			dckManager.AddPane("LogView", "Log", new Views.Tools.LogView(ViewModel.LogViewModel), null, Controls.DockLayout.DockLayoutManager.DockPosition.Bottom);
-			dckManager.AddPane("SearchVew", "Buscar", new Views.Tools.Search.SearchView(ViewModel.SearchFilesViewModel), 
-							   null, Controls.DockLayout.DockLayoutManager.DockPosition.Right);
+			//dckManager.AddPane("TreeFilesExplorer", "Archivos", new Views.TreeFilesExplorer(ViewModel.SolutionViewModel.TreeFoldersViewModel), 
+			//				   null, Controls.DockLayout.DockLayoutManager.DockPosition.Left);
+			//dckManager.AddPane("TreeConnectionsExplorer", "Conexiones", new Views.TreeConnectionsExplorer(ViewModel.SolutionViewModel.TreeConnectionsViewModel), 
+			//				   null, Controls.DockLayout.DockLayoutManager.DockPosition.Left);
+			//dckManager.AddPane("TreeReportingExplorer", "Informes", 
+			//				   new Views.Reporting.Explorers.TreeReportingExplorer(ViewModel.SolutionViewModel.ReportingSolutionViewModel.TreeReportingViewModel), 
+			//				   null, Controls.DockLayout.DockLayoutManager.DockPosition.Left);
+			//dckManager.AddPane("TreeStorageExplorer", "Storage", new Views.TreeStoragesExplorer(ViewModel.SolutionViewModel.TreeStoragesViewModel), 
+			//				   null, Controls.DockLayout.DockLayoutManager.DockPosition.Right);
+			ShowPanes();
 			// Abre los paneles predefinidos
 			dckManager.OpenGroup(Controls.DockLayout.DockLayoutManager.DockPosition.Left);
 			// Asigna los manejadores de eventos
-			MainController.SparkSolutionController.OpenWindowRequired += (sender, args) => OpenWindow(args);
+			MainController.DbStudioController.OpenWindowRequired += (_, args) => OpenWindow(args);
 			// Asigna los manejadores de eventos del docker de documentos
 			dckManager.Closing += (sender, args) => CloseWindow(args);
 			dckManager.ActiveDocumentChanged += (sender, args) => UpdateSelectedTab();
@@ -67,6 +65,33 @@ namespace Bau.DbStudio
 			lblVersion.Text = GetAssemblyVersion();
 			// Carga los menús de espacios de trabajo
 			ShowMenuWorkspaces();
+		}
+
+		/// <summary>
+		///		Muestra los paneles
+		/// </summary>
+		private void ShowPanes()
+		{
+			foreach (Libraries.PluginsStudio.Views.Base.Models.PaneModel pane in PluginsStudioViews.GetPanes())
+				dckManager.AddPane(pane.Id, pane.Title, pane.View, pane.ViewModel, ConvertPosition(pane.Position));
+		}
+
+		/// <summary>
+		///		Convierte la posición 
+		/// </summary>
+		private DockLayoutManager.DockPosition ConvertPosition(Libraries.PluginsStudio.Views.Base.Models.PaneModel.PositionType position)
+		{
+			switch (position)
+			{
+				case Libraries.PluginsStudio.Views.Base.Models.PaneModel.PositionType.Top:
+					return DockLayoutManager.DockPosition.Top;
+				case Libraries.PluginsStudio.Views.Base.Models.PaneModel.PositionType.Right:
+					return DockLayoutManager.DockPosition.Right;
+				case Libraries.PluginsStudio.Views.Base.Models.PaneModel.PositionType.Bottom:
+					return DockLayoutManager.DockPosition.Bottom;
+				default:
+					return DockLayoutManager.DockPosition.Left;
+			}
 		}
 
 		/// <summary>
@@ -94,7 +119,8 @@ namespace Bau.DbStudio
 		/// </summary>
 		private void OpenFile(string fileName)
 		{
-			OpenWindow(new Libraries.DbStudio.ViewModels.Solutions.Details.Files.FileViewModel(ViewModel.SolutionViewModel, fileName));
+			throw new NotImplementedException();
+			//OpenWindow(new Libraries.DbStudio.ViewModels.Solutions.Details.Files.FileViewModel(ViewModel.SolutionViewModel, fileName));
 		}
 
 		/// <summary>
@@ -171,7 +197,7 @@ namespace Bau.DbStudio
 		{
 			if (args.Document != null && args.Document.Tag != null && args.Document.Tag is IDetailViewModel detailViewModel && detailViewModel.IsUpdated)
 			{
-				Libraries.BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType result = MainController.SparkSolutionController.HostController.SystemController.ShowQuestionCancel
+				Libraries.BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType result = MainController.DbStudioController.HostController.SystemController.ShowQuestionCancel
 																											(detailViewModel.GetSaveAndCloseMessage());
 
 					switch (result)
@@ -259,7 +285,7 @@ namespace Bau.DbStudio
 		/// </summary>
 		private void OpenConfigurationWindow()
 		{
-			MainController.SparkSolutionController.HostHelperController.ShowDialog(this, new Views.Tools.ConfigurationView());
+			MainController.DbStudioController.HostHelperController.ShowDialog(this, new Views.Tools.ConfigurationView());
 		}
 
 		/// <summary>
@@ -282,7 +308,7 @@ namespace Bau.DbStudio
 				// Borra las opciones de menú que se hubiesen creado anteriormente
 				DeleteMenusBetween(mnuWorkspace, startIndex, indexEnd);
 				// Muestra los menús
-				foreach (Libraries.DbStudio.ViewModels.Core.Tools.Workspaces.WorkSpaceViewModel workspace in ViewModel.WorkspacesViewModel.Items)
+				foreach (Libraries.PluginsStudio.ViewModels.Tools.Workspaces.WorkSpaceViewModel workspace in ViewModel.WorkspacesViewModel.Items)
 				{
 					MenuItem mnuNewWorkspace = CreateMenu(workspace.Name, string.Empty, false, null, workspace);
 
@@ -290,7 +316,7 @@ namespace Bau.DbStudio
 						mnuWorkspace.Items.Insert(++startIndex, mnuNewWorkspace);
 						// Añade el manejador
 						mnuNewWorkspace.Click += (sender, args) => {
-																		Libraries.DbStudio.ViewModels.Core.Tools.Workspaces.WorkSpaceViewModel workSpace = (sender as MenuItem).Tag as Libraries.DbStudio.ViewModels.Core.Tools.Workspaces.WorkSpaceViewModel;
+																		Libraries.PluginsStudio.ViewModels.Tools.Workspaces.WorkSpaceViewModel workSpace = (sender as MenuItem).Tag as Libraries.PluginsStudio.ViewModels.Tools.Workspaces.WorkSpaceViewModel;
 
 																			// Selecciona el espacio de trabajo
 																			if (workSpace != null)
@@ -320,7 +346,7 @@ namespace Bau.DbStudio
 
 				// Recorre los menús seleccionando / deseleccionando
 				for (int index = startIndex; index < indexEnd; index++)
-					if (mnuWorkspace.Items[index] is MenuItem child && child.Tag is Libraries.DbStudio.ViewModels.Core.Tools.Workspaces.WorkSpaceViewModel workSpace)
+					if (mnuWorkspace.Items[index] is MenuItem child && child.Tag is Libraries.PluginsStudio.ViewModels.Tools.Workspaces.WorkSpaceViewModel workSpace)
 						child.IsChecked = workSpace.Name.Equals(ViewModel.WorkspacesViewModel.SelectedItem.Name);
 		}
 
@@ -362,7 +388,7 @@ namespace Bau.DbStudio
 				if (view is IDetailViewModel viewModel && viewModel.IsUpdated)
 				{
 					// Mensaje para el usuario
-					ViewModel.MainStudioController.HostController.SystemController.ShowMessage("Grabe las últimas modificaciones antes de cerrar la aplicación");
+					ViewModel.MainStudioController.MainWindowController.SystemController.ShowMessage("Grabe las últimas modificaciones antes de cerrar la aplicación");
 					// Indica que no puede salir de la aplicación
 					return false;
 				}
@@ -376,8 +402,8 @@ namespace Bau.DbStudio
 		private void ExitApp()
 		{
 			// Graba la configuración
-			if (!string.IsNullOrWhiteSpace(ViewModel.MainStudioController.HostController.DialogsController.LastPathSelected))
-				MainController.ConfigurationController.LastPathSelected = ViewModel.MainStudioController.HostController.DialogsController.LastPathSelected;
+			if (!string.IsNullOrWhiteSpace(ViewModel.MainStudioController.MainWindowController.HostController.DialogsController.LastPathSelected))
+				MainController.ConfigurationController.LastPathSelected = ViewModel.MainStudioController.MainWindowController.HostController.DialogsController.LastPathSelected;
 			MainController.ConfigurationController.LastWorkSpace = ViewModel.WorkspacesViewModel.SelectedItem.Name;
 			MainController.ConfigurationController.LastFiles = ViewModel.LastFilesViewModel.GetFiles();
 			MainController.ConfigurationController.Save();
@@ -405,7 +431,7 @@ namespace Bau.DbStudio
 		/// <summary>
 		///		ViewModel principal
 		/// </summary>
-		public Libraries.DbStudio.ViewModels.Core.PluginsStudioViewModel ViewModel { get; private set; }
+		public Libraries.PluginsStudio.ViewModels.PluginsStudioViewModel ViewModel { get; private set; }
 
 		/// <summary>
 		///		Controlador principal
@@ -494,22 +520,22 @@ namespace Bau.DbStudio
 
 		private void ExecuteScriptCommandBinding_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
 		{
-			ViewModel.SolutionViewModel.ConnectionExecutionViewModel.ExecuteScripCommand.Execute(null);
+			ViewModel.MainStudioController.HostPluginsController.ExecutePluginCommand("DbStudio", "ConnectionExecutionViewModel", "ExecuteScripCommand");
 		}
 
 		private void ExecuteScriptCommandBinding_CanExecute(object sender, System.Windows.Input.CanExecuteRoutedEventArgs e)
 		{
-			e.CanExecute = ViewModel.SolutionViewModel.ConnectionExecutionViewModel.ExecuteScripCommand.CanExecute(null);
+			e.CanExecute = ViewModel.MainStudioController.HostPluginsController.CheckCanExecutePluginCommand("DbStudio", "ConnectionExecutionViewModel", "ExecuteScripCommand");
 		}
 
 		private void NewQueryCommandBinding_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
 		{
-			ViewModel.SolutionViewModel.TreeConnectionsViewModel.NewQueryCommand.Execute(null);
+			ViewModel.MainStudioController.HostPluginsController.ExecutePluginCommand("DbStudio", "TreeConnectionsViewModel", "NewQueryCommand");
 		}
 
 		private void NewQueryCommandBinding_CanExecute(object sender, System.Windows.Input.CanExecuteRoutedEventArgs e)
 		{
-			e.CanExecute = ViewModel.SolutionViewModel.TreeConnectionsViewModel.NewQueryCommand.CanExecute(null);
+			e.CanExecute = ViewModel.MainStudioController.HostPluginsController.CheckCanExecutePluginCommand("DbStudio", "TreeConnectionsViewModel", "NewQueryCommand");
 		}
 
 		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

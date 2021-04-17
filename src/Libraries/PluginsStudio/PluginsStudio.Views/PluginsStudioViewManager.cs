@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Bau.Libraries.PluginsStudio.Views
 {
@@ -11,10 +8,12 @@ namespace Bau.Libraries.PluginsStudio.Views
 	/// </summary>
 	public class PluginsStudioViewManager
 	{
-		public PluginsStudioViewManager(DbStudio.ViewModels.Core.Controllers.IDbStudioCoreController mainStudioController)
+		public PluginsStudioViewManager(ViewModels.Base.Controllers.IMainWindowController mainController)
 		{
+			// Inicializa el controlador
+			PluginStudioController = new Controllers.PluginsStudioController(this, mainController);
 			// Inicializa el ViewModel
-			PluginsStudioViewModel = new DbStudio.ViewModels.Core.PluginsStudioViewModel(mainStudioController);
+			PluginsStudioViewModel = new ViewModels.PluginsStudioViewModel(PluginStudioController);
 		}
 
 		/// <summary>
@@ -33,12 +32,45 @@ namespace Bau.Libraries.PluginsStudio.Views
 		}
 
 		/// <summary>
-		///		Seleccina un espacio de trabajo
+		///		Selecciona un espacio de trabajo
 		/// </summary>
 		public void SelectWorkspace(string workspace)
 		{
 			PluginsStudioViewModel.SelectWorkspace(workspace);
 		}
+
+		/// <summary>
+		///		Obtiene los paneles de la ventana principal y de los plugins
+		/// </summary>
+		public List<Base.Models.PaneModel> GetPanes()
+		{
+			List<Base.Models.PaneModel> panes = new List<Base.Models.PaneModel>();
+
+				// Añade los paneles de la aplicación principal
+				panes.Add(new Base.Models.PaneModel
+											{
+												Id = "LogView",
+												Title = "Log",
+												Position = Base.Models.PaneModel.PositionType.Bottom,
+												View = new Tools.Log.LogView(new ViewModels.Tools.Log.LogListViewModel(PluginsStudioViewModel))
+											}
+						 );
+				panes.Add(new Base.Models.PaneModel
+											{
+												Id = "SearchView",
+												Title = "Search",
+												Position = Base.Models.PaneModel.PositionType.Right,
+												View = new Tools.Search.SearchView(new ViewModels.Tools.Search.SearchFilesViewModel(PluginsStudioViewModel))
+											}
+						 );
+				// Devuelve la colección de paneles
+				return panes;
+		}
+
+		/// <summary>
+		///		Controlador de PluginsStudio
+		/// </summary>
+		internal Controllers.PluginsStudioController PluginStudioController { get; }
 
 		/// <summary>
 		///		Manager de plugins
@@ -48,6 +80,6 @@ namespace Bau.Libraries.PluginsStudio.Views
 		/// <summary>
 		///		ViewModel
 		/// </summary>
-		public DbStudio.ViewModels.Core.PluginsStudioViewModel PluginsStudioViewModel { get; }
+		public ViewModels.PluginsStudioViewModel PluginsStudioViewModel { get; }
 	}
 }

@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
 using Bau.Libraries.BauMvvm.ViewModels.Media;
 using Bau.Libraries.RestStudio.Models.Rest;
-using Bau.Libraries.DbStudio.ViewModels.Core.Explorers;
+using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
 
 namespace Bau.Libraries.RestStudio.ViewModels.Solutions.Explorers
 {

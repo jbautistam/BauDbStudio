@@ -26,7 +26,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Tools
 			// Asigna las propiedades
 			MaskFiles = "Archivos XML (*.xml)|*.xml|Todos los archivos (*.*)|*.*";
 			MaskSqlFiles = "Archivos SQL (*.sql)|*.sql|Todos los archivos (*.*)|*.*";
-			OutputFileName = System.IO.Path.Combine(SolutionViewModel.MainViewModel.LastPathSelected, "ScriptReporting.sql");
+			OutputFileName = System.IO.Path.Combine(SolutionViewModel.MainViewModel.MainController.DialogsController.LastPathSelected, "ScriptReporting.sql");
 			// Indica que no ha habido modificaciones
 			IsUpdated = false;
 		}
@@ -56,8 +56,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Tools
 		{
 			if (ValidateData())
 			{
-				// Guarda el directorio seleccionado
-				SolutionViewModel.MainViewModel.LastPathSelected = System.IO.Path.GetDirectoryName(OutputFileName);
 				// Indica que ya no es nuevo y está grabado
 				IsUpdated = false;
 				// Cierra la ventana

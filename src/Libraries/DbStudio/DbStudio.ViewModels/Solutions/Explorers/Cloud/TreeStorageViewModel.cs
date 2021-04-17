@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.LibBlobStorage;
 using Bau.Libraries.LibLogger.Models.Log;
-using Bau.Libraries.DbStudio.ViewModels.Core.Explorers;
+using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Cloud
 {
@@ -82,7 +82,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Cloud
 		/// </summary>
 		private void OpenStorage(NodeStorageViewModel node)
 		{
-			if (SolutionViewModel.MainViewModel.MainController.OpenDialog(new Details.Cloud.StorageViewModel(SolutionViewModel, node?.Storage)) == 
+			if (SolutionViewModel.MainViewModel.MainController.MainWindowController.OpenDialog(new Details.Cloud.StorageViewModel(SolutionViewModel, node?.Storage)) == 
 							BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 			{
 				// Graba la solución
@@ -135,7 +135,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Cloud
 		/// </summary>
 		private async Task UploadFolderAsync()
 		{
-			if (SolutionViewModel.MainViewModel.MainController.HostController.DialogsController.OpenDialogSelectPath(SolutionViewModel.MainViewModel.LastPathSelected, out string path) 
+			if (SolutionViewModel.MainViewModel.MainController.HostController.DialogsController.OpenDialogSelectPath(string.Empty, out string path) 
 					== BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 			{
 				if (string.IsNullOrWhiteSpace(path) || !System.IO.Directory.Exists(path))
@@ -147,7 +147,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Cloud
 						if (files.Count > 0)
 							await UploadFilesAsync(files);
 						else
-							SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("No hay ningún archivo en es directorio");
+							SolutionViewModel.MainViewModel.MainController.SystemController.ShowMessage("No hay ningún archivo en es directorio");
 				}
 			}
 		}
@@ -157,7 +157,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Cloud
 		/// </summary>
 		private async Task UploadFileAsync()
 		{
-			List<string> files = Convert(SolutionViewModel.MainViewModel.MainController.HostController.DialogsController.OpenDialogLoadFiles(SolutionViewModel.MainViewModel.LastPathSelected, string.Empty));
+			List<string> files = Convert(SolutionViewModel.MainViewModel.MainController.DialogsController.OpenDialogLoadFiles(string.Empty, string.Empty));
 
 				if (files.Count > 0)
 					await UploadFilesAsync(files);
@@ -232,7 +232,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Cloud
 		/// </summary>
 		private async Task DownloadAsync()
 		{
-			if (SolutionViewModel.MainViewModel.MainController.HostController.DialogsController.OpenDialogSelectPath(SolutionViewModel.MainViewModel.LastPathSelected, out string path) 
+			if (SolutionViewModel.MainViewModel.MainController.DialogsController.OpenDialogSelectPath(string.Empty, out string path) 
 					== BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 			{
 				if (string.IsNullOrWhiteSpace(path) || !System.IO.Directory.Exists(path))
@@ -270,8 +270,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Cloud
 							}
 							// Log 
 							SolutionViewModel.MainViewModel.MainController.Logger.Flush();
-							// Guarda el directorio seleccionado
-							SolutionViewModel.MainViewModel.LastPathSelected = path;
 						}
 				}
 			}

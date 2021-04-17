@@ -31,7 +31,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 			PrefixOutputTable = "SRC_";
 			MountPathVariable = "MountPath";
 			SubPath = "Copy";
-			PathInputFiles = SolutionViewModel.MainViewModel.LastPathSelected;
+			PathInputFiles = SolutionViewModel.MainViewModel.MainController.DialogsController.LastPathSelected;
 			// Indica que no ha habido modificaciones
 			IsUpdated = false;
 		}
@@ -69,8 +69,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 		{
 			if (ValidateData())
 			{
-				// Guarda el directorio seleccionado
-				SolutionViewModel.MainViewModel.LastPathSelected = PathInputFiles;
 				// Indica que ya no es nuevo y está grabado
 				IsUpdated = false;
 				// Cierra la ventana

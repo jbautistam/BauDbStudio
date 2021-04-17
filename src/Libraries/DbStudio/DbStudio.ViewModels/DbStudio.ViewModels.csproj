@@ -40,9 +40,9 @@
     <ProjectReference Include="..\..\JobEtlProcessor\LibJobProcessor.FilesShell\LibJobProcessor.FilesShell.csproj" />
     <ProjectReference Include="..\..\JobEtlProcessor\LibJobProcessor.Manager\LibJobProcessor.Manager.csproj" />
     <ProjectReference Include="..\..\JobEtlProcessor\LibJobProcessor.Rest\LibJobProcessor.Rest.csproj" />
+    <ProjectReference Include="..\..\PluginsStudio\PluginsStudio.ViewModels.Base\PluginsStudio.ViewModels.Base.csproj" />
     <ProjectReference Include="..\DbStudio.Application\DbStudio.Application.csproj" />
     <ProjectReference Include="..\DbStudio.Models\DbStudio.Models.csproj" />
-    <ProjectReference Include="..\DbStudio.ViewModels.Core\DbStudio.ViewModels.Core.csproj" />
   </ItemGroup>
 
 </Project>

@@ -7,7 +7,7 @@ using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
 using Bau.Libraries.BauMvvm.ViewModels.Media;
 using Bau.Libraries.DbStudio.Models.Cloud;
 using Bau.Libraries.LibBlobStorage;
-using Bau.Libraries.DbStudio.ViewModels.Core.Explorers;
+using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Cloud
 {
@@ -42,7 +42,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Cloud
 				catch (Exception exception)
 				{
 					nodes.Add(new NodeMessageViewModel(TreeViewModel, this, $"Error al cargar los contenedores. {exception.Message}", IconType.Error));
-					(TreeViewModel as TreeStorageViewModel).SolutionViewModel.MainViewModel.MainController.Logger.Default.LogItems.Error($"Error al cargar los contenedores. {exception.Message}");
+					(TreeViewModel as TreeStorageViewModel).SolutionViewModel.MainViewModel.MainController.MainWindowController.Logger.Default.LogItems.Error($"Error al cargar los contenedores. {exception.Message}");
 				}
 				// Devuelve la colección de nodos
 				return nodes;

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bau.DbStudio.Views.EtlProjects"
         xmlns:Files="clr-namespace:Bau.Controls.Files;assembly=BauControls"
-		xmlns:ConnectionsViewModel="clr-namespace:Bau.Libraries.DbStudio.ViewModels.Core.Explorers;assembly=DbStudio.ViewModels.Core"
+		xmlns:ViewModel="clr-namespace:Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;assembly=PluginsStudio.ViewModels.Base"
 		x:Class="Bau.DbStudio.Views.EtlProjects.CreateValidationScriptView"
         mc:Ignorable="d"
         Title="Creación de scripts de validación" Height="650" Width="1200" ResizeMode="NoResize" ShowInTaskbar="False"
@@ -49,7 +49,7 @@
 						  ItemsSource="{Binding Path=TreeConnection.Children}" >
 				<TreeView.Resources>
 					<!-- Plantilla de los nodos -->
-					<HierarchicalDataTemplate DataType="{x:Type ConnectionsViewModel:BaseTreeNodeViewModel}" ItemsSource="{Binding Children}">
+					<HierarchicalDataTemplate DataType="{x:Type ViewModel:BaseTreeNodeViewModel}" ItemsSource="{Binding Children}">
 						<StackPanel Orientation="Horizontal">
 							<CheckBox IsChecked="{Binding Path=IsChecked}" />
 							<Image Width="20" Height="20" Margin="3,0" Source="{Binding Path=Icon,Converter={StaticResource FileIconConverter}}"

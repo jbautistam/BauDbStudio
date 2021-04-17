@@ -11,4 +11,14 @@
     <ProjectReference Include="..\PluginsStudio.Views.Base\PluginsStudio.Views.Base.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Page Update="Tools\Log\LogView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="Tools\Search\SearchView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
 </Project>

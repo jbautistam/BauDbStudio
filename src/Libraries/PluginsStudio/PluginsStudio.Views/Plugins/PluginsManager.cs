@@ -17,6 +17,22 @@ namespace Bau.Libraries.PluginsStudio.Views.Plugins
 		}
 
 		/// <summary>
+		///		Ejecuta un comando sobre un plugin
+		/// </summary>
+		internal void ExecutePluginCommand(string plugin, string viewModel, string command)
+		{
+			throw new NotImplementedException();
+		}
+
+		/// <summary>
+		///		Comprueba si se puede ejecutar un comando sobre un plugin
+		/// </summary>
+		internal bool CheckCanExecutePluginCommand(string plugin, string viewModel, string command)
+		{
+			throw new NotImplementedException();
+		}
+
+		/// <summary>
 		///		Plugins
 		/// </summary>
 		private List<Base.Interfaces.IPlugin> Plugins { get; } = new();

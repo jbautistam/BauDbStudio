@@ -37,7 +37,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 			ComboFormat.SelectedItem = ComboFormat.Items[0];
 			// Asigna las propiedades
 			DataBase = string.Empty;
-			OutputPath = SolutionViewModel.MainViewModel.LastPathSelected;
+			OutputPath = SolutionViewModel.MainViewModel.MainController.DialogsController.LastPathSelected;
 			BlockSize = 2_000_000;
 			// Indica que no ha habido modificaciones
 			IsUpdated = false;
@@ -68,8 +68,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 		{
 			if (ValidateData())
 			{
-				// Guarda el directorio seleccionado
-				SolutionViewModel.MainViewModel.LastPathSelected = OutputPath;
 				// Guarda las propiedades
 				FormatType = (Application.SolutionManager.FormatType) (ComboFormat.SelectedId ?? (int) Application.SolutionManager.FormatType.Parquet);
 				// Indica que ya no es nuevo y está grabado

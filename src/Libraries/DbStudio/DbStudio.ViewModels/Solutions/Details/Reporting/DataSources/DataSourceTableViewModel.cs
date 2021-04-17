@@ -8,7 +8,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.DataSour
 	/// <summary>
 	///		ViewModel de mantenimiento de un <see cref="DataSourceTableModel"/>
 	/// </summary>
-	public class DataSourceTableViewModel : BaseObservableObject, Core.Interfaces.IDetailViewModel
+	public class DataSourceTableViewModel : BaseObservableObject, PluginsStudio.ViewModels.Base.Interfaces.IDetailViewModel
 	{
 		// Variables privadas
 		private string _schema, _table;

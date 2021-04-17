@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Data;
 
-using Bau.Libraries.DbStudio.ViewModels.Core.Explorers;
+using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
 
 namespace Bau.DbStudio.Converters
 {

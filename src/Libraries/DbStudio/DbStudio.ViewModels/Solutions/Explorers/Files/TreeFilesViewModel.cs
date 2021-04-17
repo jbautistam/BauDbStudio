@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.BauMvvm.ViewModels;
-using Bau.Libraries.DbStudio.ViewModels.Core.Explorers;
+using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 {
@@ -117,7 +117,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 					case nameof(PasteCommand):
 						return _nodeToCopy != null && SelectedNode != null && isFolder;
 					case nameof(PasteClipboardImageCommand):
-						return isFolder && SolutionViewModel.MainViewModel.MainController.ClipboardContainImage();
+						return isFolder && SolutionViewModel.MainViewModel.MainController.MainWindowController.ClipboardContainImage();
 					default:
 						return true;
 				}
@@ -144,16 +144,16 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 			if (SelectedNode is NodeFileViewModel node && !node.IsFolder)
 			{
 				if (node.FileName.EndsWith(".parquet", StringComparison.CurrentCultureIgnoreCase))
-					SolutionViewModel.MainViewModel.MainController.OpenWindow(new Details.Files.Structured.ParquetFileViewModel(SolutionViewModel, node.FileName));
+					SolutionViewModel.MainViewModel.MainController.MainWindowController.OpenWindow(new Details.Files.Structured.ParquetFileViewModel(SolutionViewModel, node.FileName));
 				else if (node.FileName.EndsWith(".csv", StringComparison.CurrentCultureIgnoreCase))
-					SolutionViewModel.MainViewModel.MainController.OpenWindow(new Details.Files.Structured.CsvFileViewModel(SolutionViewModel, node.FileName));
+					SolutionViewModel.MainViewModel.MainController.MainWindowController.OpenWindow(new Details.Files.Structured.CsvFileViewModel(SolutionViewModel, node.FileName));
 				else if (node.FileName.EndsWith(".xlsx", StringComparison.CurrentCultureIgnoreCase) ||
 						 node.FileName.EndsWith(".xls", StringComparison.CurrentCultureIgnoreCase))
-					SolutionViewModel.MainViewModel.MainController.OpenWindow(new Details.Files.Structured.ExcelFileViewModel(SolutionViewModel, node.FileName));
+					SolutionViewModel.MainViewModel.MainController.MainWindowController.OpenWindow(new Details.Files.Structured.ExcelFileViewModel(SolutionViewModel, node.FileName));
 				else if (IsImage(node.FileName))
-					SolutionViewModel.MainViewModel.MainController.OpenWindow(new Details.Files.ImageViewModel(SolutionViewModel, node.FileName));
+					SolutionViewModel.MainViewModel.MainController.MainWindowController.OpenWindow(new Details.Files.ImageViewModel(SolutionViewModel, node.FileName));
 				else
-					SolutionViewModel.MainViewModel.MainController.OpenWindow(new Details.Files.FileViewModel(SolutionViewModel, node.FileName));
+					SolutionViewModel.MainViewModel.MainController.MainWindowController.OpenWindow(new Details.Files.FileViewModel(SolutionViewModel, node.FileName));
 			}
 		}
 
@@ -205,14 +205,14 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 				{
 					Tools.CreateFileViewModel createFileViewModel = new Tools.CreateFileViewModel(SolutionViewModel, path);
 					
-						if (SolutionViewModel.MainViewModel.MainController.OpenDialog(createFileViewModel)
+						if (SolutionViewModel.MainViewModel.MainController.MainWindowController.OpenDialog(createFileViewModel)
 										== BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes &&
 							!string.IsNullOrWhiteSpace(createFileViewModel.FileName))
 						{
 							// Graba el archivo
 							LibHelper.Files.HelperFiles.SaveTextFile(createFileViewModel.FullFileName, string.Empty, GetEncoder(createFileViewModel.GetSelectedEncoding()));
 							// Abre la ventana
-							SolutionViewModel.MainViewModel.MainController.OpenWindow(new Details.Files.FileViewModel(SolutionViewModel, createFileViewModel.FullFileName));
+							SolutionViewModel.MainViewModel.MainController.MainWindowController.OpenWindow(new Details.Files.FileViewModel(SolutionViewModel, createFileViewModel.FullFileName));
 							// Actualiza el árbol
 							Load();
 						}
@@ -316,18 +316,18 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 		/// </summary>
 		private void PasteClipboardImage()
 		{
-			if (!SolutionViewModel.MainViewModel.MainController.ClipboardContainImage())
+			if (!SolutionViewModel.MainViewModel.MainController.MainWindowController.ClipboardContainImage())
 				SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("No hay ninguna imagen en el portapapeles");
 			else
 			{
-				string fileName = SolutionViewModel.MainViewModel.MainController.HostController.DialogsController.OpenDialogSave(GetSelectedFolder(),
-																																 "Archivos de imagen (*.jpg)|*.jpg",
-																																 "NewImage.jpg");
+				string fileName = SolutionViewModel.MainViewModel.MainController.DialogsController.OpenDialogSave(GetSelectedFolder(),
+																												  "Archivos de imagen (*.jpg)|*.jpg",
+																												  "NewImage.jpg");
 
 					if (!string.IsNullOrWhiteSpace(fileName))
 					{
-						if (!SolutionViewModel.MainViewModel.MainController.SaveClipboardImage(fileName))
-							SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("No se ha podido grabar la imagen");
+						if (!SolutionViewModel.MainViewModel.MainController.MainWindowController.SaveClipboardImage(fileName))
+							SolutionViewModel.MainViewModel.MainController.SystemController.ShowMessage("No se ha podido grabar la imagen");
 						else
 							Load();
 					}
@@ -423,9 +423,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 
 						// Ejecuta los archivos (si ha encontrado alguno)
 						if (files.Count == 0)
-							SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("No se encuentra ningún archivo SQL para ejecutar");
+							SolutionViewModel.MainViewModel.MainController.SystemController.ShowMessage("No se encuentra ningún archivo SQL para ejecutar");
 						else
-							SolutionViewModel.MainViewModel.MainController.OpenWindow(new Details.Connections.ExecuteFilesViewModel(SolutionViewModel, files));
+							SolutionViewModel.MainViewModel.MainController.MainWindowController.OpenWindow(new Details.Connections.ExecuteFilesViewModel(SolutionViewModel, files));
 				}
 		}
 
@@ -459,7 +459,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 		/// </summary>
 		private void ExecuteEtlScript(string fileName)
 		{
-			SolutionViewModel.MainViewModel.MainController.OpenWindow(new Details.EtlProjects.ExecuteEtlConsoleViewModel(SolutionViewModel, fileName));
+			SolutionViewModel.MainViewModel.MainController.MainWindowController.OpenWindow(new Details.EtlProjects.ExecuteEtlConsoleViewModel(SolutionViewModel, fileName));
 		}
 
 		/// <summary>
@@ -523,7 +523,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 					path = GetSelectedPath();
 				// Abre el explorador sobre el directorio
 				if (!string.IsNullOrWhiteSpace(path) && System.IO.Directory.Exists(path))
-					SolutionViewModel.MainViewModel.MainController.OpenExplorer(path);
+					SolutionViewModel.MainViewModel.MainController.MainWindowController.OpenExplorer(path);
 		}
 
 		/// <summary>
@@ -595,7 +595,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 		/// </summary>
 		private void RenameOpenViewModels(string oldFileName, bool isFolder, string newFileName)
 		{
-			foreach (Core.Interfaces.IDetailViewModel viewModel in SolutionViewModel.MainViewModel.MainController.GetOpenedDetails())
+			foreach (PluginsStudio.ViewModels.Base.Interfaces.IDetailViewModel viewModel in SolutionViewModel.MainViewModel.MainController.MainWindowController.GetOpenedDetails())
 				if (viewModel is Details.Files.FileViewModel fileViewModel)
 				{
 					string newName = newFileName;
@@ -618,7 +618,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 								// Cambia el viewModel
 								fileViewModel.FileName = newName;
 								// Avisa a la ventana principal para cambiar los datos del documento abierto
-								SolutionViewModel.MainViewModel.MainController.UpdateTabId(oldWindowId, fileViewModel.TabId, fileViewModel.Header);
+								SolutionViewModel.MainViewModel.MainController.MainWindowController.UpdateTabId(oldWindowId, fileViewModel.TabId, fileViewModel.Header);
 								// Recupera en el viewModel si ha habido modificaciones
 								fileViewModel.IsUpdated = isUpdated;
 						}
@@ -630,20 +630,20 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Files
 		/// </summary>
 		private void CloseWindows(string fileName, bool isFolder)
 		{
-			foreach (Core.Interfaces.IDetailViewModel viewModel in SolutionViewModel.MainViewModel.MainController.GetOpenedDetails())
+			foreach (PluginsStudio.ViewModels.Base.Interfaces.IDetailViewModel viewModel in SolutionViewModel.MainViewModel.MainController.MainWindowController.GetOpenedDetails())
 				if (MustClose(viewModel, fileName, isFolder))
 				{
 					// Indica que no se ha modificado (porque se ha borrado el archivo)
 					viewModel.IsUpdated = false;
 					// Cierra la ventana
-					SolutionViewModel.MainViewModel.MainController.CloseWindow(viewModel.TabId);
+					SolutionViewModel.MainViewModel.MainController.MainWindowController.CloseWindow(viewModel.TabId);
 				}
 		}
 
 		/// <summary>
 		///		Comprueba si debe cerrar una ficha de detalles
 		/// </summary>
-		private bool MustClose(Core.Interfaces.IDetailViewModel viewModel, string fileName, bool isFolder)
+		private bool MustClose(PluginsStudio.ViewModels.Base.Interfaces.IDetailViewModel viewModel, string fileName, bool isFolder)
 		{
 			string viewModelFileName = string.Empty;
 			bool mustClose = false;

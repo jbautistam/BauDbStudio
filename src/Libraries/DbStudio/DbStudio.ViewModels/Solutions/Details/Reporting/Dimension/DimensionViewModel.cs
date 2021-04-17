@@ -8,7 +8,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Dimensio
 	/// <summary>
 	///		ViewModel de mantenimiento de un <see cref="DimensionModel"/>
 	/// </summary>
-	public class DimensionViewModel : BaseObservableObject, Core.Interfaces.IDetailViewModel
+	public class DimensionViewModel : BaseObservableObject, PluginsStudio.ViewModels.Base.Interfaces.IDetailViewModel
 	{
 		// Variables privadas
 		private string _header, _key, _dataSourceId, _description;

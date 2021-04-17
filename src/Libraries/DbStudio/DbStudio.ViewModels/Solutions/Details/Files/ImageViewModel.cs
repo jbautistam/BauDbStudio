@@ -7,7 +7,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files
 	/// <summary>
 	///		ViewModel para un archivo de imagen
 	/// </summary>
-	public class ImageViewModel : BaseObservableObject, Core.Interfaces.IDetailViewModel
+	public class ImageViewModel : BaseObservableObject, PluginsStudio.ViewModels.Base.Interfaces.IDetailViewModel
 	{
 		// Variables privadas
 		private string _header, _fileName;

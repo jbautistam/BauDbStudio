@@ -10,7 +10,7 @@ using Bau.Libraries.LibReporting.Models.DataWarehouses.Relations;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.Reports;
 using Bau.Libraries.LibReporting.Requests.Models;
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
-using Bau.Libraries.DbStudio.ViewModels.Core.Explorers;
+using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries
 {

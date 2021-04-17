@@ -57,8 +57,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 			// Carga la solución de informes
 			if (!string.IsNullOrWhiteSpace(Solution.FileName))
 				ReportingSolutionViewModel.Load(GetSolutionFileName(path, "Reporting"));
-			// Carga las carpetas en la ventana de búsqueda
-			MainViewModel.SearchFilesViewModel.LoadFolders();
 		}
 
 		/// <summary>
@@ -87,7 +85,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 		{
 			Details.EtlProjects.CreateTestXmlViewModel viewModel = new Details.EtlProjects.CreateTestXmlViewModel(this);
 
-				if (MainViewModel.MainController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+				if (MainViewModel.MainController.MainWindowController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 					using (BlockLogModel block = MainViewModel.MainController.Logger.Default.CreateBlock(LogModel.LogType.Info, "Comienzo de la creación de proyectos de pruebas"))
 					{
 						XmlTestProjectGenerator generator = new XmlTestProjectGenerator(Manager, viewModel.ComboConnections.GetSelectedConnection(),
@@ -103,9 +101,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 								else
 								{
 									block.Info("Fin de la creación de proyectos de pruebas");
-									MainViewModel.MainController.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
-																				  "Generación de proyectos XML",
-																				  "Ha terminado correctamente la generación del archivo de pruebas");
+									MainViewModel.MainController.MainWindowController
+											.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
+															  "Generación de proyectos XML",
+															  "Ha terminado correctamente la generación del archivo de pruebas");
 								}
 							}
 							catch (Exception exception)
@@ -124,7 +123,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 		{
 			Details.EtlProjects.CreateValidationScriptsViewModel viewModel = new Details.EtlProjects.CreateValidationScriptsViewModel(this);
 
-				if (MainViewModel.MainController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+				if (MainViewModel.MainController.MainWindowController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 					using (BlockLogModel block = MainViewModel.MainController.Logger.Default.CreateBlock(LogModel.LogType.Info, "Comienzo de la creación de archivos de validación"))
 					{
 						ScriptsValidationOptions options = new ScriptsValidationOptions
@@ -159,9 +158,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 								else
 								{
 									block.Info("Fin de la creación de archivos de validación");
-									MainViewModel.MainController.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
-																				  "Generación de archivos de validación",
-																				  "Ha terminado correctamente la generación de los archivos de validación");
+									MainViewModel.MainController.MainWindowController
+											.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
+															  "Generación de archivos de validación",
+															  "Ha terminado correctamente la generación de los archivos de validación");
 								}
 							}
 							catch (Exception exception)
@@ -180,7 +180,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 		{
 			Details.EtlProjects.CreateImportFilesScriptViewModel viewModel = new Details.EtlProjects.CreateImportFilesScriptViewModel(this);
 
-				if (MainViewModel.MainController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+				if (MainViewModel.MainController.MainWindowController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 					using (BlockLogModel block = MainViewModel.MainController.Logger.Default.CreateBlock(LogModel.LogType.Info, "Comienzo de la creación de archivos de importación"))
 					{
 						ScriptsImportOptions options = new ScriptsImportOptions
@@ -203,9 +203,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 								else
 								{
 									block.Info("Fin de la creación de archivos de importación");
-									MainViewModel.MainController.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
-																				  "Generación de archivos de importación",
-																				  "Ha terminado correctamente la generación de los archivos de importación");
+									MainViewModel.MainController.MainWindowController
+											.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
+															  "Generación de archivos de importación",
+															  "Ha terminado correctamente la generación de los archivos de importación");
 								}
 							}
 							catch (Exception exception)
@@ -224,7 +225,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 		{
 			Details.EtlProjects.CreateSchemaXmlViewModel viewModel = new Details.EtlProjects.CreateSchemaXmlViewModel(this);
 
-				if (MainViewModel.MainController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+				if (MainViewModel.MainController.MainWindowController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 					using (BlockLogModel block = MainViewModel.MainController.Logger.Default.CreateBlock(LogModel.LogType.Info, "Comienzo de la creación de archivos de esquema"))
 					{
 						// Crea los archivos de esquema
@@ -234,9 +235,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 							await new Application.Controllers.Schema.SchemaManager(Manager).SaveAsync(viewModel.ComboConnections.GetSelectedConnection(), viewModel.OutputFileName);
 							// Log
 							block.Info("Fin de la creación de archivos de esquema");
-							MainViewModel.MainController.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
-																		  "Generación de archivos de esquema",
-																		  "Ha terminado correctamente la generación de los archivos de esquema");
+							MainViewModel.MainController.MainWindowController
+									.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
+													  "Generación de archivos de esquema",
+													  "Ha terminado correctamente la generación de los archivos de esquema");
 						}
 						catch (Exception exception)
 						{
@@ -254,7 +256,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 		{
 			Details.Reporting.Tools.CreateSchemaReportingXmlViewModel viewModel = new Details.Reporting.Tools.CreateSchemaReportingXmlViewModel(this);
 
-				if (MainViewModel.MainController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+				if (MainViewModel.MainController.MainWindowController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 					using (BlockLogModel block = MainViewModel.MainController.Logger.Default.CreateBlock(LogModel.LogType.Info, "Comienzo de la creación de archivos de informes"))
 					{
 						// Crea los archivos de esquema
@@ -266,9 +268,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 								manager.SaveDataWarehouse(manager.ConvertSchemaDbToDataWarehouse(viewModel.Name, viewModel.SchemaFileName), viewModel.OutputFileName);
 								// Log
 								block.Info("Fin de la creación de archivos de esquema para informes");
-								MainViewModel.MainController.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
-																			  "Generación de archivos de esquema para informes",
-																			  "Ha terminado correctamente la generación de los archivos de esquema para informes");
+								MainViewModel.MainController.MainWindowController
+										.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
+														  "Generación de archivos de esquema para informes",
+														  "Ha terminado correctamente la generación de los archivos de esquema para informes");
 						}
 						catch (Exception exception)
 						{
@@ -286,7 +289,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 		{
 			Details.Reporting.Tools.CreateScriptsSqlReportingViewModel viewModel = new Details.Reporting.Tools.CreateScriptsSqlReportingViewModel(this);
 
-				if (MainViewModel.MainController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+				if (MainViewModel.MainController.MainWindowController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 					using (BlockLogModel block = MainViewModel.MainController.Logger.Default.CreateBlock(LogModel.LogType.Info, "Comienzo de la creación de scripts SQL de reporting"))
 					{
 						// Crea los archivos de esquema
@@ -298,9 +301,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 								manager.ConvertSchemaReportingToSql(viewModel.SchemaFileName, viewModel.OutputFileName);
 								// Log
 								block.Info("Fin de la creación de archivos de scripts SQL para informes");
-								MainViewModel.MainController.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
-																			  "Generación de archivos SQL para informes",
-																			  "Ha terminado correctamente la generación de los archivos SQL de esquema para informes");
+								MainViewModel.MainController.MainWindowController
+										.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
+														  "Generación de archivos SQL para informes",
+														  "Ha terminado correctamente la generación de los archivos SQL de esquema para informes");
 						}
 						catch (Exception exception)
 						{

@@ -12,7 +12,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 	/// <summary>
 	///		ViewModel para ejecución de una serie de archivos
 	/// </summary>
-	public class ExecuteFilesViewModel : BaseObservableObject, Core.Interfaces.IDetailViewModel
+	public class ExecuteFilesViewModel : BaseObservableObject, PluginsStudio.ViewModels.Base.Interfaces.IDetailViewModel
 	{
 		// Variables privadas
 		private string _header, _fileName;
@@ -171,7 +171,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 				// Obtiene el nombre de archivo si es necesario
 				if (newName || string.IsNullOrWhiteSpace(FileName))
 					newFileName = SolutionViewModel.MainViewModel.MainController.HostController.DialogsController.OpenDialogSave
-											(SolutionViewModel.MainViewModel.LastPathSelected,
+											(string.Empty,
 											 "Archivos de log (*.log)|*.log|Todos los archivos (*.*)|*.*",
 											 $"Execution_Log_{DateTime.Now:yyyy_MM_dd_HH_mm_ss}.log", ".log");
 				else 

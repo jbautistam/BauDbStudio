@@ -13,40 +13,26 @@ namespace Bau.Libraries.DbStudio.ViewModels
 		internal const string MaskFiles = "Archivos de solución (*.dbsln)|*.dbsln|Todos los archivos (*.*)|*.*";
 		// Variables privadas
 		private string _text;
-		private Core.Interfaces.IDetailViewModel _selectedDetailsViewModel;
-		private Tools.LogListViewModel _logViewModel;
-		private Tools.LastFilesListViewModel _lastFilesViewModel;
-		private Tools.Search.SearchFilesViewModel _searchFilesViewModel;
 
-		public MainViewModel(Core.PluginsStudioViewModel pluginsStudioViewModel, Controllers.IDbStudioController mainController)
+		public MainViewModel(string appName, Controllers.IDbStudioController mainController)
 		{
 			// Título de la aplicación
-			Text = mainController.AppName;
+			Text = appName;
 			// Asigna las propiedades
-			PluginsStudioViewModel = pluginsStudioViewModel;
 			MainController = mainController;
 			// Inicializa la solución
 			SolutionViewModel = new Solutions.SolutionViewModel(this);
-			// Inicializa los objetos principales
-			LogViewModel = new Tools.LogListViewModel(this);
-			LastFilesViewModel = new Tools.LastFilesListViewModel(this);
-			SearchFilesViewModel = new Tools.Search.SearchFilesViewModel(this);
-			// Asigna los comandos
-			SaveCommand = new BaseCommand(_ => Save(false), _ => CanSave())
-									.AddListener(this, nameof(SelectedDetailsViewModel));
-			SaveAsCommand = new BaseCommand(_ => Save(true), _ => CanSave())
-									.AddListener(this, nameof(SelectedDetailsViewModel));
-			SaveAllCommand = new BaseCommand(_ => SaveAll(), _ => CanSave())
-									.AddListener(this, nameof(SelectedDetailsViewModel));
-			RefreshCommand = new BaseCommand(_ => Refresh());
 		}
 
 		/// <summary>
 		///		Carga los datos
 		/// </summary>
-		public void Load()
+		public void Load(string path)
 		{
-			SolutionViewModel.Load(PluginsStudioViewModel.WorkspacesViewModel.SelectedItem.Path);
+			// Guarda el directorio
+			PathData = path;
+			// Carga la solución
+			SolutionViewModel.Load(path);
 		}
 
 		/// <summary>
@@ -54,7 +40,7 @@ namespace Bau.Libraries.DbStudio.ViewModels
 		/// </summary>
 		internal void SaveSolution()
 		{
-			SolutionViewModel.Save(PluginsStudioViewModel.WorkspacesViewModel.SelectedItem.Path);
+			SolutionViewModel.Save(PathData);
 		}
 
 		/// <summary>
@@ -62,34 +48,7 @@ namespace Bau.Libraries.DbStudio.ViewModels
 		/// </summary>
 		internal void Refresh()
 		{
-			Load();
-		}
-
-		/// <summary>
-		///		Comprueba si puede guardar el contenido de la ventana
-		/// </summary>
-		private bool CanSave()
-		{
-			return SelectedDetailsViewModel != null;
-		}
-
-		/// <summary>
-		///		Graba el viewModel activo
-		/// </summary>
-		private void Save(bool newName)
-		{
-			if (SelectedDetailsViewModel != null)
-				SelectedDetailsViewModel.SaveDetails(newName);
-		}
-
-		/// <summary>
-		///		Graba todos las ventanas de edición abiertas
-		/// </summary>
-		private void SaveAll()
-		{
-			foreach (Core.Interfaces.IDetailViewModel viewModel in MainController.GetOpenedDetails())
-				if (viewModel.IsUpdated)
-					viewModel.SaveDetails(false);
+			Load(PathData);
 		}
 
 		/// <summary>
@@ -99,13 +58,9 @@ namespace Bau.Libraries.DbStudio.ViewModels
 		internal string OpenDialogSave(string suggestedFileName, string mask, string defaultExtension)
 		{
 			string path = GetPath(suggestedFileName);
-			string fileName = MainController.HostController.DialogsController.OpenDialogSave(path, mask, suggestedFileName, defaultExtension);
 
-				// Si se ha escogido un nombre de archivo se guarda el último directorio seleccionado
-				if (!string.IsNullOrWhiteSpace(fileName) && System.IO.Directory.Exists(System.IO.Path.GetDirectoryName(fileName)))
-					LastPathSelected = System.IO.Path.GetDirectoryName(fileName);
-				// Devuelve el nombre de archivo
-				return fileName;
+				// Obtiene el nombre de archivo
+				return MainController.HostController.DialogsController.OpenDialogSave(path, mask, suggestedFileName, defaultExtension);
 		}
 
 		/// <summary>
@@ -120,7 +75,7 @@ namespace Bau.Libraries.DbStudio.ViewModels
 				{
 					path = System.IO.Path.GetDirectoryName(suggestedFileName);
 					if (string.IsNullOrWhiteSpace(path) || path.Equals(suggestedFileName, StringComparison.CurrentCultureIgnoreCase))
-						path = LastPathSelected;
+						path = MainController.MainWindowController.HostController.DialogsController.LastPathSelected;
 				}
 				// Si no se ha definido ningún directorio, se coge el de la solución
 				if (string.IsNullOrWhiteSpace(path))
@@ -128,11 +83,6 @@ namespace Bau.Libraries.DbStudio.ViewModels
 				// Devuelve el directorio
 				return path;
 		}
-
-		/// <summary>
-		///		ViewModel de PluginsStudio
-		/// </summary>
-		public Core.PluginsStudioViewModel PluginsStudioViewModel { get; }
 
 		/// <summary>
 		///		Controlador principal
@@ -145,13 +95,9 @@ namespace Bau.Libraries.DbStudio.ViewModels
 		public Solutions.SolutionViewModel SolutionViewModel { get; }
 
 		/// <summary>
-		///		ViewModel de detalles seleccionado en la ventana principal
+		///		Directorio de datos
 		/// </summary>
-		public Core.Interfaces.IDetailViewModel SelectedDetailsViewModel
-		{
-			get { return _selectedDetailsViewModel; }
-			set { CheckObject(ref _selectedDetailsViewModel, value); }
-		}
+		public string PathData { get; private set; }
 
 		/// <summary>
 		///		Título de la ventana
@@ -161,57 +107,5 @@ namespace Bau.Libraries.DbStudio.ViewModels
 			get { return _text; }
 			set { CheckProperty(ref _text, value); }
 		}
-
-		/// <summary>
-		///		ViewModel de log
-		/// </summary>
-		public Tools.LogListViewModel LogViewModel
-		{
-			get { return _logViewModel; }
-			set { CheckObject(ref _logViewModel, value); }
-		}
-
-		/// <summary>
-		///		ViewModel de búsqueda de archivos
-		/// </summary>
-		public Tools.Search.SearchFilesViewModel SearchFilesViewModel
-		{
-			get { return _searchFilesViewModel; }
-			set { CheckObject(ref _searchFilesViewModel, value); }
-		}
-
-		/// <summary>
-		///		ViewModel de los últimos archivos abiertos
-		/// </summary>
-		public Tools.LastFilesListViewModel LastFilesViewModel
-		{
-			get { return _lastFilesViewModel; }
-			set { CheckObject(ref _lastFilesViewModel, value); }
-		}
-
-		/// <summary>
-		///		Ultimo directorio seleccionado al abrir / grabar un archivo
-		/// </summary>
-		public string LastPathSelected { get; set; }
-
-		/// <summary>
-		///		Comando para grabar el elemento actual
-		/// </summary>
-		public BaseCommand SaveCommand { get; }
-
-		/// <summary>
-		///		Comando para grabar el elemento actual con un nuevo nombre
-		/// </summary>
-		public BaseCommand SaveAsCommand { get; }
-
-		/// <summary>
-		///		Comando para grabar todos los elementos abiertos
-		/// </summary>
-		public BaseCommand SaveAllCommand { get; }
-
-		/// <summary>
-		///		Comando para actualizar los datos
-		/// </summary>
-		public BaseCommand RefreshCommand { get; }
 	}
 }

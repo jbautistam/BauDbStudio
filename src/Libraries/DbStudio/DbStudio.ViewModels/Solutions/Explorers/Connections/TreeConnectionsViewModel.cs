@@ -2,7 +2,7 @@
 
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.DbStudio.Models.Connections;
-using Bau.Libraries.DbStudio.ViewModels.Core.Explorers;
+using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 {
@@ -80,7 +80,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 		/// </summary>
 		internal void OpenConnection(ConnectionModel connection)
 		{
-			if (SolutionViewModel.MainViewModel.MainController.OpenDialog(new Details.Connections.ConnectionViewModel(SolutionViewModel, connection)) == 
+			if (SolutionViewModel.MainViewModel.MainController.MainWindowController.OpenDialog(new Details.Connections.ConnectionViewModel(SolutionViewModel, connection)) == 
 					BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 				Load();
 		}
@@ -90,7 +90,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 		/// </summary>
 		private void OpenDeployment(Models.Deployments.DeploymentModel deployment)
 		{
-			if (SolutionViewModel.MainViewModel.MainController.OpenDialog(new Details.Deployments.DeploymentViewModel(SolutionViewModel, deployment)) == 
+			if (SolutionViewModel.MainViewModel.MainController.MainWindowController.OpenDialog(new Details.Deployments.DeploymentViewModel(SolutionViewModel, deployment)) == 
 					BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 				Load();
 		}
@@ -100,7 +100,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 		/// </summary>
 		private void OpenQuery(ConnectionTableModel table)
 		{
-			SolutionViewModel.MainViewModel.MainController.OpenWindow(new Details.Queries.ExecuteQueryViewModel(SolutionViewModel, table?.Connection.Name, GetQuery(table)));
+			SolutionViewModel.MainViewModel.MainController.MainWindowController.OpenWindow(new Details.Queries.ExecuteQueryViewModel(SolutionViewModel, table?.Connection.Name, GetQuery(table)));
 		}
 
 		/// <summary>
@@ -221,15 +221,16 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 						// Ejecuta la exportación
 						SolutionViewModel.Manager.ExportToDataBricks(deployment);
 						// Mensaje
-						SolutionViewModel.MainViewModel.MainController.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
-																						"Distribución", "Fin de la copia de archivos");
+						SolutionViewModel.MainViewModel.MainController.MainWindowController
+								.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
+												  "Distribución", "Fin de la copia de archivos");
 					}
 					catch (Exception exception)
 					{
 						SolutionViewModel.Manager.Logger.Default.LogItems.Error($"Error al copiar los archivos: {exception.Message}");
-						SolutionViewModel.MainViewModel.MainController.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Error,
-																						"Distribución", 
-																						$"Error en la copia de archivos. {exception.Message}");
+						SolutionViewModel.MainViewModel.MainController.MainWindowController
+								.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Error,
+												  "Distribución", $"Error en la copia de archivos. {exception.Message}");
 					}
 					// Limpia el log
 					SolutionViewModel.Manager.Logger.Flush();

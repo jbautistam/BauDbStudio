@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.ViewModels\BauMvvm.ViewModels.csproj" />
-    <ProjectReference Include="..\..\DbStudio\DbStudio.ViewModels.Core\DbStudio.ViewModels.Core.csproj" />
+    <ProjectReference Include="..\..\PluginsStudio\PluginsStudio.ViewModels.Base\PluginsStudio.ViewModels.Base.csproj" />
     <ProjectReference Include="..\RestStudio.Application\RestStudio.Application.csproj" />
   </ItemGroup>
 

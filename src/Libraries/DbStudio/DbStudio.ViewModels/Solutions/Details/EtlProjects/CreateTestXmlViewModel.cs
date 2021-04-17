@@ -35,7 +35,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 			PathVariable = "MountPath";
 			DataBaseVariable = "DbCompute";
 			SufixTestTables = "Test";
-			OutputPath = SolutionViewModel.MainViewModel.LastPathSelected;
+			OutputPath = SolutionViewModel.MainViewModel.MainController.DialogsController.LastPathSelected;
 			FileNameTest = "05. Create test tables.xml";
 			FileNameAssert = "10. Compare with test tables.xml";
 			// Indica que no ha habido modificaciones
@@ -79,8 +79,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 		{
 			if (ValidateData())
 			{
-				// Guarda el directorio seleccionado
-				SolutionViewModel.MainViewModel.LastPathSelected = OutputPath;
 				// Indica que ya no es nuevo y está grabado
 				IsUpdated = false;
 				// Cierra la ventana

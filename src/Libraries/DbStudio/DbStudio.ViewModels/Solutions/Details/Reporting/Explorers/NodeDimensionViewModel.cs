@@ -2,7 +2,7 @@
 
 using Bau.Libraries.LibReporting.Models.DataWarehouses.Dimensions;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.Relations;
-using Bau.Libraries.DbStudio.ViewModels.Core.Explorers;
+using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorers
 {

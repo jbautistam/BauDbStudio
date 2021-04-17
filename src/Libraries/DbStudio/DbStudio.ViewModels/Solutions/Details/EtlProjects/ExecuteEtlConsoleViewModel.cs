@@ -9,7 +9,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects
 	/// <summary>
 	///		ViewModel de ejecución de la consola de proyectos de ETL
 	/// </summary>
-	public class ExecuteEtlConsoleViewModel : BaseObservableObject, Core.Interfaces.IDetailViewModel
+	public class ExecuteEtlConsoleViewModel : BaseObservableObject, PluginsStudio.ViewModels.Base.Interfaces.IDetailViewModel
 	{
 		// Eventos públicos
 		public event EventHandler LoadFileRequired;
