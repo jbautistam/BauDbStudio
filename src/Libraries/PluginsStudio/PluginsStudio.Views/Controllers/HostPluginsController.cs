@@ -1,4 +1,6 @@
 ﻿using System;
+using Bau.Libraries.PluginsStudio.ViewModels.Base.Files;
+using Bau.Libraries.PluginsStudio.ViewModels.Base.Interfaces;
 
 namespace Bau.Libraries.PluginsStudio.Views.Controllers
 {
@@ -7,8 +9,9 @@ namespace Bau.Libraries.PluginsStudio.Views.Controllers
 	/// </summary>
 	public class HostPluginsController : ViewModels.Base.Controllers.IHostPluginsController
 	{
-		public HostPluginsController(PluginsStudioController pluginsStudioController)
+		public HostPluginsController(PluginsStudioViewManager pluginsStudioViewManager, PluginsStudioController pluginsStudioController)
 		{
+			PluginsStudioViewManager = pluginsStudioViewManager;
 			PluginsStudioController = pluginsStudioController;
 		}
 
@@ -18,6 +21,30 @@ namespace Bau.Libraries.PluginsStudio.Views.Controllers
 		public void AddFileUsed(string fileName)
 		{
 			PluginsStudioController.PluginsStudioViewManager.PluginsStudioViewModel.LastFilesViewModel.Add(fileName);
+		}
+
+		/// <summary>
+		///		Abre el editor de un archivo
+		/// </summary>
+		public void OpenFile(string fileName)
+		{
+			PluginsStudioController.PluginsStudioViewManager.OpenFile(fileName);
+		}
+
+		/// <summary>
+		///		Abre un editor sobre un archivo de texto
+		/// </summary>
+		public void OpenEditor(BaseTextFileViewModel viewModel)
+		{
+			PluginsStudioController.AppController.OpenWindow(viewModel);
+		}
+
+		/// <summary>
+		///		Actualiza el árbol de archivos
+		/// </summary>
+		public void RefreshFiles()
+		{
+			PluginsStudioController.PluginsStudioViewManager.PluginsStudioViewModel.RefreshFiles();
 		}
 
 		/// <summary>
@@ -33,8 +60,13 @@ namespace Bau.Libraries.PluginsStudio.Views.Controllers
 		/// </summary>
 		public bool CheckCanExecutePluginCommand(string plugin, string viewModel, string command)
 		{
-			return PluginsStudioController.PluginsStudioViewManager.PluginsManager.CheckCanExecutePluginCommand(plugin, viewModel, command);
+			return PluginsStudioViewManager.PluginsManager.CheckCanExecutePluginCommand(plugin, viewModel, command);
 		}
+
+		/// <summary>
+		///		Manager de vistas
+		/// </summary>
+		public PluginsStudioViewManager PluginsStudioViewManager { get; }
 
 		/// <summary>
 		///		Controlador principal
@@ -44,7 +76,7 @@ namespace Bau.Libraries.PluginsStudio.Views.Controllers
 		/// <summary>
 		///		ViewModel del documento de detalles seleccionado
 		/// </summary>
-		public ViewModels.Base.Interfaces.IDetailViewModel SelectedDetailsViewModel
+		public IDetailViewModel SelectedDetailsViewModel
 		{
 			get { return PluginsStudioController.PluginsStudioViewManager.PluginsStudioViewModel.SelectedDetailsViewModel; }
 		}

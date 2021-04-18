@@ -8,12 +8,21 @@ namespace Bau.Libraries.PluginsStudio.Views
 	/// </summary>
 	public class PluginsStudioViewManager
 	{
-		public PluginsStudioViewManager(ViewModels.Base.Controllers.IMainWindowController mainController)
+		public PluginsStudioViewManager(Base.Interfaces.IAppViewsController appController, ViewModels.Base.Controllers.IMainWindowController mainController,
+										ViewModels.Base.Controllers.IConfigurationController configurationController)
 		{
-			// Inicializa el controlador
-			PluginStudioController = new Controllers.PluginsStudioController(this, mainController);
-			// Inicializa el ViewModel
+			AppViewController = appController;
+			PluginsManager = new Plugins.PluginsManager(this);
+			PluginStudioController = new Controllers.PluginsStudioController(this, mainController, configurationController);
 			PluginsStudioViewModel = new ViewModels.PluginsStudioViewModel(PluginStudioController);
+		}
+
+		/// <summary>
+		///		Añade un plugin a la colección
+		/// </summary>
+		public void AddPlugin(Base.Interfaces.IPlugin plugin)
+		{
+			PluginsManager.Add(plugin);
 		}
 
 		/// <summary>
@@ -21,6 +30,7 @@ namespace Bau.Libraries.PluginsStudio.Views
 		/// </summary>
 		public void InitializePlugins()
 		{
+			PluginsManager.Initialize();
 		}
 
 		/// <summary>
@@ -29,6 +39,15 @@ namespace Bau.Libraries.PluginsStudio.Views
 		public void Load(string path, string workspace)
 		{
 			PluginsStudioViewModel.Load(path, workspace);
+		}
+
+		/// <summary>
+		///		Abre un archivo
+		/// </summary>
+		public void OpenFile(string fileName)
+		{
+			if (!PluginsManager.OpenFile(fileName))
+				PluginsStudioViewModel.OpenFile(fileName);
 		}
 
 		/// <summary>
@@ -52,7 +71,7 @@ namespace Bau.Libraries.PluginsStudio.Views
 												Id = "LogView",
 												Title = "Log",
 												Position = Base.Models.PaneModel.PositionType.Bottom,
-												View = new Tools.Log.LogView(new ViewModels.Tools.Log.LogListViewModel(PluginsStudioViewModel))
+												View = new Tools.Log.LogView(PluginsStudioViewModel.LogViewModel)
 											}
 						 );
 				panes.Add(new Base.Models.PaneModel
@@ -60,12 +79,27 @@ namespace Bau.Libraries.PluginsStudio.Views
 												Id = "SearchView",
 												Title = "Search",
 												Position = Base.Models.PaneModel.PositionType.Right,
-												View = new Tools.Search.SearchView(new ViewModels.Tools.Search.SearchFilesViewModel(PluginsStudioViewModel))
+												View = new Tools.Search.SearchView(PluginsStudioViewModel.SearchFilesViewModel)
 											}
 						 );
+				panes.Add(new Base.Models.PaneModel
+											{
+												Id = "FilesExplorerView",
+												Title = "Files explorer",
+												Position = Base.Models.PaneModel.PositionType.Left,
+												View = new Explorers.TreeFilesExplorer(PluginsStudioViewModel.TreeFoldersViewModel)
+											}
+						 );
+				// Añade los paneles de los plugins
+				panes.AddRange(PluginsManager.GetPanes());
 				// Devuelve la colección de paneles
 				return panes;
 		}
+
+		/// <summary>
+		///		Controlador de vistas principal
+		/// </summary>
+		internal Base.Interfaces.IAppViewsController AppViewController { get; }
 
 		/// <summary>
 		///		Controlador de PluginsStudio
@@ -75,7 +109,7 @@ namespace Bau.Libraries.PluginsStudio.Views
 		/// <summary>
 		///		Manager de plugins
 		/// </summary>
-		internal Plugins.PluginsManager PluginsManager { get; } = new();
+		internal Plugins.PluginsManager PluginsManager { get; }
 
 		/// <summary>
 		///		ViewModel

@@ -215,7 +215,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 			{
 				ExportDatabaseViewModel viewModel = new ExportDatabaseViewModel(SolutionViewModel);
 
-					if (SolutionViewModel.MainViewModel.MainController.MainWindowController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+					if (SolutionViewModel.MainViewModel.MainController.AppController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 					{
 						// Exporta los datos
 						using (BlockLogModel block = SolutionViewModel.MainViewModel.MainController.Logger.Default
@@ -298,7 +298,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 		{
 			switch (viewModel)
 			{
-				case Files.FileViewModel fileViewModel:
+				case Files.ScriptFileViewModel fileViewModel:
 					if (fileViewModel.FileName.EndsWith(".sqlx", StringComparison.CurrentCultureIgnoreCase))
 						return ExecutionMode.ScriptSqlExtended;
 					else if (fileViewModel.FileName.EndsWith(".sql", StringComparison.CurrentCultureIgnoreCase))
@@ -362,7 +362,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 		/// </summary>
 		private async Task PrepareExecuteScriptXmlAsync(IDetailViewModel viewModel)
 		{
-			if (viewModel is Files.FileViewModel fileViewModel)
+			if (viewModel is Files.ScriptFileViewModel fileViewModel)
 			{
 				if (!fileViewModel.FileName.EndsWith(".xml"))
 					SolutionViewModel.MainViewModel.MainController.HostController.SystemController.ShowMessage("No se pueden ejecutar scripts de este tipo de archivo");
@@ -446,7 +446,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 				// Ejecuta sobre el ViewModel activo
 				switch (viewModel)
 				{
-					case Files.FileViewModel fileViewModel:
+					case Files.ScriptFileViewModel fileViewModel:
 							await fileViewModel.ExecuteSqlScriptAsync(connection, arguments, cancellationToken);
 							isExecuting = true;
 						break;
@@ -549,7 +549,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections
 		private void OpenParametersFile()
 		{
 			if (!string.IsNullOrWhiteSpace(ConnectionParametersFileName))
-				SolutionViewModel.MainViewModel.MainController.MainWindowController.OpenWindow(new Files.FileViewModel(SolutionViewModel, ConnectionParametersFileName));
+				SolutionViewModel.MainViewModel.MainController.AppController.OpenWindow(new Files.ScriptFileViewModel(SolutionViewModel, ConnectionParametersFileName));
 		}
 
 		/// <summary>

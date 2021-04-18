@@ -58,7 +58,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Relation
 				if (viewModel == null)
 					viewModel = new DimensionRelationViewModel(ReportingSolutionViewModel, DataSource, null);
 				// Abre el cuadro de diálogo
-				if (ReportingSolutionViewModel.SolutionViewModel.MainViewModel.MainController.MainWindowController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+				if (ReportingSolutionViewModel.SolutionViewModel.MainViewModel.MainController.AppController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 				{
 					// Si es nuevo, la añade
 					if (isNew)

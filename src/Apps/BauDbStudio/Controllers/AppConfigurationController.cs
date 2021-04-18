@@ -5,7 +5,7 @@ namespace Bau.DbStudio.Controllers
 	/// <summary>
 	///		Controlador para la configuración de la aplicación
 	/// </summary>
-	public class AppConfigurationController
+	public class AppConfigurationController : Libraries.PluginsStudio.ViewModels.Base.Controllers.IConfigurationController
 	{
 		/// <summary>
 		///		Carga la configuración
@@ -24,7 +24,7 @@ namespace Bau.DbStudio.Controllers
 			ShowWindowNotifications = Properties.Settings.Default.ShowWindowNotifications;
 			LastEncodingIndex = Properties.Settings.Default.LastEncodingIndex;
 			PathData = Properties.Settings.Default.PathData;
-			if (string.IsNullOrWhiteSpace(pathData) || !System.IO.Directory.Exists(pathData))
+			if (string.IsNullOrWhiteSpace(PathData) || !System.IO.Directory.Exists(PathData))
 				PathData = pathData;
 		}
 

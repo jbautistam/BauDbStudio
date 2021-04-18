@@ -16,5 +16,10 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Controllers
 		///		Controlador del host de plugins
 		/// </summary>
 		IHostPluginsController HostPluginsController { get; }
+
+		/// <summary>
+		///		Controlador de la configuración
+		/// </summary>
+		IConfigurationController ConfigurationController { get; }
 	}
 }

@@ -40,9 +40,6 @@ namespace Bau.DbStudio.Controllers
 				// Muestra la ventana adecuada
 				switch (detailViewModel)
 				{
-					case Libraries.DbStudio.ViewModels.Solutions.Details.Connections.ConnectionViewModel viewModel:
-							result = HostHelperController.ShowDialog(MainWindow, new Views.Connections.ConnectionView(viewModel));
-						break;
 					default:
 							OpenWindowRequired?.Invoke(this, detailViewModel);
 						break;
@@ -61,21 +58,6 @@ namespace Bau.DbStudio.Controllers
 				// Muestra la ventana adecuada
 				switch (dialogViewModel)
 				{
-					case Libraries.DbStudio.ViewModels.Solutions.Details.Cloud.StorageViewModel viewModel:
-							result = HostHelperController.ShowDialog(MainWindow, new Views.Cloud.StorageView(viewModel));
-						break;
-					case Libraries.DbStudio.ViewModels.Solutions.Details.Connections.ConnectionViewModel viewModel:
-							result = HostHelperController.ShowDialog(MainWindow, new Views.Connections.ConnectionView(viewModel));
-						break;
-					case Libraries.DbStudio.ViewModels.Solutions.Details.Files.Structured.CsvFilePropertiesViewModel viewModel:
-							result = HostHelperController.ShowDialog(MainWindow, new Views.Files.CsvFilePropertiesView(viewModel));
-						break;
-					case Libraries.DbStudio.ViewModels.Solutions.Details.Files.Structured.ParquetFilePropertiesViewModel viewModel:
-							result = HostHelperController.ShowDialog(MainWindow, new Views.Files.ParquetFilePropertiesView(viewModel));
-						break;
-					case Libraries.DbStudio.ViewModels.Solutions.Details.Deployments.DeploymentViewModel viewModel:
-							result = HostHelperController.ShowDialog(MainWindow, new Views.Deployments.DeploymentView(viewModel));
-						break;
 					case Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects.CreateTestXmlViewModel viewModel:
 							result = HostHelperController.ShowDialog(MainWindow, new Views.EtlProjects.CreateTestXmlView(viewModel));
 						break;
@@ -90,9 +72,6 @@ namespace Bau.DbStudio.Controllers
 						break;
 					case Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects.CreateSchemaXmlViewModel viewModel:
 							result = HostHelperController.ShowDialog(MainWindow, new Views.EtlProjects.CreateSchemaXmlView(viewModel));
-						break;
-					case Libraries.DbStudio.ViewModels.Tools.CreateFileViewModel viewModel:
-							result = HostHelperController.ShowDialog(MainWindow, new Views.Tools.CreateFileView(viewModel));
 						break;
 					case Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Relations.DimensionRelationViewModel viewModel:
 							result = HostHelperController.ShowDialog(MainWindow, new Views.Reporting.Details.Relations.DimensionRelationView(viewModel));
@@ -165,9 +144,9 @@ namespace Bau.DbStudio.Controllers
 		public void ShowNotification(SystemControllerEnums.NotificationType type, string title, string message)
 		{
 			if (AppController.ConfigurationController.ShowWindowNotifications || type == SystemControllerEnums.NotificationType.Error)
-				AppController.DbStudioController.HostController.SystemController.ShowNotification(type, title, message, TimeSpan.FromSeconds(5));
+				AppController.MainWindowController.HostController.SystemController.ShowNotification(type, title, message, TimeSpan.FromSeconds(5));
 			else
-				AppController.DbStudioController.Logger.Default.LogItems.Add(new Libraries.LibLogger.Models.Log.LogModel(null, Libraries.LibLogger.Models.Log.LogModel.LogType.Info,
+				AppController.MainWindowController.Logger.Default.LogItems.Add(new Libraries.LibLogger.Models.Log.LogModel(null, Libraries.LibLogger.Models.Log.LogModel.LogType.Info,
 																															  title + ". " + message));
 		}
 

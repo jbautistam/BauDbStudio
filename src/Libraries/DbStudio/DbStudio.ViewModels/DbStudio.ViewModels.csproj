@@ -13,8 +13,11 @@
 
   <ItemGroup>
     <Compile Remove="Configuration\**" />
+    <Compile Remove="Solutions\Explorers\Files\**" />
     <EmbeddedResource Remove="Configuration\**" />
+    <EmbeddedResource Remove="Solutions\Explorers\Files\**" />
     <None Remove="Configuration\**" />
+    <None Remove="Solutions\Explorers\Files\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,8 +26,6 @@
     <Compile Remove="Solutions\Explorers\Connections\NodeSchemaViewModel.cs" />
     <Compile Remove="Solutions\Explorers\Connections\TreeDetailsNodeViewModel.cs" />
     <Compile Remove="Solutions\Explorers\Connections\TreeNodeViewModel.cs" />
-    <Compile Remove="Solutions\Explorers\Files\TreeDetailsNodeViewModel.cs" />
-    <Compile Remove="Solutions\Explorers\Files\TreeFoldersViewModel.cs" />
   </ItemGroup>
 
   <ItemGroup>

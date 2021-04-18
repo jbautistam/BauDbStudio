@@ -8,13 +8,23 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Controllers
 	public interface IPluginsStudioController
 	{
 		/// <summary>
-		///		Controlador de plugins
+		///		Controlador de la aplicación
 		/// </summary>
-		Base.Controllers.IMainWindowController MainWindowController { get; }
+		Base.Controllers.IAppController AppController { get; }
 
 		/// <summary>
-		///		Controlador del host de plugins
+		///		Controlador de plugins
 		/// </summary>
-		Base.Controllers.IHostPluginsController HostPluginsController { get; }
+		Base.Controllers.IPluginsController PluginsController { get; }
+
+		/// <summary>
+		///		Controlador de la ventana principal
+		/// </summary>
+		Base.Controllers.IMainWindowController MainWindowController => PluginsController.MainWindowController;
+
+		/// <summary>
+		///		Controlador de host
+		/// </summary>
+		Base.Controllers.IHostPluginsController HostPluginsController => PluginsController.HostPluginsController;
 	}
 }

@@ -13,6 +13,11 @@ namespace Bau.Libraries.DbStudio.ViewModels.Controllers
 		string GetEtlConsoleFileName();
 
 		/// <summary>
+		///		Controlador de la aplicación
+		/// </summary>
+		PluginsStudio.ViewModels.Base.Controllers.IAppController AppController { get; }
+
+		/// <summary>
 		///		Controlador plugin
 		/// </summary>
 		PluginsStudio.ViewModels.Base.Controllers.IPluginsController PluginController { get; }

@@ -60,6 +60,8 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.Workspaces
 				// Si no se ha seleccionado uno, selecciona el predeterminado
 				if (SelectedItem == null && Items.Count > 0)
 					SelectedItem = Items[0];
+				// Carga el espacio de trabajo
+				SelectedItem.Load();
 				// Actualiza el espacio de trabajo
 				MainViewModel.SelectWorkspace(SelectedItem.Name);
 			}
@@ -72,7 +74,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.Workspaces
 		{
 			string workspace = string.Empty;
 
-				if (MainViewModel.MainStudioController.MainWindowController.SystemController.ShowInputString("Nombre del espacio de trabajo", ref workspace) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+				if (MainViewModel.PluginsStudioController.MainWindowController.SystemController.ShowInputString("Nombre del espacio de trabajo", ref workspace) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 				{
 					if (!string.IsNullOrWhiteSpace(workspace))
 					{
@@ -103,7 +105,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.Workspaces
 		/// </summary>
 		private void DeleteWorkspace()
 		{
-			if (MainViewModel.MainStudioController.MainWindowController.SystemController.ShowQuestion($"¿Desea eliminar el espacio de trabajo '{SelectedItem.Name}'?"))
+			if (MainViewModel.PluginsStudioController.MainWindowController.SystemController.ShowQuestion($"¿Desea eliminar el espacio de trabajo '{SelectedItem.Name}'?"))
 			{
 				// Borra el directorio
 				LibHelper.Files.HelperFiles.KillPath(SelectedItem.Path);

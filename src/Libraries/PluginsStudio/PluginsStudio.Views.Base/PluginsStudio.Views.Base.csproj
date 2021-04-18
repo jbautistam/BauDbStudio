@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\DbStudio\DbStudio.ViewModels.Core\DbStudio.ViewModels.Core.csproj" />
     <ProjectReference Include="..\PluginsStudio.ViewModels\PluginsStudio.ViewModels.csproj" />
   </ItemGroup>
 

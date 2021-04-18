@@ -41,7 +41,7 @@ namespace Bau.DbStudio.Views.Tools
 
 				// Comprueba los datos introducidos
 				if (!string.IsNullOrWhiteSpace(fnConsole.FileName) && !System.IO.File.Exists(fnConsole.FileName))
-					MainWindow.MainController.DbStudioController.HostController.SystemController.ShowMessage("No se encuentra el archivo de ejecución de consola");
+					MainWindow.MainController.MainWindowController.HostController.SystemController.ShowMessage("No se encuentra el archivo de ejecución de consola");
 				else
 					validated = true;
 				// Devuelve el valor que indica si los datos son correctos

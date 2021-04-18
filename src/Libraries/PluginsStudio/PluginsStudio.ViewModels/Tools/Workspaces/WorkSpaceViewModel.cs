@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.Workspaces
 {
@@ -15,6 +17,61 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.Workspaces
 			ListViewModel = listViewModel;
 			Name = name;
 			FileName = fileName;
+		}
+
+		/// <summary>
+		///		Carga el espacio de trabajo
+		/// </summary>
+		internal void Load()
+		{
+			// Limpia la lista de carpetas
+			Folders.Clear();
+			// Carga el archivo de solución
+			Folders.AddRange(new Repository.WorkspaceRepository().Load(FileName));
+		}
+
+		/// <summary>
+		///		Graba el espacio de trabajo
+		/// </summary>
+		internal void Save()
+		{
+			new Repository.WorkspaceRepository().Save(FileName, Folders);
+		}
+
+		/// <summary>
+		///		Añade una carpeta al workspace
+		/// </summary>
+		internal void AddFolder(string folder)
+		{
+			if (!string.IsNullOrWhiteSpace(folder) && Folders.FirstOrDefault(item => item.Equals(folder, StringComparison.CurrentCultureIgnoreCase)) == null)
+			{
+				// Añade la carpeta
+				Folders.Add(folder);
+				// Graba el espacio de trabajo
+				Save();
+			}
+		}
+
+		/// <summary>
+		///		Elimina una carpeta
+		/// </summary>
+		internal void RemoveFolder(string folder)
+		{
+			if (!string.IsNullOrWhiteSpace(folder))
+			{
+				bool deleted = false;
+
+					// Borra la carpeta
+					for (int index = Folders.Count - 1; index >= 0; index--)
+						if (Folders[index].Equals(folder, StringComparison.CurrentCultureIgnoreCase))
+						{
+							Folders.RemoveAt(index);
+							deleted = true;
+						}
+					// Si se ha eliminado algo, se graba el espacio de trabajo
+					if (deleted)
+						Save();
+			}
 		}
 
 		/// <summary>
@@ -47,5 +104,10 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.Workspaces
 		{
 			get { return System.IO.Path.GetDirectoryName(FileName); }
 		}
+
+		/// <summary>
+		///		Carpetas asociadas el espacio de trabajo
+		/// </summary>
+		public List<string> Folders { get; } = new List<string>();
 	}
 }

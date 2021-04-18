@@ -114,10 +114,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 					else
 						dataSource = new DataSourceSqlModel(GetSelectedDataWarehouse(SelectedNode));
 					// Abre la vista
-					ReportingSolutionViewModel.SolutionViewModel.MainViewModel.MainController.MainWindowController.OpenWindow(new DataSources.DataSourceSqlViewModel(ReportingSolutionViewModel, dataSource));
+					ReportingSolutionViewModel.SolutionViewModel.MainViewModel.MainController.AppController.OpenWindow(new DataSources.DataSourceSqlViewModel(ReportingSolutionViewModel, dataSource));
 			}
 			else if (node.DataSource is DataSourceTableModel dataSourceTable)
-				ReportingSolutionViewModel.SolutionViewModel.MainViewModel.MainController.MainWindowController.OpenWindow(new DataSources.DataSourceTableViewModel(ReportingSolutionViewModel, dataSourceTable));
+				ReportingSolutionViewModel.SolutionViewModel.MainViewModel.MainController.AppController.OpenWindow(new DataSources.DataSourceTableViewModel(ReportingSolutionViewModel, dataSourceTable));
 		}
 
 		/// <summary>
@@ -153,7 +153,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 				else
 					dimension = node.Dimension;
 				// Abre el formulario
-				ReportingSolutionViewModel.SolutionViewModel.MainViewModel.MainController.MainWindowController.OpenWindow(new Dimension.DimensionViewModel(ReportingSolutionViewModel, dimension, isNew));
+				ReportingSolutionViewModel.SolutionViewModel.MainViewModel.MainController.AppController.OpenWindow(new Dimension.DimensionViewModel(ReportingSolutionViewModel, dimension, isNew));
 		}
 
 		/// <summary>
@@ -178,7 +178,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 				else
 					report = node.Report;
 				// Abre el formulario
-				ReportingSolutionViewModel.SolutionViewModel.MainViewModel.MainController.MainWindowController.OpenWindow(new Reports.ReportViewModel(ReportingSolutionViewModel, report, isNew));
+				ReportingSolutionViewModel.SolutionViewModel.MainViewModel.MainController.AppController.OpenWindow(new Reports.ReportViewModel(ReportingSolutionViewModel, report, isNew));
 		}
 
 		/// <summary>
@@ -189,7 +189,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 			switch (SelectedNode)
 			{
 				case NodeReportViewModel node:
-						ReportingSolutionViewModel.SolutionViewModel.MainViewModel.MainController.MainWindowController.OpenWindow
+						ReportingSolutionViewModel.SolutionViewModel.MainViewModel.MainController.AppController.OpenWindow
 								(new Queries.ReportViewModel(ReportingSolutionViewModel, node.Report));
 					break;
 				case NodeDataSourceViewModel node:
@@ -312,7 +312,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Explorer
 					sql = GetSql(dataSourceTable);
 				// Abre la consulta
 				if (!string.IsNullOrWhiteSpace(sql))
-					ReportingSolutionViewModel.SolutionViewModel.MainViewModel.MainController.MainWindowController
+					ReportingSolutionViewModel.SolutionViewModel.MainViewModel.MainController.AppController
 							.OpenWindow(new Details.Queries.ExecuteQueryViewModel(ReportingSolutionViewModel.SolutionViewModel, string.Empty, sql));
 		}
 

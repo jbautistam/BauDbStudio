@@ -80,7 +80,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 		/// </summary>
 		internal void OpenConnection(ConnectionModel connection)
 		{
-			if (SolutionViewModel.MainViewModel.MainController.MainWindowController.OpenDialog(new Details.Connections.ConnectionViewModel(SolutionViewModel, connection)) == 
+			if (SolutionViewModel.MainViewModel.MainController.AppController.OpenDialog(new Details.Connections.ConnectionViewModel(SolutionViewModel, connection)) == 
 					BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 				Load();
 		}
@@ -90,7 +90,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 		/// </summary>
 		private void OpenDeployment(Models.Deployments.DeploymentModel deployment)
 		{
-			if (SolutionViewModel.MainViewModel.MainController.MainWindowController.OpenDialog(new Details.Deployments.DeploymentViewModel(SolutionViewModel, deployment)) == 
+			if (SolutionViewModel.MainViewModel.MainController.AppController.OpenDialog(new Details.Deployments.DeploymentViewModel(SolutionViewModel, deployment)) == 
 					BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 				Load();
 		}
@@ -100,7 +100,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers.Connections
 		/// </summary>
 		private void OpenQuery(ConnectionTableModel table)
 		{
-			SolutionViewModel.MainViewModel.MainController.MainWindowController.OpenWindow(new Details.Queries.ExecuteQueryViewModel(SolutionViewModel, table?.Connection.Name, GetQuery(table)));
+			SolutionViewModel.MainViewModel.MainController.AppController.OpenWindow(new Details.Queries.ExecuteQueryViewModel(SolutionViewModel, table?.Connection.Name, GetQuery(table)));
 		}
 
 		/// <summary>

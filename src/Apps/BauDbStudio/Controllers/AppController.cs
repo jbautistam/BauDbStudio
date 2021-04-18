@@ -9,13 +9,19 @@ namespace Bau.DbStudio.Controllers
 	{
 		public AppController(string applicationName, MainWindow mainWindow, string appPath)
 		{
-			DbStudioController = new MainWindowController(this, applicationName, mainWindow, appPath);
+			AppStudioController = new AppStudioController(this);
+			MainWindowController = new MainWindowController(this, applicationName, mainWindow, appPath);
 		}
 
 		/// <summary>
-		///		Controlador de la solución
+		///		Controlador de aplicación
 		/// </summary>
-		public MainWindowController DbStudioController { get; }
+		public AppStudioController AppStudioController { get; }
+
+		/// <summary>
+		///		Controlador principal
+		/// </summary>
+		public MainWindowController MainWindowController { get; }
 
 		/// <summary>
 		///		Controlador de configuración de la aplicación

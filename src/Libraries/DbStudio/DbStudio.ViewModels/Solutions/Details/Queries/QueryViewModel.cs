@@ -298,7 +298,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Queries
 				// Graba el archivo
 				LibHelper.Files.HelperFiles.SaveTextFile(FileName, Query, System.Text.Encoding.UTF8);
 				// Actualiza el árbol
-				SolutionViewModel.TreeFoldersViewModel.Load();
+				SolutionViewModel.MainViewModel.MainController.HostPluginsController.RefreshFiles();
 				// Indica que no ha habido modificaciones
 				IsUpdated = false;
 			}
@@ -310,6 +310,14 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Queries
 		public string GetSaveAndCloseMessage()
 		{
 			return "¿Desea grabar la consulta antes de continuar?";
+		}
+
+		/// <summary>
+		///		Obtiene la cadena asociada a un archivo cuando se arrastra un nodo sobre el editor de texto
+		/// </summary>
+		public string GetAdvancedDroppedNodeFile(string fileName, bool shiftPressed)
+		{
+			throw new NotImplementedException();
 		}
 
 		/// <summary>

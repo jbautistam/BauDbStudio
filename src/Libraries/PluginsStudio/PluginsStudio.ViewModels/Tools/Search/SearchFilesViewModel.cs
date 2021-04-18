@@ -38,17 +38,17 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.Search
 			// Limpia la lista de directorios
 			FoldersViewModel.Items.Clear();
 			// Añade los directorios de la solución
-			throw new NotImplementedException("Cargar las carpetas asociadas al explorador de archivos");
-			//if (MainViewModel.WorkspacesViewModel != null)
-			//	foreach (string folder in MainViewModel.WorkspacesViewModel.SelectedItem..Folders)
-			//	{
-			//		ControlItemViewModel item = new ControlItemViewModel(System.IO.Path.GetFileName(folder), folder);
+			if (MainViewModel.WorkspacesViewModel.SelectedItem != null)
+				foreach (string folder in MainViewModel.WorkspacesViewModel.SelectedItem.Folders)
+					if (System.IO.Directory.Exists(folder))
+					{
+						ControlItemViewModel item = new ControlItemViewModel(System.IO.Path.GetFileName(folder), folder);
 
-			//			// Selecciona la carpeta
-			//			item.IsChecked = true;
-			//			// Añade el control
-			//			FoldersViewModel.Add(item, false);
-			//	}
+							// Selecciona la carpeta
+							item.IsChecked = true;
+							// Añade el control
+							FoldersViewModel.Add(item, false);
+					}
 		}
 
 		/// <summary>

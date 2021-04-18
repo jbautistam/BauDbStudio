@@ -17,16 +17,18 @@ namespace Bau.Libraries.PluginsStudio.ViewModels
 		private Tools.Log.LogListViewModel _logViewModel;
 		private Tools.Search.SearchFilesViewModel _searchFilesViewModel;
 		private Base.Interfaces.IDetailViewModel _selectedDetailsViewModel;
+		private Explorers.Files.TreeFilesViewModel _treeFoldersViewModel;
 
-		public PluginsStudioViewModel(Controllers.IPluginsStudioController mainStudioController)
+		public PluginsStudioViewModel(Controllers.IPluginsStudioController pluginsStudioController)
 		{
 			// Asigna las propiedades
-			MainStudioController = mainStudioController;
+			PluginsStudioController = pluginsStudioController;
 			// Inicializa los objetos principales
 			LastFilesViewModel = new Tools.LastFiles.LastFilesListViewModel(this);
 			WorkspacesViewModel = new Tools.Workspaces.WorkspaceListViewModel(this);
 			LogViewModel = new Tools.Log.LogListViewModel(this);
 			SearchFilesViewModel = new Tools.Search.SearchFilesViewModel(this);
+			TreeFoldersViewModel = new Explorers.Files.TreeFilesViewModel(this);
 			// Asigna los comandos
 			SaveCommand = new BaseCommand(_ => Save(false), _ => CanSave())
 									.AddListener(this, nameof(SelectedDetailsViewModel));
@@ -55,16 +57,42 @@ namespace Bau.Libraries.PluginsStudio.ViewModels
 		{
 			// Selecciona el workspace
 			WorkspacesViewModel.Select(workspace);
+			// Carga el árbol de carpetas / archivos
+			RefreshFiles();
 			// Lanza el evento de modificación del espacio de trabajo seleccionado
 			WorkspacesChanged?.Invoke(this, EventArgs.Empty);
 		}
 
 		/// <summary>
+		///		Actualiza el árbol de archivos
+		/// </summary>
+		public void RefreshFiles()
+		{
+			TreeFoldersViewModel.Load();
+		}
+
+		/// <summary>
 		///		Abre el archivo
 		/// </summary>
-		internal void OpenFile(string fileName)
+		public void OpenFile(string fileName)
 		{
-			throw new NotImplementedException();
+			if (IsImage(fileName))
+				PluginsStudioController.AppController.OpenWindow(new Files.ImageViewModel(this, fileName));
+			else
+				PluginsStudioController.AppController.OpenWindow(new Files.FileTextViewModel(this, fileName));
+		}
+
+		/// <summary>
+		///		Comprueba si es un archivo de imagen
+		/// </summary>
+		private bool IsImage(string fileName)
+		{
+			return fileName.EndsWith(".bmp", StringComparison.CurrentCultureIgnoreCase) ||
+				   fileName.EndsWith(".gif", StringComparison.CurrentCultureIgnoreCase) ||
+				   fileName.EndsWith(".jpg", StringComparison.CurrentCultureIgnoreCase) ||
+				   fileName.EndsWith(".jpeg", StringComparison.CurrentCultureIgnoreCase) ||
+				   fileName.EndsWith(".tiff", StringComparison.CurrentCultureIgnoreCase) ||
+				   fileName.EndsWith(".png", StringComparison.CurrentCultureIgnoreCase);
 		}
 
 		/// <summary>
@@ -97,7 +125,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels
 		/// </summary>
 		private void SaveAll()
 		{
-			foreach (Base.Interfaces.IDetailViewModel viewModel in MainStudioController.MainWindowController.GetOpenedDetails())
+			foreach (Base.Interfaces.IDetailViewModel viewModel in PluginsStudioController.MainWindowController.GetOpenedDetails())
 				if (viewModel.IsUpdated)
 					viewModel.SaveDetails(false);
 		}
@@ -105,7 +133,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels
 		/// <summary>
 		///		Controlador principal
 		/// </summary>
-		public Controllers.IPluginsStudioController MainStudioController { get; }
+		public Controllers.IPluginsStudioController PluginsStudioController { get; }
 
 		/// <summary>
 		///		ViewModel de detalles seleccionado en la ventana principal
@@ -150,6 +178,15 @@ namespace Bau.Libraries.PluginsStudio.ViewModels
 		{
 			get { return _searchFilesViewModel; }
 			set { CheckObject(ref _searchFilesViewModel, value); }
+		}
+
+		/// <summary>
+		///		ViewModel del árbol de archivos
+		/// </summary>
+		public Explorers.Files.TreeFilesViewModel TreeFoldersViewModel
+		{
+			get { return _treeFoldersViewModel; }
+			set { CheckObject(ref _treeFoldersViewModel, value); }
 		}
 
 		/// <summary>

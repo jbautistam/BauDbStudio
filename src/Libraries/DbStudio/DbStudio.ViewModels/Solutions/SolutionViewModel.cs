@@ -7,6 +7,7 @@ using Bau.Libraries.DbStudio.Application.Controllers.EtlProjects;
 using Bau.Libraries.DbStudio.Models;
 using Bau.Libraries.LibLogger.Models.Log;
 using Bau.Libraries.DbStudio.Application;
+using Bau.Libraries.PluginsStudio.ViewModels.Base.Interfaces;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 {
@@ -17,7 +18,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 	{
 		// Variables privadas
 		private Explorers.Connections.TreeConnectionsViewModel _treeConnectionsViewModel;
-		private Explorers.Files.TreeFilesViewModel _treeFoldersViewModel;
 		private Explorers.Cloud.TreeStorageViewModel _treeStoragesViewModel;
 		private Details.Connections.ConnectionExecutionViewModel _connectionsViewModel;
 
@@ -30,7 +30,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 			ReportingSolutionViewModel = new Details.Reporting.ReportingSolutionViewModel(this);
 			// Asigna los árboles de exploración
 			TreeConnectionsViewModel = new Explorers.Connections.TreeConnectionsViewModel(this);
-			TreeFoldersViewModel = new Explorers.Files.TreeFilesViewModel(this);
 			TreeStoragesViewModel = new Explorers.Cloud.TreeStorageViewModel(this);
 			ConnectionExecutionViewModel = new Details.Connections.ConnectionExecutionViewModel(this);
 			// Asigna los comandos
@@ -52,7 +51,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 			// Carga los exploradores
 			TreeConnectionsViewModel.Load();
 			ConnectionExecutionViewModel.Load();
-			TreeFoldersViewModel.Load();
 			TreeStoragesViewModel.Load();
 			// Carga la solución de informes
 			if (!string.IsNullOrWhiteSpace(Solution.FileName))
@@ -85,7 +83,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 		{
 			Details.EtlProjects.CreateTestXmlViewModel viewModel = new Details.EtlProjects.CreateTestXmlViewModel(this);
 
-				if (MainViewModel.MainController.MainWindowController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+				if (MainViewModel.MainController.AppController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 					using (BlockLogModel block = MainViewModel.MainController.Logger.Default.CreateBlock(LogModel.LogType.Info, "Comienzo de la creación de proyectos de pruebas"))
 					{
 						XmlTestProjectGenerator generator = new XmlTestProjectGenerator(Manager, viewModel.ComboConnections.GetSelectedConnection(),
@@ -123,7 +121,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 		{
 			Details.EtlProjects.CreateValidationScriptsViewModel viewModel = new Details.EtlProjects.CreateValidationScriptsViewModel(this);
 
-				if (MainViewModel.MainController.MainWindowController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+				if (MainViewModel.MainController.AppController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 					using (BlockLogModel block = MainViewModel.MainController.Logger.Default.CreateBlock(LogModel.LogType.Info, "Comienzo de la creación de archivos de validación"))
 					{
 						ScriptsValidationOptions options = new ScriptsValidationOptions
@@ -180,7 +178,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 		{
 			Details.EtlProjects.CreateImportFilesScriptViewModel viewModel = new Details.EtlProjects.CreateImportFilesScriptViewModel(this);
 
-				if (MainViewModel.MainController.MainWindowController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+				if (MainViewModel.MainController.AppController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 					using (BlockLogModel block = MainViewModel.MainController.Logger.Default.CreateBlock(LogModel.LogType.Info, "Comienzo de la creación de archivos de importación"))
 					{
 						ScriptsImportOptions options = new ScriptsImportOptions
@@ -225,7 +223,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 		{
 			Details.EtlProjects.CreateSchemaXmlViewModel viewModel = new Details.EtlProjects.CreateSchemaXmlViewModel(this);
 
-				if (MainViewModel.MainController.MainWindowController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+				if (MainViewModel.MainController.AppController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 					using (BlockLogModel block = MainViewModel.MainController.Logger.Default.CreateBlock(LogModel.LogType.Info, "Comienzo de la creación de archivos de esquema"))
 					{
 						// Crea los archivos de esquema
@@ -256,7 +254,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 		{
 			Details.Reporting.Tools.CreateSchemaReportingXmlViewModel viewModel = new Details.Reporting.Tools.CreateSchemaReportingXmlViewModel(this);
 
-				if (MainViewModel.MainController.MainWindowController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+				if (MainViewModel.MainController.AppController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 					using (BlockLogModel block = MainViewModel.MainController.Logger.Default.CreateBlock(LogModel.LogType.Info, "Comienzo de la creación de archivos de informes"))
 					{
 						// Crea los archivos de esquema
@@ -289,7 +287,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 		{
 			Details.Reporting.Tools.CreateScriptsSqlReportingViewModel viewModel = new Details.Reporting.Tools.CreateScriptsSqlReportingViewModel(this);
 
-				if (MainViewModel.MainController.MainWindowController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+				if (MainViewModel.MainController.AppController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 					using (BlockLogModel block = MainViewModel.MainController.Logger.Default.CreateBlock(LogModel.LogType.Info, "Comienzo de la creación de scripts SQL de reporting"))
 					{
 						// Crea los archivos de esquema
@@ -313,6 +311,51 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 						// Log
 						MainViewModel.MainController.Logger.Flush();
 					}
+		}
+
+		/// <summary>
+		///		Abre un archivo (si reconoce la extensión)
+		/// </summary>
+		public bool OpenFile(string fileName)
+		{
+			bool opened = false;
+
+				if (!string.IsNullOrWhiteSpace(fileName))
+				{
+					IDetailViewModel fileViewModel = GetFileViewModel(fileName);
+
+						// Abre la ventana
+						if (fileViewModel != null)
+						{
+							if (fileViewModel is Details.Files.ScriptFileViewModel scriptFileViewModel)
+								MainViewModel.MainController.PluginController.HostPluginsController.OpenEditor(scriptFileViewModel);
+							else
+								MainViewModel.MainController.AppController.OpenWindow(fileViewModel);
+							opened = true;
+						}
+				}
+				// Devuelve el valor que indica si se ha abierto el archivo
+				return opened;
+		}
+
+		/// <summary>
+		///		Obtiene el viewModel adecuado para un archivo
+		/// </summary>
+		private IDetailViewModel GetFileViewModel(string fileName)
+		{
+			if (fileName.EndsWith(".parquet", StringComparison.CurrentCultureIgnoreCase))
+				return new Details.Files.Structured.ParquetFileViewModel(this, fileName);
+			else if (fileName.EndsWith(".csv", StringComparison.CurrentCultureIgnoreCase))
+				return new Details.Files.Structured.CsvFileViewModel(this, fileName);
+			else if (fileName.EndsWith(".xlsx", StringComparison.CurrentCultureIgnoreCase) ||
+						fileName.EndsWith(".xls", StringComparison.CurrentCultureIgnoreCase))
+				return new Details.Files.Structured.ExcelFileViewModel(this, fileName);
+			else if (fileName.EndsWith(".sql", StringComparison.CurrentCultureIgnoreCase) ||
+						fileName.EndsWith(".sqlx", StringComparison.CurrentCultureIgnoreCase) ||
+						fileName.EndsWith(".xml", StringComparison.CurrentCultureIgnoreCase))
+				return new Details.Files.ScriptFileViewModel(this, fileName);
+			else
+				return null;
 		}
 
 		/// <summary>
@@ -342,15 +385,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Solutions
 		{
 			get { return _treeConnectionsViewModel; }
 			set { CheckObject(ref _treeConnectionsViewModel, value); }
-		}
-
-		/// <summary>
-		///		ViewModel del árbol de carpetas
-		/// </summary>
-		public Explorers.Files.TreeFilesViewModel TreeFoldersViewModel
-		{
-			get { return _treeFoldersViewModel; }
-			set { CheckObject(ref _treeFoldersViewModel, value); }
 		}
 
 		/// <summary>

@@ -51,16 +51,6 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Controllers
 		string AppPath { get; }
 
 		/// <summary>
-		///		Abre una ventana de detalles
-		/// </summary>
-		SystemControllerEnums.ResultType OpenWindow(Interfaces.IDetailViewModel detailsViewModel);
-
-		/// <summary>
-		///		Abre un cuadro de diálogo
-		/// </summary>
-		SystemControllerEnums.ResultType OpenDialog(BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewModel dialogViewModel);
-
-		/// <summary>
 		///		Abre el explorador sobre un directorio
 		/// </summary>
 		void OpenExplorer(string path);

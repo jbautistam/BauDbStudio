@@ -9,11 +9,11 @@ namespace Bau.Libraries.PluginsStudio.Views.Controllers
 	/// </summary>
 	public class PluginsStudioController : ViewModels.Controllers.IPluginsStudioController
 	{
-		public PluginsStudioController(PluginsStudioViewManager pluginsStudioViewManager, IMainWindowController mainPluginController)
+		public PluginsStudioController(PluginsStudioViewManager pluginsStudioViewManager, IMainWindowController mainPluginController, IConfigurationController configurationController)
 		{
 			PluginsStudioViewManager = pluginsStudioViewManager;
-			MainWindowController = mainPluginController;
-			HostPluginsController = new HostPluginsController(this);
+			AppController = new AppController(pluginsStudioViewManager);
+			PluginsController = new PluginsController(mainPluginController, new HostPluginsController(pluginsStudioViewManager, this), configurationController);
 		}
 
 		/// <summary>
@@ -22,13 +22,13 @@ namespace Bau.Libraries.PluginsStudio.Views.Controllers
 		public PluginsStudioViewManager PluginsStudioViewManager { get; }
 
 		/// <summary>
-		///		Controlador de plugins
+		///		Controlador de la aplicación
 		/// </summary>
-		public IMainWindowController MainWindowController { get; }
+		public IAppController AppController { get; }
 
 		/// <summary>
-		///		Controlador del host de plugins
+		///		Controlador de plugins
 		/// </summary>
-		public IHostPluginsController HostPluginsController { get; }
+		public IPluginsController PluginsController { get; }
 	}
 }

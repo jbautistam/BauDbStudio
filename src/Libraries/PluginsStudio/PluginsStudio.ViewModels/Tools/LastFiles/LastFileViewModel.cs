@@ -33,7 +33,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.LastFiles
 		/// </summary>
 		private void OpenFile()
 		{
-			MainViewModel.OpenFile(FileName);
+			MainViewModel.PluginsStudioController.HostPluginsController.OpenFile(FileName);
 		}
 
 		/// <summary>

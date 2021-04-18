@@ -7,12 +7,27 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\DbStudio\DbStudio.ViewModels.Core\DbStudio.ViewModels.Core.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Controls\WPF\BauControls\src\BauControls.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Controls\WPF\CodeEditor\src\CodeEditor.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.Views.Wpf\BauMvvm.Views.Wpf.csproj" />
     <ProjectReference Include="..\PluginsStudio.Views.Base\PluginsStudio.Views.Base.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Page Update="Tools\Log\LogView.xaml">
+    <Page Update="Explorers\TreeFilesExplorer.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="Files\CreateFileView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Files\FileTextView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="Files\ImageView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="Tools\LogItems\LogView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
     <Page Update="Tools\Search\SearchView.xaml">

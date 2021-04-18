@@ -145,7 +145,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.Search
 		private void AddNodes(string fileName, List<(string text, int line, string textFound)> texts)
 		{
 			TreeResultNodeViewModel fileNode = new TreeResultNodeViewModel(this, null, fileName, fileName, -1, string.Empty, true, BauMvvm.ViewModels.Media.MvvmColor.Navy);
-					
+
 				// Añade los hijos
 				foreach ((string text, int line, string textFound) in texts)
 					fileNode.Children.Add(new TreeResultNodeViewModel(this, fileNode, text, fileName, line, textFound, false, BauMvvm.ViewModels.Media.MvvmColor.Black));

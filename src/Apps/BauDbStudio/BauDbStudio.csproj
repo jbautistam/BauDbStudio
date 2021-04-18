@@ -21,9 +21,9 @@
     <Page Remove="Controls\**" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="Views\Connections\ConnectionParametersView.xaml.cs" />
     <Compile Remove="Views\Queries\ChartView.xaml.cs" />
     <Compile Remove="Views\Reporting\Queries\FilterColumnView.xaml.cs" />
+    <Compile Remove="Views\Tools\CreateFileView.xaml.cs" />
     <Compile Remove="Views\Tools\FindView.xaml.cs" />
     <Compile Remove="Views\Tools\FindViewModel.cs" />
   </ItemGroup>
@@ -78,9 +78,9 @@
     <None Remove="Resources\Images\Wildcards.png" />
   </ItemGroup>
   <ItemGroup>
-    <Page Remove="Views\Connections\ConnectionParametersView.xaml" />
     <Page Remove="Views\Queries\ChartView.xaml" />
     <Page Remove="Views\Reporting\Queries\FilterColumnView.xaml" />
+    <Page Remove="Views\Tools\CreateFileView.xaml" />
     <Page Remove="Views\Tools\FindView.xaml" />
   </ItemGroup>
   <ItemGroup>
@@ -97,7 +97,7 @@
     <ProjectReference Include="..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.Views\BauMvvm.Views.csproj" />
     <ProjectReference Include="..\..\..\..\..\Libraries\Charts\LibCharts\LibCharts.csproj" />
     <ProjectReference Include="..\..\..\..\..\Libraries\Common\LibSystem.Windows\LibSystem.Windows.csproj" />
-    <ProjectReference Include="..\..\Libraries\DbStudio\DbStudio.ViewModels\DbStudio.ViewModels.csproj" />
+    <ProjectReference Include="..\..\Libraries\DbStudio\DbStudio.Views\DbStudio.Views.csproj" />
     <ProjectReference Include="..\..\Libraries\PluginsStudio\PluginsStudio.Views\PluginsStudio.Views.csproj" />
   </ItemGroup>
   <ItemGroup>
@@ -194,10 +194,6 @@
     <Page Update="Views\EtlProjects\CreateTestXmlView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Files\ParquetFilePropertiesView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Update="Views\Queries\QueryViewControl.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -240,9 +236,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Reporting\Tools\CreateSchemaReportingXmlView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Tools\CreateFileView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Web\WebExplorerView.xaml">

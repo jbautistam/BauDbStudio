@@ -10,7 +10,7 @@ namespace Bau.DbStudio.Views.Web
 	/// </summary>
 	public partial class WebExplorerView : UserControl
 	{
-		public WebExplorerView(FileViewModel viewModel)
+		public WebExplorerView(ScriptFileViewModel viewModel)
 		{
 			InitializeComponent();
 		}
