@@ -48,6 +48,14 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 		}
 
 		/// <summary>
+		///		Obtiene el texto que se debe lanzar al editor
+		/// </summary>
+		public override string GetTextForEditor()
+		{
+			return FileName;
+		}
+
+		/// <summary>
 		///		Añade un nodo
 		/// </summary>
 		private void AddNode(string fileName, bool isFolder)

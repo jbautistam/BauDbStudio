@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Controls;
 
-using Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files;
+using Bau.Libraries.DbStudio.ViewModels.Details.Files;
 
 namespace Bau.DbStudio.Views.Web
 {
@@ -17,7 +17,6 @@ namespace Bau.DbStudio.Views.Web
 
 		private void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
 		{
-
 		}
 	}
 }

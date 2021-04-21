@@ -58,33 +58,6 @@ namespace Bau.DbStudio.Controllers
 				// Muestra la ventana adecuada
 				switch (dialogViewModel)
 				{
-					case Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects.CreateTestXmlViewModel viewModel:
-							result = HostHelperController.ShowDialog(MainWindow, new Views.EtlProjects.CreateTestXmlView(viewModel));
-						break;
-					case Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects.CreateValidationScriptsViewModel viewModel:
-							result = HostHelperController.ShowDialog(MainWindow, new Views.EtlProjects.CreateValidationScriptView(viewModel));
-						break;
-					case Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects.CreateImportFilesScriptViewModel viewModel:
-							result = HostHelperController.ShowDialog(MainWindow, new Views.EtlProjects.CreateImportFilesScriptView(viewModel));
-						break;
-					case Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects.ExportDatabaseViewModel viewModel:
-							result = HostHelperController.ShowDialog(MainWindow, new Views.EtlProjects.ExportDatabaseView(viewModel));
-						break;
-					case Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects.CreateSchemaXmlViewModel viewModel:
-							result = HostHelperController.ShowDialog(MainWindow, new Views.EtlProjects.CreateSchemaXmlView(viewModel));
-						break;
-					case Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Relations.DimensionRelationViewModel viewModel:
-							result = HostHelperController.ShowDialog(MainWindow, new Views.Reporting.Details.Relations.DimensionRelationView(viewModel));
-						break;
-					case Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Tools.CreateSchemaReportingXmlViewModel viewModel:
-							result = HostHelperController.ShowDialog(MainWindow, new Views.Reporting.Tools.CreateSchemaReportingXmlView(viewModel));
-						break;
-					case Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Tools.CreateScriptsSqlReportingViewModel viewModel:
-							result = HostHelperController.ShowDialog(MainWindow, new Views.Reporting.Tools.CreateReportingSqlView(viewModel));
-						break;
-					case Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries.ListReportColumnFilterViewModel viewModel:
-							result = HostHelperController.ShowDialog(MainWindow, new Views.Reporting.Queries.ListFilterColumnView(viewModel));
-						break;
 				}
 				// Devuelve el resultado
 				return result;
@@ -147,7 +120,7 @@ namespace Bau.DbStudio.Controllers
 				AppController.MainWindowController.HostController.SystemController.ShowNotification(type, title, message, TimeSpan.FromSeconds(5));
 			else
 				AppController.MainWindowController.Logger.Default.LogItems.Add(new Libraries.LibLogger.Models.Log.LogModel(null, Libraries.LibLogger.Models.Log.LogModel.LogType.Info,
-																															  title + ". " + message));
+																														   title + ". " + message));
 		}
 
 		/// <summary>

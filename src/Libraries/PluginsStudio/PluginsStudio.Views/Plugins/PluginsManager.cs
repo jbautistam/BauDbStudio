@@ -31,6 +31,15 @@ namespace Bau.Libraries.PluginsStudio.Views.Plugins
 		}
 
 		/// <summary>
+		///		Selecciona el directorio de un espacio de trabajo
+		/// </summary>
+		internal void SelectWorkspace(string path)
+		{
+			foreach (Base.Interfaces.IPlugin plugin in Plugins)
+				plugin.Load(path);
+		}
+
+		/// <summary>
 		///		Intenta abrir un archivo en los plugins
 		/// </summary>
 		internal bool OpenFile(string fileName)

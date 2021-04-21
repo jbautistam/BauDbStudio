@@ -44,8 +44,7 @@ namespace Bau.DbStudio
 			// Añade los paneles
 			ShowPanes();
 			// Asigna los manejadores de eventos
-			MainController.MainWindowController.OpenWindowRequired += (_, args) => OpenWindow(args);
-			MainController.AppStudioController.OpenDocumentRequired += (_, args) => OpenWindow(args.UserControl, args.ViewModel);
+			MainController.AppStudioController.OpenDocumentRequired += (_, args) => AddTab(args.UserControl, args.ViewModel);
 			// Asigna los manejadores de eventos del docker de documentos
 			dckManager.Closing += (sender, args) => CloseWindow(args);
 			dckManager.ActiveDocumentChanged += (sender, args) => UpdateSelectedTab();
@@ -71,7 +70,7 @@ namespace Bau.DbStudio
 		}
 
 		/// <summary>
-		///		Convierte la posición 
+		///		Convierte la posición
 		/// </summary>
 		private Controls.DockLayout.DockLayoutManager.DockPosition ConvertPosition(Libraries.PluginsStudio.Views.Base.Models.PaneModel.PositionType position)
 		{
@@ -114,45 +113,6 @@ namespace Bau.DbStudio
 		private void OpenFile(string fileName)
 		{
 			PluginsStudioViews.OpenFile(fileName);
-		}
-
-		/// <summary>
-		///		Abre la ventana de detalles
-		/// </summary>
-		private void OpenWindow(IDetailViewModel detailsViewModel)
-		{
-			switch (detailsViewModel)
-			{
-				case Libraries.DbStudio.ViewModels.Solutions.Details.Queries.ExecuteQueryViewModel viewModel:
-						AddTab(new Views.Queries.ExecuteQueryView(viewModel), viewModel);
-					break;
-				case Libraries.DbStudio.ViewModels.Solutions.Details.EtlProjects.ExecuteEtlConsoleViewModel viewModel:
-						AddTab(new Views.EtlProjects.ExecuteEtlConsoleView(viewModel), viewModel);
-					break;
-				case Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.DataSources.DataSourceSqlViewModel viewModel:
-						AddTab(new Views.Reporting.Details.DataSources.DataSourceSqlView(viewModel), viewModel);
-					break;
-				case Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.DataSources.DataSourceTableViewModel viewModel:
-						AddTab(new Views.Reporting.Details.DataSources.DataSourceTableView(viewModel), viewModel);
-					break;
-				case Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Dimension.DimensionViewModel viewModel:
-						AddTab(new Views.Reporting.Details.Dimensions.DimensionView(viewModel), viewModel);
-					break;
-				case Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Queries.ReportViewModel viewModel:
-						AddTab(new Views.Reporting.Queries.ReportView(viewModel), viewModel);
-					break;
-				case Libraries.DbStudio.ViewModels.Solutions.Details.Reporting.Reports.ReportViewModel viewModel:
-						AddTab(new Views.Reporting.Details.Reports.ReportView(viewModel), viewModel);
-					break;
-			}
-		}
-
-		/// <summary>
-		///		Abre la ventana de detalles
-		/// </summary>
-		private void OpenWindow(UserControl userControl, IDetailViewModel viewModel)
-		{
-			AddTab(userControl, viewModel);
 		}
 
 		/// <summary>

@@ -1,0 +1,62 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Bau.Libraries.DbStudio.Views.Reporting.Details.DataSources"
+			 x:Class="Bau.Libraries.DbStudio.Views.Reporting.Details.DataSources.ListDataSourceParametersView"
+             mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+		<ToolBar Grid.Row="0" Grid.Column="0" Visibility="{Binding Path=Updatable,Converter={StaticResource BoolToVisibilityConverter}}">
+			<Button ToolTip="Nuevo parámetro" Command="{Binding Path=NewParameterCommand}" Margin="2">
+				<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
+			</Button>
+			<Button ToolTip="Borrar parámetro" Command="{Binding Path=DeleteParameterCommand}" Margin="2">
+				<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
+			</Button>
+		</ToolBar>
+		<ListView Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Path=Items}" SelectedItem="{Binding Path=SelectedItem}" Margin="0">
+			<ListView.View>
+				<GridView>
+					<GridViewColumn Width="200" Header="Nombre">
+						<GridViewColumn.CellTemplate>
+							<DataTemplate>
+								<StackPanel Orientation="Horizontal">
+									<TextBlock Text="{Binding Path=Name}"  VerticalAlignment="Center" 
+										Visibility="{Binding Path=Updatable,Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+									<TextBox Text="{Binding Path=Name,UpdateSourceTrigger=PropertyChanged}" Width="170" VerticalAlignment="Center"
+										 Visibility="{Binding Path=Updatable,Converter={StaticResource BoolToVisibilityConverter}}"/>
+								</StackPanel>
+							</DataTemplate>
+						</GridViewColumn.CellTemplate>
+					</GridViewColumn>
+					<GridViewColumn Width="100" Header="Tipo">
+						<GridViewColumn.CellTemplate>
+							<DataTemplate>
+								<StackPanel Orientation="Horizontal">
+									<TextBlock Text="{Binding Path=Type}" Margin="5" VerticalAlignment="Center"
+										Visibility="{Binding Path=Updatable,Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+									<ComboBox Width="70"
+														  ItemsSource="{Binding ComboTypes.Items}" DisplayMemberPath="Text" 
+														  SelectedItem="{Binding ComboTypes.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+														   Visibility="{Binding Path=Updatable,Converter={StaticResource BoolToVisibilityConverter}}"/>
+								</StackPanel>
+							</DataTemplate>
+						</GridViewColumn.CellTemplate>
+					</GridViewColumn>
+					<GridViewColumn Width="400" Header="Valor predeterminado">
+						<GridViewColumn.CellTemplate>
+							<DataTemplate>
+								<TextBox Text="{Binding Path=DefaultValue,UpdateSourceTrigger=PropertyChanged}" Width="170" VerticalAlignment="Center"/>
+							</DataTemplate>
+						</GridViewColumn.CellTemplate>
+					</GridViewColumn>
+				</GridView>
+			</ListView.View>
+		</ListView>
+	</Grid>
+</UserControl>

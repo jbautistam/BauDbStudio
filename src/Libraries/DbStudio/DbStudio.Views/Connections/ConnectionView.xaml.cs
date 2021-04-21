@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 
-using Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Connections;
+using Bau.Libraries.DbStudio.ViewModels.Details.Connections;
 
 namespace Bau.Libraries.DbStudio.Views.Connections
 {

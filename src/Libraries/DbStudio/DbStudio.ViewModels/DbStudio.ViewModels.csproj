@@ -13,19 +13,25 @@
 
   <ItemGroup>
     <Compile Remove="Configuration\**" />
-    <Compile Remove="Solutions\Explorers\Files\**" />
+    <Compile Remove="Controllers\EventArguments\**" />
+    <Compile Remove="Explorers\Files\**" />
+    <Compile Remove="Explorers\Files\**" />
     <EmbeddedResource Remove="Configuration\**" />
-    <EmbeddedResource Remove="Solutions\Explorers\Files\**" />
+    <EmbeddedResource Remove="Controllers\EventArguments\**" />
+    <EmbeddedResource Remove="Explorers\Files\**" />
+    <EmbeddedResource Remove="Explorers\Files\**" />
     <None Remove="Configuration\**" />
-    <None Remove="Solutions\Explorers\Files\**" />
+    <None Remove="Controllers\EventArguments\**" />
+    <None Remove="Explorers\Files\**" />
+    <None Remove="Explorers\Files\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Solutions\Details\Connections\ConnectionParametersExecutionViewModel.cs" />
-    <Compile Remove="Solutions\Details\Reporting\Reports\ListReportDataSourceViewModel.cs" />
-    <Compile Remove="Solutions\Explorers\Connections\NodeSchemaViewModel.cs" />
-    <Compile Remove="Solutions\Explorers\Connections\TreeDetailsNodeViewModel.cs" />
-    <Compile Remove="Solutions\Explorers\Connections\TreeNodeViewModel.cs" />
+    <Compile Remove="Details\Connections\ConnectionParametersExecutionViewModel.cs" />
+    <Compile Remove="Details\Reporting\Reports\ListReportDataSourceViewModel.cs" />
+    <Compile Remove="Explorers\Connections\NodeSchemaViewModel.cs" />
+    <Compile Remove="Explorers\Connections\TreeDetailsNodeViewModel.cs" />
+    <Compile Remove="Explorers\Connections\TreeNodeViewModel.cs" />
   </ItemGroup>
 
   <ItemGroup>

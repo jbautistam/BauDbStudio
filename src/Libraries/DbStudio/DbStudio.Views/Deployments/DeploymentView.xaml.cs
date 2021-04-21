@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 
-using Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Deployments;
+using Bau.Libraries.DbStudio.ViewModels.Details.Deployments;
 
 namespace Bau.Libraries.DbStudio.Views.Deployments
 {

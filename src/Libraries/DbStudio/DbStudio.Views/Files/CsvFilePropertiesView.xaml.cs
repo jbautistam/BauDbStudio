@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 
-using Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Files.Structured;
+using Bau.Libraries.DbStudio.ViewModels.Details.Files.Structured;
 
 namespace Bau.Libraries.DbStudio.Views.Files
 {

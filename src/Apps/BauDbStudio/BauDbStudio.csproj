@@ -21,8 +21,6 @@
     <Page Remove="Controls\**" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="Views\Queries\ChartView.xaml.cs" />
-    <Compile Remove="Views\Reporting\Queries\FilterColumnView.xaml.cs" />
     <Compile Remove="Views\Tools\CreateFileView.xaml.cs" />
     <Compile Remove="Views\Tools\FindView.xaml.cs" />
     <Compile Remove="Views\Tools\FindViewModel.cs" />
@@ -78,8 +76,6 @@
     <None Remove="Resources\Images\Wildcards.png" />
   </ItemGroup>
   <ItemGroup>
-    <Page Remove="Views\Queries\ChartView.xaml" />
-    <Page Remove="Views\Reporting\Queries\FilterColumnView.xaml" />
     <Page Remove="Views\Tools\CreateFileView.xaml" />
     <Page Remove="Views\Tools\FindView.xaml" />
   </ItemGroup>
@@ -176,68 +172,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Views\EtlProjects\CreateImportFilesScriptView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\EtlProjects\CreateSchemaXmlView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\EtlProjects\CreateValidationScriptView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\EtlProjects\ExportDatabaseView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\EtlProjects\ExecuteEtlConsoleView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\EtlProjects\CreateTestXmlView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Queries\QueryViewControl.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Reporting\Details\DataSources\DataSourceSqlView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Reporting\Details\DataSources\ListDataSourceParametersView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Reporting\Details\Relations\DimensionRelationView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Reporting\Details\DataSources\ListDataSourceColumnsView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Reporting\Details\DataSources\DataSourceTableView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Reporting\Details\Dimensions\DimensionView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Reporting\Details\Reports\ReportView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Reporting\Explorers\TreeReportingExplorer.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Reporting\Queries\ListFilterColumnView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Reporting\Queries\ReportView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Reporting\Queries\TreeReportColumnsControl.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Reporting\Tools\CreateReportingSqlView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Reporting\Tools\CreateSchemaReportingXmlView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
     <Page Update="Views\Web\WebExplorerView.xaml">
       <SubType>Designer</SubType>
     </Page>

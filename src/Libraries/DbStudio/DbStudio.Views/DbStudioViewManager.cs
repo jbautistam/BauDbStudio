@@ -17,7 +17,7 @@ namespace Bau.Libraries.DbStudio.Views
 							   PluginsStudio.ViewModels.Base.Controllers.IPluginsController pluginController)
 		{
 			AppViewsController = appViewsController;
-			MainViewModel = new ViewModels.MainViewModel("DbStudio", new Controllers.DbStudioController(this, pluginController));
+			MainViewModel = new ViewModels.SolutionViewModel("DbStudio", new Controllers.DbStudioController(this, pluginController));
 		}
 
 		/// <summary>
@@ -33,7 +33,7 @@ namespace Bau.Libraries.DbStudio.Views
 		/// </summary>
 		public bool OpenFile(string fileName)
 		{
-			return MainViewModel.SolutionViewModel.OpenFile(fileName);
+			return MainViewModel.OpenFile(fileName);
 		}
 
 		/// <summary>
@@ -49,7 +49,7 @@ namespace Bau.Libraries.DbStudio.Views
 									Id = "TreeConnectionsExplorer",
 									Title = "Connections",
 									Position = PaneModel.PositionType.Left,
-									View = new Explorers.TreeConnectionsExplorer(MainViewModel.SolutionViewModel.TreeConnectionsViewModel)
+									View = new Explorers.TreeConnectionsExplorer(MainViewModel.TreeConnectionsViewModel)
 								}
 						 );
 				panes.Add(new PaneModel
@@ -57,16 +57,9 @@ namespace Bau.Libraries.DbStudio.Views
 									Id = "TreeStorageExplorer",
 									Title = "Storage",
 									Position = PaneModel.PositionType.Right,
-									View = new Explorers.TreeStoragesExplorer(MainViewModel.SolutionViewModel.TreeStoragesViewModel)
+									View = new Explorers.TreeStoragesExplorer(MainViewModel.TreeStoragesViewModel)
 								}
 						 );
-			//dckManager.AddPane("", "Conexiones", new Views.TreeConnectionsExplorer(ViewModel.SolutionViewModel.TreeConnectionsViewModel), 
-			//				   null, Controls.DockLayout.DockLayoutManager.DockPosition.Left);
-			//dckManager.AddPane("TreeReportingExplorer", "Informes", 
-			//				   new Views.Reporting.Explorers.TreeReportingExplorer(ViewModel.SolutionViewModel.ReportingSolutionViewModel.TreeReportingViewModel), 
-			//				   null, Controls.DockLayout.DockLayoutManager.DockPosition.Left);
-			//dckManager.AddPane("", "Storage", new Views.TreeStoragesExplorer(ViewModel.SolutionViewModel.TreeStoragesViewModel), 
-			//				   null, Controls.DockLayout.DockLayoutManager.DockPosition.Right);
 				// Devuelve la lista de paneles
 				return panes;
 		}
@@ -79,6 +72,6 @@ namespace Bau.Libraries.DbStudio.Views
 		/// <summary>
 		///		ViewModel principal
 		/// </summary>
-		public ViewModels.MainViewModel MainViewModel { get; private set; }
+		public ViewModels.SolutionViewModel MainViewModel { get; private set; }
 	}
 }

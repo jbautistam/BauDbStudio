@@ -38,7 +38,10 @@ namespace Bau.Libraries.PluginsStudio.Views
 		/// </summary>
 		public void Load(string path, string workspace)
 		{
-			PluginsStudioViewModel.Load(path, workspace);
+			// Carga los espacios de trabajo
+			PluginsStudioViewModel.Load(path);
+			// Selecciona el espacio de trabajo
+			SelectWorkspace(workspace);
 		}
 
 		/// <summary>
@@ -55,7 +58,11 @@ namespace Bau.Libraries.PluginsStudio.Views
 		/// </summary>
 		public void SelectWorkspace(string workspace)
 		{
+			// Selecciona el espacio de trabajo
 			PluginsStudioViewModel.SelectWorkspace(workspace);
+			// Llama a los plugins para cargar los datos del directorio correspondiente
+			if (PluginsStudioViewModel.WorkspacesViewModel.SelectedItem != null)
+				PluginsManager.SelectWorkspace(PluginsStudioViewModel.WorkspacesViewModel.SelectedItem.Path);
 		}
 
 		/// <summary>

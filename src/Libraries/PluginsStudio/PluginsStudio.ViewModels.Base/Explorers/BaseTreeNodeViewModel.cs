@@ -109,6 +109,14 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers
 		}
 
 		/// <summary>
+		///		Obtiene el texto para las operaciones de drag & drop sobre el editor
+		/// </summary>
+		public virtual string GetTextForEditor()
+		{
+			return string.Empty;
+		}
+
+		/// <summary>
 		///		Carga los nodos hijo
 		/// </summary>
 		protected abstract void LoadNodes();

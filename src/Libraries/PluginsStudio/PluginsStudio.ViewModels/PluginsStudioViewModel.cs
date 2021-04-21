@@ -42,12 +42,9 @@ namespace Bau.Libraries.PluginsStudio.ViewModels
 		/// <summary>
 		///		Carga los datos
 		/// </summary>
-		public void Load(string path, string workspace)
+		public void Load(string path)
 		{
-			// Carga los espacios de trabajo
 			WorkspacesViewModel.Load(path);
-			// Selecciona el espacio de trabajo
-			SelectWorkspace(workspace);
 		}
 
 		/// <summary>

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 
-using Bau.Libraries.DbStudio.ViewModels.Solutions.Details.Cloud;
+using Bau.Libraries.DbStudio.ViewModels.Details.Cloud;
 
 namespace Bau.Libraries.DbStudio.Views.Cloud
 {
