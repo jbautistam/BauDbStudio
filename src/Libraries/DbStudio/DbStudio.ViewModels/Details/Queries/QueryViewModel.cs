@@ -319,17 +319,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Queries
 		/// </summary>
 		public string TreatTextDropped(string content, bool shiftPressed)
 		{
-			string result = content;
-
-				// Obtiene el texto adecuado dependiendo de la extensión
-				if (!string.IsNullOrWhiteSpace(content))
-				{
-					if (content.IndexOf('\r') < 0 && content.Length < 10_000 && content.IndexOf('.') >= 0 &&
-							content.EndsWith(".sql", StringComparison.CurrentCultureIgnoreCase) || content.EndsWith(".sqlx", StringComparison.CurrentCultureIgnoreCase))
-						result = LibHelper.Files.HelperFiles.LoadTextFile(content);
-				}
-				// Devuelve el texto localizado
-				return result;
+			return new Controllers.DropItems.NodeTextDropHelper().TreatTextDropped(content, shiftPressed);
 		}
 
 		/// <summary>

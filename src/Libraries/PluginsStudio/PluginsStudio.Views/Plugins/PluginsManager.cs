@@ -27,8 +27,12 @@ namespace Bau.Libraries.PluginsStudio.Views.Plugins
 		/// </summary>
 		internal void Initialize()
 		{
+			// Iniclaliza los plugins
 			foreach (Base.Interfaces.IPlugin plugin in Plugins)
 				plugin.Initialize(PluginsStudioViewManager.AppViewController, PluginsStudioViewManager.PluginStudioController.PluginsController);
+			// Obtiene las opciones de los archivos
+			foreach (Base.Interfaces.IPlugin plugin in Plugins)
+				PluginsStudioViewManager.PluginsStudioViewModel.TreeFoldersViewModel.AddPluginOptions(plugin.GetFilesOptions());
 		}
 
 		/// <summary>
@@ -86,9 +90,9 @@ namespace Bau.Libraries.PluginsStudio.Views.Plugins
 		/// <summary>
 		///		Obtiene los menús de los plugins
 		/// </summary>
-		internal List<MenuListModel> GetMenus()
+		internal List<ViewModels.Base.Models.MenuListModel> GetMenus()
 		{
-			List<MenuListModel> menus = new();
+			List<ViewModels.Base.Models.MenuListModel> menus = new();
 
 				// Añade los menús
 				foreach (Base.Interfaces.IPlugin plugin in Plugins)

@@ -104,22 +104,22 @@ namespace Bau.DbStudio
 		/// </summary>
 		private void ShowMenus()
 		{
-			foreach (Libraries.PluginsStudio.Views.Base.Models.MenuListModel menu in PluginsStudioViews.GetMenus())
+			foreach (Libraries.PluginsStudio.ViewModels.Base.Models.MenuListModel menu in PluginsStudioViews.GetMenus())
 				switch (menu.Section)
 				{
-					case Libraries.PluginsStudio.Views.Base.Models.MenuListModel.SectionType.NewItem:
+					case Libraries.PluginsStudio.ViewModels.Base.Models.MenuListModel.SectionType.NewItem:
 							CreateChildMenus(mnuFilesNewItem, mnuStartFileNewItems, menu);
 						break;
-					case Libraries.PluginsStudio.Views.Base.Models.MenuListModel.SectionType.Tools:
+					case Libraries.PluginsStudio.ViewModels.Base.Models.MenuListModel.SectionType.Tools:
 							CreateChildMenus(mnuTools, mnuToolsStart, menu);
 						break;
 				}
 		}
 
 		/// <summary>
-		///		Crea elementos de menus hijo
+		///		Crea elementos de menú hijo
 		/// </summary>
-		private void CreateChildMenus(MenuItem mainMenu, Separator separatorStart, Libraries.PluginsStudio.Views.Base.Models.MenuListModel menu)
+		private void CreateChildMenus(MenuItem mainMenu, Separator separatorStart, Libraries.PluginsStudio.ViewModels.Base.Models.MenuListModel menu)
 		{
 			if (menu.Items.Count == 0)
 				separatorStart.Visibility = Visibility.Collapsed;
@@ -127,7 +127,7 @@ namespace Bau.DbStudio
 			{
 				int startIndex = mainMenu.Items.IndexOf(separatorStart);
 
-					foreach (Libraries.PluginsStudio.Views.Base.Models.MenuModel menuItem in menu.Items)
+					foreach (Libraries.PluginsStudio.ViewModels.Base.Models.MenuModel menuItem in menu.Items)
 						if (string.IsNullOrWhiteSpace(menuItem.Header))
 							mainMenu.Items.Insert(++startIndex, new Separator());
 						else

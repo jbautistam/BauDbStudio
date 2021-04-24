@@ -368,6 +368,14 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 			}
 		}
 
+		/// <summary>
+		///		Añade las opciones de los plugins asociados a los archivos
+		/// </summary>
+		public void AddPluginOptions(List<Base.Models.FileOptionsModel> fileOptionsModels)
+		{
+			throw new NotImplementedException();
+		}
+
 		///// <summary>
 		/////		Ejecuta un script
 		///// </summary>

@@ -178,12 +178,12 @@ namespace Bau.Libraries.PluginsStudio.Views.Files
 
 		private void udtEditor_Drop(object sender, System.Windows.DragEventArgs e)
 		{
-			if (_dragDropController.GetDragDropFileNode(e.Data) is Libraries.PluginsStudio.ViewModels.Base.Explorers.BaseTreeNodeViewModel nodeViewModel)
+			if (_dragDropController.GetDragDropFileNode(e.Data) is ViewModels.Base.Explorers.BaseTreeNodeViewModel nodeViewModel)
 			{
-				string text = ViewModel.GetTextFromDroppedNode(nodeViewModel, e.KeyStates == System.Windows.DragDropKeyStates.ShiftKey);
+				string text = nodeViewModel.GetTextForEditor(e.KeyStates == System.Windows.DragDropKeyStates.ShiftKey);
 
 					if (!string.IsNullOrWhiteSpace(text))
-						udtEditor.InsertText(text, e.GetPosition(udtEditor));
+						udtEditor.InsertText(ViewModel.TreatTextDropped(text, e.KeyStates == System.Windows.DragDropKeyStates.ShiftKey), e.GetPosition(udtEditor));
 			}
 		}
 

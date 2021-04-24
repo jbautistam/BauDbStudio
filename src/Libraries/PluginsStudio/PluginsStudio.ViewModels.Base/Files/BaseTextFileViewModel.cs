@@ -1,5 +1,4 @@
 ﻿using System;
-using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
 
 namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Files
 {
@@ -99,9 +98,12 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Files
 		}
 
 		/// <summary>
-		///		Obtiene el texto del nodo arrastrado sobre el editor
+		///		Trata el texto que se arrastra sobre el editor desde un árbol
 		/// </summary>
-		public abstract string GetTextFromDroppedNode(BaseTreeNodeViewModel nodeViewModel, bool pressedShiftKey);
+		public virtual string TreatTextDropped(string content, bool shiftPressed)
+		{
+			return content;
+		}
 
 		/// <summary>
 		///		Controlador de plugins

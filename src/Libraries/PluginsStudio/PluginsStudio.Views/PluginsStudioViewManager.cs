@@ -114,7 +114,7 @@ namespace Bau.Libraries.PluginsStudio.Views
 		/// <summary>
 		///		Obtiene los menús de los plugins
 		/// </summary>
-		public List<Base.Models.MenuListModel> GetMenus()
+		public List<ViewModels.Base.Models.MenuListModel> GetMenus()
 		{
 			return PluginsManager.GetMenus();
 		}

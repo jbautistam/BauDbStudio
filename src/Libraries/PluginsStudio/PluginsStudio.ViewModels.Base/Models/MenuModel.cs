@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Bau.Libraries.PluginsStudio.Views.Base.Models
+namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Models
 {
 	/// <summary>
 	///		Modelo de un menú

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Bau.Libraries.PluginsStudio.Views.Base.Models
+namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Models
 {
 	/// <summary>
 	///		Lista de menús

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using Bau.Libraries.PluginsStudio.Views.Base.Models;
+using Bau.Libraries.PluginsStudio.ViewModels.Base.Models;
 
 namespace Bau.Libraries.DbStudio.Views
 {
@@ -175,6 +176,14 @@ namespace Bau.Libraries.DbStudio.Views
 		private string GetIcon(string resource)
 		{
 			return $"pack://application:,,,/DbStudio.Views;component/Resources/Images/{resource}";
+		}
+
+		/// <summary>
+		///		Obtiene las opciones de menú asociadas a las extensiones de archivo y carpetas
+		/// </summary>
+		public List<FileOptionsModel> GetFilesOptions()
+		{
+			throw new NotImplementedException();
 		}
 
 		/// <summary>

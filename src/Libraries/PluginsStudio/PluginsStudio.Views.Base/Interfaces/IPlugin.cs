@@ -36,6 +36,11 @@ namespace Bau.Libraries.PluginsStudio.Views.Base.Interfaces
 		/// <summary>
 		///		Obtiene los menús del plugin
 		/// </summary>
-		List<Models.MenuListModel> GetMenus();
+		List<ViewModels.Base.Models.MenuListModel> GetMenus();
+
+		/// <summary>
+		///		Obtiene las opciones de menú asociadas a las extensiones de archivo y carpetas
+		/// </summary>
+		List<ViewModels.Base.Models.FileOptionsModel> GetFilesOptions();
 	}
 }
