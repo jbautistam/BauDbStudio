@@ -29,10 +29,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 		/// <summary>
 		///		Obtiene el texto de la cadena SQL asociada al campo
 		/// </summary>
-		public string GetSqlSelect(bool fullSql)
+		public override string GetTextForEditor(bool shiftPressed)
 		{
 			if (TreeViewModel is TreeConnectionsViewModel trvTree)
-				return trvTree.GetSqlSelect(this, fullSql);
+				return trvTree.GetSqlSelect(this, shiftPressed);
 			else
 				return string.Empty;
 		}

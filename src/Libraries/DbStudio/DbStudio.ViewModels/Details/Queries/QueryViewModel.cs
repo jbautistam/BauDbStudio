@@ -315,11 +315,21 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Queries
 		}
 
 		/// <summary>
-		///		Obtiene la cadena asociada a un archivo cuando se arrastra un nodo sobre el editor de texto
+		///		Trata el contenido que se inserta cuando se suelta un nodo del explorador sobre el editor
 		/// </summary>
-		public string GetAdvancedDroppedNodeFile(string fileName, bool shiftPressed)
+		public string TreatTextDropped(string content, bool shiftPressed)
 		{
-			throw new NotImplementedException();
+			string result = content;
+
+				// Obtiene el texto adecuado dependiendo de la extensión
+				if (!string.IsNullOrWhiteSpace(content))
+				{
+					if (content.IndexOf('\r') < 0 && content.Length < 10_000 && content.IndexOf('.') >= 0 &&
+							content.EndsWith(".sql", StringComparison.CurrentCultureIgnoreCase) || content.EndsWith(".sqlx", StringComparison.CurrentCultureIgnoreCase))
+						result = LibHelper.Files.HelperFiles.LoadTextFile(content);
+				}
+				// Devuelve el texto localizado
+				return result;
 		}
 
 		/// <summary>

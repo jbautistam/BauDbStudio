@@ -104,6 +104,22 @@ namespace Bau.Libraries.PluginsStudio.Views
 		}
 
 		/// <summary>
+		///		Obtiene las barras de herramientas del plugin
+		/// </summary>
+		public List<Base.Models.ToolBarModel> GetToolBars()
+		{
+			return PluginsManager.GetToolbars();
+		}
+
+		/// <summary>
+		///		Obtiene los menús de los plugins
+		/// </summary>
+		public List<Base.Models.MenuListModel> GetMenus()
+		{
+			return PluginsManager.GetMenus();
+		}
+
+		/// <summary>
 		///		Controlador de vistas principal
 		/// </summary>
 		internal Base.Interfaces.IAppViewsController AppViewController { get; }

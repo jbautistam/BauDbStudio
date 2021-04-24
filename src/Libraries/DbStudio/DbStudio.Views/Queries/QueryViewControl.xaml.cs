@@ -82,20 +82,16 @@ namespace Bau.Libraries.DbStudio.Views.Queries
 
 		private void udtEditor_Drop(object sender, System.Windows.DragEventArgs e)
 		{
-			if (_dragDropController.GetDragDropFileNode(e.Data) is ViewModels.Explorers.Connections.NodeTableViewModel tableNodeViewModel)
-				udtEditor.InsertText(tableNodeViewModel.GetSqlSelect(e.KeyStates == System.Windows.DragDropKeyStates.ShiftKey), 
-									 e.GetPosition(udtEditor));
-			else if (_dragDropController.GetDragDropFileNode(e.Data) is ViewModels.Explorers.Connections.NodeTableFieldViewModel fieldNodeViewModel)
-				udtEditor.InsertText(fieldNodeViewModel.GetSqlSelect(e.KeyStates == System.Windows.DragDropKeyStates.ShiftKey), 
-									 e.GetPosition(udtEditor));
-			else if (_dragDropController.GetDragDropFileNode(e.Data) is PluginsStudio.ViewModels.Base.Explorers.BaseTreeNodeViewModel baseNodeViewModel)
-			{
-				string content = baseNodeViewModel.GetTextForEditor();
+			object data = _dragDropController.GetDragDropFileNode(e.Data);
 
-					if (!string.IsNullOrWhiteSpace(content))
-						udtEditor.InsertText(ViewModel.GetAdvancedDroppedNodeFile(content, e.KeyStates == System.Windows.DragDropKeyStates.ShiftKey), 
-											 e.GetPosition(udtEditor));
-			}
+				if (data is PluginsStudio.ViewModels.Base.Explorers.BaseTreeNodeViewModel baseNodeViewModel)
+				{
+					string content = baseNodeViewModel.GetTextForEditor(e.KeyStates == System.Windows.DragDropKeyStates.ShiftKey);
+
+						if (!string.IsNullOrWhiteSpace(content))
+							udtEditor.InsertText(ViewModel.TreatTextDropped(content, e.KeyStates == System.Windows.DragDropKeyStates.ShiftKey), 
+												 e.GetPosition(udtEditor));
+				}
 		}
 
 		private void DataGrid_LoadingRow(object sender, DataGridRowEventArgs e)

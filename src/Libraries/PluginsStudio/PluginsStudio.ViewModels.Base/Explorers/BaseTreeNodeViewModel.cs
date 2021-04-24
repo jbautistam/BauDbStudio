@@ -111,7 +111,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers
 		/// <summary>
 		///		Obtiene el texto para las operaciones de drag & drop sobre el editor
 		/// </summary>
-		public virtual string GetTextForEditor()
+		public virtual string GetTextForEditor(bool shiftPressed)
 		{
 			return string.Empty;
 		}

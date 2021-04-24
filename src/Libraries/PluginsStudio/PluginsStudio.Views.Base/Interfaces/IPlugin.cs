@@ -27,5 +27,15 @@ namespace Bau.Libraries.PluginsStudio.Views.Base.Interfaces
 		///		Obtiene los paneles del plugin
 		/// </summary>
 		List<Models.PaneModel> GetPanes();
+
+		/// <summary>
+		///		Obtiene las barras de herramientas del plugin
+		/// </summary>
+		List<Models.ToolBarModel> GetToolBars();
+
+		/// <summary>
+		///		Obtiene los menús del plugin
+		/// </summary>
+		List<Models.MenuListModel> GetMenus();
 	}
 }

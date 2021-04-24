@@ -50,7 +50,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 		/// <summary>
 		///		Obtiene el texto que se debe lanzar al editor
 		/// </summary>
-		public override string GetTextForEditor()
+		public override string GetTextForEditor(bool shiftPressed)
 		{
 			return FileName;
 		}

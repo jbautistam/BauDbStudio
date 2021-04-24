@@ -60,8 +60,121 @@ namespace Bau.Libraries.DbStudio.Views
 									View = new Explorers.TreeStoragesExplorer(MainViewModel.TreeStoragesViewModel)
 								}
 						 );
+				panes.Add(new PaneModel
+								{
+									Id = "TreeReportingExplorer",
+									Title = "Reporting",
+									Position = PaneModel.PositionType.Left,
+									View = new Reporting.Explorers.TreeReportingExplorer(MainViewModel.ReportingSolutionViewModel.TreeReportingViewModel)
+								}
+						 );
 				// Devuelve la lista de paneles
 				return panes;
+		}
+
+		/// <summary>
+		///		Obtiene las barras de herramientas del plugin
+		/// </summary>
+		public List<ToolBarModel> GetToolBars()
+		{
+			List<ToolBarModel> toolBars = new();
+
+				// Añade la barra de herramientas del control de ejecución
+				toolBars.Add(new ToolBarModel
+										{
+											Id = "ExecutionToolBar",
+											ToolBar = new Controls.ExecutionToolBar(MainViewModel.ConnectionExecutionViewModel)
+										}
+							);
+				// Devuelve la lista
+				return toolBars;
+		}
+
+		/// <summary>
+		///		Obtiene los menús del plugin
+		/// </summary>
+		public List<MenuListModel> GetMenus()
+		{
+
+					//<Separator/>
+					//<MenuItem Header="_Conexión" Command="{Binding Path=SolutionViewModel.TreeConnectionsViewModel.NewConnectionCommand}" >
+					//	<MenuItem.Icon>
+					//		<Image Width="16" Height="16" Source="/Resources/Images/Connection.png" />
+					//	</MenuItem.Icon>
+					//</MenuItem>
+					//<MenuItem Header="_Distribución" Command="{Binding Path=SolutionViewModel.TreeConnectionsViewModel.NewDeploymentCommand}" >
+					//	<MenuItem.Icon>
+					//		<Image Width="16" Height="16" Source="/Resources/Images/Deployment.png" />
+					//	</MenuItem.Icon>
+					//</MenuItem>
+					//<Separator/>
+					//<MenuItem Header="_Storage" Command="{Binding Path=SolutionViewModel.TreeStoragesViewModel.NewStorageCommand}" >
+					//	<MenuItem.Icon>
+					//		<Image Width="16" Height="16" Source="/Resources/Images/Search.png" />
+					//	</MenuItem.Icon>
+					//</MenuItem>
+					//<Separator/>
+					//<MenuItem Header="_Consulta" InputGestureText="Ctrl+Q" Command="commandsLocal:CustomCommands.NewQuery" >
+					//	<MenuItem.Icon>
+					//		<Image Width="16" Height="16" Source="/Resources/Images/Script.png" />
+					//	</MenuItem.Icon>
+					//</MenuItem>
+					//<Separator/>
+					//<MenuItem Header="_Xml de pruebas" Command="{Binding Path=SolutionViewModel.CreateTestXmlCommand}" >
+					//	<MenuItem.Icon>
+					//		<Image Width="16" Height="16" Source="/Resources/Images/FileXml.png" />
+					//	</MenuItem.Icon>
+					//</MenuItem>
+
+			List<MenuListModel> menus = new();
+
+				// Crea la lista de menús de "Nuevo elemento"
+				menus.Add(GetMenus(MenuListModel.SectionType.NewItem));
+				menus.Add(GetMenus(MenuListModel.SectionType.Tools));
+				// Devuelve la lista de menús
+				return menus;
+		}
+
+		/// <summary>
+		///		Obtiene los menús
+		/// </summary>
+		private MenuListModel GetMenus(MenuListModel.SectionType section)
+		{
+			MenuListModel menuList = new(section);
+
+				// Obtiene los elementos del menú
+				switch (section)
+				{
+					case MenuListModel.SectionType.NewItem:
+							menuList.Add("_Conexión", MainViewModel.TreeConnectionsViewModel.NewConnectionCommand, GetIcon("Connection.png"));
+							menuList.Add("_Distribución", MainViewModel.TreeConnectionsViewModel.NewDeploymentCommand, GetIcon("Deployment.png"));
+							menuList.Add("_Storage", MainViewModel.TreeStoragesViewModel.NewStorageCommand, GetIcon("Search.png"));
+							menuList.AddSeparator();
+							menuList.Add("_Consulta", MainViewModel.TreeConnectionsViewModel.NewQueryCommand, GetIcon("Script.png"));
+							menuList.AddSeparator();
+							menuList.Add("_Xml de pruebas", MainViewModel.CreateTestXmlCommand, GetIcon("FileXml.png"));
+						break;
+					case MenuListModel.SectionType.Tools:
+							menuList.Add("_Exportar tablas de datos ... ", MainViewModel.ConnectionExecutionViewModel.ExportDataBaseCommand, GetIcon("Export.png"));
+							menuList.AddSeparator();
+							menuList.Add("_Crear scripts validación ...", MainViewModel.CreateValidationScriptsCommand, GetIcon("FileSql.png"));
+							menuList.Add("Crear script de importación de archivos ...", MainViewModel.CreateImportFilesScriptsCommand, GetIcon("FileSql.png"));
+							menuList.AddSeparator();
+							menuList.Add("Generar XML de esquema ...", MainViewModel.CreateSchemaXmlCommand, GetIcon("FileXml.png"));
+							menuList.Add("Generar XML de reporting ...", MainViewModel.CreateSchemaReportingXmlCommand, GetIcon("FileXml.png"));
+							menuList.Add("Generar scripts SQL de reporting ...", MainViewModel.CreateSchemaReportingSqlCommand, GetIcon("FileXml.png"));
+						break;
+				}
+				// Devuelve la lista de menús
+				return menuList;
+		}
+
+		/// <summary>
+		///		Obtiene la URL completa de un icono
+		/// </summary>
+		private string GetIcon(string resource)
+		{
+			return $"pack://application:,,,/DbStudio.Views;component/Resources/Images/{resource}";
 		}
 
 		/// <summary>

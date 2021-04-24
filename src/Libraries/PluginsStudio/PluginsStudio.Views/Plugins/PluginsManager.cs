@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Bau.Libraries.PluginsStudio.Views.Base.Models;
 
 namespace Bau.Libraries.PluginsStudio.Views.Plugins
 {
@@ -57,15 +58,43 @@ namespace Bau.Libraries.PluginsStudio.Views.Plugins
 		/// <summary>
 		///		Obtiene los paneles de los plugins
 		/// </summary>
-		internal List<Base.Models.PaneModel> GetPanes()
+		internal List<PaneModel> GetPanes()
 		{
-			List<Base.Models.PaneModel> panes = new List<Base.Models.PaneModel>();
+			List<PaneModel> panes = new List<PaneModel>();
 
 				// Añade los paneles de los diferentes plugins
 				foreach (Base.Interfaces.IPlugin plugin in Plugins)
 					panes.AddRange(plugin.GetPanes());
 				// Devuelve la colección de paneles
 				return panes;
+		}
+
+		/// <summary>
+		///		Obtiene las barras de herramientas de los plugins
+		/// </summary>
+		internal List<ToolBarModel> GetToolbars()
+		{
+			List<ToolBarModel> toolbars = new();
+
+				// Añade las barras de herramientas
+				foreach (Base.Interfaces.IPlugin plugin in Plugins)
+					toolbars.AddRange(plugin.GetToolBars());
+				// Devuelve la lista
+				return toolbars;
+		}
+
+		/// <summary>
+		///		Obtiene los menús de los plugins
+		/// </summary>
+		internal List<MenuListModel> GetMenus()
+		{
+			List<MenuListModel> menus = new();
+
+				// Añade los menús
+				foreach (Base.Interfaces.IPlugin plugin in Plugins)
+					menus.AddRange(plugin.GetMenus());
+				// Devuelve la lista
+				return menus;
 		}
 
 		/// <summary>

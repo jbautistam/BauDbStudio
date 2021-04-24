@@ -19,7 +19,8 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Files
 		/// </summary>
 		public override string GetTextFromDroppedNode(BaseTreeNodeViewModel nodeViewModel, bool pressedShiftKey)
 		{
-			throw new NotImplementedException();
+			System.Diagnostics.Debug.WriteLine("Obtener el texto");
+			return "Obtener el texto de verdad";
 		}
 
 		/// <summary>

@@ -20,12 +20,12 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 		}
 
 		/// <summary>
-		///		Obtiene el texto de la cadena SQL asociada a la tabla
+		///		Obtiene el texto que se puede insertar en un editor con los datos de la tabla
 		/// </summary>
-		public string GetSqlSelect(bool fullSql)
+		public override string GetTextForEditor(bool shiftPressed)
 		{
 			if (TreeViewModel is TreeConnectionsViewModel trvTree)
-				return trvTree.GetSqlSelectText(this, fullSql);
+				return trvTree.GetSqlSelectText(this, shiftPressed);
 			else
 				return string.Empty;
 		}

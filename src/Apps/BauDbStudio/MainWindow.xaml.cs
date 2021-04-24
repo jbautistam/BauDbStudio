@@ -41,8 +41,10 @@ namespace Bau.DbStudio
 			ViewModel.LastFilesViewModel.Add(MainController.ConfigurationController.LastFiles);
 			// Añade los manejadores de eventos
 			ViewModel.WorkspacesChanged += (sender, args) => ShowMenuWorkspaces();
-			// Añade los paneles
+			// Añade los paneles y barras de herramientas
 			ShowPanes();
+			ShowToolbars();
+			ShowMenus();
 			// Asigna los manejadores de eventos
 			MainController.AppStudioController.OpenDocumentRequired += (_, args) => AddTab(args.UserControl, args.ViewModel);
 			// Asigna los manejadores de eventos del docker de documentos
@@ -84,6 +86,57 @@ namespace Bau.DbStudio
 					return Controls.DockLayout.DockLayoutManager.DockPosition.Bottom;
 				default:
 					return Controls.DockLayout.DockLayoutManager.DockPosition.Left;
+			}
+		}
+
+		/// <summary>
+		///		Muestra las barras de herramientas
+		/// </summary>
+		private void ShowToolbars()
+		{
+			foreach (Libraries.PluginsStudio.Views.Base.Models.ToolBarModel toolbar in PluginsStudioViews.GetToolBars())
+				if (toolbar?.ToolBar != null)
+					tbMain.ToolBars.Add(toolbar.ToolBar);
+		}
+
+		/// <summary>
+		///		Muestra los menús
+		/// </summary>
+		private void ShowMenus()
+		{
+			foreach (Libraries.PluginsStudio.Views.Base.Models.MenuListModel menu in PluginsStudioViews.GetMenus())
+				switch (menu.Section)
+				{
+					case Libraries.PluginsStudio.Views.Base.Models.MenuListModel.SectionType.NewItem:
+							CreateChildMenus(mnuFilesNewItem, mnuStartFileNewItems, menu);
+						break;
+					case Libraries.PluginsStudio.Views.Base.Models.MenuListModel.SectionType.Tools:
+							CreateChildMenus(mnuTools, mnuToolsStart, menu);
+						break;
+				}
+		}
+
+		/// <summary>
+		///		Crea elementos de menus hijo
+		/// </summary>
+		private void CreateChildMenus(MenuItem mainMenu, Separator separatorStart, Libraries.PluginsStudio.Views.Base.Models.MenuListModel menu)
+		{
+			if (menu.Items.Count == 0)
+				separatorStart.Visibility = Visibility.Collapsed;
+			else
+			{
+				int startIndex = mainMenu.Items.IndexOf(separatorStart);
+
+					foreach (Libraries.PluginsStudio.Views.Base.Models.MenuModel menuItem in menu.Items)
+						if (string.IsNullOrWhiteSpace(menuItem.Header))
+							mainMenu.Items.Insert(++startIndex, new Separator());
+						else
+						{
+							MenuItem newMenuItem = CreateMenu(menuItem.Header, menuItem.Icon, menuItem.IsCheckable, menuItem.Command, menuItem.Tag);
+
+								// Inserta el menú tras el separador
+								mainMenu.Items.Insert(++startIndex, newMenuItem);
+						}
 			}
 		}
 
