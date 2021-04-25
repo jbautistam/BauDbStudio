@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Collections.Generic;
 
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
 using Bau.Libraries.BauMvvm.Views.Wpf.Forms.Trees;
@@ -70,6 +71,74 @@ namespace Bau.Libraries.PluginsStudio.Views.Explorers
         }
 
 		/// <summary>
+		///		Prepara los menús contextuales
+		/// </summary>
+		private void PrepareContextualMenus()
+		{
+			ContextMenu explorerMenus = trvExplorer.ContextMenu;
+
+				// Crea los menús contextuales
+				if (explorerMenus != null)
+				{
+					List<ViewModels.Base.Models.MenuModel> menuItems = ViewModel.GetFileMenus();
+					int lastSeparatorIndex = 0;
+					Separator lastSeparator = null;
+
+						// Busca el último separador (el de los plugins)
+						for (int index = 0; index < explorerMenus.Items.Count; index++)
+							if (explorerMenus.Items[index] is Separator separator && separator.Name.Equals("mnuPluginsSeparator", StringComparison.CurrentCultureIgnoreCase))
+							{
+								lastSeparatorIndex = index;
+								lastSeparator = separator;
+							}
+						// Si se ha encontrado el separador (que siempre debería estar ahí)
+						if (lastSeparator != null)
+						{
+							// Quita las opciones posteriores al separador
+							for (int index = explorerMenus.Items.Count - 1; index > lastSeparatorIndex; index--)
+								explorerMenus.Items.RemoveAt(index);
+							// Añade las opciones de menú
+							if (menuItems.Count == 0)
+								lastSeparator.Visibility = Visibility.Collapsed;
+							else
+							{
+								// Muestra el separador
+								lastSeparator.Visibility = Visibility.Visible;
+								// Añade los menús
+								foreach (ViewModels.Base.Models.MenuModel menuItem in menuItems)
+									if (string.IsNullOrWhiteSpace(menuItem.Header))
+										explorerMenus.Items.Insert(++lastSeparatorIndex, new Separator());
+									else
+										explorerMenus.Items.Insert(++lastSeparatorIndex, 
+																   CreateMenu(menuItem.Header, menuItem.Icon, menuItem.IsCheckable, menuItem.Command, 
+																			  (ViewModel.SelectedNode as NodeFileViewModel)?.FileName, 
+																			  menuItem.Tag));
+							}
+						}
+				}
+		}
+
+		/// <summary>
+		///		Crea una opción de menú
+		/// </summary>
+		private MenuItem CreateMenu(string text, string icon, bool isCheckable, ICommand command, string fileName, object tag = null)
+		{
+			MenuItem mnuNewItem = new MenuItem();
+
+				// Asigna las propiedades
+				mnuNewItem.Header = text;
+				if (!string.IsNullOrWhiteSpace(icon))
+					mnuNewItem.Icon = new BauMvvm.Views.Wpf.Tools.ToolsWpf().GetImage(icon);
+				mnuNewItem.Tag = tag;
+				mnuNewItem.IsCheckable = isCheckable;
+				// Añade el comando
+				mnuNewItem.Command = command;
+				mnuNewItem.CommandParameter = fileName; 
+				// Devuelve la opción de menú creada
+				return mnuNewItem;
+		}
+
+		/// <summary>
 		///		ViewModel del árbol de archivos
 		/// </summary>
 		public TreeFilesViewModel ViewModel { get; }
@@ -133,6 +202,11 @@ namespace Bau.Libraries.PluginsStudio.Views.Explorers
 					{
 						ViewModel.MainViewModel.PluginsStudioController.MainWindowController.Logger.Default.LogItems.Error("Error when drop files", exception);
 					}
+		}
+
+		private void trvExplorer_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+		{
+			PrepareContextualMenus();
 		}
 	}
 }

@@ -27,6 +27,9 @@ namespace Bau.Libraries.DbStudio.Views.Controllers
 				case ViewModels.Details.Connections.ExecuteFilesViewModel viewModel:
 						DbStudioController.DbStudioViewManager.AppViewsController.OpenDocument(new Connections.ExecuteFilesView(viewModel), viewModel);
 					break;
+				case ViewModels.Details.Files.ScriptFileViewModel viewModel:
+						DbStudioController.PluginController.HostPluginsController.OpenEditor(viewModel);
+					break;
 				case ViewModels.Details.Files.Structured.BaseFileViewModel viewModel:
 						DbStudioController.DbStudioViewManager.AppViewsController.OpenDocument(new Files.DataTableFileView(viewModel), viewModel);
 					break;

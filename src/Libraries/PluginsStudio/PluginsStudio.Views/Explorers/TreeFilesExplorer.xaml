@@ -14,7 +14,7 @@
 				SelectedItemChanged="trvExplorer_SelectedItemChanged"
 				MouseDoubleClick="trvExplorer_MouseDoubleClick" MouseDown="trvExplorer_MouseDown"
 				PreviewMouseLeftButtonDown="trvExplorer_PreviewMouseLeftButtonDown" PreviewMouseMove="trvExplorer_PreviewMouseMove"
-				Drop="trvExplorer_Drop" AllowDrop="True">
+				Drop="trvExplorer_Drop" AllowDrop="True" ContextMenuOpening="trvExplorer_ContextMenuOpening">
 			<TreeView.Resources>
 				<!-- Plantilla de los nodos -->
 				<HierarchicalDataTemplate DataType="{x:Type ViewModel:BaseTreeNodeViewModel}" ItemsSource="{Binding Children}">
@@ -87,12 +87,14 @@
 							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Folder.png" />
 						</MenuItem.Icon>
 					</MenuItem>
-					<Separator />
+					<Separator x:Name="mnuPluginsSeparator" />
+					<!--
 					<MenuItem Header="Ejecutar" Command="{Binding ProcessScriptCommand}">
 						<MenuItem.Icon>
 							<Image Width="16" Height="16" Source="/Resources/Images/ArrowRight.png" />
 						</MenuItem.Icon>
 					</MenuItem>
+					-->
 				</ContextMenu>
 			</TreeView.Resources>
 			<TreeView.ItemContainerStyle>

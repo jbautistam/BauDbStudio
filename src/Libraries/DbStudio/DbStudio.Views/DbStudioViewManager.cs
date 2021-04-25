@@ -183,7 +183,19 @@ namespace Bau.Libraries.DbStudio.Views
 		/// </summary>
 		public List<FileOptionsModel> GetFilesOptions()
 		{
-			throw new NotImplementedException();
+			return new PluginsStudio.ViewModels.Base.Models.Builders.FileOptionsBuilder()
+								.WithOption()
+									.WithFolder()
+									.WithExtension("sql")
+									.WithExtension("xml")
+									.WithMenu(new MenuModel
+														{
+															Header = "Ejecutar",
+															Icon = GetIcon("ArrowRight.png"),
+															Command = MainViewModel.ConnectionExecutionViewModel.ExecuteFileCommand
+														}
+											 )
+								.Build();
 		}
 
 		/// <summary>

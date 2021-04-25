@@ -369,88 +369,28 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 		}
 
 		/// <summary>
-		///		Añade las opciones de los plugins asociados a los archivos
+		///		Guarda las opciones de los plugins asociados a los archivos
 		/// </summary>
-		public void AddPluginOptions(List<Base.Models.FileOptionsModel> fileOptionsModels)
+		public void AddPluginOptions(List<Base.Models.FileOptionsModel> fileOptions)
 		{
-			throw new NotImplementedException();
+			PluginsFileOptions = fileOptions;
 		}
 
-		///// <summary>
-		/////		Ejecuta un script
-		///// </summary>
-		//private void ExecuteScript()
-		//{
-		//	string fileName = GetSelectedFile();
-		//	bool executeXml = false;
+		/// <summary>
+		///		Obtiene los menús asociados al archivo
+		/// </summary>
+		public List<Base.Models.MenuModel> GetFileMenus()
+		{
+			List<Base.Models.MenuModel> menus = new();
 
-		//		// Si el archivo seleccionado es XML, lo ejecuta sobre una consola
-		//		if (!string.IsNullOrWhiteSpace(fileName))
-		//		{
-		//			if (fileName.EndsWith(".xml", StringComparison.CurrentCultureIgnoreCase))
-		//			{
-		//				// Ejecuta el archivo XML en una consola
-		//				ExecuteEtlScript(fileName);
-		//				// Indica que se trata de un archivo XML ejecutado sobre consola
-		//				executeXml = true;
-		//			}
-		//		}
-		//		// Si no se trata de un archivo de proyecto XML (que se va a ejecutar en consola), se ejecutan los SQL
-		//		if (!executeXml)
-		//		{
-		//			List<string> files = GetFilesFromPath(fileName, ".sql");
-
-		//				// Ejecuta los archivos (si ha encontrado alguno)
-		//				if (files.Count == 0)
-		//					MainViewModel.MainViewModel.MainController.SystemController.ShowMessage("No se encuentra ningún archivo SQL para ejecutar");
-		//				else
-		//					MainViewModel.MainViewModel.MainController.MainWindowController.OpenWindow(new Details.Connections.ExecuteFilesViewModel(MainViewModel, files));
-		//		}
-		//}
-
-		///// <summary>
-		/////		Obtiene los archivos SQL de un directorio (o el archivo seleccionado)
-		///// </summary>
-		//private List<string> GetFilesFromPath(string selectedFileName, string extension)
-		//{
-		//	List<string> files = new List<string>();
-
-		//		// Obtiene el archivo seleccionado o los archivos de un directorio
-		//		if (!string.IsNullOrWhiteSpace(selectedFileName) && selectedFileName.EndsWith(extension, StringComparison.CurrentCultureIgnoreCase))
-		//			files.Add(selectedFileName);
-		//		else
-		//		{
-		//			// Obtiene la lista de todos los archivos
-		//			files = LibHelper.Files.HelperFiles.ListRecursive(GetSelectedFolder(), $"*{extension}");
-		//			// Quita los archivos que no coincidan con la máscara
-		//			for (int index = files.Count - 1; index	>= 0; index--)
-		//				if (!files[index].EndsWith(extension, StringComparison.CurrentCultureIgnoreCase))
-		//					files.RemoveAt(index);
-		//			// Ordena los archivos
-		//			files.Sort((first, second) => first.CompareIgnoreNullTo(second));
-		//		}
-		//		// Devuelve la colección de archivos
-		//		return files;
-		//}
-
-		///// <summary>
-		/////		Ejecuta un script de XML
-		///// </summary>
-		//private void ExecuteEtlScript(string fileName)
-		//{
-		//	MainViewModel.MainViewModel.MainController.MainWindowController.OpenWindow(new Details.EtlProjects.ExecuteEtlConsoleViewModel(MainViewModel, fileName));
-		//}
-
-		///// <summary>
-		/////		Comprueba si se puede ejecutar un script
-		///// </summary>
-		//private bool CanExecuteScript()
-		//{
-		//	string fileName = GetSelectedFile();
-
-		//		return (!string.IsNullOrWhiteSpace(fileName) && fileName.EndsWith(".sql", StringComparison.CurrentCultureIgnoreCase)) ||
-		//					!string.IsNullOrWhiteSpace(GetSelectedFolder());
-		//}
+				// Obtiene las opciones de menú asociadas al nodo
+				if (SelectedNode != null && SelectedNode is NodeFileViewModel node)
+					foreach (Base.Models.FileOptionsModel option in PluginsFileOptions)
+						if (option.Check(node.IsFolder, node.FileName))
+							menus.Add(option.Menu);
+				// Devuelve la lista de menús
+				return menus;
+		}
 
 		/// <summary>
 		///		Obtiene el archivo seleccionado
@@ -650,6 +590,11 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 		///		ViewModel principal
 		/// </summary>
 		public PluginsStudioViewModel MainViewModel { get; }
+
+		/// <summary>
+		///		Opciones de los plugins asociadas a los archivos
+		/// </summary>
+		public List<Base.Models.FileOptionsModel> PluginsFileOptions { get; private set; }
 
 		/// <summary>
 		///		Comando para añadir un directorio de archivos a la solución

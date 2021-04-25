@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -56,7 +57,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Connections
 			// Asigna la solución y el viewmodel de parámetros de ejecución
 			SolutionViewModel = solutionViewModel;
 			// Asigna los comandos
-			ExecuteScripCommand = new BaseCommand(async _ => await ExecuteScriptAsync(), _ => !IsExecuting)
+			ExecuteFileCommand = new BaseCommand(parameter => ExecuteFolderFile(parameter));
+			ExecuteScriptCommand = new BaseCommand(async _ => await ExecuteScriptAsync(), _ => !IsExecuting)
 													.AddListener(this, nameof(IsExecuting));
 			CancelScriptExecutionCommand = new BaseCommand(_ => CancelScriptExecution(), _ => IsExecuting)
 													.AddListener(this, nameof(IsExecuting));
@@ -552,6 +554,54 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Connections
 		}
 
 		/// <summary>
+		///		Ejecuta el script de un archivo o una carpeta
+		/// </summary>
+		private void ExecuteFolderFile(object parameter)
+		{
+			if (parameter != null && parameter is string fileName && !string.IsNullOrWhiteSpace(fileName))
+			{
+				// Si el archivo seleccionado es XML, lo ejecuta sobre una consola, si no se ejecutan los SQL del directorio / archivo
+				if (fileName.EndsWith(".xml", StringComparison.CurrentCultureIgnoreCase))
+					SolutionViewModel.MainController.AppController.OpenWindow(new ExecuteEtlConsoleViewModel(SolutionViewModel, fileName));
+				else
+				{
+					List<string> files = GetFilesFromPath(fileName, ".sql");
+
+						// Ejecuta los archivos (si ha encontrado alguno)
+						if (files.Count == 0)
+							SolutionViewModel.MainController.SystemController.ShowMessage("No se encuentra ningún archivo SQL para ejecutar");
+						else
+							SolutionViewModel.MainController.AppController.OpenWindow(new ExecuteFilesViewModel(SolutionViewModel, files));
+				}
+			}
+		}
+
+		/// <summary>
+		///		Obtiene los archivos SQL de un directorio (o el archivo seleccionado)
+		/// </summary>
+		private List<string> GetFilesFromPath(string selectedFileName, string extension)
+		{
+			List<string> files = new List<string>();
+
+				// Obtiene el archivo seleccionado o los archivos de un directorio
+				if (System.IO.Directory.Exists(selectedFileName))
+				{
+					// Obtiene la lista de todos los archivos
+					files = LibHelper.Files.HelperFiles.ListRecursive(selectedFileName, $"*{extension}");
+					// Quita los archivos que no coincidan con la máscara
+					for (int index = files.Count - 1; index >= 0; index--)
+						if (!files[index].EndsWith(extension, StringComparison.CurrentCultureIgnoreCase))
+							files.RemoveAt(index);
+					// Ordena los archivos
+					files.Sort((first, second) => first.CompareIgnoreNullTo(second));
+				}
+				else if (selectedFileName.EndsWith(extension, StringComparison.CurrentCultureIgnoreCase))
+					files.Add(selectedFileName);
+				// Devuelve la colección de archivos
+				return files;
+		}
+
+		/// <summary>
 		///		ViewModel de la solución
 		/// </summary>
 		public SolutionViewModel SolutionViewModel { get; }
@@ -658,7 +708,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Connections
 		/// <summary>
 		///		Comando de ejecución de un script
 		/// </summary>
-		public BaseCommand ExecuteScripCommand { get; }
+		public BaseCommand ExecuteScriptCommand { get; }
 
 		/// <summary>
 		///		Comando para cancelar la ejecución de un script
@@ -680,6 +730,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Connections
 		/// </summary>
 		public BaseCommand ExportDataBaseCommand { get; }
 
-		// SolutionViewModel.ConnectionExecutionViewModel.LastParameterFiles
+		/// <summary>
+		///		Ejecuta un archivo / directorio
+		/// </summary>
+		public BaseCommand ExecuteFileCommand { get; }
 	}
 }

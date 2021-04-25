@@ -9,6 +9,22 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Models
 	public class FileOptionsModel
 	{
 		/// <summary>
+		///		Comprueba si esta opción se corresponde con una carpeta / archivo
+		/// </summary>
+		public bool Check(bool isFolder, string fileName)
+		{
+			// Comprueba si la carpeta / extensión coincide con las condiciones
+			if (isFolder && ForFolder)
+				return true;
+			else if (!isFolder && !string.IsNullOrWhiteSpace(fileName))
+				foreach (string extension in FileExtension)
+					if (fileName.EndsWith(extension, StringComparison.CurrentCultureIgnoreCase))
+						return true;
+			// Si ha llegado hasta aquí es porque no se corresponde
+			return false;
+		}
+
+		/// <summary>
 		///		Id principal
 		/// </summary>
 		public string Id { get; set; } = Guid.NewGuid().ToString();
