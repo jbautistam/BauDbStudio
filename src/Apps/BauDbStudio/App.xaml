@@ -18,9 +18,7 @@
 			<converter:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter" />
 			<converter:MVVMColorConverter x:Key="MVVMColorConverter" />
 			<!-- Conversores locales -->
-			<converterLocal:FileIconConverter x:Key="FileIconConverter" />
 			<converterLocal:FileNameIconConverter x:Key="FileNameIconConverter" />
-			<converterLocal:SortIconConverter x:Key="SortIconConverter" />
 		</ResourceDictionary>
 	</Application.Resources>
 </Application>

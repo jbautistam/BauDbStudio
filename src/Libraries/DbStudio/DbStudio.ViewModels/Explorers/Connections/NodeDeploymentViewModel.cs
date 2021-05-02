@@ -13,7 +13,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 	public class NodeDeploymentViewModel : BaseTreeNodeViewModel
 	{
 		public NodeDeploymentViewModel(TreeSolutionBaseViewModel trvTree, IHierarchicalViewModel parent, DeploymentModel deployment) : 
-					base(trvTree, parent, deployment.Name, NodeType.Deployment, IconType.Deployment, deployment, false, false, MvvmColor.Black)
+					base(trvTree, parent, deployment.Name, TreeConnectionsViewModel.NodeType.Deployment.ToString(), 
+						 TreeConnectionsViewModel.IconType.Deployment.ToString(), deployment, false, false, MvvmColor.Black)
 		{
 			Deployment = deployment;
 		}

@@ -141,9 +141,9 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers
 		/// <summary>
 		///		Obtiene el tipo de nodo seleccionado
 		/// </summary>
-		protected BaseTreeNodeViewModel.NodeType GetSelectedNodeType()
+		protected string GetSelectedNodeType()
 		{
-			return SelectedNode?.Type ?? BaseTreeNodeViewModel.NodeType.Unknown;
+			return SelectedNode?.Type;
 		}
 
 		/// <summary>

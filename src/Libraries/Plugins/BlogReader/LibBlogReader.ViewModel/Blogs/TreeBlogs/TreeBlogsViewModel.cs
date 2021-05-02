@@ -17,6 +17,14 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs.TreeBlogs
 	{   
 		// Constantes privadas
 		private const string OpmlFilter = "Archivos OPML (*.opml)|*.opml|Todos los archivos (*.*)|*.*";
+		// Enumerados públicos
+		/// <summary>Tipo de nodo</summary>
+		public enum NodeType
+		{
+			Unknown,
+			Folder,
+			Blog
+		}
 
 		public TreeBlogsViewModel(BlogReaderViewModel mainViewModel)
 		{

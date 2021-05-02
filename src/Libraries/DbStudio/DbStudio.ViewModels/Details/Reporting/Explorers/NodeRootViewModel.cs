@@ -1,5 +1,6 @@
 ﻿using System;
 
+using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.LibReporting.Models.DataWarehouses;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.Dimensions;
@@ -15,25 +16,26 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 	/// </summary>
 	public class NodeRootViewModel : BaseTreeNodeViewModel
 	{
-		public NodeRootViewModel(BaseTreeViewModel trvTree, IHierarchicalViewModel parent, NodeType type, string text, bool lazyLoad = true, bool bold = true, MvvmColor color = null) :
-					base(trvTree, parent, text, type, IconType.Connection, type, lazyLoad, bold, color ?? MvvmColor.Red)
+		public NodeRootViewModel(BaseTreeViewModel trvTree, IHierarchicalViewModel parent, TreeReportingViewModel.NodeType type, 
+								 string text, bool lazyLoad = true, bool bold = true, MvvmColor color = null) :
+					base(trvTree, parent, text, type.ToString(), TreeReportingViewModel.IconType.Unknown.ToString(), type, lazyLoad, bold, color ?? MvvmColor.Red)
 		{
-			switch (type)
+			switch (NodeType)
 			{
-				case NodeType.DimensionsRoot:
-						Icon = IconType.Dimension;
+				case TreeReportingViewModel.NodeType.DimensionsRoot:
+						Icon = TreeReportingViewModel.IconType.Dimension.ToString();
 					break;
-				case NodeType.DataSourcesRoot:
-						Icon = IconType.Schema;
+				case TreeReportingViewModel.NodeType.DataSourcesRoot:
+						Icon = TreeReportingViewModel.IconType.Schema.ToString();
 					break;
-				case NodeType.ReportsRoot:
-						Icon = IconType.Report;
+				case TreeReportingViewModel.NodeType.ReportsRoot:
+						Icon = TreeReportingViewModel.IconType.Report.ToString();
 					break;
-				case NodeType.File:
-						Icon = IconType.Field;
+				case TreeReportingViewModel.NodeType.File:
+						Icon = TreeReportingViewModel.IconType.Field.ToString();
 					break;
-				case NodeType.Table:
-						Icon = IconType.Path;
+				case TreeReportingViewModel.NodeType.Table:
+						Icon = TreeReportingViewModel.IconType.Path.ToString();
 					break;
 			}
 		}
@@ -43,15 +45,15 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 		/// </summary>
 		protected override void LoadNodes()
 		{
-			switch (Type)
+			switch (NodeType)
 			{
-				case NodeType.DataSourcesRoot:
+				case TreeReportingViewModel.NodeType.DataSourcesRoot:
 						LoadDataSources();
 					break;
-				case NodeType.DimensionsRoot:
+				case TreeReportingViewModel.NodeType.DimensionsRoot:
 						LoadDimensions();
 					break;
-				case NodeType.ReportsRoot:
+				case TreeReportingViewModel.NodeType.ReportsRoot:
 						LoadReports();
 					break;
 			}
@@ -102,6 +104,22 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 				return nodeDataWarehouse.DataWarehouse;
 			else
 				return null;
+		}
+
+		/// <summary>
+		///		Tipo de nodo
+		/// </summary>
+		private TreeReportingViewModel.NodeType NodeType
+		{
+			get { return Type.GetEnum(TreeReportingViewModel.NodeType.Unknown); }
+		}
+
+		/// <summary>
+		///		Tipo de icono
+		/// </summary>
+		private TreeReportingViewModel.IconType IconType
+		{
+			get { return Icon.GetEnum(TreeReportingViewModel.IconType.Unknown); }
 		}
 	}
 }

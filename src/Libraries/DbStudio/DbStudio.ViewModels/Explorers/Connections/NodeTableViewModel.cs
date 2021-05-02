@@ -11,12 +11,13 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 	public class NodeTableViewModel : BaseTreeNodeViewModel
 	{
 		public NodeTableViewModel(TreeSolutionBaseViewModel trvTree, NodeConnectionViewModel parent, ConnectionTableModel table, bool isTable) : 
-					base(trvTree, parent, table.FullName, NodeType.Table, IconType.Table, table, true, true, BauMvvm.ViewModels.Media.MvvmColor.Navy)
+					base(trvTree, parent, table.FullName, TreeConnectionsViewModel.NodeType.Table.ToString(), 
+						 TreeConnectionsViewModel.IconType.Table.ToString(), table, true, true, BauMvvm.ViewModels.Media.MvvmColor.Navy)
 		{
 			Table = table;
 			IsTable = isTable;
 			if (!IsTable)
-				Icon = IconType.View;
+				Icon = TreeConnectionsViewModel.IconType.View.ToString();
 		}
 
 		/// <summary>

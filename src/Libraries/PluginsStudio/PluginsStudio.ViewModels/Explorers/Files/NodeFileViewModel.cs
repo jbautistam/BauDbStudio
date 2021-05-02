@@ -1,5 +1,6 @@
 ﻿using System;
 
+using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
 using Bau.Libraries.BauMvvm.ViewModels.Media;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
@@ -16,7 +17,8 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 		private bool _isFolder;
 
 		public NodeFileViewModel(TreeFilesViewModel trvTree, IHierarchicalViewModel parent, string fileName, bool isFolder) 
-					: base(trvTree, parent, string.Empty, NodeType.File, isFolder ? IconType.Path : IconType.File, 
+					: base(trvTree, parent, string.Empty, TreeFilesViewModel.NodeType.File.ToString(), 
+						   (isFolder ? TreeFilesViewModel.IconType.Path : TreeFilesViewModel.IconType.File).ToString(), 
 						   fileName, isFolder, isFolder,
 						   isFolder ? MvvmColor.Navy : MvvmColor.Black)
 		{
@@ -79,6 +81,22 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 		{
 			get { return _isFolder; }
 			set { CheckProperty(ref _isFolder, value); }
+		}
+
+		/// <summary>
+		///		Tipo de nodo
+		/// </summary>
+		public TreeFilesViewModel.NodeType NodeType
+		{
+			get { return Type.GetEnum(TreeFilesViewModel.NodeType.Unknown); }
+		}
+
+		/// <summary>
+		///		Tipo de icono
+		/// </summary>
+		public TreeFilesViewModel.IconType IconType
+		{
+			get { return Icon.GetEnum(TreeFilesViewModel.IconType.Unknown); }
 		}
 	}
 }

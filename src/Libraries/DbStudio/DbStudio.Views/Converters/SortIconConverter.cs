@@ -3,7 +3,7 @@ using System.Windows.Data;
 
 using Bau.Libraries.LibReporting.Requests.Models;
 
-namespace Bau.DbStudio.Converters
+namespace Bau.Libraries.DbStudio.Views.Converters
 {
 	/// <summary>
 	///		Conversor de iconos para el tipo de ordenación

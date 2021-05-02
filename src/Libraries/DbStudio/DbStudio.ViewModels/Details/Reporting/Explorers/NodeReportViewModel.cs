@@ -12,7 +12,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 	public class NodeReportViewModel : BaseTreeNodeViewModel
 	{
 		public NodeReportViewModel(BaseTreeViewModel trvTree, BaseTreeNodeViewModel parent, ReportModel report) : 
-					base(trvTree, parent, report.Id, NodeType.Report, IconType.Report, report, true, true, BauMvvm.ViewModels.Media.MvvmColor.Navy)
+					base(trvTree, parent, report.Id, TreeReportingViewModel.NodeType.Report.ToString(), TreeReportingViewModel.IconType.Report.ToString(), 
+						 report, true, true, BauMvvm.ViewModels.Media.MvvmColor.Navy)
 		{
 			Report = report;
 		}
@@ -24,7 +25,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 		{
 			foreach (ReportDataSourceModel expression in Report.ReportDataSources)
 			{
-				NodeRootViewModel parentDataSource = new NodeRootViewModel(TreeViewModel, this, NodeType.Table, expression.DataSource.Id, false);
+				NodeRootViewModel parentDataSource = new NodeRootViewModel(TreeViewModel, this, TreeReportingViewModel.NodeType.Table, expression.DataSource.Id, false);
 
 					// Añade el nodo raíz
 					Children.Add(parentDataSource);
@@ -42,14 +43,14 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 		{
 			foreach (DimensionRelationModel relation in expression.Relations)
 			{
-				NodeRootViewModel parentDimension = new NodeRootViewModel(TreeViewModel, parentDataSource, NodeType.DimensionsRoot, relation.Dimension.Id, false,
+				NodeRootViewModel parentDimension = new NodeRootViewModel(TreeViewModel, parentDataSource, TreeReportingViewModel.NodeType.DimensionsRoot, relation.Dimension.Id, false,
 																		  true, BauMvvm.ViewModels.Media.MvvmColor.Navy);
 
 					// Añade el campo raíz al árbol
 					parentDataSource.Children.Add(parentDimension);
 					// Añade los campos de la relación
 					foreach (RelationForeignKey column in relation.ForeignKeys)
-						parentDimension.Children.Add(new NodeRootViewModel(TreeViewModel, parentDimension, NodeType.File, 
+						parentDimension.Children.Add(new NodeRootViewModel(TreeViewModel, parentDimension, TreeReportingViewModel.NodeType.File, 
 																			$"{column.ColumnId} -> {column.TargetColumnId}", false,
 																			false, BauMvvm.ViewModels.Media.MvvmColor.Black));
 			}

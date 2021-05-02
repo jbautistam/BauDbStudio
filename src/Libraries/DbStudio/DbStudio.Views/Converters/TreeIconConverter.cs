@@ -2,14 +2,14 @@
 using System.Windows.Data;
 
 using Bau.Libraries.LibHelper.Extensors;
-using Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files;
+using Bau.Libraries.DbStudio.ViewModels.Explorers.Connections;
 
-namespace Bau.DbStudio.Converters
+namespace Bau.Libraries.DbStudio.Views.Converters
 {
 	/// <summary>
 	///		Conversor de iconos
 	/// </summary>
-	public class FileIconConverter : IValueConverter
+	public class TreeIconConverter : IValueConverter
 	{
 		/// <summary>
 		///		Convierte un tipo en un icono
@@ -17,7 +17,7 @@ namespace Bau.DbStudio.Converters
 		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
 		{ 
 			if (value is string iconName)
-				return GetIcon(iconName.GetEnum(TreeFilesViewModel.IconType.Unknown));
+				return GetIcon(iconName.GetEnum(TreeConnectionsViewModel.IconType.Unknown));
 			else
 				return null;
 		}
@@ -25,41 +25,41 @@ namespace Bau.DbStudio.Converters
 		/// <summary>
 		///		Obtiene la imagen asociada a un icono
 		/// </summary>
-		private object GetIcon(TreeFilesViewModel.IconType icon)
+		private object GetIcon(TreeConnectionsViewModel.IconType icon)
 		{
 			switch (icon)
 			{ 
-				case TreeFilesViewModel.IconType.Connection:
+				case TreeConnectionsViewModel.IconType.Connection:
 					return "/Resources/Images/Connection.png";
-				case TreeFilesViewModel.IconType.Schema:
+				case TreeConnectionsViewModel.IconType.Schema:
 					return "/Resources/Images/Schema.png";
-				case TreeFilesViewModel.IconType.Deployment:
+				case TreeConnectionsViewModel.IconType.Deployment:
 					return "/Resources/Images/Deployment.png";
-				case TreeFilesViewModel.IconType.Storage:
+				case TreeConnectionsViewModel.IconType.Storage:
 					return "/Resources/Images/Storage.png";
-				case TreeFilesViewModel.IconType.Project:
+				case TreeConnectionsViewModel.IconType.Project:
 					return "/Resources/Images/Project.png";
-				case TreeFilesViewModel.IconType.Path:
+				case TreeConnectionsViewModel.IconType.Path:
 					return "/Resources/Images/FolderNode.png";
-				case TreeFilesViewModel.IconType.File:
+				case TreeConnectionsViewModel.IconType.File:
 					return "/Resources/Images/File.png";
-				case TreeFilesViewModel.IconType.Table:
+				case TreeConnectionsViewModel.IconType.Table:
 					return "/Resources/Images/Table.png";
-				case TreeFilesViewModel.IconType.View:
+				case TreeConnectionsViewModel.IconType.View:
 					return "/Resources/Images/View.png";
-				case TreeFilesViewModel.IconType.Key:
+				case TreeConnectionsViewModel.IconType.Key:
 					return "/Resources/Images/Key.png";
-				case TreeFilesViewModel.IconType.Field:
+				case TreeConnectionsViewModel.IconType.Field:
 					return "/Resources/Images/Field.png";
-				case TreeFilesViewModel.IconType.Error:
+				case TreeConnectionsViewModel.IconType.Error:
 					return "/Resources/Images/DataError.png";
-				case TreeFilesViewModel.IconType.Loading:
+				case TreeConnectionsViewModel.IconType.Loading:
 					return "/Resources/Images/Loading.png";
-				case TreeFilesViewModel.IconType.DataSourceSql:
+				case TreeConnectionsViewModel.IconType.DataSourceSql:
 					return "/Resources/Images/FileSql.png";
-				case TreeFilesViewModel.IconType.Report:
+				case TreeConnectionsViewModel.IconType.Report:
 					return "/Resources/Images/Report.png";
-				case TreeFilesViewModel.IconType.Dimension:
+				case TreeConnectionsViewModel.IconType.Dimension:
 					return "/Resources/Images/ReportDimension.png";
 				default:
 					return null;

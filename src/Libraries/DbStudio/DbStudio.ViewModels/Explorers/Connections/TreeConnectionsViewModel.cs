@@ -1,8 +1,8 @@
 ﻿using System;
 
+using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.DbStudio.Models.Connections;
-using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 {
@@ -11,6 +11,74 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 	/// </summary>
 	public class TreeConnectionsViewModel : TreeSolutionBaseViewModel
 	{
+		/// <summary>
+		///		Tipo de nodo
+		/// </summary>
+		public enum NodeType
+		{
+			/// <summary>Desconocido. No se debería utilizar</summary>
+			Unknown,
+			/// <summary>Raíz de la conexión</summary>
+			ConnectionRoot,
+			/// <summary>Conexión</summary>
+			Connection,
+			/// <summary>Esquema de una conexión</summary>
+			SchemaRoot,
+			/// <summary>Tabla</summary>
+			Table,
+			/// <summary>Raíz de la distribución</summary>
+			DeploymentRoot,
+			/// <summary>Distribución</summary>
+			Deployment,
+			/// <summary>Raíz de archivos de proyecto</summary>
+			FilesRoot,
+			/// <summary>Archivo / directorio</summary>
+			File,
+			/// <summary>Conexión a storage</summary>
+			Storage,
+			/// <summary>Contenedor de storage</summary>
+			StorageContainer,
+			/// <summary>Mensaje (transitorio)</summary>
+			Message,
+			/// <summary>Almacén de datos</summary>
+			DataWarehouse,
+			/// <summary>Raíz de origen de datos</summary>
+			DataSourcesRoot,
+			/// <summary>Origen de datos</summary>
+			DataSource,
+			/// <summary>Raíz de dimensiones</summary>
+			DimensionsRoot,
+			/// <summary>Dimensión</summary>
+			Dimension,
+			/// <summary>Raíz de informes</summary>
+			ReportsRoot,
+			/// <summary>Informe</summary>
+			Report
+		}
+		/// <summary>
+		///		Tipo de icono
+		/// </summary>
+		public enum IconType
+		{
+			Unknown,
+			Connection,
+			Deployment,
+			Project,
+			Path,
+			File,
+			Schema,
+			Table,
+			View,
+			Key,
+			Field,
+			Error,
+			Loading,
+			Storage,
+			Report,
+			DataSourceSql,
+			Dimension
+		}
+
 		public TreeConnectionsViewModel(SolutionViewModel solutionViewModel) : base(solutionViewModel)
 		{
 			NewConnectionCommand = new BaseCommand(_ => OpenConnection(null), _ => CanExecuteAction(nameof(NewConnectionCommand)))
@@ -27,8 +95,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 		/// </summary>
 		protected override void AddRootNodes()
 		{
-			Children.Add(new NodeRootViewModel(this, null, BaseTreeNodeViewModel.NodeType.ConnectionRoot, "Conexiones"));
-			Children.Add(new NodeRootViewModel(this, null, BaseTreeNodeViewModel.NodeType.DeploymentRoot, "Distribución"));
+			Children.Add(new NodeRootViewModel(this, null, NodeType.ConnectionRoot, "Conexiones"));
+			Children.Add(new NodeRootViewModel(this, null, NodeType.DeploymentRoot, "Distribución"));
 		}
 
 		/// <summary>
@@ -36,7 +104,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 		/// </summary>
 		protected override bool CanExecuteAction(string action)
 		{
-			BaseTreeNodeViewModel.NodeType nodeType = GetSelectedNodeType();
+			TreeConnectionsViewModel.NodeType nodeType = GetSelectedNodeTypeConverted();
 
 				switch (action)
 				{
@@ -44,13 +112,13 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 					case nameof(NewDeploymentCommand):
 						return true;
 					case nameof(OpenCommand):
-						return nodeType == BaseTreeNodeViewModel.NodeType.Connection || 
-							   nodeType == BaseTreeNodeViewModel.NodeType.Deployment ||  
-							   nodeType == BaseTreeNodeViewModel.NodeType.Table;
+						return nodeType == NodeType.Connection || 
+							   nodeType == NodeType.Deployment ||  
+							   nodeType == NodeType.Table;
 					case nameof(ExecuteDeploymentCommand):
-						return nodeType == BaseTreeNodeViewModel.NodeType.Deployment;
+						return nodeType == NodeType.Deployment;
 					case nameof(DeleteCommand):
-						return nodeType == BaseTreeNodeViewModel.NodeType.Connection || nodeType == BaseTreeNodeViewModel.NodeType.Deployment;
+						return nodeType == NodeType.Connection || nodeType == NodeType.Deployment;
 					default:
 						return false;
 				}
@@ -61,15 +129,15 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 		/// </summary>
 		protected override void OpenProperties()
 		{
-			switch (GetSelectedNodeType())
+			switch (GetSelectedNodeTypeConverted())
 			{
-				case BaseTreeNodeViewModel.NodeType.Connection:
+				case NodeType.Connection:
 						OpenConnection((SelectedNode as NodeConnectionViewModel)?.Tag as ConnectionModel);
 					break;
-				case BaseTreeNodeViewModel.NodeType.Deployment:
+				case NodeType.Deployment:
 						OpenDeployment((SelectedNode as NodeDeploymentViewModel)?.Tag as Models.Deployments.DeploymentModel);
 					break;
-				case BaseTreeNodeViewModel.NodeType.Table:
+				case NodeType.Table:
 						OpenQuery((SelectedNode as NodeTableViewModel)?.Tag as ConnectionTableModel);
 					break;
 			}
@@ -285,6 +353,14 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 				// Actualiza el árbol
 				Load();
 			}
+		}
+
+		/// <summary>
+		///		Obtiene el enumerado del tipo de nodo seleccionado
+		/// </summary>
+		private NodeType GetSelectedNodeTypeConverted()
+		{
+			return GetSelectedNodeType().GetEnum(NodeType.Unknown);
 		}
 
 		/// <summary>

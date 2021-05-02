@@ -4,8 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 			 xmlns:ViewModel="clr-namespace:Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries;assembly=DbStudio.ViewModels"
+			 xmlns:ConverterLocal="clr-namespace:Bau.Libraries.DbStudio.Views.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+	<UserControl.Resources>
+		<ConverterLocal:TreeIconConverter x:Key="TreeIconConverter"/>
+		<ConverterLocal:SortIconConverter x:Key="SortIconConverter"/>
+	</UserControl.Resources>
 	<Grid>
 		<TreeView x:Name="trvExplorer" BorderThickness="0"
 				ItemsSource="{Binding Path=Children}"
@@ -14,7 +19,7 @@
 				<!-- Plantilla de los nodos -->
 				<HierarchicalDataTemplate DataType="{x:Type ViewModel:NodeColumnViewModel}" ItemsSource="{Binding Children}">
 					<StackPanel Orientation="Horizontal">
-						<Image Width="20" Height="20" Margin="3,0" Source="{Binding Path=Icon,Converter={StaticResource FileIconConverter}}"
+						<Image Width="20" Height="20" Margin="3,0" Source="{Binding Path=Icon,Converter={StaticResource TreeIconConverter}}"
 							Visibility="{Binding Path=CanSelect,Converter={StaticResource InverseBoolToVisibilityConverter}}"
 							 ToolTip="{Binding Path=ToolTipText}" />
 						<CheckBox Visibility="{Binding Path=CanSelect,Converter={StaticResource BoolToVisibilityConverter}}"

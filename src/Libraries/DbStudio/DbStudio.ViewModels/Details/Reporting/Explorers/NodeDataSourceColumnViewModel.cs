@@ -11,11 +11,11 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 	public class NodeDataSourceColumnViewModel : BaseTreeNodeViewModel
 	{
 		public NodeDataSourceColumnViewModel(BaseTreeViewModel trvTree, BaseTreeNodeViewModel parent, DataSourceColumnModel column) : 
-					base(trvTree, parent, column.Id, NodeType.Table, IconType.Field, column, false)
+					base(trvTree, parent, column.Id, TreeReportingViewModel.NodeType.Table.ToString(), TreeReportingViewModel.IconType.Field.ToString(), column, false)
 		{
 			Column = column;
 			if (column.IsPrimaryKey)
-				Icon = IconType.Key;
+				Icon = TreeReportingViewModel.IconType.Key.ToString();
 			if (!column.Visible)
 				Foreground = BauMvvm.ViewModels.Media.MvvmColor.Gray;
 		}

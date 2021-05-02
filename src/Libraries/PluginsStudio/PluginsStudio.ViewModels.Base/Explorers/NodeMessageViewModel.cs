@@ -7,15 +7,13 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers
 	/// </summary>
 	public class NodeMessageViewModel : BaseTreeNodeViewModel
 	{
-		public NodeMessageViewModel(BaseTreeViewModel trvTree, BaseTreeNodeViewModel parent, string message, IconType icon = IconType.Loading) : 
-					base(trvTree, parent, message, NodeType.Message, icon, null, false, false, BauMvvm.ViewModels.Media.MvvmColor.DarkGreen)
+		public NodeMessageViewModel(BaseTreeViewModel trvTree, BaseTreeNodeViewModel parent, string message, string type = "Message", string icon = "Loading") : 
+					base(trvTree, parent, message, type, icon, null, false, false, BauMvvm.ViewModels.Media.MvvmColor.DarkGreen)
 		{
-			if (icon == IconType.Error)
-				Foreground = BauMvvm.ViewModels.Media.MvvmColor.Red;
 		}
 
 		/// <summary>
-		///		Carga los nodos de la tabla
+		///		Carga los nodos
 		/// </summary>
 		protected override void LoadNodes()
 		{

@@ -18,6 +18,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs.TreeBlogs
 		{
 			MainViewModel = mainViewModel;
 			Blog = blog;
+			Icon = TreeBlogsViewModel.NodeType.Blog.ToString();
 			if (blog.Enabled)
 				Foreground = BauMvvm.ViewModels.Media.MvvmColor.Black;
 			else

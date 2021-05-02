@@ -18,7 +18,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Cloud
 
 		public NodeStorageContainerFileViewModel(BaseTreeViewModel trvTree, IHierarchicalViewModel parent, 
 												 StorageModel storage, BlobNodeModel blob, bool isFolder)
-					: base(trvTree, parent, blob.Name, NodeType.File, isFolder ? IconType.Path : IconType.File, 
+					: base(trvTree, parent, blob.Name, TreeStorageViewModel.NodeType.File.ToString(), 
+						   (isFolder ? TreeStorageViewModel.IconType.Path : TreeStorageViewModel.IconType.File).ToString(), 
 						   blob, false, isFolder,
 						   isFolder ? MvvmColor.Navy : MvvmColor.Black)
 		{

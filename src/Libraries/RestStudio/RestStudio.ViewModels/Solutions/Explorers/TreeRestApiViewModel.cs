@@ -7,6 +7,18 @@ namespace Bau.Libraries.RestStudio.ViewModels.Solutions.Explorers
 	/// </summary>
 	public class TreeRestApiViewModel : PluginsStudio.ViewModels.Base.Explorers.BaseTreeViewModel
 	{
+		// Tipos públicos
+		/// <summary>Tipo de nodo</summary>
+		public enum NodeType
+		{
+			Unknown
+		}
+		/// <summary>Tipo de icono</summary>
+		public enum IconType
+		{
+			Unknown
+		}
+
 		public TreeRestApiViewModel(SolutionViewModel solutionViewModel)
 		{
 			// Asigna las propiedades

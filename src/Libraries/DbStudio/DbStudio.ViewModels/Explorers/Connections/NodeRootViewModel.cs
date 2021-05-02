@@ -1,5 +1,6 @@
 ﻿using System;
 
+using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
 using Bau.Libraries.BauMvvm.ViewModels.Media;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
@@ -11,19 +12,19 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 	/// </summary>
 	public class NodeRootViewModel : BaseTreeNodeViewModel
 	{
-		public NodeRootViewModel(TreeSolutionBaseViewModel trvTree, IHierarchicalViewModel parent, NodeType type, string text, bool lazyLoad = true) :
-					base(trvTree, parent, text, type, IconType.Connection, type, lazyLoad, true, MvvmColor.Red)
+		public NodeRootViewModel(TreeSolutionBaseViewModel trvTree, IHierarchicalViewModel parent, TreeConnectionsViewModel.NodeType type, string text, bool lazyLoad = true) :
+					base(trvTree, parent, text, type.ToString(), TreeConnectionsViewModel.IconType.Connection.ToString(), type, lazyLoad, true, MvvmColor.Red)
 		{
 			switch (type)
 			{
-				case NodeType.ConnectionRoot:
-						Icon = IconType.Connection;
+				case TreeConnectionsViewModel.NodeType.ConnectionRoot:
+						Icon = TreeConnectionsViewModel.IconType.Connection.ToString();
 					break;
-				case NodeType.SchemaRoot:
-						Icon = IconType.Schema;
+				case TreeConnectionsViewModel.NodeType.SchemaRoot:
+						Icon = TreeConnectionsViewModel.IconType.Schema.ToString();
 					break;
-				case NodeType.DeploymentRoot:
-						Icon = IconType.Deployment;
+				case TreeConnectionsViewModel.NodeType.DeploymentRoot:
+						Icon = TreeConnectionsViewModel.IconType.Deployment.ToString();
 					break;
 			}
 			PropertyChanged += (sender, args) => {
@@ -37,12 +38,12 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 		/// </summary>
 		protected override void LoadNodes()
 		{
-			switch (Type)
+			switch (NodeType)
 			{
-				case NodeType.ConnectionRoot:
+				case TreeConnectionsViewModel.NodeType.ConnectionRoot:
 						LoadConnectionNodes();
 					break;
-				case NodeType.DeploymentRoot:
+				case TreeConnectionsViewModel.NodeType.DeploymentRoot:
 						LoadDeploymentNodes();
 					break;
 			}
@@ -77,9 +78,17 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 		/// </summary>
 		private void CheckChildNodes()
 		{
-			if (Type == NodeType.SchemaRoot)
+			if (NodeType == TreeConnectionsViewModel.NodeType.SchemaRoot)
 				foreach (BaseTreeNodeViewModel node in Children)
 					node.IsChecked = IsChecked;
+		}
+
+		/// <summary>
+		///		Tipo de nodo
+		/// </summary>
+		public TreeConnectionsViewModel.NodeType NodeType
+		{
+			get { return Type.GetEnum(TreeConnectionsViewModel.NodeType.Unknown); }
 		}
 	}
 }

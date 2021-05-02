@@ -18,6 +18,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs.TreeBlogs
 		{
 			MainViewModel = mainViewModel;
 			Folder = folder;
+			Icon = TreeBlogsViewModel.NodeType.Folder.ToString();
 			Foreground = BauMvvm.ViewModels.Media.MvvmColor.Navy;
 		}
 

@@ -19,7 +19,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Cloud
 	{
 		public NodeStorageContainerViewModel(BaseTreeViewModel trvTree, IHierarchicalViewModel parent, StorageModel storage, 
 											 string container) 
-					: base(trvTree, parent, container, NodeType.StorageContainer, IconType.Path, container, true, 
+					: base(trvTree, parent, container, TreeStorageViewModel.NodeType.StorageContainer.ToString(), TreeStorageViewModel.IconType.Path.ToString(), container, true, 
 						   true, MvvmColor.Green)
 		{
 			Storage = storage;

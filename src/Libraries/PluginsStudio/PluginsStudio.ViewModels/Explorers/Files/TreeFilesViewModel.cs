@@ -11,7 +11,74 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 	///		ViewModel de un árbol de archivos
 	/// </summary>
 	public class TreeFilesViewModel : BaseTreeViewModel
-	{	
+	{
+		/// <summary>
+		///		Tipo de nodo
+		/// </summary>
+		public enum NodeType
+		{
+			/// <summary>Desconocido. No se debería utilizar</summary>
+			Unknown,
+			/// <summary>Raíz de la conexión</summary>
+			ConnectionRoot,
+			/// <summary>Conexión</summary>
+			Connection,
+			/// <summary>Esquema de una conexión</summary>
+			SchemaRoot,
+			/// <summary>Tabla</summary>
+			Table,
+			/// <summary>Raíz de la distribución</summary>
+			DeploymentRoot,
+			/// <summary>Distribución</summary>
+			Deployment,
+			/// <summary>Raíz de archivos de proyecto</summary>
+			FilesRoot,
+			/// <summary>Archivo / directorio</summary>
+			File,
+			/// <summary>Conexión a storage</summary>
+			Storage,
+			/// <summary>Contenedor de storage</summary>
+			StorageContainer,
+			/// <summary>Mensaje (transitorio)</summary>
+			Message,
+			/// <summary>Almacén de datos</summary>
+			DataWarehouse,
+			/// <summary>Raíz de origen de datos</summary>
+			DataSourcesRoot,
+			/// <summary>Origen de datos</summary>
+			DataSource,
+			/// <summary>Raíz de dimensiones</summary>
+			DimensionsRoot,
+			/// <summary>Dimensión</summary>
+			Dimension,
+			/// <summary>Raíz de informes</summary>
+			ReportsRoot,
+			/// <summary>Informe</summary>
+			Report
+		}
+		/// <summary>
+		///		Tipo de icono
+		/// </summary>
+		public enum IconType
+		{
+			Unknown,
+			Connection,
+			Deployment,
+			Project,
+			Path,
+			File,
+			Schema,
+			Table,
+			View,
+			Key,
+			Field,
+			Error,
+			Loading,
+			Storage,
+			Report,
+			DataSourceSql,
+			Dimension
+		}
 		// Variables privadas
 		private NodeFileViewModel _nodeToCopy;
 
@@ -101,16 +168,16 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 		/// </summary>
 		protected override bool CanExecuteAction(string action)
 		{
-			BaseTreeNodeViewModel.NodeType type = GetSelectedNodeType();
+			NodeType type = GetSelectedNodeType().GetEnum(NodeType.Unknown);
 			bool isFolder = SelectedNode is NodeFolderRootViewModel || ((SelectedNode as NodeFileViewModel)?.IsFolder ?? false);
 
 				// Devuelve el valor que indica si puede ejecutar la acción
 				switch (action)
 				{
 					case nameof(OpenCommand):
-						return type == BaseTreeNodeViewModel.NodeType.File && !isFolder;
+						return type == NodeType.File && !isFolder;
 					case nameof(CopyCommand):
-						return type == BaseTreeNodeViewModel.NodeType.File;
+						return type == NodeType.File;
 					case nameof(PasteCommand):
 						return _nodeToCopy != null && SelectedNode != null && isFolder;
 					case nameof(PasteClipboardImageCommand):
@@ -125,9 +192,9 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 		/// </summary>
 		protected override void OpenProperties()
 		{
-			switch (GetSelectedNodeType())
+			switch (GetSelectedNodeType().GetEnum(NodeType.Unknown))
 			{
-				case BaseTreeNodeViewModel.NodeType.File:
+				case NodeType.File:
 						OpenFile();
 					break;
 			}

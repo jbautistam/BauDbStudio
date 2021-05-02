@@ -11,11 +11,12 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 	public class NodeDataSourceViewModel : BaseTreeNodeViewModel
 	{
 		public NodeDataSourceViewModel(BaseTreeViewModel trvTree, BaseTreeNodeViewModel parent, BaseDataSourceModel dataSource) : 
-					base(trvTree, parent, dataSource.Id, NodeType.DataSource, IconType.Table, dataSource, true, true, BauMvvm.ViewModels.Media.MvvmColor.Navy)
+					base(trvTree, parent, dataSource.Id, TreeReportingViewModel.NodeType.DataSource.ToString(), TreeReportingViewModel.IconType.Table.ToString(), 
+						 dataSource, true, true, BauMvvm.ViewModels.Media.MvvmColor.Navy)
 		{
 			DataSource = dataSource;
 			if (dataSource is DataSourceSqlModel)
-				Icon = IconType.DataSourceSql;
+				Icon = TreeReportingViewModel.IconType.DataSourceSql.ToString();
 		}
 
 		/// <summary>

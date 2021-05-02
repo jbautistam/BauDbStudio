@@ -1,5 +1,6 @@
 ﻿using System;
 
+using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
 using Bau.Libraries.LibBlogReader.Model;
@@ -12,7 +13,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs.TreeBlogs
 	public abstract class BaseBlogsNodeViewModel : BaseTreeNodeAsyncViewModel
 	{
 		public BaseBlogsNodeViewModel(BaseTreeViewModel trvTree, IHierarchicalViewModel parent, string nodeID, string text, bool lazyLoadChildren = true)
-								: base(trvTree, parent, text, NodeType.Unknown, IconType.Connection, null, lazyLoadChildren)
+								: base(trvTree, parent, text, TreeBlogsViewModel.NodeType.Unknown.ToString(), TreeBlogsViewModel.NodeType.Unknown.ToString(), null, lazyLoadChildren)
 		{
 			NodeId = nodeID;
 		}
@@ -31,5 +32,13 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs.TreeBlogs
 		///		Clave del nodo
 		/// </summary>
 		public string NodeId { get; }
+
+		/// <summary>
+		///		Tipo de nodo
+		/// </summary>
+		public TreeBlogsViewModel.NodeType NodeType
+		{
+			get { return Type.GetEnum(TreeBlogsViewModel.NodeType.Unknown); }
+		}
 	}
 }

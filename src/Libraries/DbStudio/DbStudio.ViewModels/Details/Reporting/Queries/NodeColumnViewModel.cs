@@ -38,7 +38,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 		private ListReportColumnFilterViewModel _filterWhere, _filterHaving;
 
 		public NodeColumnViewModel(BaseTreeViewModel trvTree, IHierarchicalViewModel parent, NodeColumnType columnNodeType, string text, DataSourceColumnModel column) :
-					base(trvTree, parent, text, NodeType.ConnectionRoot, IconType.Connection, column, false, false, MvvmColor.Black)
+					base(trvTree, parent, text, Explorers.TreeReportingViewModel.NodeType.ConnectionRoot.ToString(), 
+						 Explorers.TreeReportingViewModel.IconType.Connection.ToString(), column, false, false, MvvmColor.Black)
 		{
 			// Asigna la columna
 			ColumnNodeType = columnNodeType;

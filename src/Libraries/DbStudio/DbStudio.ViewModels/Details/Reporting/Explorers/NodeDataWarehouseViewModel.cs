@@ -13,7 +13,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 	public class NodeDataWarehouseViewModel : BaseTreeNodeViewModel
 	{
 		public NodeDataWarehouseViewModel(BaseTreeViewModel trvTree, IHierarchicalViewModel parent, DataWarehouseModel dataWarehouse) : 
-					base(trvTree, parent, dataWarehouse.Name, NodeType.DataWarehouse, IconType.Connection, dataWarehouse, true, true, MvvmColor.Red)
+					base(trvTree, parent, dataWarehouse.Name, TreeReportingViewModel.NodeType.DataWarehouse.ToString(), TreeReportingViewModel.IconType.Connection.ToString(), 
+						 dataWarehouse, true, true, MvvmColor.Red)
 		{
 			DataWarehouse = dataWarehouse;
 		}
@@ -23,9 +24,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 		/// </summary>
 		protected override void LoadNodes()
 		{
-			Children.Add(new NodeRootViewModel(TreeViewModel, this, NodeType.DataSourcesRoot, "Orígenes de datos", true));
-			Children.Add(new NodeRootViewModel(TreeViewModel, this, NodeType.DimensionsRoot, "Dimensiones", true));
-			Children.Add(new NodeRootViewModel(TreeViewModel, this, NodeType.ReportsRoot, "Informes", true));
+			Children.Add(new NodeRootViewModel(TreeViewModel, this, TreeReportingViewModel.NodeType.DataSourcesRoot, "Orígenes de datos", true));
+			Children.Add(new NodeRootViewModel(TreeViewModel, this, TreeReportingViewModel.NodeType.DimensionsRoot, "Dimensiones", true));
+			Children.Add(new NodeRootViewModel(TreeViewModel, this, TreeReportingViewModel.NodeType.ReportsRoot, "Informes", true));
 		}
 
 		/// <summary>

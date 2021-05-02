@@ -10,6 +10,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers
 	/// </summary>
 	public abstract class BaseTreeNodeViewModel : ControlHierarchicalViewModel
 	{	
+/*
 		/// <summary>
 		///		Tipo de nodo
 		/// </summary>
@@ -78,9 +79,10 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers
 		}
 		// Variables privadas
 		private IconType _icon;
+*/
 
 		public BaseTreeNodeViewModel(BaseTreeViewModel trvTree, IHierarchicalViewModel parent, string text, 
-									 NodeType type, IconType icon, object tag, 
+									 string type, string icon, object tag, 
 									 bool lazyLoad, bool isBold = false, MvvmColor foreground = null) 
 							: base(parent, text, tag, lazyLoad, isBold, foreground)
 		{ 
@@ -129,15 +131,15 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers
 		/// <summary>
 		///		Tipo de nodo
 		/// </summary>
-		public NodeType Type { get; }
+		public string Type { get; }
 
-		/// <summary>
-		///		Icono
-		/// </summary>
-		public IconType Icon 
-		{ 
-			get { return _icon; }
-			set { CheckProperty(ref _icon, value); }
-		}
+		///// <summary>
+		/////		Icono
+		///// </summary>
+		//public IconType Icon 
+		//{ 
+		//	get { return _icon; }
+		//	set { CheckProperty(ref _icon, value); }
+		//}
 	}
 }

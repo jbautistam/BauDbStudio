@@ -11,11 +11,11 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 	public class NodeTableFieldViewModel : BaseTreeNodeViewModel
 	{
 		public NodeTableFieldViewModel(TreeSolutionBaseViewModel trvTree, NodeTableViewModel parent, ConnectionTableFieldModel field) : 
-					base(trvTree, parent, field.FullName, NodeType.Table, IconType.Field, field, false)
+					base(trvTree, parent, field.FullName, TreeConnectionsViewModel.NodeType.Table.ToString(), TreeConnectionsViewModel.IconType.Field.ToString(), field, false)
 		{
 			Field = field;
 			if (field.IsKey)
-				Icon = IconType.Key;
+				Icon = TreeConnectionsViewModel.IconType.Key.ToString();
 		}
 
 		/// <summary>

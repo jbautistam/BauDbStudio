@@ -12,7 +12,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 	public class NodeDimensionViewModel : BaseTreeNodeViewModel
 	{
 		public NodeDimensionViewModel(BaseTreeViewModel trvTree, BaseTreeNodeViewModel parent, DimensionModel dimension) : 
-					base(trvTree, parent, dimension.Id, NodeType.Dimension, IconType.Dimension, dimension, true, true, BauMvvm.ViewModels.Media.MvvmColor.Navy)
+					base(trvTree, parent, dimension.Id, TreeReportingViewModel.NodeType.Dimension.ToString(), TreeReportingViewModel.IconType.Dimension.ToString(), 
+						 dimension, true, true, BauMvvm.ViewModels.Media.MvvmColor.Navy)
 		{
 			Dimension = dimension;
 		}

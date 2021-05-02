@@ -6,7 +6,11 @@
              xmlns:local="clr-namespace:Bau.Libraries.DbStudio.Views.Explorers"
 			 xmlns:ViewModel="clr-namespace:Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;assembly=PluginsStudio.ViewModels.Base"
              mc:Ignorable="d" 
+			 xmlns:ConverterLocal="clr-namespace:Bau.Libraries.DbStudio.Views.Converters"
              d:DesignHeight="450" d:DesignWidth="800">
+	<UserControl.Resources>
+		<ConverterLocal:TreeIconConverter x:Key="TreeIconConverter"/>
+	</UserControl.Resources>
 	<Grid>
 		<TreeView x:Name="trvExplorer" BorderThickness="0"
 				ContextMenu="{DynamicResource ResourceKey=mnuExplorer}" 
@@ -18,7 +22,7 @@
 				<!-- Plantilla de los nodos -->
 				<HierarchicalDataTemplate DataType="{x:Type ViewModel:BaseTreeNodeViewModel}" ItemsSource="{Binding Children}">
 					<StackPanel Orientation="Horizontal">
-						<Image Width="20" Height="20" Margin="3,0" Source="{Binding Path=Icon,Converter={StaticResource FileIconConverter}}"
+						<Image Width="20" Height="20" Margin="3,0" Source="{Binding Path=Icon,Converter={StaticResource TreeIconConverter}}"
 							 ToolTip="{Binding Path=ToolTipText}" />
 						<TextBlock Text="{Binding Text}" FontWeight="{Binding IsBold,Converter={StaticResource BoolToFontWeightConverter}}"
 								   Foreground="{Binding Path=Foreground,Converter={StaticResource MVVMColorConverter}}" 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.LibBlobStorage;
 using Bau.Libraries.LibLogger.Models.Log;
@@ -14,6 +15,73 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Cloud
 	/// </summary>
 	public class TreeStorageViewModel : BaseTreeViewModel
 	{	
+		/// <summary>
+		///		Tipo de nodo
+		/// </summary>
+		public enum NodeType
+		{
+			/// <summary>Desconocido. No se debería utilizar</summary>
+			Unknown,
+			/// <summary>Raíz de la conexión</summary>
+			ConnectionRoot,
+			/// <summary>Conexión</summary>
+			Connection,
+			/// <summary>Esquema de una conexión</summary>
+			SchemaRoot,
+			/// <summary>Tabla</summary>
+			Table,
+			/// <summary>Raíz de la distribución</summary>
+			DeploymentRoot,
+			/// <summary>Distribución</summary>
+			Deployment,
+			/// <summary>Raíz de archivos de proyecto</summary>
+			FilesRoot,
+			/// <summary>Archivo / directorio</summary>
+			File,
+			/// <summary>Conexión a storage</summary>
+			Storage,
+			/// <summary>Contenedor de storage</summary>
+			StorageContainer,
+			/// <summary>Mensaje (transitorio)</summary>
+			Message,
+			/// <summary>Almacén de datos</summary>
+			DataWarehouse,
+			/// <summary>Raíz de origen de datos</summary>
+			DataSourcesRoot,
+			/// <summary>Origen de datos</summary>
+			DataSource,
+			/// <summary>Raíz de dimensiones</summary>
+			DimensionsRoot,
+			/// <summary>Dimensión</summary>
+			Dimension,
+			/// <summary>Raíz de informes</summary>
+			ReportsRoot,
+			/// <summary>Informe</summary>
+			Report
+		}
+		/// <summary>
+		///		Tipo de icono
+		/// </summary>
+		public enum IconType
+		{
+			Unknown,
+			Connection,
+			Deployment,
+			Project,
+			Path,
+			File,
+			Schema,
+			Table,
+			View,
+			Key,
+			Field,
+			Error,
+			Loading,
+			Storage,
+			Report,
+			DataSourceSql,
+			Dimension
+		}
 		public TreeStorageViewModel(SolutionViewModel solutionViewModel)
 		{ 
 			SolutionViewModel = solutionViewModel;
@@ -44,20 +112,20 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Cloud
 		/// </summary>
 		protected override bool CanExecuteAction(string action)
 		{
-			BaseTreeNodeViewModel.NodeType type = GetSelectedNodeType();
+			NodeType type = GetSelectedNodeTypeConverted();
 
 				// Comprueba la acción
 				switch (action)
 				{
 					case nameof(OpenCommand):
 					case nameof(NewContainerCommand):
-						return type == BaseTreeNodeViewModel.NodeType.Storage;
+						return type == NodeType.Storage;
 					case nameof(DeleteCommand):
 						return true;
 					case nameof(UploadFileAsyncCommand):
 					case nameof(UploadFolderAsyncCommand):
 					case nameof(DownloadAsyncCommand):
-						return type == BaseTreeNodeViewModel.NodeType.StorageContainer || type == BaseTreeNodeViewModel.NodeType.File;
+						return type == NodeType.StorageContainer || type == NodeType.File;
 					default:
 						return false;
 				}
@@ -68,13 +136,21 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Cloud
 		/// </summary>
 		protected override void OpenProperties()
 		{
-			switch (GetSelectedNodeType())
+			switch (GetSelectedNodeTypeConverted())
 			{
-				case BaseTreeNodeViewModel.NodeType.Storage:
+				case NodeType.Storage:
 						if (SelectedNode is NodeStorageViewModel node)
 							OpenStorage(node);
 					break;
 			}
+		}
+
+		/// <summary>
+		///		Obtiene el tipo de nodo del nodo seleccionado
+		/// </summary>
+		private NodeType GetSelectedNodeTypeConverted()
+		{
+			return GetSelectedNodeType().GetEnum(NodeType.Unknown);
 		}
 
 		/// <summary>

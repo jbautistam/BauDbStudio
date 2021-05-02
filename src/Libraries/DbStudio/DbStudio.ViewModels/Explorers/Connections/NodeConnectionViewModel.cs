@@ -16,7 +16,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 	public class NodeConnectionViewModel : BaseTreeNodeAsyncViewModel
 	{
 		public NodeConnectionViewModel(TreeSolutionBaseViewModel trvTree, IHierarchicalViewModel parent, ConnectionModel connection) : 
-					base(trvTree, parent, connection.Name, NodeType.Connection, IconType.Connection, connection, true, true, MvvmColor.Red)
+					base(trvTree, parent, connection.Name, TreeConnectionsViewModel.NodeType.Connection.ToString(), TreeConnectionsViewModel.IconType.Connection.ToString(), 
+						 connection, true, true, MvvmColor.Red)
 		{
 			Connection = connection;
 		}
@@ -31,8 +32,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 				// Carga el esquema de las conexiones
 				try
 				{
-					NodeRootViewModel rootTables = new NodeRootViewModel(TreeViewModel as TreeSolutionBaseViewModel, this, NodeType.SchemaRoot, "Tables", false);
-					NodeRootViewModel rootViews = new NodeRootViewModel(TreeViewModel as TreeSolutionBaseViewModel, this, NodeType.SchemaRoot, "Views", false);
+					NodeRootViewModel rootTables = new NodeRootViewModel(TreeViewModel as TreeSolutionBaseViewModel, this, TreeConnectionsViewModel.NodeType.SchemaRoot, "Tables", false);
+					NodeRootViewModel rootViews = new NodeRootViewModel(TreeViewModel as TreeSolutionBaseViewModel, this, TreeConnectionsViewModel.NodeType.SchemaRoot, "Views", false);
 
 						// Carga el esquema
 						await (TreeViewModel as TreeSolutionBaseViewModel).SolutionViewModel.Manager.LoadSchemaAsync(Connection, cancellationToken);
@@ -52,7 +53,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 				}
 				catch (Exception exception)
 				{
-					nodes.Add(new NodeMessageViewModel(TreeViewModel, this, "No se puede cargar el esquema de la conexión", IconType.Error));
+					nodes.Add(new NodeMessageViewModel(TreeViewModel, this, "No se puede cargar el esquema de la conexión", TreeConnectionsViewModel.IconType.Error.ToString()));
 					(TreeViewModel as TreeSolutionBaseViewModel).SolutionViewModel.MainController.MainWindowController.Logger.Default.LogItems.Error("Error when load schema", exception);
 					(TreeViewModel as TreeSolutionBaseViewModel).SolutionViewModel.MainController.Logger.Flush();
 				}
