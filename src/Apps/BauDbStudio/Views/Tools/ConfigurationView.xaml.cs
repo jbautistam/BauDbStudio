@@ -22,14 +22,14 @@ namespace Bau.DbStudio.Views.Tools
 		private void InitForm()
 		{
 			for (int index = 0; index < cboFontChooser.Items.Count; index++)
-				if (cboFontChooser.Items[index].ToString().Equals(MainWindow.MainController.ConfigurationController.EditorFontName, StringComparison.CurrentCultureIgnoreCase))
+				if (cboFontChooser.Items[index].ToString().Equals(MainWindow.DbStudioViewsManager.ConfigurationController.EditorFontName, StringComparison.CurrentCultureIgnoreCase))
 					cboFontChooser.SelectedItem = cboFontChooser.Items[index];
 			if (cboFontChooser.SelectedItem == null && cboFontChooser.Items.Count > 0)
 				cboFontChooser.SelectedIndex = 0;
-			txtFontSize.Value = MainWindow.MainController.ConfigurationController.EditorFontSize;
-			chkShowLineNumber.IsChecked = MainWindow.MainController.ConfigurationController.EditorShowLinesNumber;
-			fnConsole.FileName = MainWindow.MainController.ConfigurationController.ConsoleExecutable;
-			chkShowNotifications.IsChecked = MainWindow.MainController.ConfigurationController.ShowWindowNotifications;
+			txtFontSize.Value = MainWindow.DbStudioViewsManager.ConfigurationController.EditorFontSize;
+			chkShowLineNumber.IsChecked = MainWindow.DbStudioViewsManager.ConfigurationController.EditorShowLinesNumber;
+			fnConsole.FileName = MainWindow.DbStudioViewsManager.ConfigurationController.ConsoleExecutable;
+			chkShowNotifications.IsChecked = MainWindow.DbStudioViewsManager.ConfigurationController.ShowWindowNotifications;
 		}
 
 		/// <summary>
@@ -41,7 +41,7 @@ namespace Bau.DbStudio.Views.Tools
 
 				// Comprueba los datos introducidos
 				if (!string.IsNullOrWhiteSpace(fnConsole.FileName) && !System.IO.File.Exists(fnConsole.FileName))
-					MainWindow.MainController.MainWindowController.HostController.SystemController.ShowMessage("No se encuentra el archivo de ejecución de consola");
+					MainWindow.DbStudioViewsManager.MainWindowsController.HostController.SystemController.ShowMessage("No se encuentra el archivo de ejecución de consola");
 				else
 					validated = true;
 				// Devuelve el valor que indica si los datos son correctos
@@ -57,13 +57,13 @@ namespace Bau.DbStudio.Views.Tools
 			{
 				// Cambia los valores
 				if (cboFontChooser.SelectedItem != null)
-					MainWindow.MainController.ConfigurationController.EditorFontName = cboFontChooser.SelectedItem.ToString();
-				MainWindow.MainController.ConfigurationController.EditorFontSize = txtFontSize.Value;
-				MainWindow.MainController.ConfigurationController.EditorShowLinesNumber = chkShowLineNumber.IsChecked ?? false;
-				MainWindow.MainController.ConfigurationController.ConsoleExecutable = fnConsole.FileName;
-				MainWindow.MainController.ConfigurationController.ShowWindowNotifications = chkShowNotifications.IsChecked ?? false;
+					MainWindow.DbStudioViewsManager.ConfigurationController.EditorFontName = cboFontChooser.SelectedItem.ToString();
+				MainWindow.DbStudioViewsManager.ConfigurationController.EditorFontSize = txtFontSize.Value;
+				MainWindow.DbStudioViewsManager.ConfigurationController.EditorShowLinesNumber = chkShowLineNumber.IsChecked ?? false;
+				MainWindow.DbStudioViewsManager.ConfigurationController.ConsoleExecutable = fnConsole.FileName;
+				MainWindow.DbStudioViewsManager.ConfigurationController.ShowWindowNotifications = chkShowNotifications.IsChecked ?? false;
 				// Graba la configuración
-				MainWindow.MainController.ConfigurationController.Save();
+				MainWindow.DbStudioViewsManager.ConfigurationController.Save();
 				// Cierra la ventana
 				Close();
 			}

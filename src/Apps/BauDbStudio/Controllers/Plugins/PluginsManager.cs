@@ -5,16 +5,16 @@ using Bau.Libraries.PluginsStudio.ViewModels.Base.Models;
 using Bau.Libraries.PluginsStudio.Views.Base.Interfaces;
 using Bau.Libraries.PluginsStudio.Views.Base.Models;
 
-namespace Bau.DbStudio.Controllers.PluginsStudio.Plugins
+namespace Bau.DbStudio.Controllers.Plugins
 {
 	/// <summary>
 	///		Manager de plugins
 	/// </summary>
 	internal class PluginsManager
 	{
-		internal PluginsManager(PluginsStudioViewManager pluginsStudioViewManager)
+		internal PluginsManager(DbStudioViewsManager dbStudioViewManager)
 		{
-			PluginsStudioViewManager = pluginsStudioViewManager;
+			DbStudioViewManager = dbStudioViewManager;
 		}
 
 		/// <summary>
@@ -32,10 +32,10 @@ namespace Bau.DbStudio.Controllers.PluginsStudio.Plugins
 		{
 			// Iniclaliza los plugins
 			foreach (IPlugin plugin in Plugins)
-				plugin.Initialize(PluginsStudioViewManager.AppViewController, PluginsStudioViewManager.PluginStudioController.PluginsController);
+				plugin.Initialize(DbStudioViewManager.AppViewController, DbStudioViewManager.PluginStudioController.PluginsController);
 			// Obtiene las opciones de los archivos
 			foreach (IPlugin plugin in Plugins)
-				PluginsStudioViewManager.PluginsStudioViewModel.TreeFoldersViewModel.AddPluginOptions(plugin.GetFilesOptions());
+				DbStudioViewManager.PluginsStudioViewModel.TreeFoldersViewModel.AddPluginOptions(plugin.GetFilesOptions());
 		}
 
 		/// <summary>
@@ -132,7 +132,7 @@ namespace Bau.DbStudio.Controllers.PluginsStudio.Plugins
 		/// <summary>
 		///		Manager de plugins
 		/// </summary>
-		internal PluginsStudioViewManager PluginsStudioViewManager { get; }
+		internal DbStudioViewsManager DbStudioViewManager { get; }
 
 		/// <summary>
 		///		Plugins

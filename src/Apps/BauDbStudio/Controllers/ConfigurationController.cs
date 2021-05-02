@@ -6,10 +6,11 @@ namespace Bau.DbStudio.Controllers
 	/// <summary>
 	///		Controlador para la configuración de la aplicación
 	/// </summary>
-	public class AppConfigurationController : Libraries.PluginsStudio.ViewModels.Base.Controllers.IConfigurationController
+	public class ConfigurationController : Libraries.PluginsStudio.ViewModels.Base.Controllers.IConfigurationController
 	{
-		// Variables privadas
-		private string SetupSeparator = "({#@~=#})";
+		// Constantes privadas
+		private const string SetupSeparator = "({#@~=#})";
+
 		/// <summary>
 		///		Carga la configuración
 		/// </summary>

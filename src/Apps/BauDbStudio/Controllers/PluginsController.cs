@@ -2,18 +2,18 @@
 
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Controllers;
 
-namespace Bau.DbStudio.Controllers.PluginsStudio.Controllers
+namespace Bau.DbStudio.Controllers
 {
 	/// <summary>
 	///		Controlador de plugins
 	/// </summary>
 	public class PluginsController : IPluginsController
 	{
-		public PluginsController(IMainWindowController mainWindowController, IHostPluginsController hostPluginsController, IConfigurationController configurationController)
+		public PluginsController(DbStudioViewsManager dbStudioViewsManager)
 		{
-			MainWindowController = mainWindowController;
-			HostPluginsController = hostPluginsController;
-			ConfigurationController = configurationController;
+			MainWindowController = dbStudioViewsManager.MainWindowsController;
+			HostPluginsController = new HostPluginsController(dbStudioViewsManager);
+			ConfigurationController = dbStudioViewsManager.ConfigurationController;
 		}
 
 		/// <summary>

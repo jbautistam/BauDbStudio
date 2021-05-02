@@ -8,14 +8,14 @@ namespace Bau.DbStudio.Controllers
 	/// <summary>
 	///		Controlador de aplicación
 	/// </summary>
-	public class AppStudioController : Libraries.PluginsStudio.Views.Base.Interfaces.IAppViewsController
+	public class AppViewsController : Libraries.PluginsStudio.Views.Base.Interfaces.IAppViewsController
 	{
 		// Eventos públicos
 		public event EventHandler<EventArguments.OpenDocumentEventArgs> OpenDocumentRequired;
 
-		public AppStudioController(AppController appController)
+		public AppViewsController(DbStudioViewsManager dbStudioViewsManager)
 		{
-			AppController = appController;
+			DbStudioViewsManager = dbStudioViewsManager;
 		}
 
 		/// <summary>
@@ -23,7 +23,7 @@ namespace Bau.DbStudio.Controllers
 		/// </summary>
 		public SystemControllerEnums.ResultType OpenDialog(System.Windows.Window window)
 		{
-			return AppController.MainWindowController.HostHelperController.ShowDialog(AppController.MainWindowController.MainWindow, window);
+			return DbStudioViewsManager.MainWindowsController.HostHelperController.ShowDialog(DbStudioViewsManager.MainWindow, window);
 		}
 
 		/// <summary>
@@ -37,6 +37,6 @@ namespace Bau.DbStudio.Controllers
 		/// <summary>
 		///		Controlador de aplicación
 		/// </summary>
-		internal AppController AppController { get; }
+		internal DbStudioViewsManager DbStudioViewsManager { get; }
 	}
 }

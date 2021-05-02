@@ -47,37 +47,6 @@ namespace Bau.Libraries.LibBlogReader.ViewModel
 			TreeBlogs.Load();
 		}
 
-/*
-
-		/// <summary>
-		///		Crea los parámetros de un mensaje a partir de una entrada
-		/// </summary>
-		private ParametersModelCollection GetParametersBlog(Model.EntryModel entry)
-		{
-			var parameters = new ParametersModelCollection();
-
-				// Añade los datos del blog
-				parameters.Add(ModuleName, "BlogName", entry.Blog.Name);
-				parameters.Add(ModuleName, "BlogDescription", entry.Blog.Description);
-				parameters.Add(ModuleName, "BlogUrl", entry.Blog.URL);
-				// Añade los datos de la entrada
-				parameters.Add(ModuleName, "EntryName", entry.Name);
-				parameters.Add(ModuleName, "EntryDescription", entry.Description);
-				parameters.Add(ModuleName, "EntryContent", entry.Content);
-				parameters.Add(ModuleName, "EntryUrl", entry.URL);
-				// Devuelve la colección de parámetros
-				return parameters;
-		}
-		/// <summary>
-		///		Envía un mensaje de cambio de estado
-		/// </summary>
-		internal void SendMesageChangeStatus(object content = null)
-		{
-			System.Diagnostics.Debug.WriteLine("Falta ésto");
-			// HostController.Messenger.Send(new Controllers.Messengers.MessageChangeStatusNews(content));
-		}
-
-*/
 		/// <summary>
 		///		Manager de blogs
 		/// </summary>

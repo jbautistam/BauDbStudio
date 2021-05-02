@@ -41,9 +41,9 @@ namespace Bau.Libraries.RestStudio.ViewModels.Solutions
 		/// </summary>
 		private string GetSolutionFileName()
 		{
-			// Ajusta el directorio si estaba vacío
-			if (string.IsNullOrWhiteSpace(Path))
-				Path = RestStudioViewModel.RestController.PluginController.AppPath;
+			//// Ajusta el directorio si estaba vacío
+			//if (string.IsNullOrWhiteSpace(Path))
+			//	Path = RestStudioViewModel.RestController.PluginController.AppPath;
 			// Obtiene el nombre de archivo
 			return System.IO.Path.Combine(Path, "RestSolution.rxml");
 		}

@@ -2,17 +2,16 @@
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Files;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Interfaces;
 
-namespace Bau.DbStudio.Controllers.PluginsStudio.Controllers
+namespace Bau.DbStudio.Controllers
 {
 	/// <summary>
 	///		Controlador del host de plugins
 	/// </summary>
 	public class HostPluginsController : Libraries.PluginsStudio.ViewModels.Base.Controllers.IHostPluginsController
 	{
-		public HostPluginsController(PluginsStudioViewManager pluginsStudioViewManager, PluginsStudioController pluginsStudioController)
+		public HostPluginsController(DbStudioViewsManager dbStudioViewManager)
 		{
-			PluginsStudioViewManager = pluginsStudioViewManager;
-			PluginsStudioController = pluginsStudioController;
+			DbStudioViewManager = dbStudioViewManager;
 		}
 
 		/// <summary>
@@ -20,7 +19,7 @@ namespace Bau.DbStudio.Controllers.PluginsStudio.Controllers
 		/// </summary>
 		public void AddFileUsed(string fileName)
 		{
-			PluginsStudioController.PluginsStudioViewManager.PluginsStudioViewModel.LastFilesViewModel.Add(fileName);
+			DbStudioViewManager.PluginsStudioViewModel.LastFilesViewModel.Add(fileName);
 		}
 
 		/// <summary>
@@ -28,7 +27,7 @@ namespace Bau.DbStudio.Controllers.PluginsStudio.Controllers
 		/// </summary>
 		public void OpenFile(string fileName)
 		{
-			PluginsStudioController.PluginsStudioViewManager.OpenFile(fileName);
+			DbStudioViewManager.OpenFile(fileName);
 		}
 
 		/// <summary>
@@ -36,7 +35,7 @@ namespace Bau.DbStudio.Controllers.PluginsStudio.Controllers
 		/// </summary>
 		public void OpenEditor(BaseTextFileViewModel viewModel)
 		{
-			PluginsStudioController.AppController.OpenWindow(viewModel);
+			DbStudioViewManager.AppController.OpenWindow(viewModel);
 		}
 
 		/// <summary>
@@ -44,7 +43,7 @@ namespace Bau.DbStudio.Controllers.PluginsStudio.Controllers
 		/// </summary>
 		public void OpenWebBrowser(string url)
 		{
-			PluginsStudioController.PluginsStudioViewManager.PluginsStudioViewModel.OpenWebBrowser(url);
+			DbStudioViewManager.PluginsStudioViewModel.OpenWebBrowser(url);
 		}
 
 		/// <summary>
@@ -52,7 +51,7 @@ namespace Bau.DbStudio.Controllers.PluginsStudio.Controllers
 		/// </summary>
 		public void RefreshFiles()
 		{
-			PluginsStudioController.PluginsStudioViewManager.PluginsStudioViewModel.RefreshFiles();
+			DbStudioViewManager.PluginsStudioViewModel.RefreshFiles();
 		}
 
 		/// <summary>
@@ -60,7 +59,7 @@ namespace Bau.DbStudio.Controllers.PluginsStudio.Controllers
 		/// </summary>
 		public void ExecutePluginCommand(string plugin, string viewModel, string command)
 		{
-			PluginsStudioController.PluginsStudioViewManager.PluginsManager.ExecutePluginCommand(plugin, viewModel, command);
+			DbStudioViewManager.PluginsManager.ExecutePluginCommand(plugin, viewModel, command);
 		}
 
 		/// <summary>
@@ -68,25 +67,20 @@ namespace Bau.DbStudio.Controllers.PluginsStudio.Controllers
 		/// </summary>
 		public bool CheckCanExecutePluginCommand(string plugin, string viewModel, string command)
 		{
-			return PluginsStudioViewManager.PluginsManager.CheckCanExecutePluginCommand(plugin, viewModel, command);
+			return DbStudioViewManager.PluginsManager.CheckCanExecutePluginCommand(plugin, viewModel, command);
 		}
 
 		/// <summary>
 		///		Manager de vistas
 		/// </summary>
-		public PluginsStudioViewManager PluginsStudioViewManager { get; }
-
-		/// <summary>
-		///		Controlador principal
-		/// </summary>
-		public PluginsStudioController PluginsStudioController { get; }
+		public DbStudioViewsManager DbStudioViewManager { get; }
 
 		/// <summary>
 		///		ViewModel del documento de detalles seleccionado
 		/// </summary>
 		public IDetailViewModel SelectedDetailsViewModel
 		{
-			get { return PluginsStudioController.PluginsStudioViewManager.PluginsStudioViewModel.SelectedDetailsViewModel; }
+			get { return DbStudioViewManager.PluginsStudioViewModel.SelectedDetailsViewModel; }
 		}
 	}
 }

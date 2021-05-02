@@ -12,55 +12,12 @@ namespace Bau.DbStudio.Controllers
 	/// </summary>
 	public class MainWindowController : Libraries.PluginsStudio.ViewModels.Base.Controllers.IMainWindowController
 	{
-		// Eventos públicos
-		public event EventHandler<IDetailViewModel> OpenWindowRequired;
-
-		public MainWindowController(AppController appController, string applicationName, MainWindow mainWindow, string appPath)
+		public MainWindowController(DbStudioViewsManager dbStudioViewsManager)
 		{
-			// Asigna las propiedades
-			AppController = appController;
-			HostController = new HostController(applicationName, mainWindow);
-			HostHelperController = new HostHelperController(mainWindow);
-			MainWindow = mainWindow;
+			DbStudioViewsManager = dbStudioViewsManager;
+			HostController = new HostController(DbStudioViewsManager.AppName, DbStudioViewsManager.MainWindow);
+			HostHelperController = new HostHelperController(DbStudioViewsManager.MainWindow);
 			Logger = new Libraries.LibLogger.Core.LogManager();
-			AppName = applicationName;
-			// Directorio de aplicación
-			AppPath = appPath;
-			// Crea el directorio de aplicación
-			Libraries.LibHelper.Files.HelperFiles.MakePath(appPath);
-		}
-
-		/// <summary>
-		///		Abre una ventana de detalles
-		/// </summary>
-		public SystemControllerEnums.ResultType OpenWindow(IDetailViewModel detailViewModel)
-		{
-			SystemControllerEnums.ResultType result = SystemControllerEnums.ResultType.Yes;
-
-				// Muestra la ventana adecuada
-				switch (detailViewModel)
-				{
-					default:
-							OpenWindowRequired?.Invoke(this, detailViewModel);
-						break;
-				}
-				// Devuelve el resultado
-				return result;
-		}
-
-		/// <summary>
-		///		Abre un cuadro de diálogo
-		/// </summary>
-		public SystemControllerEnums.ResultType OpenDialog(Libraries.BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewModel dialogViewModel)
-		{
-			SystemControllerEnums.ResultType result = SystemControllerEnums.ResultType.No;
-
-				// Muestra la ventana adecuada
-				switch (dialogViewModel)
-				{
-				}
-				// Devuelve el resultado
-				return result;
 		}
 
 		/// <summary>
@@ -76,7 +33,7 @@ namespace Bau.DbStudio.Controllers
 		/// </summary>
 		public IDetailViewModel GetActiveDetails()
 		{
-			return MainWindow.GetActiveDetails();
+			return DbStudioViewsManager.MainWindow.GetActiveDetails();
 		}
 
 		/// <summary>
@@ -84,7 +41,7 @@ namespace Bau.DbStudio.Controllers
 		/// </summary>
 		public List<IDetailViewModel> GetOpenedDetails()
 		{
-			return MainWindow.GetOpenedDetails();
+			return DbStudioViewsManager.MainWindow.GetOpenedDetails();
 		}
 
 		/// <summary>
@@ -92,7 +49,7 @@ namespace Bau.DbStudio.Controllers
 		/// </summary>
 		public void UpdateTabId(string oldTabId, string newTabId, string newHeader)
 		{
-			MainWindow.UpdateTabId(oldTabId, newTabId, newHeader);
+			DbStudioViewsManager.MainWindow.UpdateTabId(oldTabId, newTabId, newHeader);
 		}
 
 		/// <summary>
@@ -100,7 +57,7 @@ namespace Bau.DbStudio.Controllers
 		/// </summary>
 		public void CloseWindow(string tabId)
 		{
-			MainWindow.CloseTab(tabId);
+			DbStudioViewsManager.MainWindow.CloseTab(tabId);
 		}
 
 		/// <summary>
@@ -108,11 +65,11 @@ namespace Bau.DbStudio.Controllers
 		/// </summary>
 		public void ShowNotification(SystemControllerEnums.NotificationType type, string title, string message)
 		{
-			if (AppController.ConfigurationController.ShowWindowNotifications || type == SystemControllerEnums.NotificationType.Error)
-				AppController.MainWindowController.HostController.SystemController.ShowNotification(type, title, message, TimeSpan.FromSeconds(5));
+			if (DbStudioViewsManager.ConfigurationController.ShowWindowNotifications || type == SystemControllerEnums.NotificationType.Error)
+				DbStudioViewsManager.MainWindowsController.HostController.SystemController.ShowNotification(type, title, message, TimeSpan.FromSeconds(5));
 			else
-				AppController.MainWindowController.Logger.Default.LogItems.Add(new Libraries.LibLogger.Models.Log.LogModel(null, Libraries.LibLogger.Models.Log.LogModel.LogType.Info,
-																														   title + ". " + message));
+				DbStudioViewsManager.MainWindowsController.Logger.Default.LogItems.Add(new Libraries.LibLogger.Models.Log.LogModel(null, Libraries.LibLogger.Models.Log.LogModel.LogType.Info,
+																																   title + ". " + message));
 		}
 
 		/// <summary>
@@ -137,16 +94,16 @@ namespace Bau.DbStudio.Controllers
 				}
 				catch (Exception exception)
 				{
-					Logger.Default.LogItems.Error("Error al graba el archivo del portapapeles", exception);
+					Logger.Default.LogItems.Error("Error al grabar el archivo del portapapeles", exception);
 				}
 				// Devuelve el valor que indica si se ha grabado
 				return saved;
 		}
 
 		/// <summary>
-		///		Controlador de aplicación
+		///		Manager de vistas principal
 		/// </summary>
-		internal AppController AppController { get; }
+		internal DbStudioViewsManager DbStudioViewsManager { get; }
 
 		/// <summary>
 		///		Controlador principal
@@ -162,20 +119,5 @@ namespace Bau.DbStudio.Controllers
 		///		Logger
 		/// </summary>
 		public Libraries.LibLogger.Core.LogManager Logger { get; }
-
-		/// <summary>
-		///		Ventana principal
-		/// </summary>
-		internal MainWindow MainWindow { get; }
-
-		/// <summary>
-		///		Nombre de la aplicación
-		/// </summary>
-		public string AppName { get; }
-
-		/// <summary>
-		///		Directorio de aplicación
-		/// </summary>
-		public string AppPath { get; }
 	}
 }

@@ -24,22 +24,19 @@ namespace Bau.DbStudio
 		{
 			// Asigna el icono a la ventana
 			Icon = System.Windows.Media.Imaging.BitmapFrame.Create(new Uri("pack://application:,,,./Resources/BauDbStudio.ico", UriKind.RelativeOrAbsolute)); 
-			// Inicializa el controlador
-			MainController = new Controllers.AppController("Bau.DbStudio", this, 
-														   System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Bau.DbStudio"));
-			MainController.ConfigurationController.Load(MainController.MainWindowController.AppPath);
 			// Inicializa el contexto y los controles
-			PluginsStudioViews = new Controllers.PluginsStudio.PluginsStudioViewManager(MainController.AppStudioController, MainController.MainWindowController,
-																						MainController.ConfigurationController);
-			PluginsStudioViews.AddPlugin(new Libraries.DbStudio.Views.DbStudioViewManager());
-			PluginsStudioViews.AddPlugin(new Libraries.BlogReader.Views.BlogReaderPlugin());
-			PluginsStudioViews.InitializePlugins();
+			DbStudioViewsManager = new Controllers.DbStudioViewsManager("BauDbStudio", 
+																		System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Bau.DbStudio"),
+																		this);
+			DbStudioViewsManager.AddPlugin(new Libraries.DbStudio.Views.DbStudioViewManager());
+			DbStudioViewsManager.AddPlugin(new Libraries.BlogReader.Views.BlogReaderPlugin());
+			DbStudioViewsManager.Initialize();
 			// Inicializa el ViewModel
-			DataContext = ViewModel = PluginsStudioViews.PluginsStudioViewModel;
+			DataContext = ViewModel = DbStudioViewsManager.PluginsStudioViewModel;
 			// Carga los datos
-			PluginsStudioViews.Load(MainController.ConfigurationController.PathData, MainController.ConfigurationController.LastWorkSpace);
+			DbStudioViewsManager.Load(DbStudioViewsManager.ConfigurationController.PathData, DbStudioViewsManager.ConfigurationController.LastWorkSpace);
 			//ViewModel.LastPathSelected = MainController.ConfigurationController.LastPathSelected;
-			ViewModel.LastFilesViewModel.Add(MainController.ConfigurationController.LastFiles);
+			ViewModel.LastFilesViewModel.Add(DbStudioViewsManager.ConfigurationController.LastFiles);
 			// Añade los manejadores de eventos
 			ViewModel.WorkspacesChanged += (sender, args) => ShowMenuWorkspaces();
 			// Añade los paneles y barras de herramientas
@@ -47,12 +44,12 @@ namespace Bau.DbStudio
 			ShowToolbars();
 			ShowMenus();
 			// Asigna los manejadores de eventos
-			MainController.AppStudioController.OpenDocumentRequired += (_, args) => AddTab(args.UserControl, args.ViewModel);
+			(DbStudioViewsManager.AppViewController as Controllers.AppViewsController).OpenDocumentRequired += (_, args) => AddTab(args.UserControl, args.ViewModel);
 			// Asigna los manejadores de eventos del docker de documentos
 			dckManager.Closing += (sender, args) => CloseWindow(args);
 			dckManager.ActiveDocumentChanged += (sender, args) => UpdateSelectedTab();
 			// Cambia el tema
-			SetTheme((Controls.DockLayout.DockLayoutManager.DockTheme) MainController.ConfigurationController.LastThemeSelected);
+			SetTheme((Controls.DockLayout.DockLayoutManager.DockTheme) DbStudioViewsManager.ConfigurationController.LastThemeSelected);
 			// Muestra el número de versión
 			lblVersion.Text = GetAssemblyVersion();
 			// Carga los menús de espacios de trabajo
@@ -65,7 +62,7 @@ namespace Bau.DbStudio
 		private void ShowPanes()
 		{
 			// Muestra los paneles
-			foreach (Libraries.PluginsStudio.Views.Base.Models.PaneModel pane in PluginsStudioViews.GetPanes())
+			foreach (Libraries.PluginsStudio.Views.Base.Models.PaneModel pane in DbStudioViewsManager.GetPanes())
 				if (pane != null)
 					dckManager.AddPane(pane.Id, pane.Title, pane.View, pane.ViewModel, ConvertPosition(pane.Position));
 			// Abre los paneles predefinidos
@@ -95,7 +92,7 @@ namespace Bau.DbStudio
 		/// </summary>
 		private void ShowToolbars()
 		{
-			foreach (Libraries.PluginsStudio.Views.Base.Models.ToolBarModel toolbar in PluginsStudioViews.GetToolBars())
+			foreach (Libraries.PluginsStudio.Views.Base.Models.ToolBarModel toolbar in DbStudioViewsManager.GetToolBars())
 				if (toolbar?.ToolBar != null)
 					tbMain.ToolBars.Add(toolbar.ToolBar);
 		}
@@ -105,7 +102,7 @@ namespace Bau.DbStudio
 		/// </summary>
 		private void ShowMenus()
 		{
-			foreach (Libraries.PluginsStudio.ViewModels.Base.Models.MenuListModel menu in PluginsStudioViews.GetMenus())
+			foreach (Libraries.PluginsStudio.ViewModels.Base.Models.MenuListModel menu in DbStudioViewsManager.GetMenus())
 				switch (menu.Section)
 				{
 					case Libraries.PluginsStudio.ViewModels.Base.Models.MenuListModel.SectionType.NewItem:
@@ -166,7 +163,7 @@ namespace Bau.DbStudio
 		/// </summary>
 		private void OpenFile(string fileName)
 		{
-			PluginsStudioViews.OpenFile(fileName);
+			DbStudioViewsManager.OpenFile(fileName);
 		}
 
 		/// <summary>
@@ -200,7 +197,7 @@ namespace Bau.DbStudio
 		{
 			if (args.Document != null && args.Document.Tag != null && args.Document.Tag is IDetailViewModel detailViewModel && detailViewModel.IsUpdated)
 			{
-				Libraries.BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType result = MainController.MainWindowController.HostController.SystemController.ShowQuestionCancel
+				Libraries.BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType result = DbStudioViewsManager.MainWindowsController.HostController.SystemController.ShowQuestionCancel
 																											(detailViewModel.GetSaveAndCloseMessage());
 
 					switch (result)
@@ -280,7 +277,7 @@ namespace Bau.DbStudio
 			mnuThemeVs2013Dark.IsChecked = newTheme == Controls.DockLayout.DockLayoutManager.DockTheme.VS2013DarkTheme;
 			mnuThemeVs2013Light.IsChecked = newTheme == Controls.DockLayout.DockLayoutManager.DockTheme.VS2013LightTheme;
 			// Cambia la configuración
-			MainController.ConfigurationController.LastThemeSelected = (int) newTheme;
+			DbStudioViewsManager.ConfigurationController.LastThemeSelected = (int) newTheme;
 		}
 
 		/// <summary>
@@ -288,7 +285,7 @@ namespace Bau.DbStudio
 		/// </summary>
 		private void OpenConfigurationWindow()
 		{
-			MainController.MainWindowController.HostHelperController.ShowDialog(this, new Views.Tools.ConfigurationView());
+			DbStudioViewsManager.MainWindowsController.HostHelperController.ShowDialog(this, new Views.Tools.ConfigurationView());
 		}
 
 		/// <summary>
@@ -323,7 +320,7 @@ namespace Bau.DbStudio
 
 																			// Selecciona el espacio de trabajo
 																			if (workSpace != null)
-																				PluginsStudioViews.SelectWorkspace(workSpace.Name);
+																				DbStudioViewsManager.SelectWorkspace(workSpace.Name);
 																			// Cambia las marcas de check de los menús
 																			CheckWorkSpaceMenu();
 																   };
@@ -406,10 +403,10 @@ namespace Bau.DbStudio
 		{
 			// Graba la configuración
 			if (!string.IsNullOrWhiteSpace(ViewModel.PluginsStudioController.MainWindowController.HostController.DialogsController.LastPathSelected))
-				MainController.ConfigurationController.LastPathSelected = ViewModel.PluginsStudioController.MainWindowController.HostController.DialogsController.LastPathSelected;
-			MainController.ConfigurationController.LastWorkSpace = ViewModel.WorkspacesViewModel.SelectedItem.Name;
-			MainController.ConfigurationController.LastFiles = ViewModel.LastFilesViewModel.GetFiles();
-			MainController.ConfigurationController.Save();
+				DbStudioViewsManager.ConfigurationController.LastPathSelected = ViewModel.PluginsStudioController.MainWindowController.HostController.DialogsController.LastPathSelected;
+			DbStudioViewsManager.ConfigurationController.LastWorkSpace = ViewModel.WorkspacesViewModel.SelectedItem.Name;
+			DbStudioViewsManager.ConfigurationController.LastFiles = ViewModel.LastFilesViewModel.GetFiles();
+			DbStudioViewsManager.ConfigurationController.Save();
 			// Cierra la aplicación
 			Close();
 		}
@@ -429,17 +426,12 @@ namespace Bau.DbStudio
 		/// <summary>
 		///		Manager de vistas de PluginsStudio
 		/// </summary>
-		public Controllers.PluginsStudio.PluginsStudioViewManager PluginsStudioViews { get; private set; }
+		public static Controllers.DbStudioViewsManager DbStudioViewsManager { get; private set; }
 
 		/// <summary>
 		///		ViewModel principal
 		/// </summary>
 		public Libraries.PluginsStudio.ViewModels.PluginsStudioViewModel ViewModel { get; private set; }
-
-		/// <summary>
-		///		Controlador principal
-		/// </summary>
-		public static Controllers.AppController MainController { get; private set; }
 
 		private void Window_Loaded(object sender, RoutedEventArgs e)
 		{

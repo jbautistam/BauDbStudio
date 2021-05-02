@@ -11,46 +11,6 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Controllers
 	public interface IMainWindowController
 	{
 		/// <summary>
-		///		Controlador principal
-		/// </summary>
-		IHostController HostController { get; }
-
-		/// <summary>
-		///		Controlador de diálogos de sistema
-		/// </summary>
-		IHostDialogsController DialogsController => HostController.DialogsController;
-
-        /// <summary>
-        ///     Controlador con funciones del sistema
-        /// </summary>
-        IHostSystemController SystemController => HostController.SystemController;
-
-        /// <summary>
-        ///     Controlador con funciones del sistema asíncrono
-        /// </summary>
-        IHostSystemControllerAsync SystemControllerAsync => HostController.SystemControllerAsync;
-
-        /// <summary>
-        ///     Controlador de mensajes
-        /// </summary>
-        IHostMessengerController MessengerController => HostController.MessengerController;
-
-		/// <summary>
-		///		Controlador de log
-		/// </summary>
-		LibLogger.Core.LogManager Logger { get; }
-
-		/// <summary>
-		///		Nombre de la aplicación
-		/// </summary>
-		string AppName { get; }
-
-		/// <summary>
-		///		Directorio de aplicación
-		/// </summary>
-		string AppPath { get; }
-
-		/// <summary>
 		///		Abre el explorador sobre un directorio
 		/// </summary>
 		void OpenExplorer(string path);
@@ -89,5 +49,35 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Controllers
 		///		Graba la imagen del portapapeles
 		/// </summary>
 		bool SaveClipboardImage(string fileName);
+
+		/// <summary>
+		///		Controlador principal
+		/// </summary>
+		IHostController HostController { get; }
+
+		/// <summary>
+		///		Controlador de diálogos de sistema
+		/// </summary>
+		IHostDialogsController DialogsController => HostController.DialogsController;
+
+        /// <summary>
+        ///     Controlador con funciones del sistema
+        /// </summary>
+        IHostSystemController SystemController => HostController.SystemController;
+
+        /// <summary>
+        ///     Controlador con funciones del sistema asíncrono
+        /// </summary>
+        IHostSystemControllerAsync SystemControllerAsync => HostController.SystemControllerAsync;
+
+        /// <summary>
+        ///     Controlador de mensajes
+        /// </summary>
+        IHostMessengerController MessengerController => HostController.MessengerController;
+
+		/// <summary>
+		///		Controlador de log
+		/// </summary>
+		LibLogger.Core.LogManager Logger { get; }
 	}
 }

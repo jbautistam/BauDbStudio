@@ -4,21 +4,27 @@ using System.Collections.Generic;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Models;
 using Bau.Libraries.PluginsStudio.Views.Base.Models;
 
-namespace Bau.DbStudio.Controllers.PluginsStudio
+namespace Bau.DbStudio.Controllers
 {
 	/// <summary>
 	///		Manager de las vistas de PluginStudio
 	/// </summary>
-	public class PluginsStudioViewManager
+	public class DbStudioViewsManager
 	{
-		public PluginsStudioViewManager(Libraries.PluginsStudio.Views.Base.Interfaces.IAppViewsController appController, 
-										Libraries.PluginsStudio.ViewModels.Base.Controllers.IMainWindowController mainController,
-										Libraries.PluginsStudio.ViewModels.Base.Controllers.IConfigurationController configurationController)
+		public DbStudioViewsManager(string appName, string appPath, MainWindow mainWindow)
 		{
-			AppViewController = appController;
+			// Asigna los controladores
+			MainWindow = mainWindow;
+			AppName = appName;
+			AppPath = appPath;
+			AppController = new AppController(this);
+			AppViewController = new AppViewsController(this);
+			MainWindowsController = new MainWindowController(this);
 			PluginsManager = new Plugins.PluginsManager(this);
-			PluginStudioController = new Controllers.PluginsStudioController(this, mainController, configurationController);
+			PluginStudioController = new PluginsStudioController(this);
 			PluginsStudioViewModel = new Libraries.PluginsStudio.ViewModels.PluginsStudioViewModel(PluginStudioController);
+			// Crea el directorio de aplicación
+			Libraries.LibHelper.Files.HelperFiles.MakePath(appPath);
 		}
 
 		/// <summary>
@@ -30,10 +36,13 @@ namespace Bau.DbStudio.Controllers.PluginsStudio
 		}
 
 		/// <summary>
-		///		Inicializa los plugins
+		///		Inicializa la ventana principal y los plugins
 		/// </summary>
-		public void InitializePlugins()
+		public void Initialize()
 		{
+			// Inicializa los controladores
+			ConfigurationController.Load(AppPath);
+			// Inicializa los plugins
 			PluginsManager.Initialize();
 		}
 
@@ -124,6 +133,26 @@ namespace Bau.DbStudio.Controllers.PluginsStudio
 		}
 
 		/// <summary>
+		///		Nombre de la aplicación
+		/// </summary>
+		public string AppName { get; }
+
+		/// <summary>
+		///		Directorio de aplicación
+		/// </summary>
+		public string AppPath { get; }
+
+		/// <summary>
+		///		Ventana principal
+		/// </summary>
+		internal MainWindow MainWindow { get; }
+
+		/// <summary>
+		///		Controlador de vistas principal
+		/// </summary>
+		internal Libraries.PluginsStudio.ViewModels.Base.Controllers.IAppController AppController { get; }
+
+		/// <summary>
 		///		Controlador de vistas principal
 		/// </summary>
 		internal Libraries.PluginsStudio.Views.Base.Interfaces.IAppViewsController AppViewController { get; }
@@ -131,7 +160,7 @@ namespace Bau.DbStudio.Controllers.PluginsStudio
 		/// <summary>
 		///		Controlador de PluginsStudio
 		/// </summary>
-		internal Controllers.PluginsStudioController PluginStudioController { get; }
+		internal PluginsStudioController PluginStudioController { get; }
 
 		/// <summary>
 		///		Manager de plugins
@@ -139,8 +168,18 @@ namespace Bau.DbStudio.Controllers.PluginsStudio
 		internal Plugins.PluginsManager PluginsManager { get; }
 
 		/// <summary>
+		///		Controlador de ventanas principal
+		/// </summary>
+		internal MainWindowController MainWindowsController { get; }
+
+		/// <summary>
 		///		ViewModel
 		/// </summary>
-		public Bau.Libraries.PluginsStudio.ViewModels.PluginsStudioViewModel PluginsStudioViewModel { get; }
+		public Libraries.PluginsStudio.ViewModels.PluginsStudioViewModel PluginsStudioViewModel { get; }
+
+		/// <summary>
+		///		Controlador de configuración de la aplicación
+		/// </summary>
+		public ConfigurationController ConfigurationController { get; } = new ConfigurationController();
 	}
 }
