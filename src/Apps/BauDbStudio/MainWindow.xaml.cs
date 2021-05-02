@@ -29,8 +29,8 @@ namespace Bau.DbStudio
 														   System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Bau.DbStudio"));
 			MainController.ConfigurationController.Load(MainController.MainWindowController.AppPath);
 			// Inicializa el contexto y los controles
-			PluginsStudioViews = new Libraries.PluginsStudio.Views.PluginsStudioViewManager(MainController.AppStudioController, MainController.MainWindowController,
-																							MainController.ConfigurationController);
+			PluginsStudioViews = new Controllers.PluginsStudio.PluginsStudioViewManager(MainController.AppStudioController, MainController.MainWindowController,
+																						MainController.ConfigurationController);
 			PluginsStudioViews.AddPlugin(new Libraries.DbStudio.Views.DbStudioViewManager());
 			PluginsStudioViews.AddPlugin(new Libraries.BlogReader.Views.BlogReaderPlugin());
 			PluginsStudioViews.InitializePlugins();
@@ -296,7 +296,7 @@ namespace Bau.DbStudio
 		/// </summary>
 		private void OpenSearchWindow()
 		{
-			if (dckManager.ActiveDocument?.UserControl is Libraries.PluginsStudio.Views.Files.FileTextView fileView)
+			if (dckManager.ActiveDocument?.UserControl is Views.Files.FileTextView fileView)
 				fileView.OpenSearch(true);
 		}
 
@@ -429,7 +429,7 @@ namespace Bau.DbStudio
 		/// <summary>
 		///		Manager de vistas de PluginsStudio
 		/// </summary>
-		public Libraries.PluginsStudio.Views.PluginsStudioViewManager PluginsStudioViews { get; private set; }
+		public Controllers.PluginsStudio.PluginsStudioViewManager PluginsStudioViews { get; private set; }
 
 		/// <summary>
 		///		ViewModel principal
@@ -559,7 +559,7 @@ namespace Bau.DbStudio
 
 		private void OpenWebBrowser_Click(object sender, RoutedEventArgs e)
 		{
-			dckManager.AddDocument("192830489", "Web", new Views.Web.WebExplorerView(null), null);
+			dckManager.AddDocument("192830489", "Web", new Views.Tools.Web.WebExplorerView(null), null);
 		}
 	}
 }

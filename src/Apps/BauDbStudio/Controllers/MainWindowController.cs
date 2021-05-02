@@ -104,14 +104,6 @@ namespace Bau.DbStudio.Controllers
 		}
 
 		/// <summary>
-		///		Obtiene el nombre de la consola de ejecución de proyectos ETL
-		/// </summary>
-		public string GetEtlConsoleFileName()
-		{
-			return AppController.ConfigurationController.ConsoleExecutable;
-		}
-
-		/// <summary>
 		///		Muestra una notificación: si está marcada como error o si la configuración así lo permite
 		/// </summary>
 		public void ShowNotification(SystemControllerEnums.NotificationType type, string title, string message)
