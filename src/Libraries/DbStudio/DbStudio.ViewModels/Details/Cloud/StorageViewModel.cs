@@ -13,7 +13,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Cloud
 		private string _name, _description, _connectionString;
 		private bool _isNew;
 
-		public StorageViewModel(SolutionViewModel solutionViewModel, StorageModel storage)
+		public StorageViewModel(DbStudioViewModel solutionViewModel, StorageModel storage)
 		{
 			// Inicializa las propiedades
 			SolutionViewModel = solutionViewModel;
@@ -81,7 +81,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Cloud
 		/// <summary>
 		///		ViewModel de la solución
 		/// </summary>
-		public SolutionViewModel SolutionViewModel { get; }
+		public DbStudioViewModel SolutionViewModel { get; }
 
 		/// <summary>
 		///		Datos de almacenamiento

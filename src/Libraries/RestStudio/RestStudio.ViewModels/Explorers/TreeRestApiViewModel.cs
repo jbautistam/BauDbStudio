@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Bau.Libraries.RestStudio.ViewModels.Solutions.Explorers
+namespace Bau.Libraries.RestStudio.ViewModels.Explorers
 {
 	/// <summary>
 	///		ViewModel del árbol de las Api Rest
@@ -19,10 +19,10 @@ namespace Bau.Libraries.RestStudio.ViewModels.Solutions.Explorers
 			Unknown
 		}
 
-		public TreeRestApiViewModel(SolutionViewModel solutionViewModel)
+		public TreeRestApiViewModel(RestStudioViewModel mainViewModel)
 		{
 			// Asigna las propiedades
-			SolutionViewModel = solutionViewModel;
+			MainViewModel = mainViewModel;
 			// Asigna los comandos
 		}
 
@@ -31,7 +31,7 @@ namespace Bau.Libraries.RestStudio.ViewModels.Solutions.Explorers
 		/// </summary>
 		protected override void AddRootNodes()
 		{
-			foreach (Models.Rest.RestModel rest in SolutionViewModel.Solution.RestApis)
+			foreach (Models.Rest.RestModel rest in MainViewModel.Solution.RestApis)
 				Children.Add(new NodeRestApiViewModel(this, null, rest));
 		}
 
@@ -60,8 +60,8 @@ namespace Bau.Libraries.RestStudio.ViewModels.Solutions.Explorers
 		}
 
 		/// <summary>
-		///		ViewModel de la solución
+		///		ViewModel principal
 		/// </summary>
-		public SolutionViewModel SolutionViewModel { get; }
+		public RestStudioViewModel MainViewModel { get; }
 	}
 }

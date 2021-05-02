@@ -11,7 +11,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Files
 	/// </summary>
 	public class ScriptFileViewModel : PluginsStudio.ViewModels.Base.Files.BaseTextFileViewModel
 	{
-		public ScriptFileViewModel(SolutionViewModel solutionViewModel, string fileName) : base(solutionViewModel.MainController.PluginController, fileName)
+		public ScriptFileViewModel(DbStudioViewModel solutionViewModel, string fileName) : base(solutionViewModel.MainController.PluginController, fileName)
 		{
 			SolutionViewModel = solutionViewModel;
 		}
@@ -71,6 +71,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Files
 		/// <summary>
 		///		Solución
 		/// </summary>
-		public SolutionViewModel SolutionViewModel { get; }
+		public DbStudioViewModel SolutionViewModel { get; }
 	}
 }

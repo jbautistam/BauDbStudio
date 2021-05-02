@@ -14,7 +14,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting
 		private string _fileName;
 		private Explorers.TreeReportingViewModel _treeReportingViewModel;
 
-		public ReportingSolutionViewModel(SolutionViewModel solutionViewModel)
+		public ReportingSolutionViewModel(DbStudioViewModel solutionViewModel)
 		{
 			SolutionViewModel = solutionViewModel;
 			ReportingSolutionManager = new ReportingSolutionManager();
@@ -57,7 +57,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting
 		/// <summary>
 		///		ViewModel de la solución
 		/// </summary>
-		public SolutionViewModel SolutionViewModel { get; }
+		public DbStudioViewModel SolutionViewModel { get; }
 
 		/// <summary>
 		///		Manager de la solución de reporting

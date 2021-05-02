@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 
 using Bau.Libraries.PluginsStudio.Views.Base.Models;
-using Bau.Libraries.PluginsStudio.ViewModels.Base.Models;
 
-namespace Bau.Libraries.DbStudio.Views
+namespace Bau.Libraries.RestStudio.Views
 {
 	/// <summary>
-	///		Manager de vistas de DbStudio
+	///		Manager de vistas de RestStudio
 	/// </summary>
-	public class DbStudioViewManager : PluginsStudio.Views.Base.Interfaces.IPlugin
+	public class RestStudioViewManager : PluginsStudio.Views.Base.Interfaces.IPlugin
 	{
 		/// <summary>
 		///		Inicializa el manager de vistas de DbStudio
@@ -18,7 +17,7 @@ namespace Bau.Libraries.DbStudio.Views
 							   PluginsStudio.ViewModels.Base.Controllers.IPluginsController pluginController)
 		{
 			AppViewsController = appViewsController;
-			MainViewModel = new ViewModels.DbStudioViewModel("DbStudio", new Controllers.DbStudioController(this, pluginController));
+			MainViewModel = new ViewModels.RestStudioViewModel(new Controllers.RestStudioController(this, pluginController));
 		}
 
 		/// <summary>
@@ -34,7 +33,7 @@ namespace Bau.Libraries.DbStudio.Views
 		/// </summary>
 		public void Refresh()
 		{
-			MainViewModel.Load(MainViewModel.PathData);
+			MainViewModel.Load(MainViewModel.Path);
 		}
 
 		/// <summary>
@@ -55,26 +54,10 @@ namespace Bau.Libraries.DbStudio.Views
 				// Añade los paneles de la aplicación principal
 				panes.Add(new PaneModel
 								{
-									Id = "TreeConnectionsExplorer",
-									Title = "Connections",
+									Id = "TreeRestApiExplorer",
+									Title = "RestApi",
 									Position = PaneModel.PositionType.Left,
-									View = new Explorers.TreeConnectionsExplorer(MainViewModel.TreeConnectionsViewModel)
-								}
-						 );
-				panes.Add(new PaneModel
-								{
-									Id = "TreeStorageExplorer",
-									Title = "Storage",
-									Position = PaneModel.PositionType.Right,
-									View = new Explorers.TreeStoragesExplorer(MainViewModel.TreeStoragesViewModel)
-								}
-						 );
-				panes.Add(new PaneModel
-								{
-									Id = "TreeReportingExplorer",
-									Title = "Reporting",
-									Position = PaneModel.PositionType.Left,
-									View = new Reporting.Explorers.TreeReportingExplorer(MainViewModel.ReportingSolutionViewModel.TreeReportingViewModel)
+									View = new Explorers.TreeRestApiExplorer(MainViewModel.TreeRestApiViewModel)
 								}
 						 );
 				// Devuelve la lista de paneles
@@ -86,33 +69,36 @@ namespace Bau.Libraries.DbStudio.Views
 		/// </summary>
 		public List<ToolBarModel> GetToolBars()
 		{
-			List<ToolBarModel> toolBars = new();
+			return new();
+			//List<ToolBarModel> toolBars = new();
 
-				// Añade la barra de herramientas del control de ejecución
-				toolBars.Add(new ToolBarModel
-										{
-											Id = "ExecutionToolBar",
-											ToolBar = new Controls.ExecutionToolBar(MainViewModel.ConnectionExecutionViewModel)
-										}
-							);
-				// Devuelve la lista
-				return toolBars;
+			//	// Añade la barra de herramientas del control de ejecución
+			//	toolBars.Add(new ToolBarModel
+			//							{
+			//								Id = "ExecutionToolBar",
+			//								ToolBar = new Controls.ExecutionToolBar(MainViewModel.ConnectionExecutionViewModel)
+			//							}
+			//				);
+			//	// Devuelve la lista
+			//	return toolBars;
 		}
 
 		/// <summary>
 		///		Obtiene los menús del plugin
 		/// </summary>
-		public List<MenuListModel> GetMenus()
+		public List<PluginsStudio.ViewModels.Base.Models.MenuListModel> GetMenus()
 		{
-			List<MenuListModel> menus = new();
+			return new();
+			//List<MenuListModel> menus = new();
 
-				// Crea la lista de menús de "Nuevo elemento"
-				menus.Add(GetMenus(MenuListModel.SectionType.NewItem));
-				menus.Add(GetMenus(MenuListModel.SectionType.Tools));
-				// Devuelve la lista de menús
-				return menus;
+			//	// Crea la lista de menús de "Nuevo elemento"
+			//	menus.Add(GetMenus(MenuListModel.SectionType.NewItem));
+			//	menus.Add(GetMenus(MenuListModel.SectionType.Tools));
+			//	// Devuelve la lista de menús
+			//	return menus;
 		}
 
+/*
 		/// <summary>
 		///		Obtiene los menús
 		/// </summary>
@@ -154,25 +140,26 @@ namespace Bau.Libraries.DbStudio.Views
 		{
 			return $"pack://application:,,,/DbStudio.Views;component/Resources/Images/{resource}";
 		}
-
+*/
 		/// <summary>
 		///		Obtiene las opciones de menú asociadas a las extensiones de archivo y carpetas
 		/// </summary>
-		public List<FileOptionsModel> GetFilesOptions()
+		public List<PluginsStudio.ViewModels.Base.Models.FileOptionsModel> GetFilesOptions()
 		{
-			return new PluginsStudio.ViewModels.Base.Models.Builders.FileOptionsBuilder()
-								.WithOption()
-									.WithFolder()
-									.WithExtension("sql")
-									.WithExtension("xml")
-									.WithMenu(new MenuModel
-														{
-															Header = "Ejecutar",
-															Icon = GetIcon("ArrowRight.png"),
-															Command = MainViewModel.ConnectionExecutionViewModel.ExecuteFileCommand
-														}
-											 )
-								.Build();
+			return new();
+			//return new PluginsStudio.ViewModels.Base.Models.Builders.FileOptionsBuilder()
+			//					.WithOption()
+			//						.WithFolder()
+			//						.WithExtension("sql")
+			//						.WithExtension("xml")
+			//						.WithMenu(new MenuModel
+			//											{
+			//												Header = "Ejecutar",
+			//												Icon = GetIcon("ArrowRight.png"),
+			//												Command = MainViewModel.ConnectionExecutionViewModel.ExecuteFileCommand
+			//											}
+			//								 )
+			//					.Build();
 		}
 
 		/// <summary>
@@ -183,6 +170,6 @@ namespace Bau.Libraries.DbStudio.Views
 		/// <summary>
 		///		ViewModel principal
 		/// </summary>
-		public ViewModels.DbStudioViewModel MainViewModel { get; private set; }
+		public ViewModels.RestStudioViewModel MainViewModel { get; private set; }
 	}
 }

@@ -82,7 +82,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Cloud
 			DataSourceSql,
 			Dimension
 		}
-		public TreeStorageViewModel(SolutionViewModel solutionViewModel)
+		public TreeStorageViewModel(DbStudioViewModel solutionViewModel)
 		{ 
 			SolutionViewModel = solutionViewModel;
 			NewStorageCommand = new BaseCommand(_ => OpenStorage(null));
@@ -555,7 +555,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Cloud
 		/// <summary>
 		///		ViewModel de la solución
 		/// </summary>
-		public SolutionViewModel SolutionViewModel { get; }
+		public DbStudioViewModel SolutionViewModel { get; }
 
 		/// <summary>
 		///		Comando para crear una nueva conexión a storage

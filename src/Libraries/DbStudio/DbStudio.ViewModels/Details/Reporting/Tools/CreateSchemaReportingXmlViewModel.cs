@@ -10,7 +10,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Tools
 		// Variables privadas
 		private string _name, _schemaFileName, _outputFileName, _maskFiles;
 
-		public CreateSchemaReportingXmlViewModel(SolutionViewModel solutionViewModel)
+		public CreateSchemaReportingXmlViewModel(DbStudioViewModel solutionViewModel)
 		{
 			// Inicializa las propiedades
 			SolutionViewModel = solutionViewModel;
@@ -67,7 +67,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Tools
 		/// <summary>
 		///		ViewModel de la solución
 		/// </summary>
-		public SolutionViewModel SolutionViewModel { get; }
+		public DbStudioViewModel SolutionViewModel { get; }
 
 		/// <summary>
 		///		Identificador del esquema en el DataWarehouse

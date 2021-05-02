@@ -14,7 +14,7 @@ namespace Bau.Libraries.DbStudio.ViewModels
 	/// <summary>
 	///		ViewModel de la solución
 	/// </summary>
-	public class SolutionViewModel : BaseObservableObject
+	public class DbStudioViewModel : BaseObservableObject
 	{
 		// Variables privadas
 		private string _text;
@@ -22,7 +22,7 @@ namespace Bau.Libraries.DbStudio.ViewModels
 		private Explorers.Cloud.TreeStorageViewModel _treeStoragesViewModel;
 		private Details.Connections.ConnectionExecutionViewModel _connectionsViewModel;
 
-		public SolutionViewModel(string appName, Controllers.IDbStudioController mainController)
+		public DbStudioViewModel(string appName, Controllers.IDbStudioController mainController)
 		{
 			// Título de la aplicación
 			Text = appName;

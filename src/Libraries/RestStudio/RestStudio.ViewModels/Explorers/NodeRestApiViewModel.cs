@@ -6,7 +6,7 @@ using Bau.Libraries.BauMvvm.ViewModels.Media;
 using Bau.Libraries.RestStudio.Models.Rest;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
 
-namespace Bau.Libraries.RestStudio.ViewModels.Solutions.Explorers
+namespace Bau.Libraries.RestStudio.ViewModels.Explorers
 {
 	/// <summary>
 	///		ViewModel de un nodo de API Rest

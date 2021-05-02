@@ -18,7 +18,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Connections
 		private string _header, _fileName;
 		private BauMvvm.ViewModels.Forms.ControlItems.ControlItemCollectionViewModel<ExecuteFilesItemViewModel> _files;
 
-		public ExecuteFilesViewModel(SolutionViewModel solutionViewModel, List<string> files) : base(false)
+		public ExecuteFilesViewModel(DbStudioViewModel solutionViewModel, List<string> files) : base(false)
 		{
 			// Asigna las propiedades
 			SolutionViewModel = solutionViewModel;
@@ -230,7 +230,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Connections
 		/// <summary>
 		///		Solución
 		/// </summary>
-		public SolutionViewModel SolutionViewModel { get; }
+		public DbStudioViewModel SolutionViewModel { get; }
 
 		/// <summary>
 		///		Cabecera

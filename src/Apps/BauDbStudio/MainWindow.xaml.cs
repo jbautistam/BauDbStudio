@@ -28,8 +28,10 @@ namespace Bau.DbStudio
 			DbStudioViewsManager = new Controllers.DbStudioViewsManager("BauDbStudio", 
 																		System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Bau.DbStudio"),
 																		this);
+			// Añade los plugins
 			DbStudioViewsManager.AddPlugin(new Libraries.DbStudio.Views.DbStudioViewManager());
 			DbStudioViewsManager.AddPlugin(new Libraries.BlogReader.Views.BlogReaderPlugin());
+			DbStudioViewsManager.AddPlugin(new Libraries.RestStudio.Views.RestStudioViewManager());
 			DbStudioViewsManager.Initialize();
 			// Inicializa el ViewModel
 			DataContext = ViewModel = DbStudioViewsManager.PluginsStudioViewModel;

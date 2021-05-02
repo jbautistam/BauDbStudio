@@ -32,7 +32,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Queries
 		private System.Timers.Timer _timer;
 		private System.Diagnostics.Stopwatch _stopwatch;
 
-		public QueryViewModel(SolutionViewModel solutionViewModel, string selectedConnection, string query, bool raisePrepareExecution) : base(false)
+		public QueryViewModel(DbStudioViewModel solutionViewModel, string selectedConnection, string query, bool raisePrepareExecution) : base(false)
 		{
 			// Asigna los viewModel
 			SolutionViewModel = solutionViewModel;
@@ -391,7 +391,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Queries
 		/// <summary>
 		///		Solución
 		/// </summary>
-		public SolutionViewModel SolutionViewModel { get; }
+		public DbStudioViewModel SolutionViewModel { get; }
 
 		/// <summary>
 		///		ViewModel para el gráfico

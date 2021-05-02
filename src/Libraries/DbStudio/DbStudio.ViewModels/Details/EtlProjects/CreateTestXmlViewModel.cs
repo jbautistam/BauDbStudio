@@ -15,7 +15,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.EtlProjects
 		private string _outputPath, _fileNameTest, _fileNameAssert;
 		private Connections.ComboConnectionsViewModel _comboConnections;
 
-		public CreateTestXmlViewModel(SolutionViewModel solutionViewModel)
+		public CreateTestXmlViewModel(DbStudioViewModel solutionViewModel)
 		{
 			// Inicializa las propiedades
 			SolutionViewModel = solutionViewModel;
@@ -89,7 +89,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.EtlProjects
 		/// <summary>
 		///		ViewModel de la solución
 		/// </summary>
-		public SolutionViewModel SolutionViewModel { get; }
+		public DbStudioViewModel SolutionViewModel { get; }
 
 		/// <summary>
 		///		Datos de conexión

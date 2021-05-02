@@ -16,7 +16,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.EtlProjects
 		// Variables privadas
 		private string _header, _etlConsoleFileName, _projectFileName, _contextFileName;
 
-		public ExecuteEtlConsoleViewModel(SolutionViewModel solutionViewModel, string projectFileName) : base(false)
+		public ExecuteEtlConsoleViewModel(DbStudioViewModel solutionViewModel, string projectFileName) : base(false)
 		{
 			// Inicializa las propiedades
 			SolutionViewModel = solutionViewModel;
@@ -135,7 +135,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.EtlProjects
 		/// <summary>
 		///		ViewModel de la solución
 		/// </summary>
-		public SolutionViewModel SolutionViewModel { get; }
+		public DbStudioViewModel SolutionViewModel { get; }
 
 		/// <summary>
 		///		Datos de conexión

@@ -16,7 +16,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.EtlProjects
 		private Application.SolutionManager.FormatType _formatType;
 		private long _blockSize;
 
-		public ExportDatabaseViewModel(SolutionViewModel solutionViewModel)
+		public ExportDatabaseViewModel(DbStudioViewModel solutionViewModel)
 		{
 			// Inicializa las propiedades
 			SolutionViewModel = solutionViewModel;
@@ -80,7 +80,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.EtlProjects
 		/// <summary>
 		///		ViewModel de la solución
 		/// </summary>
-		public SolutionViewModel SolutionViewModel { get; }
+		public DbStudioViewModel SolutionViewModel { get; }
 
 		/// <summary>
 		///		Base de datos

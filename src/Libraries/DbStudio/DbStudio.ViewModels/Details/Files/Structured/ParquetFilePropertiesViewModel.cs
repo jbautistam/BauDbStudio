@@ -11,7 +11,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Files.Structured
 		// Variables privadas
 		private ObservableCollection<ParquetFileListItemColumnViewModel> _columns;
 
-		public ParquetFilePropertiesViewModel(SolutionViewModel solutionViewModel, ParquetFileViewModel fileViewModel)
+		public ParquetFilePropertiesViewModel(DbStudioViewModel solutionViewModel, ParquetFileViewModel fileViewModel)
 		{
 			// Inicializa las propiedades
 			SolutionViewModel = solutionViewModel;
@@ -47,7 +47,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Files.Structured
 		/// <summary>
 		///		ViewModel de la solución
 		/// </summary>
-		public SolutionViewModel SolutionViewModel { get; }
+		public DbStudioViewModel SolutionViewModel { get; }
 
 		/// <summary>
 		///		ViewModel del archivo

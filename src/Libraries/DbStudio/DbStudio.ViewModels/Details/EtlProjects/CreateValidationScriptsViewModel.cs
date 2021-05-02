@@ -19,7 +19,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.EtlProjects
 		private Application.SolutionManager.FormatType _formatType;
 		private ComboViewModel _comboFormat;
 
-		public CreateValidationScriptsViewModel(SolutionViewModel solutionViewModel)
+		public CreateValidationScriptsViewModel(DbStudioViewModel solutionViewModel)
 		{
 			// Inicializa las propiedades
 			SolutionViewModel = solutionViewModel;
@@ -123,7 +123,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.EtlProjects
 		/// <summary>
 		///		ViewModel de la solución
 		/// </summary>
-		public SolutionViewModel SolutionViewModel { get; }
+		public DbStudioViewModel SolutionViewModel { get; }
 
 		/// <summary>
 		///		Indica si se deben comprobar archivos o base de datos

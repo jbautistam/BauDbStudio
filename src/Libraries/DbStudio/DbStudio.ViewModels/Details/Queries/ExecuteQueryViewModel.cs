@@ -12,7 +12,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Queries
 		// Variables privadas
 		private string _header;
 
-		public ExecuteQueryViewModel(SolutionViewModel solutionViewModel, string selectedConnection, string query) : base(false)
+		public ExecuteQueryViewModel(DbStudioViewModel solutionViewModel, string selectedConnection, string query) : base(false)
 		{
 			// Asigna los viewModel
 			SolutionViewModel = solutionViewModel;
@@ -44,7 +44,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Queries
 		/// <summary>
 		///		Solución
 		/// </summary>
-		public SolutionViewModel SolutionViewModel { get; }
+		public DbStudioViewModel SolutionViewModel { get; }
 
 		/// <summary>
 		///		ViewModel para la consulta

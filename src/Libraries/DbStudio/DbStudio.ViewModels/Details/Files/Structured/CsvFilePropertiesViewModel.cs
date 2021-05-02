@@ -14,7 +14,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Files.Structured
 		private bool _skipFirstLine;
 		private CsvFileListColumnsViewModel _listColumnsViewModel;
 
-		public CsvFilePropertiesViewModel(SolutionViewModel solutionViewModel, CsvFileViewModel fileViewModel)
+		public CsvFilePropertiesViewModel(DbStudioViewModel solutionViewModel, CsvFileViewModel fileViewModel)
 		{
 			// Inicializa las propiedades
 			SolutionViewModel = solutionViewModel;
@@ -112,7 +112,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Files.Structured
 		/// <summary>
 		///		ViewModel de la solución
 		/// </summary>
-		public SolutionViewModel SolutionViewModel { get; }
+		public DbStudioViewModel SolutionViewModel { get; }
 
 		/// <summary>
 		///		ViewModel del archivo

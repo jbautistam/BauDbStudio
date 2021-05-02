@@ -52,7 +52,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Connections
 		private System.Diagnostics.Stopwatch _stopwatch;
 		private BauMvvm.ViewModels.Forms.ControlItems.ControlGenericListViewModel<LastParameterFileViewModel> _lastParametersFileViewModel;
 
-		public ConnectionExecutionViewModel(SolutionViewModel solutionViewModel)
+		public ConnectionExecutionViewModel(DbStudioViewModel solutionViewModel)
 		{
 			// Asigna la solución y el viewmodel de parámetros de ejecución
 			SolutionViewModel = solutionViewModel;
@@ -604,7 +604,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Connections
 		/// <summary>
 		///		ViewModel de la solución
 		/// </summary>
-		public SolutionViewModel SolutionViewModel { get; }
+		public DbStudioViewModel SolutionViewModel { get; }
 
 		/// <summary>
 		///		Combo de conexiones

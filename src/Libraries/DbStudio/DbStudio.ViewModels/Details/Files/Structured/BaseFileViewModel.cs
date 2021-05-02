@@ -31,7 +31,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Files.Structured
 		private long _records;
 		private DataTable _dataResults;
 
-		protected BaseFileViewModel(SolutionViewModel solutionViewModel, string fileName, string exportFilesExtensions) : base(false)
+		protected BaseFileViewModel(DbStudioViewModel solutionViewModel, string fileName, string exportFilesExtensions) : base(false)
 		{
 			// Asigna las propiedades
 			SolutionViewModel = solutionViewModel;
@@ -157,7 +157,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Files.Structured
 		/// <summary>
 		///		Solución
 		/// </summary>
-		public SolutionViewModel SolutionViewModel { get; }
+		public DbStudioViewModel SolutionViewModel { get; }
 
 		/// <summary>
 		///		Máscara de grabación de archivos

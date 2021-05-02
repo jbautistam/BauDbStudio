@@ -12,7 +12,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.EtlProjects
 		private string _outputFileName;
 		private Connections.ComboConnectionsViewModel _comboConnections;
 
-		public CreateImportFilesScriptViewModel(SolutionViewModel solutionViewModel)
+		public CreateImportFilesScriptViewModel(DbStudioViewModel solutionViewModel)
 		{
 			// Inicializa las propiedades
 			SolutionViewModel = solutionViewModel;
@@ -79,7 +79,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.EtlProjects
 		/// <summary>
 		///		ViewModel de la solución
 		/// </summary>
-		public SolutionViewModel SolutionViewModel { get; }
+		public DbStudioViewModel SolutionViewModel { get; }
 
 		/// <summary>
 		///		Combo de conexiones

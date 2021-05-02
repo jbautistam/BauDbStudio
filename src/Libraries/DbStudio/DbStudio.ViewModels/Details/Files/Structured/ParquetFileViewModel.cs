@@ -10,7 +10,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Files.Structured
 	/// </summary>
 	public class ParquetFileViewModel : BaseFileViewModel
 	{
-		public ParquetFileViewModel(SolutionViewModel solutionViewModel, string fileName) : base(solutionViewModel, fileName, "csv") {}
+		public ParquetFileViewModel(DbStudioViewModel solutionViewModel, string fileName) : base(solutionViewModel, fileName, "csv") {}
 
 		/// <summary>
 		///		Carga la página del archivo

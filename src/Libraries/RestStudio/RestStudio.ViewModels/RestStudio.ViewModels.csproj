@@ -11,8 +11,4 @@
     <ProjectReference Include="..\RestStudio.Application\RestStudio.Application.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Solutions\Details\" />
-  </ItemGroup>
-
 </Project>

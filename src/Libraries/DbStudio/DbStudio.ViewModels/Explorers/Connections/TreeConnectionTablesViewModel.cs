@@ -11,7 +11,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 	/// </summary>
 	public class TreeConnectionTablesViewModel : TreeSolutionBaseViewModel
 	{
-		public TreeConnectionTablesViewModel(SolutionViewModel solutionViewModel) : base(solutionViewModel) {}
+		public TreeConnectionTablesViewModel(DbStudioViewModel solutionViewModel) : base(solutionViewModel) {}
 
 		/// <summary>
 		///		Carga el árbol de una conexión

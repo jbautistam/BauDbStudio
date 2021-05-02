@@ -9,7 +9,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers
 	/// </summary>
 	public abstract class TreeSolutionBaseViewModel : BaseTreeViewModel
 	{
-		public TreeSolutionBaseViewModel(SolutionViewModel solutionViewModel)
+		public TreeSolutionBaseViewModel(DbStudioViewModel solutionViewModel)
 		{
 			SolutionViewModel = solutionViewModel;
 		}
@@ -17,6 +17,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers
 		/// <summary>
 		///		ViewModel de la solución
 		/// </summary>
-		public SolutionViewModel SolutionViewModel { get; }
+		public DbStudioViewModel SolutionViewModel { get; }
 	}
 }

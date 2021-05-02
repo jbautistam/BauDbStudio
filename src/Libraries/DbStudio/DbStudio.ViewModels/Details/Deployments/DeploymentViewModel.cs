@@ -15,7 +15,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Deployments
 		private bool _isNew, _writeComments, _lowcaseFileNames, _replaceArguments;
 		private ComboViewModel _comboTypes;
 
-		public DeploymentViewModel(SolutionViewModel solutionViewModel, DeploymentModel deployment)
+		public DeploymentViewModel(DbStudioViewModel solutionViewModel, DeploymentModel deployment)
 		{
 			// Inicializa las propiedades
 			SolutionViewModel = solutionViewModel;
@@ -127,7 +127,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Deployments
 		/// <summary>
 		///		ViewModel de la solución
 		/// </summary>
-		public SolutionViewModel SolutionViewModel { get; }
+		public DbStudioViewModel SolutionViewModel { get; }
 
 		/// <summary>
 		///		Datos de distribución

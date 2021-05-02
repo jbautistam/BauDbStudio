@@ -11,7 +11,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Files.Structured
 	/// </summary>
 	public class ExcelFileViewModel : BaseFileViewModel
 	{
-		public ExcelFileViewModel(SolutionViewModel solutionViewModel, string fileName) : base(solutionViewModel, fileName, "parquet") {}
+		public ExcelFileViewModel(DbStudioViewModel solutionViewModel, string fileName) : base(solutionViewModel, fileName, "parquet") {}
 
 		/// <summary>
 		///		Carga el archivo

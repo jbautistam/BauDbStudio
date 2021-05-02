@@ -10,7 +10,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Tools
 		// Variables privadas
 		private string _schemaFileName, _outputFileName, _maskFiles, _maskSqlFiles;
 
-		public CreateScriptsSqlReportingViewModel(SolutionViewModel solutionViewModel)
+		public CreateScriptsSqlReportingViewModel(DbStudioViewModel solutionViewModel)
 		{
 			// Inicializa las propiedades
 			SolutionViewModel = solutionViewModel;
@@ -66,7 +66,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Tools
 		/// <summary>
 		///		ViewModel de la solución
 		/// </summary>
-		public SolutionViewModel SolutionViewModel { get; }
+		public DbStudioViewModel SolutionViewModel { get; }
 
 		/// <summary>
 		///		Nombre del archivo de esquema

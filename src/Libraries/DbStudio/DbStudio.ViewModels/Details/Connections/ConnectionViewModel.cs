@@ -20,7 +20,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Connections
 		private bool _isNew;
 		private ComboViewModel _comboTypes;
 
-		public ConnectionViewModel(SolutionViewModel solutionViewModel, ConnectionModel connection)
+		public ConnectionViewModel(DbStudioViewModel solutionViewModel, ConnectionModel connection)
 		{
 			// Inicializa las propiedades
 			SolutionViewModel = solutionViewModel;
@@ -186,7 +186,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Connections
 		/// <summary>
 		///		ViewModel de la solución
 		/// </summary>
-		public SolutionViewModel SolutionViewModel { get; }
+		public DbStudioViewModel SolutionViewModel { get; }
 
 		/// <summary>
 		///		Datos de conexión

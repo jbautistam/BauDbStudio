@@ -14,7 +14,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Connections
 		// Variables privadas
 		private ComboViewModel _connections;
 
-		public ComboConnectionsViewModel(SolutionViewModel solutionViewModel, string selectedConnection)
+		public ComboConnectionsViewModel(DbStudioViewModel solutionViewModel, string selectedConnection)
 		{
 			SolutionViewModel = solutionViewModel;
 			LoadComboConnections(selectedConnection);
@@ -67,7 +67,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Connections
 		/// <summary>
 		///		ViewModel de la solución
 		/// </summary>
-		public SolutionViewModel SolutionViewModel { get; }
+		public DbStudioViewModel SolutionViewModel { get; }
 
 		/// <summary>
 		///		Combo de conexiones

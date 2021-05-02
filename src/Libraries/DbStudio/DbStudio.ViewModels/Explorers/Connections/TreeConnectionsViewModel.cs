@@ -79,7 +79,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 			Dimension
 		}
 
-		public TreeConnectionsViewModel(SolutionViewModel solutionViewModel) : base(solutionViewModel)
+		public TreeConnectionsViewModel(DbStudioViewModel solutionViewModel) : base(solutionViewModel)
 		{
 			NewConnectionCommand = new BaseCommand(_ => OpenConnection(null), _ => CanExecuteAction(nameof(NewConnectionCommand)))
 										.AddListener(this, nameof(SelectedNode));
