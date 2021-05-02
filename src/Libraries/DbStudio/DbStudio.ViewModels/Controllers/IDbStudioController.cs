@@ -13,9 +13,14 @@ namespace Bau.Libraries.DbStudio.ViewModels.Controllers
 		string GetEtlConsoleFileName();
 
 		/// <summary>
-		///		Controlador de la aplicación
+		///		Abre una ventana de detalles
 		/// </summary>
-		PluginsStudio.ViewModels.Base.Controllers.IAppController AppController { get; }
+		BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType OpenWindow(PluginsStudio.ViewModels.Base.Interfaces.IDetailViewModel detailsViewModel);
+
+		/// <summary>
+		///		Abre un cuadro de diálogo
+		/// </summary>
+		BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType OpenDialog(BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewModel dialogViewModel);
 
 		/// <summary>
 		///		Controlador plugin

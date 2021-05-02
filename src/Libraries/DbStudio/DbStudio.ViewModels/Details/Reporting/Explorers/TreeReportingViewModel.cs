@@ -182,10 +182,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 					else
 						dataSource = new DataSourceSqlModel(GetSelectedDataWarehouse(SelectedNode));
 					// Abre la vista
-					ReportingSolutionViewModel.SolutionViewModel.MainController.AppController.OpenWindow(new DataSources.DataSourceSqlViewModel(ReportingSolutionViewModel, dataSource));
+					ReportingSolutionViewModel.SolutionViewModel.MainController.OpenWindow(new DataSources.DataSourceSqlViewModel(ReportingSolutionViewModel, dataSource));
 			}
 			else if (node.DataSource is DataSourceTableModel dataSourceTable)
-				ReportingSolutionViewModel.SolutionViewModel.MainController.AppController.OpenWindow(new DataSources.DataSourceTableViewModel(ReportingSolutionViewModel, dataSourceTable));
+				ReportingSolutionViewModel.SolutionViewModel.MainController.OpenWindow(new DataSources.DataSourceTableViewModel(ReportingSolutionViewModel, dataSourceTable));
 		}
 
 		/// <summary>
@@ -221,7 +221,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 				else
 					dimension = node.Dimension;
 				// Abre el formulario
-				ReportingSolutionViewModel.SolutionViewModel.MainController.AppController.OpenWindow(new Dimension.DimensionViewModel(ReportingSolutionViewModel, dimension, isNew));
+				ReportingSolutionViewModel.SolutionViewModel.MainController.OpenWindow(new Dimension.DimensionViewModel(ReportingSolutionViewModel, dimension, isNew));
 		}
 
 		/// <summary>
@@ -246,7 +246,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 				else
 					report = node.Report;
 				// Abre el formulario
-				ReportingSolutionViewModel.SolutionViewModel.MainController.AppController.OpenWindow(new Reports.ReportViewModel(ReportingSolutionViewModel, report, isNew));
+				ReportingSolutionViewModel.SolutionViewModel.MainController.OpenWindow(new Reports.ReportViewModel(ReportingSolutionViewModel, report, isNew));
 		}
 
 		/// <summary>
@@ -257,8 +257,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 			switch (SelectedNode)
 			{
 				case NodeReportViewModel node:
-						ReportingSolutionViewModel.SolutionViewModel.MainController.AppController.OpenWindow
-								(new Queries.ReportViewModel(ReportingSolutionViewModel, node.Report));
+						ReportingSolutionViewModel.SolutionViewModel.MainController.OpenWindow(new Queries.ReportViewModel(ReportingSolutionViewModel, node.Report));
 					break;
 				case NodeDataSourceViewModel node:
 						OpenQueryDataSource(node.DataSource);
@@ -380,7 +379,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 					sql = GetSql(dataSourceTable);
 				// Abre la consulta
 				if (!string.IsNullOrWhiteSpace(sql))
-					ReportingSolutionViewModel.SolutionViewModel.MainController.AppController
+					ReportingSolutionViewModel.SolutionViewModel.MainController
 							.OpenWindow(new Details.Queries.ExecuteQueryViewModel(ReportingSolutionViewModel.SolutionViewModel, string.Empty, sql));
 		}
 

@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\AppController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Resources\Images\ArrowDown.png" />
     <None Remove="Resources\Images\ArrowRight.png" />
     <None Remove="Resources\Images\ArrowUp.png" />

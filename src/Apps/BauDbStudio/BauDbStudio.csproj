@@ -21,6 +21,7 @@
     <Page Remove="Controls\**" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="Controllers\AppController.cs" />
     <Compile Remove="Converters\FileIconConverter.cs" />
     <Compile Remove="Views\Tools\CreateFileView.xaml.cs" />
     <Compile Remove="Views\Tools\FindView.xaml.cs" />

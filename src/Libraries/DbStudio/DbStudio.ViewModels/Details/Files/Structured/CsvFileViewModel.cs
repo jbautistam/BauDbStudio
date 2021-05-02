@@ -50,8 +50,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Files.Structured
 		/// </summary>
 		protected override void OpenFileProperties()
 		{
-			if (SolutionViewModel.MainController.AppController.OpenDialog(new CsvFilePropertiesViewModel(SolutionViewModel, this)) == 
-					BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+			if (SolutionViewModel.MainController.OpenDialog(new CsvFilePropertiesViewModel(SolutionViewModel, this)) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 				LoadFile();
 		}
 

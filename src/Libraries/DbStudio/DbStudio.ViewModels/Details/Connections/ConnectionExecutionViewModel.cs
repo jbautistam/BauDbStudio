@@ -216,7 +216,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Connections
 			{
 				ExportDatabaseViewModel viewModel = new ExportDatabaseViewModel(SolutionViewModel);
 
-					if (SolutionViewModel.MainController.AppController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+					if (SolutionViewModel.MainController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 					{
 						// Exporta los datos
 						using (BlockLogModel block = SolutionViewModel.MainController.Logger.Default
@@ -550,7 +550,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Connections
 		private void OpenParametersFile()
 		{
 			if (!string.IsNullOrWhiteSpace(ConnectionParametersFileName))
-				SolutionViewModel.MainController.AppController.OpenWindow(new Files.ScriptFileViewModel(SolutionViewModel, ConnectionParametersFileName));
+				SolutionViewModel.MainController.OpenWindow(new Files.ScriptFileViewModel(SolutionViewModel, ConnectionParametersFileName));
 		}
 
 		/// <summary>
@@ -562,7 +562,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Connections
 			{
 				// Si el archivo seleccionado es XML, lo ejecuta sobre una consola, si no se ejecutan los SQL del directorio / archivo
 				if (fileName.EndsWith(".xml", StringComparison.CurrentCultureIgnoreCase))
-					SolutionViewModel.MainController.AppController.OpenWindow(new ExecuteEtlConsoleViewModel(SolutionViewModel, fileName));
+					SolutionViewModel.MainController.OpenWindow(new ExecuteEtlConsoleViewModel(SolutionViewModel, fileName));
 				else
 				{
 					List<string> files = GetFilesFromPath(fileName, ".sql");
@@ -571,7 +571,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Connections
 						if (files.Count == 0)
 							SolutionViewModel.MainController.SystemController.ShowMessage("No se encuentra ningún archivo SQL para ejecutar");
 						else
-							SolutionViewModel.MainController.AppController.OpenWindow(new ExecuteFilesViewModel(SolutionViewModel, files));
+							SolutionViewModel.MainController.OpenWindow(new ExecuteFilesViewModel(SolutionViewModel, files));
 				}
 			}
 		}

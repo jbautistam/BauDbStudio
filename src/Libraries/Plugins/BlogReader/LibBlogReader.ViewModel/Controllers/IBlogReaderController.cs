@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Bau.Libraries.BauMvvm.ViewModels.Controllers;
+
 namespace Bau.Libraries.LibBlogReader.ViewModel.Controllers
 {
 	/// <summary>
@@ -8,9 +10,14 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Controllers
 	public interface IBlogReaderController
 	{
 		/// <summary>
-		///		Controlador de la aplicación
+		///		Abre una ventana de detalles
 		/// </summary>
-		PluginsStudio.ViewModels.Base.Controllers.IAppController AppController { get; }
+		SystemControllerEnums.ResultType OpenWindow(PluginsStudio.ViewModels.Base.Interfaces.IDetailViewModel detailsViewModel);
+
+		/// <summary>
+		///		Abre un cuadro de diálogo
+		/// </summary>
+		SystemControllerEnums.ResultType OpenDialog(BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewModel dialogViewModel);
 
 		/// <summary>
 		///		Controlador plugin

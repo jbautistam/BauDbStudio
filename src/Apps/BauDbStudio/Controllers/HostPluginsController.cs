@@ -1,4 +1,5 @@
 ﻿using System;
+
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Files;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Interfaces;
 
@@ -35,7 +36,7 @@ namespace Bau.DbStudio.Controllers
 		/// </summary>
 		public void OpenEditor(BaseTextFileViewModel viewModel)
 		{
-			DbStudioViewManager.AppController.OpenWindow(viewModel);
+			DbStudioViewManager.PluginStudioController.OpenWindow(viewModel);
 		}
 
 		/// <summary>

@@ -148,7 +148,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 		/// </summary>
 		internal void OpenConnection(ConnectionModel connection)
 		{
-			if (SolutionViewModel.MainController.AppController.OpenDialog(new Details.Connections.ConnectionViewModel(SolutionViewModel, connection)) == 
+			if (SolutionViewModel.MainController.OpenDialog(new Details.Connections.ConnectionViewModel(SolutionViewModel, connection)) == 
 					BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 				Load();
 		}
@@ -158,7 +158,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 		/// </summary>
 		private void OpenDeployment(Models.Deployments.DeploymentModel deployment)
 		{
-			if (SolutionViewModel.MainController.AppController.OpenDialog(new Details.Deployments.DeploymentViewModel(SolutionViewModel, deployment)) == 
+			if (SolutionViewModel.MainController.OpenDialog(new Details.Deployments.DeploymentViewModel(SolutionViewModel, deployment)) == 
 					BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 				Load();
 		}
@@ -168,7 +168,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 		/// </summary>
 		private void OpenQuery(ConnectionTableModel table)
 		{
-			SolutionViewModel.MainController.AppController.OpenWindow(new Details.Queries.ExecuteQueryViewModel(SolutionViewModel, table?.Connection.Name, GetQuery(table)));
+			SolutionViewModel.MainController.OpenWindow(new Details.Queries.ExecuteQueryViewModel(SolutionViewModel, table?.Connection.Name, GetQuery(table)));
 		}
 
 		/// <summary>

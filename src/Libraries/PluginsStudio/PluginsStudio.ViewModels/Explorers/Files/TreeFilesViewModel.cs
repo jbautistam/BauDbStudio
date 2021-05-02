@@ -244,8 +244,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 				{
 					Tools.CreateFileViewModel createFileViewModel = new Tools.CreateFileViewModel(MainViewModel, path);
 
-						if (MainViewModel.PluginsStudioController.AppController.OpenDialog(createFileViewModel)
-										== BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes &&
+						if (MainViewModel.PluginsStudioController.OpenDialog(createFileViewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes &&
 							!string.IsNullOrWhiteSpace(createFileViewModel.FileName))
 						{
 							// Graba el archivo
@@ -361,8 +360,8 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 			{
 				string fileName = MainViewModel.PluginsStudioController.MainWindowController.DialogsController
 										.OpenDialogSave(GetSelectedFolder(),
-														"Archivos de imagen (*.jpg)|*.jpg",
-														"NewImage.jpg");
+														"Archivos PNG (*.png)|*.png|Archivos JPG (*.jpg)|*.jpg|Archivos BMP (*.bmp)|*.bmp|Archivos GIF (*.gif)|*.gif|Archivos TIFF (*.tiff)|*.tiff",
+														"NewImage.png");
 
 					if (!string.IsNullOrWhiteSpace(fileName))
 					{

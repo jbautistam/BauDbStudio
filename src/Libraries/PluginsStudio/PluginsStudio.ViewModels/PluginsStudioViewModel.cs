@@ -74,9 +74,9 @@ namespace Bau.Libraries.PluginsStudio.ViewModels
 		public void OpenFile(string fileName)
 		{
 			if (IsImage(fileName))
-				PluginsStudioController.AppController.OpenWindow(new Files.ImageViewModel(this, fileName));
+				PluginsStudioController.OpenWindow(new Files.ImageViewModel(this, fileName));
 			else
-				PluginsStudioController.AppController.OpenWindow(new Files.FileTextViewModel(this, fileName));
+				PluginsStudioController.OpenWindow(new Files.FileTextViewModel(this, fileName));
 		}
 
 		/// <summary>
@@ -84,7 +84,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels
 		/// </summary>
 		public void OpenWebBrowser(string url)
 		{
-			PluginsStudioController.AppController.OpenWindow(new Tools.Web.WebViewModel(this, url));
+			PluginsStudioController.OpenWindow(new Tools.Web.WebViewModel(this, url));
 		}
 
 		/// <summary>

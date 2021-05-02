@@ -158,7 +158,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Cloud
 		/// </summary>
 		private void OpenStorage(NodeStorageViewModel node)
 		{
-			if (SolutionViewModel.MainController.AppController.OpenDialog(new Details.Cloud.StorageViewModel(SolutionViewModel, node?.Storage)) == 
+			if (SolutionViewModel.MainController.OpenDialog(new Details.Cloud.StorageViewModel(SolutionViewModel, node?.Storage)) == 
 							BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 			{
 				// Graba la solución

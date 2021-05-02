@@ -26,13 +26,13 @@ namespace Bau.Libraries.BlogReader.Views.Views.Converters
 						switch (status)
 						{
 							case EntryModel.StatusEntry.Interesting:
-									icon = "/BauControls;component/Themes/Images/EntryInteresting.png";
+									icon = "/BlogReader.Views;component/Resources/EntryInteresting.png";
 								break;
 							case EntryModel.StatusEntry.NotRead:
-									icon = "/BauControls;component/Themes/Images/EntryNotRead.png";
+									icon = "/BlogReader.Views;component/Resources/EntryNotRead.png";
 								break;
 							case EntryModel.StatusEntry.Read:
-									icon = "/BauControls;component/Themes/Images/EntryRead.png";
+									icon = "/BlogReader.Views;component/Resources/EntryRead.png";
 								break;
 						}
 				}

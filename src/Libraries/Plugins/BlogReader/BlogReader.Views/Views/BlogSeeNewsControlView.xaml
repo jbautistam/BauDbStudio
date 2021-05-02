@@ -36,13 +36,13 @@
 			<ToolBarPanel Grid.Column="0" Grid.Row="0">
 				<ToolBar>
 					<CheckBox ToolTip="Ver entradas no leídas" IsChecked="{Binding SeeNotRead}">
-						<Image Source="/BauControls;component/Themes/Images/EntryNotRead.png" Width="16" Height="16"/>
+						<Image Source="/BlogReader.Views;component/Resources/EntryNotRead.png" Width="16" Height="16"/>
 					</CheckBox>
 					<CheckBox ToolTip="Ver entradas leídas" IsChecked="{Binding SeeRead}">
-						<Image Source="/BauControls;component/Themes/Images/EntryRead.png" Width="16" Height="16"/>
+						<Image Source="/BlogReader.Views;component/Resources/EntryRead.png" Width="16" Height="16"/>
 					</CheckBox>
 					<CheckBox ToolTip="Ver entradas interesantes" IsChecked="{Binding SeeInteresting}">
-						<Image Source="/BauControls;component/Themes/Images/EntryInteresting.png" Width="16" Height="16"/>
+						<Image Source="/BlogReader.Views;component/Resources/EntryInteresting.png" Width="16" Height="16"/>
 					</CheckBox>
 					<Separator/>
 					<Button ToolTip="Exportar" Command="{Binding Path=ExportEntriesCommand}">
@@ -64,17 +64,17 @@
 					<ContextMenu x:Key="mnuEntries">
 						<MenuItem Header="_Marcar como leído" Command="{Binding MarkAsReadCommand}">
 							<MenuItem.Icon>
-								<Image Source="/BauControls;component/Themes/Images/EntryRead.png" Width="16" Height="16"/>
+								<Image Source="/BlogReader.Views;component/Resources/EntryRead.png" Width="16" Height="16"/>
 							</MenuItem.Icon>
 						</MenuItem>
 						<MenuItem Header="_Marcar como no leído" Command="{Binding MarkAsNotReadCommand}">
 							<MenuItem.Icon>
-								<Image Source="/BauControls;component/Themes/Images/EntryNotRead.png" Width="16" Height="16"/>
+								<Image Source="/BlogReader.Views;component/Resources/EntryNotRead.png" Width="16" Height="16"/>
 							</MenuItem.Icon>
 						</MenuItem>
 						<MenuItem Header="_Marcar como interesante" Command="{Binding MarkAsInterestingCommand}">
 							<MenuItem.Icon>
-								<Image Source="/BauControls;component/Themes/Images/EntryInteresting.png" Width="16" Height="16"/>
+								<Image Source="/BlogReader.Views;component/Resources/EntryInteresting.png" Width="16" Height="16"/>
 							</MenuItem.Icon>
 						</MenuItem>
 						<Separator />
@@ -117,7 +117,7 @@
 													Foreground="{Binding Path=Foreground,Converter={StaticResource MVVMColorConverter}}" 
 											Margin="5,0,0,0" 
                                                 VerticalAlignment="Center"/>
-										<Image Source="/BlogReader.Plugin;component/Resources/attach.png" 
+										<Image Source="/Resources/attach.png" 
                                                Visibility="{Binding HasAttachment, Converter={StaticResource BoolToVisibilityConverter}}" Width="16" Height="16"/>
 									</StackPanel>
 								</DataTemplate>

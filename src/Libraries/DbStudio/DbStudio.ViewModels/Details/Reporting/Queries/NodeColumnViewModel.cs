@@ -143,7 +143,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 		private void UpdateFilter(bool whereClause)
 		{
 			if (TreeViewModel is TreeQueryReportViewModel tree)
-				tree.ReportViewModel.ReportingSolutionViewModel.SolutionViewModel.MainController.AppController.OpenDialog(GetFilter(whereClause));
+				tree.ReportViewModel.ReportingSolutionViewModel.SolutionViewModel.MainController.OpenDialog(GetFilter(whereClause));
 		}
 
 		/// <summary>

@@ -7,7 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\AppController.cs" />
+    <Compile Remove="Converters\BoolToVisibilityConverter.cs" />
     <Compile Remove="Views\Configuration\ctlConfigurationBlogReader.xaml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\attach.png" />
+    <None Remove="Resources\EntryInteresting.png" />
+    <None Remove="Resources\EntryNotRead.png" />
+    <None Remove="Resources\EntryRead.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +32,13 @@
 
   <ItemGroup>
     <Folder Include="Views\Configuration\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\attach.png" />
+    <Resource Include="Resources\EntryInteresting.png" />
+    <Resource Include="Resources\EntryNotRead.png" />
+    <Resource Include="Resources\EntryRead.png" />
   </ItemGroup>
 
 </Project>

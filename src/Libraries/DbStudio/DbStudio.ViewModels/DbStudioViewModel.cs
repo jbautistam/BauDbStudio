@@ -105,7 +105,7 @@ namespace Bau.Libraries.DbStudio.ViewModels
 		{
 			Details.EtlProjects.CreateTestXmlViewModel viewModel = new Details.EtlProjects.CreateTestXmlViewModel(this);
 
-				if (MainController.AppController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+				if (MainController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 					using (BlockLogModel block = MainController.Logger.Default.CreateBlock(LogModel.LogType.Info, "Comienzo de la creación de proyectos de pruebas"))
 					{
 						XmlTestProjectGenerator generator = new XmlTestProjectGenerator(Manager, viewModel.ComboConnections.GetSelectedConnection(),
@@ -143,7 +143,7 @@ namespace Bau.Libraries.DbStudio.ViewModels
 		{
 			Details.EtlProjects.CreateValidationScriptsViewModel viewModel = new Details.EtlProjects.CreateValidationScriptsViewModel(this);
 
-				if (MainController.AppController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+				if (MainController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 					using (BlockLogModel block = MainController.Logger.Default.CreateBlock(LogModel.LogType.Info, "Comienzo de la creación de archivos de validación"))
 					{
 						ScriptsValidationOptions options = new ScriptsValidationOptions
@@ -200,7 +200,7 @@ namespace Bau.Libraries.DbStudio.ViewModels
 		{
 			Details.EtlProjects.CreateImportFilesScriptViewModel viewModel = new Details.EtlProjects.CreateImportFilesScriptViewModel(this);
 
-				if (MainController.AppController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+				if (MainController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 					using (BlockLogModel block = MainController.Logger.Default.CreateBlock(LogModel.LogType.Info, "Comienzo de la creación de archivos de importación"))
 					{
 						ScriptsImportOptions options = new ScriptsImportOptions
@@ -245,7 +245,7 @@ namespace Bau.Libraries.DbStudio.ViewModels
 		{
 			Details.EtlProjects.CreateSchemaXmlViewModel viewModel = new Details.EtlProjects.CreateSchemaXmlViewModel(this);
 
-				if (MainController.AppController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+				if (MainController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 					using (BlockLogModel block = MainController.Logger.Default.CreateBlock(LogModel.LogType.Info, "Comienzo de la creación de archivos de esquema"))
 					{
 						// Crea los archivos de esquema
@@ -276,7 +276,7 @@ namespace Bau.Libraries.DbStudio.ViewModels
 		{
 			Details.Reporting.Tools.CreateSchemaReportingXmlViewModel viewModel = new Details.Reporting.Tools.CreateSchemaReportingXmlViewModel(this);
 
-				if (MainController.AppController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+				if (MainController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 					using (BlockLogModel block = MainController.Logger.Default.CreateBlock(LogModel.LogType.Info, "Comienzo de la creación de archivos de informes"))
 					{
 						// Crea los archivos de esquema
@@ -309,7 +309,7 @@ namespace Bau.Libraries.DbStudio.ViewModels
 		{
 			Details.Reporting.Tools.CreateScriptsSqlReportingViewModel viewModel = new Details.Reporting.Tools.CreateScriptsSqlReportingViewModel(this);
 
-				if (MainController.AppController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+				if (MainController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 					using (BlockLogModel block = MainController.Logger.Default.CreateBlock(LogModel.LogType.Info, "Comienzo de la creación de scripts SQL de reporting"))
 					{
 						// Crea los archivos de esquema
@@ -352,7 +352,7 @@ namespace Bau.Libraries.DbStudio.ViewModels
 							if (fileViewModel is Details.Files.ScriptFileViewModel scriptFileViewModel)
 								MainController.PluginController.HostPluginsController.OpenEditor(scriptFileViewModel);
 							else
-								MainController.AppController.OpenWindow(fileViewModel);
+								MainController.OpenWindow(fileViewModel);
 							opened = true;
 						}
 				}

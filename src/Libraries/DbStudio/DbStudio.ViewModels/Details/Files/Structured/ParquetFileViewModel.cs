@@ -46,7 +46,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Files.Structured
 		/// </summary>
 		protected override void OpenFileProperties()
 		{
-			SolutionViewModel.MainController.AppController.OpenDialog(new ParquetFilePropertiesViewModel(SolutionViewModel, this));
+			SolutionViewModel.MainController.OpenDialog(new ParquetFilePropertiesViewModel(SolutionViewModel, this));
 		}
 	}
 }

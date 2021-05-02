@@ -13,9 +13,14 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Controllers
 		void Refresh();
 
 		/// <summary>
-		///		Controlador de la aplicación
+		///		Abre una ventana de detalles
 		/// </summary>
-		Base.Controllers.IAppController AppController { get; }
+		BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType OpenWindow(Base.Interfaces.IDetailViewModel detailsViewModel);
+
+		/// <summary>
+		///		Abre un cuadro de diálogo
+		/// </summary>
+		BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType OpenDialog(BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewModel dialogViewModel);
 
 		/// <summary>
 		///		Controlador de plugins

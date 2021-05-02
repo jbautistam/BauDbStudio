@@ -39,7 +39,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs.TreeBlogs
 		/// </summary>
 		internal void UpdateItem()
 		{
-			MainViewModel.ViewsController.AppController.OpenDialog(new BlogViewModel(MainViewModel, null, Blog));
+			MainViewModel.ViewsController.OpenDialog(new BlogViewModel(MainViewModel, null, Blog));
 		}
 
 		/// <summary>

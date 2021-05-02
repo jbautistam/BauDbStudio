@@ -17,7 +17,6 @@ namespace Bau.DbStudio.Controllers
 			MainWindow = mainWindow;
 			AppName = appName;
 			AppPath = appPath;
-			AppController = new AppController(this);
 			AppViewController = new AppViewsController(this);
 			MainWindowsController = new MainWindowController(this);
 			PluginsManager = new Plugins.PluginsManager(this);
@@ -146,11 +145,6 @@ namespace Bau.DbStudio.Controllers
 		///		Ventana principal
 		/// </summary>
 		internal MainWindow MainWindow { get; }
-
-		/// <summary>
-		///		Controlador de vistas principal
-		/// </summary>
-		internal Libraries.PluginsStudio.ViewModels.Base.Controllers.IAppController AppController { get; }
 
 		/// <summary>
 		///		Controlador de vistas principal

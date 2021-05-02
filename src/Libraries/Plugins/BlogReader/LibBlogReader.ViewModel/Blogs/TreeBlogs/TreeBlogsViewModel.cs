@@ -271,8 +271,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs.TreeBlogs
 						parent = MainViewModel.BlogManager.File;
 				}
 				// Abre la ventana de modificación
-				if (MainViewModel.ViewsController.AppController.OpenDialog
-										(new FolderViewModel(MainViewModel, parent, folder)) == SystemControllerEnums.ResultType.Yes)
+				if (MainViewModel.ViewsController.OpenDialog(new FolderViewModel(MainViewModel, parent, folder)) == SystemControllerEnums.ResultType.Yes)
 					Refresh();
 		}
 
@@ -294,7 +293,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs.TreeBlogs
 				else
 					folder = blog.Folder;
 				// Abre la ventana de modificación
-				if (MainViewModel.ViewsController.AppController.OpenDialog(new BlogViewModel(MainViewModel, folder, blog)) == SystemControllerEnums.ResultType.Yes)
+				if (MainViewModel.ViewsController.OpenDialog(new BlogViewModel(MainViewModel, folder, blog)) == SystemControllerEnums.ResultType.Yes)
 					Refresh();
 		}
 
@@ -381,24 +380,8 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs.TreeBlogs
 		/// </summary>
 		private void SeeNews()
 		{
-			MainViewModel.ViewsController.AppController.OpenWindow(new BlogSeeNewsViewModel(MainViewModel, (SelectedNode as BaseBlogsNodeViewModel).GetBlogs()));
+			MainViewModel.ViewsController.OpenWindow(new BlogSeeNewsViewModel(MainViewModel, (SelectedNode as BaseBlogsNodeViewModel).GetBlogs()));
 		}
-
-		///// <summary>
-		/////		Chequea un nodo
-		///// </summary>
-		//public void CheckNode(int? id)
-		//{
-		//	CheckNode(id);
-		//}
-
-		///// <summary>
-		/////		Obtiene los nodos chequeados
-		///// </summary>
-		//public List<int> GetCheckedNodes()
-		//{
-		//	return GetCheckedNodes();
-		//}
 
 		/// <summary>
 		///		Actualiza el árbol
