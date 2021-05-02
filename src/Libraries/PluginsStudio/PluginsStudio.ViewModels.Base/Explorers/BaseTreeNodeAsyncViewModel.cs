@@ -39,7 +39,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers
 			object state = new object();
 			List<BaseTreeNodeViewModel> nodes = await GetChildNodesAsync(cancellationToken);
 
-				// Carga los nodos en le árbol
+				// Carga los nodos en el árbol
 				//? _contexUi mantiene el contexto de sincronización que creó el ViewModel (que debería ser la interface de usuario)
 				//? Al generarse las tablas en otro hilo, no se puede añadir a ObservableCollection sin una
 				//? excepción del tipo "Este tipo de CollectionView no admite cambios en su SourceCollection desde un hilo diferente del hilo Dispatcher"
@@ -50,8 +50,9 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers
 														// Limpia la lista de nodos
 														Children.Clear();
 														// Añade la lista de contenedores
-														foreach (BaseTreeNodeViewModel node in nodes)
-															Children.Add(node);
+														if (nodes != null)
+															foreach (BaseTreeNodeViewModel node in nodes)
+																Children.Add(node);
 													}
 													catch (Exception exception)
 													{

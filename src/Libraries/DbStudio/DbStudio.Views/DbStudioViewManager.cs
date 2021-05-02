@@ -30,6 +30,14 @@ namespace Bau.Libraries.DbStudio.Views
 		}
 
 		/// <summary>
+		///		Actualiza los exploradores y ventanas
+		/// </summary>
+		public void Refresh()
+		{
+			MainViewModel.Load(MainViewModel.PathData);
+		}
+
+		/// <summary>
 		///		Intenta abrir un archivo en un plugin
 		/// </summary>
 		public bool OpenFile(string fileName)
@@ -96,37 +104,6 @@ namespace Bau.Libraries.DbStudio.Views
 		/// </summary>
 		public List<MenuListModel> GetMenus()
 		{
-
-					//<Separator/>
-					//<MenuItem Header="_Conexión" Command="{Binding Path=SolutionViewModel.TreeConnectionsViewModel.NewConnectionCommand}" >
-					//	<MenuItem.Icon>
-					//		<Image Width="16" Height="16" Source="/Resources/Images/Connection.png" />
-					//	</MenuItem.Icon>
-					//</MenuItem>
-					//<MenuItem Header="_Distribución" Command="{Binding Path=SolutionViewModel.TreeConnectionsViewModel.NewDeploymentCommand}" >
-					//	<MenuItem.Icon>
-					//		<Image Width="16" Height="16" Source="/Resources/Images/Deployment.png" />
-					//	</MenuItem.Icon>
-					//</MenuItem>
-					//<Separator/>
-					//<MenuItem Header="_Storage" Command="{Binding Path=SolutionViewModel.TreeStoragesViewModel.NewStorageCommand}" >
-					//	<MenuItem.Icon>
-					//		<Image Width="16" Height="16" Source="/Resources/Images/Search.png" />
-					//	</MenuItem.Icon>
-					//</MenuItem>
-					//<Separator/>
-					//<MenuItem Header="_Consulta" InputGestureText="Ctrl+Q" Command="commandsLocal:CustomCommands.NewQuery" >
-					//	<MenuItem.Icon>
-					//		<Image Width="16" Height="16" Source="/Resources/Images/Script.png" />
-					//	</MenuItem.Icon>
-					//</MenuItem>
-					//<Separator/>
-					//<MenuItem Header="_Xml de pruebas" Command="{Binding Path=SolutionViewModel.CreateTestXmlCommand}" >
-					//	<MenuItem.Icon>
-					//		<Image Width="16" Height="16" Source="/Resources/Images/FileXml.png" />
-					//	</MenuItem.Icon>
-					//</MenuItem>
-
 			List<MenuListModel> menus = new();
 
 				// Crea la lista de menús de "Nuevo elemento"

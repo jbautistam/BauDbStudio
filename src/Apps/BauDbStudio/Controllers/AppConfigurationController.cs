@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Bau.DbStudio.Controllers
 {
@@ -7,11 +8,14 @@ namespace Bau.DbStudio.Controllers
 	/// </summary>
 	public class AppConfigurationController : Libraries.PluginsStudio.ViewModels.Base.Controllers.IConfigurationController
 	{
+		// Variables privadas
+		private string SetupSeparator = "({#@~=#})";
 		/// <summary>
 		///		Carga la configuración
 		/// </summary>
 		public void Load(string pathData)
 		{
+			// Asigna las configuraciones de la aplicación
 			LastPathSelected = Properties.Settings.Default.LastPathSelected;
 			LastThemeSelected = Properties.Settings.Default.LastThemeSelected;
 			EditorFontName = Properties.Settings.Default.EditorFontName;
@@ -26,6 +30,58 @@ namespace Bau.DbStudio.Controllers
 			PathData = Properties.Settings.Default.PathData;
 			if (string.IsNullOrWhiteSpace(PathData) || !System.IO.Directory.Exists(PathData))
 				PathData = pathData;
+			// Carga la configuración de plugins
+			LoadPluginsCongiguration(Properties.Settings.Default.PluginsSetup);
+		}
+
+		/// <summary>
+		///		Carga la configuración de los plugins
+		/// </summary>
+		private void LoadPluginsCongiguration(string setup)
+		{
+			// Limpia la configuración
+			PluginsConfiguration.Clear();
+			// Asigna la configuración
+			if (!string.IsNullOrWhiteSpace(setup))
+			{
+				string [] parts = setup.Split(SetupSeparator);
+
+					for (int index = 0; index < parts.Length; index += 3)
+						if (parts.Length > index + 3 && !string.IsNullOrWhiteSpace(parts[index]) && !string.IsNullOrWhiteSpace(parts[index + 1]))
+							PluginsConfiguration.Add((parts[index], parts[index + 1], parts[index + 2]));
+			}
+		}
+
+		/// <summary>
+		///		Obtiene un valor de configuración de un plugin
+		/// </summary>
+		public string GetConfiguration(string plugin, string key)
+		{
+			// Busca la configuración del plugin
+			if (!string.IsNullOrWhiteSpace(plugin) && !string.IsNullOrWhiteSpace(key))
+				foreach ((string plugin, string key, string value) configuration in PluginsConfiguration)
+					if (configuration.plugin.Equals(plugin, StringComparison.CurrentCultureIgnoreCase) &&
+							configuration.key.Equals(key, StringComparison.CurrentCultureIgnoreCase))
+						return configuration.value;
+			// Si ha llegado hasta aquí es porque no ha encontrado nada
+			return string.Empty;
+		}
+
+		/// <summary>
+		///		Cambia un valor de configuración de un plugin
+		/// </summary>
+		public void SetConfiguration(string plugin, string key, string value)
+		{
+			if (!string.IsNullOrWhiteSpace(plugin) && !string.IsNullOrWhiteSpace(key))
+			{
+				// Elimina la configuración del plugin para esa clave
+				for (int index = PluginsConfiguration.Count - 1; index >= 0; index--)
+					if (PluginsConfiguration[index].plugin.Equals(plugin, StringComparison.CurrentCultureIgnoreCase) &&
+							PluginsConfiguration[index].key.Equals(key, StringComparison.CurrentCultureIgnoreCase))
+						PluginsConfiguration.RemoveAt(index);
+				// Añade la configuración
+				PluginsConfiguration.Add((plugin, key, value));
+			}
 		}
 
 		/// <summary>
@@ -46,8 +102,29 @@ namespace Bau.DbStudio.Controllers
 			Properties.Settings.Default.ShowWindowNotifications = ShowWindowNotifications;
 			Properties.Settings.Default.LastEncodingIndex = LastEncodingIndex;
 			Properties.Settings.Default.PathData = PathData;
+			Properties.Settings.Default.PluginsSetup = GetPluginsConfiguration();
 			// Graba la configuración
 			Properties.Settings.Default.Save();
+		}
+
+		/// <summary>
+		///		Obtiene la configuración de plugins
+		/// </summary>
+		private string GetPluginsConfiguration()
+		{
+			string result = string.Empty;
+
+				// Añade las configuraciones a la cadena
+				foreach ((string plugin, string key, string value) in PluginsConfiguration)
+				{
+					// Añade el separador si es necesario
+					if (!string.IsNullOrWhiteSpace(result))
+						result += SetupSeparator;
+					// Añade los datos
+					result += plugin + SetupSeparator + key + SetupSeparator + value;
+				}
+				// Devuelve la caena resultante
+				return result;
 		}
 
 		/// <summary>
@@ -109,5 +186,10 @@ namespace Bau.DbStudio.Controllers
 		///		Directorio de datos
 		/// </summary>
 		public string PathData { get; set; }
+
+		/// <summary>
+		///		Configuraciones de los plugins
+		/// </summary>
+		private List<(string plugin, string key, string value)> PluginsConfiguration { get; } = new();
 	}
 }

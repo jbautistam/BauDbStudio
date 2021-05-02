@@ -102,6 +102,15 @@ namespace Bau.Libraries.PluginsStudio.Views.Plugins
 		}
 
 		/// <summary>
+		///		Actualiza los exploradores y ventanas
+		/// </summary>
+		internal void Refresh()
+		{
+			foreach (Base.Interfaces.IPlugin plugin in Plugins)
+				plugin.Refresh();
+		}
+
+		/// <summary>
 		///		Ejecuta un comando sobre un plugin
 		/// </summary>
 		internal void ExecutePluginCommand(string plugin, string viewModel, string command)

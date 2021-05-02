@@ -19,6 +19,11 @@ namespace Bau.Libraries.PluginsStudio.Views.Base.Interfaces
 		void Load(string path);
 
 		/// <summary>
+		///		Actualiza los exploradores y ventanas
+		/// </summary>
+		void Refresh();
+
+		/// <summary>
 		///		Intenta abrir un archivo en un plugin
 		/// </summary>
 		bool OpenFile(string fileName);

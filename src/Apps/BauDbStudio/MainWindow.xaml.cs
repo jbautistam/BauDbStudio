@@ -32,6 +32,7 @@ namespace Bau.DbStudio
 			PluginsStudioViews = new Libraries.PluginsStudio.Views.PluginsStudioViewManager(MainController.AppStudioController, MainController.MainWindowController,
 																							MainController.ConfigurationController);
 			PluginsStudioViews.AddPlugin(new Libraries.DbStudio.Views.DbStudioViewManager());
+			PluginsStudioViews.AddPlugin(new Libraries.BlogReader.Views.BlogReaderPlugin());
 			PluginsStudioViews.InitializePlugins();
 			// Inicializa el ViewModel
 			DataContext = ViewModel = PluginsStudioViews.PluginsStudioViewModel;

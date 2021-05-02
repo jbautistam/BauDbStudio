@@ -20,7 +20,12 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Controllers
 		/// <summary>
 		///		Abre la ventana de edición de un archivo
 		/// </summary>
-		void OpenEditor(Base.Files.BaseTextFileViewModel viewModel);
+		void OpenEditor(Files.BaseTextFileViewModel viewModel);
+
+		/// <summary>
+		///		Abre un navegador Web
+		/// </summary>
+		void OpenWebBrowser(string url);
 
 		/// <summary>
 		///		Actualiza el árbol de archivos

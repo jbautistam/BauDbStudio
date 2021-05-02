@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>Bau.Libraries.LibBlogReader.Model</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\..\Libraries\Common\LibDataStructures\src\LibDataStructures.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\..\Libraries\Common\LibHelper\src\LibHelper.csproj" />
+  </ItemGroup>
+
+</Project>

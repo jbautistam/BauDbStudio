@@ -8,6 +8,11 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Controllers
 	public interface IPluginsStudioController
 	{
 		/// <summary>
+		///		Llama a lo plugins para actualizar los exploradores y ventanas
+		/// </summary>
+		void Refresh();
+
+		/// <summary>
 		///		Controlador de la aplicación
 		/// </summary>
 		Base.Controllers.IAppController AppController { get; }

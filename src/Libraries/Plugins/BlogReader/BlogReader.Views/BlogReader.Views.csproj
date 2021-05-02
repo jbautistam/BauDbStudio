@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>Bau.Libraries.BlogReader.Views</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Views\Configuration\ctlConfigurationBlogReader.xaml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="Views\Configuration\ctlConfigurationBlogReader.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\PluginsStudio\PluginsStudio.Views\PluginsStudio.Views.csproj" />
+    <ProjectReference Include="..\LibBlogReader.ViewModel\LibBlogReader.ViewModel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Configuration\" />
+  </ItemGroup>
+
+</Project>

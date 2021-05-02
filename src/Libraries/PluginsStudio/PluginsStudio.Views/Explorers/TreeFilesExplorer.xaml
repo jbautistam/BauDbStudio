@@ -88,13 +88,6 @@
 						</MenuItem.Icon>
 					</MenuItem>
 					<Separator x:Name="mnuPluginsSeparator" />
-					<!--
-					<MenuItem Header="Ejecutar" Command="{Binding ProcessScriptCommand}">
-						<MenuItem.Icon>
-							<Image Width="16" Height="16" Source="/Resources/Images/ArrowRight.png" />
-						</MenuItem.Icon>
-					</MenuItem>
-					-->
 				</ContextMenu>
 			</TreeView.Resources>
 			<TreeView.ItemContainerStyle>

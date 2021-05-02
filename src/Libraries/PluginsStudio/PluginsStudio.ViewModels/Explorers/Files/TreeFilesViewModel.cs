@@ -384,7 +384,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 			List<Base.Models.MenuModel> menus = new();
 
 				// Obtiene las opciones de menú asociadas al nodo
-				if (SelectedNode != null && SelectedNode is NodeFileViewModel node)
+				if (PluginsFileOptions != null && SelectedNode != null && SelectedNode is NodeFileViewModel node)
 					foreach (Base.Models.FileOptionsModel option in PluginsFileOptions)
 						if (option.Check(node.IsFolder, node.FileName))
 							menus.Add(option.Menu);

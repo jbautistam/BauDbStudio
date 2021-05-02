@@ -8,6 +8,16 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Controllers
 	public interface IConfigurationController
 	{
 		/// <summary>
+		///		Obtiene un valor de configuración
+		/// </summary>
+		string GetConfiguration(string plugin, string key);
+
+		/// <summary>
+		///		Cambia un valor de configuración de un plugin
+		/// </summary>
+		void SetConfiguration(string plugin, string key, string value);
+
+		/// <summary>
 		///		Graba la configuración
 		/// </summary>
 		void Save();

@@ -95,6 +95,7 @@
     <ProjectReference Include="..\..\..\..\..\Libraries\Common\LibSystem.Windows\LibSystem.Windows.csproj" />
     <ProjectReference Include="..\..\Libraries\DbStudio\DbStudio.Views\DbStudio.Views.csproj" />
     <ProjectReference Include="..\..\Libraries\PluginsStudio\PluginsStudio.Views\PluginsStudio.Views.csproj" />
+    <ProjectReference Include="..\..\Libraries\Plugins\BlogReader\BlogReader.Views\BlogReader.Views.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\BauDbStudio.ico" />

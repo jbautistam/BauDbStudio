@@ -30,18 +30,29 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers
 		}
 
 		/// <summary>
-		///		Carga los datos del árbol de soluciones
+		///		Carga los datos del árbol
 		/// </summary>
 		public void Load()
 		{
-			List<IHierarchicalViewModel> nodesExpanded = GetNodesExpanded(Children);
+			object state = new object();
 
-				// Limpia la colección de hijos
-				Children.Clear();
-				// Añade los nodos raíz
-				AddRootNodes();
-				// Expande los nodos previamente abiertos
-				ExpandNodes(Children, nodesExpanded);
+				// Carga los nodos en el árbol
+				//? _contexUi mantiene el contexto de sincronización que creó el ViewModel (que debería ser la interface de usuario)
+				//? Al generarse las tablas en otro hilo o desde un evento, no se puede borrar ObservableCollection sin una
+				//? excepción del tipo "Este tipo de CollectionView no admite cambios en su SourceCollection desde un hilo diferente del hilo Dispatcher"
+				//? Por eso se tiene que añadir el mensaje de log desde el contexto de sincronización de la UI
+				ContextUI.Send(_ => {
+										List<IHierarchicalViewModel> nodesExpanded = GetNodesExpanded(Children);
+
+											// Limpia la colección de hijos
+											Children.Clear();
+											// Añade los nodos raíz
+											AddRootNodes();
+											// Expande los nodos previamente abiertos
+											ExpandNodes(Children, nodesExpanded);
+									},
+									state
+							  );
 		}
 
 		/// <summary>

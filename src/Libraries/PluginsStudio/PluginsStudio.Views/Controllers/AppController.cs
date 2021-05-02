@@ -29,6 +29,9 @@ namespace Bau.Libraries.PluginsStudio.Views.Controllers
 				case ViewModels.Base.Files.BaseTextFileViewModel viewModel:
 						PluginsStudioViewManager.AppViewController.OpenDocument(new Files.FileTextView(viewModel), viewModel);
 					break;
+				case ViewModels.Tools.Web.WebViewModel viewModel:
+						PluginsStudioViewManager.AppViewController.OpenDocument(new Tools.Web.WebExplorerView(viewModel), viewModel);
+					break;
 			}
 			// Devuelve el resultado
 			return SystemControllerEnums.ResultType.Yes;

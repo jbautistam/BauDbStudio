@@ -40,6 +40,14 @@ namespace Bau.Libraries.PluginsStudio.Views.Controllers
 		}
 
 		/// <summary>
+		///		Abre un navegador sobre una URL
+		/// </summary>
+		public void OpenWebBrowser(string url)
+		{
+			PluginsStudioController.PluginsStudioViewManager.PluginsStudioViewModel.OpenWebBrowser(url);
+		}
+
+		/// <summary>
 		///		Actualiza el árbol de archivos
 		/// </summary>
 		public void RefreshFiles()

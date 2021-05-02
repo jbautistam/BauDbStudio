@@ -186,11 +186,8 @@
 
 		<ToolBarTray x:Name="tbMain" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" >
 			<ToolBar BandIndex="1">
-				<Button ToolTip="Añadir carpeta" Command="{Binding Path=SolutionViewModel.TreeFoldersViewModel.NewFolderFilesCommand}" Margin="2">
+				<Button ToolTip="Añadir carpeta" Command="{Binding Path=TreeFoldersViewModel.NewFolderFilesCommand}" Margin="2">
 					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Folder.png" />
-				</Button>
-				<Button ToolTip="Añadir conexión" Command="{Binding Path=SolutionViewModel.TreeConnectionsViewModel.NewConnectionCommand}" Margin="2">
-					<Image Width="16" Height="16" Source="/Resources/Images/Connection.png" />
 				</Button>
 				<Separator Margin="2"/>
 				<Button ToolTip="Guardar" Command="{Binding Path=SaveCommand}" Margin="2">
@@ -201,6 +198,20 @@
 				</Button>
 				<Button ToolTip="Guardar todo" Command="{Binding Path=SaveAllCommand}" Margin="2">
 					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/SaveAll.png" />
+				</Button>
+				<Separator Margin="2"/>
+				<Button ToolTip="Copiar" Command="ApplicationCommands.Copy" Margin="2">
+					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Copy.png" />
+				</Button>
+				<Button ToolTip="Cortar" Command="ApplicationCommands.Cut" Margin="2">
+					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Cut.png" />
+				</Button>
+				<Button ToolTip="Pegar" Command="ApplicationCommands.Paste" Margin="2">
+					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Paste.png" />
+				</Button>
+				<Separator/>
+				<Button ToolTip="Borrar" Command="ApplicationCommands.Delete" Margin="2">
+					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
 				</Button>
 				<Separator Margin="2"/>
 				<Button ToolTip="Actualizar" Command="{Binding Path=RefreshCommand}" Margin="2">

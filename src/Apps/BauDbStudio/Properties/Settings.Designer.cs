@@ -166,5 +166,17 @@ namespace Bau.DbStudio.Properties {
                 this["PathData"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string PluginsSetup {
+            get {
+                return ((string)(this["PluginsSetup"]));
+            }
+            set {
+                this["PluginsSetup"] = value;
+            }
+        }
     }
 }

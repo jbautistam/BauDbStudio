@@ -17,6 +17,14 @@ namespace Bau.Libraries.PluginsStudio.Views.Controllers
 		}
 
 		/// <summary>
+		///		Llama a los diferentes plugins para que actualicen exploradores y ventanas
+		/// </summary>
+		public void Refresh()
+		{
+			PluginsStudioViewManager.PluginsManager.Refresh();
+		}
+
+		/// <summary>
 		///		Manager principal
 		/// </summary>
 		public PluginsStudioViewManager PluginsStudioViewManager { get; }

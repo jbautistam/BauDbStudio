@@ -80,6 +80,14 @@ namespace Bau.Libraries.PluginsStudio.ViewModels
 		}
 
 		/// <summary>
+		///		Abre un navegador Web
+		/// </summary>
+		public void OpenWebBrowser(string url)
+		{
+			PluginsStudioController.AppController.OpenWindow(new Tools.Web.WebViewModel(this, url));
+		}
+
+		/// <summary>
 		///		Comprueba si es un archivo de imagen
 		/// </summary>
 		private bool IsImage(string fileName)
@@ -105,7 +113,10 @@ namespace Bau.Libraries.PluginsStudio.ViewModels
 		/// </summary>
 		internal void Refresh()
 		{
-			throw new NotImplementedException();
+			// Actualiza los árboles principales
+			TreeFoldersViewModel.Load();
+			// Indica que se actualicen los plugins
+			PluginsStudioController.Refresh();
 		}
 
 		/// <summary>
