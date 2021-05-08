@@ -33,7 +33,7 @@
 									Visibility="{Binding Path=CanFilterWhere,Converter={StaticResource BoolToVisibilityConverter}}"
 									Command="{Binding Path=FilterWhereCommand}">
 								<Button.Content>
-									<Image Width="20" Height="20" Margin="3,0" Source="/Resources/Images/Filter.png"/>
+									<Image Width="20" Height="20" Margin="3,0" Source="/DbStudio.Views;component/Resources/Images/Filter.png"/>
 								</Button.Content>
 							</Button>
 							<Button BorderBrush="Transparent" Background="Transparent"
@@ -51,7 +51,7 @@
 									Visibility="{Binding Path=CanFilterHaving,Converter={StaticResource BoolToVisibilityConverter}}"
 									Command="{Binding Path=FilterHavingCommand}">
 								<Button.Content>
-									<Image Width="20" Height="20" Margin="3,0" Source="/Resources/Images/Filter.png"/>
+									<Image Width="20" Height="20" Margin="3,0" Source="/DbStudio.Views;component/Resources/Images/Filter.png"/>
 								</Button.Content>
 							</Button>
 						</StackPanel>

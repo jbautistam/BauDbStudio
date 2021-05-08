@@ -69,20 +69,20 @@
 
 	<Button Margin="5,0,0,0" ToolTip="Seleccionar archivo de parámetros" 
 					Command="{Binding Path=UpdateParametersFileCommand}">
-		<Image Width="16" Height="16" Source="/Resources/Images/File.png" />
+		<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/File.png" />
 	</Button>
 	<Button Margin="5,0,0,0" ToolTip="Ejecutar" Command="{Binding Path=ExecuteScriptCommand}"
 					Visibility="{Binding Path=IsExecuting,Converter={StaticResource InverseBoolToVisibilityConverter}}">
-		<Image Width="16" Height="16" Source="/Resources/Images/ArrowRight.png" />
+		<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/ArrowRight.png" />
 	</Button>
 	<Button Margin="5,0,0,0" ToolTip="Cancelar" Command="{Binding Path=CancelScriptExecutionCommand}"
 					Visibility="{Binding Path=IsExecuting,Converter={StaticResource BoolToVisibilityConverter}}">
-		<Image Width="16" Height="16" Source="/Resources/Images/Stop.png" />
+		<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/Stop.png" />
 	</Button>
 	<Label Content="{Binding Path=ExecutionTime}" Margin="2"
 				   Foreground="{Binding Path=ExecutionTimeColor,Converter={StaticResource MVVMColorConverter}}"/>
 	<Separator/>
 	<Button ToolTip="Consulta" Command="{Binding Path=SolutionViewModel.TreeConnectionsViewModel.NewQueryCommand}" Margin="2">
-		<Image Width="16" Height="16" Source="/Resources/Images/Script.png" />
+		<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/Script.png" />
 	</Button>
 </ToolBar>

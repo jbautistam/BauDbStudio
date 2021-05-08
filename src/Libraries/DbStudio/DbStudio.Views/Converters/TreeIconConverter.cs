@@ -30,37 +30,37 @@ namespace Bau.Libraries.DbStudio.Views.Converters
 			switch (icon)
 			{ 
 				case TreeConnectionsViewModel.IconType.Connection:
-					return "/Resources/Images/Connection.png";
+					return "/DbStudio.Views;component/Resources/Images/Connection.png";
 				case TreeConnectionsViewModel.IconType.Schema:
-					return "/Resources/Images/Schema.png";
+					return "/DbStudio.Views;component/Resources/Images/Schema.png";
 				case TreeConnectionsViewModel.IconType.Deployment:
-					return "/Resources/Images/Deployment.png";
+					return "/DbStudio.Views;component/Resources/Images/Deployment.png";
 				case TreeConnectionsViewModel.IconType.Storage:
-					return "/Resources/Images/Storage.png";
+					return "/DbStudio.Views;component/Resources/Images/Storage.png";
 				case TreeConnectionsViewModel.IconType.Project:
-					return "/Resources/Images/Project.png";
+					return "/DbStudio.Views;component/Resources/Images/Project.png";
 				case TreeConnectionsViewModel.IconType.Path:
-					return "/Resources/Images/FolderNode.png";
+					return "/DbStudio.Views;component/Resources/Images/FolderNode.png";
 				case TreeConnectionsViewModel.IconType.File:
-					return "/Resources/Images/File.png";
+					return "/DbStudio.Views;component/Resources/Images/File.png";
 				case TreeConnectionsViewModel.IconType.Table:
-					return "/Resources/Images/Table.png";
+					return "/DbStudio.Views;component/Resources/Images/Table.png";
 				case TreeConnectionsViewModel.IconType.View:
-					return "/Resources/Images/View.png";
+					return "/DbStudio.Views;component/Resources/Images/View.png";
 				case TreeConnectionsViewModel.IconType.Key:
-					return "/Resources/Images/Key.png";
+					return "/DbStudio.Views;component/Resources/Images/Key.png";
 				case TreeConnectionsViewModel.IconType.Field:
-					return "/Resources/Images/Field.png";
+					return "/DbStudio.Views;component/Resources/Images/Field.png";
 				case TreeConnectionsViewModel.IconType.Error:
-					return "/Resources/Images/DataError.png";
+					return "/DbStudio.Views;component/Resources/Images/DataError.png";
 				case TreeConnectionsViewModel.IconType.Loading:
-					return "/Resources/Images/Loading.png";
+					return "/DbStudio.Views;component/Resources/Images/Loading.png";
 				case TreeConnectionsViewModel.IconType.DataSourceSql:
-					return "/Resources/Images/FileSql.png";
+					return "/DbStudio.Views;component/Resources/Images/FileSql.png";
 				case TreeConnectionsViewModel.IconType.Report:
-					return "/Resources/Images/Report.png";
+					return "/DbStudio.Views;component/Resources/Images/Report.png";
 				case TreeConnectionsViewModel.IconType.Dimension:
-					return "/Resources/Images/ReportDimension.png";
+					return "/DbStudio.Views;component/Resources/Images/ReportDimension.png";
 				default:
 					return null;
 			}

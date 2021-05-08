@@ -38,12 +38,12 @@
 						</MenuItem.Icon>
 						<MenuItem Header="Conexión" Command="{Binding Path=NewConnectionCommand}">
 							<MenuItem.Icon>
-								<Image Width="16" Height="16" Source="/Resources/Images/Connection.png" />
+								<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/Connection.png" />
 							</MenuItem.Icon>
 						</MenuItem>
 						<MenuItem Header="Distribución" Command="{Binding Path=NewDeploymentCommand}">
 							<MenuItem.Icon>
-								<Image Width="16" Height="16" Source="/Resources/Images/Deployment.png" />
+								<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/Deployment.png" />
 							</MenuItem.Icon>
 						</MenuItem>
 					</MenuItem>
@@ -61,13 +61,13 @@
 					<Separator/>
 					<MenuItem Header="Consulta" Command="{Binding Path=NewQueryCommand}">
 						<MenuItem.Icon>
-							<Image Width="16" Height="16" Source="/Resources/Images/Script.png" />
+							<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/Script.png" />
 						</MenuItem.Icon>
 					</MenuItem>
 					<Separator/>
 					<MenuItem Header="Distribuir" Command="{Binding Path=ExecuteDeploymentCommand}">
 						<MenuItem.Icon>
-							<Image Width="16" Height="16" Source="/Resources/Images/Deployment.png" />
+							<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/Deployment.png" />
 						</MenuItem.Icon>
 					</MenuItem>
 				</ContextMenu>

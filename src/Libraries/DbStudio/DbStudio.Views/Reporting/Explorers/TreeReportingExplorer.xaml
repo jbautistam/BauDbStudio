@@ -38,22 +38,22 @@
 						</MenuItem.Icon>
 						<MenuItem Header="Almacén de datos" Command="{Binding Path=NewDataWarehouseCommand}">
 							<MenuItem.Icon>
-								<Image Width="16" Height="16" Source="/Resources/Images/Connection.png" />
+								<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/Connection.png" />
 							</MenuItem.Icon>
 						</MenuItem>
 						<MenuItem Header="Origen de datos" Command="{Binding Path=NewDataSourceCommand}">
 							<MenuItem.Icon>
-								<Image Width="16" Height="16" Source="/Resources/Images/Connection.png" />
+								<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/Connection.png" />
 							</MenuItem.Icon>
 						</MenuItem>
 						<MenuItem Header="Dimensión" Command="{Binding Path=NewDimensionCommand}">
 							<MenuItem.Icon>
-								<Image Width="16" Height="16" Source="/Resources/Images/Connection.png" />
+								<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/Connection.png" />
 							</MenuItem.Icon>
 						</MenuItem>
 						<MenuItem Header="Informe" Command="{Binding Path=NewReportCommand}">
 							<MenuItem.Icon>
-								<Image Width="16" Height="16" Source="/Resources/Images/Connection.png" />
+								<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/Connection.png" />
 							</MenuItem.Icon>
 						</MenuItem>
 					</MenuItem>
@@ -71,7 +71,7 @@
 					<Separator/>
 					<MenuItem Header="Consulta" Command="{Binding Path=QueryCommand}">
 						<MenuItem.Icon>
-							<Image Width="16" Height="16" Source="/Resources/Images/Script.png" />
+							<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/Script.png" />
 						</MenuItem.Icon>
 					</MenuItem>
 				</ContextMenu>

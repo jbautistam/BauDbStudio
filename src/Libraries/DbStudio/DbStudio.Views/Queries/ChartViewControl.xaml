@@ -97,12 +97,12 @@
 		</GroupBox>
 		<Button Grid.Row="2" Grid.Column="0" Command="{Binding Path=DrawCommand}" Height="32"  Margin="0,0,14,0" >
 			<StackPanel Orientation="Horizontal">
-				<Image Width="16" Height="16" Source="/Resources/Images/Chart.png" />
+				<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/Chart.png" />
 				<TextBlock Text="Dibujar"/>
 			</StackPanel>
-				</Button>
+		</Button>
 
-			<GridSplitter Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" HorizontalAlignment="Right" VerticalAlignment="Stretch"
+		<GridSplitter Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" HorizontalAlignment="Right" VerticalAlignment="Stretch"
 				Margin="15,2,5,2" Background="AliceBlue" Width="7" />
 		<BauCharts:Chart Name="wpfPlot" Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" />
 	</Grid>

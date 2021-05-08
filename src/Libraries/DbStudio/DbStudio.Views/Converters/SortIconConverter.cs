@@ -29,11 +29,11 @@ namespace Bau.Libraries.DbStudio.Views.Converters
 			switch (sort)
 			{ 
 				case BaseColumnRequestModel.SortOrder.Ascending:
-					return "/Resources/Images/SortAscending.png";
+					return "/DbStudio.Views;component/Resources/Images/SortAscending.png";
 				case BaseColumnRequestModel.SortOrder.Descending:
-					return "/Resources/Images/SortDescending.png";
+					return "/DbStudio.Views;component/Resources/Images/SortDescending.png";
 				default:
-					return "/Resources/Images/NoSort.png";
+					return "/DbStudio.Views;component/Resources/Images/NoSort.png";
 			}
 		}
 
