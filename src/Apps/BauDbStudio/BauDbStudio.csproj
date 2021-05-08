@@ -23,6 +23,7 @@
   <ItemGroup>
     <Compile Remove="Controllers\AppController.cs" />
     <Compile Remove="Converters\FileIconConverter.cs" />
+    <Compile Remove="Views\Tools\ConfigurationView.xaml.cs" />
     <Compile Remove="Views\Tools\CreateFileView.xaml.cs" />
     <Compile Remove="Views\Tools\FindView.xaml.cs" />
     <Compile Remove="Views\Tools\FindViewModel.cs" />
@@ -57,6 +58,7 @@
     <None Remove="Resources\Images\Wildcards.png" />
   </ItemGroup>
   <ItemGroup>
+    <Page Remove="Views\Tools\ConfigurationView.xaml" />
     <Page Remove="Views\Tools\CreateFileView.xaml" />
     <Page Remove="Views\Tools\FindView.xaml" />
   </ItemGroup>

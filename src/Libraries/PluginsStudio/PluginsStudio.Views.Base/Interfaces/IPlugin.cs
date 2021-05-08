@@ -47,5 +47,10 @@ namespace Bau.Libraries.PluginsStudio.Views.Base.Interfaces
 		///		Obtiene las opciones de menú asociadas a las extensiones de archivo y carpetas
 		/// </summary>
 		List<ViewModels.Base.Models.FileOptionsModel> GetFilesOptions();
+
+		/// <summary>
+		///		Obtiene la vista de configuración
+		/// </summary>
+		IPluginConfigurationView GetConfigurationView();
 	}
 }

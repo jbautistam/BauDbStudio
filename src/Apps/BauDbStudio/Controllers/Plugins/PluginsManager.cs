@@ -105,6 +105,26 @@ namespace Bau.DbStudio.Controllers.Plugins
 		}
 
 		/// <summary>
+		///		Obtiene las vistas de configuración de los plugins
+		/// </summary>
+		internal List<IPluginConfigurationView> GetConfigurationViews()
+		{
+			List<IPluginConfigurationView> views = new();
+
+				// Añade las configuraciones
+				foreach (IPlugin plugin in Plugins)
+				{
+					IPluginConfigurationView configurationView = plugin.GetConfigurationView();
+
+						/// Añade la configuración a la lista
+						if (configurationView != null)
+							views.Add(configurationView);
+				}
+				// Devuelve la lista
+				return views;
+		}
+
+		/// <summary>
 		///		Actualiza los exploradores y ventanas
 		/// </summary>
 		internal void Refresh()

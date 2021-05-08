@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="203" d:DesignWidth="490"
+             d:DesignHeight="203" d:DesignWidth="590"
 			 xmlns:Files="clr-namespace:Bau.Controls.Files;assembly=BauControls"
 			 xmlns:Editors="clr-namespace:Bau.Controls.Editors;assembly=BauControls">
     <Grid>
@@ -12,19 +12,24 @@
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="Auto"/>			
+			<ColumnDefinition Width="Auto"/>
+			<ColumnDefinition Width="*"/>
 			<ColumnDefinition Width="Auto"/>
 			<ColumnDefinition Width="*"/>
 		</Grid.ColumnDefinitions>
 		<Label Content="Directorio:" Grid.Column="0" Grid.Row="0" />
-		<Files:PathSelect Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" Margin = "3" PathName="{Binding Path=PathBlogs}" />
+		<Files:PathSelect Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="3" Margin = "5" PathName="{Binding Path=PathBlogs}" />
 		<Label Content="Minutos entre descarga de blogs:" Grid.Row="1" Grid.Column="0" />
-		<Editors:IntegerUpDown Grid.Column="1" Grid.Row="1" Margin = "3" Value="{Binding Path=MinutesBetweenDownload}" FontWeight="Normal" />
+		<Editors:IntegerUpDown Grid.Column="1" Grid.Row="1" Margin = "5" MinWidth="50" Width="50" HorizontalAlignment="Left"
+			Minimum="5" Maximum="240"
+			Value="{Binding Path=MinutesBetweenDownload}" FontWeight="Normal" />
+		<Label Content="Entradas por página:" Grid.Row="1" Grid.Column="2" />
+		<Editors:IntegerUpDown Grid.Row="1" Grid.Column="3" Margin = "5" Value="{Binding Path=RecordsPerPage}" FontWeight="Normal" Minimum="5" Maximum="200"
+			MinWidth="50" Width="50" HorizontalAlignment="Left"/>
 		<CheckBox Content="Descarga automática de blogs" IsChecked="{Binding Path=DownloadEnabled}" 
-							Grid.Row="1" Grid.Column="2" Margin = "3" />
-		<Label Content="Entradas por página:" Grid.Row="2" Grid.Column="0" />
-		<Editors:IntegerUpDown Grid.Row="2" Grid.Column="1" Margin = "3" Value="{Binding Path=RecordsPerPage}" FontWeight="Normal" />
+			Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" Margin = "5" VerticalAlignment="Center" />
 	</Grid>
 </UserControl>

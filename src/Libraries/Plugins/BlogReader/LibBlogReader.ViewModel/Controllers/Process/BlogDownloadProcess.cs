@@ -26,7 +26,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Controllers.Process
 		public void Start()
 		{
 			// Inicializa el temporizador
-			_timer = new System.Timers.Timer(TimeSpan.FromMinutes(5).TotalMinutes);
+			_timer = new System.Timers.Timer(TimeSpan.FromMinutes(5).TotalMilliseconds);
 			_timer.Enabled = true;
 			// Asigna el manejador de eventos
 			_timer.Elapsed += (sender, args) => Execute();
@@ -41,7 +41,6 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Controllers.Process
 		{
 			lock (_lock)
 			{
-				MainViewModel.ConfigurationViewModel.MinutesBetweenDownload = 20;
 				if (_timer != null && (DateTime.Now - LastDownload).TotalMinutes > MainViewModel.ConfigurationViewModel.MinutesBetweenDownload)
 				{
 					// Detiene el temporizador

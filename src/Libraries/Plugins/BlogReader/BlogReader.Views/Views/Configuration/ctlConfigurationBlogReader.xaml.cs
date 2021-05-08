@@ -8,14 +8,22 @@ namespace Bau.Libraries.BlogReader.Views.Views.Configuration
 	/// <summary>
 	///		Control de configuración de BlogReader
 	/// </summary>
-	public partial class ctlConfigurationBlogReader : UserControl, Libraries.Plugins.Views.Host.IUserControlConfigurationView
+	public partial class ctlConfigurationBlogReader : UserControl, PluginsStudio.Views.Base.Interfaces.IPluginConfigurationView
 	{
-		public ctlConfigurationBlogReader()
-		{ 
+		public ctlConfigurationBlogReader(ConfigurationViewModel viewModel)
+		{
 			// Inicializa los componentes
 			InitializeComponent();
 			// Inicializa el ViewModel
-			ViewModel = new ConfigurationViewModel();
+			DataContext = ViewModel = viewModel;
+		}
+
+		/// <summary>
+		///		Obtiene el control de usuario
+		/// </summary>
+		public UserControl GetUserControl()
+		{
+			return this;
 		}
 
 		/// <summary>
@@ -37,10 +45,11 @@ namespace Bau.Libraries.BlogReader.Views.Views.Configuration
 		/// <summary>
 		///		ViewModel con los datos de configuración
 		/// </summary>
-		public ConfigurationViewModel ViewModel
-		{
-			get { return DataContext as ConfigurationViewModel; }
-			set { DataContext = value; }
-		}
+		public ConfigurationViewModel ViewModel { get; }
+
+		/// <summary>
+		///		Cabecera del control
+		/// </summary>
+		public string Header { get; } = "BlogReader";
 	}
 }

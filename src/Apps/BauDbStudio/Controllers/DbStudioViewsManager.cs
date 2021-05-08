@@ -132,6 +132,14 @@ namespace Bau.DbStudio.Controllers
 		}
 
 		/// <summary>
+		///		Obtiene los controles de configuración de los plugins
+		/// </summary>
+		public List<Libraries.PluginsStudio.Views.Base.Interfaces.IPluginConfigurationView> GetConfigurationViews()
+		{
+			return PluginsManager.GetConfigurationViews();
+		}
+
+		/// <summary>
 		///		Nombre de la aplicación
 		/// </summary>
 		public string AppName { get; }

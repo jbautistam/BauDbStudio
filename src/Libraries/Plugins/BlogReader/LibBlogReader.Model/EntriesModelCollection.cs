@@ -26,7 +26,10 @@ namespace Bau.Libraries.LibBlogReader.Model
 		/// </summary>
 		public EntryModel SearchByURL(string url)
 		{
-			return this.FirstOrDefault<EntryModel>(entry => entry.URL.EqualsIgnoreCase(url));
+			if (string.IsNullOrWhiteSpace(url))
+				return null;
+			else
+				return this.FirstOrDefault<EntryModel>(entry => entry.URL.EqualsIgnoreCase(url));
 		}
 
 		/// <summary>

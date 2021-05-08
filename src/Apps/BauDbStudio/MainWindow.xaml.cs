@@ -287,7 +287,7 @@ namespace Bau.DbStudio
 		/// </summary>
 		private void OpenConfigurationWindow()
 		{
-			DbStudioViewsManager.MainWindowsController.HostHelperController.ShowDialog(this, new Views.Tools.ConfigurationView());
+			DbStudioViewsManager.MainWindowsController.HostHelperController.ShowDialog(this, new Views.Tools.Configuration.ConfigurationView(DbStudioViewsManager));
 		}
 
 		/// <summary>

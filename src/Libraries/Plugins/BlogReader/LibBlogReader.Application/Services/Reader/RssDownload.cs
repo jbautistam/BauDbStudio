@@ -103,8 +103,7 @@ namespace Bau.Libraries.LibBlogReader.Application.Services.Reader
 
 				// Graba las entradas nuevas
 				foreach (AtomEntry entry in channel.Entries)
-					if (entry.Links != null && entry.Links.Count > 0 && !entry.Links[0].Href.IsEmpty() &&
-							!blog.Entries.ExistsURL(entry.Links[0].Href))
+					if (entry.Links != null && !blog.Entries.ExistsURL(GetUrlAlternate(entry.Links)))
 					{
 						EntryModel blogEntry = new EntryModel();
 

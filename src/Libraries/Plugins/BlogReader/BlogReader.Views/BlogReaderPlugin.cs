@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using Bau.Libraries.LibBlogReader.ViewModel;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Models;
+using Bau.Libraries.PluginsStudio.Views.Base.Interfaces;
 using Bau.Libraries.PluginsStudio.Views.Base.Models;
 
 namespace Bau.Libraries.BlogReader.Views
@@ -161,9 +162,17 @@ namespace Bau.Libraries.BlogReader.Views
 		}
 
 		/// <summary>
+		///		Obtiene la vista de configuración del plugin
+		/// </summary>
+		public IPluginConfigurationView GetConfigurationView()
+		{
+			return new Views.Configuration.ctlConfigurationBlogReader(MainViewModel.ConfigurationViewModel);
+		}
+
+		/// <summary>
 		///		Controlador de aplicación
 		/// </summary>
-		internal PluginsStudio.Views.Base.Interfaces.IAppViewsController AppViewsController { get; private set; }
+		internal IAppViewsController AppViewsController { get; private set; }
 
 		/// <summary>
 		///		ViewModel principal

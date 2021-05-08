@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using Bau.Libraries.PluginsStudio.Views.Base.Models;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Models;
+using Bau.Libraries.PluginsStudio.Views.Base.Interfaces;
 
 namespace Bau.Libraries.DbStudio.Views
 {
@@ -176,9 +177,17 @@ namespace Bau.Libraries.DbStudio.Views
 		}
 
 		/// <summary>
+		///		Obtiene la vista de configuración (en este caso, no devuelve nada)
+		/// </summary>
+		public IPluginConfigurationView GetConfigurationView()
+		{
+			return null;
+		}
+
+		/// <summary>
 		///		Controlador de aplicación
 		/// </summary>
-		internal PluginsStudio.Views.Base.Interfaces.IAppViewsController AppViewsController { get; private set; }
+		internal IAppViewsController AppViewsController { get; private set; }
 
 		/// <summary>
 		///		ViewModel principal

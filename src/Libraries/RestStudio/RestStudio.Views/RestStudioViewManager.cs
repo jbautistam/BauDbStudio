@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using Bau.Libraries.PluginsStudio.Views.Base.Interfaces;
 using Bau.Libraries.PluginsStudio.Views.Base.Models;
 
 namespace Bau.Libraries.RestStudio.Views
@@ -8,12 +9,12 @@ namespace Bau.Libraries.RestStudio.Views
 	/// <summary>
 	///		Manager de vistas de RestStudio
 	/// </summary>
-	public class RestStudioViewManager : PluginsStudio.Views.Base.Interfaces.IPlugin
+	public class RestStudioViewManager : IPlugin
 	{
 		/// <summary>
 		///		Inicializa el manager de vistas de DbStudio
 		/// </summary>
-		public void Initialize(PluginsStudio.Views.Base.Interfaces.IAppViewsController appViewsController, 
+		public void Initialize(IAppViewsController appViewsController, 
 							   PluginsStudio.ViewModels.Base.Controllers.IPluginsController pluginController)
 		{
 			AppViewsController = appViewsController;
@@ -163,9 +164,17 @@ namespace Bau.Libraries.RestStudio.Views
 		}
 
 		/// <summary>
+		///		Obtiene la vista de configuración (en este caso, no devuelve nada)
+		/// </summary>
+		public IPluginConfigurationView GetConfigurationView()
+		{
+			return null;
+		}
+
+		/// <summary>
 		///		Controlador de aplicación
 		/// </summary>
-		internal PluginsStudio.Views.Base.Interfaces.IAppViewsController AppViewsController { get; private set; }
+		internal IAppViewsController AppViewsController { get; private set; }
 
 		/// <summary>
 		///		ViewModel principal
