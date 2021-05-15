@@ -40,12 +40,12 @@ namespace Bau.Libraries.RestStudio.Views.Controllers
 			SystemControllerEnums.ResultType result = SystemControllerEnums.ResultType.No;
 
 				// Abre la ventana
-				//switch (dialogViewModel)
-				//{
-				//	case ViewModels.Details.Cloud.StorageViewModel viewModel:
-				//			result = DbStudioController.DbStudioViewManager.AppViewsController.OpenDialog(new Cloud.StorageView(viewModel));
-				//		break;
-				//}
+				switch (dialogViewModel)
+				{
+					case ViewModels.Solution.RestApiViewModel viewModel:
+							result = RestStudioViewManager.AppViewsController.OpenDialog(new Solution.RestView(viewModel));
+						break;
+				}
 				// Devuelve el resultado
 				return result;
 		}

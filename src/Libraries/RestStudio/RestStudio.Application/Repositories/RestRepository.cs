@@ -88,6 +88,7 @@ namespace Bau.Libraries.RestStudio.Application.Repositories
 						ContextModel context = new ContextModel();
 
 							// Añade los datos
+							context.Name = nodeML.Nodes[TagName].Value.TrimIgnoreNull();
 							context.Url = nodeML.Attributes[TagUrl].Value.TrimIgnoreNull();
 							context.Timeout = TimeSpan.FromMinutes(nodeML.Attributes[TagTimeout].Value.GetInt(3));
 							// Añade las crdenciales
@@ -195,6 +196,7 @@ namespace Bau.Libraries.RestStudio.Application.Repositories
 						// Añade los atributos
 						rootML.Attributes.Add(TagUrl, context.Url);
 						rootML.Attributes.Add(TagTimeout, context.Timeout.TotalMinutes);
+						rootML.Nodes.Add(TagName, context.Name);
 						// Añade las credenciales
 						credentialsML = rootML.Nodes.Add(TagCredentials);
 						credentialsML.Attributes.Add(TagType, context.Credentials.Authentication.ToString());

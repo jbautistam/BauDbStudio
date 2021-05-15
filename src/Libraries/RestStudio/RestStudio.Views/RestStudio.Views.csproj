@@ -7,12 +7,39 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Images\Context.png" />
+    <None Remove="Resources\Images\Export.png" />
+    <None Remove="Resources\Images\FolderNode.png" />
+    <None Remove="Resources\Images\Key.png" />
+    <None Remove="Resources\Images\Method.png" />
+    <None Remove="Resources\Images\RestApi.png" />
+    <None Remove="Resources\Images\Step.png" />
+    <None Remove="Resources\Images\Upload.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.Views\BauMvvm.Views.csproj" />
     <ProjectReference Include="..\..\PluginsStudio\PluginsStudio.Views.Base\PluginsStudio.Views.Base.csproj" />
     <ProjectReference Include="..\RestStudio.ViewModels\RestStudio.ViewModels.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\Images\RestApi.png" />
+    <Resource Include="Resources\Images\Export.png" />
+    <Resource Include="Resources\Images\FolderNode.png" />
+    <Resource Include="Resources\Images\Key.png" />
+    <Resource Include="Resources\Images\Context.png" />
+    <Resource Include="Resources\Images\Method.png" />
+    <Resource Include="Resources\Images\Step.png" />
+    <Resource Include="Resources\Images\Upload.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Page Update="Explorers\TreeRestExplorer.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Solution\RestView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>

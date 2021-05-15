@@ -131,7 +131,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers
 		/// <summary>
 		///		Tipo de nodo
 		/// </summary>
-		public string Type { get; }
+		public string Type { get; protected set; }
 
 		///// <summary>
 		/////		Icono

@@ -8,6 +8,11 @@ namespace Bau.Libraries.RestStudio.Models.Rest
 	public class ContextModel
 	{
 		/// <summary>
+		///		Nombre
+		/// </summary>
+		public string Name { get; set; }
+
+		/// <summary>
 		///		Url de servidor
 		/// </summary>
 		public string Url { get; set; }
@@ -18,7 +23,7 @@ namespace Bau.Libraries.RestStudio.Models.Rest
 		public CredentialsModel Credentials { get; } = new();
 
 		/// <summary>
-		///		Tiemout
+		///		Timeout
 		/// </summary>
 		public TimeSpan Timeout { get; set; } = TimeSpan.FromMinutes(3);
 	}

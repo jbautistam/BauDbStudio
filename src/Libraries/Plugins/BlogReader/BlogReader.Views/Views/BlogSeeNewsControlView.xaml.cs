@@ -51,6 +51,12 @@ namespace Bau.Libraries.BlogReader.Views.Views
 			ShowHtmlNews();
 		}
 
+		private async void BlogSeeNewsControlView_Closed(object sender, EventArgs e)
+		{
+			await wbExplorer.ShowHtmlAsync(string.Empty);
+			//wbExplorer.Dispose();
+		}
+
 		/// <summary>
 		///		Muestra el HTML de las noticias
 		/// </summary>

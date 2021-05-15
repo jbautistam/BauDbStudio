@@ -29,8 +29,14 @@ namespace Bau.Libraries.RestStudio.Views.Converters
 		{
 			switch (icon)
 			{ 
-				case TreeRestApiViewModel.IconType.Unknown:
-					return "/Resources/Images/Connection.png";
+				case TreeRestApiViewModel.IconType.RestApi:
+					return "/RestStudio.Views;component/Resources/Images/RestApi.png";
+				case TreeRestApiViewModel.IconType.ContextsRoot:
+				case TreeRestApiViewModel.IconType.Context:
+					return "/RestStudio.Views;component/Resources/Images/Context.png";
+				case TreeRestApiViewModel.IconType.MethodsRoot:
+				case TreeRestApiViewModel.IconType.Method:
+					return "/RestStudio.Views;component/Resources/Images/Method.png";
 				default:
 					return null;
 			}

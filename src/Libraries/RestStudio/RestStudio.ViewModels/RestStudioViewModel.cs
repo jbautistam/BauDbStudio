@@ -30,6 +30,8 @@ namespace Bau.Libraries.RestStudio.ViewModels
 			Path = path;
 			// Carga el archivo
 			Solution = new RestManager().Load(GetSolutionFileName());
+			// Actualiza el árbol
+			TreeRestApiViewModel.Load();
 		}
 
 		/// <summary>

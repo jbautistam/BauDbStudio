@@ -35,14 +35,19 @@
 						<MenuItem.Icon>
 							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
 						</MenuItem.Icon>
-						<MenuItem Header="Cuenta de storage" Command="{Binding Path=NewStorageCommand}">
+						<MenuItem Header="Api Rest" Command="{Binding Path=NewRestApiCommand}">
 							<MenuItem.Icon>
-								<Image Width="16" Height="16" Source="/Resources/Images/Storage.png" />
+								<Image Width="16" Height="16" Source="/RestStudio.Views;component/Resources/Images/RestApi.png" />
 							</MenuItem.Icon>
 						</MenuItem>
-						<MenuItem Header="Contenedor" Command="{Binding Path=NewContainerCommand}">
+						<MenuItem Header="Contexto" Command="{Binding Path=NewContextCommand}">
 							<MenuItem.Icon>
-								<Image Width="16" Height="16" Source="/Resources/Images/FolderNode.png" />
+								<Image Width="16" Height="16" Source="/RestStudio.Views;component/Resources/Images/Context.png" />
+							</MenuItem.Icon>
+						</MenuItem>
+						<MenuItem Header="Método" Command="{Binding Path=NewMethodCommand}">
+							<MenuItem.Icon>
+								<Image Width="16" Height="16" Source="/RestStudio.Views;component/Resources/Images/Method.png" />
 							</MenuItem.Icon>
 						</MenuItem>
 					</MenuItem>
@@ -55,27 +60,6 @@
 					<MenuItem Header="Borrar" Command="{Binding DeleteAsyncCommand}">
 						<MenuItem.Icon>
 							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
-						</MenuItem.Icon>
-					</MenuItem>
-					<Separator/>
-					<MenuItem Header="Subir">
-						<MenuItem.Icon>
-							<Image Width="16" Height="16" Source="/Resources/Images/Upload.png" />
-						</MenuItem.Icon>
-						<MenuItem Header="Directorio" Command="{Binding UploadFolderAsyncCommand}">
-							<MenuItem.Icon>
-								<Image Width="16" Height="16" Source="/Resources/Images/Upload.png" />
-							</MenuItem.Icon>
-						</MenuItem>
-						<MenuItem Header="Archivos" Command="{Binding UploadFileAsyncCommand}">
-							<MenuItem.Icon>
-								<Image Width="16" Height="16" Source="/Resources/Images/Upload.png" />
-							</MenuItem.Icon>
-						</MenuItem>
-					</MenuItem>
-					<MenuItem Header="Descargar archivos" Command="{Binding DownloadAsyncCommand}">
-						<MenuItem.Icon>
-							<Image Width="16" Height="16" Source="/Resources/Images/Download.png" />
 						</MenuItem.Icon>
 					</MenuItem>
 				</ContextMenu>

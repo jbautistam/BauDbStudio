@@ -49,6 +49,7 @@ namespace Bau.DbStudio
 			(DbStudioViewsManager.AppViewController as Controllers.AppViewsController).OpenDocumentRequired += (_, args) => AddTab(args.UserControl, args.ViewModel);
 			// Asigna los manejadores de eventos del docker de documentos
 			dckManager.Closing += (sender, args) => CloseWindow(args);
+			//dckManager.Closed += (sender, args) => DestroyTab(args);
 			dckManager.ActiveDocumentChanged += (sender, args) => UpdateSelectedTab();
 			// Cambia el tema
 			SetTheme((Controls.DockLayout.DockLayoutManager.DockTheme) DbStudioViewsManager.ConfigurationController.LastThemeSelected);
@@ -213,6 +214,17 @@ namespace Bau.DbStudio
 					}
 			}
 		}
+
+		///// <summary>
+		/////		Cierra una ficha
+		///// </summary>
+		//private void DestroyTab(Controls.DockLayout.EventArguments.ClosingEventArgs args)
+		//{
+		//	if (args.Document != null && args.Document.Tag != null && args.Document.Tag is IDetailViewModel detailViewModel)
+		//	{
+		//		args.Document.LayoutContent.Close();
+		//	}
+		//}
 
 		/// <summary>
 		///		Modifica la ventana de detalles seleccionada
