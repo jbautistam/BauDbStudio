@@ -171,6 +171,14 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Reports
 		}
 
 		/// <summary>
+		///		Cierra el viewmodel
+		/// </summary>
+		public void Close()
+		{
+			// ... no hace nada, sólo implementa la interface
+		}
+
+		/// <summary>
 		///		ViewModel
 		/// </summary>
 		public ReportingSolutionViewModel ReportingSolutionViewModel { get; }

@@ -30,11 +30,12 @@ namespace Bau.Libraries.BlogReader.Views.Views
 			grdData.DataContext = ViewModel;
 			lswEntries.ItemsSource = ViewModel.Entries;
 			// Observa el evento PropertyChanged para ver cuándo se cambia el Html
-			ViewModel.PropertyChanged += (sender, evntArgs) =>
+			ViewModel.PropertyChanged += (sender, args) =>
 												{
-													if (evntArgs.PropertyName.EqualsIgnoreCase("HtmlNews"))
+													if (args.PropertyName.Equals(nameof(BlogSeeNewsViewModel.HtmlNews), StringComparison.CurrentCultureIgnoreCase))
 														ShowHtmlNews();
 												};
+			ViewModel.Closed += async (sender, args) => await DestroyWindowAsync();
 			// Añade el viewModel al explorador
 			wbExplorer.DataContext = ViewModel;
 			wbExplorer.FunctionExecute += (sender, evntArgs) => ViewModel.ExecuteFromExplorer(evntArgs.Parameters);
@@ -49,12 +50,6 @@ namespace Bau.Libraries.BlogReader.Views.Views
 			}
 			// Muestra el HTML
 			ShowHtmlNews();
-		}
-
-		private async void BlogSeeNewsControlView_Closed(object sender, EventArgs e)
-		{
-			await wbExplorer.ShowHtmlAsync(string.Empty);
-			//wbExplorer.Dispose();
 		}
 
 		/// <summary>
@@ -83,6 +78,19 @@ namespace Bau.Libraries.BlogReader.Views.Views
 		{
 			ViewModel.MainViewModel.ViewsController.HostPluginsController.OpenWebBrowser(e.Url);
 			e.Cancel = true;
+		}
+
+		/// <summary>
+		///		Destruye la ventana cuando se cierra
+		/// </summary>
+		private async System.Threading.Tasks.Task DestroyWindowAsync()
+		{
+			// Libera el temporizador
+			_tmrRead.Stop();
+			_tmrRead.Tick -= tmrRead_Tick;
+			// Cierra el navegador
+			await wbExplorer.ShowHtmlAsync(string.Empty);
+			wbExplorer.Dispose();
 		}
 
 		/// <summary>

@@ -7,6 +7,8 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.Web
 	/// </summary>
 	public class WebViewModel : BauMvvm.ViewModels.BaseObservableObject, Base.Interfaces.IDetailViewModel
 	{
+		// Eventos públicos
+		public event EventHandler Closed;
 		// Variables privadas
 		private string _url;
 
@@ -31,6 +33,14 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.Web
 		public void SaveDetails(bool newName)
 		{
 			throw new NotImplementedException();
+		}
+
+		/// <summary>
+		///		Cierra el viewmodel
+		/// </summary>
+		public void Close()
+		{
+			Closed?.Invoke(this, EventArgs.Empty);
 		}
 
 		/// <summary>

@@ -30,6 +30,8 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 			/// <summary>Reproducir el adjunto</summary>
 			Play
 		}
+		// Eventos públicos
+		public event EventHandler Closed;
 		// Variables privadas
 		private BlogEntriesCollectionViewModel _entries, _entriesForView;
 		private BlogEntryViewModel _selectedEntry;
@@ -382,9 +384,8 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 							if (entry != null)
 							{
 								BlogEntriesCollectionViewModel entries = new BlogEntriesCollectionViewModel { entry };
-								EntryAction action = parameters[0].GetEnum(EntryAction.Unknown);
 
-									switch (action)
+									switch (parameters[0].GetEnum(EntryAction.Unknown))
 									{
 										case EntryAction.MarkRead:
 												if (entry.Entry.Status == EntryModel.StatusEntry.Read)
@@ -610,6 +611,14 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 		public void SaveDetails(bool newName)
 		{
 			// No hace nada, sólo implementa la interface
+		}
+
+		/// <summary>
+		///		Cierra el viewmodel
+		/// </summary>
+		public void Close()
+		{
+			Closed?.Invoke(this, EventArgs.Empty);
 		}
 
 		/// <summary>

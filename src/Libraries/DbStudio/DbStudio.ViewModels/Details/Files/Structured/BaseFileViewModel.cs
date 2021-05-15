@@ -155,6 +155,11 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Files.Structured
 		}
 
 		/// <summary>
+		///		Cierra el viewmodel
+		/// </summary>
+		public abstract void Close();
+
+		/// <summary>
 		///		Solución
 		/// </summary>
 		public DbStudioViewModel SolutionViewModel { get; }

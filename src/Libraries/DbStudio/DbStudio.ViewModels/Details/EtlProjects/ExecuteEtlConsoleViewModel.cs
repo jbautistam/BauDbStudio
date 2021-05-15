@@ -133,6 +133,14 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.EtlProjects
 		}
 
 		/// <summary>
+		///		Cierra el viewmodel
+		/// </summary>
+		public void Close()
+		{
+			// ... no hace nada, sólo implementa la interface
+		}
+
+		/// <summary>
 		///		ViewModel de la solución
 		/// </summary>
 		public DbStudioViewModel SolutionViewModel { get; }

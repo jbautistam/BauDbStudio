@@ -61,6 +61,14 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Files.Structured
 		}
 
 		/// <summary>
+		///		Cierra el viewmodel
+		/// </summary>
+		public override void Close()
+		{
+			// ... no hace nada, sólo implementa la interface
+		}
+
+		/// <summary>
 		///		Parámetros del archivo
 		/// </summary>
 		public LibCsvFiles.Models.FileModel FileParameters { get; } = new LibCsvFiles.Models.FileModel();

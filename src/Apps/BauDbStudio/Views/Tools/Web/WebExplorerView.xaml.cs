@@ -15,6 +15,7 @@ namespace Bau.DbStudio.Views.Tools.Web
 		{
 			InitializeComponent();
 			DataContext = ViewModel = viewModel;
+			viewModel.Closed += async (sender, args) => await DestroyWindowAsync();
 		}
 
 		/// <summary>
@@ -23,6 +24,15 @@ namespace Bau.DbStudio.Views.Tools.Web
 		private async Task InitControlAsync()
 		{
 			await wbBrowser.ShowUrlAsync(ViewModel.Url);
+		}
+
+		/// <summary>
+		///		Libera la memoria de la ventana antes de cerrar
+		/// </summary>
+		private async Task DestroyWindowAsync()
+		{
+			await wbBrowser.ShowHtmlAsync(string.Empty);
+			wbBrowser.Dispose();
 		}
 
 		/// <summary>

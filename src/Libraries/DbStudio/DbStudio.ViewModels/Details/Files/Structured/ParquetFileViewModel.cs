@@ -48,5 +48,13 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Files.Structured
 		{
 			SolutionViewModel.MainController.OpenDialog(new ParquetFilePropertiesViewModel(SolutionViewModel, this));
 		}
+
+		/// <summary>
+		///		Cierra el viewmodel
+		/// </summary>
+		public override void Close()
+		{
+			// ... no hace nada, sólo implementa la interface
+		}
 	}
 }

@@ -42,6 +42,14 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Queries
 		}
 
 		/// <summary>
+		///		Cierra el viewmodel
+		/// </summary>
+		public void Close()
+		{
+			// ... no hace nada, sólo implementa la interface
+		}
+
+		/// <summary>
 		///		Solución
 		/// </summary>
 		public DbStudioViewModel SolutionViewModel { get; }

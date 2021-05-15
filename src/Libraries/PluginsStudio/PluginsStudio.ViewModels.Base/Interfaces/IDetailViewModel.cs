@@ -18,6 +18,11 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Interfaces
 		void SaveDetails(bool newName);
 
 		/// <summary>
+		///		Cierra la ventana
+		/// </summary>
+		void Close();
+
+		/// <summary>
 		///		Título de la ficha
 		/// </summary>
 		string Header { get; }

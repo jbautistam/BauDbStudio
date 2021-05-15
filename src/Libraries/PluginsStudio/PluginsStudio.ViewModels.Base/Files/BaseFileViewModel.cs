@@ -39,6 +39,11 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Files
 		}
 
 		/// <summary>
+		///		Cierra el viewModel
+		/// </summary>
+		public abstract void Close();
+
+		/// <summary>
 		///		Id de la ficha
 		/// </summary>
 		public string TabId 
