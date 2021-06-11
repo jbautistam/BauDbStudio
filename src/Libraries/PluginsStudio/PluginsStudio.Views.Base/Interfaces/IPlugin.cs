@@ -49,6 +49,11 @@ namespace Bau.Libraries.PluginsStudio.Views.Base.Interfaces
 		List<ViewModels.Base.Models.FileOptionsModel> GetFilesOptions();
 
 		/// <summary>
+		///		Obtiene los archivos asignados a un plugin
+		/// </summary>
+		List<ViewModels.Base.Models.FileAssignedModel> GetFilesAssigned();
+
+		/// <summary>
 		///		Obtiene la vista de configuración
 		/// </summary>
 		IPluginConfigurationView GetConfigurationView();

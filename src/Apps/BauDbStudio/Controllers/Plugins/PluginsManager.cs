@@ -125,6 +125,20 @@ namespace Bau.DbStudio.Controllers.Plugins
 		}
 
 		/// <summary>
+		///		Obtiene las extensiones de archivo asignadas
+		/// </summary>
+		internal List<FileAssignedModel> GetFilesAssigned()
+		{
+			List<FileAssignedModel> files = new();
+
+				// Añade los archivos asignados
+				foreach (IPlugin plugin in Plugins)
+					files.AddRange(plugin.GetFilesAssigned());
+				// Devuelve la lista
+				return files;
+		}
+
+		/// <summary>
 		///		Actualiza los exploradores y ventanas
 		/// </summary>
 		internal void Refresh()

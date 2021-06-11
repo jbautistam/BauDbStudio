@@ -23,6 +23,7 @@
   <ItemGroup>
     <Compile Remove="Controllers\AppController.cs" />
     <Compile Remove="Converters\FileIconConverter.cs" />
+    <Compile Remove="Views\Files\ImageView - Copia.xaml.cs" />
     <Compile Remove="Views\Tools\ConfigurationView.xaml.cs" />
     <Compile Remove="Views\Tools\CreateFileView.xaml.cs" />
     <Compile Remove="Views\Tools\FindView.xaml.cs" />
@@ -40,7 +41,9 @@
     <None Remove="Resources\Images\FileCsharp.png" />
     <None Remove="Resources\Images\FileCsv.png" />
     <None Remove="Resources\Images\FileExcel.png" />
+    <None Remove="Resources\Images\FileImage.png" />
     <None Remove="Resources\Images\FileJson.png" />
+    <None Remove="Resources\Images\FileMd.png" />
     <None Remove="Resources\Images\FileParquet.png" />
     <None Remove="Resources\Images\FilePowershell.png" />
     <None Remove="Resources\Images\FilePython.png" />
@@ -51,13 +54,20 @@
     <None Remove="Resources\Images\FolderNode.png" />
     <None Remove="Resources\Images\Loading.png" />
     <None Remove="Resources\Images\Search.png" />
+    <None Remove="Resources\Images\SeeWindow.png" />
     <None Remove="Resources\Images\SplashScreenImage.png" />
     <None Remove="Resources\Images\Stop.png" />
     <None Remove="Resources\Images\Upload.png" />
     <None Remove="Resources\Images\WholeWord.png" />
     <None Remove="Resources\Images\Wildcards.png" />
+    <None Remove="Resources\Images\Zoom100.png" />
+    <None Remove="Resources\Images\ZoomFill.png" />
+    <None Remove="Resources\Images\ZoomFit.png" />
+    <None Remove="Resources\Images\ZoomIn.png" />
+    <None Remove="Resources\Images\ZoomOut.png" />
   </ItemGroup>
   <ItemGroup>
+    <Page Remove="Views\Files\ImageView - Copia.xaml" />
     <Page Remove="Views\Tools\ConfigurationView.xaml" />
     <Page Remove="Views\Tools\CreateFileView.xaml" />
     <Page Remove="Views\Tools\FindView.xaml" />
@@ -70,6 +80,7 @@
     <ProjectReference Include="..\..\..\..\..\Controls\WPF\BauControls\src\BauControls.csproj" />
     <ProjectReference Include="..\..\..\..\..\Controls\WPF\CodeEditor\src\CodeEditor.csproj" />
     <ProjectReference Include="..\..\..\..\..\Controls\WPF\DockLayout\src\DockLayout.csproj" />
+    <ProjectReference Include="..\..\..\..\..\Controls\WPF\ZoomAndPanControl\ZoomAndPanControls.csproj" />
     <ProjectReference Include="..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.ViewModels\BauMvvm.ViewModels.csproj" />
     <ProjectReference Include="..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.Views.Wpf\BauMvvm.Views.Wpf.csproj" />
     <ProjectReference Include="..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.Views\BauMvvm.Views.csproj" />
@@ -78,6 +89,8 @@
     <ProjectReference Include="..\..\Libraries\DbStudio\DbStudio.Views\DbStudio.Views.csproj" />
     <ProjectReference Include="..\..\Libraries\PluginsStudio\PluginsStudio.ViewModels\PluginsStudio.ViewModels.csproj" />
     <ProjectReference Include="..\..\Libraries\Plugins\BlogReader\BlogReader.Views\BlogReader.Views.csproj" />
+    <ProjectReference Include="..\..\Libraries\Plugins\ComicsReader\ComicsReader.Plugin\ComicsReader.Plugin.csproj" />
+    <ProjectReference Include="..\..\Libraries\Plugins\EbooksReader\EbooksReader.Plugin\EbooksReader.Plugin.csproj" />
     <ProjectReference Include="..\..\Libraries\RestStudio\RestStudio.Views\RestStudio.Views.csproj" />
   </ItemGroup>
   <ItemGroup>
@@ -88,9 +101,12 @@
     <Resource Include="Resources\Images\DataError.png" />
     <Resource Include="Resources\Images\Export.png" />
     <Resource Include="Resources\Images\FileExcel.png" />
+    <Resource Include="Resources\Images\FileImage.png" />
+    <Resource Include="Resources\Images\FileMd.png" />
     <Resource Include="Resources\Images\FileSqlExtended.png" />
     <Resource Include="Resources\Images\Filter.png" />
     <Resource Include="Resources\Images\Loading.png" />
+    <Resource Include="Resources\Images\SeeWindow.png" />
     <Resource Include="Resources\Images\Upload.png" />
     <Resource Include="Resources\Images\Download.png" />
     <Resource Include="Resources\Images\File.png" />
@@ -107,6 +123,11 @@
     <Resource Include="Resources\Images\Stop.png" />
     <Resource Include="Resources\Images\WholeWord.png" />
     <Resource Include="Resources\Images\Wildcards.png" />
+    <Resource Include="Resources\Images\Zoom100.png" />
+    <Resource Include="Resources\Images\ZoomFill.png" />
+    <Resource Include="Resources\Images\ZoomFit.png" />
+    <Resource Include="Resources\Images\ZoomIn.png" />
+    <Resource Include="Resources\Images\ZoomOut.png" />
   </ItemGroup>
   <ItemGroup>
     <SplashScreen Include="Resources\SplashScreenImage.png" />

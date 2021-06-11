@@ -45,6 +45,12 @@ namespace Bau.Libraries.RestStudio.Views.Controllers
 					case ViewModels.Solution.RestApiViewModel viewModel:
 							result = RestStudioViewManager.AppViewsController.OpenDialog(new Solution.RestView(viewModel));
 						break;
+					case ViewModels.Solution.ContextViewModel viewModel:
+							result = RestStudioViewManager.AppViewsController.OpenDialog(new Solution.ContextView(viewModel));
+						break;
+					case ViewModels.Solution.MethodViewModel viewModel:
+							result = RestStudioViewManager.AppViewsController.OpenDialog(new Solution.MethodView(viewModel));
+						break;
 				}
 				// Devuelve el resultado
 				return result;

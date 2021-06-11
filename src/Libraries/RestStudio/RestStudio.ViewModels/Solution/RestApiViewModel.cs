@@ -5,19 +5,19 @@ using Bau.Libraries.RestStudio.Models.Rest;
 namespace Bau.Libraries.RestStudio.ViewModels.Solution
 {
 	/// <summary>
-	///		ViewModel de <see cref="RestModel"/>
+	///		ViewModel de <see cref="RestApiModel"/>
 	/// </summary>
 	public class RestApiViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewModel
 	{
 		// Variables privadas
 		private string _name, _description;
 
-		public RestApiViewModel(RestStudioViewModel mainViewModel, RestModel rest)
+		public RestApiViewModel(RestStudioViewModel mainViewModel, RestApiModel rest)
 		{
 			// Inicializa las propiedades
 			MainViewModel = mainViewModel;
 			if (rest == null)
-				Rest = new RestModel();
+				Rest = new RestApiModel();
 			else
 				Rest = rest;
 			// Inicializa el ViewModel
@@ -74,7 +74,7 @@ namespace Bau.Libraries.RestStudio.ViewModels.Solution
 		/// <summary>
 		///		Modelo de los datos de la API Rest
 		/// </summary>
-		public RestModel Rest { get; }
+		public RestApiModel Rest { get; }
 
 		/// <summary>
 		///		Nombre

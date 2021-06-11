@@ -99,6 +99,14 @@ namespace Bau.Libraries.RestStudio.Views
 			//	return menus;
 		}
 
+		/// <summary>
+		///		Obtiene las extensiones de archivo asociadas al plugin
+		/// </summary>
+		public List<PluginsStudio.ViewModels.Base.Models.FileAssignedModel> GetFilesAssigned()
+		{
+			return new();
+		}
+
 /*
 		/// <summary>
 		///		Obtiene los menús

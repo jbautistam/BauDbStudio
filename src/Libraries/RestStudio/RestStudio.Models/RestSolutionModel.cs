@@ -11,6 +11,6 @@ namespace Bau.Libraries.RestStudio.Models
 		/// <summary>
 		///		Apis de la solución
 		/// </summary>
-		public List<Rest.RestModel> RestApis { get; } = new();
+		public List<Rest.RestApiModel> RestApis { get; } = new();
 	}
 }

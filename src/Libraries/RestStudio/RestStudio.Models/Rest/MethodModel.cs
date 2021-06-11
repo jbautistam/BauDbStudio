@@ -20,6 +20,11 @@ namespace Bau.Libraries.RestStudio.Models.Rest
 		}
 
 		/// <summary>
+		///		Nombre del método
+		/// </summary>
+		public string Name { get; set; }
+
+		/// <summary>
 		///		Método
 		/// </summary>
 		public MethodType Method { get; set; }

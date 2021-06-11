@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Bau.Libraries.BauMvvm.ViewModels;
+using Bau.Libraries.RestStudio.Models.Rest;
 
 namespace Bau.Libraries.RestStudio.ViewModels.Explorers
 {
@@ -44,9 +45,9 @@ namespace Bau.Libraries.RestStudio.ViewModels.Explorers
 			// Asigna los comandos
 			NewRestApiCommand = new BaseCommand(_ => UpdateRestApi(null))
 										.AddListener(this, nameof(SelectedNode));
-			NewContextCommand = new BaseCommand(_ => UpdateContext(null), _ => CanExecuteAction(nameof(NewContextCommand)))
+			NewContextCommand = new BaseCommand(_ => UpdateContext(SelectedNode as NodeRestViewModel), _ => CanExecuteAction(nameof(NewContextCommand)))
 										.AddListener(this, nameof(SelectedNode));
-			NewMethodCommand = new BaseCommand(_ => UpdateMethod(null), _ => CanExecuteAction(nameof(NewMethodCommand)))
+			NewMethodCommand = new BaseCommand(_ => UpdateMethod(SelectedNode as NodeRestViewModel), _ => CanExecuteAction(nameof(NewMethodCommand)))
 										.AddListener(this, nameof(SelectedNode));
 		}
 
@@ -55,7 +56,7 @@ namespace Bau.Libraries.RestStudio.ViewModels.Explorers
 		/// </summary>
 		protected override void AddRootNodes()
 		{
-			foreach (Models.Rest.RestModel rest in MainViewModel.Solution.RestApis)
+			foreach (RestApiModel rest in MainViewModel.Solution.RestApis)
 				Children.Add(new NodeRestViewModel(this, null, rest.Name, NodeType.RestApi, rest, true, BauMvvm.ViewModels.Media.MvvmColor.Navy));
 		}
 
@@ -72,7 +73,7 @@ namespace Bau.Libraries.RestStudio.ViewModels.Explorers
 						return type == NodeType.RestApi || type == NodeType.Context || type == NodeType.Method;
 					case nameof(NewContextCommand):
 					case nameof(NewMethodCommand):
-						return type == NodeType.ContextsRoot || type == NodeType.MethodsRoot;
+						return type == NodeType.ContextsRoot || type == NodeType.MethodsRoot || type ==  NodeType.RestApi;
 					default:
 						return false;
 				}
@@ -106,9 +107,9 @@ namespace Bau.Libraries.RestStudio.ViewModels.Explorers
 			bool isNew = true;
 
 				// Obtiene el modelo
-				if (node != null && node.Tag is Models.Rest.RestModel restNode)
+				if (node != null && node.Tag is RestApiModel rest)
 				{
-					viewModel = new Solution.RestApiViewModel(MainViewModel, restNode);
+					viewModel = new Solution.RestApiViewModel(MainViewModel, rest);
 					isNew = false;
 				}
 				else
@@ -129,6 +130,33 @@ namespace Bau.Libraries.RestStudio.ViewModels.Explorers
 		/// </summary>
 		private void UpdateContext(NodeRestViewModel node)
 		{
+			RestApiModel restApi = node?.GetRestParent();
+
+				if (restApi == null)
+					MainViewModel.RestStudioController.HostController.SystemController.ShowMessage("Seleccione un nodo de API para añadirle un contexto");
+				else
+				{
+					Solution.ContextViewModel viewModel = null;
+					bool isNew = true;
+
+						// Obtiene el modelo
+						if (node != null && node.Tag is ContextModel context)
+						{
+							viewModel = new Solution.ContextViewModel(MainViewModel, context);
+							isNew = false;
+						}
+						else
+							viewModel = new Solution.ContextViewModel(MainViewModel, null);
+						// Abre la ventana
+						if (MainViewModel.RestStudioController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+						{
+							// Si es nuevo, se añade a la colección
+							if (isNew)
+								restApi.Contexts.Add(viewModel.Context);
+							// Graba y actualiza
+							Save();
+						}
+				}
 		}
 
 		/// <summary>
@@ -136,6 +164,33 @@ namespace Bau.Libraries.RestStudio.ViewModels.Explorers
 		/// </summary>
 		private void UpdateMethod(NodeRestViewModel node)
 		{
+			RestApiModel restApi = node?.GetRestParent();
+
+				if (restApi == null)
+					MainViewModel.RestStudioController.HostController.SystemController.ShowMessage("Seleccione un nodo de API para añadirle un método");
+				else
+				{
+					Solution.MethodViewModel viewModel = null;
+					bool isNew = true;
+
+						// Obtiene el modelo
+						if (node != null && node.Tag is MethodModel method)
+						{
+							viewModel = new Solution.MethodViewModel(MainViewModel, method);
+							isNew = false;
+						}
+						else
+							viewModel = new Solution.MethodViewModel(MainViewModel, null);
+						// Abre la ventana
+						if (MainViewModel.RestStudioController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+						{
+							// Si es nuevo, se añade a la colección
+							if (isNew)
+								restApi.Methods.Add(viewModel.Method);
+							// Graba y actualiza
+							Save();
+						}
+				}
 		}
 
 		/// <summary>

@@ -353,9 +353,9 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 		{
 			string result = text;
 
-				// Quita la etiqueta "iframe"
-				while (!result.IsEmpty() && result.IndexOf("<iframe") >= 0)
-					result = System.Text.RegularExpressions.Regex.Replace(result, "<iframe(.|\n)*?</iframe>", string.Empty);
+				//// Quita la etiqueta "iframe"
+				//while (!result.IsEmpty() && result.IndexOf("<iframe") >= 0)
+				//	result = System.Text.RegularExpressions.Regex.Replace(result, "<iframe(.|\n)*?</iframe>", string.Empty);
 				// Devuelve el resultado
 				return result;
 		}

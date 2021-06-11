@@ -47,7 +47,7 @@ namespace Bau.Libraries.RestStudio.Application.Repositories
 							foreach (MLNode nodeML in rootML.Nodes)
 								if (nodeML.Name == TagApi)
 								{
-									RestModel restApi = new RestModel();
+									RestApiModel restApi = new RestApiModel();
 
 										// Asigna las propiedades
 										restApi.Name = nodeML.Nodes[TagName].Value.TrimIgnoreNull();
@@ -122,6 +122,7 @@ namespace Bau.Libraries.RestStudio.Application.Repositories
 						MethodModel method = new();
 
 							// Asigna las propiedades
+							method.Name = nodeML.Nodes[TagName].Value.TrimIgnoreNull();
 							method.Method = nodeML.Attributes[TagType].Value.GetEnum(MethodModel.MethodType.Get);
 							method.Url = nodeML.Attributes[TagUrl].Value.TrimIgnoreNull();
 							method.Body = nodeML.Nodes[TagBody].Value.TrimIgnoreNull();
@@ -143,7 +144,7 @@ namespace Bau.Libraries.RestStudio.Application.Repositories
 			MLNode rootML = fileML.Nodes.Add(TagRoot);
 
 				// Asigna los nodos
-				foreach (RestModel restApi in solution.RestApis)
+				foreach (RestApiModel restApi in solution.RestApis)
 				{
 					MLNode nodeML = rootML.Nodes.Add(TagApi);
 
@@ -222,6 +223,7 @@ namespace Bau.Libraries.RestStudio.Application.Repositories
 					MLNode nodeML = nodesML.Add(TagMethod);
 
 						// Asigna los atributos
+						nodeML.Nodes.Add(TagName, method.Name);
 						nodeML.Attributes.Add(TagType, method.Method.ToString());
 						nodeML.Attributes.Add(TagUrl, method.Url);
 						nodeML.Nodes.Add(TagBody, method.Body);

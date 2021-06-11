@@ -32,12 +32,13 @@ namespace Bau.DbStudio
 			DbStudioViewsManager.AddPlugin(new Libraries.DbStudio.Views.DbStudioViewManager());
 			DbStudioViewsManager.AddPlugin(new Libraries.BlogReader.Views.BlogReaderPlugin());
 			DbStudioViewsManager.AddPlugin(new Libraries.RestStudio.Views.RestStudioViewManager());
+			DbStudioViewsManager.AddPlugin(new Libraries.ComicsReader.Plugin.ComicReaderPlugin());
+			DbStudioViewsManager.AddPlugin(new Libraries.EbooksReader.Plugin.EBookReaderPlugin());
 			DbStudioViewsManager.Initialize();
 			// Inicializa el ViewModel
 			DataContext = ViewModel = DbStudioViewsManager.PluginsStudioViewModel;
 			// Carga los datos
 			DbStudioViewsManager.Load(DbStudioViewsManager.ConfigurationController.PathData, DbStudioViewsManager.ConfigurationController.LastWorkSpace);
-			//ViewModel.LastPathSelected = MainController.ConfigurationController.LastPathSelected;
 			ViewModel.LastFilesViewModel.Add(DbStudioViewsManager.ConfigurationController.LastFiles);
 			// Añade los manejadores de eventos
 			ViewModel.WorkspacesChanged += (sender, args) => ShowMenuWorkspaces();
@@ -224,17 +225,6 @@ namespace Bau.DbStudio
 			if (args.Document.Tag != null && args.Document.Tag is IDetailViewModel detailViewModel)
 				detailViewModel.Close();
 		}
-
-		///// <summary>
-		/////		Cierra una ficha
-		///// </summary>
-		//private void DestroyTab(Controls.DockLayout.EventArguments.ClosingEventArgs args)
-		//{
-		//	if (args.Document != null && args.Document.Tag != null && args.Document.Tag is IDetailViewModel detailViewModel)
-		//	{
-		//		args.Document.LayoutContent.Close();
-		//	}
-		//}
 
 		/// <summary>
 		///		Modifica la ventana de detalles seleccionada

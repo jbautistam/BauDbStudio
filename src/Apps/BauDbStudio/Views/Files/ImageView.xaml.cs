@@ -17,8 +17,8 @@ namespace Bau.DbStudio.Views.Files
 			InitializeComponent();
 			// Carga el archivo
 			LoadImage(viewModel.FileName);
-			// Cambia el zoom
-			pnlZoom.ZoomMode = Bau.Controls.Graphical.ImageZoomBoxPanel.eZoomMode.ActualSize;
+			//// Cambia el zoom
+			//pnlZoom.ZoomMode = Bau.Controls.Graphical.ImageZoomBoxPanel.eZoomMode.ActualSize;
 		}
 
 		/// <summary>
@@ -40,7 +40,18 @@ namespace Bau.DbStudio.Views.Files
 				// Asigna la imagen
 				imgImage.Source = image;
 				// Muestra las propiedades de la imagen
-				lblStatus.Text = $"Dimensiones {image.PixelWidth} x {image.PixelHeight}";
+				// lblStatus.Text = $"Dimensiones {image.PixelWidth} x {image.PixelHeight}";
+		}
+
+		private void chkShowThumb_Click(object sender, System.Windows.RoutedEventArgs e)
+		{
+			if (wndZoom != null)
+			{
+				if (chkShowThumb.IsChecked ?? false)
+					wndZoom.Visibility = System.Windows.Visibility.Visible;
+				else
+					wndZoom.Visibility = System.Windows.Visibility.Collapsed;
+			}
 		}
 	}
 }

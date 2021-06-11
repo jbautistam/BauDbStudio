@@ -177,6 +177,14 @@ namespace Bau.Libraries.DbStudio.Views
 		}
 
 		/// <summary>
+		///		Obtiene las extensiones de archivo asociadas al plugin
+		/// </summary>
+		public List<PluginsStudio.ViewModels.Base.Models.FileAssignedModel> GetFilesAssigned()
+		{
+			return new();
+		}
+
+		/// <summary>
 		///		Obtiene la vista de configuración (en este caso, no devuelve nada)
 		/// </summary>
 		public IPluginConfigurationView GetConfigurationView()

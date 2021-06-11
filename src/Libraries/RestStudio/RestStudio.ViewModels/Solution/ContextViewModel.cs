@@ -13,7 +13,6 @@ namespace Bau.Libraries.RestStudio.ViewModels.Solution
 		// Variables privadas
 		private string _name, _url;
 		private int _timeout;
-		private CredentialsModel.AuthenticationType _authenticationType;
 		private string _urlAuthority, _user, _password, _scope;
 		private ComboViewModel _comboTypes;
 
@@ -38,6 +37,13 @@ namespace Bau.Libraries.RestStudio.ViewModels.Solution
 			LoadComboTypes();
 			// Asigna las propiedades
 			Name = Context.Name;
+			Url = Context.Url;
+			Timeout = (int) Context.Timeout.TotalMinutes;
+			ComboTypes.SelectedId = (int) Context.Credentials.Authentication;
+			UrlAuthority = Context.Credentials.UrlAuthority;
+			User = Context.Credentials.User;
+			Password = Context.Credentials.Password;
+			Scope = Context.Credentials.Scope;
 		}
 
 		/// <summary>
@@ -63,7 +69,7 @@ namespace Bau.Libraries.RestStudio.ViewModels.Solution
 		{
 			bool validated = false;
 
-				// Compureba los datos
+				// Comprueba los datos
 				if (string.IsNullOrWhiteSpace(Name))
 					MainViewModel.RestStudioController.MainWindowController.SystemController.ShowMessage("Introduzca el nombre");
 				else
@@ -81,6 +87,13 @@ namespace Bau.Libraries.RestStudio.ViewModels.Solution
 			{
 				// Actualiza los datos del modelo
 				Context.Name = Name;
+				Context.Url = Url;
+				Context.Timeout = TimeSpan.FromMinutes(Timeout);
+				Context.Credentials.Authentication = (CredentialsModel.AuthenticationType) (ComboTypes.SelectedId ?? 0);
+				Context.Credentials.UrlAuthority = UrlAuthority;
+				Context.Credentials.User = User;
+				Context.Credentials.Password = Password;
+				Context.Credentials.Scope = Scope;
 				// Indica que ya no es nuevo y está grabado
 				IsUpdated = false;
 				// Cierra la ventana
