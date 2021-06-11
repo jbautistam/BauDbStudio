@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>Bau.Libraries.BlogReader.Views</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\AppController.cs" />
+    <Compile Remove="Converters\BoolToVisibilityConverter.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\attach.png" />
+    <None Remove="Resources\EntryInteresting.png" />
+    <None Remove="Resources\EntryNotRead.png" />
+    <None Remove="Resources\EntryRead.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\..\Controls\WPF\BauControls\src\BauControls.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.Views.Wpf\BauMvvm.Views.Wpf.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.Views\BauMvvm.Views.csproj" />
+    <ProjectReference Include="..\..\..\PluginsStudio\PluginsStudio.Views.Base\PluginsStudio.Views.Base.csproj" />
+    <ProjectReference Include="..\LibBlogReader.ViewModel\LibBlogReader.ViewModel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\attach.png" />
+    <Resource Include="Resources\EntryInteresting.png" />
+    <Resource Include="Resources\EntryNotRead.png" />
+    <Resource Include="Resources\EntryRead.png" />
+  </ItemGroup>
+
+</Project>

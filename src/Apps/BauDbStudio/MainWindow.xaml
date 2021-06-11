@@ -8,7 +8,7 @@
 		xmlns:commandsLocal="clr-namespace:Bau.DbStudio.Converters"
 		xmlns:dockLayout="clr-namespace:Bau.Controls.DockLayout;assembly=DockLayout"
         mc:Ignorable="d"
-        Title="{Binding Path=Text}" Height="450" Width="800" Loaded="Window_Loaded" Unloaded="Window_Unloaded" WindowStartupLocation="CenterScreen" WindowState="Maximized" Closing="Window_Closing">
+        Title="BauDbStudio" Height="450" Width="800" Loaded="Window_Loaded" Unloaded="Window_Unloaded" WindowStartupLocation="CenterScreen" WindowState="Maximized" Closing="Window_Closing">
 	<Window.CommandBindings>
 		<CommandBinding Command="Save" Executed="SaveCommandBinding_Executed" CanExecute="SaveCommandBinding_CanExecute"/>
 		<CommandBinding Command="Search" Executed="SearchCommandBinding_Executed"/>
@@ -33,50 +33,16 @@
 		<!-- Menú -->
 		<Menu Grid.Column="0" Grid.Row="0">
 			<MenuItem Header="_Archivo">
-				<MenuItem Header="_Nuevo">
+				<MenuItem Header="_Nuevo" x:Name="mnuFilesNewItem">
 					<MenuItem.Icon>
 						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
 					</MenuItem.Icon>
-					<MenuItem Header="_Conexión" Command="{Binding Path=SolutionViewModel.TreeConnectionsViewModel.NewConnectionCommand}" >
-						<MenuItem.Icon>
-							<Image Width="16" Height="16" Source="/Resources/Images/Connection.png" />
-						</MenuItem.Icon>
-					</MenuItem>
-					<MenuItem Header="_Distribución" Command="{Binding Path=SolutionViewModel.TreeConnectionsViewModel.NewDeploymentCommand}" >
-						<MenuItem.Icon>
-							<Image Width="16" Height="16" Source="/Resources/Images/Deployment.png" />
-						</MenuItem.Icon>
-					</MenuItem>
-					<Separator/>
-					<MenuItem Header="D_irectorio" Command="{Binding Path=SolutionViewModel.TreeFoldersViewModel.NewFolderFilesCommand}" >
+					<MenuItem Header="D_irectorio" Command="{Binding Path=TreeFoldersViewModel.NewFolderFilesCommand}" >
 						<MenuItem.Icon>
 							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Folder.png" />
 						</MenuItem.Icon>
 					</MenuItem>
-					<Separator/>
-					<MenuItem Header="_Storage" Command="{Binding Path=SolutionViewModel.TreeStoragesViewModel.NewStorageCommand}" >
-						<MenuItem.Icon>
-							<Image Width="16" Height="16" Source="/Resources/Images/Search.png" />
-						</MenuItem.Icon>
-					</MenuItem>
-					<Separator/>
-					<MenuItem Header="_Consulta" InputGestureText="Ctrl+Q" Command="commandsLocal:CustomCommands.NewQuery" >
-						<MenuItem.Icon>
-							<Image Width="16" Height="16" Source="/Resources/Images/Script.png" />
-						</MenuItem.Icon>
-					</MenuItem>
-					<Separator/>
-					<MenuItem Header="_Xml de pruebas" Command="{Binding Path=SolutionViewModel.CreateTestXmlCommand}" >
-						<MenuItem.Icon>
-							<Image Width="16" Height="16" Source="/Resources/Images/FileXml.png" />
-						</MenuItem.Icon>
-					</MenuItem>
-					<Separator/>
-					<MenuItem Header="Ventana del explorador" Click="OpenWebBrowser_Click" >
-						<MenuItem.Icon>
-							<Image Width="16" Height="16" Source="/Resources/Images/FileXml.png" />
-						</MenuItem.Icon>
-					</MenuItem>
+					<Separator x:Name="mnuStartFileNewItems" />
 				</MenuItem>
 				<MenuItem Header="_Guardar" InputGestureText="Ctrl+S" Command="Save" >
 					<MenuItem.Icon>
@@ -104,14 +70,14 @@
 					<MenuItem.Icon>
 						<Image Width="16" Height="16" Source="Resources/Images/Project.png" />
 					</MenuItem.Icon>
-					<MenuItem Header="_Nuevo" Command="{Binding Path=SolutionViewModel.NewWorkspaceCommand}" >
+					<MenuItem Header="_Nuevo" Command="{Binding Path=WorkspacesViewModel.NewWorkspaceCommand}" >
 						<MenuItem.Icon>
 							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
 						</MenuItem.Icon>
 					</MenuItem>
 					<Separator x:Name="mnuStartWorkspaces" />
 					<Separator x:Name="mnuEndWorkspaces" />
-					<MenuItem Header="_Borrar" Command="{Binding Path=SolutionViewModel.DeleteWorkspaceCommand}" >
+					<MenuItem Header="_Borrar" Command="{Binding Path=WorkspacesViewModel.DeleteWorkspaceCommand}" >
 						<MenuItem.Icon>
 							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
 						</MenuItem.Icon>
@@ -127,6 +93,12 @@
 							<Setter Property="MenuItem.Command" Value="{Binding OpenFileCommand}"/>
 						</Style>
 					</MenuItem.ItemContainerStyle>
+				</MenuItem>
+				<Separator/>
+				<MenuItem Header="Ventana del explorador" Click="OpenWebBrowser_Click" >
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/Resources/Images/FileXml.png" />
+					</MenuItem.Icon>
 				</MenuItem>
 				<Separator/>
 				<MenuItem Header="_Salir" InputGestureText="Alt+F4" Click="ExitMenuItem_Click" >
@@ -172,38 +144,8 @@
 					</MenuItem.Icon>
 				</MenuItem>
 			</MenuItem>
-			<MenuItem Header="_Herramientas">
-				<MenuItem Header="_Exportar tablas de datos ... " Command="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.ExportDataBaseCommand}">
-					<MenuItem.Icon>
-						<Image Width="16" Height="16" Source="/Resources/Images/Export.png" />
-					</MenuItem.Icon>
-				</MenuItem>
-				<MenuItem Header="_Crear scripts validación ..." Command="{Binding Path=SolutionViewModel.CreateValidationScriptsCommand}">
-					<MenuItem.Icon>
-						<Image Width="16" Height="16" Source="/Resources/Images/FileSql.png" />
-					</MenuItem.Icon>
-				</MenuItem>
-				<MenuItem Header="Crear script de importación de archivos ..." Command="{Binding Path=SolutionViewModel.CreateImportFilesScriptsCommand}">
-					<MenuItem.Icon>
-						<Image Width="16" Height="16" Source="/Resources/Images/FileSql.png" />
-					</MenuItem.Icon>
-				</MenuItem>
-				<Separator/>
-				<MenuItem Header="Generar XML de esquema ..." Command="{Binding Path=SolutionViewModel.CreateSchemaXmlCommand}">
-					<MenuItem.Icon>
-						<Image Width="16" Height="16" Source="/Resources/Images/FileXml.png" />
-					</MenuItem.Icon>
-				</MenuItem>
-				<MenuItem Header="Generar XML de reporting ..." Command="{Binding Path=SolutionViewModel.CreateSchemaReportingXmlCommand}">
-					<MenuItem.Icon>
-						<Image Width="16" Height="16" Source="/Resources/Images/FileXml.png" />
-					</MenuItem.Icon>
-				</MenuItem>
-				<MenuItem Header="Generar scripts SQL de reporting ..." Command="{Binding Path=SolutionViewModel.CreateSchemaReportingSqlCommand}">
-					<MenuItem.Icon>
-						<Image Width="16" Height="16" Source="/Resources/Images/FileXml.png" />
-					</MenuItem.Icon>
-				</MenuItem>
+			<MenuItem Header="_Herramientas" x:Name="mnuTools">
+				<Separator x:Name="mnuToolsStart" Visibility="Collapsed"/>
 				<Separator/>
 				<MenuItem Header="_Configuración ..." Click="Configuration_Click">
 					<MenuItem.Icon>
@@ -242,108 +184,41 @@
 			</MenuItem>
 		</Menu>
 
-		<ToolBar Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
-			<Button ToolTip="Añadir carpeta" Command="{Binding Path=SolutionViewModel.TreeFoldersViewModel.NewFolderFilesCommand}" Margin="2">
-				<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Folder.png" />
-			</Button>
-			<Button ToolTip="Añadir conexión" Command="{Binding Path=SolutionViewModel.TreeConnectionsViewModel.NewConnectionCommand}" Margin="2">
-				<Image Width="16" Height="16" Source="/Resources/Images/Connection.png" />
-			</Button>
-			<Separator Margin="2"/>
-			<Button ToolTip="Guardar" Command="{Binding Path=SaveCommand}" Margin="2">
-				<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Save.png" />
-			</Button>
-			<Button ToolTip="Guardar como" Command="{Binding Path=SaveAsCommand}" Margin="2">
-				<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/SaveAs.png" />
-			</Button>
-			<Button ToolTip="Guardar todo" Command="{Binding Path=SaveAllCommand}" Margin="2">
-				<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/SaveAll.png" />
-			</Button>
-			<Separator Margin="2"/>
-			<Button ToolTip="Actualizar" Command="{Binding Path=RefreshCommand}" Margin="2">
-				<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Refresh.png" />
-			</Button>
-			<Separator Margin="2"/>
-			<ComboBox HorizontalAlignment="Right" Width="200" MinWidth="200" Margin="20,2,0,2" 
-						  ItemsSource="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.Connections.Items}" DisplayMemberPath="Text" 
-						  SelectedItem="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.Connections.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
-			<ToggleButton x:Name="cmdParametersPopup" IsChecked="False" HorizontalContentAlignment="Stretch" Margin="2" 
-					Grid.Row="0" Grid.Column="0" Foreground="Black">
-				<ToggleButton.Content>
-					<Grid>
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="*"/>
-							<ColumnDefinition Width="Auto"/>
-						</Grid.ColumnDefinitions>
-						<Button Grid.Row="0" Grid.Column="0" Content="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.ConnectionShortFileName}" 
-							    ToolTip="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.ConnectionParametersFileName}"
-								Command="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.OpenParametersFileCommand}"
-							    FontWeight="Normal" Background="Transparent" BorderThickness="0" Margin="2"/>
-						<Image Width="20" Height="20" Grid.Row="0" Grid.Column="1" Margin="0" Source="/BauControls;component/Themes/Images/ArrowDown.png" />
-					</Grid>
-				</ToggleButton.Content>
-			</ToggleButton>
-
-			<Popup IsOpen="{Binding ElementName=cmdParametersPopup,Path=IsChecked}" PlacementTarget="{Binding ElementName=cmdParametersPopup}" 
-				   Placement="Bottom" PopupAnimation="Slide" StaysOpen="False" Width="700">
-				<Grid Background="#FFDADADA">
-					<Grid.RowDefinitions>
-						<RowDefinition Height="200" />
-					</Grid.RowDefinitions>
-					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="*" />
-					</Grid.ColumnDefinitions>
-					<Grid>
-						<Grid.RowDefinitions>
-							<RowDefinition Height="Auto" />
-							<RowDefinition Height="*" />
-						</Grid.RowDefinitions>
-						<ListView Grid.Row="1" Grid.Column="0" 
-								  ItemsSource="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.LastParameterFiles.Items}" 
-								  SelectedItem="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.LastParameterFiles.SelectedItem}">
-							<ListView.View>
-								<GridView>
-									<GridViewColumn Width="Auto" Header="Archivo">
-										<GridViewColumn.CellTemplate>
-											<DataTemplate>
-												<TextBlock Text="{Binding Path=File}" />
-											</DataTemplate>
-										</GridViewColumn.CellTemplate>
-									</GridViewColumn>
-									<GridViewColumn Width="Auto" Header="Directorio">
-										<GridViewColumn.CellTemplate>
-											<DataTemplate>
-												<TextBlock Text="{Binding Path=Path}" />
-											</DataTemplate>
-										</GridViewColumn.CellTemplate>
-									</GridViewColumn>
-								</GridView>
-							</ListView.View>
-						</ListView>
-					</Grid>
-				</Grid>
-			</Popup>
-
-			<Button Margin="5,0,0,0" ToolTip="Seleccionar archivo de parámetros" 
-					Command="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.UpdateParametersFileCommand}">
-				<Image Width="16" Height="16" Source="/Resources/Images/File.png" />
-			</Button>
-			<Button Margin="5,0,0,0" ToolTip="Ejecutar" Command="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.ExecuteScripCommand}"
-					Visibility="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.IsExecuting,Converter={StaticResource InverseBoolToVisibilityConverter}}">
-				<Image Width="16" Height="16" Source="/Resources/Images/ArrowRight.png" />
-			</Button>
-			<Button Margin="5,0,0,0" ToolTip="Cancelar" Command="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.CancelScriptExecutionCommand}"
-					Visibility="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.IsExecuting,Converter={StaticResource BoolToVisibilityConverter}}">
-				<Image Width="16" Height="16" Source="/Resources/Images/Stop.png" />
-			</Button>
-			<Label Content="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.ExecutionTime}" Margin="2"
-				   Foreground="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.ExecutionTimeColor,Converter={StaticResource MVVMColorConverter}}"/>
-			<Separator/>
-			<Button ToolTip="Consulta" Command="{Binding Path=SolutionViewModel.TreeConnectionsViewModel.NewQueryCommand}" Margin="2">
-				<Image Width="16" Height="16" Source="/Resources/Images/Script.png" />
-			</Button>
-		</ToolBar>
+		<ToolBarTray x:Name="tbMain" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" >
+			<ToolBar BandIndex="1">
+				<Button ToolTip="Añadir carpeta" Command="{Binding Path=TreeFoldersViewModel.NewFolderFilesCommand}" Margin="2">
+					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Folder.png" />
+				</Button>
+				<Separator Margin="2"/>
+				<Button ToolTip="Guardar" Command="{Binding Path=SaveCommand}" Margin="2">
+					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Save.png" />
+				</Button>
+				<Button ToolTip="Guardar como" Command="{Binding Path=SaveAsCommand}" Margin="2">
+					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/SaveAs.png" />
+				</Button>
+				<Button ToolTip="Guardar todo" Command="{Binding Path=SaveAllCommand}" Margin="2">
+					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/SaveAll.png" />
+				</Button>
+				<Separator Margin="2"/>
+				<Button ToolTip="Copiar" Command="ApplicationCommands.Copy" Margin="2">
+					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Copy.png" />
+				</Button>
+				<Button ToolTip="Cortar" Command="ApplicationCommands.Cut" Margin="2">
+					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Cut.png" />
+				</Button>
+				<Button ToolTip="Pegar" Command="ApplicationCommands.Paste" Margin="2">
+					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Paste.png" />
+				</Button>
+				<Separator/>
+				<Button ToolTip="Borrar" Command="ApplicationCommands.Delete" Margin="2">
+					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
+				</Button>
+				<Separator Margin="2"/>
+				<Button ToolTip="Actualizar" Command="{Binding Path=RefreshCommand}" Margin="2">
+					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Refresh.png" />
+				</Button>
+			</ToolBar>
+		</ToolBarTray>
 
 		<dockLayout:DockLayoutManager x:Name="dckManager" Grid.Row="2" Grid.Column="0" OpenFileRequired="dckManager_OpenFileRequired" >
 		</dockLayout:DockLayoutManager>

@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>Bau.Libraries.EbooksReader.ViewModel</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\Messengers\**" />
+    <EmbeddedResource Remove="Controllers\Messengers\**" />
+    <None Remove="Controllers\Messengers\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\..\Libraries\Formats\eBooks\LibEBooks\src\LibEBooks.Services\LibEBooks.Services.csproj" />
+    <ProjectReference Include="..\..\..\PluginsStudio\PluginsStudio.ViewModels.Base\PluginsStudio.ViewModels.Base.csproj" />
+  </ItemGroup>
+
+</Project>

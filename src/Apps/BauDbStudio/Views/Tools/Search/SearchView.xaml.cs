@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-using Bau.Libraries.DbStudio.ViewModels.Tools.Search;
+using Bau.Libraries.PluginsStudio.ViewModels.Tools.Search;
 
 namespace Bau.DbStudio.Views.Tools.Search
 {

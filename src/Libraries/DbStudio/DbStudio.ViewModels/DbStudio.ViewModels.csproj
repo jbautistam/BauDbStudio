@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
-    <TargetFramework>netstandard2.1</TargetFramework>
+	  <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>Bau.Libraries.DbStudio.ViewModels</RootNamespace>
   </PropertyGroup>
 
@@ -13,18 +13,25 @@
 
   <ItemGroup>
     <Compile Remove="Configuration\**" />
+    <Compile Remove="Controllers\EventArguments\**" />
+    <Compile Remove="Explorers\Files\**" />
+    <Compile Remove="Explorers\Files\**" />
     <EmbeddedResource Remove="Configuration\**" />
+    <EmbeddedResource Remove="Controllers\EventArguments\**" />
+    <EmbeddedResource Remove="Explorers\Files\**" />
+    <EmbeddedResource Remove="Explorers\Files\**" />
     <None Remove="Configuration\**" />
+    <None Remove="Controllers\EventArguments\**" />
+    <None Remove="Explorers\Files\**" />
+    <None Remove="Explorers\Files\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Solutions\Details\Connections\ConnectionParametersExecutionViewModel.cs" />
-    <Compile Remove="Solutions\Details\Reporting\Reports\ListReportDataSourceViewModel.cs" />
-    <Compile Remove="Solutions\Explorers\Connections\NodeSchemaViewModel.cs" />
-    <Compile Remove="Solutions\Explorers\Connections\TreeDetailsNodeViewModel.cs" />
-    <Compile Remove="Solutions\Explorers\Connections\TreeNodeViewModel.cs" />
-    <Compile Remove="Solutions\Explorers\Files\TreeDetailsNodeViewModel.cs" />
-    <Compile Remove="Solutions\Explorers\Files\TreeFoldersViewModel.cs" />
+    <Compile Remove="Details\Connections\ConnectionParametersExecutionViewModel.cs" />
+    <Compile Remove="Details\Reporting\Reports\ListReportDataSourceViewModel.cs" />
+    <Compile Remove="Explorers\Connections\NodeSchemaViewModel.cs" />
+    <Compile Remove="Explorers\Connections\TreeDetailsNodeViewModel.cs" />
+    <Compile Remove="Explorers\Connections\TreeNodeViewModel.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -40,6 +47,7 @@
     <ProjectReference Include="..\..\JobEtlProcessor\LibJobProcessor.FilesShell\LibJobProcessor.FilesShell.csproj" />
     <ProjectReference Include="..\..\JobEtlProcessor\LibJobProcessor.Manager\LibJobProcessor.Manager.csproj" />
     <ProjectReference Include="..\..\JobEtlProcessor\LibJobProcessor.Rest\LibJobProcessor.Rest.csproj" />
+    <ProjectReference Include="..\..\PluginsStudio\PluginsStudio.ViewModels.Base\PluginsStudio.ViewModels.Base.csproj" />
     <ProjectReference Include="..\DbStudio.Application\DbStudio.Application.csproj" />
     <ProjectReference Include="..\DbStudio.Models\DbStudio.Models.csproj" />
   </ItemGroup>

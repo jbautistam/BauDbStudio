@@ -1,89 +1,60 @@
 ﻿using System;
-using System.Collections.Generic;
-
-using Bau.Libraries.BauMvvm.ViewModels.Controllers;
-using Bau.Libraries.DbStudio.ViewModels.Solutions.Details;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Controllers
 {
 	/// <summary>
-	///		Interface para los controladores de solución
+	///		Interface para los controladores de solución de DbStudio
 	/// </summary>
 	public interface IDbStudioController
 	{
-		/// <summary>
-		///		Controlador principal
-		/// </summary>
-		IHostController HostController { get; }
-
-		/// <summary>
-		///		Controlador de log
-		/// </summary>
-		LibLogger.Core.LogManager Logger { get; }
-
-		/// <summary>
-		///		Nombre de la aplicación
-		/// </summary>
-		string AppName { get; }
-
-		/// <summary>
-		///		Directorio de aplicación
-		/// </summary>
-		string AppPath { get; }
-
-		/// <summary>
-		///		Abre una ventana de detalles
-		/// </summary>
-		SystemControllerEnums.ResultType OpenWindow(IDetailViewModel detailsViewModel);
-
-		/// <summary>
-		///		Abre un cuadro de diálogo
-		/// </summary>
-		SystemControllerEnums.ResultType OpenDialog(BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewModel dialogViewModel);
-
-		/// <summary>
-		///		Abre el explorador sobre un directorio
-		/// </summary>
-		void OpenExplorer(string path);
-
-		/// <summary>
-		///		Obtiene la ventana de detalles activa
-		/// </summary>
-		IDetailViewModel GetActiveDetails();
-
-		/// <summary>
-		///		Obtiene la lista de ventanas de detalles abiertas
-		/// </summary>
-		List<IDetailViewModel> GetOpenedDetails();
-
-		/// <summary>
-		///		Indica a la ventana principal que cambie el Id de un documento
-		/// </summary>
-		void UpdateTabId(string oldTabId, string newTabId, string newHeader);
-
-		/// <summary>
-		///		Indica a la ventana principal que cierre un documento
-		/// </summary>
-		void CloseWindow(string tabId);
-
 		/// <summary>
 		///		Obtiene el nombre del archivo de la consola de ejecución de proyectos ETL
 		/// </summary>
 		string GetEtlConsoleFileName();
 
 		/// <summary>
-		///		Muestra una notificación (sólo si la configuración lo permite
+		///		Abre una ventana de detalles
 		/// </summary>
-		void ShowNotification(SystemControllerEnums.NotificationType type, string title, string message);
+		BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType OpenWindow(PluginsStudio.ViewModels.Base.Interfaces.IDetailViewModel detailsViewModel);
 
 		/// <summary>
-		///		Comprueba si en el portapapeles hay una imagen
+		///		Abre un cuadro de diálogo
 		/// </summary>
-		bool ClipboardContainImage();
+		BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType OpenDialog(BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewModel dialogViewModel);
 
 		/// <summary>
-		///		Graba la imagen del portapapeles
+		///		Controlador plugin
 		/// </summary>
-		bool SaveClipboardImage(string fileName);
+		PluginsStudio.ViewModels.Base.Controllers.IPluginsController PluginController { get; }
+
+		/// <summary>
+		///		Controlador de la ventana principal
+		/// </summary>
+		PluginsStudio.ViewModels.Base.Controllers.IMainWindowController MainWindowController => PluginController.MainWindowController;
+
+		/// <summary>
+		///		Controlador del host de plugins
+		/// </summary>
+		PluginsStudio.ViewModels.Base.Controllers.IHostPluginsController HostPluginsController => PluginController.HostPluginsController;
+
+		/// <summary>
+		///		Controlador principal
+		/// </summary>
+		BauMvvm.ViewModels.Controllers.IHostController HostController => MainWindowController.HostController;
+
+		/// <summary>
+		///		Controlador de diálogos del sistema
+		/// </summary>
+		BauMvvm.ViewModels.Controllers.IHostDialogsController DialogsController => MainWindowController.HostController.DialogsController;
+
+		/// <summary>
+		///		Controlador con ventanas de sistema
+		/// </summary>
+		BauMvvm.ViewModels.Controllers.IHostSystemController SystemController => MainWindowController.HostController.SystemController;
+
+		/// <summary>
+		///		Controlador de log
+		/// </summary>
+		LibLogger.Core.LogManager Logger => MainWindowController.Logger;
 	}
 }

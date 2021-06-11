@@ -4,15 +4,66 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" xmlns:bauControls="clr-namespace:Bau.Controls.Graphical;assembly=BauControls">
+             d:DesignHeight="300" d:DesignWidth="1000"
+			 xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:zoomAndPan="clr-namespace:Bau.Controls.ZoomAndPanControls;assembly=ZoomAndPanControls">
 	<Grid>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="*" />
-			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
-		<bauControls:ImageZoomBoxPanel x:Name="pnlZoom" Grid.Column="0" Grid.Row="0">
-			<Image x:Name="imgImage" />
-		</bauControls:ImageZoomBoxPanel>
-		<TextBlock x:Name="lblStatus" Grid.Column="0" Grid.Row="1" />
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="Auto"/>
+		</Grid.ColumnDefinitions>
+
+		<ToolBarTray x:Name="tbMain" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
+			<ToolBar BandIndex="1">
+				<Button Margin="5" Command="{Binding ElementName=ZoomAndPanControl, Path=ZoomPercentCommand}" ToolTip="100%">
+					<Image Width="16" Height="16" Source="/Resources/Images/Zoom100.png" />
+				</Button>
+				<Button Margin="5" Command="{Binding ElementName=ZoomAndPanControl, Path=FitCommand}" ToolTip="Ajustar al alto">
+					<Image Width="16" Height="16" Source="/Resources/Images/ZoomFit.png" />
+				</Button>
+				<Button Margin="5" Command="{Binding ElementName=ZoomAndPanControl, Path=FillCommand}" ToolTip="Ajustar al ancho">
+					<Image Width="16" Height="16" Source="/Resources/Images/ZoomFill.png" />
+				</Button>
+				<Separator/>
+				<Button Margin="5" Command="{Binding ElementName=ZoomAndPanControl, Path=ZoomOutCommand}">
+					<Image Width="16" Height="16" Source="/Resources/Images/ZoomOut.png" />
+				</Button>
+				<Slider Width="120" LargeChange="20" Margin="5"
+                    Maximum="{Binding ElementName=ZoomAndPanControl, Path=ZoomAndPanContent.MaximumZoom, Converter={zoomAndPan:ZoomAdjustConverter}}"
+                    Minimum="{Binding ElementName=ZoomAndPanControl, Path=ZoomAndPanContent.MinimumZoomClamped, Converter={zoomAndPan:ZoomAdjustConverter}}"
+                    Value="{Binding ElementName=ZoomAndPanControl, Path=ViewportZoom, Converter={zoomAndPan:ZoomAdjustConverter}}"
+                    SmallChange=".1"
+                    TickFrequency="10"
+                    TickPlacement="TopLeft" />
+				<Button Margin="5" Command="{Binding ElementName=ZoomAndPanControl, Path=ZoomInCommand}">
+					<Image Width="16" Height="16" Source="/Resources/Images/ZoomIn.png" />
+				</Button>
+				<TextBlock Width="50" VerticalAlignment="Center" Margin="5"
+						Text="{Binding ElementName=ZoomAndPanControl, Path=ViewportZoom, StringFormat=p1}"
+						TextAlignment="Right" />
+				<Separator/>
+				<ToggleButton x:Name="chkShowThumb" IsChecked="True" Click="chkShowThumb_Click" ToolTip="Mostrar thumbnail">
+					<Image Width="16" Height="16" Source="/Resources/Images/SeeWindow.png" />
+				</ToggleButton>
+			</ToolBar>
+		</ToolBarTray>
+
+		<zoomAndPan:ZoomAndPanScrollViewer x:Name="ZoomAndPanControl" Background="#AACCCCCC" 
+										   Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="2"
+										   MinimumZoomType="FitScreen" UseAnimations="True"
+										   ZoomAndPanInitialPosition="FillScreen">
+			<Image x:Name="imgImage"/>
+		</zoomAndPan:ZoomAndPanScrollViewer>
+
+		<Border x:Name="wndZoom" Grid.Row="2" Grid.Column="1" Width="200" Height="200" BorderBrush="White" Background="#AACCCCCC" BorderThickness="3">
+				<zoomAndPan:ZoomAndPanViewBox 
+											  DataContext="{Binding ElementName=ZoomAndPanControl}"
+											  Visual="{Binding ElementName=imgImage}"/>
+		</Border>
 	</Grid>
 </UserControl>

@@ -22,8 +22,6 @@ namespace Bau.Libraries.LibReporting.Solution
 		{
 			// Limpia los archivos de la solución
 			ReportingSolution.Clear();
-			// Asigna el nombre de archivo
-			ReportingSolution.FileName = fileName;
 			// Carga los nuevos archivos de solución
 			new Repositories.ReportingRepository(this).Load(fileName);
 			// Carga los esquemas de la solución
@@ -79,9 +77,9 @@ namespace Bau.Libraries.LibReporting.Solution
 		/// <summary>
 		///		Graba una solución
 		/// </summary>
-		public void SaveSolution()
+		public void SaveSolution(string fileName)
 		{
-			new Repositories.ReportingRepository(this).Save();
+			new Repositories.ReportingRepository(this).Save(fileName);
 		}
 
 		/// <summary>

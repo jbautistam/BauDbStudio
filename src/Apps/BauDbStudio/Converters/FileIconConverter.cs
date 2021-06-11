@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Windows.Data;
 
-using Bau.Libraries.DbStudio.ViewModels.Solutions.Explorers;
+using Bau.Libraries.LibHelper.Extensors;
+using Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files;
 
 namespace Bau.DbStudio.Converters
 {
@@ -15,8 +16,8 @@ namespace Bau.DbStudio.Converters
 		/// </summary>
 		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
 		{ 
-			if (value is BaseTreeNodeViewModel.IconType icon)
-				return GetIcon(icon);
+			if (value is string iconName)
+				return GetIcon(iconName.GetEnum(TreeFilesViewModel.IconType.Unknown));
 			else
 				return null;
 		}
@@ -24,41 +25,41 @@ namespace Bau.DbStudio.Converters
 		/// <summary>
 		///		Obtiene la imagen asociada a un icono
 		/// </summary>
-		private object GetIcon(BaseTreeNodeViewModel.IconType icon)
+		private object GetIcon(TreeFilesViewModel.IconType icon)
 		{
 			switch (icon)
 			{ 
-				case BaseTreeNodeViewModel.IconType.Connection:
+				case TreeFilesViewModel.IconType.Connection:
 					return "/Resources/Images/Connection.png";
-				case BaseTreeNodeViewModel.IconType.Schema:
+				case TreeFilesViewModel.IconType.Schema:
 					return "/Resources/Images/Schema.png";
-				case BaseTreeNodeViewModel.IconType.Deployment:
+				case TreeFilesViewModel.IconType.Deployment:
 					return "/Resources/Images/Deployment.png";
-				case BaseTreeNodeViewModel.IconType.Storage:
+				case TreeFilesViewModel.IconType.Storage:
 					return "/Resources/Images/Storage.png";
-				case BaseTreeNodeViewModel.IconType.Project:
+				case TreeFilesViewModel.IconType.Project:
 					return "/Resources/Images/Project.png";
-				case BaseTreeNodeViewModel.IconType.Path:
+				case TreeFilesViewModel.IconType.Path:
 					return "/Resources/Images/FolderNode.png";
-				case BaseTreeNodeViewModel.IconType.File:
+				case TreeFilesViewModel.IconType.File:
 					return "/Resources/Images/File.png";
-				case BaseTreeNodeViewModel.IconType.Table:
+				case TreeFilesViewModel.IconType.Table:
 					return "/Resources/Images/Table.png";
-				case BaseTreeNodeViewModel.IconType.View:
+				case TreeFilesViewModel.IconType.View:
 					return "/Resources/Images/View.png";
-				case BaseTreeNodeViewModel.IconType.Key:
+				case TreeFilesViewModel.IconType.Key:
 					return "/Resources/Images/Key.png";
-				case BaseTreeNodeViewModel.IconType.Field:
+				case TreeFilesViewModel.IconType.Field:
 					return "/Resources/Images/Field.png";
-				case BaseTreeNodeViewModel.IconType.Error:
+				case TreeFilesViewModel.IconType.Error:
 					return "/Resources/Images/DataError.png";
-				case BaseTreeNodeViewModel.IconType.Loading:
+				case TreeFilesViewModel.IconType.Loading:
 					return "/Resources/Images/Loading.png";
-				case BaseTreeNodeViewModel.IconType.DataSourceSql:
+				case TreeFilesViewModel.IconType.DataSourceSql:
 					return "/Resources/Images/FileSql.png";
-				case BaseTreeNodeViewModel.IconType.Report:
+				case TreeFilesViewModel.IconType.Report:
 					return "/Resources/Images/Report.png";
-				case BaseTreeNodeViewModel.IconType.Dimension:
+				case TreeFilesViewModel.IconType.Dimension:
 					return "/Resources/Images/ReportDimension.png";
 				default:
 					return null;

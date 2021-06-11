@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Windows.Media.Imaging;
 
 namespace Bau.DbStudio.Controllers.Helpers
 {
@@ -26,23 +27,47 @@ namespace Bau.DbStudio.Controllers.Helpers
 				// Pega la imagen
 				if (ContainsImage())
 				{ 
-					System.Windows.Media.Imaging.BitmapSource image = System.Windows.Clipboard.GetImage();
+					BitmapSource image = System.Windows.Clipboard.GetImage();
 
 						// Graba la imagen
 						using (FileStream file = new FileStream(fileName, FileMode.Create))
 						{
-							System.Windows.Media.Imaging.BitmapEncoder encoder = new System.Windows.Media.Imaging.JpegBitmapEncoder();
+							BitmapEncoder encoder = GetEncoderFromFilename(fileName);
 
-								// Codifica la imagen
-								encoder.Frames.Add(System.Windows.Media.Imaging.BitmapFrame.Create(image));
-								// Graba la imagen
-								encoder.Save(file);
+								if (encoder != null)
+								{
+									// Codifica la imagen
+									encoder.Frames.Add(BitmapFrame.Create(image));
+									// Graba la imagen
+									encoder.Save(file);
+									// Indica que se ha grabado correctamente
+									saved = true;
+								}
 						}
-						// Indica que se ha grabado correctamente
-						saved = true;
 				}
 				// Devuelve el valor que indica si se ha grabado correctamente
 				return saved;
+		}
+
+		/// <summary>
+		///		Obtiene el codificador adecuado para el archivo
+		/// </summary>
+		private BitmapEncoder GetEncoderFromFilename(string fileName)
+		{
+			if (fileName.EndsWith(".jpg", StringComparison.CurrentCultureIgnoreCase) || fileName.EndsWith(".jpeg", StringComparison.CurrentCultureIgnoreCase))
+				return new JpegBitmapEncoder();
+			else if (fileName.EndsWith(".png", StringComparison.CurrentCultureIgnoreCase))
+				return new PngBitmapEncoder();
+			else if (fileName.EndsWith(".gif", StringComparison.CurrentCultureIgnoreCase))
+				return new GifBitmapEncoder();
+			else if (fileName.EndsWith(".wmp", StringComparison.CurrentCultureIgnoreCase))
+				return new WmpBitmapEncoder();
+			else if (fileName.EndsWith(".tiff", StringComparison.CurrentCultureIgnoreCase))
+				return new TiffBitmapEncoder();
+			else if (fileName.EndsWith(".bmp", StringComparison.CurrentCultureIgnoreCase))
+				return new BmpBitmapEncoder();
+			else
+				return null;
 		}
 	}
 }

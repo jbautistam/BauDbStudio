@@ -15,9 +15,6 @@ namespace Bau.Libraries.DbStudio.Application
 	/// </summary>
 	public class SolutionManager
 	{
-		// Constantes privadas
-		private const string DefaultWorkspace = "Studio.Configuration";
-
 		// Enumerados públicos
 		/// <summary>
 		///		Tipo de formato de los archivos de salida
@@ -30,55 +27,26 @@ namespace Bau.Libraries.DbStudio.Application
 			Parquet
 		}
 
-		public SolutionManager(LogManager logger, string pathConfiguration)
+		public SolutionManager(LogManager logger)
 		{
 			Logger = logger;
-			PathConfiguration = pathConfiguration;
 			DbScriptsManager = new DbScripts.Manager.DbScriptsManager(logger);
 		}
 
 		/// <summary>
 		///		Carga los datos de configuración
 		/// </summary>
-		public SolutionModel LoadConfiguration(string workspace)
+		public SolutionModel LoadConfiguration(string fileName)
 		{
-			WorkSpace = workspace;
-			return new Repository.SolutionRepository().Load(GetConfigurationFileName());
-		}
-
-		/// <summary>
-		///		Borra el archivo de configuración de un espacio de trabajo
-		/// </summary>
-		public void DeleteConfiguration(string workspace)
-		{
-			// Borra el archivo
-			WorkSpace = workspace;
-			LibHelper.Files.HelperFiles.KillFile(GetConfigurationFileName());
-			// Carga el espacio de trabajo predeterminado
-			LoadConfiguration(DefaultWorkspace);
+			return new Repository.SolutionRepository().Load(fileName);
 		}
 
 		/// <summary>
 		///		Graba los datos de una solución
 		/// </summary>
-		public void SaveSolution(SolutionModel solution)
+		public void SaveSolution(SolutionModel solution, string fileName)
 		{
-			new Repository.SolutionRepository().Save(solution, GetConfigurationFileName());
-		}
-
-		/// <summary>
-		///		Obtiene el nombre del archivo de configuración
-		/// </summary>
-		private string GetConfigurationFileName()
-		{
-			// Obtiene el directorio de configuración si no existía
-			if (string.IsNullOrWhiteSpace(PathConfiguration))
-				PathConfiguration = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-			// Obtiene el directorio del espacio de trabajo
-			if (string.IsNullOrWhiteSpace(WorkSpace))
-				WorkSpace = DefaultWorkspace;
-			// Devuelve el nombre del archivo de configuración
-			return System.IO.Path.Combine(PathConfiguration, WorkSpace + ".xml");
+			new Repository.SolutionRepository().Save(solution, fileName);
 		}
 
 		/// <summary>
@@ -145,16 +113,6 @@ namespace Bau.Libraries.DbStudio.Application
 		///		Manager de log
 		/// </summary>
 		public LogManager Logger { get; }
-
-		/// <summary>
-		///		Directorio de configuración
-		/// </summary>
-		public string PathConfiguration { get; private set; }
-
-		/// <summary>
-		///		Nombre del archivo del espacio de trabajo
-		/// </summary>
-		public string WorkSpace { get; private set; }
 
 		/// <summary>
 		///		Manager para el tratamiento de scripts

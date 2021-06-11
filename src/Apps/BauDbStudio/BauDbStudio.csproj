@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
 	  <TargetFramework>net5.0-windows10.0.19041.0</TargetFramework>
@@ -21,9 +21,11 @@
     <Page Remove="Controls\**" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="Views\Connections\ConnectionParametersView.xaml.cs" />
-    <Compile Remove="Views\Queries\ChartView.xaml.cs" />
-    <Compile Remove="Views\Reporting\Queries\FilterColumnView.xaml.cs" />
+    <Compile Remove="Controllers\AppController.cs" />
+    <Compile Remove="Converters\FileIconConverter.cs" />
+    <Compile Remove="Views\Files\ImageView - Copia.xaml.cs" />
+    <Compile Remove="Views\Tools\ConfigurationView.xaml.cs" />
+    <Compile Remove="Views\Tools\CreateFileView.xaml.cs" />
     <Compile Remove="Views\Tools\FindView.xaml.cs" />
     <Compile Remove="Views\Tools\FindViewModel.cs" />
   </ItemGroup>
@@ -33,18 +35,15 @@
     <None Remove="Resources\Images\ArrowRight.png" />
     <None Remove="Resources\Images\ArrowUp.png" />
     <None Remove="Resources\Images\CaseSensitive.png" />
-    <None Remove="Resources\Images\Chart.png" />
-    <None Remove="Resources\Images\Connection.png" />
-    <None Remove="Resources\Images\Deployment.png" />
     <None Remove="Resources\Images\Download.png" />
-    <None Remove="Resources\Images\ExecutionPlan.png" />
     <None Remove="Resources\Images\Export.png" />
-    <None Remove="Resources\Images\Field.png" />
     <None Remove="Resources\Images\File.png" />
     <None Remove="Resources\Images\FileCsharp.png" />
     <None Remove="Resources\Images\FileCsv.png" />
     <None Remove="Resources\Images\FileExcel.png" />
+    <None Remove="Resources\Images\FileImage.png" />
     <None Remove="Resources\Images\FileJson.png" />
+    <None Remove="Resources\Images\FileMd.png" />
     <None Remove="Resources\Images\FileParquet.png" />
     <None Remove="Resources\Images\FilePowershell.png" />
     <None Remove="Resources\Images\FilePython.png" />
@@ -53,76 +52,63 @@
     <None Remove="Resources\Images\FileXml.png" />
     <None Remove="Resources\Images\Filter.png" />
     <None Remove="Resources\Images\FolderNode.png" />
-    <None Remove="Resources\Images\Key.png" />
     <None Remove="Resources\Images\Loading.png" />
-    <None Remove="Resources\Images\NoSort.png" />
-    <None Remove="Resources\Images\Project.png" />
-    <None Remove="Resources\Images\ProjectDisabled.png" />
-    <None Remove="Resources\Images\Report.png" />
-    <None Remove="Resources\Images\ReportDimension.png" />
-    <None Remove="Resources\Images\Schema.png" />
-    <None Remove="Resources\Images\Script.png" />
-    <None Remove="Resources\Images\ScriptDisabled.png" />
     <None Remove="Resources\Images\Search.png" />
-    <None Remove="Resources\Images\SortAscending.png" />
-    <None Remove="Resources\Images\SortDescending.png" />
+    <None Remove="Resources\Images\SeeWindow.png" />
     <None Remove="Resources\Images\SplashScreenImage.png" />
-    <None Remove="Resources\Images\Step.png" />
-    <None Remove="Resources\Images\StepDisabled.png" />
     <None Remove="Resources\Images\Stop.png" />
-    <None Remove="Resources\Images\Storage.png" />
-    <None Remove="Resources\Images\Table.png" />
     <None Remove="Resources\Images\Upload.png" />
-    <None Remove="Resources\Images\View.png" />
     <None Remove="Resources\Images\WholeWord.png" />
     <None Remove="Resources\Images\Wildcards.png" />
+    <None Remove="Resources\Images\Zoom100.png" />
+    <None Remove="Resources\Images\ZoomFill.png" />
+    <None Remove="Resources\Images\ZoomFit.png" />
+    <None Remove="Resources\Images\ZoomIn.png" />
+    <None Remove="Resources\Images\ZoomOut.png" />
   </ItemGroup>
   <ItemGroup>
-    <Page Remove="Views\Connections\ConnectionParametersView.xaml" />
-    <Page Remove="Views\Queries\ChartView.xaml" />
-    <Page Remove="Views\Reporting\Queries\FilterColumnView.xaml" />
+    <Page Remove="Views\Files\ImageView - Copia.xaml" />
+    <Page Remove="Views\Tools\ConfigurationView.xaml" />
+    <Page Remove="Views\Tools\CreateFileView.xaml" />
     <Page Remove="Views\Tools\FindView.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\CaseSensitive.png" />
-    <Resource Include="Resources\Images\Chart.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Controls\WPF\BauCharts\BauCharts.csproj" />
     <ProjectReference Include="..\..\..\..\..\Controls\WPF\BauControls\src\BauControls.csproj" />
     <ProjectReference Include="..\..\..\..\..\Controls\WPF\CodeEditor\src\CodeEditor.csproj" />
     <ProjectReference Include="..\..\..\..\..\Controls\WPF\DockLayout\src\DockLayout.csproj" />
+    <ProjectReference Include="..\..\..\..\..\Controls\WPF\ZoomAndPanControl\ZoomAndPanControls.csproj" />
     <ProjectReference Include="..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.ViewModels\BauMvvm.ViewModels.csproj" />
     <ProjectReference Include="..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.Views.Wpf\BauMvvm.Views.Wpf.csproj" />
     <ProjectReference Include="..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.Views\BauMvvm.Views.csproj" />
     <ProjectReference Include="..\..\..\..\..\Libraries\Charts\LibCharts\LibCharts.csproj" />
     <ProjectReference Include="..\..\..\..\..\Libraries\Common\LibSystem.Windows\LibSystem.Windows.csproj" />
-    <ProjectReference Include="..\..\Libraries\DbStudio\DbStudio.ViewModels\DbStudio.ViewModels.csproj" />
+    <ProjectReference Include="..\..\Libraries\DbStudio\DbStudio.Views\DbStudio.Views.csproj" />
+    <ProjectReference Include="..\..\Libraries\PluginsStudio\PluginsStudio.ViewModels\PluginsStudio.ViewModels.csproj" />
+    <ProjectReference Include="..\..\Libraries\Plugins\BlogReader\BlogReader.Views\BlogReader.Views.csproj" />
+    <ProjectReference Include="..\..\Libraries\Plugins\ComicsReader\ComicsReader.Plugin\ComicsReader.Plugin.csproj" />
+    <ProjectReference Include="..\..\Libraries\Plugins\EbooksReader\EbooksReader.Plugin\EbooksReader.Plugin.csproj" />
+    <ProjectReference Include="..\..\Libraries\RestStudio\RestStudio.Views\RestStudio.Views.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\BauDbStudio.ico" />
     <Resource Include="Resources\Images\ArrowDown.png" />
     <Resource Include="Resources\Images\ArrowRight.png" />
     <Resource Include="Resources\Images\ArrowUp.png" />
-    <Resource Include="Resources\Images\Connection.png" />
     <Resource Include="Resources\Images\DataError.png" />
-    <Resource Include="Resources\Images\ExecutionPlan.png" />
     <Resource Include="Resources\Images\Export.png" />
     <Resource Include="Resources\Images\FileExcel.png" />
+    <Resource Include="Resources\Images\FileImage.png" />
+    <Resource Include="Resources\Images\FileMd.png" />
     <Resource Include="Resources\Images\FileSqlExtended.png" />
     <Resource Include="Resources\Images\Filter.png" />
     <Resource Include="Resources\Images\Loading.png" />
-    <Resource Include="Resources\Images\NoSort.png" />
-    <Resource Include="Resources\Images\Report.png" />
-    <Resource Include="Resources\Images\ReportDimension.png" />
-    <Resource Include="Resources\Images\Schema.png" />
-    <Resource Include="Resources\Images\SortAscending.png" />
-    <Resource Include="Resources\Images\SortDescending.png" />
-    <Resource Include="Resources\Images\Storage.png" />
+    <Resource Include="Resources\Images\SeeWindow.png" />
     <Resource Include="Resources\Images\Upload.png" />
     <Resource Include="Resources\Images\Download.png" />
-    <Resource Include="Resources\Images\Deployment.png" />
-    <Resource Include="Resources\Images\Field.png" />
     <Resource Include="Resources\Images\File.png" />
     <Resource Include="Resources\Images\FileCsharp.png" />
     <Resource Include="Resources\Images\FileCsv.png" />
@@ -133,19 +119,15 @@
     <Resource Include="Resources\Images\FileSql.png" />
     <Resource Include="Resources\Images\FileXml.png" />
     <Resource Include="Resources\Images\FolderNode.png" />
-    <Resource Include="Resources\Images\Key.png" />
-    <Resource Include="Resources\Images\Project.png" />
-    <Resource Include="Resources\Images\ProjectDisabled.png" />
-    <Resource Include="Resources\Images\Script.png" />
-    <Resource Include="Resources\Images\ScriptDisabled.png" />
     <Resource Include="Resources\Images\Search.png" />
-    <Resource Include="Resources\Images\Step.png" />
-    <Resource Include="Resources\Images\StepDisabled.png" />
     <Resource Include="Resources\Images\Stop.png" />
-    <Resource Include="Resources\Images\Table.png" />
-    <Resource Include="Resources\Images\View.png" />
     <Resource Include="Resources\Images\WholeWord.png" />
     <Resource Include="Resources\Images\Wildcards.png" />
+    <Resource Include="Resources\Images\Zoom100.png" />
+    <Resource Include="Resources\Images\ZoomFill.png" />
+    <Resource Include="Resources\Images\ZoomFit.png" />
+    <Resource Include="Resources\Images\ZoomIn.png" />
+    <Resource Include="Resources\Images\ZoomOut.png" />
   </ItemGroup>
   <ItemGroup>
     <SplashScreen Include="Resources\SplashScreenImage.png" />
@@ -175,79 +157,32 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Views\EtlProjects\CreateImportFilesScriptView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\EtlProjects\CreateSchemaXmlView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\EtlProjects\CreateValidationScriptView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\EtlProjects\ExportDatabaseView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\EtlProjects\ExecuteEtlConsoleView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\EtlProjects\CreateTestXmlView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Files\ParquetFilePropertiesView.xaml">
+    <Page Update="Views\Explorers\TreeFilesExplorer.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Queries\QueryViewControl.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Reporting\Details\DataSources\DataSourceSqlView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Reporting\Details\DataSources\ListDataSourceParametersView.xaml">
+    <Page Update="Views\Files\CreateFileView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Reporting\Details\Relations\DimensionRelationView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Reporting\Details\DataSources\ListDataSourceColumnsView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Reporting\Details\DataSources\DataSourceTableView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Reporting\Details\Dimensions\DimensionView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Reporting\Details\Reports\ReportView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Reporting\Explorers\TreeReportingExplorer.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Reporting\Queries\ListFilterColumnView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Reporting\Queries\ReportView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Reporting\Queries\TreeReportColumnsControl.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Reporting\Tools\CreateReportingSqlView.xaml">
+    <Page Update="Views\Files\FileTextView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Reporting\Tools\CreateSchemaReportingXmlView.xaml">
+    <Page Update="Views\Files\ImageView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Tools\CreateFileView.xaml">
+    <Page Update="Views\Tools\LogItems\LogView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Tools\Search\SearchView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Web\WebExplorerView.xaml">
+    <Page Update="Views\Tools\Web\WebExplorerView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
