@@ -21,16 +21,19 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Manager.Controllers
 				// Convierte el archivo
 				try
 				{
-					LibParquetFiles.Writers.ParquetWriter writer = new LibParquetFiles.Writers.ParquetWriter(target);
+					LibParquetFiles.Writers.ParquetWriter writer = new LibParquetFiles.Writers.ParquetWriter();
 
 						// Evita el error de await
 						await Task.Delay(1);
 						// Crea el directorio de salida
 						LibHelper.Files.HelperFiles.MakePath(System.IO.Path.GetDirectoryName(target));
 						// Escribe el archivo
-						using (LibCsvFiles.CsvReader reader = new LibCsvFiles.CsvReader(source, null, null))
+						using (LibCsvFiles.CsvReader reader = new LibCsvFiles.CsvReader(null, null))
 						{
-							writer.Write(reader);
+							// Abre el archivo
+							reader.Open(source);
+							// Escribe los datos
+							writer.Write(target, reader);
 						}
 						// Indica que se ha convertido el archivo
 						converted = true;

@@ -31,7 +31,6 @@ namespace Bau.Libraries.LibJobProcessor.Database
 															 CancellationToken cancellationToken)
 		{
 			bool processed = false;
-			DbAggregatorManager dataProviderManager = GetProviderManager(contexts, step);
 
 				// Procesa el paso
 				using (BlockLogModel block = Logger.Default.CreateBlock(LogModel.LogType.Debug, $"Start execute step {step.Name}"))
@@ -40,7 +39,8 @@ namespace Bau.Libraries.LibJobProcessor.Database
 						block.Error($"Cant find the file {step.ScriptFileName}");
 					else
 					{
-						DbScriptManager scriptManager = new DbScriptManager(step, dataProviderManager, parameters, Logger);
+						DbAggregatorManager dataProviderManager = GetProviderManager(contexts, step);
+						DbScriptManager scriptManager = new DbScriptManager(step, dataProviderManager, GetStorageConnections(contexts), parameters, Logger);
 
 							// Ejecuta el paso
 							if (System.IO.Path.GetExtension(step.ScriptFileName).EqualsIgnoreCase(".sql"))
@@ -73,6 +73,29 @@ namespace Bau.Libraries.LibJobProcessor.Database
 				}
 				// Devuelve el agregado
 				return providersManager;
+		}
+
+		/// <summary>
+		///		Obtiene las conexiones a Storage
+		/// </summary>
+		private NormalizedDictionary<string> GetStorageConnections(List<JobContextModel> contexts)
+		{
+			NormalizedDictionary<string> connections = new NormalizedDictionary<string>();
+
+				// Obtiene las conexiones del contexto
+				foreach (JobContextModel context in contexts)
+					if (!string.IsNullOrWhiteSpace(context.ProcessorKey) && context.ProcessorKey.Equals(Key, StringComparison.CurrentCultureIgnoreCase))
+						foreach (LibDataStructures.Trees.TreeNodeModel node in context.Tree.Nodes)
+							if (node.Id.EqualsIgnoreCase("StorageConnection"))
+							{
+								string key = node.Attributes["Key"].GetValueString();
+								string value = node.Value?.ToString();
+
+									if (!string.IsNullOrWhiteSpace(key) && !string.IsNullOrWhiteSpace(value))
+										connections.Add(key, value);
+							}
+				// Devuelve las conexiones
+				return connections;
 		}
 
 		/// <summary>

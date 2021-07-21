@@ -150,12 +150,12 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Export
 		/// </summary>
 		private void ExportToParquet(BlockLogModel block, string fileName, IDataReader reader)
 		{
-			LibParquetFiles.Writers.ParquetWriter writer = new LibParquetFiles.Writers.ParquetWriter(fileName);
+			LibParquetFiles.Writers.ParquetWriter writer = new LibParquetFiles.Writers.ParquetWriter();
 
 				// Asigna el evento de progreso
 				writer.Progress += (sender, args) => block.Progress(System.IO.Path.GetFileName(fileName), args.Records, args.Records + 1);
 				// Graba el archivo
-				writer.Write(reader);
+				writer.Write(fileName, reader);
 		}
 
 		/// <summary>

@@ -3,16 +3,13 @@ using System.Collections.Generic;
 
 using Bau.Libraries.LibCsvFiles.Models;
 
-namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Sentences.Csv
+namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Sentences.Files
 {
 	/// <summary>
 	///		Sentencia de importación a CSV
 	/// </summary>
-	internal class SentenceImportCsv : SentenceCsvBase
+	internal class SentenceFileImport : SentenceFileBase
 	{
-		// Variables privadas
-		private string _fileName;
-
 		///// <summary>
 		/////		Comprueba los datos
 		///// </summary>
@@ -34,30 +31,19 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Sentences.Csv
 		//}
 
 		/// <summary>
-		///		Conexión destino
+		///		Indica si se deben importar los archivos de la carpeta
 		/// </summary>
-		internal string Target { get; set; }
-
-		/// <summary>
-		///		Nombre de archivo
-		/// </summary>
-		internal string FileName 
-		{ 
-			get
-			{
-				// Si no existe nombre de archivo, recoge el nombre de la tabla con la extensión de CSV
-				if (string.IsNullOrWhiteSpace(_fileName))
-					_fileName = Table + ".csv";
-				// Devuelve el nombre de archivo
-				return _fileName;
-			}
-			set { _fileName = value; }
-		}
+		internal bool ImportFolder { get; set; }
 
 		/// <summary>
 		///		Tabla sobre la que se van a importar los datos
 		/// </summary>
 		internal string Table { get; set; }
+
+		/// <summary>
+		///		Indica si la importación de este archivo es obligatoria
+		/// </summary>
+		internal bool Required { get; set; } = true;
 
 		/// <summary>
 		///		Mapeo de columnas. Clave: nombre de columna origen, Valor: nombre de columna destino

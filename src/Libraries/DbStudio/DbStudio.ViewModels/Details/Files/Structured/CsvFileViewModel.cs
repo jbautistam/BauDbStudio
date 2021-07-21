@@ -29,14 +29,16 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Files.Structured
 		protected override void SaveFile(LibLogger.Models.Log.BlockLogModel block, string fileName)
 		{
 			// Graba el archivo
-			using (CsvReader reader = new CsvReader(FileName, FileParameters, FileColumns))
+			using (CsvReader reader = new CsvReader(FileParameters, FileColumns))
 			{
-				using (ParquetWriter writer = new ParquetWriter(fileName))
+				using (ParquetWriter writer = new ParquetWriter())
 				{
 					// Log
 					writer.Progress += (sender, args) => block.Progress(System.IO.Path.GetFileName(fileName), args.Records, args.Records + 1);
+					// Abre el archivo
+					reader.Open(FileName);
 					// Escribe el archivo
-					writer.Write(reader);
+					writer.Write(fileName, reader);
 				}
 			}
 			// Log

@@ -38,12 +38,12 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Files.Structured
 				// Graba el archivo
 				using (IDataReader reader = excelReader.LoadFile(FileName, 1, 0, rows, true).CreateDataReader())
 				{
-					using (ParquetWriter writer = new ParquetWriter(fileName))
+					using (ParquetWriter writer = new ParquetWriter())
 					{
 						// Log
 						writer.Progress += (sender, args) => block.Progress(System.IO.Path.GetFileName(fileName), args.Records, args.Records + 1);
 						// Escribe el archivo
-						writer.Write(reader);
+						writer.Write(fileName, reader);
 					}
 				}
 				// Log

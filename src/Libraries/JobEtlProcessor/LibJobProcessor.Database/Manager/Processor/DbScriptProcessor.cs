@@ -2,18 +2,20 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Bau.Libraries.Compiler.LibInterpreter.Context.Variables;
 using Bau.Libraries.Compiler.LibInterpreter.Processor;
 using Bau.Libraries.Compiler.LibInterpreter.Processor.Sentences;
 using Bau.Libraries.DbAggregator.Models;
+using Bau.Libraries.LibBlobStorage;
 using Bau.Libraries.LibDataStructures.Collections;
 using Bau.Libraries.LibDbScripts.Parser;
 using Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Context;
 using Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Sentences;
-using Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Sentences.Csv;
+using Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Sentences.Files;
 using Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Sentences.Parameters;
-using Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Sentences.Parquet;
 using Bau.Libraries.LibLogger.Models.Log;
 
 namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor
@@ -31,7 +33,7 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor
 		/// <summary>
 		///		Procesa el programa
 		/// </summary>
-		internal void Process(ProgramModel program)
+		internal async Task ProcessAsync(ProgramModel program, System.Threading.CancellationToken cancelationToken)
 		{
 			// Inicializa el generador base
 			Initialize();
@@ -42,24 +44,24 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor
 				Context.Actual.VariablesTable.Add(key, value);
 			Context.Actual.VariablesTable.Add("Today", DateTime.Now);
 			// Ejecuta el programa
-			Execute(program.Sentences);
+			await ExecuteAsync(program.Sentences, cancelationToken);
 		}
 
 		/// <summary>
 		///		Ejecuta una serie de sentencias
 		/// </summary>
-		protected override void Execute(SentenceBase abstractSentence)
+		protected override async Task ExecuteAsync(SentenceBase abstractSentence, System.Threading.CancellationToken cancellationToken)
 		{
 			switch (abstractSentence)
 			{
 				case SentenceBlock sentence:
-						ExecuteBlock(sentence);
+						await ExecuteBlockAsync(sentence, cancellationToken);
 					break;
 				case SentenceForEach sentence:
-						ExecuteForEach(sentence);
+						await ExecuteForEachAsync(sentence, cancellationToken);
 					break;
 				case SentenceIfExists sentence:
-						ExecuteIfExists(sentence);
+						await ExecuteIfExistsAsync(sentence, cancellationToken);
 					break;
 				case SentenceExecute sentence:
 						ExecuteDataCommand(sentence);
@@ -79,26 +81,20 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor
 				case SentenceAssertScalar sentence:
 						ExecuteAssertScalar(sentence);
 					break;
-				case SentenceImportCsv sentence:
-						ExecuteImportCsv(sentence);
+				case SentenceFileExportPartitioned sentence:
+						await ExecuteExportPartitionedAsnc(sentence, cancellationToken);
 					break;
-				case SentenceImportCsvSchema sentence:
-						ExecuteImportCsvSchema(sentence);
+				case SentenceFileImport sentence:
+						await ExecuteImportFileAsync(sentence, cancellationToken);
 					break;
-				case SentenceExportCsv sentence:
-						ExecuteExportCsv(sentence);
+				case SentenceFileExport sentence:
+						await ExecuteExportFileAsync(sentence, cancellationToken);
 					break;
-				case SentenceExportPartitionedCsv sentence:
-						ExecuteExportPartitionedCsv(sentence);
+				case SentenceFileImportSchema sentence:
+						await ExecuteImportCsvSchemaAsync(sentence, cancellationToken);
 					break;
-				case SentenceExportCsvSchema sentence:
-						ExecuteExportCsvSchema(sentence);
-					break;
-				case SentenceExportParquet sentence:
-						ExecuteExportParquet(sentence);
-					break;
-				case SentenceImportParquet sentence:
-						ExecuteImportParquet(sentence);
+				case SentenceFileExportSchema sentence:
+						await ExecuteExportCsvSchemaAsync(sentence, cancellationToken);
 					break;
 			}
 		}
@@ -106,18 +102,18 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor
 		/// <summary>
 		///		Ejecuta una sentencia de bloque
 		/// </summary>
-		private void ExecuteBlock(SentenceBlock sentence)
+		private async Task ExecuteBlockAsync(SentenceBlock sentence, System.Threading.CancellationToken cancellationToken)
 		{
 			using (BlockLogModel block = Manager.Logger.Default.CreateBlock(LogModel.LogType.Info, $"Start block {sentence.Message}"))
 			{
-				ExecuteWithContext(sentence.Sentences);
+				await ExecuteWithContextAsync(sentence.Sentences, cancellationToken);
 			}
 		}
 
 		/// <summary>
 		///		Ejecuta una sentencia foreach
 		/// </summary>
-		private void ExecuteForEach(SentenceForEach sentence)
+		private async Task ExecuteForEachAsync(SentenceForEach sentence, CancellationToken cancellationToken)
 		{
 			using (BlockLogModel block = Manager.Logger.Default.CreateBlock(LogModel.LogType.Info, "Start for each"))
 			{
@@ -155,7 +151,7 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor
 														else
 															Context.Actual.VariablesTable.Add(table.Columns[index].ColumnName, row[index]);
 													// Ejecuta las sentencias
-													Execute(sentence.SentencesWithData);
+													await ExecuteAsync(sentence.SentencesWithData, cancellationToken);
 													// Limpia el contexto
 													Context.Pop();
 												}
@@ -169,7 +165,7 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor
 									}
 									// Si no se han encontrado datos, ejecuta las sentencias adecuadas
 									if (startRow == 0)
-										Execute(sentence.SentencesEmptyData);
+										await ExecuteAsync(sentence.SentencesEmptyData, cancellationToken);
 							}
 					}
 			}
@@ -207,7 +203,9 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor
 								}
 								catch (Exception exception)
 								{
-									AddError($"Error when execute bulkCopy. {exception.Message}");
+									AddError($"Error when execute bulkCopy. {exception.Message}", exception);
+									AddDebug($"Source: {sentence.Source}. Target: {sentence.Target}");
+									AddDebug($"Command: {command.Sql}");
 								}
 					}
 			}
@@ -216,7 +214,7 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor
 		/// <summary>
 		///		Ejecuta la sentencia que comprueba si existe un valor en la tabla de datos
 		/// </summary>
-		private void ExecuteIfExists(SentenceIfExists sentence)
+		private async Task ExecuteIfExistsAsync(SentenceIfExists sentence, CancellationToken cancellationToken)
 		{
 			using (BlockLogModel block = Manager.Logger.Default.CreateBlock(LogModel.LogType.Info, "Start if exists"))
 			{
@@ -240,9 +238,9 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor
 									if (!Stopped)
 									{
 										if (exists && sentence.SentencesThen.Count > 0)
-											ExecuteWithContext(sentence.SentencesThen);
+											await ExecuteWithContextAsync(sentence.SentencesThen, cancellationToken);
 										else if (!exists && sentence.SentencesElse.Count > 0)
-											ExecuteWithContext(sentence.SentencesElse);
+											await ExecuteWithContextAsync(sentence.SentencesElse, cancellationToken);
 									}
 							}
 					}
@@ -410,6 +408,7 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor
 			string sql = new SqlParser().ParseCommand(sentence.Sql, GetVariables().ToDictionary(), out error);
 			CommandModel command = null;
 
+				// Ejecuta el comando si no ha habido ningún error
 				if (string.IsNullOrWhiteSpace(error))
 				{
 					// Genera el comando
@@ -581,66 +580,48 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor
 		}
 
 		/// <summary>
-		///		Ejecuta una importación de CSV
+		///		Ejecuta la sentencia de importación de un archivo
 		/// </summary>
-		private void ExecuteImportCsv(SentenceImportCsv sentence)
+		private async Task ExecuteExportFileAsync(SentenceFileExport sentence, CancellationToken cancellationToken)
 		{
-			if (!new Managers.Csv.ImportCsvManager(this).Execute(sentence))
-				AddError($"Error when execute import sentence. File: {sentence.FileName}");
+			if (!await new Managers.FileControllers.ExportFileController(this).ExecuteAsync(sentence, cancellationToken))
+				AddError($"Error when export to file. '{sentence.FileName}'");
+		}
+
+		/// <summary>
+		///		Ejecuta la sentencia de exportación de un archivo
+		/// </summary>
+		private async Task ExecuteImportFileAsync(SentenceFileImport sentence, CancellationToken cancellationToken)
+		{
+			if (!await new Managers.FileControllers.ImportFileController(this).ExecuteAsync(sentence, cancellationToken))
+				AddError($"Errow when import file '{sentence.FileName}' to table '{sentence.Table}'");
 		}
 
 		/// <summary>
 		///		Ejecuta la importación de archivos CSV a las tablas de exquema de base de datos
 		/// </summary>
-		private void ExecuteImportCsvSchema(SentenceImportCsvSchema sentence)
+		private async Task ExecuteImportCsvSchemaAsync(SentenceFileImportSchema sentence, CancellationToken cancellationToken)
 		{
-			if (!new Managers.Csv.ImportSchemaCsvManager(this).Execute(sentence))
-				AddError($"Error when execute import CSV files to '{sentence.Target}'");
+			if (!await new Managers.FileControllers.ImportFileSchemaController(this).ExecuteAsync(sentence, cancellationToken))
+				AddError($"Error when execute import schema files to '{sentence.Target}'");
 		}
 
 		/// <summary>
-		///		Ejecuta una exportación a un archivo CSV
+		///		Ejecuta una exportación a una serie de archivos particionando el origen de datos
 		/// </summary>
-		private void ExecuteExportCsv(SentenceExportCsv sentence)
+		private async Task ExecuteExportPartitionedAsnc(SentenceFileExportPartitioned sentence, CancellationToken cancellationToken)
 		{
-			if (!new Managers.Csv.ExportCsvManager(this).Execute(sentence))
-				AddError($"Error when execute export sentence. File: '{sentence.FileName}'");
-		}
-
-		/// <summary>
-		///		Ejecuta una exportación a una serie de archivos CSV particionando el origen de datos
-		/// </summary>
-		private void ExecuteExportPartitionedCsv(SentenceExportPartitionedCsv sentence)
-		{
-			if (!new Managers.Csv.ExportPartitionedCsvManager(this).Execute(sentence))
-				AddError($"Error when execute export sentence. File: '{sentence.FileName}'");
+			if (!await new Managers.FileControllers.ExportFilePartitionedController(this).ExecuteAsync(sentence, cancellationToken))
+				AddError($"Error when execute export partitioned sentence. File: '{sentence.FileName}'");
 		}
 
 		/// <summary>
 		///		Ejecuta la exportación de archivos CSV a las tablas de exquema de base de datos
 		/// </summary>
-		private void ExecuteExportCsvSchema(SentenceExportCsvSchema sentence)
+		private async Task ExecuteExportCsvSchemaAsync(SentenceFileExportSchema sentence, CancellationToken cancellationToken)
 		{
-			if (!new Managers.Csv.ExportSchemaCsvManager(this).Execute(sentence))
-				AddError($"Error when execute export database to CSV from '{sentence.Source}'");
-		}
-
-		/// <summary>
-		///		Ejecuta la sentencia de importación de un archivo parquet
-		/// </summary>
-		private void ExecuteExportParquet(SentenceExportParquet sentence)
-		{
-			if (!new Managers.ParquetFiles.ExportParquetController(this).Execute(sentence))
-				AddError($"Error when export to parquet file. '{sentence.FileName}'");
-		}
-
-		/// <summary>
-		///		Ejecuta la sentencia de exportación de un archivo parquet
-		/// </summary>
-		private void ExecuteImportParquet(SentenceImportParquet sentence)
-		{
-			if (!new Managers.ParquetFiles.ImportParquetController(this).Execute(sentence))
-				AddError($"Errow when import to parquet file from '{sentence.Table}'");
+			if (!await new Managers.FileControllers.ExportFileSchemaController(this).ExecuteAsync(sentence, cancellationToken))
+				AddError($"Error when execute export database to files from '{sentence.Source}'");
 		}
 
 		/// <summary>
@@ -697,15 +678,40 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor
 		internal ProviderModel GetProvider(string key)
 		{
 			// Si la clave es una variable, sustituye por el contenido de la variable
-			if (!string.IsNullOrWhiteSpace(key) && key.StartsWith("{{") && key.EndsWith("}}"))
-			{
-				VariableModel variable = Context.Actual.VariablesTable.GetIfExists(key.Substring(2, key.Length - 4));
-
-					if (variable != null)
-						key = variable.Value as string;
-			}
+			key = ApplyVariablesToKey(key);
 			// Devuelve el proveedor
 			return Manager.DataProviderManager.GetProvider(key);
+		}
+
+		/// <summary>
+		///		Manager del storage
+		/// </summary>
+		internal ICloudStorageManager GetCloudStorageManager(string key)
+		{
+			// Si la clave es una variable, sustituye por el contenido de la variable
+			key = ApplyVariablesToKey(key);
+			// Devuelve el storage adecuado
+			if (!Manager.StorageConnectionStrings.ContainsKey(key))
+				throw new NotImplementedException($"Can't find the blob storage connection string with key '{key}'");
+			else
+				return new StorageManager().OpenAzureStorageBlob(Manager.StorageConnectionStrings[key]);
+		}
+
+		/// <summary>
+		///		Aplica las variables a la clave solicitada
+		/// </summary>
+		private string ApplyVariablesToKey(string value)
+		{
+			// Si la clave es una variable, sustituye por el contenido de la variable
+			if (!string.IsNullOrWhiteSpace(value) && value.StartsWith("{{") && value.EndsWith("}}"))
+			{
+				VariableModel variable = Context.Actual.VariablesTable.GetIfExists(value.Substring(2, value.Length - 4));
+
+					if (variable != null)
+						value = variable.Value as string;
+			}
+			// Devuelve la clave
+			return value;
 		}
 
 		/// <summary>

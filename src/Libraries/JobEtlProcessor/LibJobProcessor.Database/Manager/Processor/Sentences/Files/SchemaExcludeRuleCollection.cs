@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Sentences.Csv
+namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Sentences.Files
 {
 	/// <summary>
 	///		Colección de <see cref="SchemaExcludeRule"/>

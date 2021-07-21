@@ -137,7 +137,7 @@ namespace Bau.Libraries.LibJobProcessor.Manager
 		}
 
 		/// <summary>
-		///		Ejecuta un <see cref="JobModel"/>
+		///		Ejecuta un <see cref="JobProjectModel"/>
 		/// </summary>
 		private async Task ExecuteJobAsync(JobProjectModel project, JobStepModel job, CancellationToken cancellationToken)
 		{

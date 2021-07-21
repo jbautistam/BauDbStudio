@@ -1,24 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Bau.Libraries.LibDbProviders.Base.Schema;
 using Bau.Libraries.DbAggregator.Models;
 using Bau.Libraries.LibLogger.Models.Log;
-using Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Sentences.Csv;
+using Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Sentences.Files;
 
-namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Managers.Csv
+namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Managers.FileControllers
 {
 	/// <summary>
-	///		Procesador de las sentencias de exportación de esquema a CSV
+	///		Procesador de las sentencias de exportación de esquema a archivos
 	/// </summary>
-	internal class ExportSchemaCsvManager : BaseManager
+	internal class ExportFileSchemaController : BaseManager
 	{
-		internal ExportSchemaCsvManager(DbScriptProcessor processor) : base(processor) {}
+		internal ExportFileSchemaController(DbScriptProcessor processor) : base(processor) {}
 
 		/// <summary>
 		///		Procesa una exportación de las tablas de esquema a archivos CSV
 		/// </summary>
-		internal bool Execute(SentenceExportCsvSchema sentence)
+		internal async Task<bool> ExecuteAsync(SentenceFileExportSchema sentence, CancellationToken cancellationToken)
 		{
 			bool exported = false;
 
@@ -35,11 +37,11 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Managers.Csv
 							exported = true;
 							// Elimina los archivos si es necesario
 							if (sentence.DeleteOldFiles)
-								DeletePathFiles(block, Processor.Manager.Step.Project.GetFullFileName(sentence.Path));
-							// Exporta las tablas del esquema (mientras no haya errores
-							foreach (SentenceExportCsv sentenceCsv in GetExportFileSentences(block, provider, sentence))
-								if (exported)
-									exported = new ExportCsvManager(Processor).Execute(sentenceCsv);
+								DeletePathFiles(block, sentence.Container, Processor.Manager.Step.Project.GetFullFileName(sentence.FileName), sentence.GetExtension());
+							// Exporta las tablas del esquema (mientras no haya errores)
+							foreach (SentenceFileExport exportSentence in GetExportFileSentences(block, provider, sentence))
+								if (exported && !cancellationToken.IsCancellationRequested)
+									exported = await new FileControllers.ExportFileController(Processor).ExecuteAsync(exportSentence, cancellationToken);
 						}
 				}
 				// Devuelve el valor que indica si se ha exportado
@@ -49,10 +51,10 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Managers.Csv
 		/// <summary>
 		///		Borra los archivos CSV de un directorio
 		/// </summary>
-		private void DeletePathFiles(BlockLogModel block, string path)
+		private void DeletePathFiles(BlockLogModel block, string container, string path, string extension)
 		{
-			if (System.IO.Directory.Exists(path))
-				foreach (string fileName in System.IO.Directory.GetFiles(path, "*.csv"))
+			if (string.IsNullOrWhiteSpace(container) && System.IO.Directory.Exists(path))
+				foreach (string fileName in System.IO.Directory.GetFiles(path, "*" + extension))
 					try
 					{
 						System.IO.File.Delete(fileName);
@@ -66,9 +68,9 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Managers.Csv
 		/// <summary>
 		///		Obtiene los comandos para exportación de los archivos asociados a las tablas
 		/// </summary>
-		private List<SentenceExportCsv> GetExportFileSentences(BlockLogModel block, ProviderModel provider, SentenceExportCsvSchema sentence)
+		private List<SentenceFileExport> GetExportFileSentences(BlockLogModel block, ProviderModel provider, SentenceFileExportSchema sentence)
 		{
-			List<SentenceExportCsv> sentences = new List<SentenceExportCsv>();
+			List<SentenceFileExport> sentences = new List<SentenceFileExport>();
 
 				// Obtiene las sentencias
 				foreach (TableDbModel table in provider.LoadSchema().Tables)
@@ -83,13 +85,16 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Managers.Csv
 		/// <summary>
 		///		Crea una sentencia de exportación a CSV con los datos de la tabla
 		/// </summary>
-		private SentenceExportCsv CreateSentence(SentenceExportCsvSchema sentence, TableDbModel table)
+		private SentenceFileExport CreateSentence(SentenceFileExportSchema sentence, TableDbModel table)
 		{
-			SentenceExportCsv exportSentence = new SentenceExportCsv();
+			SentenceFileExport exportSentence = new SentenceFileExport();
 
 				// Asigna las propiedades
+				exportSentence.Type = sentence.Type;
 				exportSentence.Source = sentence.Source;
-				exportSentence.FileName = table.Name + ".csv";
+				exportSentence.Target = sentence.Target;
+				exportSentence.Container = sentence.Container;
+				exportSentence.FileName = System.IO.Path.Combine(sentence.FileName, table.Name + sentence.GetExtension());
 				exportSentence.Command = GetSelect(table);
 				exportSentence.BatchSize = sentence.BatchSize;
 				exportSentence.Timeout = sentence.Timeout;

@@ -40,10 +40,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Controllers.DropItems
 				try
 				{
 					// Añade los nombres de campos
-					using (LibParquetFiles.Readers.ParquetDataReader reader = new LibParquetFiles.Readers.ParquetDataReader(fileName))
+					using (LibParquetFiles.Readers.ParquetDataReader reader = new LibParquetFiles.Readers.ParquetDataReader())
 					{
 						// Abre el archivo
-						reader.Open();
+						reader.Open(fileName);
 						// Añade los nombres de campo
 						for (int index = 0; index < reader.FieldCount; index++)
 						{

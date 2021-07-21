@@ -207,11 +207,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ComicsReader.ViewModel", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ComicsReader.Plugin", "src\Libraries\Plugins\ComicsReader\ComicsReader.Plugin\ComicsReader.Plugin.csproj", "{93279A77-EB2F-4B77-BE43-AFD29E1D656B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9A043E7B-4225-4250-AB57-E6BE85D6289A}"
-	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZoomAndPanControls", "..\..\Controls\WPF\ZoomAndPanControl\ZoomAndPanControls.csproj", "{41925F99-A4C5-4D27-8EE9-00C166E59A74}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "eBooksReader", "eBooksReader", "{E3BE4122-3561-4852-9C9F-133175BFDA51}"

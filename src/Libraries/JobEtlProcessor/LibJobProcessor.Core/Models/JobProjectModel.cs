@@ -52,6 +52,19 @@ namespace Bau.Libraries.LibJobProcessor.Core.Models
 		}
 
 		/// <summary>
+		///		Aplica los parámetros
+		/// </summary>
+		public string ApplyParameters(string value)
+		{
+			// Convierte el valor
+			if (!string.IsNullOrWhiteSpace(value))
+				foreach (JobContextModel context in Contexts)
+					value = context.ApplyParameters(value);
+			// Devuelve el valor generado
+			return value;
+		}
+
+		/// <summary>
 		///		Validación del proyecto
 		/// </summary>
 		public Errors.ErrorModelCollection Validate()

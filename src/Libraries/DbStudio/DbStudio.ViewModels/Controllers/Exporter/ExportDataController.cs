@@ -57,7 +57,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Controllers.Exporter
 		private async Task ExportToCsvAsync(BlockLogModel block, string fileName, DbDataReader reader, CancellationToken cancellationToken)
 		{
 			LibCsvFiles.Controllers.CsvDataReaderWriter writer = new LibCsvFiles.Controllers.CsvDataReaderWriter();
-			
+
 				// Asigna el evento de progreso
 				writer.Progress += (sender, args) => block.Progress(System.IO.Path.GetFileName(fileName), args.Records, args.Records + 1);
 				// Graba el archivo
@@ -69,12 +69,12 @@ namespace Bau.Libraries.DbStudio.ViewModels.Controllers.Exporter
 		/// </summary>
 		private async Task ExportToParquetAsync(BlockLogModel block, string fileName, DbDataReader reader, CancellationToken cancellationToken)
 		{
-			using (LibParquetFiles.Writers.ParquetWriterAsync writer = new LibParquetFiles.Writers.ParquetWriterAsync(fileName))
+			using (LibParquetFiles.Writers.ParquetWriterAsync writer = new LibParquetFiles.Writers.ParquetWriterAsync())
 			{
 				// Asigna el evento de progreso
 				writer.Progress += (sender, args) => block.Progress(System.IO.Path.GetFileName(fileName), args.Records, args.Records + 1);
 				// Graba el archivo
-				await writer.WriteAsync(reader, cancellationToken);
+				await writer.WriteAsync(fileName, reader, cancellationToken);
 			}
 		}
 	}

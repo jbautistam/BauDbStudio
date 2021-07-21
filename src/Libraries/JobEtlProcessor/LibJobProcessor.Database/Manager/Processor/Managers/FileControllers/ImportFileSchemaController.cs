@@ -1,24 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Bau.Libraries.LibDbProviders.Base.Schema;
 using Bau.Libraries.DbAggregator.Models;
 using Bau.Libraries.LibLogger.Models.Log;
-using Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Sentences.Csv;
+using Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Sentences.Files;
 
-namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Managers.Csv
+namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Managers.FileControllers
 {
 	/// <summary>
 	///		Procesador de las sentencias de importación de archivos de todo el esquema de base de datos
 	/// </summary>
-	internal class ImportSchemaCsvManager : BaseManager
+	internal class ImportFileSchemaController : BaseManager
 	{
-		internal ImportSchemaCsvManager(DbScriptProcessor processor) : base(processor) {}
+		internal ImportFileSchemaController(DbScriptProcessor processor) : base(processor) {}
 
 		/// <summary>
 		///		Procesa una importación de archivos CSV para las tablas de esquema de base de datos
 		/// </summary>
-		internal bool Execute(SentenceImportCsvSchema sentence)
+		internal async Task<bool> ExecuteAsync(SentenceFileImportSchema sentence, CancellationToken cancellationToken)
 		{
 			bool imported = false;
 
@@ -34,13 +36,13 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Managers.Csv
 							// Supone que todo se importa correctamente
 							imported = true;
 							// Ejecuta las sentencias de importación obtenidas a partir del esquema y los archivos
-							foreach (SentenceImportCsv sentenceCsv in GetImportFileSentences(block, provider, sentence))
-								if (imported)
+							foreach (SentenceFileImport importSentence in GetImportFileSentences(block, provider, sentence))
+								if (imported && !cancellationToken.IsCancellationRequested)
 								{
 									// Log
-									block.Info($"Importing '{sentenceCsv.FileName}' in '{sentenceCsv.Table}'");
+									block.Info($"Importing '{importSentence.FileName}' in '{importSentence.Table}'");
 									// Importa el archivo
-									imported = new ImportCsvManager(Processor).Execute(sentenceCsv);
+									imported = await new FileControllers.ImportFileController(Processor).ExecuteAsync(importSentence, cancellationToken);
 								}
 						}
 				}
@@ -51,21 +53,16 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Managers.Csv
 		/// <summary>
 		///		Obtiene los comandos para importación de los archivos asociados a las tablas
 		/// </summary>
-		private List<SentenceImportCsv> GetImportFileSentences(BlockLogModel block, ProviderModel provider, SentenceImportCsvSchema sentence)
+		private List<SentenceFileImport> GetImportFileSentences(BlockLogModel block, ProviderModel provider, SentenceFileImportSchema sentence)
 		{
-			List<SentenceImportCsv> sentences = new List<SentenceImportCsv>();
+			List<SentenceFileImport> sentences = new List<SentenceFileImport>();
 
 				// Obtiene las sentencias
 				foreach (TableDbModel table in provider.LoadSchema().Tables)
 					if (sentence.ExcludeRules.CheckMustExclude(table.Name))
 						block.Debug($"Skip table {table.Name} because is excluded");
 					else 
-					{
-						string fileName = System.IO.Path.Combine(Processor.Manager.Step.Project.GetFullFileName(sentence.Path), $"{table.Name}.csv");
-
-							if (System.IO.File.Exists(fileName))
-								sentences.Add(CreateSentence(sentence, table));
-					}
+						sentences.Add(CreateSentence(sentence, table));
 				// Devuelve la colección de instrucciones
 				return sentences;
 		}
@@ -73,13 +70,16 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Managers.Csv
 		/// <summary>
 		///		Crea una sentencia de importación de una tabla con los datos de un archivo
 		/// </summary>
-		private SentenceImportCsv CreateSentence(SentenceImportCsvSchema sentence, TableDbModel table)
+		private SentenceFileImport CreateSentence(SentenceFileImportSchema sentence, TableDbModel table)
 		{
-			SentenceImportCsv importSentence = new SentenceImportCsv();
+			SentenceFileImport importSentence = new SentenceFileImport();
 
 				// Asigna las propiedades
+				importSentence.Type = importSentence.Type;
+				importSentence.Source = sentence.Source;
 				importSentence.Target = sentence.Target;
-				importSentence.FileName = table.Name + ".csv";
+				importSentence.Container = importSentence.Container;
+				importSentence.FileName = System.IO.Path.Combine(Processor.Manager.Step.Project.GetFullFileName(sentence.FileName), table.Name + sentence.GetExtension());
 				importSentence.Table = table.Name;
 				importSentence.BatchSize = sentence.BatchSize;
 				importSentence.Timeout = sentence.Timeout;

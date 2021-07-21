@@ -1,11 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 
-namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Sentences.Csv
+namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Sentences.Files
 {
-	/// <summary>
-	///		Sentencia de exportación a CSV
-	/// </summary>
-	internal class SentenceExportCsv : SentenceCsvBase
+	internal class SentenceFileExportPartitioned : SentenceFileBase
 	{
 		///// <summary>
 		/////		Comprueba los datos
@@ -21,25 +19,25 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Sentences.Csv
 		//			error += Environment.NewLine + $"{nameof(FileName)} can't be empty";
 		//		if (string.IsNullOrWhiteSpace(LoadCommand))
 		//			error += Environment.NewLine + $"{nameof(LoadCommand)} can't be empty";
-		//		if (RecordsPerBlock < 1)
-		//			error += Environment.NewLine + $"{nameof(RecordsPerBlock)} can't be less than 1";
+		//		if (Columns.Count == 0)
+		//			error += Environment.NewLine + "Undefined partition columns";
 		//		// Devuelve el error
 		//		return error;
 		//}
 
 		/// <summary>
-		///		Conexión origen
-		/// </summary>
-		internal string Source { get; set; }
-
-		/// <summary>
-		///		Nombre de archivo
-		/// </summary>
-		internal string FileName { get; set; }
-
-		/// <summary>
 		///		Comando de carga de datos para exportar
 		/// </summary>
 		internal Parameters.ProviderSentenceModel Command { get; set; }
+
+		/// <summary>
+		///		Separador de partición
+		/// </summary>
+		internal string PartitionSeparator { get; set; } = "_#_";
+
+		/// <summary>
+		///		Columnas de la partición
+		/// </summary>
+		internal List<string> PartitionColumns { get; } = new List<string>();
 	}
 }

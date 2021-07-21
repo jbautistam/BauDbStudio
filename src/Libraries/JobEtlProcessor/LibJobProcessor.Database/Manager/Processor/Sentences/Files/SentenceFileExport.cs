@@ -1,9 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Sentences.Csv
+namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Sentences.Files
 {
-	internal class SentenceExportPartitionedCsv : SentenceCsvBase
+	/// <summary>
+	///		Sentencia de exportación a archivo
+	/// </summary>
+	internal class SentenceFileExport : SentenceFileBase
 	{
 		///// <summary>
 		/////		Comprueba los datos
@@ -19,21 +21,16 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Sentences.Csv
 		//			error += Environment.NewLine + $"{nameof(FileName)} can't be empty";
 		//		if (string.IsNullOrWhiteSpace(LoadCommand))
 		//			error += Environment.NewLine + $"{nameof(LoadCommand)} can't be empty";
-		//		if (Columns.Count == 0)
-		//			error += Environment.NewLine + "Undefined partition columns";
+		//		if (RecordsPerBlock < 1)
+		//			error += Environment.NewLine + $"{nameof(RecordsPerBlock)} can't be less than 1";
 		//		// Devuelve el error
 		//		return error;
 		//}
 
 		/// <summary>
-		///		Conexión origen
+		///		Número de registros por grupo de filas
 		/// </summary>
-		internal string Source { get; set; }
-
-		/// <summary>
-		///		Nombre de archivo
-		/// </summary>
-		internal string FileName { get; set; }
+		internal int RowGroupSize { get; set; } = 45_000;
 
 		/// <summary>
 		///		Comando de carga de datos para exportar
@@ -41,13 +38,11 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Sentences.Csv
 		internal Parameters.ProviderSentenceModel Command { get; set; }
 
 		/// <summary>
-		///		Separador de partición
+		///		Indica si los archivos están en el storage
 		/// </summary>
-		internal string PartitionSeparator { get; set; } = "_#_";
-
-		/// <summary>
-		///		Columnas de la partición
-		/// </summary>
-		internal List<string> Columns { get; } = new List<string>();
+		internal bool FilesAtStorage 
+		{ 
+			get { return !string.IsNullOrWhiteSpace(Target) && !string.IsNullOrWhiteSpace(Container); }
+		}
 	}
 }

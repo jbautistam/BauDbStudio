@@ -11,11 +11,36 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Manager\Processor\Managers\Csv\**" />
+    <Compile Remove="Manager\Processor\Managers\FileManager\**" />
+    <Compile Remove="Manager\Processor\Managers\ParquetFiles\**" />
+    <Compile Remove="Manager\Processor\Sentences\Csv\**" />
+    <Compile Remove="Manager\Processor\Sentences\Parquet\**" />
+    <EmbeddedResource Remove="Manager\Processor\Managers\Csv\**" />
+    <EmbeddedResource Remove="Manager\Processor\Managers\FileManager\**" />
+    <EmbeddedResource Remove="Manager\Processor\Managers\ParquetFiles\**" />
+    <EmbeddedResource Remove="Manager\Processor\Sentences\Csv\**" />
+    <EmbeddedResource Remove="Manager\Processor\Sentences\Parquet\**" />
+    <None Remove="Manager\Processor\Managers\Csv\**" />
+    <None Remove="Manager\Processor\Managers\FileManager\**" />
+    <None Remove="Manager\Processor\Managers\ParquetFiles\**" />
+    <None Remove="Manager\Processor\Sentences\Csv\**" />
+    <None Remove="Manager\Processor\Sentences\Parquet\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Manager\Processor\Managers\FileControllers\Storage\FileManagerFactory.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Cloud\LibCloudStorage\src\LibCloudStorage\LibCloudStorage.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibLogger\src\LibLogger.Core\LibLogger.Core.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibMarkup\src\LibMarkup.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Compilers\src\LibInterpreter\LibInterpreter.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DbAggregator\DbAggregator.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DbScripts\LibDbScripts.Parser\LibDbScripts.Parser.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Formats\LibCsvFiles\src\LibCsvFiles.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Formats\LibJsonFiles\LibJsonFiles.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Formats\LibParquetFiles\src\LibParquetFiles.csproj" />
     <ProjectReference Include="..\LibJobProcessor.Core\LibJobProcessor.Core.csproj" />
   </ItemGroup>

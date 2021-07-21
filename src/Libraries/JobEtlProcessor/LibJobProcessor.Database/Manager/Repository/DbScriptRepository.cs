@@ -8,8 +8,7 @@ using Bau.Libraries.Compiler.LibInterpreter.Processor.Sentences;
 using Bau.Libraries.Compiler.LibInterpreter.Context.Variables;
 using Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Sentences.Parameters;
 using Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Sentences;
-using Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Sentences.Csv;
-using Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Sentences.Parquet;
+using Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Sentences.Files;
 
 namespace Bau.Libraries.LibJobProcessor.Database.Manager.Repository
 {
@@ -77,9 +76,9 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Repository
 		private const string TagMap = "Map";
 		private const string TagFrom = "From";
 		private const string TagTo = "To";
-		private const string TagSentenceImportCsv = "ImportCsv";
-		private const string TagSentenceExportCsv = "ExportCsv";
-		private const string TagSentenceExportPartitionedCsv = "ExportPartitionCsv";
+		private const string TagSentenceImportFile = "ImportFile";
+		private const string TagSentenceExportFile = "ExportFile";
+		private const string TagSentenceExportPartitioned = "ExportPartitioned";
 		private const string TagPartitionBy = "PartitionBy";
 		private const string TagSentenceImportSchemaCsv = "ImportSchemaCsv";
 		private const string TagSentenceExportSchemaCsv = "ExportSchemaCsv";
@@ -94,13 +93,16 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Repository
 		private const string TagDateFormat = "DateFormat";
 		private const string TagValueTrue = "ValueTrue";
 		private const string TagValueFalse = "ValueFalse";
+		private const string TagRequired = "Required";
 		private const string TagExclude = "Exclude";
 		private const string TagExcludeMode = "Mode";
 		private const string TagExcludeExcept = "Except";
 		private const string TagTimeout = "Timeout";
-		private const string TagSentenceExportParquet = "ExportParquet";
-		private const string TagSentenceImportParquet = "ImportParquet";
+		//private const string TagSentenceExportParquet = "ExportParquet";
+		//private const string TagSentenceImportParquet = "ImportParquet";
 		private const string TagRowGroupSize = "RowGroupSize";
+		private const string TagContainer = "Container";
+		private const string TagImportFolder = "ImportFolder";
 
 		/// <summary>
 		///		Carga el programa de un archivo
@@ -214,26 +216,20 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Repository
 						case TagSentenceExecuteScript:
 								sentences.Add(LoadSentenceExecuteScript(nodeML));
 							break;
-						case TagSentenceImportCsv:
-								sentences.Add(LoadSentenceImportCsv(nodeML));
-							break;
 						case TagSentenceImportSchemaCsv:
 								sentences.Add(LoadSentenceImportSchema(nodeML));
 							break;
 						case TagSentenceExportSchemaCsv:
 								sentences.Add(LoadSentenceExportSchema(nodeML));
 							break;
-						case TagSentenceExportCsv:
-								sentences.Add(LoadSentenceExportCsv(nodeML));
-							break;
-						case TagSentenceExportPartitionedCsv:
+						case TagSentenceExportPartitioned:
 								sentences.Add(LoadSentenceExportPartitionedCsv(nodeML));
 							break;
-						case TagSentenceExportParquet:
-								sentences.Add(LoadSentenceExportParquet(nodeML));
+						case TagSentenceImportFile:
+								sentences.Add(LoadSentenceImportFile(nodeML));
 							break;
-						case TagSentenceImportParquet:
-								sentences.Add(LoadSentenceImportParquet(nodeML));
+						case TagSentenceExportFile:
+								sentences.Add(LoadSentenceExportFile(nodeML));
 							break;
 						default:
 							throw new ArgumentException($"Node unkwnown: {nodeML.Name}");
@@ -359,11 +355,11 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Repository
 		{
 			return new SentenceExecute
 							{
-								Target = rootML.Attributes[TagTarget].Value,
+								Target = rootML.Attributes[TagTarget].Value.TrimIgnoreNull(),
 								Command = GetProviderCommand(rootML, TagProviderCommand)
 							};
 		}
-		
+
 		/// <summary>
 		///		Sentencia de ejecución de un script
 		/// </summary>
@@ -379,7 +375,7 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Repository
 				// Asigna los mapeos de variables
 				foreach (MLNode nodeML in rootML.Nodes)
 					if (nodeML.Name == TagMap)
-						sentence.Mapping.Add((nodeML.Attributes[TagVariable].Value, nodeML.Attributes[TagTo].Value));
+						sentence.Mapping.Add((nodeML.Attributes[TagVariable].Value.TrimIgnoreNull(), nodeML.Attributes[TagTo].Value.TrimIgnoreNull()));
 				// Devuelve la sentencia creada
 				return sentence;
 		}
@@ -391,9 +387,9 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Repository
 		{
 			SentenceBulkCopy sentence = new SentenceBulkCopy
 												{
-													Source = rootML.Attributes[TagSource].Value,
-													Target = rootML.Attributes[TagTarget].Value,
-													Table = rootML.Attributes[TagTable].Value,
+													Source = rootML.Attributes[TagSource].Value.TrimIgnoreNull(),
+													Target = rootML.Attributes[TagTarget].Value.TrimIgnoreNull(),
+													Table = rootML.Attributes[TagTable].Value.TrimIgnoreNull(),
 													BatchSize = rootML.Attributes[TagBatchSize].Value.GetInt(30_000),
 													Command = GetProviderCommand(rootML, TagProviderCommand)
 												};
@@ -423,8 +419,8 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Repository
 		{
 			return new SentenceCopy
 							{
-								Source = rootML.Attributes[TagSource].Value,
-								Target = rootML.Attributes[TagTarget].Value,
+								Source = rootML.Attributes[TagSource].Value.TrimIgnoreNull(),
+								Target = rootML.Attributes[TagTarget].Value.TrimIgnoreNull(),
 								LoadCommand = GetProviderCommand(rootML, TagLoad),
 								SaveCommand = GetProviderCommand(rootML, TagSave)
 							};
@@ -438,7 +434,7 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Repository
 			SentenceIfExists sentence = new SentenceIfExists();
 
 				// Carga los parámetros de la sentencia
-				sentence.Source = rootML.Attributes[TagSource].Value;
+				sentence.Source = rootML.Attributes[TagSource].Value.TrimIgnoreNull();
 				sentence.Command = GetProviderCommand(rootML, TagProviderCommand);
 				// Carga las instrucciones a ejecutar cuando existe o no existe el dato
 				foreach (MLNode nodeML in rootML.Nodes)
@@ -462,7 +458,7 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Repository
 		{
 			return new SentenceException
 							{
-								Message = rootML.Value
+								Message = rootML.Value.TrimIgnoreNull()
 							};
 		}
 
@@ -474,7 +470,7 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Repository
 			SentenceIf sentence = new SentenceIf();
 
 				// Carga la condición
-				sentence.Condition = rootML.Attributes[TagCondition].Value;
+				sentence.Condition = rootML.Attributes[TagCondition].Value.TrimIgnoreNull();
 				// Carga las sentencias de la parte then y else
 				foreach (MLNode nodeML in rootML.Nodes)
 					switch (nodeML.Name)
@@ -498,7 +494,7 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Repository
 			SentenceWhile sentence = new SentenceWhile();
 
 				// Carga la condición y las sentencias
-				sentence.Condition = rootML.Attributes[TagCondition].Value;
+				sentence.Condition = rootML.Attributes[TagCondition].Value.TrimIgnoreNull();
 				sentence.Sentences.AddRange(LoadSentences(rootML.Nodes, pathBase));
 				// Devuelve la sentencia
 				return sentence;
@@ -512,8 +508,8 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Repository
 			SentenceAssertExecute sentence = new SentenceAssertExecute();
 
 				// Asigna las propiedades
-				sentence.Target = rootML.Attributes[TagTarget].Value;
-				sentence.Message = rootML.Attributes[TagMessage].Value;
+				sentence.Target = rootML.Attributes[TagTarget].Value.TrimIgnoreNull();
+				sentence.Message = rootML.Attributes[TagMessage].Value.TrimIgnoreNull();
 				sentence.Command = GetProviderCommand(rootML, TagProviderCommand);
 				sentence.WithError = rootML.Attributes[TagWithError].Value.GetBool();
 				sentence.Records = rootML.Attributes[TagRecords].Value.GetInt(0);
@@ -528,8 +524,8 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Repository
 		{
 			return new SentenceAssertScalar
 							{
-								Target = rootML.Attributes[TagTarget].Value,
-								Message = rootML.Attributes[TagMessage].Value,
+								Target = rootML.Attributes[TagTarget].Value.TrimIgnoreNull(),
+								Message = rootML.Attributes[TagMessage].Value.TrimIgnoreNull(),
 								Command = GetProviderCommand(rootML, TagProviderCommand),
 								Result = rootML.Attributes[TagResult].Value.GetLong(0)
 							};
@@ -549,7 +545,7 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Repository
 					// Primero obtiene el comando
 					foreach (MLNode nodeML in rootML.Nodes)
 						if (nodeML.Name == tagCommand)
-							sentence = new ProviderSentenceModel(nodeML.Value, GetTimeout(rootML, TimeSpan.FromMinutes(5)));
+							sentence = new ProviderSentenceModel(nodeML.Value.TrimIgnoreNull(), GetTimeout(rootML, TimeSpan.FromMinutes(5)));
 					// Si ha generado la sentencia, añade los argumentos
 					if (sentence != null)
 						foreach (MLNode nodeML in rootML.Nodes)
@@ -569,12 +565,12 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Repository
 
 				// Añade los datos del filtro
 				filter.ColumnType = rootML.Attributes[TagType].Value.GetEnum(VariableModel.VariableType.Unknown);
-				filter.VariableName = rootML.Attributes[TagVariable].Value;
-				filter.Parameter = rootML.Attributes[TagParameter].Value;
+				filter.VariableName = rootML.Attributes[TagVariable].Value.TrimIgnoreNull();
+				filter.Parameter = rootML.Attributes[TagParameter].Value.TrimIgnoreNull();
 				if (string.IsNullOrEmpty(filter.VariableName) && !string.IsNullOrEmpty(filter.Parameter))
 					filter.VariableName = filter.Parameter.Replace("@", "");
 				// Obtiene el valor por defecto
-				filter.Default = ConvertStringValue(filter.ColumnType, rootML.Attributes[TagDefault].Value);
+				filter.Default = ConvertStringValue(filter.ColumnType, rootML.Attributes[TagDefault].Value.TrimIgnoreNull());
 				// Devuelve los datos del filtro
 				return filter;
 		}
@@ -604,16 +600,21 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Repository
 		}
 
 		/// <summary>
-		///		Carga una sentencia para importar CSV
+		///		Carga una sentencia <see cref="SentenceFileImport"/>
 		/// </summary>
-		private SentenceBase LoadSentenceImportCsv(MLNode rootML)
+		private SentenceBase LoadSentenceImportFile(MLNode rootML)
 		{
-			SentenceImportCsv sentence = new SentenceImportCsv();
+			SentenceFileImport sentence = new SentenceFileImport();
 
 				// Asigna las propiedades
-				sentence.Target = rootML.Attributes[TagTarget].Value;
-				sentence.FileName = rootML.Attributes[TagFileName].Value;
-				sentence.Table = rootML.Attributes[TagTable].Value;
+				sentence.Type = rootML.Attributes[TagType].Value.GetEnum(SentenceFileBase.FileType.Csv);
+				sentence.Source = rootML.Attributes[TagSource].Value.TrimIgnoreNull();
+				sentence.Target = rootML.Attributes[TagTarget].Value.TrimIgnoreNull();
+				sentence.Container = rootML.Attributes[TagContainer].Value.TrimIgnoreNull();
+				sentence.FileName = rootML.Attributes[TagFileName].Value.TrimIgnoreNull();
+				sentence.ImportFolder = rootML.Attributes[TagImportFolder].Value.GetBool();
+				sentence.Table = rootML.Attributes[TagTable].Value.TrimIgnoreNull();
+				sentence.Required = rootML.Attributes[TagRequired].Value.GetBool(true);
 				sentence.BatchSize = rootML.Attributes[TagBatchSize].Value.GetInt(BatchSizeDefault);
 				sentence.Timeout = GetTimeout(rootML, TimeSpan.FromHours(2));
 				// Carga la definición
@@ -626,15 +627,65 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Repository
 		}
 
 		/// <summary>
-		///		Carga una sentencia <see cref="SentenceImportCsvSchema"/>
+		///		Carga una sentencia <see cref="SentenceFileExport"/>
 		/// </summary>
-		private SentenceImportCsvSchema LoadSentenceImportSchema(MLNode rootML)
+		private SentenceBase LoadSentenceExportFile(MLNode rootML)
 		{
-			SentenceImportCsvSchema sentence = new SentenceImportCsvSchema();
+			SentenceFileExport sentence = new SentenceFileExport();
+
+				// Asigna las propiedades
+				sentence.Type = rootML.Attributes[TagType].Value.GetEnum(SentenceFileBase.FileType.Csv);
+				sentence.Source = rootML.Attributes[TagSource].Value.TrimIgnoreNull();
+				sentence.Target = rootML.Attributes[TagTarget].Value.TrimIgnoreNull();
+				sentence.Container = rootML.Attributes[TagContainer].Value.TrimIgnoreNull();
+				sentence.FileName = rootML.Attributes[TagFileName].Value.TrimIgnoreNull();
+				sentence.BatchSize = rootML.Attributes[TagBatchSize].Value.GetInt(BatchSizeDefault);
+				sentence.RowGroupSize = rootML.Attributes[TagRowGroupSize].Value.GetInt(45_000);
+				sentence.Command = GetProviderCommand(rootML, TagLoad);
+				// Carga la definición
+				LoadDefinitionCsv(sentence.Definition, rootML);
+				// Devuelve la sentencia
+				return sentence;
+		}
+
+		/// <summary>
+		///		Carga una sentencia para exportar una serie de archivos particionados
+		/// </summary>
+		private SentenceBase LoadSentenceExportPartitionedCsv(MLNode rootML)
+		{
+			SentenceFileExportPartitioned sentence = new SentenceFileExportPartitioned();
+
+				// Asigna las propiedades
+				sentence.Type = rootML.Attributes[TagType].Value.GetEnum(SentenceFileBase.FileType.Csv);
+				sentence.Source = rootML.Attributes[TagSource].Value.TrimIgnoreNull();
+				sentence.Target = rootML.Attributes[TagTarget].Value.TrimIgnoreNull();
+				sentence.Container = rootML.Attributes[TagContainer].Value.TrimIgnoreNull();
+				sentence.FileName = rootML.Attributes[TagFileName].Value.TrimIgnoreNull();
+				sentence.BatchSize = rootML.Attributes[TagBatchSize].Value.GetInt(BatchSizeDefault);
+				sentence.Command = GetProviderCommand(rootML, TagLoad);
+				// Carga la definición
+				LoadDefinitionCsv(sentence.Definition, rootML);
+				// Carga las columnas de partición
+				foreach (MLNode nodeML in rootML.Nodes)
+					if (nodeML.Name == TagPartitionBy && !string.IsNullOrWhiteSpace(nodeML.Attributes[TagColumn].Value))
+						sentence.PartitionColumns.Add(nodeML.Attributes[TagColumn].Value.TrimIgnoreNull());
+				// Devuelve la sentencia
+				return sentence;
+		}
+
+		/// <summary>
+		///		Carga una sentencia <see cref="SentenceFileImportSchema"/>
+		/// </summary>
+		private SentenceFileImportSchema LoadSentenceImportSchema(MLNode rootML)
+		{
+			SentenceFileImportSchema sentence = new SentenceFileImportSchema();
 
 				// Asigna las propiedades básicas
-				sentence.Target = rootML.Attributes[TagTarget].Value;
-				sentence.Path = rootML.Attributes[TagPath].Value;
+				sentence.Type = rootML.Attributes[TagType].Value.GetEnum(SentenceFileBase.FileType.Csv);
+				sentence.Source = rootML.Attributes[TagSource].Value.TrimIgnoreNull();
+				sentence.Target = rootML.Attributes[TagTarget].Value.TrimIgnoreNull();
+				sentence.Container = rootML.Attributes[TagContainer].Value.TrimIgnoreNull();
+				sentence.FileName = rootML.Attributes[TagPath].Value.TrimIgnoreNull();
 				sentence.BatchSize = rootML.Attributes[TagBatchSize].Value.GetInt(BatchSizeDefault);
 				sentence.Timeout = GetTimeout(rootML, TimeSpan.FromHours(2));
 				// Obtiene los parámetros del archivo
@@ -646,55 +697,18 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Repository
 		}
 
 		/// <summary>
-		///		Carga una sentencia para exportar CSV
-		/// </summary>
-		private SentenceBase LoadSentenceExportCsv(MLNode rootML)
-		{
-			SentenceExportCsv sentence = new SentenceExportCsv();
-
-				// Asigna las propiedades
-				sentence.Source = rootML.Attributes[TagSource].Value;
-				sentence.FileName = rootML.Attributes[TagFileName].Value;
-				sentence.BatchSize = rootML.Attributes[TagBatchSize].Value.GetInt(BatchSizeDefault);
-				sentence.Command = GetProviderCommand(rootML, TagLoad);
-				// Carga la definición
-				LoadDefinitionCsv(sentence.Definition, rootML);
-				// Devuelve la sentencia
-				return sentence;
-		}
-
-		/// <summary>
-		///		Carga una sentencia para exportar una serie de archivos CSV particionados
-		/// </summary>
-		private SentenceBase LoadSentenceExportPartitionedCsv(MLNode rootML)
-		{
-			SentenceExportPartitionedCsv sentence = new SentenceExportPartitionedCsv();
-
-				// Asigna las propiedades
-				sentence.Source = rootML.Attributes[TagSource].Value;
-				sentence.FileName = rootML.Attributes[TagFileName].Value;
-				sentence.BatchSize = rootML.Attributes[TagBatchSize].Value.GetInt(BatchSizeDefault);
-				sentence.Command = GetProviderCommand(rootML, TagLoad);
-				// Carga la definición
-				LoadDefinitionCsv(sentence.Definition, rootML);
-				// Carga las columnas de partición
-				foreach (MLNode nodeML in rootML.Nodes)
-					if (nodeML.Name == TagPartitionBy && !string.IsNullOrWhiteSpace(nodeML.Attributes[TagColumn].Value))
-						sentence.Columns.Add(nodeML.Attributes[TagColumn].Value.TrimIgnoreNull());
-				// Devuelve la sentencia
-				return sentence;
-		}
-
-		/// <summary>
-		///		Carga una sentencia <see cref="SentenceExportCsvSchema"/>
+		///		Carga una sentencia <see cref="SentenceFileExportSchema"/>
 		/// </summary>
 		private SentenceBase LoadSentenceExportSchema(MLNode rootML)
 		{
-			SentenceExportCsvSchema sentence = new SentenceExportCsvSchema();
+			SentenceFileExportSchema sentence = new SentenceFileExportSchema();
 
 				// Asigna las propiedades básicas
-				sentence.Source = rootML.Attributes[TagSource].Value;
-				sentence.Path = rootML.Attributes[TagPath].Value;
+				sentence.Type = rootML.Attributes[TagType].Value.GetEnum(SentenceFileBase.FileType.Csv);
+				sentence.Source = rootML.Attributes[TagSource].Value.TrimIgnoreNull();
+				sentence.Target = rootML.Attributes[TagTarget].Value.TrimIgnoreNull();
+				sentence.Container = rootML.Attributes[TagContainer].Value.TrimIgnoreNull();
+				sentence.FileName = rootML.Attributes[TagPath].Value.TrimIgnoreNull();
 				sentence.DeleteOldFiles = rootML.Attributes[TagDeleteOldFiles].Value.GetBool();
 				sentence.BatchSize = rootML.Attributes[TagBatchSize].Value.GetInt(BatchSizeDefault);
 				sentence.Timeout = GetTimeout(rootML, TimeSpan.FromHours(2));
@@ -713,12 +727,12 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Repository
 		{
 			definition.WithHeader = rootML.Attributes[TagWithHeader].Value.GetBool(true);
 			definition.TypedHeader = rootML.Attributes[TagTypedHeader].Value.GetBool(false);
-			definition.Separator = rootML.Attributes[TagFieldsSeparator].Value;
-			definition.DecimalSeparator = rootML.Attributes[TagDecimalSeparator].Value;
-			definition.ThousandsSeparator = rootML.Attributes[TagThousandsSeparator].Value;
-			definition.DateFormat = rootML.Attributes[TagDateFormat].Value;
-			definition.TrueValue = rootML.Attributes[TagValueTrue].Value;
-			definition.FalseValue = rootML.Attributes[TagValueFalse].Value;
+			definition.Separator = rootML.Attributes[TagFieldsSeparator].Value.TrimIgnoreNull();
+			definition.DecimalSeparator = rootML.Attributes[TagDecimalSeparator].Value.TrimIgnoreNull();
+			definition.ThousandsSeparator = rootML.Attributes[TagThousandsSeparator].Value.TrimIgnoreNull();
+			definition.DateFormat = rootML.Attributes[TagDateFormat].Value.TrimIgnoreNull();
+			definition.TrueValue = rootML.Attributes[TagValueTrue].Value.TrimIgnoreNull();
+			definition.FalseValue = rootML.Attributes[TagValueFalse].Value.TrimIgnoreNull();
 		}
 
 		/// <summary>
@@ -768,7 +782,7 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Repository
 					if (nodeML.Name == TagColumn)
 						columns.Add(new ColumnModel
 											{
-												Name = nodeML.Attributes[TagName].Value,
+												Name = nodeML.Attributes[TagName].Value.TrimIgnoreNull(),
 												Type = nodeML.Attributes[TagType].Value.GetEnum(ColumnModel.ColumnType.String)
 											}
 									);
@@ -777,49 +791,12 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Repository
 		}
 
 		/// <summary>
-		///		Carga una sentencia <see cref="SentenceExportParquet"/>
-		/// </summary>
-		private SentenceBase LoadSentenceExportParquet(MLNode rootML)
-		{
-			SentenceExportParquet sentence = new SentenceExportParquet();
-
-				// Asigna las propiedades básicas
-				sentence.Source = rootML.Attributes[TagSource].Value.TrimIgnoreNull();
-				sentence.FileName = rootML.Attributes[TagFileName].Value.TrimIgnoreNull();
-				sentence.Command = GetProviderCommand(rootML, TagLoad);
-				sentence.RecordsPerBlock = rootML.Attributes[TagBatchSize].Value.GetInt(BatchSizeDefault);
-				sentence.RowGroupSize = rootML.Attributes[TagRowGroupSize].Value.GetInt(45_000);
-				sentence.Timeout = GetTimeout(rootML, TimeSpan.FromHours(2));
-				// Devuelve la sentencia
-				return sentence;
-		}
-
-		/// <summary>
-		///		Carga una sentencia <see cref="SentenceImportParquet"/>
-		/// </summary>
-		private SentenceBase LoadSentenceImportParquet(MLNode rootML)
-		{
-			SentenceImportParquet sentence = new SentenceImportParquet();
-
-				// Asigna las propiedades básicas
-				sentence.Target = rootML.Attributes[TagTarget].Value.TrimIgnoreNull();
-				sentence.FileName = rootML.Attributes[TagFileName].Value.TrimIgnoreNull();
-				sentence.Table = rootML.Attributes[TagTable].Value.TrimIgnoreNull();
-				sentence.RecordsPerBlock = rootML.Attributes[TagBatchSize].Value.GetInt(BatchSizeDefault);
-				sentence.Timeout = GetTimeout(rootML, TimeSpan.FromHours(2));
-				// Obtiene los mapeos
-				LoadMappings(sentence.Mappings, rootML);
-				// Devuelve la sentencia
-				return sentence;
-		}
-
-		/// <summary>
 		///		Obtiene el timeout definido en el nodo
 		/// </summary>
 		private TimeSpan GetTimeout(MLNode rootML, TimeSpan defaultTimeOut)
 		{
 			TimeSpan? timeout = null;
-			string attribute = rootML.Attributes[TagTimeout].Value;
+			string attribute = rootML.Attributes[TagTimeout].Value.TrimIgnoreNull();
 
 				// Interpreta la cadena de timeout
 				if (!string.IsNullOrWhiteSpace(attribute) && attribute.Length > 1)

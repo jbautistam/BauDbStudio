@@ -28,8 +28,11 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Manager.Controllers
 						// Crea el directorio de salida
 						LibHelper.Files.HelperFiles.MakePath(System.IO.Path.GetDirectoryName(target));
 						// Escribe el archivo
-						using (LibParquetFiles.Readers.ParquetDataReader reader = new LibParquetFiles.Readers.ParquetDataReader(source))
+						using (LibParquetFiles.Readers.ParquetDataReader reader = new LibParquetFiles.Readers.ParquetDataReader())
 						{
+							// Abre el archivo de entrada
+							reader.Open(source);
+							// Escribe en el archivo de salida
 							writer.Save(reader, target);
 						}
 						// Indica que se ha convertido

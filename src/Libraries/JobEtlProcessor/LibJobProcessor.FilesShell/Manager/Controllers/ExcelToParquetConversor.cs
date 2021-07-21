@@ -21,7 +21,7 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Manager.Controllers
 				// Convierte el archivo
 				try
 				{
-					LibParquetFiles.Writers.ParquetWriter writer = new LibParquetFiles.Writers.ParquetWriter(target);
+					LibParquetFiles.Writers.ParquetWriter writer = new LibParquetFiles.Writers.ParquetWriter();
 
 						// Evita el error de await
 						await Task.Delay(1);
@@ -31,7 +31,7 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Manager.Controllers
 						using (System.Data.IDataReader reader = new LibExcelFiles.Data.ExcelDataTableReader().LoadFile(source, options.SheetIndex,  
 																													   1, 10_000_000, options.WithHeader).CreateDataReader())
 						{
-							writer.Write(reader);
+							writer.Write(target, reader);
 						}
 						// Indica que se ha convertido el archivo
 						converted = true;

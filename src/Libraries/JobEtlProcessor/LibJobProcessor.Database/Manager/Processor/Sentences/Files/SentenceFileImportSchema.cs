@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Sentences.Csv
+namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Sentences.Files
 {
 	/// <summary>
 	///		Sentencia de exportación de todas las tablas de un esquema a archivos CSV
 	/// </summary>
-	internal class SentenceImportCsvSchema : SentenceCsvBase
+	internal class SentenceFileImportSchema : SentenceFileBase
 	{
 		///// <summary>
 		/////		Comprueba los datos
@@ -24,18 +24,8 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Sentences.Csv
 		//}
 
 		/// <summary>
-		///		Conexión destino
-		/// </summary>
-		internal string Target { get; set; }
-
-		/// <summary>
-		///		Directorio
-		/// </summary>
-		internal string Path { get; set; }
-
-		/// <summary>
 		///		Reglas de exclusión de tablas 
 		/// </summary>
-		internal SchemaExcludeRuleCollection ExcludeRules { get; } = new SchemaExcludeRuleCollection();
+		internal Files.SchemaExcludeRuleCollection ExcludeRules { get; } = new Files.SchemaExcludeRuleCollection();
 	}
 }

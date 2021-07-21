@@ -15,10 +15,12 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager
 	/// </summary>
 	internal class DbScriptManager
 	{
-		internal DbScriptManager(JobStepModel step, DbAggregatorManager dataProviderManager, NormalizedDictionary<object> parameters, LogManager logger)
+		internal DbScriptManager(JobStepModel step, DbAggregatorManager dataProviderManager, NormalizedDictionary<string> storageConnectionStrings, 
+								 NormalizedDictionary<object> parameters, LogManager logger)
 		{
 			Step = step;
 			DataProviderManager = dataProviderManager;
+			StorageConnectionStrings = storageConnectionStrings ?? new NormalizedDictionary<string>();
 			Parameters = parameters;
 			Logger = logger;
 		}
@@ -60,10 +62,8 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager
 		{
 			Processor.DbScriptProcessor processor = new Processor.DbScriptProcessor(this);
 
-				// Evita los warnings
-				await Task.Delay(1);
 				// Ejecuta el script
-				processor.Process(program);
+				await processor.ProcessAsync(program, cancellationToken);
 				// Devuelve el valor que indica si ha habido errores
 				return Errors.Count == 0;
 		}
@@ -77,6 +77,11 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager
 		///		Controlador de los proveedores de datos
 		/// </summary>
 		internal DbAggregatorManager DataProviderManager { get; }
+
+		/// <summary>
+		///		Cadenas de conexión al storage
+		/// </summary>
+		internal NormalizedDictionary<string> StorageConnectionStrings { get; }
 
 		/// <summary>
 		///		Parámetros iniciales

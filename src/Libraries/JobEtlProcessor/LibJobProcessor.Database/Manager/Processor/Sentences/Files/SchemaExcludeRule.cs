@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Sentences.Csv
+namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Sentences.Files
 {
 	/// <summary>
 	///		Modelo para la exclusión de tablas en la importación / exportación de esquemas

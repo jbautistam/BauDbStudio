@@ -41,6 +41,19 @@ namespace Bau.Libraries.LibJobProcessor.Core.Models
 		}
 
 		/// <summary>
+		///		Aplica los parámetros
+		/// </summary>
+		public string ApplyParameters(string value)
+		{
+			// Convierte el valor
+			if (!string.IsNullOrWhiteSpace(value))
+				foreach ((string key, JobParameterModel parameter) in Parameters.Enumerate())
+					value = value.Replace("{{" + key + "}}", parameter.Value?.ToString(), StringComparison.CurrentCultureIgnoreCase);
+			// Devuelve el valor generado
+			return value;
+		}
+
+		/// <summary>
 		///		Clave del procesador
 		/// </summary>
 		public string ProcessorKey { get; set; } 

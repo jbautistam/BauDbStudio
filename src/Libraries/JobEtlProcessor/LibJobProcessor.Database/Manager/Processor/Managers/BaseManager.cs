@@ -16,7 +16,7 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Managers
 		}
 
 		/// <summary>
-		///		Lanza un evento de medición
+		///		Lanza un evento de progreso
 		/// </summary>
 		protected void RaiseProgress(string message, long records)
 		{

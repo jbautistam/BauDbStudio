@@ -23,21 +23,23 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Files.Structured
 		/// <summary>
 		///		Graba el archivo
 		/// </summary>
-		protected override void SaveFile(LibLogger.Models.Log.BlockLogModel block, string fileName)
+		protected override void SaveFile(LibLogger.Models.Log.BlockLogModel block, string fileNameTarget)
 		{
 			LibCsvFiles.Controllers.CsvDataReaderWriter writer = new LibCsvFiles.Controllers.CsvDataReaderWriter();
 
 				// Escribe el archivo
-				using (ParquetDataReader reader = new ParquetDataReader(FileName))
+				using (ParquetDataReader reader = new ParquetDataReader())
 				{
 					// Log
-					writer.Progress += (sender, args) => block.Progress(System.IO.Path.GetFileName(fileName), args.Records, args.Records + 1);
+					writer.Progress += (sender, args) => block.Progress(System.IO.Path.GetFileName(fileNameTarget), args.Records, args.Records + 1);
+					// Abre el archivo
+					reader.Open(FileName);
 					// Escribe el archivo
-					writer.Save(reader, fileName);
+					writer.Save(reader, fileNameTarget);
 				}
 				// Log
-				block.Progress(System.IO.Path.GetFileName(fileName), 0, 0);
-				block.Info($"Fin de la grabación del archivo '{fileName}'");
+				block.Progress(System.IO.Path.GetFileName(fileNameTarget), 0, 0);
+				block.Info($"Fin de la grabación del archivo '{fileNameTarget}'");
 				SolutionViewModel.MainController.Logger.Flush();
 		}
 
