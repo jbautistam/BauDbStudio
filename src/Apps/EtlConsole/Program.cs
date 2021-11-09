@@ -78,7 +78,7 @@ namespace Bau.EtlConsole
 		}
 
 		/// <summary>
-		///		Comrpueba si una cadena se corresponde con un argumento de entrada
+		///		Comprueba si una cadena se corresponde con un argumento de entrada
 		/// </summary>
 		private static bool IsArgument(string argument, ArgumentType type)
 		{

@@ -51,6 +51,10 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.Workspaces
 		/// </summary>
 		public void Select(string actual)
 		{
+			// Ajusta el espacio de trabajo al predeterminado si no se ha pasado nada
+			if (string.IsNullOrWhiteSpace(actual))
+				actual = DefaultWorkSpace;
+			// Carga el espacio de trabajo
 			if (!string.IsNullOrWhiteSpace(actual) && !actual.Equals(SelectedItem?.Name))
 			{
 				// Selecciona el espacio de trabajo

@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Bussiness\Blogs\EntryBussiness.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\..\Libraries\Common\LibMarkup\src\LibMarkup.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\..\Libraries\Communications\LibFeeds\LibFeeds.csproj" />
     <ProjectReference Include="..\LibBlogReader.Model\LibBlogReader.Model.csproj" />

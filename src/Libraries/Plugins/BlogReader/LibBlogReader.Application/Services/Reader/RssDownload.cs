@@ -127,7 +127,7 @@ namespace Bau.Libraries.LibBlogReader.Application.Services.Reader
 					}
 				// Si se ha añadido algo, graba las entradas
 				if (downloaded.Count > 0)
-					new Bussiness.Blogs.EntryBussiness().Save(blog, _blogManager.Configuration.PathBlogs);
+					_blogManager.SaveBlog(blog);
 				// Devuelve los elementos descargados
 				return downloaded;
 		}

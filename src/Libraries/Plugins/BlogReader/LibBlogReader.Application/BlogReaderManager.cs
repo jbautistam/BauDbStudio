@@ -28,7 +28,7 @@ namespace Bau.Libraries.LibBlogReader.Application
 		}
 
 		/// <summary>
-		///		Graba los archivos
+		///		Graba el árbol de blogs
 		/// </summary>
 		public void Save()
 		{
@@ -54,9 +54,9 @@ namespace Bau.Libraries.LibBlogReader.Application
 		/// <summary>
 		///		Guarda los datos de un blog
 		/// </summary>
-		public void SaveBlog(BlogModel blog, string fileName)
+		public void SaveBlog(BlogModel blog)
 		{
-			new Repository.EntryXmlRepository().SaveToFile(blog, fileName);
+			new Repository.EntryXmlRepository().Save(blog, Configuration.PathBlogs);
 		}
 
 		/// <summary>

@@ -12,19 +12,6 @@ namespace Bau.Libraries.LibBlogReader.Model
 		// Variables privadas
 		private string path;
 
-		///// <summary>
-		/////		Obtiene el número de elementos no leídos
-		///// </summary>
-		//public int GetNumberNotRead()
-		//{ 
-		//	// Calcula el número de elementos no leídos (si realmente ha habido modificaciones, evita así
-		//	// la llamada al Lazy y la lectura del XML si no es necesario)
-		//	if (IsDirty)
-		//		NumberNotRead = Entries.GetNumberNotRead();
-		//	// Y devuelve el número calculado
-		//	return NumberNotRead;
-		//}
-
 		/// <summary>
 		///		Borra una entrada
 		/// </summary>

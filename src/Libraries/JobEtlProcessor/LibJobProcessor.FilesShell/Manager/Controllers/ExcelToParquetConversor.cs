@@ -21,7 +21,7 @@ namespace Bau.Libraries.LibJobProcessor.FilesShell.Manager.Controllers
 				// Convierte el archivo
 				try
 				{
-					LibParquetFiles.Writers.ParquetWriter writer = new LibParquetFiles.Writers.ParquetWriter();
+					LibParquetFiles.Writers.ParquetWriter writer = new LibParquetFiles.Writers.ParquetWriter(200_000);
 
 						// Evita el error de await
 						await Task.Delay(1);

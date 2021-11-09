@@ -61,7 +61,7 @@ namespace Bau.Libraries.LibBlogReader.Model
 		public void DeleteOldData()
 		{
 			for (int index = Count - 1; index >= 0; index--)
-				if (Count > MaxItems && this[index].DatePublish < DateTime.Now.AddDays(-30) &&
+				if (Count > MaxItems && this[index].DatePublish < DateTime.Now.AddDays(-60) &&
 						this[index].Status == EntryModel.StatusEntry.Deleted)
 					RemoveAt(index);
 		}

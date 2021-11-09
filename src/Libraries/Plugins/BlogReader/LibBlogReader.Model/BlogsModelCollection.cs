@@ -29,7 +29,8 @@ namespace Bau.Libraries.LibBlogReader.Model
 
 				// Obtiene el número de elementos no leídos
 				foreach (BlogModel blog in this)
-					number += blog.NumberNotRead;
+					if (blog.Enabled)
+						number += blog.NumberNotRead;
 				// Devuelve el número de elementos no leídos
 				return number;
 		}

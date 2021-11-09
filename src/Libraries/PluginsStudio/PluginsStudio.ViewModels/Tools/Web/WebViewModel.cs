@@ -15,8 +15,36 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.Web
 		public WebViewModel(PluginsStudioViewModel mainViewModel, string url) : base(false)
 		{
 			Url = url;
-			Header = url;
+			Header = GetTitle(url);
 			MainViewModel = mainViewModel;
+		}
+
+		/// <summary>
+		///		Obtiene el título a partir de la URL
+		/// </summary>
+		private string GetTitle(string url)
+		{
+			if (Uri.TryCreate(url, UriKind.Absolute, out Uri converted))
+			{
+				const int MaxLength = 20;
+				string [] paths = converted.PathAndQuery.Split('/');
+				string result = string.Empty;
+
+					// Quita los directorios
+					for (int index = paths.Length - 1; index >= 0; index--)
+						if (!string.IsNullOrWhiteSpace(paths[index]) && string.IsNullOrWhiteSpace(result))
+							result = paths[index];
+					// Si no se ha obtenido nada, recoge el dato inicial
+					if (string.IsNullOrWhiteSpace(result))
+						result = converted.PathAndQuery;
+					// Sólo los primeros caracteres
+					if (result.Length > MaxLength)
+						result = result.Substring(0, MaxLength);
+					// Devuelve los datos
+					return result;
+			}
+			else
+				return url;
 		}
 
 		/// <summary>

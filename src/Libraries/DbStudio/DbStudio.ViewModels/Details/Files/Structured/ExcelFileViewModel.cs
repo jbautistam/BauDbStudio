@@ -38,7 +38,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Files.Structured
 				// Graba el archivo
 				using (IDataReader reader = excelReader.LoadFile(FileName, 1, 0, rows, true).CreateDataReader())
 				{
-					using (ParquetWriter writer = new ParquetWriter())
+					using (ParquetWriter writer = new ParquetWriter(200_000))
 					{
 						// Log
 						writer.Progress += (sender, args) => block.Progress(System.IO.Path.GetFileName(fileName), args.Records, args.Records + 1);

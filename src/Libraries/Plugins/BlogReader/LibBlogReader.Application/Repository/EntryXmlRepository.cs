@@ -69,14 +69,6 @@ namespace Bau.Libraries.LibBlogReader.Repository
 		/// </summary>
 		internal void Save(BlogModel blog, string path)
 		{
-			SaveToFile(blog, GetFileName(blog, path));
-		}
-
-		/// <summary>
-		///		Graba las entradas de un blog
-		/// </summary>
-		internal void SaveToFile(BlogModel blog, string fileName)
-		{
 			MLFile fileML = new MLFile();
 			MLNode objMLRoot = fileML.Nodes.Add(TagRoot);
 
@@ -99,7 +91,7 @@ namespace Bau.Libraries.LibBlogReader.Repository
 						nodeML.Nodes.Add(TagAuthor, entry.Author);
 				}
 				// Graba el archivo
-				new XMLWriter().Save(fileName, fileML);
+				new XMLWriter().Save(GetFileName(blog, path), fileML);
 		}
 
 		/// <summary>

@@ -95,7 +95,7 @@ namespace Bau.DbStudio.Converters
 		{
 			// Comprueba si la extensión está asignada a algún plugin
 			foreach (Bau.Libraries.PluginsStudio.ViewModels.Base.Models.FileAssignedModel fileAssigned in FilesAssignedIcons)
-				if (fileName.EndsWith(fileAssigned.FileExtension))
+				if (fileName.EndsWith(fileAssigned.FileExtension, StringComparison.CurrentCultureIgnoreCase))
 					return fileAssigned.Icon;
 			// Si ha llegado hasta aquí es porque no está
 			return string.Empty;

@@ -12,7 +12,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 	///		ViewModel para ver las noticias de <see cref="BlogModel"/>
 	/// </summary>
 	public class BlogSeeNewsViewModel : BaseObservableObject, PluginsStudio.ViewModels.Base.Interfaces.IDetailViewModel
-	{   
+	{
 		// Enumerados privadas
 		/// <summary>
 		///		Acciones que se pueden realizar con una entrada
@@ -37,7 +37,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 		private BlogEntryViewModel _selectedEntry;
 		private bool _mustSeeInteresting, _mustSeeNotRead, _mustSeeRead, _isDirty;
 		private int _entriesNumber, _recordsPerPage, _actualPage, _pageIndex;
-		private string _htmlNews;
+		private string _htmlNews, _tabId;
 
 		public BlogSeeNewsViewModel(BlogReaderViewModel mainViewModel, BlogsModelCollection blogs) : base(false)
 		{ 
@@ -52,19 +52,17 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 			PreviousPageCommand = CreateCommandForPage(nameof(PreviousPageCommand));
 			LastPageCommand = CreateCommandForPage(nameof(LastPageCommand));
 			// Inicializa los comandos del menú
-			MarkAsReadCommand = new BaseCommand(parameter => ExecuteAction(nameof(MarkAsReadCommand), parameter),
-												parameter => CanExecuteAction(nameof(MarkAsReadCommand), parameter));
-			MarkAsNotReadCommand = new BaseCommand(parameter => ExecuteAction(nameof(MarkAsNotReadCommand), parameter),
-												   parameter => CanExecuteAction(nameof(MarkAsNotReadCommand), parameter));
-			MarkAsInterestingCommand = new BaseCommand(parameter => ExecuteAction(nameof(MarkAsInterestingCommand), parameter),
-													   parameter => CanExecuteAction(nameof(MarkAsInterestingCommand), parameter));
-			ExportEntriesCommand = new BaseCommand(parameter => ExecuteAction(nameof(ExportEntriesCommand), parameter),
-												   parameter => CanExecuteAction(nameof(ExportEntriesCommand), parameter));
-			PlayCommand = new BaseCommand(parameter => ExecuteAction(nameof(PlayCommand), parameter),
-										  parameter => CanExecuteAction(nameof(PlayCommand), parameter))
+			MarkAsReadCommand = new BaseCommand(_ => ExecuteAction(nameof(MarkAsReadCommand)),
+												_ => CanExecuteAction(nameof(MarkAsReadCommand)));
+			MarkAsNotReadCommand = new BaseCommand(_ => ExecuteAction(nameof(MarkAsNotReadCommand)),
+												   _ => CanExecuteAction(nameof(MarkAsNotReadCommand)));
+			MarkAsInterestingCommand = new BaseCommand(_ => ExecuteAction(nameof(MarkAsInterestingCommand)),
+													   _ => CanExecuteAction(nameof(MarkAsInterestingCommand)));
+			ExportEntriesCommand = new BaseCommand(_ => ExportEntries());
+			PlayCommand = new BaseCommand(_ => PlayEntry())
 									.AddListener(this, nameof(SelectedEntry));
-			DeleteCommand = new BaseCommand(parameter => ExecuteAction(nameof(DeleteCommand), parameter),
-											parameter => CanExecuteAction(nameof(DeleteCommand), parameter))
+			DeleteCommand = new BaseCommand(_ => ExecuteAction(nameof(DeleteCommand)),
+											_ => CanExecuteAction(nameof(DeleteCommand)))
 									.AddListener(this, nameof(SelectedEntry));
 			// Inicializa las propiedades
 			PropertyChanged += (sender, args) =>
@@ -79,7 +77,9 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 		///		Inicializa el ViewModel: propiedades, menús y comandos
 		/// </summary>
 		private void InitViewModel()
-		{ 
+		{
+			// Guarda el Id del documento
+			TabId = $"{GetType().ToString()}_{GetBlogSeeNewsTabId()}";
 			// Obtiene los datos de configuración (asigna las variables, no las propiedades porque las propiedades lanzan TreatSelectedEntriesChanged
 			_mustSeeRead = MainViewModel.ConfigurationViewModel.SeeEntriesRead;
 			_mustSeeNotRead = MainViewModel.ConfigurationViewModel.SeeEntriesNotRead;
@@ -89,19 +89,32 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 		}
 
 		/// <summary>
+		///		Obtiene la etiqueta para la colección de blogs
+		/// </summary>
+		private string GetBlogSeeNewsTabId()
+		{
+			string tabId = string.Empty;
+
+				// Crea la Id de la ventana
+				foreach (BlogModel blog in Blogs)
+					tabId += blog.URL + ";";
+				// Devuelve el Id
+				return tabId;
+		}
+
+		/// <summary>
 		///		Crea un comando asociado a la página HTML
 		/// </summary>
 		private BaseCommand CreateCommandForPage(string action)
 		{
-			return new BaseCommand(parameter => ExecuteAction(action, parameter),
-								   parameter => CanExecuteAction(action, parameter))
+			return new BaseCommand(_ => ExecuteAction(action), _ => CanExecuteAction(action))
 							.AddListener(this, nameof(Pages)).AddListener(this, nameof(ActualPage)).AddListener(this, nameof(RecordsPerPage));
 		}
 
 		/// <summary>
 		///		Ejecuta una acción
 		/// </summary>
-		private void ExecuteAction(string action, object parameter)
+		private void ExecuteAction(string action)
 		{
 			switch (action)
 			{
@@ -134,13 +147,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 						Refresh();
 					break;
 				case nameof(DeleteCommand):
-						DeleteSelectedEntries(parameter);
-					break;
-				case nameof(ExportEntriesCommand):
-						ExportEntries();
-					break;
-				case nameof(PlayCommand):
-						PlayEntry();
+						DeleteSelectedEntries();
 					break;
 			}
 		}
@@ -148,7 +155,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 		/// <summary>
 		///		Comprueba si se puede ejecutar una acción
 		/// </summary>
-		private bool CanExecuteAction(string action, object parameter)
+		private bool CanExecuteAction(string action)
 		{
 			switch (action)
 			{
@@ -164,9 +171,6 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 				case nameof(MarkAsNotReadCommand):
 				case nameof(MarkAsInterestingCommand):
 					return SelectedEntry != null;
-				case nameof(ExportEntriesCommand):
-				case nameof(PlayCommand):
-					return true;
 				default:
 					return false;
 			}
@@ -218,7 +222,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 		/// <summary>
 		///		Borra las entradas seleccionadas
 		/// </summary>
-		private void DeleteSelectedEntries(object parameter)
+		private void DeleteSelectedEntries()
 		{
 			BlogEntriesCollectionViewModel entriesForDelete = Entries.GetSelected();
 
@@ -456,12 +460,13 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 		///		Trata la modificación de las entradas las entradas
 		/// </summary>
 		private void TreatUpdateEntries(BlogsModelCollection blogsUpdated)
-		{   
+		{
 			// Graba las entradas de los blogs modificados
 			foreach (BlogModel blog in blogsUpdated)
-				new EntryBussiness().Save(blog, MainViewModel.BlogManager.Configuration.PathBlogs);
+				MainViewModel.BlogManager.SaveBlog(blog);
 			// Modifica el número de elementos no leídos
 			new BlogBussiness().UpdateNumberNotRead(blogsUpdated);
+			// Graba el archivo con los blogs y las carpetas
 			MainViewModel.BlogManager.Save();
 			// Cambia el estado del comando borrar
 			DeleteCommand.OnCanExecuteChanged();
@@ -478,7 +483,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 
 				// Comprueba si se puede cambiar el estado de una entrada
 				if (entry.Status != newStatus)
-				{ 
+				{
 					// Indica que por ahora se puede cambiar
 					canChange = true;
 					// Comprueba el nuevo valor
@@ -502,7 +507,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 		///		Trata la modificación en los parámetros de lectura de la lista
 		/// </summary>
 		private void TreatSelectedEntriesChanged()
-		{ 
+		{
 			// Se no se ha seleccionado nada, se muestran al menos la no leidas
 			if (!SeeRead && !SeeNotRead && !SeeInteresting)
 				SeeNotRead = true;
@@ -541,7 +546,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 													}
 											);
 						// Graba los datos del blog
-						MainViewModel.BlogManager.SaveBlog(blog, fileName);
+						MainViewModel.BlogManager.SaveBlog(blog);
 				}
 		}
 
@@ -635,7 +640,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 		///		Cabecera
 		/// </summary>
 		public string Header 
-		{ 
+		{
 			get { return "News"; }
 		}
 
@@ -643,8 +648,9 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 		///		Id de la ficha
 		/// </summary>
 		public string TabId 
-		{ 
-			get { return $"{GetType().ToString()}_{Guid.NewGuid().ToString()}"; }
+		{
+			get { return _tabId; }
+			private set { CheckProperty(ref _tabId, value); }
 		}
 
 		/// <summary>
@@ -669,7 +675,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 		private BlogEntriesCollectionViewModel EntriesForView
 		{
 			get
-			{ 
+			{
 				// Obtiene las entradas que se deben mostrar en el explorador
 				if (_entriesForView == null || _isDirty)
 				{ 

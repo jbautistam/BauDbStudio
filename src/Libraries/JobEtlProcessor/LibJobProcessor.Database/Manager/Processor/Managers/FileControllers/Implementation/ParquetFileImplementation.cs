@@ -47,7 +47,7 @@ namespace Bau.Libraries.LibJobProcessor.Database.Manager.Processor.Managers.File
 				long records = 0;
 
 					// Escribe en el archivo
-					records = GetDataWriter(sentence.BatchSize, block).Write(stream, reader, sentence.RowGroupSize);
+					records = GetDataWriter(sentence.BatchSize, block).Write(stream, reader);
 					// Log
 					block.Info($"Exported {records:#,##0} records");
 			}
