@@ -380,7 +380,8 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs.TreeBlogs
 		/// </summary>
 		private void SeeNews()
 		{
-			MainViewModel.ViewsController.OpenWindow(new BlogSeeNewsViewModel(MainViewModel, (SelectedNode as BaseBlogsNodeViewModel).GetBlogs()));
+			if (SelectedNode != null && SelectedNode is BaseBlogsNodeViewModel blogsViewModel)
+				MainViewModel.ViewsController.OpenWindow(new BlogSeeNewsViewModel(MainViewModel, blogsViewModel.GetBlogs()));
 		}
 
 		/// <summary>
