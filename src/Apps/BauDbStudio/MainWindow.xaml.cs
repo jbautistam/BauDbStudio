@@ -29,6 +29,7 @@ namespace Bau.DbStudio
 																		System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Bau.DbStudio"),
 																		this);
 			// Añade los plugins
+			DbStudioViewsManager.AddPlugin(new Libraries.JobsProcessor.Plugin.JobsProcessorPlugin());
 			DbStudioViewsManager.AddPlugin(new Libraries.DbStudio.Views.DbStudioViewManager());
 			DbStudioViewsManager.AddPlugin(new Libraries.BlogReader.Views.BlogReaderPlugin());
 			DbStudioViewsManager.AddPlugin(new Libraries.RestStudio.Views.RestStudioViewManager());
@@ -421,8 +422,12 @@ namespace Bau.DbStudio
 			DbStudioViewsManager.ConfigurationController.LastWorkSpace = ViewModel.WorkspacesViewModel.SelectedItem.Name;
 			DbStudioViewsManager.ConfigurationController.LastFiles = ViewModel.LastFilesViewModel.GetFiles();
 			DbStudioViewsManager.ConfigurationController.Save();
-			// Cierra la aplicación
-			Close();
+			// Cierra la aplicación (puede que dé una excepción al cerrar porque ya se está cerrando en el evento Closing)
+			try
+			{
+				Close();
+			}
+			catch {}
 		}
 
 		/// <summary>
@@ -550,6 +555,8 @@ namespace Bau.DbStudio
 		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
 		{
 			e.Cancel = !CanExitApp();
+			if (!e.Cancel)
+				ExitApp();
 		}
 
 		private void dckManager_OpenFileRequired(object sender, Controls.DockLayout.EventArguments.OpenFileRequiredArgs e)
@@ -561,11 +568,6 @@ namespace Bau.DbStudio
 		private void AboutMenuItem_Click(object sender, RoutedEventArgs e)
 		{
 			OpenAboutWindow();
-		}
-
-		private void OpenWebBrowser_Click(object sender, RoutedEventArgs e)
-		{
-			dckManager.AddDocument("192830489", "Web", new Views.Tools.Web.WebExplorerView(null), null);
 		}
 	}
 }

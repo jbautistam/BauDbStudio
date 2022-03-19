@@ -6,9 +6,9 @@
     <RootNamespace>Bau.DbStudio</RootNamespace>
     <Authors>Jose Antonio Bautista</Authors>
     <ApplicationIcon>Resources\BauDbStudio.ico</ApplicationIcon>
-    <AssemblyVersion>1.0.19.0</AssemblyVersion>
+    <AssemblyVersion>1.0.20.0</AssemblyVersion>
     <FileVersion>1.0.19.0</FileVersion>
-    <Version>1.0.19</Version>
+    <Version>1.0.20</Version>
     <PackageProjectUrl>https://github.com/jbautistam/BauDbStudio</PackageProjectUrl>
     <RepositoryUrl>https://github.com/jbautistam/BauDbStudio</RepositoryUrl>
   </PropertyGroup>
@@ -93,6 +93,7 @@
     <ProjectReference Include="..\..\Libraries\Plugins\BlogReader\BlogReader.Views\BlogReader.Views.csproj" />
     <ProjectReference Include="..\..\Libraries\Plugins\ComicsReader\ComicsReader.Plugin\ComicsReader.Plugin.csproj" />
     <ProjectReference Include="..\..\Libraries\Plugins\EbooksReader\EbooksReader.Plugin\EbooksReader.Plugin.csproj" />
+    <ProjectReference Include="..\..\Libraries\Plugins\JobsProcessor\JobsProcessor.Plugin\JobsProcessor.Plugin.csproj" />
     <ProjectReference Include="..\..\Libraries\RestStudio\RestStudio.Views\RestStudio.Views.csproj" />
   </ItemGroup>
   <ItemGroup>

@@ -19,42 +19,42 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 		{
 			/// <summary>Desconocido. No se debería utilizar</summary>
 			Unknown,
-			/// <summary>Raíz de la conexión</summary>
-			ConnectionRoot,
-			/// <summary>Conexión</summary>
-			Connection,
-			/// <summary>Esquema de una conexión</summary>
-			SchemaRoot,
-			/// <summary>Tabla</summary>
-			Table,
-			/// <summary>Raíz de la distribución</summary>
-			DeploymentRoot,
-			/// <summary>Distribución</summary>
-			Deployment,
+			///// <summary>Raíz de la conexión</summary>
+			//ConnectionRoot,
+			///// <summary>Conexión</summary>
+			//Connection,
+			///// <summary>Esquema de una conexión</summary>
+			//SchemaRoot,
+			///// <summary>Tabla</summary>
+			//Table,
+			///// <summary>Raíz de la distribución</summary>
+			//DeploymentRoot,
+			///// <summary>Distribución</summary>
+			//Deployment,
 			/// <summary>Raíz de archivos de proyecto</summary>
 			FilesRoot,
 			/// <summary>Archivo / directorio</summary>
 			File,
-			/// <summary>Conexión a storage</summary>
-			Storage,
-			/// <summary>Contenedor de storage</summary>
-			StorageContainer,
-			/// <summary>Mensaje (transitorio)</summary>
-			Message,
-			/// <summary>Almacén de datos</summary>
-			DataWarehouse,
-			/// <summary>Raíz de origen de datos</summary>
-			DataSourcesRoot,
-			/// <summary>Origen de datos</summary>
-			DataSource,
-			/// <summary>Raíz de dimensiones</summary>
-			DimensionsRoot,
-			/// <summary>Dimensión</summary>
-			Dimension,
-			/// <summary>Raíz de informes</summary>
-			ReportsRoot,
-			/// <summary>Informe</summary>
-			Report
+			///// <summary>Conexión a storage</summary>
+			//Storage,
+			///// <summary>Contenedor de storage</summary>
+			//StorageContainer,
+			///// <summary>Mensaje (transitorio)</summary>
+			//Message,
+			///// <summary>Almacén de datos</summary>
+			//DataWarehouse,
+			///// <summary>Raíz de origen de datos</summary>
+			//DataSourcesRoot,
+			///// <summary>Origen de datos</summary>
+			//DataSource,
+			///// <summary>Raíz de dimensiones</summary>
+			//DimensionsRoot,
+			///// <summary>Dimensión</summary>
+			//Dimension,
+			///// <summary>Raíz de informes</summary>
+			//ReportsRoot,
+			///// <summary>Informe</summary>
+			//Report
 		}
 		/// <summary>
 		///		Tipo de icono
@@ -62,29 +62,19 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 		public enum IconType
 		{
 			Unknown,
-			Connection,
-			Deployment,
 			Project,
 			Path,
-			File,
-			Schema,
-			Table,
-			View,
-			Key,
-			Field,
-			Error,
-			Loading,
-			Storage,
-			Report,
-			DataSourceSql,
-			Dimension
+			File
 		}
 		// Variables privadas
 		private NodeFileViewModel _nodeToCopy;
 
 		public TreeFilesViewModel(PluginsStudioViewModel solutionViewModel)
 		{ 
+			// Inicializa las propiedades
 			MainViewModel = solutionViewModel;
+			PluginsFileOptions = new List<Base.Models.FileOptionsModel>();
+			// Inicializa los comandos
 			NewFolderFilesCommand = new BaseCommand(_ => AddFolderToExplorer());
 			NewFolderCommand = new BaseCommand(_ => CreateFolder(), _ => CanCreateFileOrFolder())
 										.AddListener(this, nameof(SelectedNode));
@@ -439,7 +429,8 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 		/// </summary>
 		public void AddPluginOptions(List<Base.Models.FileOptionsModel> fileOptions)
 		{
-			PluginsFileOptions = fileOptions;
+			if (fileOptions is not null)
+				PluginsFileOptions.AddRange(fileOptions);
 		}
 
 		/// <summary>
