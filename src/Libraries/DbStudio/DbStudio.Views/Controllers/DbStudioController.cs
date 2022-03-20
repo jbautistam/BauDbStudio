@@ -44,9 +44,6 @@ namespace Bau.Libraries.DbStudio.Views.Controllers
 				case ViewModels.Details.Queries.ExecuteQueryViewModel viewModel:
 						DbStudioViewManager.AppViewsController.OpenDocument(new Queries.ExecuteQueryView(viewModel), viewModel);
 					break;
-				case ViewModels.Details.EtlProjects.ExecuteEtlConsoleViewModel viewModel:
-						DbStudioViewManager.AppViewsController.OpenDocument(new EtlProjects.ExecuteEtlConsoleView(viewModel), viewModel);
-					break;
 				case ViewModels.Details.Reporting.DataSources.DataSourceSqlViewModel viewModel:
 						DbStudioViewManager.AppViewsController.OpenDocument(new Reporting.Details.DataSources.DataSourceSqlView(viewModel), viewModel);
 					break;

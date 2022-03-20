@@ -78,7 +78,6 @@
     <Resource Include="Resources\Images\CaseSensitive.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\Controls\WPF\BauCharts\BauCharts.csproj" />
     <ProjectReference Include="..\..\..\..\..\Controls\WPF\BauControls\src\BauControls.csproj" />
     <ProjectReference Include="..\..\..\..\..\Controls\WPF\CodeEditor\src\CodeEditor.csproj" />
     <ProjectReference Include="..\..\..\..\..\Controls\WPF\DockLayout\src\DockLayout.csproj" />
@@ -86,7 +85,6 @@
     <ProjectReference Include="..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.ViewModels\BauMvvm.ViewModels.csproj" />
     <ProjectReference Include="..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.Views.Wpf\BauMvvm.Views.Wpf.csproj" />
     <ProjectReference Include="..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.Views\BauMvvm.Views.csproj" />
-    <ProjectReference Include="..\..\..\..\..\Libraries\Charts\LibCharts\LibCharts.csproj" />
     <ProjectReference Include="..\..\..\..\..\Libraries\Common\LibSystem.Windows\LibSystem.Windows.csproj" />
     <ProjectReference Include="..\..\Libraries\DbStudio\DbStudio.Views\DbStudio.Views.csproj" />
     <ProjectReference Include="..\..\Libraries\PluginsStudio\PluginsStudio.ViewModels\PluginsStudio.ViewModels.csproj" />
@@ -94,7 +92,6 @@
     <ProjectReference Include="..\..\Libraries\Plugins\ComicsReader\ComicsReader.Plugin\ComicsReader.Plugin.csproj" />
     <ProjectReference Include="..\..\Libraries\Plugins\EbooksReader\EbooksReader.Plugin\EbooksReader.Plugin.csproj" />
     <ProjectReference Include="..\..\Libraries\Plugins\JobsProcessor\JobsProcessor.Plugin\JobsProcessor.Plugin.csproj" />
-    <ProjectReference Include="..\..\Libraries\RestStudio\RestStudio.Views\RestStudio.Views.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\BauDbStudio.ico" />

@@ -10,7 +10,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.Web
 		// Eventos públicos
 		public event EventHandler Closed;
 		// Variables privadas
-		private string _url;
+		private string _header, _url;
 
 		public WebViewModel(PluginsStudioViewModel mainViewModel, string url) : base(false)
 		{
@@ -88,7 +88,11 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.Web
 		/// <summary>
 		///		Cabecera
 		/// </summary>
-		public string Header { get; }
+		public string Header 
+		{ 
+			get { return _header; }
+			set { CheckProperty(ref _header, value); }
+		}
 
 		/// <summary>
 		///		Id de la ficha

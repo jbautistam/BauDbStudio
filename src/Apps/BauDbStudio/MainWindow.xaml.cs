@@ -32,7 +32,6 @@ namespace Bau.DbStudio
 			DbStudioViewsManager.AddPlugin(new Libraries.JobsProcessor.Plugin.JobsProcessorPlugin());
 			DbStudioViewsManager.AddPlugin(new Libraries.DbStudio.Views.DbStudioViewManager());
 			DbStudioViewsManager.AddPlugin(new Libraries.BlogReader.Views.BlogReaderPlugin());
-			DbStudioViewsManager.AddPlugin(new Libraries.RestStudio.Views.RestStudioViewManager());
 			DbStudioViewsManager.AddPlugin(new Libraries.ComicsReader.Plugin.ComicReaderPlugin());
 			DbStudioViewsManager.AddPlugin(new Libraries.EbooksReader.Plugin.EBookReaderPlugin());
 			DbStudioViewsManager.Initialize();

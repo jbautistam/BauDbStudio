@@ -48,19 +48,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Files
 		}
 
 		/// <summary>
-		///		Ejecuta el script XML
-		/// </summary>
-		internal async Task ExecuteXmlScriptAsync(string contextFileName, System.Threading.CancellationToken cancellationToken)
-		{
-			ScriptsManager.JobXmlProjectManager manager = new ScriptsManager.JobXmlProjectManager(SolutionViewModel.Manager.Logger);
-
-				// Ejecuta el script XML
-				await manager.ExecuteAsync(FileName, contextFileName, cancellationToken);
-				// Libera el log
-				SolutionViewModel.Manager.Logger.Flush();
-		}
-
-		/// <summary>
 		///		Obtiene la cadena asociada a un archivo cuando se arrastra un nodo sobre el editor de texto
 		/// </summary>
 		public override string TreatTextDropped(string content, bool shiftPressed)

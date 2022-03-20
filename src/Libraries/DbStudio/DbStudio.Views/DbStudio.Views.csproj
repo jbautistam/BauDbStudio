@@ -50,7 +50,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\Controls\WPF\BauCharts\BauCharts.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Controls\WPF\BauCharts\src\BauCharts\BauCharts.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Controls\WPF\BauControls\src\BauControls.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Controls\WPF\CodeEditor\src\CodeEditor.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.Views.Wpf\BauMvvm.Views.Wpf.csproj" />
@@ -123,10 +123,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="EtlProjects\CreateValidationScriptView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="EtlProjects\ExecuteEtlConsoleView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>

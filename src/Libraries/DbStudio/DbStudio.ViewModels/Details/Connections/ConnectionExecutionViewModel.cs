@@ -31,12 +31,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Connections
 			ScriptSql,
 			/// <summary>Script de SQL extendido (interpretado)</summary>
 			ScriptSqlExtended,
-			/// <summary>Xml de procesos</summary>
-			JobsXml,
 			/// <summary>Lote de scripts SQL</summary>
-			BatchSql,
-			/// <summary>Lote de scripts ETL</summary>
-			BatchEtl
+			BatchSql
 		}
 
 		// Variables privadas
@@ -195,12 +191,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Connections
 						case ExecutionMode.ScriptSqlExtended:
 								await PrepareExecuteScriptSqlAsync(selectedViewModel);
 							break;
-						case ExecutionMode.JobsXml:
-								await PrepareExecuteScriptXmlAsync(selectedViewModel);
-							break;
-						case ExecutionMode.BatchEtl:
-								await PrepareExecuteBatchXmlAsync(selectedViewModel);
-							break;
 					}
 			}
 		}
@@ -304,12 +294,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Connections
 						return ExecutionMode.ScriptSqlExtended;
 					else if (fileViewModel.FileName.EndsWith(".sql", StringComparison.CurrentCultureIgnoreCase))
 						return ExecutionMode.ScriptSql;
-					else if (fileViewModel.FileName.EndsWith(".xml", StringComparison.CurrentCultureIgnoreCase))
-						return ExecutionMode.JobsXml;
 					else
 						return ExecutionMode.Unknown;
-				case ExecuteEtlConsoleViewModel _:
-					return ExecutionMode.BatchEtl;
 				case ExecuteFilesViewModel _:
 					return ExecutionMode.BatchSql;
 				default:
@@ -358,85 +344,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Connections
 				}
 		}
 
-		/// <summary>
-		///		Prepara la ejecución de un script XML
-		/// </summary>
-		private async Task PrepareExecuteScriptXmlAsync(IDetailViewModel viewModel)
-		{
-			if (viewModel is Files.ScriptFileViewModel fileViewModel)
-			{
-				if (!fileViewModel.FileName.EndsWith(".xml"))
-					SolutionViewModel.MainController.SystemController.ShowMessage("No se pueden ejecutar scripts de este tipo de archivo");
-				else if (fileViewModel.IsUpdated)
-					SolutionViewModel.MainController.SystemController.ShowMessage("Grabe el contenido del archivo antes de ejecutar");
-				else if (string.IsNullOrWhiteSpace(fileViewModel.Content))
-					SolutionViewModel.MainController.SystemController.ShowMessage("El archivo está vacío");
-				else if (string.IsNullOrWhiteSpace(EtlParametersFileName) || !System.IO.File.Exists(EtlParametersFileName))
-					SolutionViewModel.MainController.SystemController.ShowMessage("Seleccione un archivo de contexto");
-				else
-				{
-					// Arranca la ejecución
-					StartExecution();
-					// Ejecuta la tarea
-					try
-					{
-						// Ejecuta el script XML
-						await fileViewModel.ExecuteXmlScriptAsync(EtlParametersFileName, _cancellationToken);
-						// Muestra el mensaje al usuario
-						SolutionViewModel.MainController.MainWindowController
-								.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
-													"Ejecución de script XML",
-													"Ha terminado correctamente la ejecución del script");
-					}
-					catch (Exception exception)
-					{
-						SolutionViewModel.MainController.Logger.Default.LogItems.Error($"Error al ejecutar la consulta. {exception.Message}");
-					}
-					// Indica que ha finalizado la tarea y detiene el temporizador
-					StopExecuting();
-				}
-			}
-		}
-
-		/// <summary>
-		///		Prepara la ejecución de un script XML
-		/// </summary>
-		private async Task PrepareExecuteBatchXmlAsync(IDetailViewModel viewModel)
-		{
-			if (viewModel is ExecuteEtlConsoleViewModel etlViewModel)
-			{
-				if (string.IsNullOrWhiteSpace(etlViewModel.ProjectFileName))
-					SolutionViewModel.MainController.SystemController.ShowMessage("Seleccione el archivo de proyecto");
-				else if (!etlViewModel.ProjectFileName.EndsWith(".xml"))
-					SolutionViewModel.MainController.SystemController.ShowMessage("No se reconoce el formato del archivo de proyecto");
-				else if (string.IsNullOrWhiteSpace(etlViewModel.ContextFileName))
-					SolutionViewModel.MainController.SystemController.ShowMessage("Seleccione el archivo de contexto");
-				else if (!etlViewModel.ContextFileName.EndsWith(".xml"))
-					SolutionViewModel.MainController.SystemController.ShowMessage("No se reconoce el formato del archivo de contexto");
-				else
-				{
-					// Arranca la ejecución
-					StartExecution();
-					// Ejecuta la tarea
-					try
-					{
-						// Ejecuta el script XML
-						await etlViewModel.ExecuteXmlScriptAsync(_cancellationToken);
-						// Muestra el mensaje al usuario
-						SolutionViewModel.MainController.MainWindowController
-								.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
-													"Ejecución de script XML",
-													"Ha terminado correctamente la ejecución del script");
-					}
-					catch (Exception exception)
-					{
-						SolutionViewModel.MainController.Logger.Default.LogItems.Error($"Error al ejecutar la consulta. {exception.Message}");
-					}
-					// Indica que ha finalizado la tarea y detiene el temporizador
-					StopExecuting();
-				}
-			}
-		}
 		/// <summary>
 		///		Ejecuta el script
 		/// </summary>
@@ -560,19 +467,13 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Connections
 		{
 			if (parameter != null && parameter is string fileName && !string.IsNullOrWhiteSpace(fileName))
 			{
-				// Si el archivo seleccionado es XML, lo ejecuta sobre una consola, si no se ejecutan los SQL del directorio / archivo
-				if (fileName.EndsWith(".xml", StringComparison.CurrentCultureIgnoreCase))
-					SolutionViewModel.MainController.OpenWindow(new ExecuteEtlConsoleViewModel(SolutionViewModel, fileName));
-				else
-				{
-					List<string> files = GetFilesFromPath(fileName, ".sql");
+				List<string> files = GetFilesFromPath(fileName, ".sql");
 
-						// Ejecuta los archivos (si ha encontrado alguno)
-						if (files.Count == 0)
-							SolutionViewModel.MainController.SystemController.ShowMessage("No se encuentra ningún archivo SQL para ejecutar");
-						else
-							SolutionViewModel.MainController.OpenWindow(new ExecuteFilesViewModel(SolutionViewModel, files));
-				}
+					// Ejecuta los archivos (si ha encontrado alguno)
+					if (files.Count == 0)
+						SolutionViewModel.MainController.SystemController.ShowMessage("No se encuentra ningún archivo SQL para ejecutar");
+					else
+						SolutionViewModel.MainController.OpenWindow(new ExecuteFilesViewModel(SolutionViewModel, files));
 			}
 		}
 

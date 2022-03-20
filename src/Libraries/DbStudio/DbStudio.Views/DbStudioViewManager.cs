@@ -165,7 +165,6 @@ namespace Bau.Libraries.DbStudio.Views
 								.WithOption()
 									.WithFolder()
 									.WithExtension("sql")
-									.WithExtension("xml")
 									.WithMenu(new MenuModel
 														{
 															Header = "Ejecutar",

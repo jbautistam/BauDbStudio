@@ -14,20 +14,24 @@
   <ItemGroup>
     <Compile Remove="Configuration\**" />
     <Compile Remove="Controllers\EventArguments\**" />
+    <Compile Remove="Details\Files\ScriptsManager\**" />
     <Compile Remove="Explorers\Files\**" />
     <Compile Remove="Explorers\Files\**" />
     <EmbeddedResource Remove="Configuration\**" />
     <EmbeddedResource Remove="Controllers\EventArguments\**" />
+    <EmbeddedResource Remove="Details\Files\ScriptsManager\**" />
     <EmbeddedResource Remove="Explorers\Files\**" />
     <EmbeddedResource Remove="Explorers\Files\**" />
     <None Remove="Configuration\**" />
     <None Remove="Controllers\EventArguments\**" />
+    <None Remove="Details\Files\ScriptsManager\**" />
     <None Remove="Explorers\Files\**" />
     <None Remove="Explorers\Files\**" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Remove="Details\Connections\ConnectionParametersExecutionViewModel.cs" />
+    <Compile Remove="Details\EtlProjects\ExecuteEtlConsoleViewModel.cs" />
     <Compile Remove="Details\Reporting\Reports\ListReportDataSourceViewModel.cs" />
     <Compile Remove="Explorers\Connections\NodeSchemaViewModel.cs" />
     <Compile Remove="Explorers\Connections\TreeDetailsNodeViewModel.cs" />
@@ -35,18 +39,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\Controls\WPF\BauCharts\src\LibCharts\LibCharts.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.ViewModels\BauMvvm.ViewModels.csproj" />
-    <ProjectReference Include="..\..\..\..\..\..\Libraries\Charts\LibCharts\LibCharts.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Cloud\LibCloudStorage\src\LibCloudStorage\LibCloudStorage.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibLogger\src\LibLogger.Core\LibLogger.Core.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibSystem.Windows\LibSystem.Windows.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Formats\LibExcelFiles\src\LibExcelFiles.csproj" />
     <ProjectReference Include="..\..\DbReporting\LibReporting.Solution\LibReporting.Solution.csproj" />
-    <ProjectReference Include="..\..\JobEtlProcessor\LibJobProcessor.Cloud\LibJobProcessor.Cloud.csproj" />
-    <ProjectReference Include="..\..\JobEtlProcessor\LibJobProcessor.Database\LibJobProcessor.Database.csproj" />
-    <ProjectReference Include="..\..\JobEtlProcessor\LibJobProcessor.FilesShell\LibJobProcessor.FilesShell.csproj" />
-    <ProjectReference Include="..\..\JobEtlProcessor\LibJobProcessor.Manager\LibJobProcessor.Manager.csproj" />
-    <ProjectReference Include="..\..\JobEtlProcessor\LibJobProcessor.Rest\LibJobProcessor.Rest.csproj" />
     <ProjectReference Include="..\..\PluginsStudio\PluginsStudio.ViewModels.Base\PluginsStudio.ViewModels.Base.csproj" />
     <ProjectReference Include="..\DbStudio.Application\DbStudio.Application.csproj" />
     <ProjectReference Include="..\DbStudio.Models\DbStudio.Models.csproj" />
