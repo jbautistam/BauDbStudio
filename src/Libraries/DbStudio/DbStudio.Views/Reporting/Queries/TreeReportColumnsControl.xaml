@@ -10,6 +10,7 @@
 	<UserControl.Resources>
 		<ConverterLocal:TreeIconConverter x:Key="TreeIconConverter"/>
 		<ConverterLocal:SortIconConverter x:Key="SortIconConverter"/>
+		<ConverterLocal:FilterIconConverter x:Key="FilterIconConverter"/>
 	</UserControl.Resources>
 	<Grid>
 		<TreeView x:Name="trvExplorer" BorderThickness="0"
@@ -33,7 +34,7 @@
 									Visibility="{Binding Path=CanFilterWhere,Converter={StaticResource BoolToVisibilityConverter}}"
 									Command="{Binding Path=FilterWhereCommand}">
 								<Button.Content>
-									<Image Width="20" Height="20" Margin="3,0" Source="/DbStudio.Views;component/Resources/Images/Filter.png"/>
+									<Image Width="20" Height="20" Margin="3,0" Source="{Binding Path=HasFiltersColumn,Converter={StaticResource FilterIconConverter}}"/>
 								</Button.Content>
 							</Button>
 							<Button BorderBrush="Transparent" Background="Transparent"
@@ -51,7 +52,7 @@
 									Visibility="{Binding Path=CanFilterHaving,Converter={StaticResource BoolToVisibilityConverter}}"
 									Command="{Binding Path=FilterHavingCommand}">
 								<Button.Content>
-									<Image Width="20" Height="20" Margin="3,0" Source="/DbStudio.Views;component/Resources/Images/Filter.png"/>
+									<Image Width="20" Height="20" Margin="3,0" Source="{Binding Path=HasFiltersHaving,Converter={StaticResource FilterIconConverter}}"/>
 								</Button.Content>
 							</Button>
 						</StackPanel>

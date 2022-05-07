@@ -83,7 +83,7 @@ namespace Bau.Libraries.LibReporting.Solution
 		}
 
 		/// <summary>
-		///		Carga los <see cref="Models.DataWarehouses.DataWarehouseModel"/> de un archivo
+		///		Carga los <see cref="DataWarehouseModel"/> de un archivo
 		/// </summary>
 		public void LoadDataWarehouse(string fileName)
 		{
@@ -95,7 +95,7 @@ namespace Bau.Libraries.LibReporting.Solution
 		}
 
 		/// <summary>
-		///		Carga un <see cref="Models.DataWarehouses.DataWarehouseModel"/> a partir de un archivo de esquema de base de datos
+		///		Carga un <see cref="DataWarehouseModel"/> a partir de un archivo de esquema de base de datos
 		/// </summary>
 		public DataWarehouseModel ConvertSchemaDbToDataWarehouse(string name, string fileName)
 		{

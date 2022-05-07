@@ -32,7 +32,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 			ExpressionColumn
 		}
 		// Variables privadas
-		private bool _canSelect, _canSort, _canFilterWhere, _canAggregate, _canFilterHaving;
+		private bool _canSelect, _canSort, _canFilterWhere, _canAggregate, _canFilterHaving, _hasFiltersColumn, _hasFiltersHaving;
 		private BaseColumnRequestModel.SortOrder _sortOrder;
 		private ComboViewModel _comboAggregationTypes;
 		private ListReportColumnFilterViewModel _filterWhere, _filterHaving;
@@ -143,7 +143,18 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 		private void UpdateFilter(bool whereClause)
 		{
 			if (TreeViewModel is TreeQueryReportViewModel tree)
-				tree.ReportViewModel.ReportingSolutionViewModel.SolutionViewModel.MainController.OpenDialog(GetFilter(whereClause));
+			{
+				bool hasFilters = false;
+
+					// Abre el cuadro de diálogo que muestra los filtros posibles
+					tree.ReportViewModel.ReportingSolutionViewModel.SolutionViewModel.MainController.OpenDialog(GetFilter(whereClause));
+					// Cambia el valor que indica si tenemos filtros
+					hasFilters = GetFilter(whereClause).FiltersViewModel.Count > 0;
+					if (whereClause)
+						HasFiltersColumn = hasFilters;
+					else
+						HasFiltersHaving = hasFilters;
+			}
 		}
 
 		/// <summary>
@@ -246,6 +257,24 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 		{
 			get { return _sortOrder; }
 			set { CheckProperty(ref _sortOrder, value); }
+		}
+
+		/// <summary>
+		///		Indica si tiene un filtro sobre la columna
+		/// </summary>
+		public bool HasFiltersColumn
+		{
+			get { return _hasFiltersColumn; }
+			set { CheckProperty(ref _hasFiltersColumn, value); }
+		}
+
+		/// <summary>
+		///		Indica si tiene un filtro sobre el Having
+		/// </summary>
+		public bool HasFiltersHaving
+		{
+			get { return _hasFiltersHaving; }
+			set { CheckProperty(ref _hasFiltersHaving, value); }
 		}
 
 		/// <summary>
