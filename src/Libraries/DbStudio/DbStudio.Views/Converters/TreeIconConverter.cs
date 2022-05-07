@@ -33,8 +33,6 @@ namespace Bau.Libraries.DbStudio.Views.Converters
 					return "/DbStudio.Views;component/Resources/Images/Connection.png";
 				case TreeConnectionsViewModel.IconType.Schema:
 					return "/DbStudio.Views;component/Resources/Images/Schema.png";
-				case TreeConnectionsViewModel.IconType.Deployment:
-					return "/DbStudio.Views;component/Resources/Images/Deployment.png";
 				case TreeConnectionsViewModel.IconType.Storage:
 					return "/DbStudio.Views;component/Resources/Images/Storage.png";
 				case TreeConnectionsViewModel.IconType.Project:

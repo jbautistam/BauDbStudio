@@ -168,7 +168,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers
 		/// <summary>
 		///		Nodo seleccionado
 		/// </summary>
-		public BaseTreeNodeViewModel SelectedNode
+		public virtual BaseTreeNodeViewModel SelectedNode
 		{	
 			get { return _selectedNode; }
 			set { CheckObject(ref _selectedNode, value); }

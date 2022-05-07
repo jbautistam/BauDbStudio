@@ -19,7 +19,6 @@ namespace Bau.Libraries.DbStudio.ViewModels
 		// Variables privadas
 		private string _text;
 		private Explorers.Connections.TreeConnectionsViewModel _treeConnectionsViewModel;
-		private Explorers.Cloud.TreeStorageViewModel _treeStoragesViewModel;
 		private Details.Connections.ConnectionExecutionViewModel _connectionsViewModel;
 
 		public DbStudioViewModel(string appName, Controllers.IDbStudioController mainController)
@@ -34,7 +33,6 @@ namespace Bau.Libraries.DbStudio.ViewModels
 			ReportingSolutionViewModel = new Details.Reporting.ReportingSolutionViewModel(this);
 			// Asigna los árboles de exploración
 			TreeConnectionsViewModel = new Explorers.Connections.TreeConnectionsViewModel(this);
-			TreeStoragesViewModel = new Explorers.Cloud.TreeStorageViewModel(this);
 			ConnectionExecutionViewModel = new Details.Connections.ConnectionExecutionViewModel(this);
 			// Asigna los comandos
 			CreateTestXmlCommand = new BaseCommand(async _ => await CreateTestXmlAsync());
@@ -57,7 +55,6 @@ namespace Bau.Libraries.DbStudio.ViewModels
 			// Carga los exploradores
 			TreeConnectionsViewModel.Load();
 			ConnectionExecutionViewModel.Load();
-			TreeStoragesViewModel.Load();
 			// Carga la solución de informes
 			if (!string.IsNullOrWhiteSpace(Solution.FileName))
 				ReportingSolutionViewModel.Load(GetSolutionFileName(path, "Reporting"));
@@ -365,14 +362,15 @@ namespace Bau.Libraries.DbStudio.ViewModels
 		/// </summary>
 		private IDetailViewModel GetFileViewModel(string fileName)
 		{
-			if (fileName.EndsWith(".parquet", StringComparison.CurrentCultureIgnoreCase))
-				return new Details.Files.Structured.ParquetFileViewModel(this, fileName);
-			else if (fileName.EndsWith(".csv", StringComparison.CurrentCultureIgnoreCase))
-				return new Details.Files.Structured.CsvFileViewModel(this, fileName);
-			else if (fileName.EndsWith(".xlsx", StringComparison.CurrentCultureIgnoreCase) ||
-						fileName.EndsWith(".xls", StringComparison.CurrentCultureIgnoreCase))
-				return new Details.Files.Structured.ExcelFileViewModel(this, fileName);
-			else if (fileName.EndsWith(".sql", StringComparison.CurrentCultureIgnoreCase) ||
+			//if (fileName.EndsWith(".parquet", StringComparison.CurrentCultureIgnoreCase))
+			//	return new Details.Files.Structured.ParquetFileViewModel(this, fileName);
+			//else if (fileName.EndsWith(".csv", StringComparison.CurrentCultureIgnoreCase))
+			//	return new Details.Files.Structured.CsvFileViewModel(this, fileName);
+			//else if (fileName.EndsWith(".xlsx", StringComparison.CurrentCultureIgnoreCase) ||
+			//			fileName.EndsWith(".xls", StringComparison.CurrentCultureIgnoreCase))
+			//	return new Details.Files.Structured.ExcelFileViewModel(this, fileName);
+			//else 
+			if (fileName.EndsWith(".sql", StringComparison.CurrentCultureIgnoreCase) ||
 						fileName.EndsWith(".sqlx", StringComparison.CurrentCultureIgnoreCase) ||
 						fileName.EndsWith(".xml", StringComparison.CurrentCultureIgnoreCase))
 				return new Details.Files.ScriptFileViewModel(this, fileName);
@@ -421,15 +419,6 @@ namespace Bau.Libraries.DbStudio.ViewModels
 		{
 			get { return _treeConnectionsViewModel; }
 			set { CheckObject(ref _treeConnectionsViewModel, value); }
-		}
-
-		/// <summary>
-		///		ViewModel del árbol de storage
-		/// </summary>
-		public Explorers.Cloud.TreeStorageViewModel TreeStoragesViewModel
-		{
-			get { return _treeStoragesViewModel; }
-			set { CheckObject(ref _treeStoragesViewModel, value); }
 		}
 
 		/// <summary>

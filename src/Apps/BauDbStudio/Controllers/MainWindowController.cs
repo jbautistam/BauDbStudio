@@ -29,6 +29,14 @@ namespace Bau.DbStudio.Controllers
 		}
 
 		/// <summary>
+		///		Abre el browser predeterminado sobre una URL
+		/// </summary>
+		public void OpenWindowsWebBrowser(Uri uri)
+		{
+			Libraries.LibSystem.Files.WindowsFiles.OpenBrowser(uri.ToString());
+		}
+
+		/// <summary>
 		///		Obtiene el viewModel activo de detalles
 		/// </summary>
 		public IDetailViewModel GetActiveDetails()

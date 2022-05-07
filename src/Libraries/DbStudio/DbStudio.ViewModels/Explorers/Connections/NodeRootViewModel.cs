@@ -23,9 +23,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 				case TreeConnectionsViewModel.NodeType.SchemaRoot:
 						Icon = TreeConnectionsViewModel.IconType.Schema.ToString();
 					break;
-				case TreeConnectionsViewModel.NodeType.DeploymentRoot:
-						Icon = TreeConnectionsViewModel.IconType.Deployment.ToString();
-					break;
 			}
 			PropertyChanged += (sender, args) => {
 													if (args.PropertyName.Equals(nameof(IsChecked), StringComparison.CurrentCultureIgnoreCase))
@@ -43,9 +40,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 				case TreeConnectionsViewModel.NodeType.ConnectionRoot:
 						LoadConnectionNodes();
 					break;
-				case TreeConnectionsViewModel.NodeType.DeploymentRoot:
-						LoadDeploymentNodes();
-					break;
 			}
 		}
 
@@ -59,18 +53,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 			// Añade los nodos
 			foreach (Models.Connections.ConnectionModel connection in (TreeViewModel as TreeSolutionBaseViewModel).SolutionViewModel.Solution.Connections)
 				Children.Add(new NodeConnectionViewModel((TreeViewModel as TreeSolutionBaseViewModel), this, connection));
-		}
-
-		/// <summary>
-		///		Carga los nodos de distribución
-		/// </summary>
-		private void LoadDeploymentNodes()
-		{
-			// Ordena las distribuciones
-			(TreeViewModel as TreeSolutionBaseViewModel).SolutionViewModel.Solution.Deployments.SortByName();
-			// Añade los nodos
-			foreach (Models.Deployments.DeploymentModel deployment in (TreeViewModel as TreeSolutionBaseViewModel).SolutionViewModel.Solution.Deployments)
-				Children.Add(new NodeDeploymentViewModel(TreeViewModel as TreeSolutionBaseViewModel, this, deployment));
 		}
 
 		/// <summary>

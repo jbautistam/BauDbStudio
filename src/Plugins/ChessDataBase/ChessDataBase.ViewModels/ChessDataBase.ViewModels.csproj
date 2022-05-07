@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+
+		<PropertyGroup>
+			<TargetFramework>net6.0</TargetFramework>
+		</PropertyGroup>
+
+
+		<ItemGroup>
+		  <ProjectReference Include="..\..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.ViewModels\BauMvvm.ViewModels.csproj" />
+		  <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibHelper\src\LibHelper.csproj" />
+		  <ProjectReference Include="..\..\..\Libraries\PluginsStudio\PluginsStudio.ViewModels\PluginsStudio.ViewModels.csproj" />
+		  <ProjectReference Include="..\LibChessGame.Models\LibChessGame.Models.csproj" />
+		  <ProjectReference Include="..\LibPgnConversor\LibPgn.Conversor.csproj" />
+		</ItemGroup>
+
+</Project>

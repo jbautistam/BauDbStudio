@@ -34,6 +34,9 @@
   <ItemGroup>
     <None Remove="Resources\BauDbStudio.ico" />
     <None Remove="Resources\Images\ArrowDown.png" />
+    <None Remove="Resources\Images\ArrowFirst.png" />
+    <None Remove="Resources\Images\ArrowLast.png" />
+    <None Remove="Resources\Images\ArrowLeft.png" />
     <None Remove="Resources\Images\ArrowRight.png" />
     <None Remove="Resources\Images\ArrowUp.png" />
     <None Remove="Resources\Images\CaseSensitive.png" />
@@ -41,20 +44,17 @@
     <None Remove="Resources\Images\Export.png" />
     <None Remove="Resources\Images\File.png" />
     <None Remove="Resources\Images\FileCsharp.png" />
-    <None Remove="Resources\Images\FileCsv.png" />
-    <None Remove="Resources\Images\FileExcel.png" />
     <None Remove="Resources\Images\FileImage.png" />
     <None Remove="Resources\Images\FileJson.png" />
     <None Remove="Resources\Images\FileMd.png" />
-    <None Remove="Resources\Images\FileParquet.png" />
     <None Remove="Resources\Images\FilePowershell.png" />
     <None Remove="Resources\Images\FilePython.png" />
     <None Remove="Resources\Images\FileSql.png" />
-    <None Remove="Resources\Images\FileSqlExtended.png" />
     <None Remove="Resources\Images\FileXml.png" />
     <None Remove="Resources\Images\Filter.png" />
     <None Remove="Resources\Images\FolderNode.png" />
     <None Remove="Resources\Images\Loading.png" />
+    <None Remove="Resources\Images\Refresh.png" />
     <None Remove="Resources\Images\Search.png" />
     <None Remove="Resources\Images\SeeWindow.png" />
     <None Remove="Resources\Images\SplashScreenImage.png" />
@@ -75,6 +75,12 @@
     <Page Remove="Views\Tools\FindView.xaml" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="App.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\ArrowFirst.png" />
+    <Resource Include="Resources\Images\ArrowLast.png" />
+    <Resource Include="Resources\Images\ArrowLeft.png" />
     <Resource Include="Resources\Images\CaseSensitive.png" />
   </ItemGroup>
   <ItemGroup>
@@ -82,16 +88,19 @@
     <ProjectReference Include="..\..\..\..\..\Controls\WPF\CodeEditor\src\CodeEditor.csproj" />
     <ProjectReference Include="..\..\..\..\..\Controls\WPF\DockLayout\src\DockLayout.csproj" />
     <ProjectReference Include="..\..\..\..\..\Controls\WPF\ZoomAndPanControl\ZoomAndPanControls.csproj" />
-    <ProjectReference Include="..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.ViewModels\BauMvvm.ViewModels.csproj" />
     <ProjectReference Include="..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.Views.Wpf\BauMvvm.Views.Wpf.csproj" />
     <ProjectReference Include="..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.Views\BauMvvm.Views.csproj" />
     <ProjectReference Include="..\..\..\..\..\Libraries\Common\LibSystem.Windows\LibSystem.Windows.csproj" />
     <ProjectReference Include="..\..\Libraries\DbStudio\DbStudio.Views\DbStudio.Views.csproj" />
     <ProjectReference Include="..\..\Libraries\PluginsStudio\PluginsStudio.ViewModels\PluginsStudio.ViewModels.csproj" />
-    <ProjectReference Include="..\..\Libraries\Plugins\BlogReader\BlogReader.Views\BlogReader.Views.csproj" />
-    <ProjectReference Include="..\..\Libraries\Plugins\ComicsReader\ComicsReader.Plugin\ComicsReader.Plugin.csproj" />
-    <ProjectReference Include="..\..\Libraries\Plugins\EbooksReader\EbooksReader.Plugin\EbooksReader.Plugin.csproj" />
-    <ProjectReference Include="..\..\Libraries\Plugins\JobsProcessor\JobsProcessor.Plugin\JobsProcessor.Plugin.csproj" />
+    <ProjectReference Include="..\..\Plugins\BlogReader\BlogReader.Views\BlogReader.Views.csproj" />
+    <ProjectReference Include="..\..\Plugins\ChessDataBase\ChessDataBase.Plugin\ChessDataBase.Plugin.csproj" />
+    <ProjectReference Include="..\..\Plugins\CloudStudio\CloudStudio.Plugin\CloudStudio.Plugin.csproj" />
+    <ProjectReference Include="..\..\Plugins\ComicsReader\ComicsReader.Plugin\ComicsReader.Plugin.csproj" />
+    <ProjectReference Include="..\..\Plugins\EbooksReader\EbooksReader.Plugin\EbooksReader.Plugin.csproj" />
+    <ProjectReference Include="..\..\Plugins\JobsProcessor\JobsProcessor.Plugin\JobsProcessor.Plugin.csproj" />
+    <ProjectReference Include="..\..\Plugins\PasswordManager\PasswordManager.Plugin\PasswordManager.Plugin.csproj" />
+    <ProjectReference Include="..\..\Plugins\StructuredFilesStudio\StructuredFilesStudio.Views\StructuredFilesStudio.Views.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\BauDbStudio.ico" />
@@ -100,20 +109,17 @@
     <Resource Include="Resources\Images\ArrowUp.png" />
     <Resource Include="Resources\Images\DataError.png" />
     <Resource Include="Resources\Images\Export.png" />
-    <Resource Include="Resources\Images\FileExcel.png" />
     <Resource Include="Resources\Images\FileImage.png" />
     <Resource Include="Resources\Images\FileMd.png" />
-    <Resource Include="Resources\Images\FileSqlExtended.png" />
     <Resource Include="Resources\Images\Filter.png" />
     <Resource Include="Resources\Images\Loading.png" />
+    <Resource Include="Resources\Images\Refresh.png" />
     <Resource Include="Resources\Images\SeeWindow.png" />
     <Resource Include="Resources\Images\Upload.png" />
     <Resource Include="Resources\Images\Download.png" />
     <Resource Include="Resources\Images\File.png" />
     <Resource Include="Resources\Images\FileCsharp.png" />
-    <Resource Include="Resources\Images\FileCsv.png" />
     <Resource Include="Resources\Images\FileJson.png" />
-    <Resource Include="Resources\Images\FileParquet.png" />
     <Resource Include="Resources\Images\FilePowershell.png" />
     <Resource Include="Resources\Images\FilePython.png" />
     <Resource Include="Resources\Images\FileSql.png" />

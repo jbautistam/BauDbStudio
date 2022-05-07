@@ -64,14 +64,6 @@ namespace Bau.Libraries.DbStudio.Views
 						 );
 				panes.Add(new PaneModel
 								{
-									Id = "TreeStorageExplorer",
-									Title = "Storage",
-									Position = PaneModel.PositionType.Right,
-									View = new Explorers.TreeStoragesExplorer(MainViewModel.TreeStoragesViewModel)
-								}
-						 );
-				panes.Add(new PaneModel
-								{
 									Id = "TreeReportingExplorer",
 									Title = "Reporting",
 									Position = PaneModel.PositionType.Left,
@@ -126,8 +118,6 @@ namespace Bau.Libraries.DbStudio.Views
 				{
 					case MenuListModel.SectionType.NewItem:
 							menuList.Add("_Conexión", MainViewModel.TreeConnectionsViewModel.NewConnectionCommand, GetIcon("Connection.png"));
-							menuList.Add("_Distribución", MainViewModel.TreeConnectionsViewModel.NewDeploymentCommand, GetIcon("Deployment.png"));
-							menuList.Add("_Storage", MainViewModel.TreeStoragesViewModel.NewStorageCommand, GetIcon("Search.png"));
 							menuList.AddSeparator();
 							menuList.Add("_Consulta", MainViewModel.TreeConnectionsViewModel.NewQueryCommand, GetIcon("Script.png"));
 							menuList.AddSeparator();
@@ -180,7 +170,29 @@ namespace Bau.Libraries.DbStudio.Views
 		/// </summary>
 		public List<PluginsStudio.ViewModels.Base.Models.FileAssignedModel> GetFilesAssigned()
 		{
-			return new();
+			List<PluginsStudio.ViewModels.Base.Models.FileAssignedModel> files = new List<FileAssignedModel>();
+
+				// Asigna las extensions
+				files.Add(new FileAssignedModel
+									{
+										FileExtension = ".sql",
+										Icon = GetIcon("FileSql.png")
+									}
+						 );
+				files.Add(new FileAssignedModel
+									{
+										FileExtension = ".sqlx",
+										Icon = GetIcon("FileSqlExtended.png")
+									}
+						 );
+				files.Add(new FileAssignedModel
+									{
+										FileExtension = ".xml",
+										Icon = GetIcon("FileXml.png")
+									}
+						 );
+				// Devuelve la lista de archivos asignados
+				return files;
 		}
 
 		/// <summary>

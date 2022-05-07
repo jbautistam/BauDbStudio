@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <RootNamespace>Bau.Libraries.LibPgn.Conversor</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LibChessGame.Models\LibChessGame.Models.csproj" />
+    <ProjectReference Include="..\LibPgnReader\LibPgnReader.csproj" />
+  </ItemGroup>
+
+</Project>

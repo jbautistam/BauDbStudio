@@ -16,6 +16,7 @@
 			<converter:BoolToFontWeightConverter x:Key="BoolToFontWeightConverter" />
 			<converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
 			<converter:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter" />
+			<converter:ObjectToVisibilityConverter x:Key="ObjectToVisibilityConverter" />
 			<converter:MVVMColorConverter x:Key="MVVMColorConverter" />
 			<!-- Conversores locales -->
 			<converterLocal:FileNameIconConverter x:Key="FileNameIconConverter" />

@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Files\**" />
+    <EmbeddedResource Remove="Files\**" />
+    <None Remove="Files\**" />
+    <Page Remove="Files\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Controllers\AppController.cs" />
   </ItemGroup>
 
@@ -17,13 +24,13 @@
     <None Remove="Resources\Images\Chart.png" />
     <None Remove="Resources\Images\Connection.png" />
     <None Remove="Resources\Images\DataError.png" />
-    <None Remove="Resources\Images\Deployment.png" />
     <None Remove="Resources\Images\Download.png" />
     <None Remove="Resources\Images\ExecutionPlan.png" />
     <None Remove="Resources\Images\Export.png" />
     <None Remove="Resources\Images\Field.png" />
     <None Remove="Resources\Images\File.png" />
     <None Remove="Resources\Images\FileSql.png" />
+    <None Remove="Resources\Images\FileSqlExtended.png" />
     <None Remove="Resources\Images\FileXml.png" />
     <None Remove="Resources\Images\Filter.png" />
     <None Remove="Resources\Images\FolderNode.png" />
@@ -65,13 +72,13 @@
     <Resource Include="Resources\Images\Chart.png" />
     <Resource Include="Resources\Images\Connection.png" />
     <Resource Include="Resources\Images\DataError.png" />
-    <Resource Include="Resources\Images\Deployment.png" />
     <Resource Include="Resources\Images\Download.png" />
     <Resource Include="Resources\Images\ExecutionPlan.png" />
     <Resource Include="Resources\Images\Export.png" />
     <Resource Include="Resources\Images\Field.png" />
     <Resource Include="Resources\Images\File.png" />
     <Resource Include="Resources\Images\FileSql.png" />
+    <Resource Include="Resources\Images\FileSqlExtended.png" />
     <Resource Include="Resources\Images\FileXml.png" />
     <Resource Include="Resources\Images\Filter.png" />
     <Resource Include="Resources\Images\FolderNode.png" />
@@ -98,16 +105,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Page Update="Cloud\StorageView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-    </Page>
     <Page Update="Connections\ConnectionView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
     <Page Update="Connections\ExecuteFilesView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-    </Page>
-    <Page Update="Deployments\DeploymentView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
     <Page Update="EtlProjects\CreateImportFilesScriptView.xaml">
@@ -132,19 +133,6 @@
     </Page>
     <Page Update="Explorers\TreeConnectionsExplorer.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-    </Page>
-    <Page Update="Explorers\TreeStoragesExplorer.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-    </Page>
-    <Page Update="Files\CsvFilePropertiesView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-    </Page>
-    <Page Update="Files\DataTableFileView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-    </Page>
-    <Page Update="Files\ParquetFilePropertiesView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
     </Page>
     <Page Update="Queries\ChartViewControl.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>

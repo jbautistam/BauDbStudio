@@ -26,10 +26,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 			SchemaRoot,
 			/// <summary>Tabla</summary>
 			Table,
-			/// <summary>Raíz de la distribución</summary>
-			DeploymentRoot,
-			/// <summary>Distribución</summary>
-			Deployment,
 			/// <summary>Raíz de archivos de proyecto</summary>
 			FilesRoot,
 			/// <summary>Archivo / directorio</summary>
@@ -62,7 +58,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 		{
 			Unknown,
 			Connection,
-			Deployment,
 			Project,
 			Path,
 			File,
@@ -83,11 +78,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 		{
 			NewConnectionCommand = new BaseCommand(_ => OpenConnection(null), _ => CanExecuteAction(nameof(NewConnectionCommand)))
 										.AddListener(this, nameof(SelectedNode));
-			NewDeploymentCommand = new BaseCommand(_ => OpenDeployment(null), _ => CanExecuteAction(nameof(NewDeploymentCommand)))
-										.AddListener(this, nameof(SelectedNode));
 			NewQueryCommand = new BaseCommand(parameter => OpenQuery(null));
-			ExecuteDeploymentCommand = new BaseCommand(_ => ExecuteDeployment(), _ => CanExecuteAction(nameof(ExecuteDeploymentCommand)))
-										.AddListener(this, nameof(SelectedNode));
 		}
 
 		/// <summary>
@@ -96,7 +87,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 		protected override void AddRootNodes()
 		{
 			Children.Add(new NodeRootViewModel(this, null, NodeType.ConnectionRoot, "Conexiones"));
-			Children.Add(new NodeRootViewModel(this, null, NodeType.DeploymentRoot, "Distribución"));
 		}
 
 		/// <summary>
@@ -109,16 +99,12 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 				switch (action)
 				{
 					case nameof(NewConnectionCommand):
-					case nameof(NewDeploymentCommand):
 						return true;
 					case nameof(OpenCommand):
 						return nodeType == NodeType.Connection || 
-							   nodeType == NodeType.Deployment ||  
 							   nodeType == NodeType.Table;
-					case nameof(ExecuteDeploymentCommand):
-						return nodeType == NodeType.Deployment;
 					case nameof(DeleteCommand):
-						return nodeType == NodeType.Connection || nodeType == NodeType.Deployment;
+						return nodeType == NodeType.Connection;
 					default:
 						return false;
 				}
@@ -134,9 +120,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 				case NodeType.Connection:
 						OpenConnection((SelectedNode as NodeConnectionViewModel)?.Tag as ConnectionModel);
 					break;
-				case NodeType.Deployment:
-						OpenDeployment((SelectedNode as NodeDeploymentViewModel)?.Tag as Models.Deployments.DeploymentModel);
-					break;
 				case NodeType.Table:
 						OpenQuery((SelectedNode as NodeTableViewModel)?.Tag as ConnectionTableModel);
 					break;
@@ -149,16 +132,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 		internal void OpenConnection(ConnectionModel connection)
 		{
 			if (SolutionViewModel.MainController.OpenDialog(new Details.Connections.ConnectionViewModel(SolutionViewModel, connection)) == 
-					BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
-				Load();
-		}
-
-		/// <summary>
-		///		Abre la ventana con los datos de una distribución
-		/// </summary>
-		private void OpenDeployment(Models.Deployments.DeploymentModel deployment)
-		{
-			if (SolutionViewModel.MainController.OpenDialog(new Details.Deployments.DeploymentViewModel(SolutionViewModel, deployment)) == 
 					BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 				Load();
 		}
@@ -269,43 +242,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 		}
 
 		/// <summary>
-		///		Exporta un directorio para Databricks
-		/// </summary>
-		private void ExecuteDeployment()
-		{
-			Models.Deployments.DeploymentModel deployment = (SelectedNode as NodeDeploymentViewModel)?.Tag as Models.Deployments.DeploymentModel;
-
-				if (deployment == null)
-					SolutionViewModel.MainController.SystemController.ShowMessage("Seleccione un nodeo de distribución");
-				else if (string.IsNullOrWhiteSpace(deployment.SourcePath))
-					SolutionViewModel.MainController.SystemController.ShowMessage("Seleccione una carpeta de origen");
-				else if (!System.IO.Directory.Exists(deployment.SourcePath))
-					SolutionViewModel.MainController.SystemController.ShowMessage("No se encuentra el directorio de origen");
-				else 
-				{
-					// Copia los archivos
-					try
-					{
-						// Ejecuta la exportación
-						SolutionViewModel.Manager.ExportToDataBricks(deployment);
-						// Mensaje
-						SolutionViewModel.MainController.MainWindowController
-								.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
-												  "Distribución", "Fin de la copia de archivos");
-					}
-					catch (Exception exception)
-					{
-						SolutionViewModel.Manager.Logger.Default.LogItems.Error($"Error al copiar los archivos: {exception.Message}");
-						SolutionViewModel.MainController.MainWindowController
-								.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Error,
-												  "Distribución", $"Error en la copia de archivos. {exception.Message}");
-					}
-					// Limpia el log
-					SolutionViewModel.Manager.Logger.Flush();
-				}
-		}
-
-		/// <summary>
 		///		Borra el elemento seleccionado
 		/// </summary>
 		protected override void DeleteItem()
@@ -314,9 +250,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 			{
 				case ConnectionModel item:
 						DeleteConnection(item);
-					break;
-				case Models.Deployments.DeploymentModel item:
-						DeleteDeployment(item);
 					break;
 			}
 		}
@@ -340,22 +273,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 		}
 
 		/// <summary>
-		///		Borra un proceso de distribución
-		/// </summary>
-		private void DeleteDeployment(Models.Deployments.DeploymentModel deployment)
-		{
-			if (SolutionViewModel.MainController.SystemController.ShowQuestion($"¿Realmente desea borrar los datos de la distribución {deployment.Name}?"))
-			{
-				// Borra el objeto
-				SolutionViewModel.Solution.Deployments.Remove(deployment);
-				// Graba la solución
-				SolutionViewModel.SaveSolution();
-				// Actualiza el árbol
-				Load();
-			}
-		}
-
-		/// <summary>
 		///		Obtiene el enumerado del tipo de nodo seleccionado
 		/// </summary>
 		private NodeType GetSelectedNodeTypeConverted()
@@ -369,18 +286,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 		public BaseCommand NewConnectionCommand { get; }
 
 		/// <summary>
-		///		Comando de nueva distribución
-		/// </summary>
-		public BaseCommand NewDeploymentCommand { get; }
-
-		/// <summary>
 		///		Comando para crear una nueva consulta
 		/// </summary>
 		public BaseCommand NewQueryCommand { get; }
-
-		/// <summary>
-		///		Comando para exportar
-		/// </summary>
-		public BaseCommand ExecuteDeploymentCommand { get; }
 	}
 }

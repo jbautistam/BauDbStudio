@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>Bau.Libraries.LibBlogReader.Application</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Bussiness\Blogs\EntryBussiness.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Communications\LibFeeds\src\LibFeeds.csproj" />
+    <ProjectReference Include="..\LibBlogReader.Model\LibBlogReader.Model.csproj" />
+  </ItemGroup>
+
+</Project>

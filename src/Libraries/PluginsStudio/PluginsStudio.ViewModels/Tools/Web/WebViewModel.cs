@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+using Bau.Libraries.BauMvvm.ViewModels;
 
 namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.Web
 {
@@ -9,14 +11,19 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.Web
 	{
 		// Eventos públicos
 		public event EventHandler Closed;
+		public event EventHandler RefreshPage;
 		// Variables privadas
 		private string _header, _url;
 
 		public WebViewModel(PluginsStudioViewModel mainViewModel, string url) : base(false)
 		{
+			// Asigna las propiedades
 			Url = url;
 			Header = GetTitle(url);
 			MainViewModel = mainViewModel;
+			// Asigna los comandos
+			RefreshCommand = new BauMvvm.ViewModels.BaseCommand(_ => RefreshBrowser(), _ => CanUpdatePage());
+			OpenExplorerCommand = new BaseCommand(_ => OpenExplorer(), _ => CanUpdatePage());
 		}
 
 		/// <summary>
@@ -45,6 +52,36 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.Web
 			}
 			else
 				return url;
+		}
+
+		/// <summary>
+		///		Comprueba si se puede actualizar una página
+		/// </summary>
+		private bool CanUpdatePage() => !string.IsNullOrWhiteSpace(Url);
+
+		/// <summary>
+		///		Actualiza la página en el navegador
+		/// </summary>
+		private void RefreshBrowser()
+		{
+			RefreshPage?.Invoke(this, EventArgs.Empty);
+		}
+
+		/// <summary>
+		///		Abre otra ventana del navegador sobre una URL
+		/// </summary>
+		public void OpenBrowser(string url)
+		{
+			MainViewModel.PluginsStudioController.HostPluginsController.OpenWebBrowser(url);
+		}
+
+		/// <summary>
+		///		Abre el explorador externo
+		/// </summary>
+		private void OpenExplorer()
+		{
+			if (Uri.TryCreate(Url, UriKind.Absolute, out Uri url))
+				MainViewModel.PluginsStudioController.MainWindowController.OpenWindowsWebBrowser(url);
 		}
 
 		/// <summary>
@@ -82,7 +119,18 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.Web
 		public string Url
 		{
 			get { return _url; }
-			set { CheckProperty(ref _url, value); }
+			set 
+			{ 
+				if (CheckProperty(ref _url, value) && !string.IsNullOrWhiteSpace(value) &&
+						!value.Equals("about:blank", StringComparison.CurrentCultureIgnoreCase) &&
+						!IsLastUrl(value))
+					Urls.Add(value);
+
+				bool IsLastUrl(string url)
+				{
+					return Urls.Count > 0 && Urls[Urls.Count - 1].Equals(url, StringComparison.CurrentCultureIgnoreCase);
+				}
+			}
 		}
 
 		/// <summary>
@@ -101,5 +149,20 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.Web
 		{ 
 			get { return GetType().ToString() + "_" + Guid.NewGuid().ToString(); }
 		}
+
+		/// <summary>
+		///		Urls en la lista
+		/// </summary>
+		public ObservableCollection<string> Urls { get; } = new();
+
+		/// <summary>
+		///		Comando para actualizar
+		/// </summary>
+		public BaseCommand RefreshCommand { get; }
+
+		/// <summary>
+		///		Comando para abrir el explorador
+		/// </summary>
+		public BaseCommand OpenExplorerCommand { get; }
 	}
 }

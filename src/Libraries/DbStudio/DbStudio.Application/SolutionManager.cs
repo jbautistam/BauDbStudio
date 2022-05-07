@@ -102,14 +102,6 @@ namespace Bau.Libraries.DbStudio.Application
 		}
 
 		/// <summary>
-		///		Exporta un directorio de archivos al formato de notebooks de Databricks
-		/// </summary>
-		public void ExportToDataBricks(Models.Deployments.DeploymentModel deployment)
-		{
-			new Controllers.Databricks.DatabrickExporterController(this).Export(deployment);
-		}
-
-		/// <summary>
 		///		Manager de log
 		/// </summary>
 		public LogManager Logger { get; }

@@ -41,21 +41,10 @@ namespace Bau.DbStudio.Converters
 
 							if (!string.IsNullOrWhiteSpace(pluginIcon))
 								icon = pluginIcon;
-							else if (fileName.EndsWith(".parquet", StringComparison.CurrentCultureIgnoreCase))
-								icon = "/Resources/Images/FileParquet.png";
-							else if (fileName.EndsWith(".csv", StringComparison.CurrentCultureIgnoreCase))
-								icon = "/Resources/Images/FileCsv.png";
-							else if (fileName.EndsWith(".sqlx", StringComparison.CurrentCultureIgnoreCase))
-								icon = "/Resources/Images/FileSqlExtended.png";
-							else if (fileName.EndsWith(".sql", StringComparison.CurrentCultureIgnoreCase))
-								icon = "/Resources/Images/FileSql.png";
 							else if (fileName.EndsWith(".json", StringComparison.CurrentCultureIgnoreCase))
 								icon = "/Resources/Images/FileJson.png";
 							else if (fileName.EndsWith(".xml", StringComparison.CurrentCultureIgnoreCase))
 								icon = "/Resources/Images/FileXml.png";
-							else if (fileName.EndsWith(".xlsx", StringComparison.CurrentCultureIgnoreCase) ||
-									 fileName.EndsWith(".xls", StringComparison.CurrentCultureIgnoreCase))
-								icon = "/Resources/Images/FileExcel.png";
 							else if (fileName.EndsWith(".py", StringComparison.CurrentCultureIgnoreCase))
 								icon = "/Resources/Images/FilePython.png";
 							else if (fileName.EndsWith(".ps", StringComparison.CurrentCultureIgnoreCase) ||

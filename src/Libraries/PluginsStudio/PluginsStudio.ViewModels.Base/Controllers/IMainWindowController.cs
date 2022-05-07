@@ -16,6 +16,11 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Controllers
 		void OpenExplorer(string path);
 
 		/// <summary>
+		///		Abre el browser predeterminado sobre una URL
+		/// </summary>
+		void OpenWindowsWebBrowser(Uri uri);
+
+		/// <summary>
 		///		Obtiene la ventana de detalles activa
 		/// </summary>
 		Interfaces.IDetailViewModel GetActiveDetails();

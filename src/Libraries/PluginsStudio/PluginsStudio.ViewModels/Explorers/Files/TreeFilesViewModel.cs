@@ -19,42 +19,10 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 		{
 			/// <summary>Desconocido. No se debería utilizar</summary>
 			Unknown,
-			///// <summary>Raíz de la conexión</summary>
-			//ConnectionRoot,
-			///// <summary>Conexión</summary>
-			//Connection,
-			///// <summary>Esquema de una conexión</summary>
-			//SchemaRoot,
-			///// <summary>Tabla</summary>
-			//Table,
-			///// <summary>Raíz de la distribución</summary>
-			//DeploymentRoot,
-			///// <summary>Distribución</summary>
-			//Deployment,
 			/// <summary>Raíz de archivos de proyecto</summary>
 			FilesRoot,
 			/// <summary>Archivo / directorio</summary>
-			File,
-			///// <summary>Conexión a storage</summary>
-			//Storage,
-			///// <summary>Contenedor de storage</summary>
-			//StorageContainer,
-			///// <summary>Mensaje (transitorio)</summary>
-			//Message,
-			///// <summary>Almacén de datos</summary>
-			//DataWarehouse,
-			///// <summary>Raíz de origen de datos</summary>
-			//DataSourcesRoot,
-			///// <summary>Origen de datos</summary>
-			//DataSource,
-			///// <summary>Raíz de dimensiones</summary>
-			//DimensionsRoot,
-			///// <summary>Dimensión</summary>
-			//Dimension,
-			///// <summary>Raíz de informes</summary>
-			//ReportsRoot,
-			///// <summary>Informe</summary>
-			//Report
+			File
 		}
 		/// <summary>
 		///		Tipo de icono

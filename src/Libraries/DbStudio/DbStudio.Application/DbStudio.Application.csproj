@@ -30,12 +30,10 @@
     <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DataBaseProviders\LibDbProviders.Spark\LibDbProviders.Spark.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DataBaseProviders\LibDbProviders.SqLite\LibDbProviders.SqLite.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DataBaseProviders\LibDbProviders.SqlServer\LibDbProviders.SqlServer.csproj" />
-    <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DbScripts\LibDbScripts.Parser\LibDbScripts.Parser.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\Schema\LibDbSchema.Repository.Xml\LibDbSchema.Repository.Xml.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Formats\LibCsvFiles\src\LibCsvFiles.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Formats\LibParquetFiles\src\LibParquetFiles.csproj" />
     <ProjectReference Include="..\..\DbScripts\DbScripts.Manager\DbScripts.Manager.csproj" />
-    <ProjectReference Include="..\DbStudio.Conversor\DbStudio.Conversor.csproj" />
     <ProjectReference Include="..\DbStudio.Models\DbStudio.Models.csproj" />
   </ItemGroup>
 

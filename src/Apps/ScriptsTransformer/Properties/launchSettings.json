@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "ScriptsTransformer": {
-      "commandName": "Project",
-      "commandLineArgs": "-source C:/Projects/engine-scripts/src/Engine/Stocks -target C:/deleteme/engine -MountPath $mountpath -DbCompute $dbcompute"
-    }
-  }
-}

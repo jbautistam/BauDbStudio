@@ -15,8 +15,14 @@ namespace Bau.DbStudio.Views.Tools.Web
 		{
 			InitializeComponent();
 			DataContext = ViewModel = viewModel;
-			wbBrowser.EndNavigate += (sender, args) => viewModel.Header = wbBrowser.Title;
+			wbBrowser.EndNavigate += (sender, args) => 
+											{
+												viewModel.Header = wbBrowser.Title;
+												viewModel.Url = args.Url;
+											};
+			wbBrowser.OpenWindowRequested += (sender, args) => ViewModel.OpenBrowser(args.Url);
 			viewModel.Closed += async (sender, args) => await DestroyWindowAsync();
+			ViewModel.RefreshPage += async (sender, args) => await InitControlAsync();
 		}
 
 		/// <summary>
