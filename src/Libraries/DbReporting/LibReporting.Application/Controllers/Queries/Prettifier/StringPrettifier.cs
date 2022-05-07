@@ -145,7 +145,28 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Prettifier
 		/// </summary>
 		public override string ToString()
 		{
-			return Builder.ToString();
+			string[] newLines = new[] { "\n", "\r", "\r\n" };
+			string sql = Builder.ToString();
+
+				// Quita los saltos de línea duplicados
+				while (!string.IsNullOrWhiteSpace(sql) && ExistsDuplicatedString(sql, newLines))
+					foreach (string newLine in newLines)
+						sql = sql.Replace(newLine + newLine, newLine);
+				// Devuelve la cadena
+				return sql;
+		}
+
+		/// <summary>
+		///		Comprueba si existe una cadena por duplicado
+		/// </summary>
+		private bool ExistsDuplicatedString(string sql, string[] newLines)
+		{
+			// Comprueba si existe la cadena
+			foreach (string newLine in newLines)
+				if (sql.IndexOf(newLine + newLine) >= 0)
+					return true;
+			// Si ha llegado hasta aquí es porque no existe
+			return false;
 		}
 
 		/// <summary>

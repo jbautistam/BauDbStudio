@@ -38,9 +38,6 @@ namespace Bau.Libraries.DbStudio.Views.Controllers
 				case ViewModels.Details.Files.ScriptFileViewModel viewModel:
 						PluginController.HostPluginsController.OpenEditor(viewModel);
 					break;
-				//case ViewModels.Details.Files.Structured.BaseFileViewModel viewModel:
-				//		DbStudioViewManager.AppViewsController.OpenDocument(new Files.DataTableFileView(viewModel), viewModel);
-				//	break;
 				case ViewModels.Details.Queries.ExecuteQueryViewModel viewModel:
 						DbStudioViewManager.AppViewsController.OpenDocument(new Queries.ExecuteQueryView(viewModel), viewModel);
 					break;
@@ -77,12 +74,6 @@ namespace Bau.Libraries.DbStudio.Views.Controllers
 					case ViewModels.Details.Connections.ConnectionViewModel viewModel:
 							result = DbStudioViewManager.AppViewsController.OpenDialog(new Connections.ConnectionView(viewModel));
 						break;
-					//case ViewModels.Details.Files.Structured.CsvFilePropertiesViewModel viewModel:
-					//		result = DbStudioViewManager.AppViewsController.OpenDialog(new Files.CsvFilePropertiesView(viewModel));
-					//	break;
-					//case ViewModels.Details.Files.Structured.ParquetFilePropertiesViewModel viewModel:
-					//		result = DbStudioViewManager.AppViewsController.OpenDialog(new Files.ParquetFilePropertiesView(viewModel));
-					//	break;
 					case ViewModels.Details.EtlProjects.CreateTestXmlViewModel viewModel:
 							result = DbStudioViewManager.AppViewsController.OpenDialog(new EtlProjects.CreateTestXmlView(viewModel));
 						break;

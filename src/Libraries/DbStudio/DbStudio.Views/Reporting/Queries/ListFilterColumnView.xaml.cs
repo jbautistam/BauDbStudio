@@ -14,16 +14,20 @@ namespace Bau.Libraries.DbStudio.Views.Reporting.Queries
 		{
 			InitializeComponent();
 			DataContext = ViewModel = viewModel;
-			ViewModel.Close += (sender, eventArgs) => 
-									{
-										DialogResult = eventArgs.IsAccepted; 
-										Close();
-									};
 		}
 
 		/// <summary>
 		///		ViewModel
 		/// </summary>
 		public ListReportColumnFilterViewModel ViewModel { get; }
+
+		private void cmdAccept_Click(object sender, RoutedEventArgs e)
+		{
+			if (ViewModel.SaveFilters())
+			{
+				DialogResult = true;
+				Close();
+			}
+		}
 	}
 }

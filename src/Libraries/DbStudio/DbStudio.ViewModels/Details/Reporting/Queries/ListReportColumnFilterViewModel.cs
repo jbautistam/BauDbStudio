@@ -83,6 +83,20 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 		/// </summary>
 		protected override void Save()
 		{
+			if (SaveDetails())
+			{
+				// Indica que ya no es nuevo y está grabado
+				IsUpdated = false;
+				// Cierra la ventana
+				RaiseEventClose(true);
+			}
+		}
+
+		/// <summary>
+		///		Graba los filtros si no hay errores
+		/// </summary>
+		private bool SaveDetails()
+		{
 			bool canSave = true;
 
 				// Comprueba cada uno de los filtros de la lista
@@ -98,14 +112,16 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 					}
 					else
 						canSave = false;
-				// Cierra la ventana si todo es correcto
-				if (canSave)
-				{
-					// Indica que ya no es nuevo y está grabado
-					IsUpdated = false;
-					// Cierra la ventana
-					RaiseEventClose(true);
-				}
+				// Devuelve el valor que indica si se puede cerrar la ventana
+				return canSave;
+		}
+
+		/// <summary>
+		///		Graba los datos (la vista da una excepción "DialogResult sólo se puede establecer después de haber creado Window y una vez mostrada como cuadro de diálogo.")
+		/// </summary>
+		public bool SaveFilters()
+		{
+			return SaveDetails();
 		}
 
 		/// <summary>
