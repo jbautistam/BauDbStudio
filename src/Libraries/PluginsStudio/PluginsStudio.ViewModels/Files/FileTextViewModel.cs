@@ -37,8 +37,10 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Files
 				// Obtiene la cadena adecuada
 				if (LibHelper.Files.HelperFiles.CheckIsImage(droppedFile))
 					return $"![{name}]({droppedFile.Replace('\\', '/')} \"{name}\")";
-				else
+				else if (droppedFile.EndsWith(".md", StringComparison.CurrentCultureIgnoreCase))
 					return $"[{name}]({System.IO.Path.Combine(System.IO.Path.GetDirectoryName(droppedFile), System.IO.Path.GetFileNameWithoutExtension(droppedFile)).Replace('\\', '/')})";
+				else
+					return $"[{name}]({System.IO.Path.Combine(System.IO.Path.GetDirectoryName(droppedFile), name).Replace('\\', '/')})";
 		}
 
 		/// <summary>

@@ -31,7 +31,6 @@
     <None Remove="Resources\Images\File.png" />
     <None Remove="Resources\Images\FileSql.png" />
     <None Remove="Resources\Images\FileSqlExtended.png" />
-    <None Remove="Resources\Images\FileXml.png" />
     <None Remove="Resources\Images\Filter.png" />
     <None Remove="Resources\Images\FilterSelected.png" />
     <None Remove="Resources\Images\FolderNode.png" />
@@ -80,7 +79,6 @@
     <Resource Include="Resources\Images\File.png" />
     <Resource Include="Resources\Images\FileSql.png" />
     <Resource Include="Resources\Images\FileSqlExtended.png" />
-    <Resource Include="Resources\Images\FileXml.png" />
     <Resource Include="Resources\Images\Filter.png" />
     <Resource Include="Resources\Images\FilterSelected.png" />
     <Resource Include="Resources\Images\FolderNode.png" />

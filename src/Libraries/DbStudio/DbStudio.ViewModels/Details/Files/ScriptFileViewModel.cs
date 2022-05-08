@@ -52,7 +52,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Files
 		/// </summary>
 		public override string TreatTextDropped(string content, bool shiftPressed)
 		{
-			return new Controllers.DropItems.NodeTextDropHelper().TreatTextDropped(content, shiftPressed);
+			return new Controllers.DropItems.NodeTextDropHelper(false).TreatTextDropped(content, shiftPressed);
 		}
 
 		/// <summary>

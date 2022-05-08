@@ -23,5 +23,10 @@ namespace Bau.Libraries.LibReporting.Requests.Models
 		///		Expresiones solicitadas
 		/// </summary>
 		public List<ExpressionRequestModel> Expressions { get; } = new List<ExpressionRequestModel>();
+
+		/// <summary>
+		///		Paginación
+		/// </summary>
+		public PaginationRequestModel Pagination { get; } = new PaginationRequestModel();
 	}
 }

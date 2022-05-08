@@ -319,7 +319,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Queries
 		/// </summary>
 		public string TreatTextDropped(string content, bool shiftPressed)
 		{
-			return new Controllers.DropItems.NodeTextDropHelper().TreatTextDropped(content, shiftPressed);
+			return new Controllers.DropItems.NodeTextDropHelper(true).TreatTextDropped(content, shiftPressed);
 		}
 
 		/// <summary>

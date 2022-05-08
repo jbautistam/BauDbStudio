@@ -141,9 +141,9 @@ namespace Bau.Libraries.DbStudio.Views
 		/// <summary>
 		///		Obtiene la URL completa de un icono
 		/// </summary>
-		private string GetIcon(string resource)
+		private string GetIcon(string icon)
 		{
-			return $"pack://application:,,,/DbStudio.Views;component/Resources/Images/{resource}";
+			return $"pack://application:,,,/DbStudio.Views;component/Resources/Images/{icon}";
 		}
 
 		/// <summary>
@@ -183,12 +183,6 @@ namespace Bau.Libraries.DbStudio.Views
 									{
 										FileExtension = ".sqlx",
 										Icon = GetIcon("FileSqlExtended.png")
-									}
-						 );
-				files.Add(new FileAssignedModel
-									{
-										FileExtension = ".xml",
-										Icon = GetIcon("FileXml.png")
 									}
 						 );
 				// Devuelve la lista de archivos asignados

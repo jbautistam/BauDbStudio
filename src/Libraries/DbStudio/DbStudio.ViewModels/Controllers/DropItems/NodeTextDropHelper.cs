@@ -7,6 +7,11 @@ namespace Bau.Libraries.DbStudio.ViewModels.Controllers.DropItems
 	/// </summary>
 	internal class NodeTextDropHelper
 	{
+		internal NodeTextDropHelper(bool isQueryViewModel)
+		{
+			IsQueryViewModel = isQueryViewModel;
+		}
+
 		/// <summary>
 		///		Trata el texto pasado a un editor
 		/// </summary>
@@ -15,7 +20,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Controllers.DropItems
 			string result = content;
 
 				// Obtiene el texto adecuado dependiendo de la extensión
-				if (!string.IsNullOrWhiteSpace(content) && content.IndexOf('\r') < 0 && content.Length < 10_000 && content.IndexOf('.') >= 0)
+				if (IsQueryViewModel && !string.IsNullOrWhiteSpace(content) && content.IndexOf('\r') < 0 && 
+					content.Length < 10_000 && content.IndexOf('.') >= 0)
 				{
 					if (content.EndsWith(".sql", StringComparison.CurrentCultureIgnoreCase) || content.EndsWith(".sqlx", StringComparison.CurrentCultureIgnoreCase))
 						result = LibHelper.Files.HelperFiles.LoadTextFile(content);
@@ -79,5 +85,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Controllers.DropItems
 			//TODO -> Leer el esquema del archivo CSV
 			return "Get CSV schema " + fileName;
 		}
+
+		/// <summary>
+		///		Indica si el helper está en una ventana de consulta
+		/// </summary>
+		private bool IsQueryViewModel { get; }
 	}
 }

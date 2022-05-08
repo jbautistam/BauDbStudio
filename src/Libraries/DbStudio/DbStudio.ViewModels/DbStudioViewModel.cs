@@ -362,17 +362,8 @@ namespace Bau.Libraries.DbStudio.ViewModels
 		/// </summary>
 		private IDetailViewModel GetFileViewModel(string fileName)
 		{
-			//if (fileName.EndsWith(".parquet", StringComparison.CurrentCultureIgnoreCase))
-			//	return new Details.Files.Structured.ParquetFileViewModel(this, fileName);
-			//else if (fileName.EndsWith(".csv", StringComparison.CurrentCultureIgnoreCase))
-			//	return new Details.Files.Structured.CsvFileViewModel(this, fileName);
-			//else if (fileName.EndsWith(".xlsx", StringComparison.CurrentCultureIgnoreCase) ||
-			//			fileName.EndsWith(".xls", StringComparison.CurrentCultureIgnoreCase))
-			//	return new Details.Files.Structured.ExcelFileViewModel(this, fileName);
-			//else 
 			if (fileName.EndsWith(".sql", StringComparison.CurrentCultureIgnoreCase) ||
-						fileName.EndsWith(".sqlx", StringComparison.CurrentCultureIgnoreCase) ||
-						fileName.EndsWith(".xml", StringComparison.CurrentCultureIgnoreCase))
+						fileName.EndsWith(".sqlx", StringComparison.CurrentCultureIgnoreCase))
 				return new Details.Files.ScriptFileViewModel(this, fileName);
 			else
 				return null;

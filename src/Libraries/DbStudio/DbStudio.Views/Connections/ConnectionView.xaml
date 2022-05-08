@@ -119,9 +119,8 @@
 					<Label Grid.Row="0" Grid.Column="0" Margin="5" Content="Archivo:"/>
 					<Files:FileSelect Grid.Row="0" Grid.Column="1" Margin="5" VerticalAlignment="Stretch" FileName="{Binding Path=FileName, UpdateSourceTrigger=PropertyChanged}"/>
 					<Label Grid.Row="1" Grid.Column="0" Margin="5" Content="Contraseña:"/>
-					<TextBox Grid.Row="1" Grid.Column="1" 
-							Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
-					
+					<Editors:PasswordTextBox Grid.Row="1" Grid.Column="1" 
+							PasswordText="{Binding Password, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
 				</Grid>
 			</Grid>
 		</GroupBox>
