@@ -79,12 +79,19 @@ namespace Bau.Libraries.JobsProcessor.Application
 				{
 					// Log
 					AddLog(context, command, EventArguments.JobProcessEventArgs.StatusType.Start, 
-						   $"Start execution {System.IO.Path.GetFileName(command.FileName)}", commands.IndexOf(command) + 1, commands.Count);
+							$"Start execution {System.IO.Path.GetFileName(command.FileName)}", commands.IndexOf(command) + 1, commands.Count);
 					// Ejecuta el proceso
-					await ExecuteProcessAsync(command, context, cancellationToken);
+					if (!await ExecuteProcessAsync(command, context, cancellationToken))
+					{
+						// Log
+						AddLog(JobProcessEventArgs.StatusType.Error, $"Error when execute command: '{command.FileName}'");
+						// Detiene el proceso si es necesario
+						if (command.StopWhenError)
+							throw new Exception($"Stop the process (command '{command.FileName}'.StopWhenError = true");
+					}
 					// Log
 					AddLog(context, command, EventArguments.JobProcessEventArgs.StatusType.End, 
-						   $"End execution {System.IO.Path.GetFileName(command.FileName)}", commands.IndexOf(command) + 1, commands.Count);
+							$"End execution {System.IO.Path.GetFileName(command.FileName)}", commands.IndexOf(command) + 1, commands.Count);
 				}
 				else
 					AddLog(context, command, EventArguments.JobProcessEventArgs.StatusType.Error, "Canceled");
@@ -93,19 +100,26 @@ namespace Bau.Libraries.JobsProcessor.Application
 		/// <summary>
 		///		Ejecuta el proceso asociado a un comando
 		/// </summary>
-		private async Task ExecuteProcessAsync(CommandModel command, ContextModel context, CancellationToken cancellationToken)
+		private async Task<bool> ExecuteProcessAsync(CommandModel command, ContextModel context, CancellationToken cancellationToken)
 		{
 			Processes.SystemProcessHelper processor = new(this, context, command, false);
+			bool processed = true;
 
 				// Ejecuta la aplicación
 				try
 				{
+					// Ejecuta el comando
 					await processor.ExecuteAsync(cancellationToken);
+					// Devuelve el valor que indica si ha habido algún error
+					processed = processor.ExitCode >= 0;
 				}
 				catch (Exception exception)
 				{
 					AddLog(JobProcessEventArgs.StatusType.Error, $"Error when execute {System.IO.Path.GetFileName(command.FileName)}. {exception.Message}");
+					processed = false;
 				}
+				// Devuelve el valor que indica si se ha ejecutado correctamente
+				return processed;
 		}
 
 		/// <summary>

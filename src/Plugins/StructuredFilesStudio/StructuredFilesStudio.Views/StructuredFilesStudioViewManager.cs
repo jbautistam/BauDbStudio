@@ -97,26 +97,33 @@ namespace Bau.Libraries.StructuredFilesStudio.Views
 				// Asigna las extensions
 				files.Add(new FileAssignedModel
 									{
+										Name = "Csv file",
 										FileExtension = ".csv",
 										Icon = GetIcon("FileCsv.png")
 									}
 						 );
 				files.Add(new FileAssignedModel
 									{
+										Name = "Excel file",
 										FileExtension = ".xls",
-										Icon = GetIcon("FileExcel.png")
+										Icon = GetIcon("FileExcel.png"),
+										CanCreate = false
 									}
 						 );
 				files.Add(new FileAssignedModel
 									{
+										Name = "Excel file",
 										FileExtension = ".xlsx",
-										Icon = GetIcon("FileExcel.png")
+										Icon = GetIcon("FileExcel.png"),
+										CanCreate = false
 									}
 						 );
 				files.Add(new FileAssignedModel
 									{
+										Name = "Parquet file",
 										FileExtension = ".parquet",
-										Icon = GetIcon("FileParquet.png")
+										Icon = GetIcon("FileParquet.png"),
+										CanCreate = false
 									}
 						 );
 				// Devuelve la lista de archivos asignados

@@ -25,7 +25,17 @@ namespace Bau.Libraries.JobsProcessor.Application.Models
 				// Añade los argumentos
 				foreach (ArgumentModel argument in Arguments)
 					if (argument.Position == ArgumentModel.ArgumentPosition.CommandLine)
-						arguments = arguments.AddWithSeparator($"{argument.Parameter.Name} {argument.GetArgumentValue(context)}", " ");
+					{
+						string argumentValue = argument.GetArgumentValue(context);
+
+							// Añade comillas si es necesario en el valor del argumento
+							if (string.IsNullOrWhiteSpace(argumentValue))
+								argumentValue = "\"\"";
+							else if (argumentValue.IndexOf(' ') >= 0)
+								argumentValue = $"\"{argumentValue}\"";
+							// Añade el agumento a la línea de ocmandos
+							arguments = arguments.AddWithSeparator($"{argument.Parameter.Name} {argumentValue}", " ");
+					}
 				// Devuelve la cadena con los argumentos
 				return arguments;
 		}
@@ -68,5 +78,10 @@ namespace Bau.Libraries.JobsProcessor.Application.Models
 		///		Argumentos de la consola
 		/// </summary>
 		public List<ArgumentModel> Arguments { get; } = new();
+
+		/// <summary>
+		///		Indica si se debe detener con el primer error
+		/// </summary>
+		public bool StopWhenError { get; set; } = true;
 	}
 }

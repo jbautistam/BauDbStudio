@@ -98,8 +98,10 @@ namespace Bau.Libraries.ComicsReader.Plugin
 				{
 					return new FileAssignedModel
 									{
+										Name = $"Comic {extension}",
 										FileExtension = extension,
-										Icon = "/ComicsReader.Plugin;component/Resources/FileCbr.png"
+										Icon = "/ComicsReader.Plugin;component/Resources/FileCbr.png",
+										CanCreate = false
 									};
 				}
 		}

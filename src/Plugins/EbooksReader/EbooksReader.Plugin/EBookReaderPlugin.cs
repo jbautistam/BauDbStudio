@@ -89,14 +89,18 @@ namespace Bau.Libraries.EbooksReader.Plugin
 				// Asigna las extensions
 				files.Add(new FileAssignedModel
 									{
+										Name = "Ebook",
 										FileExtension = ".epub",
-										Icon = "/EbooksReader.Plugin;component/Resources/FileEpub.png"
+										Icon = "/EbooksReader.Plugin;component/Resources/FileEpub.png",
+										CanCreate = false
 									}
 						 );
 				files.Add(new FileAssignedModel
 									{
+										Name = "Ebook",
 										FileExtension = ".mobi",
-										Icon = "/EbooksReader.Plugin;component/Resources/FileMobi.png"
+										Icon = "/EbooksReader.Plugin;component/Resources/FileMobi.png",
+										CanCreate = false
 									}
 						 );
 				// Devuelve la lista de archivos asignados

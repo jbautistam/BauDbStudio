@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+
+using Bau.Libraries.PluginsStudio.ViewModels.Base.Models;
 
 namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Controllers
 {
@@ -11,6 +14,11 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Controllers
 		///		Añade un archivo utilizado a la lista de archivos
 		/// </summary>
 		void AddFileUsed(string fileName);
+
+		/// <summary>
+		///		Obtiene los archivos asignados que se pueden crear
+		/// </summary>
+		public List<FileAssignedModel> GetFilesAssigned();
 
 		/// <summary>
 		///		Abre un archivo

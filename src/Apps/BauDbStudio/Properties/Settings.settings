@@ -23,9 +23,6 @@
     <Setting Name="LastWorkSpace" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="ConsoleExecutable" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
     <Setting Name="LastFiles" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>

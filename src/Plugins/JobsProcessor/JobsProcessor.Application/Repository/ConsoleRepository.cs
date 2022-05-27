@@ -19,6 +19,7 @@ namespace Bau.Libraries.JobsProcessor.Application.Repository
 		private const string TagCommandsRoot = "Commands";
 		private const string TagCommand = "Command";
 		private const string TagFileName = "FileName";
+		private const string TagStopWhenError = "StopWhenError";
 		private const string TagArgument = "Argument";
 		private const string TagEnvironment = "Environment";
 		private const string TagName = "Name";
@@ -66,7 +67,8 @@ namespace Bau.Libraries.JobsProcessor.Application.Repository
 		{
 			CommandModel command = new CommandModel
 											{
-												FileName = rootML.Attributes[TagFileName].Value.TrimIgnoreNull()
+												FileName = rootML.Attributes[TagFileName].Value.TrimIgnoreNull(),
+												StopWhenError = rootML.Attributes[TagStopWhenError].Value.GetBool(true)
 											};
 
 				// Carga los argumentos del comando

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
+using Bau.Libraries.PluginsStudio.ViewModels.Base.Models;
 
 namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 {
@@ -200,19 +201,36 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 
 				if (!string.IsNullOrWhiteSpace(path))
 				{
-					Tools.CreateFileViewModel createFileViewModel = new Tools.CreateFileViewModel(MainViewModel, path);
+					Tools.CreateFileViewModel createFileViewModel = new Tools.CreateFileViewModel(MainViewModel, path, 
+																								  MainViewModel.PluginsStudioController.PluginsController.HostPluginsController.GetFilesAssigned());
 
 						if (MainViewModel.PluginsStudioController.OpenDialog(createFileViewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes &&
 							!string.IsNullOrWhiteSpace(createFileViewModel.FileName))
 						{
 							// Graba el archivo
-							LibHelper.Files.HelperFiles.SaveTextFile(createFileViewModel.FullFileName, string.Empty, GetEncoder(createFileViewModel.GetSelectedEncoding()));
+							LibHelper.Files.HelperFiles.SaveTextFile(createFileViewModel.FullFileName, 
+																	 GetTemplate(createFileViewModel.FileName, createFileViewModel.FilesAssigned), 
+																	 GetEncoder(createFileViewModel.GetSelectedEncoding()));
 							// Abre la ventana
 							MainViewModel.PluginsStudioController.HostPluginsController.OpenFile(createFileViewModel.FullFileName);
 							// Actualiza el árbol
 							Load();
 						}
 				}
+		}
+
+		/// <summary>
+		///		Obtiene la plantilla asociada a una extensión
+		/// </summary>
+		private string GetTemplate(string fileName, List<FileAssignedModel> filesAssigned)
+		{
+			// Busca la extensión entre los archivos asignados
+			foreach (FileAssignedModel fileAssigned in filesAssigned)
+				if (fileName.EndsWith(fileAssigned.FileExtension, StringComparison.CurrentCultureIgnoreCase) &&
+						!string.IsNullOrWhiteSpace(fileAssigned.Template))
+					return fileAssigned.Template;
+			// Si ha llegado hasta aquí es porque no ha encontrado ninguna plantilla
+			return string.Empty;
 		}
 
 		/// <summary>

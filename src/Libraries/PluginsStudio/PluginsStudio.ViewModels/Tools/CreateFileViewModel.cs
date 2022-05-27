@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 
+using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.ComboItems;
+using Bau.Libraries.PluginsStudio.ViewModels.Base.Models;
 
 namespace Bau.Libraries.PluginsStudio.ViewModels.Tools
 {
@@ -9,21 +12,6 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools
 	/// </summary>
 	public class CreateFileViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewModel
 	{
-		// Enumerados privados
-		/// <summary>
-		///		Tipo de archivo
-		/// </summary>
-		private enum FileType
-		{
-			Sql,
-			SqlExtended,
-			Json,
-			Xml,
-			Python,
-			Markdown,
-			Other
-		}
-
 		/// <summary>
 		///		Codificación del archivo
 		/// </summary>
@@ -39,10 +27,11 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools
 		private string _fileName;
 		private ComboViewModel _comboTypes, _comboEncoding;
 
-		public CreateFileViewModel(PluginsStudioViewModel mainViewModel, string path)
+		public CreateFileViewModel(PluginsStudioViewModel mainViewModel, string path, List<FileAssignedModel> filesAssigned)
 		{
 			MainViewModel = mainViewModel;
 			Path = path;
+			FilesAssigned = filesAssigned;
 			LoadComboTypes();
 			LoadComboEncoding();
 		}
@@ -55,13 +44,8 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools
 			// Crea el combo
 			ComboTypes = new ComboViewModel(this);
 			// Añade los elementos
-			ComboTypes.AddItem((int) FileType.Sql, "Sql");
-			ComboTypes.AddItem((int) FileType.SqlExtended, "Sql extendido");
-			ComboTypes.AddItem((int) FileType.Json, "Json");
-			ComboTypes.AddItem((int) FileType.Xml, "Xml");
-			ComboTypes.AddItem((int) FileType.Python, "Python");
-			ComboTypes.AddItem((int) FileType.Markdown, "Markdown");
-			ComboTypes.AddItem((int) FileType.Other, "Otros");
+			foreach (FileAssignedModel fileAssigned in FilesAssigned)
+				ComboTypes.AddItem(ComboTypes.Items.Count + 1, $"{fileAssigned.Name} ({fileAssigned.FileExtension})", fileAssigned);
 			// Asigna el manejador de eventos
 			ComboTypes.PropertyChanged += (sender, args) =>
 												{
@@ -106,47 +90,38 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools
 			string file = FileName;
 
 				// Cambia la extensión
-				if (GetSelectedType() != FileType.Other)
+				if (ComboTypes.SelectedTag is not null && ComboTypes.SelectedTag is FileAssignedModel fileAssigned)
 				{
 					// Inicializa el nombre de archivo
 					if (string.IsNullOrWhiteSpace(file))
-						file = "New file.sql";
+						file = $"New file";
 					// Cambia la extensión
-					file = System.IO.Path.GetFileNameWithoutExtension(file);
-					file += GetExtension(GetSelectedType());
+					file = GetFileNameWithoutExtension(file);
+					file += GetExtension(fileAssigned.FileExtension);
 				}
 				// Cambia el nombre de archivo
 				FileName = file;
 		}
 
 		/// <summary>
-		///		Obtiene la extensión asociada a un tipo de archivo
+		///		Obtiene el nombre de archivo sin la extensión (no se puede utilizar System.IO.Path.GetFileNameWithoutExtension porque
+		///	en ocasiones tiene más de una extensión)
 		/// </summary>
-		private string GetExtension(FileType fileType)
+		private string GetFileNameWithoutExtension(string file)
 		{
-			switch (fileType)
-			{
-				case FileType.Json:
-					return ".json";
-				case FileType.SqlExtended:
-					return ".sqlx";
-				case FileType.Xml:
-					return ".xml";
-				case FileType.Python:
-					return ".py";
-				case FileType.Markdown:
-					return ".md";
-				default:
-					return ".sql";
-			}
+			return file.Cut(".", out string _);
 		}
 
 		/// <summary>
-		///		Obtiene el tipo seleccionado en el combo
+		///		Obtiene la extensión asociada a un tipo de archivo
 		/// </summary>
-		private FileType GetSelectedType()
+		private string GetExtension(string extension)
 		{
-			return (FileType) (ComboTypes.SelectedId ?? 0);
+			// Añade el punto a la extensión
+			if (!string.IsNullOrWhiteSpace(extension) && !extension.StartsWith("."))
+				extension = "." + extension;
+			// Devuelve la extensión
+			return extension;
 		}
 
 		/// <summary>
@@ -193,6 +168,11 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools
 		///		Directorio
 		/// </summary>
 		public string Path { get; }
+
+		/// <summary>
+		///		Archivos asignados por los plugins
+		/// </summary>
+		public List<FileAssignedModel> FilesAssigned { get; }
 
 		/// <summary>
 		///		Nombre de archivo

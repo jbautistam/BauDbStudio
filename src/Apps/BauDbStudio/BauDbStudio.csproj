@@ -50,6 +50,7 @@
     <None Remove="Resources\Images\FilePowershell.png" />
     <None Remove="Resources\Images\FilePython.png" />
     <None Remove="Resources\Images\FileSql.png" />
+    <None Remove="Resources\Images\FileTxt.png" />
     <None Remove="Resources\Images\FileXml.png" />
     <None Remove="Resources\Images\Filter.png" />
     <None Remove="Resources\Images\FolderNode.png" />
@@ -111,6 +112,7 @@
     <Resource Include="Resources\Images\Export.png" />
     <Resource Include="Resources\Images\FileImage.png" />
     <Resource Include="Resources\Images\FileMd.png" />
+    <Resource Include="Resources\Images\FileTxt.png" />
     <Resource Include="Resources\Images\Filter.png" />
     <Resource Include="Resources\Images\Loading.png" />
     <Resource Include="Resources\Images\Refresh.png" />

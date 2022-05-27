@@ -18,6 +18,7 @@ namespace Bau.DbStudio.Controllers
 			AppName = appName;
 			AppPath = appPath;
 			AppViewController = new AppViewsController(this);
+			ConfigurationController = new ConfigurationController(this);
 			MainWindowsController = new MainWindowController(this);
 			PluginsManager = new Plugins.PluginsManager(this);
 			PluginStudioController = new PluginsStudioController(this);
@@ -182,6 +183,6 @@ namespace Bau.DbStudio.Controllers
 		/// <summary>
 		///		Controlador de configuración de la aplicación
 		/// </summary>
-		public ConfigurationController ConfigurationController { get; } = new ConfigurationController();
+		public ConfigurationController ConfigurationController { get; }
 	}
 }

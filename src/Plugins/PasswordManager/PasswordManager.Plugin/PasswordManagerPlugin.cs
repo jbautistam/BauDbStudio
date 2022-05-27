@@ -95,6 +95,7 @@ namespace Bau.Libraries.PasswordManager.Plugin
 				{
 					return new FileAssignedModel
 									{
+										Name = "Password manager file",
 										FileExtension = extension,
 										Icon = "/PasswordManager.Plugin;component/Resources/FileEnc.png"
 									};

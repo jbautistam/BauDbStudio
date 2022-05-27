@@ -175,12 +175,14 @@ namespace Bau.Libraries.DbStudio.Views
 				// Asigna las extensions
 				files.Add(new FileAssignedModel
 									{
+										Name = "Sql Script",
 										FileExtension = ".sql",
 										Icon = GetIcon("FileSql.png")
 									}
 						 );
 				files.Add(new FileAssignedModel
 									{
+										Name = "Sql Extended",
 										FileExtension = ".sqlx",
 										Icon = GetIcon("FileSqlExtended.png")
 									}

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Bau.DbStudio.Views.Files"
 		x:Class="Bau.DbStudio.Views.Files.CreateFileView"
         mc:Ignorable="d"
-        Title="Seleccionar archivo" Height="250" Width="800" ResizeMode="NoResize" ShowInTaskbar="False"
+        Title="Nuevo archivo" Height="500" Width="900" ResizeMode="NoResize" ShowInTaskbar="False"
 		xmlns:Behaviors="clr-namespace:Bau.Libraries.BauMvvm.Views.Converters;assembly=BauMvvm.Views"
 		Behaviors:FocusBehavior.FocusFirst="true">
 	<Grid>
@@ -17,7 +17,7 @@
 		<GroupBox Header="Propiedades" Grid.Row="0" Grid.Column="0">
 			<Grid>
 				<Grid.RowDefinitions>
-					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="*"/>
 					<RowDefinition Height="Auto"/>
 					<RowDefinition Height="Auto"/>
 				</Grid.RowDefinitions>
@@ -26,9 +26,24 @@
 					<ColumnDefinition Width="*"/>
 				</Grid.ColumnDefinitions>
 				<Label Grid.Row="0" Grid.Column="0" Margin="5" Content="Tipo:"/>
-				<ComboBox Grid.Row="0" Grid.Column="1" Margin="5" 
-						  ItemsSource="{Binding ComboTypes.Items}" DisplayMemberPath="Text" 
-						  SelectedItem="{Binding ComboTypes.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+				<ListView Grid.Row="0" Grid.Column="1" Margin="5"
+						ItemsSource="{Binding Path=ComboTypes.Items}" 
+						SelectedItem="{Binding Path=ComboTypes.SelectedItem}" 
+						ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+					<ListView.ItemTemplate>
+						<DataTemplate>
+							<StackPanel Margin = "3" MaxWidth="150" MinWidth="150">
+								<Image Source="{Binding Path=Tag.Icon}" Stretch="Fill" Width="32" Height="32" Margin="5"/>
+								<TextBlock Text="{Binding Path=Text}" FontWeight="Bold" TextAlignment="Center" TextWrapping="Wrap" />
+							</StackPanel>
+						</DataTemplate>
+					</ListView.ItemTemplate>
+					<ListView.ItemsPanel>
+						<ItemsPanelTemplate>
+							<WrapPanel Orientation="Horizontal"/>
+						</ItemsPanelTemplate>
+					</ListView.ItemsPanel>
+				</ListView>
 				<Label Grid.Row="1" Grid.Column="0" Margin="5" Content="Nombre de archivo:"/>
 				<TextBox Grid.Row="1" Grid.Column="1" 
 						Text="{Binding Path=FileName, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
@@ -36,6 +51,7 @@
 				<ComboBox Grid.Row="2" Grid.Column="1" Margin="5" 
 						  ItemsSource="{Binding ComboEncoding.Items}" DisplayMemberPath="Text" 
 						  SelectedItem="{Binding ComboEncoding.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
 			</Grid>
 		</GroupBox>
 		<StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">

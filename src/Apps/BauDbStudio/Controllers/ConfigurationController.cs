@@ -11,6 +11,11 @@ namespace Bau.DbStudio.Controllers
 		// Constantes privadas
 		private const string SetupSeparator = "({#@~=#})";
 
+		public ConfigurationController(DbStudioViewsManager viewsManager)
+		{
+			ViewsManager = viewsManager;
+		}
+
 		/// <summary>
 		///		Carga la configuración
 		/// </summary>
@@ -23,7 +28,6 @@ namespace Bau.DbStudio.Controllers
 			EditorFontSize = Properties.Settings.Default.EditorFontSize;
 			EditorShowLinesNumber = Properties.Settings.Default.EditorShowLinesNumber;
 			EditorZoom = Properties.Settings.Default.EditorZoom;
-			ConsoleExecutable = Properties.Settings.Default.ConsoleExecutable;
 			LastWorkSpace = Properties.Settings.Default.LastWorkSpace;
 			LastFiles = Properties.Settings.Default.LastFiles;
 			ShowWindowNotifications = Properties.Settings.Default.ShowWindowNotifications;
@@ -32,25 +36,37 @@ namespace Bau.DbStudio.Controllers
 			if (string.IsNullOrWhiteSpace(PathData) || !System.IO.Directory.Exists(PathData))
 				PathData = pathData;
 			// Carga la configuración de plugins
-			LoadPluginsCongiguration(Properties.Settings.Default.PluginsSetup);
+			LoadPluginsConfiguration(GetPluginsSetupFileName(pathData));
 		}
 
 		/// <summary>
 		///		Carga la configuración de los plugins
 		/// </summary>
-		private void LoadPluginsCongiguration(string setup)
+		private void LoadPluginsConfiguration(string fileName)
 		{
 			// Limpia la configuración
 			PluginsConfiguration.Clear();
-			// Asigna la configuración
-			if (!string.IsNullOrWhiteSpace(setup))
-			{
-				string [] parts = setup.Split(SetupSeparator);
+			// Carga el texto del archivo
+			if (!string.IsNullOrWhiteSpace(fileName) && System.IO.File.Exists(fileName))
+				try
+				{
+					string setup = Bau.Libraries.LibHelper.Files.HelperFiles.LoadTextFile(fileName);
 
-					for (int index = 0; index < parts.Length; index += 3)
-						if (parts.Length > index + 3 && !string.IsNullOrWhiteSpace(parts[index]) && !string.IsNullOrWhiteSpace(parts[index + 1]))
-							PluginsConfiguration.Add((parts[index], parts[index + 1], parts[index + 2]));
-			}
+						// Asigna la configuración
+						if (!string.IsNullOrWhiteSpace(setup))
+						{
+							string [] parts = setup.Split(SetupSeparator);
+
+								for (int index = 0; index < parts.Length; index += 3)
+									if (parts.Length > index + 3 && !string.IsNullOrWhiteSpace(parts[index]) && !string.IsNullOrWhiteSpace(parts[index + 1]))
+										PluginsConfiguration.Add((parts[index], parts[index + 1], parts[index + 2]));
+						}
+				}
+				catch (Exception exception)
+				{
+					ViewsManager.MainWindowsController.HostController.SystemController
+							.ShowMessage($"Error when load the plugins configuration file {fileName}. {exception.Message}");
+				}
 		}
 
 		/// <summary>
@@ -97,15 +113,31 @@ namespace Bau.DbStudio.Controllers
 			Properties.Settings.Default.EditorFontSize = EditorFontSize;
 			Properties.Settings.Default.EditorShowLinesNumber = EditorShowLinesNumber;
 			Properties.Settings.Default.EditorZoom = EditorZoom;
-			Properties.Settings.Default.ConsoleExecutable = ConsoleExecutable;
 			Properties.Settings.Default.LastWorkSpace = LastWorkSpace;
 			Properties.Settings.Default.LastFiles = LastFiles;
 			Properties.Settings.Default.ShowWindowNotifications = ShowWindowNotifications;
 			Properties.Settings.Default.LastEncodingIndex = LastEncodingIndex;
 			Properties.Settings.Default.PathData = PathData;
-			Properties.Settings.Default.PluginsSetup = GetPluginsConfiguration();
 			// Graba la configuración
 			Properties.Settings.Default.Save();
+			// Graba la configuración de los plugins
+			SavePluginsConfiguration(GetPluginsSetupFileName(PathData));
+		}
+
+		/// <summary>
+		///		Grab la configuración de los plugins
+		/// </summary>
+		private void SavePluginsConfiguration(string fileName)
+		{
+			try
+			{
+				Bau.Libraries.LibHelper.Files.HelperFiles.SaveTextFile(fileName, GetPluginsConfiguration());
+			}
+			catch (Exception exception)
+			{
+				ViewsManager.MainWindowsController.HostController.SystemController
+					.ShowMessage($"Can't save the plugins configuration file {fileName}. {exception.Message}");
+			}
 		}
 
 		/// <summary>
@@ -124,9 +156,22 @@ namespace Bau.DbStudio.Controllers
 					// Añade los datos
 					result += plugin + SetupSeparator + key + SetupSeparator + value;
 				}
-				// Devuelve la caena resultante
+				// Devuelve la cadena resultante
 				return result;
 		}
+
+		/// <summary>
+		///		Obtiene el nombre del archivo de setup
+		/// </summary>
+		private string GetPluginsSetupFileName(string pathData)
+		{
+			return System.IO.Path.Combine(pathData, "PluginsSetup.xml");
+		}
+
+		/// <summary>
+		///		Manager principal
+		/// </summary>
+		public DbStudioViewsManager ViewsManager { get; }
 
 		/// <summary>
 		///		Ultimo directorio seleccionado para grabación

@@ -54,7 +54,7 @@ namespace Bau.Libraries.JobsProcessor.Application.Models
 					value = value.Replace("\\{\\{", "{{");
 					value = value.Replace("\\}\\}", "}}");
 				}
-				// Devuelve el valor convertiod
+				// Devuelve el valor convertido
 				return value;
 		}
 

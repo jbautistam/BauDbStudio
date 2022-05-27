@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+	  <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>Bau.Libraries.DbScripts.Manager</RootNamespace>
   </PropertyGroup>
 
@@ -16,7 +16,7 @@
     <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DataBaseProviders\LibDbProviders.Spark\LibDbProviders.Spark.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DataBaseProviders\LibDbProviders.SqLite\LibDbProviders.SqLite.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DataBaseProviders\LibDbProviders.SqlServer\LibDbProviders.SqlServer.csproj" />
-    <ProjectReference Include="..\..\..\..\..\..\Libraries\Interpreters\src\Interpreters\DbScripts\LibDbScripts.Interpreter\LibDbScripts.Interpreter.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Interpreter\DbScripts\LibDbScripts.Interpreter\LibDbScripts.Interpreter.csproj" />
     <ProjectReference Include="..\..\DbStudio\DbStudio.Models\DbStudio.Models.csproj" />
   </ItemGroup>
 

@@ -105,10 +105,43 @@ namespace Bau.Libraries.JobsProcessor.Plugin
 				{
 					return new FileAssignedModel
 									{
+										Name = "Context command file",
 										FileExtension = extension,
-										Icon = GetIconName(name)
+										Icon = GetIconName(name),
+										Template = GetTemplateCmdXml()
 									};
 				}
+		}
+
+		/// <summary>
+		///		Obtiene la plantilla del archivo
+		/// </summary>
+		private string GetTemplateCmdXml()
+		{
+			return @"
+<?xml version=##1.0## encoding=##utf-8## ?>
+<Project>
+	<Contexts>
+		<Context>
+			<Parameter Name=##ParameterName## Value = ##ParameterValue## />
+		</Context>
+	</Contexts>
+	<Commands>
+		<Command FileName = ##Executable##>			
+			<Argument Type=##string## Name=##Argument1## Value=##{{ParameterName}}##/>
+			<Argument Type=##int## Name=##Argument2## Value=##40##/>
+			<Environment Type=##json## Name=##Parameters##>
+				<![CDATA[
+					{
+						##Argument3##: ##{{ParameterName}}##,
+						##Argument4##: ##{{ParameterName}}##
+					}
+				]]>
+			</Environment>
+		</Command>
+	</Commands>
+</Project>"
+				.Replace("##", "\"").Trim();
 		}
 
 		/// <summary>

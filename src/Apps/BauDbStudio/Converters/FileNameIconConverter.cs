@@ -56,6 +56,8 @@ namespace Bau.DbStudio.Converters
 								icon = "/Resources/Images/FileMd.png";
 							else if (fileName.EndsWith(".cmd.xml", StringComparison.CurrentCultureIgnoreCase))
 								icon = "/Resources/Images/FileCmd.png";
+							else if (fileName.EndsWith(".txt", StringComparison.CurrentCultureIgnoreCase))
+								icon = "/Resources/Images/FileTxt.png";
 							else if (IsImage(fileName))
 								icon = "/Resources/Images/FileImage.png";
 					}

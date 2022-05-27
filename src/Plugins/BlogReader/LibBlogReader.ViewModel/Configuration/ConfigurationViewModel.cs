@@ -9,6 +9,8 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Configuration
 	/// </summary>
 	public class ConfigurationViewModel : BauMvvm.ViewModels.BaseObservableObject
 	{   
+		// Constants privadas
+		private const string ApplicationName = "BlogReader";
 		// Variables privadas
 		private string _pathBlogs;
 		private int _minutesBetweenDownload, _recordsPerPage;
@@ -24,13 +26,13 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Configuration
 		/// </summary>
 		internal void Load()
 		{
-			PathBlogs = MainViewModel.ViewsController.PluginController.ConfigurationController.GetConfiguration("BlogReader", nameof(PathBlogs));
-			MinutesBetweenDownload = MainViewModel.ViewsController.PluginController.ConfigurationController.GetConfiguration("BlogReader", nameof(MinutesBetweenDownload)).GetInt(60);
-			RecordsPerPage = MainViewModel.ViewsController.PluginController.ConfigurationController.GetConfiguration("BlogReader", nameof(RecordsPerPage)).GetInt(25);
-			DownloadEnabled = MainViewModel.ViewsController.PluginController.ConfigurationController.GetConfiguration("BlogReader", nameof(DownloadEnabled)).GetBool();
-			SeeEntriesRead = MainViewModel.ViewsController.PluginController.ConfigurationController.GetConfiguration("BlogReader", nameof(SeeEntriesRead)).GetBool();
-			SeeEntriesNotRead = MainViewModel.ViewsController.PluginController.ConfigurationController.GetConfiguration("BlogReader", nameof(SeeEntriesNotRead)).GetBool();
-			SeeEntriesInteresting = MainViewModel.ViewsController.PluginController.ConfigurationController.GetConfiguration("BlogReader", nameof(SeeEntriesInteresting)).GetBool();
+			PathBlogs = MainViewModel.ViewsController.PluginController.ConfigurationController.GetConfiguration(ApplicationName, nameof(PathBlogs));
+			MinutesBetweenDownload = MainViewModel.ViewsController.PluginController.ConfigurationController.GetConfiguration(ApplicationName, nameof(MinutesBetweenDownload)).GetInt(60);
+			RecordsPerPage = MainViewModel.ViewsController.PluginController.ConfigurationController.GetConfiguration(ApplicationName, nameof(RecordsPerPage)).GetInt(25);
+			DownloadEnabled = MainViewModel.ViewsController.PluginController.ConfigurationController.GetConfiguration(ApplicationName, nameof(DownloadEnabled)).GetBool();
+			SeeEntriesRead = MainViewModel.ViewsController.PluginController.ConfigurationController.GetConfiguration(ApplicationName, nameof(SeeEntriesRead)).GetBool();
+			SeeEntriesNotRead = MainViewModel.ViewsController.PluginController.ConfigurationController.GetConfiguration(ApplicationName, nameof(SeeEntriesNotRead)).GetBool();
+			SeeEntriesInteresting = MainViewModel.ViewsController.PluginController.ConfigurationController.GetConfiguration(ApplicationName, nameof(SeeEntriesInteresting)).GetBool();
 		}
 
 		/// <summary>
@@ -40,22 +42,35 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Configuration
 		{ 
 			// Inicializa los argumentos de salida
 			error = string.Empty;
+			// Comprueba los datos
+			if (string.IsNullOrWhiteSpace(PathBlogs) || !System.IO.Directory.Exists(PathBlogs))
+				error = "Enter a valid path";
 			// Devuelve el valor que indica si los datos son correctos
 			return error.IsEmpty();
 		}
 
 		/// <summary>
-		///		Graba los datos
+		///		Graba los datos (y actualiza el árbol)
 		/// </summary>
 		public void Save()
 		{
-			MainViewModel.ViewsController.PluginController.ConfigurationController.SetConfiguration("BlogReader", nameof(PathBlogs), PathBlogs);
-			MainViewModel.ViewsController.PluginController.ConfigurationController.SetConfiguration("BlogReader", nameof(MinutesBetweenDownload), MinutesBetweenDownload.ToString());
-			MainViewModel.ViewsController.PluginController.ConfigurationController.SetConfiguration("BlogReader", nameof(RecordsPerPage), RecordsPerPage.ToString());
-			MainViewModel.ViewsController.PluginController.ConfigurationController.SetConfiguration("BlogReader", nameof(DownloadEnabled), DownloadEnabled.ToString());
-			MainViewModel.ViewsController.PluginController.ConfigurationController.SetConfiguration("BlogReader", nameof(SeeEntriesRead), SeeEntriesRead.ToString());
-			MainViewModel.ViewsController.PluginController.ConfigurationController.SetConfiguration("BlogReader", nameof(SeeEntriesNotRead), SeeEntriesNotRead.ToString());
-			MainViewModel.ViewsController.PluginController.ConfigurationController.SetConfiguration("BlogReader", nameof(SeeEntriesInteresting), SeeEntriesInteresting.ToString());
+			// Grava la configuración
+			MainViewModel.ViewsController.PluginController.ConfigurationController.SetConfiguration(ApplicationName, nameof(PathBlogs), 
+																									PathBlogs);
+			MainViewModel.ViewsController.PluginController.ConfigurationController.SetConfiguration(ApplicationName, nameof(MinutesBetweenDownload), 
+																									MinutesBetweenDownload.ToString());
+			MainViewModel.ViewsController.PluginController.ConfigurationController.SetConfiguration(ApplicationName, nameof(RecordsPerPage), 
+																									RecordsPerPage.ToString());
+			MainViewModel.ViewsController.PluginController.ConfigurationController.SetConfiguration(ApplicationName, nameof(DownloadEnabled), 
+																									DownloadEnabled.ToString());
+			MainViewModel.ViewsController.PluginController.ConfigurationController.SetConfiguration(ApplicationName, nameof(SeeEntriesRead), 
+																									SeeEntriesRead.ToString());
+			MainViewModel.ViewsController.PluginController.ConfigurationController.SetConfiguration(ApplicationName, nameof(SeeEntriesNotRead), 
+																									SeeEntriesNotRead.ToString());
+			MainViewModel.ViewsController.PluginController.ConfigurationController.SetConfiguration(ApplicationName, nameof(SeeEntriesInteresting), 
+																									SeeEntriesInteresting.ToString());
+			// Actualiza el árbol
+			MainViewModel.Load(PathBlogs);
 		}
 
 		/// <summary>

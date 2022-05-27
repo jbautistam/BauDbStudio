@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Files;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Interfaces;
+using Bau.Libraries.PluginsStudio.ViewModels.Base.Models;
 
 namespace Bau.DbStudio.Controllers
 {
@@ -61,6 +64,66 @@ namespace Bau.DbStudio.Controllers
 		public void ExecutePluginCommand(string plugin, string viewModel, string command)
 		{
 			DbStudioViewManager.PluginsManager.ExecutePluginCommand(plugin, viewModel, command);
+		}
+
+		/// <summary>
+		///		Obtiene los archivos asignados que se pueden crear
+		/// </summary>
+		public List<FileAssignedModel> GetFilesAssigned()
+		{
+			List<FileAssignedModel> files = new()
+												{
+													new FileAssignedModel
+																{
+																	Name = "Json",
+																	FileExtension = ".json",
+																	Icon = "/Resources/Images/FileJson.png"
+																},
+													new FileAssignedModel
+																{
+																	Name = "Xml",
+																	FileExtension = ".xml",
+																	Icon = "/Resources/Images/FileXml.png"
+																},
+													new FileAssignedModel
+																{
+																	Name = "Python",
+																	FileExtension = ".py",
+																	Icon = "/Resources/Images/FilePython.png"
+																},
+													new FileAssignedModel
+																{
+																	Name = "Markdown",
+																	FileExtension = ".md",
+																	Icon = "/Resources/Images/FileMd.png"
+																},
+													new FileAssignedModel
+																{
+																	Name = "Powershell",
+																	FileExtension = ".ps",
+																	Icon = "/Resources/Images/FilePowershell.png"
+																},
+													new FileAssignedModel
+																{
+																	Name = "C Sharp",
+																	FileExtension = ".cs",
+																	Icon = "/Resources/Images/FileCsharp.png"
+																},
+													new FileAssignedModel
+																{
+																	Name = "Text",
+																	FileExtension = ".txt",
+																	Icon = "/Resources/Images/FileTxt.png"
+																}
+												};
+				// Añade los archivos de plugin
+				foreach (FileAssignedModel file in DbStudioViewManager.PluginsManager.GetFilesAssigned())
+					if (file.CanCreate && files.FirstOrDefault(item => item.FileExtension.Equals(file.FileExtension, StringComparison.CurrentCultureIgnoreCase)) is null)
+						files.Add(file);
+				// Ordena los archivos
+				files.Sort((first, second) => $"{first.Name}{first.FileExtension}".CompareTo($"{second.Name}{second.FileExtension}"));
+				// Devuelve la lista de archivos
+				return files;
 		}
 
 		/// <summary>

@@ -22,7 +22,6 @@ namespace Bau.Libraries.BlogReader.Views
 			AppViewsController = appViewsController;
 			MainViewModel = new BlogReaderViewModel(new Controllers.BlogController(this, pluginController));
 			MainViewModel.Initialize();
-			MainViewModel.ConfigurationViewModel.PathBlogs = @"C:\Users\Usuario\Documents\BauPlugStudio\BlogsData";
 		}
 
 		/// <summary>

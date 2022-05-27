@@ -21,7 +21,7 @@
 			<ColumnDefinition Width="*"/>
 		</Grid.ColumnDefinitions>
 		<Label Content="Directorio:" Grid.Column="0" Grid.Row="0" />
-		<Files:PathSelect Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="3" Margin = "5" PathName="{Binding Path=PathBlogs}" />
+		<Files:PathSelect Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="3" Margin = "5" PathName="{Binding Path=PathBlogs,UpdateSourceTrigger=PropertyChanged}" />
 		<Label Content="Minutos entre descarga de blogs:" Grid.Row="1" Grid.Column="0" />
 		<Editors:IntegerUpDown Grid.Column="1" Grid.Row="1" Margin = "5" MinWidth="50" Width="50" HorizontalAlignment="Left"
 			Minimum="5" Maximum="240"
