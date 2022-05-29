@@ -46,6 +46,11 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Controllers
 		void ShowNotification(SystemControllerEnums.NotificationType type, string title, string message);
 
 		/// <summary>
+		///		Copia un valor al portapapeles
+		/// </summary>
+		void CopyToClipboard(object value);
+
+		/// <summary>
 		///		Comprueba si en el portapapeles hay una imagen
 		/// </summary>
 		bool ClipboardContainImage();

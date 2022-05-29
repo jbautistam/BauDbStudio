@@ -12,11 +12,12 @@ namespace Bau.Libraries.DbStudio.Views.Queries
 	public partial class QueryViewControl : UserControl
 	{
 		// Variables privadas
-		private DragDropTreeExplorerController _dragDropController = new DragDropTreeExplorerController();
+		private DragDropTreeController _dragDropController;
 
 		public QueryViewControl()
 		{
 			InitializeComponent();
+			_dragDropController = new DragDropTreeController(this, "BaseNodeViewModel");
 		}
 
 		/// <summary>

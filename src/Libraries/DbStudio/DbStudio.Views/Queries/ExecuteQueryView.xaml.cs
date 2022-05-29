@@ -11,8 +11,6 @@ namespace Bau.Libraries.DbStudio.Views.Queries
 	/// </summary>
 	public partial class ExecuteQueryView : UserControl
 	{
-		// Variables privadas
-		private DragDropTreeExplorerController _dragDropController = new DragDropTreeExplorerController();
 
 		public ExecuteQueryView(ExecuteQueryViewModel viewModel)
 		{

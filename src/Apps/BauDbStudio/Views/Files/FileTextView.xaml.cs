@@ -12,12 +12,13 @@ namespace Bau.DbStudio.Views.Files
 	public partial class FileTextView : UserControl
 	{
 		// Variables privadas
-		private DragDropTreeExplorerController _dragDropController = new DragDropTreeExplorerController();
+		private DragDropTreeController _dragDropController;
 
 		public FileTextView(BaseTextFileViewModel viewModel)
 		{
 			InitializeComponent();
 			DataContext = ViewModel = viewModel;
+			_dragDropController = new DragDropTreeController(this, "BaseNodeViewModel");
 		}
 
 		/// <summary>

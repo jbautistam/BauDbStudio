@@ -32,7 +32,7 @@
 						Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
 				<Label Grid.Row="1" Grid.Column="0" Margin="5" Content="Descripción:"/>
 				<TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Top" VerticalContentAlignment="Top" VerticalScrollBarVisibility="Auto" 
-						MinLines="4" MaxLines="5"
+						MinLines="4" MaxLines="5" MinHeight="90"
 						Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
 			</Grid>
 		</GroupBox>

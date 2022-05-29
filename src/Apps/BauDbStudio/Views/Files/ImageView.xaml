@@ -35,7 +35,7 @@
 				</Button>
 				<Slider Width="120" LargeChange="20" Margin="5"
                     Maximum="{Binding ElementName=ZoomAndPanControl, Path=ZoomAndPanContent.MaximumZoom, Converter={zoomAndPan:ZoomAdjustConverter}}"
-                    Minimum="{Binding ElementName=ZoomAndPanControl, Path=ZoomAndPanContent.MinimumZoomClamped, Converter={zoomAndPan:ZoomAdjustConverter}}"
+                    Minimum="{Binding ElementName=ZoomAndPanControl, Path=ZoomAndPanContent.MinimumZoom, Converter={zoomAndPan:ZoomAdjustConverter}}"
                     Value="{Binding ElementName=ZoomAndPanControl, Path=ViewportZoom, Converter={zoomAndPan:ZoomAdjustConverter}}"
                     SmallChange=".1"
                     TickFrequency="10"
@@ -55,8 +55,8 @@
 
 		<zoomAndPan:ZoomAndPanScrollViewer x:Name="ZoomAndPanControl" Background="#AACCCCCC" 
 										   Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="2"
-										   MinimumZoomType="FitScreen" UseAnimations="True"
-										   ZoomAndPanInitialPosition="FillScreen">
+										   UseAnimations="True"
+										   ZoomAndPanInitialPosition="FitScreen">
 			<Image x:Name="imgImage"/>
 		</zoomAndPan:ZoomAndPanScrollViewer>
 

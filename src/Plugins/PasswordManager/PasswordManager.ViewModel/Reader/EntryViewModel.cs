@@ -26,6 +26,7 @@ namespace Bau.Libraries.PasswordManager.ViewModel.Reader
 														FileViewModel.IsUpdated = true;
 												 };
 			// Asigna los comandos
+			CopyPasswordCommand = new BaseCommand(_ => CopyPassword());
 			CreatePasswordCommand = new BaseCommand(_ => CreatePassword());
 		}
 
@@ -56,14 +57,25 @@ namespace Bau.Libraries.PasswordManager.ViewModel.Reader
 				// Comprueba los datos introducidos
 				if (string.IsNullOrWhiteSpace(Name))
 					FileViewModel.MainViewModel.ViewsController.HostController.SystemController.ShowMessage("Introduzca el nombre de la entrada");
-				else if (string.IsNullOrWhiteSpace(Password) || string.IsNullOrWhiteSpace(RepeatPassword))
-					FileViewModel.MainViewModel.ViewsController.HostController.SystemController.ShowMessage("Introduzca la contraseña");
-				else if (!Password.Equals(RepeatPassword))
-					FileViewModel.MainViewModel.ViewsController.HostController.SystemController.ShowMessage("Ambas contraseñas deben ser iguales");
+				else if (!CheckPassword(Password, RepeatPassword))
+					FileViewModel.MainViewModel.ViewsController.HostController.SystemController.ShowMessage("Compruebe las contraseñas");
 				else
 					validated = true;
 				// Devuelve el valor que indica si los datos son correctos
 				return validated;
+		}
+
+		/// <summary>
+		///		Comprueba las contraseñas
+		/// </summary>
+		private bool CheckPassword(string password, string repeatPassword)
+		{
+			if (string.IsNullOrWhiteSpace(password) && string.IsNullOrWhiteSpace(repeatPassword))
+				return true;
+			else if (string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(repeatPassword) || !Password.Equals(repeatPassword))
+				return false;
+			else
+				return true;
 		}
 
 		/// <summary>
@@ -88,6 +100,15 @@ namespace Bau.Libraries.PasswordManager.ViewModel.Reader
 				}
 				// Devuelve el valor que indica si se ha actualizado
 				return validated;
+		}
+
+		/// <summary>
+		///		Copia la contraseña en el portapapeles
+		/// </summary>
+		private void CopyPassword()
+		{
+			if (!string.IsNullOrWhiteSpace(Password))
+				FileViewModel.MainViewModel.ViewsController.PluginController.MainWindowController.CopyToClipboard(Password);
 		}
 
 		/// <summary>
@@ -172,6 +193,11 @@ namespace Bau.Libraries.PasswordManager.ViewModel.Reader
 		///		Datos de la entrada
 		/// </summary>
 		public EntryModel Entry { get; }
+
+		/// <summary>
+		///		Comando para copiar una contraseña al portapapeles
+		/// </summary>
+		public BaseCommand CopyPasswordCommand { get; }
 
 		/// <summary>
 		///		Comando para crear una contraseña

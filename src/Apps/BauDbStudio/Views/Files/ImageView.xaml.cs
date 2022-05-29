@@ -32,8 +32,6 @@ namespace Bau.DbStudio.Views.Files
 				image.BeginInit();
 				image.StreamSource = new System.IO.FileStream(fileName, System.IO.FileMode.Open, System.IO.FileAccess.Read);
 				image.CacheOption = BitmapCacheOption.OnLoad;
-				//bitmapImage.DecodePixelWidth = (int) _decodePixelWidth;
-				//bitmapImage.DecodePixelHeight = (int) _decodePixelHeight;
 				image.EndInit();
 				// Libera el stream para evitar excepciones de acceso al archivo cuando se intenta borrar la imagen
 				image.StreamSource.Dispose();
@@ -41,6 +39,21 @@ namespace Bau.DbStudio.Views.Files
 				imgImage.Source = image;
 				// Muestra las propiedades de la imagen
 				// lblStatus.Text = $"Dimensiones {image.PixelWidth} x {image.PixelHeight}";
+				// Inicializa los controles
+				try
+				{
+					// Cambia el zoom original
+					ZoomAndPanControl.ZoomAndPanContent.MinimumZoom = 0.25;
+					ZoomAndPanControl.ZoomAndPanContent.MaximumZoom = 4;
+					ZoomAndPanControl.ZoomAndPanContent.ZoomAndPanInitialPosition = Controls.ZoomAndPanControls.ZoomAndPanInitialPositionEnum.FitScreen;
+					// Oculta el thumb
+					chkShowThumb.IsChecked = false;
+					wndZoom.Visibility = System.Windows.Visibility.Collapsed;
+				}
+				catch (Exception exception)
+				{
+					System.Diagnostics.Debug.WriteLine($"Error when set image zoom. {exception.Message}");
+				}
 		}
 
 		private void chkShowThumb_Click(object sender, System.Windows.RoutedEventArgs e)

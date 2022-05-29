@@ -10,6 +10,20 @@ namespace Bau.DbStudio.Controllers.Helpers
 	internal class ClipboardHelper
 	{
 		/// <summary>
+		///		Copia un objeto al portapapeles
+		/// </summary>
+		internal void SetData(object value)
+		{
+			if (value is not null)
+			{
+				if (value is string valueString)
+					System.Windows.Clipboard.SetText(valueString);
+				else
+					System.Windows.Clipboard.SetDataObject(value);
+			}
+		}
+
+		/// <summary>
 		///		Comprueba si el portapapeles contiene una imagen
 		/// </summary>
 		internal bool ContainsImage()

@@ -65,7 +65,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Connections
 			// Crea el combo
 			ComboTypes = new ComboViewModel(this);
 			// Añade los elementos
-			ComboTypes.AddItem(null, "<Seleccione un tipo de conexión>");
+			ComboTypes.AddItem(-1, "<Seleccione un tipo de conexión>");
 			ComboTypes.AddItem((int) ConnectionModel.ConnectionType.Spark, "Spark");
 			ComboTypes.AddItem((int) ConnectionModel.ConnectionType.SqlServer, "Sql server");
 			ComboTypes.AddItem((int) ConnectionModel.ConnectionType.Odbc, "Odbc");

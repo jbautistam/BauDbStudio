@@ -17,12 +17,13 @@ namespace Bau.Libraries.DbStudio.Views.Reporting.Explorers
 	{
 		// Variables privadas
 		private Point _startDrag;
-		private DragDropTreeExplorerController _dragDropController = new DragDropTreeExplorerController();
+		private DragDropTreeController _dragDropController;
 
 		public TreeReportingExplorer(TreeReportingViewModel treeViewModel)
 		{
 			InitializeComponent();
 			DataContext = ViewModel = treeViewModel;
+			_dragDropController = new DragDropTreeController(this, "BaseNodeViewModel");
 		}
 
 		/// <summary>
@@ -33,10 +34,7 @@ namespace Bau.Libraries.DbStudio.Views.Reporting.Explorers
 		private void trvExplorer_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
 		{ 
 			if (trvExplorer.DataContext is TreeReportingViewModel && (sender as TreeView)?.SelectedItem is BaseTreeNodeViewModel node)
-			{
 				ViewModel.SelectedNode = node;
-				//ViewModel.OpenDetailsCommand.Execute(null);
-			}
 		}
 
 		private void trvExplorer_MouseDoubleClick(object sender, MouseButtonEventArgs e)

@@ -33,6 +33,15 @@ namespace Bau.Libraries.ComicsReader.Plugin.Views
 				_isLoaded = true;
 				// Carga el archivo
 				await ViewModel.ParseAsync();
+				// Asigna las propiedades al control de imagen
+				ZoomAndPanControl.MinimumZoomType = Controls.ZoomAndPanControls.MinimumZoomTypeEnum.FitScreen;
+				ZoomAndPanControl.ZoomAndPanContent.MinimumZoomType = Controls.ZoomAndPanControls.MinimumZoomTypeEnum.FitScreen;
+				ZoomAndPanControl.ZoomAndPanContent.MaximumZoom = 3;
+				ZoomAndPanControl.ZoomAndPanContent.MinimumZoom = 0.25;
+				// Asigna los manejadores de eventos sobre el control de imagen
+				ZoomAndPanControl.ZoomAndPanContent.ContentZoomChanged += (sender, args) => ViewModel.Zoom = ZoomAndPanControl.ZoomAndPanContent.ViewportZoom;
+				// Asigna los manejadores de eventos sobre el ViewModel
+				ViewModel.UpdateZoom += (sender, args) => ZoomAndPanControl.ZoomAndPanContent.ViewportZoom = args.Zoom; 
 			}
 		}
 
@@ -61,6 +70,19 @@ namespace Bau.Libraries.ComicsReader.Plugin.Views
 		{
 			if (lstThumbs.SelectedItem != null)
 				lstThumbs.ScrollIntoView(lstThumbs.SelectedItem);
+		}
+
+		private void ZoomAndPanControl_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+		{
+			switch (e.Key)
+			{
+				case System.Windows.Input.Key.PageDown:
+						ViewModel.GoNextPage();
+					break;
+				case System.Windows.Input.Key.PageUp:
+						ViewModel.GoPreviousPage();
+					break;
+			}
 		}
 	}
 }

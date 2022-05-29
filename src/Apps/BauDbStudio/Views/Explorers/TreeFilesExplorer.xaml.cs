@@ -19,12 +19,13 @@ namespace Bau.DbStudio.Views.Explorers
 	{
 		// Variables privadas
 		private Point _startDrag;
-		private DragDropTreeExplorerController _dragDropController = new DragDropTreeExplorerController();
+		private DragDropTreeController _dragDropController;
 
 		public TreeFilesExplorer(TreeFilesViewModel treeViewModel)
 		{
 			InitializeComponent();
 			DataContext = ViewModel = treeViewModel;
+			_dragDropController = new DragDropTreeController(this, "BaseNodeViewModel", true);
 		}
 
 		/// <summary>

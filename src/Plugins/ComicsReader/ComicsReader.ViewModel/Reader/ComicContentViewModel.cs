@@ -13,8 +13,11 @@ namespace Bau.Libraries.ComicsReader.ViewModel.Reader
 	/// </summary>
 	public class ComicContentViewModel : BaseObservableObject, PluginsStudio.ViewModels.Base.Interfaces.IDetailViewModel
 	{
+		// Eventos públícos
+		public EventHandler<EventArguments.ZoomEventArgs> UpdateZoom;
 		// Variables privadas
 		private ControlListViewModel _pages;
+		private double _zoom;
 		private string _fileName;
 
 		public ComicContentViewModel(ComicReaderViewModel mainViewModel, string fileName) : base(false)
@@ -107,7 +110,7 @@ namespace Bau.Libraries.ComicsReader.ViewModel.Reader
 		/// <summary>
 		///		Pasa a la primera página
 		/// </summary>
-		private void GoNextPage()
+		public void GoNextPage()
 		{
 			GoPage(GetActualPage() + 1);
 		}
@@ -123,7 +126,7 @@ namespace Bau.Libraries.ComicsReader.ViewModel.Reader
 		/// <summary>
 		///		Pasa a la primera página
 		/// </summary>
-		private void GoPreviousPage()
+		public void GoPreviousPage()
 		{
 			GoPage(GetActualPage() - 1);
 		}
@@ -147,9 +150,17 @@ namespace Bau.Libraries.ComicsReader.ViewModel.Reader
 		/// <summary>
 		///		Selecciona una página
 		/// </summary>
-		private void GoPage(int page)
+		public void GoPage(int page)
 		{
-			ComicPages.SelectedItem = ComicPages.Items[page];
+			if (CanGoPage(page))
+			{
+				double previousZoom = Zoom;
+
+					// Cambia la página seleccionada
+					ComicPages.SelectedItem = ComicPages.Items[page];
+					// Lanza el evento para que recupere el zoom	
+					UpdateZoom?.Invoke(this, new EventArguments.ZoomEventArgs(previousZoom));
+			}
 		}
 
 		/// <summary>
@@ -233,6 +244,15 @@ namespace Bau.Libraries.ComicsReader.ViewModel.Reader
 		{
 			get { return _pages; }
 			set { CheckObject(ref _pages, value); }
+		}
+
+		/// <summary>
+		///		Zoom actual
+		/// </summary>
+		public double Zoom
+		{
+			get { return _zoom; }
+			set { CheckProperty(ref _zoom, value); }
 		}
 
 		/// <summary>

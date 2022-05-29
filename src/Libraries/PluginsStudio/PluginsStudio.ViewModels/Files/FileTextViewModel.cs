@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Bau.Libraries.LibHelper.Extensors;
+
 namespace Bau.Libraries.PluginsStudio.ViewModels.Files
 {
 	/// <summary>
@@ -33,14 +35,25 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Files
 		private string GetTextDroppedOnMarkdown(string droppedFile)
 		{
 			string name = System.IO.Path.GetFileName(droppedFile);
+			string link = string.Empty;
 
 				// Obtiene la cadena adecuada
 				if (LibHelper.Files.HelperFiles.CheckIsImage(droppedFile))
-					return $"![{name}]({droppedFile.Replace('\\', '/')} \"{name}\")";
-				else if (droppedFile.EndsWith(".md", StringComparison.CurrentCultureIgnoreCase))
-					return $"[{name}]({System.IO.Path.Combine(System.IO.Path.GetDirectoryName(droppedFile), System.IO.Path.GetFileNameWithoutExtension(droppedFile)).Replace('\\', '/')})";
+					link = $"![{name}]({droppedFile.Replace('\\', '/')} \"{name}\")";
 				else
-					return $"[{name}]({System.IO.Path.Combine(System.IO.Path.GetDirectoryName(droppedFile), name).Replace('\\', '/')})";
+				{
+					// Asigna el nombre de archivo (sin extensión o sin directorio final)
+					if (droppedFile.EndsWith("_index.md", StringComparison.CurrentCultureIgnoreCase))
+						link = System.IO.Path.GetDirectoryName(droppedFile);
+					else if (droppedFile.EndsWith(".md", StringComparison.CurrentCultureIgnoreCase))
+						link = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(droppedFile), System.IO.Path.GetFileNameWithoutExtension(droppedFile));
+					else
+						link = droppedFile;
+					// Asigna el vínculo
+					link = $"[{name}]({link.Replace('\\', '/')})";
+				}
+				// Devuelve el vínculo
+				return link;
 		}
 
 		/// <summary>

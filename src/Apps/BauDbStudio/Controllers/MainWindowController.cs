@@ -81,6 +81,14 @@ namespace Bau.DbStudio.Controllers
 		}
 
 		/// <summary>
+		///		Copia un objeto al portapapeles
+		/// </summary>
+		public void CopyToClipboard(object value)
+		{
+			new Helpers.ClipboardHelper().SetData(value);
+		}
+
+		/// <summary>
 		///		Comprueba si en el portapapeles hay alguna imagen
 		/// </summary>
 		public bool ClipboardContainImage()

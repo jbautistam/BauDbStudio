@@ -82,7 +82,8 @@
 			</ToolBar>
 		</ToolBarTray>
 		<Slider Grid.Column="0" Grid.Row="2" x:Name="sldThumbWidth" Minimum="50" Maximum="150" Value="100" Width="100"/>
-		<ListBox x:Name="lstThumbs" Grid.Column="0" Grid.Row="1" ItemsSource="{Binding Path=ComicPages.Items}" SelectedItem="{Binding Path=ComicPages.SelectedItem}"
+		<ListBox x:Name="lstThumbs" Grid.Column="0" Grid.Row="1" ItemsSource="{Binding Path=ComicPages.Items}"
+				 SelectedItem="{Binding Path=ComicPages.SelectedItem}"
 				 SelectionChanged="lstThumbs_SelectionChanged">
 			<ListBox.ItemTemplate>
 				<DataTemplate>
@@ -125,14 +126,12 @@
 			<zoomAndPan:ZoomAndPanScrollViewer x:Name="ZoomAndPanControl" Background="#AACCCCCC" 
 										   Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="2"
 										   MinimumZoomType="FitScreen" UseAnimations="True"
-										   ZoomAndPanInitialPosition="FillScreen">
+										   ZoomAndPanInitialPosition="FillScreen" KeyDown="ZoomAndPanControl_KeyDown">
 				<Image x:Name="imgImage" Source="{Binding Path=ComicPages.SelectedItem.FileName}" />
 			</zoomAndPan:ZoomAndPanScrollViewer>
 
 			<Border x:Name="wndZoom" Grid.Row="2" Grid.Column="1" Width="200" Height="200" BorderBrush="White" Background="#AACCCCCC" BorderThickness="3">
-				<zoomAndPan:ZoomAndPanViewBox 
-											  DataContext="{Binding ElementName=ZoomAndPanControl}"
-											  Visual="{Binding ElementName=imgImage}"/>
+				<zoomAndPan:ZoomAndPanViewBox DataContext="{Binding ElementName=ZoomAndPanControl}" Visual="{Binding ElementName=imgImage}"/>
 			</Border>
 		</Grid>
 	</Grid>
