@@ -116,9 +116,15 @@ namespace Bau.Libraries.PasswordManager.ViewModel.Reader
 		/// </summary>
 		private void CreatePassword()
 		{
-			Password = "1234";
-			// Copia la contraseña sobre el campo de "repetir contraseña"
-			RepeatPassword = Password;
+			Generator.GeneratorViewModel viewModel = new(this);
+
+				// Si se ha creado una contraseña, se copia en los cuadros de texto
+				if (FileViewModel.MainViewModel.ViewsController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes &&
+					!string.IsNullOrWhiteSpace(viewModel.Password))
+				{
+					Password = viewModel.Password;
+					RepeatPassword = Password;
+				}
 		}
 
 		/// <summary>

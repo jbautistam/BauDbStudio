@@ -8,9 +8,9 @@ namespace Bau.Libraries.PasswordManager.Plugin.Controllers
 	/// </summary>
 	public class PasswordManagerController : ViewModel.Controllers.IPasswordManagerController
 	{
-		public PasswordManagerController(PasswordManagerPlugin comicReaderPlugin, PluginsStudio.ViewModels.Base.Controllers.IPluginsController pluginController)
+		public PasswordManagerController(PasswordManagerPlugin passwordManagerPlugin, PluginsStudio.ViewModels.Base.Controllers.IPluginsController pluginController)
 		{
-			ComicReaderPlugin = comicReaderPlugin;
+			PasswordManagerPlugin = passwordManagerPlugin;
 			PluginController = pluginController;
 		}
 
@@ -23,7 +23,7 @@ namespace Bau.Libraries.PasswordManager.Plugin.Controllers
 			switch (detailsViewModel)
 			{
 				case Bau.Libraries.PasswordManager.ViewModel.Reader.PasswordFileViewModel viewModel:
-						ComicReaderPlugin.AppViewsController.OpenDocument(new Views.PasswordFileView(viewModel), viewModel);
+						PasswordManagerPlugin.AppViewsController.OpenDocument(new Views.PasswordFileView(viewModel), viewModel);
 					break;
 			}
 			// Devuelve el valor predeterminado
@@ -38,12 +38,12 @@ namespace Bau.Libraries.PasswordManager.Plugin.Controllers
 			SystemControllerEnums.ResultType result = SystemControllerEnums.ResultType.No;
 
 				// Abre la ventana
-				//switch (dialogViewModel)
-				//{
-				//	case PasswordManager.ViewModel.Blogs.BlogViewModel viewModel:
-				//			result = PasswordManagerPlugin.AppViewsController.OpenDialog(new Views.BlogView(viewModel));
-				//		break;
-				//}
+				switch (dialogViewModel)
+				{
+					case PasswordManager.ViewModel.Generator.GeneratorViewModel viewModel:
+							result = PasswordManagerPlugin.AppViewsController.OpenDialog(new Views.GeneratorView(viewModel));
+						break;
+				}
 				// Devuelve el resultado
 				return result;
 		}
@@ -51,7 +51,7 @@ namespace Bau.Libraries.PasswordManager.Plugin.Controllers
 		/// <summary>
 		///		ViewManager
 		/// </summary>
-		public PasswordManagerPlugin ComicReaderPlugin { get; }
+		public PasswordManagerPlugin PasswordManagerPlugin { get; }
 
 		/// <summary>
 		///		Controlador de plugin

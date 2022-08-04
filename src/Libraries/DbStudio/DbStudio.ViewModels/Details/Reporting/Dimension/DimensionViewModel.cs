@@ -54,7 +54,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Dimension
 		}
 
 		/// <summary>
-		///		Normaliza el nombre de la d
+		///		Normaliza el nombre de la dimensión
 		/// </summary>
 		private string NormalizeName(string value)
 		{

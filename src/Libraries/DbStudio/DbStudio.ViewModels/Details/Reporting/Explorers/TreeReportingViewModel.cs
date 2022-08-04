@@ -93,6 +93,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 										.AddListener(this, nameof(SelectedNode));
 			QueryCommand = new BaseCommand(_ => OpenQuery(), _ => CanExecuteAction(nameof(QueryCommand)))
 										.AddListener(this, nameof(SelectedNode));
+			SaveJsonCommand = new BaseCommand(_ => SaveJson(), _ => CanExecuteAction(nameof(SaveJsonCommand)))
+										.AddListener(this, nameof(SaveJsonCommand));
 		}
 
 		/// <summary>
@@ -122,6 +124,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 					return SelectedNode is NodeDimensionViewModel || SelectedNode is NodeDataSourceViewModel || SelectedNode is NodeReportViewModel;
 				case nameof(QueryCommand):
 					return SelectedNode is NodeReportViewModel || SelectedNode is NodeDataSourceViewModel;
+				case nameof(SaveJsonCommand):
+					return SelectedNode is NodeReportViewModel || SelectedNode is NodeDataSourceViewModel || SelectedNode is NodeDimensionViewModel;
 				case nameof(DeleteCommand):
 					return SelectedNode is NodeDataWarehouseViewModel || SelectedNode is NodeReportViewModel || SelectedNode is NodeDimensionViewModel ||
 						   (SelectedNode is NodeDataSourceViewModel nodeDataSource && nodeDataSource.DataSource is DataSourceSqlModel);
@@ -263,6 +267,42 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 						OpenQueryDataSource(node.DataSource);
 					break;
 			}
+		}
+
+		/// <summary>
+		///		Graba los datos
+		/// </summary>
+		private void SaveJson()
+		{
+			switch (SelectedNode)
+			{
+				case NodeDimensionViewModel node:
+						SaveJson(node.Dimension);
+					break;
+				case NodeDataSourceViewModel node:
+						SaveJson(node.DataSource);
+					break;
+			}
+		}
+
+		/// <summary>
+		///		Graba los datos de un objeto como un archivo Json
+		/// </summary>
+		private void SaveJson<TypeData>(TypeData domain) where TypeData : Bau.Libraries.LibReporting.Models.Base.BaseReportingModel
+		{
+			string fileName = ReportingSolutionViewModel.SolutionViewModel.MainController.DialogsController.OpenDialogSave
+									(string.Empty, 
+									 "Archivos Json (*.json)|*.json|Todos los archivos (*.*)|*.*",
+									 domain.Id + ".json", ".json");
+
+				if (!string.IsNullOrWhiteSpace(fileName))
+				{
+					// Graba el archivo
+					System.IO.File.WriteAllText(fileName, Newtonsoft.Json.JsonConvert.SerializeObject(domain, Newtonsoft.Json.Formatting.Indented));
+					// y lo abre en el editor
+					ReportingSolutionViewModel.SolutionViewModel.MainController.HostPluginsController.OpenFile(fileName);
+				}
+
 		}
 
 		/// <summary>
@@ -443,5 +483,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 		///		Comando de consulta
 		/// </summary>
 		public BaseCommand QueryCommand { get; }
+
+		/// <summary>
+		///		Comando para grabar un archivo JSON
+		/// </summary>
+		public BaseCommand SaveJsonCommand { get; }
 	}
 }
