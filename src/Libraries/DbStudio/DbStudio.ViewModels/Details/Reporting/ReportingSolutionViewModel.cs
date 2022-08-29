@@ -40,7 +40,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting
 		internal void SaveSolution()
 		{
 			if (!string.IsNullOrWhiteSpace(_fileName))
-			ReportingSolutionManager.SaveSolution(_fileName);
+				ReportingSolutionManager.SaveSolution(_fileName);
 		}
 
 		/// <summary>

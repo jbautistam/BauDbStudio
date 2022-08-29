@@ -33,6 +33,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.DataSources
 			Table = DataSource.Table;
 			// Carga las columnas
 			ColumnsViewModel = new ListDataSourceColumnsViewModel(ReportingSolutionViewModel, DataSource, false);
+			ColumnsViewModel.PropertyChanged += (sender, args) => {
+																	if (args.PropertyName.Equals(nameof(ListDataSourceColumnsViewModel.IsUpdated), StringComparison.CurrentCultureIgnoreCase))
+																		IsUpdated = true;
+																  };
 			// Indica que por ahora no ha habido modificaciones
 			IsUpdated = false;
 		}

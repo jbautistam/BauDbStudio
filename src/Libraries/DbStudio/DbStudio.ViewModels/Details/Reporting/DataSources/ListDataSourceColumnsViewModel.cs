@@ -38,7 +38,16 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.DataSources
 			Items = new ObservableCollection<ListItemDataSourceColumnViewModel>();
 			// Añade las columnas
 			foreach (DataSourceColumnModel column in DataSource.Columns.EnumerateValuesSorted())
-				Items.Add(new ListItemDataSourceColumnViewModel(ReportingSolutionViewModel, column, Updatable));
+			{
+				ListItemDataSourceColumnViewModel item = new ListItemDataSourceColumnViewModel(ReportingSolutionViewModel, column, Updatable);
+
+					// Añade el manejador de eventos
+					item.PropertyChanged += (sender, args) => IsUpdated = true;
+					// Añade el elemento
+					Items.Add(item);
+			}
+			// Indica que no ha habido modificaciones
+			IsUpdated = false;
 		}
 
 		/// <summary>
