@@ -15,6 +15,8 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\AppController.cs" />
+    <Compile Remove="EtlProjects\CreateSchemaXmlView.xaml.cs" />
+    <Compile Remove="Reporting\Tools\CreateSchemaReportingXmlView.xaml.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -54,6 +56,11 @@
     <None Remove="Resources\Images\Table.png" />
     <None Remove="Resources\Images\Upload.png" />
     <None Remove="Resources\Images\View.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="EtlProjects\CreateSchemaXmlView.xaml" />
+    <Page Remove="Reporting\Tools\CreateSchemaReportingXmlView.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -112,10 +119,6 @@
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
     <Page Update="EtlProjects\CreateImportFilesScriptView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="EtlProjects\CreateSchemaXmlView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
@@ -189,10 +192,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Reporting\Tools\CreateReportingSqlView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Reporting\Tools\CreateSchemaReportingXmlView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>

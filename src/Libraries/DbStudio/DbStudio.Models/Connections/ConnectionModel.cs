@@ -32,6 +32,23 @@ namespace Bau.Libraries.DbStudio.Models.Connections
 		}
 
 		/// <summary>
+		///		Clona la conexión
+		/// </summary>
+		public ConnectionModel Clone()
+		{
+			ConnectionModel connection = new ConnectionModel(Solution);
+
+				// Asigna las propiedades
+				connection.Name = Name;
+				connection.Description = Description;
+				connection.Type = Type;
+				connection.Parameters.AddRange(Parameters);
+				connection.TimeoutExecuteScript = TimeoutExecuteScript;
+				// Devuelve la nueva conexión
+				return connection;
+		}
+
+		/// <summary>
 		///		Solución a la que se asocia la conexión
 		/// </summary>
 		public SolutionModel Solution { get; }

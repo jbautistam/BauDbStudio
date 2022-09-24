@@ -34,8 +34,10 @@
 
   <ItemGroup>
     <Compile Remove="Details\Connections\ConnectionParametersExecutionViewModel.cs" />
+    <Compile Remove="Details\EtlProjects\CreateSchemaXmlViewModel.cs" />
     <Compile Remove="Details\EtlProjects\ExecuteEtlConsoleViewModel.cs" />
     <Compile Remove="Details\Reporting\Reports\ListReportDataSourceViewModel.cs" />
+    <Compile Remove="Details\Reporting\Tools\CreateSchemaReportingXmlViewModel.cs" />
     <Compile Remove="Explorers\Connections\NodeSchemaViewModel.cs" />
     <Compile Remove="Explorers\Connections\TreeDetailsNodeViewModel.cs" />
     <Compile Remove="Explorers\Connections\TreeNodeViewModel.cs" />

@@ -73,12 +73,20 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 			DataSourceSql,
 			Dimension
 		}
+		// Variables privadas
+		private ConnectionModel copiedConnection = null;
 
 		public TreeConnectionsViewModel(DbStudioViewModel solutionViewModel) : base(solutionViewModel)
 		{
 			NewConnectionCommand = new BaseCommand(_ => OpenConnection(null), _ => CanExecuteAction(nameof(NewConnectionCommand)))
 										.AddListener(this, nameof(SelectedNode));
 			NewQueryCommand = new BaseCommand(parameter => OpenQuery(null));
+			CopyCommand = new BaseCommand(_ => CopyConnection(), _ => CanExecuteAction(nameof(CopyCommand)))
+										.AddListener(this, nameof(SelectedNode));
+			PasteCommand = new BaseCommand(_ => PasteConnection(), _ => CanExecuteAction(nameof(PasteCommand)))
+										.AddListener(this, nameof(SelectedNode));
+			CreateSchemaXmlCommand = new BaseCommand(async _ => await CreateSchemaXmlAsync(), _ => CanExecuteAction(nameof(CreateSchemaXmlCommand)))
+										.AddListener(this, nameof(SelectedNode));
 		}
 
 		/// <summary>
@@ -103,8 +111,12 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 					case nameof(OpenCommand):
 						return nodeType == NodeType.Connection || 
 							   nodeType == NodeType.Table;
+					case nameof(CopyCommand):
 					case nameof(DeleteCommand):
+					case nameof(CreateSchemaXmlCommand):
 						return nodeType == NodeType.Connection;
+					case nameof(PasteCommand):
+						return copiedConnection != null;
 					default:
 						return false;
 				}
@@ -273,6 +285,73 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 		}
 
 		/// <summary>
+		///		Copia la conexión
+		/// </summary>
+		private void CopyConnection()
+		{
+			if (SelectedNode is NodeConnectionViewModel node)
+				copiedConnection = node.Connection;
+		}
+
+		/// <summary>
+		///		Pega la conexión
+		/// </summary>
+		private void PasteConnection()
+		{
+			if (copiedConnection is null)
+				SolutionViewModel.MainController.SystemController.ShowMessage("Copy the connection that you want paste");
+			else
+			{
+				ConnectionModel connection = copiedConnection.Clone();
+
+					// Cambia el nombre y el Id
+					connection.Name += " (copy)";
+					// Añade la conexión a la solución
+					SolutionViewModel.Solution.Connections.Add(connection);
+					// Graba la solución
+					SolutionViewModel.SaveSolution();
+					// Actualiza el combo de conexiones
+					SolutionViewModel.ConnectionExecutionViewModel.Load();
+					// Actualiza el árbol
+					Load();
+			}
+		}
+
+		/// <summary>
+		///		Crea el archivo XML de esquema
+		/// </summary>
+		private async System.Threading.Tasks.Task CreateSchemaXmlAsync()
+		{
+			if (SelectedNode is NodeConnectionViewModel node)
+			{
+				string fileName = SolutionViewModel.MainController.DialogsController.OpenDialogSave(null, 
+																									"Archivos XML (*.xml)|*.xml|Todos los archivos (*.*)|*.*", 
+																									$"{node.Connection.Name}.xml", 
+																									".xml");
+
+					if (!string.IsNullOrWhiteSpace(fileName))
+						try
+						{
+							// Crea los archivos
+							await new Application.Controllers.Schema.SchemaManager(SolutionViewModel.Manager).SaveAsync(node.Connection, fileName);
+							// Log
+							SolutionViewModel.MainController.SystemController.ShowMessage("Generación del archivo de esquema finalizada");
+							SolutionViewModel.MainController.MainWindowController
+									.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
+														"Generación de archivos de esquema",
+														$"Ha terminado correctamente la generación del archivo de esquema de la conexión {node.Connection.Name}");
+						}
+						catch (Exception exception)
+						{
+							SolutionViewModel.MainController.MainWindowController
+									.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Error,
+													  "Generación de archivos de esquema",
+													  $"Error en la generación de archivos de esquema de la conexión {node.Connection.Name}. {exception.Message}");
+						}
+			}
+		}
+
+		/// <summary>
 		///		Obtiene el enumerado del tipo de nodo seleccionado
 		/// </summary>
 		private NodeType GetSelectedNodeTypeConverted()
@@ -289,5 +368,20 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 		///		Comando para crear una nueva consulta
 		/// </summary>
 		public BaseCommand NewQueryCommand { get; }
+
+		/// <summary>
+		///		Comando para copiar los datos de una conexión
+		/// </summary>
+		public BaseCommand CopyCommand { get; }
+
+		/// <summary>
+		///		Comando para pegar los datos de una conexión
+		/// </summary>
+		public BaseCommand PasteCommand { get; }
+
+		/// <summary>
+		///		Comando para generar el XML de esquema
+		/// </summary>
+		public BaseCommand CreateSchemaXmlCommand { get; }
 	}
 }

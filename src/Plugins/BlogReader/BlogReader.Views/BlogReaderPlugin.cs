@@ -82,15 +82,6 @@ namespace Bau.Libraries.BlogReader.Views
 		public List<MenuListModel> GetMenus()
 		{
 			return new();
-			/*
-			List<MenuListModel> menus = new();
-
-				// Crea la lista de menús de "Nuevo elemento"
-				menus.Add(GetMenus(MenuListModel.SectionType.NewItem));
-				menus.Add(GetMenus(MenuListModel.SectionType.Tools));
-				// Devuelve la lista de menús
-				return menus;
-			*/
 		}
 
 		/// <summary>
@@ -101,71 +92,12 @@ namespace Bau.Libraries.BlogReader.Views
 			return new();
 		}
 
-/*
-		/// <summary>
-		///		Obtiene los menús
-		/// </summary>
-		private MenuListModel GetMenus(MenuListModel.SectionType section)
-		{
-			MenuListModel menuList = new(section);
-
-				// Obtiene los elementos del menú
-				switch (section)
-				{
-					case MenuListModel.SectionType.NewItem:
-							menuList.Add("_Conexión", MainViewModel.TreeConnectionsViewModel.NewConnectionCommand, GetIcon("Connection.png"));
-							menuList.Add("_Distribución", MainViewModel.TreeConnectionsViewModel.NewDeploymentCommand, GetIcon("Deployment.png"));
-							menuList.Add("_Storage", MainViewModel.TreeStoragesViewModel.NewStorageCommand, GetIcon("Search.png"));
-							menuList.AddSeparator();
-							menuList.Add("_Consulta", MainViewModel.TreeConnectionsViewModel.NewQueryCommand, GetIcon("Script.png"));
-							menuList.AddSeparator();
-							menuList.Add("_Xml de pruebas", MainViewModel.CreateTestXmlCommand, GetIcon("FileXml.png"));
-						break;
-					case MenuListModel.SectionType.Tools:
-							menuList.Add("_Exportar tablas de datos ... ", MainViewModel.ConnectionExecutionViewModel.ExportDataBaseCommand, GetIcon("Export.png"));
-							menuList.AddSeparator();
-							menuList.Add("_Crear scripts validación ...", MainViewModel.CreateValidationScriptsCommand, GetIcon("FileSql.png"));
-							menuList.Add("Crear script de importación de archivos ...", MainViewModel.CreateImportFilesScriptsCommand, GetIcon("FileSql.png"));
-							menuList.AddSeparator();
-							menuList.Add("Generar XML de esquema ...", MainViewModel.CreateSchemaXmlCommand, GetIcon("FileXml.png"));
-							menuList.Add("Generar XML de reporting ...", MainViewModel.CreateSchemaReportingXmlCommand, GetIcon("FileXml.png"));
-							menuList.Add("Generar scripts SQL de reporting ...", MainViewModel.CreateSchemaReportingSqlCommand, GetIcon("FileXml.png"));
-						break;
-				}
-				// Devuelve la lista de menús
-				return menuList;
-		}
-*/
-
-		/// <summary>
-		///		Obtiene la URL completa de un icono
-		/// </summary>
-		private string GetIcon(string resource)
-		{
-			return $"pack://application:,,,/DbStudio.Views;component/Resources/Images/{resource}";
-		}
-
 		/// <summary>
 		///		Obtiene las opciones de menú asociadas a las extensiones de archivo y carpetas
 		/// </summary>
 		public List<FileOptionsModel> GetFilesOptions()
 		{
 			return null;
-/*
-			return new PluginsStudio.ViewModels.Base.Models.Builders.FileOptionsBuilder()
-								.WithOption()
-									.WithFolder()
-									.WithExtension("sql")
-									.WithExtension("xml")
-									.WithMenu(new MenuModel
-														{
-															Header = "Ejecutar",
-															Icon = GetIcon("ArrowRight.png"),
-															Command = MainViewModel.ConnectionExecutionViewModel.ExecuteFileCommand
-														}
-											 )
-								.Build();
-*/
 		}
 
 		/// <summary>

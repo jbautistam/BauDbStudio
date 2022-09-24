@@ -43,6 +43,16 @@
 						</MenuItem.Icon>
 					</MenuItem>
 					<Separator />
+					<MenuItem Header="Copiar" Command="{Binding CopyCommand}">
+						<MenuItem.Icon>
+							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Copy.png" />
+						</MenuItem.Icon>
+					</MenuItem>
+					<MenuItem Header="Pegar" Command="{Binding PasteCommand}">
+						<MenuItem.Icon>
+							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Paste.png" />
+						</MenuItem.Icon>
+					</MenuItem>
 					<MenuItem Header="Borrar" Command="{Binding DeleteCommand}">
 						<MenuItem.Icon>
 							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
@@ -52,6 +62,12 @@
 					<MenuItem Header="Consulta" Command="{Binding Path=NewQueryCommand}">
 						<MenuItem.Icon>
 							<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/Script.png" />
+						</MenuItem.Icon>
+					</MenuItem>
+					<Separator/>
+					<MenuItem Header="Generar XML de esquema ..." Command="{Binding Path=CreateSchemaXmlCommand}">
+						<MenuItem.Icon>
+							<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/File.png" />
 						</MenuItem.Icon>
 					</MenuItem>
 				</ContextMenu>

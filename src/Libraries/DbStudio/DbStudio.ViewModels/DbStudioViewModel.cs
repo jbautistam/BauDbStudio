@@ -38,8 +38,6 @@ namespace Bau.Libraries.DbStudio.ViewModels
 			CreateTestXmlCommand = new BaseCommand(async _ => await CreateTestXmlAsync());
 			CreateValidationScriptsCommand = new BaseCommand(async _ => await CreateValidationScriptsAsync());
 			CreateImportFilesScriptsCommand = new BaseCommand(async _ => await CreateImportFilesScriptsAsync());
-			CreateSchemaXmlCommand  = new BaseCommand(async _ => await CreateSchemaXmlAsync());
-			CreateSchemaReportingXmlCommand = new BaseCommand(_ => CreateSchemaReportingXml());
 			CreateSchemaReportingSqlCommand = new BaseCommand(_ => CreateSchemaReportingSql());
 		}
 
@@ -236,70 +234,6 @@ namespace Bau.Libraries.DbStudio.ViewModels
 		}
 
 		/// <summary>
-		///		Crea los archivos XML de un esquema
-		/// </summary>
-		private async Task CreateSchemaXmlAsync()
-		{
-			Details.EtlProjects.CreateSchemaXmlViewModel viewModel = new Details.EtlProjects.CreateSchemaXmlViewModel(this);
-
-				if (MainController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
-					using (BlockLogModel block = MainController.Logger.Default.CreateBlock(LogModel.LogType.Info, "Comienzo de la creación de archivos de esquema"))
-					{
-						// Crea los archivos de esquema
-						try
-						{
-							// Crea los archivos
-							await new Application.Controllers.Schema.SchemaManager(Manager).SaveAsync(viewModel.ComboConnections.GetSelectedConnection(), viewModel.OutputFileName);
-							// Log
-							block.Info("Fin de la creación de archivos de esquema");
-							MainController.MainWindowController
-									.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
-													  "Generación de archivos de esquema",
-													  "Ha terminado correctamente la generación de los archivos de esquema");
-						}
-						catch (Exception exception)
-						{
-							block.Error($"Error en la generación de archivos de esqu{exception.Message}");
-						}
-						// Log
-						MainController.Logger.Flush();
-					}
-		}
-
-		/// <summary>
-		///		Crea los archivos XML de un esquema para reporting
-		/// </summary>
-		private void CreateSchemaReportingXml()
-		{
-			Details.Reporting.Tools.CreateSchemaReportingXmlViewModel viewModel = new Details.Reporting.Tools.CreateSchemaReportingXmlViewModel(this);
-
-				if (MainController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
-					using (BlockLogModel block = MainController.Logger.Default.CreateBlock(LogModel.LogType.Info, "Comienzo de la creación de archivos de informes"))
-					{
-						// Crea los archivos de esquema
-						try
-						{
-							LibReporting.Solution.ReportingSolutionManager manager = new LibReporting.Solution.ReportingSolutionManager();
-
-								// Graba el archivo
-								manager.SaveDataWarehouse(manager.ConvertSchemaDbToDataWarehouse(viewModel.Name, viewModel.SchemaFileName), viewModel.OutputFileName);
-								// Log
-								block.Info("Fin de la creación de archivos de esquema para informes");
-								MainController.MainWindowController
-										.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
-														  "Generación de archivos de esquema para informes",
-														  "Ha terminado correctamente la generación de los archivos de esquema para informes");
-						}
-						catch (Exception exception)
-						{
-							block.Error($"Error en la generación de archivos de esquema. {exception.Message}");
-						}
-						// Log
-						MainController.Logger.Flush();
-					}
-		}
-
-		/// <summary>
 		///		Crea los archivos SQL de creación de un esquema para reporting sobre una base de datos
 		/// </summary>
 		private void CreateSchemaReportingSql()
@@ -435,16 +369,6 @@ namespace Bau.Libraries.DbStudio.ViewModels
 		///		Crea los archivos SQL de importación de archivos a una base de datos
 		/// </summary>
 		public BaseCommand CreateImportFilesScriptsCommand { get; }
-
-		/// <summary>
-		///		Crea los archivos XML de un esquema de base de datos
-		/// </summary>
-		public BaseCommand CreateSchemaXmlCommand { get; }
-
-		/// <summary>
-		///		Crea los archivos XML de reporting a partir de un esquema de base de datos
-		/// </summary>
-		public BaseCommand CreateSchemaReportingXmlCommand { get; }
 
 		/// <summary>
 		///		Crea los scripts SQL de una base de datos de reporting a partir de un esquema XML de reporting

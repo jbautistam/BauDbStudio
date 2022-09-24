@@ -86,14 +86,8 @@ namespace Bau.Libraries.DbStudio.Views.Controllers
 					case ViewModels.Details.EtlProjects.ExportDatabaseViewModel viewModel:
 							result = DbStudioViewManager.AppViewsController.OpenDialog(new EtlProjects.ExportDatabaseView(viewModel));
 						break;
-					case ViewModels.Details.EtlProjects.CreateSchemaXmlViewModel viewModel:
-							result = DbStudioViewManager.AppViewsController.OpenDialog(new EtlProjects.CreateSchemaXmlView(viewModel));
-						break;
 					case ViewModels.Details.Reporting.Relations.DimensionRelationViewModel viewModel:
 							result = DbStudioViewManager.AppViewsController.OpenDialog(new Reporting.Details.Relations.DimensionRelationView(viewModel));
-						break;
-					case ViewModels.Details.Reporting.Tools.CreateSchemaReportingXmlViewModel viewModel:
-							result = DbStudioViewManager.AppViewsController.OpenDialog(new Reporting.Tools.CreateSchemaReportingXmlView(viewModel));
 						break;
 					case ViewModels.Details.Reporting.Tools.CreateScriptsSqlReportingViewModel viewModel:
 							result = DbStudioViewManager.AppViewsController.OpenDialog(new Reporting.Tools.CreateReportingSqlView(viewModel));

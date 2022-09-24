@@ -56,6 +56,12 @@
 								<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/Connection.png" />
 							</MenuItem.Icon>
 						</MenuItem>
+						<Separator/>
+						<MenuItem Header="Almacén de datos a partir de esquema ..." Command="{Binding Path=NewDataWarehouseFromFileCommand}">
+							<MenuItem.Icon>
+								<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/Connection.png" />
+							</MenuItem.Icon>
+						</MenuItem>
 					</MenuItem>
 					<MenuItem Header="Abrir" Command="{Binding OpenCommand}">
 						<MenuItem.Icon>
@@ -74,9 +80,26 @@
 							<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/Script.png" />
 						</MenuItem.Icon>
 					</MenuItem>
+					<Separator/>
 					<MenuItem Header="Generar JSON" Command="{Binding Path=SaveJsonCommand}">
 						<MenuItem.Icon>
 							<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/Upload.png" />
+						</MenuItem.Icon>
+					</MenuItem>
+					<MenuItem Header="Modificar esquema físico" Command="{Binding Path=MergeSchemaCommand}">
+						<MenuItem.Icon>
+							<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/Step.png" />
+						</MenuItem.Icon>
+					</MenuItem>
+					<Separator/>
+					<MenuItem Header="Abrir en el Explorador" Command="{Binding Path=OpenExplorerCommand}">
+						<MenuItem.Icon>
+							<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/Project.png" />
+						</MenuItem.Icon>
+					</MenuItem>
+					<MenuItem Header="Editar XML" Command="{Binding Path=OpenXmlCommand}">
+						<MenuItem.Icon>
+							<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/File.png" />
 						</MenuItem.Icon>
 					</MenuItem>
 				</ContextMenu>

@@ -85,6 +85,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 			ReportingSolutionViewModel = reportingSolutionViewModel;
 			NewDataWarehouseCommand = new BaseCommand(_ => NewDataWarehouse(), _ => CanExecuteAction(nameof(NewDataWarehouseCommand)))
 										.AddListener(this, nameof(SelectedNode));
+			NewDataWarehouseFromFileCommand = new BaseCommand(_ => NewDataWarehouseFromFile(), _ => CanExecuteAction(nameof(NewDataWarehouseFromFileCommand)))
+													.AddListener(this, nameof(SelectedNode));
 			NewDataSourceCommand = new BaseCommand(_ => OpenDataSource(null), _ => CanExecuteAction(nameof(NewDataSourceCommand)))
 										.AddListener(this, nameof(SelectedNode));
 			NewDimensionCommand = new BaseCommand(_ => OpenDimension(null), _ => CanExecuteAction(nameof(NewDimensionCommand)))
@@ -94,7 +96,45 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 			QueryCommand = new BaseCommand(_ => OpenQuery(), _ => CanExecuteAction(nameof(QueryCommand)))
 										.AddListener(this, nameof(SelectedNode));
 			SaveJsonCommand = new BaseCommand(_ => SaveJson(), _ => CanExecuteAction(nameof(SaveJsonCommand)))
-										.AddListener(this, nameof(SaveJsonCommand));
+										.AddListener(this, nameof(SelectedNode));
+			OpenExplorerCommand = new BaseCommand(_ => OpenExplorer(), _ => CanExecuteAction(nameof(OpenExplorerCommand)))
+										.AddListener(this, nameof(SelectedNode));
+			OpenXmlCommand = new BaseCommand(_ => OpenXmlEditor(), _ => CanExecuteAction(nameof(OpenXmlCommand)))
+										.AddListener(this, nameof(SelectedNode));
+			MergeSchemaCommand = new BaseCommand(_ => MergeSchema(), _ => CanExecuteAction(nameof(MergeSchemaCommand)))
+										.AddListener(this, nameof(SelectedNode));
+		}
+
+		/// <summary>
+		///		Abre el archivo en el explorador
+		/// </summary>
+		private void OpenExplorer()
+		{
+			if (SelectedNode is NodeDataWarehouseViewModel node)
+			{
+				string fileName = ReportingSolutionViewModel.ReportingSolutionManager.ReportingSolution.GetFileName(node.DataWarehouse);
+
+					if (!System.IO.File.Exists(fileName))
+						ReportingSolutionViewModel.SolutionViewModel.MainController.SystemController.ShowMessage($"Can't find the file {fileName}");
+					else
+						ReportingSolutionViewModel.SolutionViewModel.MainController.MainWindowController.OpenExplorer(System.IO.Path.GetDirectoryName(fileName));
+			}
+		}
+
+		/// <summary>
+		///		Abre el archivo Xml en el editor
+		/// </summary>
+		private void OpenXmlEditor()
+		{
+			if (SelectedNode is NodeDataWarehouseViewModel node)
+			{
+				string fileName = ReportingSolutionViewModel.ReportingSolutionManager.ReportingSolution.GetFileName(node.DataWarehouse);
+
+					if (!System.IO.File.Exists(fileName))
+						ReportingSolutionViewModel.SolutionViewModel.MainController.SystemController.ShowMessage($"Can't find the file {fileName}");
+					else
+						ReportingSolutionViewModel.SolutionViewModel.MainController.PluginController.HostPluginsController.OpenFile(fileName);
+			}
 		}
 
 		/// <summary>
@@ -114,6 +154,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 			switch (action)
 			{
 				case nameof(NewDataWarehouseCommand):
+				case nameof(NewDataWarehouseFromFileCommand):
 					return true;
 				case nameof(NewDataSourceCommand):
 				case nameof(NewReportCommand):
@@ -129,6 +170,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 				case nameof(DeleteCommand):
 					return SelectedNode is NodeDataWarehouseViewModel || SelectedNode is NodeReportViewModel || SelectedNode is NodeDimensionViewModel ||
 						   (SelectedNode is NodeDataSourceViewModel nodeDataSource && nodeDataSource.DataSource is DataSourceSqlModel);
+				case nameof(OpenExplorerCommand):
+				case nameof(OpenXmlCommand):
+				case nameof(MergeSchemaCommand):
+					return SelectedNode is NodeDataWarehouseViewModel;
 				default:
 					return false;
 			}
@@ -163,12 +208,86 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 														"Archivo de esquema (*.xml)|*.xml|Todos los archivos (*.*)|*.*");
 
 				if (!string.IsNullOrWhiteSpace(fileName) && System.IO.File.Exists(fileName))
+					AddDataWarehouseToSolution(fileName);
+		}
+
+		/// <summary>
+		///		Crea un nuevo dataWarehouse a partir de un archivo XML de esquema de conexión
+		/// </summary>
+		private void NewDataWarehouseFromFile()
+		{
+			string schemaFile = ReportingSolutionViewModel.SolutionViewModel.MainController.DialogsController
+									.OpenDialogLoad(string.Empty, "Archivos de esquema (*.xml)|*.xml|Todos los archivos (*.*)|*.*");
+
+				if (!string.IsNullOrWhiteSpace(schemaFile) && System.IO.File.Exists(schemaFile))
 				{
-					// Añade un almacén de datos a la solución
-					ReportingSolutionViewModel.ReportingSolutionManager.AddDataWarehouse(fileName);
-					// Graba la solución y actualiza el árbol
-					SaveSolution();
+					string fileName = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(schemaFile),
+																$"Reporting-{System.IO.Path.GetFileNameWithoutExtension(schemaFile)}.xml");
+
+						if (System.IO.File.Exists(fileName))
+							ReportingSolutionViewModel.SolutionViewModel.MainController.SystemController
+									.ShowMessage($"Ya existe un archivo de reporting llamado {fileName}");
+						else
+							try
+							{
+								DataWarehouseModel dataWarehouse = ReportingSolutionViewModel.ReportingSolutionManager
+																		.ConvertSchemaDbToDataWarehouse(System.IO.Path.GetFileNameWithoutExtension(schemaFile),
+																										schemaFile);
+
+									// Graba los datos del almacén en un archivo
+									ReportingSolutionViewModel.ReportingSolutionManager.SaveDataWarehouse(dataWarehouse, fileName);
+									// Añade el almacén de datos a la colección
+									AddDataWarehouseToSolution(fileName);
+									// Mensaje
+									ReportingSolutionViewModel.SolutionViewModel.MainController.SystemController
+											.ShowMessage("Se ha añadido correctamente el almacén de datos a la solución");
+							}
+							catch (Exception exception)
+							{
+								ReportingSolutionViewModel.SolutionViewModel.MainController.SystemController
+										.ShowMessage($"Error al crear el esquema de reporting {exception.Message}");
+							}
 				}
+		}
+
+		/// <summary>
+		///		Añade un almacén de datos a la solución
+		/// </summary>
+		private void AddDataWarehouseToSolution(string fileName)
+		{
+			// Añade un almacén de datos a la solución
+			ReportingSolutionViewModel.ReportingSolutionManager.AddDataWarehouse(fileName);
+			// Graba la solución y actualiza el árbol
+			SaveSolution();
+		}
+
+		/// <summary>
+		///		Combina el esquema
+		/// </summary>
+		private void MergeSchema()
+		{
+			if (SelectedNode is NodeDataWarehouseViewModel node)
+			{
+				string dataWarehouseFileName = ReportingSolutionViewModel.ReportingSolutionManager.ReportingSolution.GetFileName(node.DataWarehouse);
+
+					if (!System.IO.File.Exists(dataWarehouseFileName))
+						ReportingSolutionViewModel.SolutionViewModel.MainController.SystemController.ShowMessage($"Can't find the file {dataWarehouseFileName}");
+					else
+					{
+						string schemaFileName = ReportingSolutionViewModel.SolutionViewModel.MainController.DialogsController
+													.OpenDialogLoad(string.Empty,
+																	"Archivo de esquema (*.xml)|*.xml|Todos los archivos (*.*)|*.*");
+
+							if (!string.IsNullOrWhiteSpace(schemaFileName) && System.IO.File.Exists(schemaFileName))
+							{
+								ReportingSolutionViewModel.SolutionViewModel.MainController.SystemController.ShowMessage($"Merge {dataWarehouseFileName} with {schemaFileName}");
+								//// Añade un almacén de datos a la solución
+								//ReportingSolutionViewModel.ReportingSolutionManager.AddDataWarehouse(schemaFileName);
+								//// Graba la solución y actualiza el árbol
+								//SaveSolution();
+							}
+					}
+			}
 		}
 
 		/// <summary>
@@ -465,6 +584,11 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 		public BaseCommand NewDataWarehouseCommand { get; }
 
 		/// <summary>
+		///		Comando de creación de un nuevo almacén de datos a partir de un archivo de conexión
+		/// </summary>
+		public BaseCommand NewDataWarehouseFromFileCommand { get; }
+
+		/// <summary>
 		///		Comando de nueva dimensión
 		/// </summary>
 		public BaseCommand NewDimensionCommand { get; }
@@ -488,5 +612,20 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 		///		Comando para grabar un archivo JSON
 		/// </summary>
 		public BaseCommand SaveJsonCommand { get; }
+
+		/// <summary>
+		///		Comando para abrir el archivo en el explorador
+		/// </summary>
+		public BaseCommand OpenExplorerCommand { get; }
+
+		/// <summary>
+		///		Comando para abrir el archivo XML en el editor
+		/// </summary>
+		public BaseCommand OpenXmlCommand { get; }
+
+		/// <summary>
+		///		Comando para combinar con un archivo de esquema
+		/// </summary>
+		public BaseCommand MergeSchemaCommand { get; }
 	}
 }

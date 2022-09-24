@@ -22,7 +22,7 @@ namespace Bau.Libraries.LibReporting.Solution.Models
 		/// <summary>
 		///		Obtiene el nombre de archivo asociado con un almacén en la solución
 		/// </summary>
-		internal string GetFileName(DataWarehouseModel dataWarehouse)
+		public string GetFileName(DataWarehouseModel dataWarehouse)
 		{
 			// Busca el nombre de archivo
 			foreach ((string solutionDataWarehouse, string file) in DataWarehousesFiles)
