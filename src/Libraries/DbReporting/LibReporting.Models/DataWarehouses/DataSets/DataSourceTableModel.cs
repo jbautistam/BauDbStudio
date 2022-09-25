@@ -21,6 +21,24 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets
 		}
 
 		/// <summary>
+		///		Clona un <see cref="DataSourceTableModel"/>
+		/// </summary>
+		public DataSourceTableModel Clone(DataWarehouseModel target)
+		{
+			DataSourceTableModel dataSource = new DataSourceTableModel(target)
+														{
+															Schema = Schema,
+															Table = Table
+														};
+
+				// Clona las columnas
+				foreach (DataSourceColumnModel column in Columns.EnumerateValues())
+					dataSource.Columns.Add(column.Clone(dataSource));
+				// Devuelve el origen de datos clonado
+				return dataSource;
+		}
+
+		/// <summary>
 		///		Esquema origen
 		/// </summary>
 		public string Schema { get; set; }
@@ -55,5 +73,10 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets
 					return fullName; 
 			}
 		}
+
+		/// <summary>
+		///		Indica si es un origen de datos establecido sobre una vista
+		/// </summary>
+		public bool IsView { get; set; }
 	}
 }

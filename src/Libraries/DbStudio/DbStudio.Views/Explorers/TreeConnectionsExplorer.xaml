@@ -9,7 +9,7 @@
 			 xmlns:ConverterLocal="clr-namespace:Bau.Libraries.DbStudio.Views.Converters"
              d:DesignHeight="450" d:DesignWidth="800">
 	<UserControl.Resources>
-		<ConverterLocal:TreeIconConverter x:Key="TreeIconConverter"/>
+		<ConverterLocal:TreeConnectionIconConverter x:Key="TreeIconConverter"/>
 	</UserControl.Resources>
 	<Grid>
 		<TreeView x:Name="trvExplorer" BorderThickness="0"

@@ -13,7 +13,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 	public class NodeDataWarehouseViewModel : BaseTreeNodeViewModel
 	{
 		public NodeDataWarehouseViewModel(BaseTreeViewModel trvTree, IHierarchicalViewModel parent, DataWarehouseModel dataWarehouse) : 
-					base(trvTree, parent, dataWarehouse.Name, TreeReportingViewModel.NodeType.DataWarehouse.ToString(), TreeReportingViewModel.IconType.Connection.ToString(), 
+					base(trvTree, parent, dataWarehouse.Name, TreeReportingViewModel.NodeType.DataWarehouse.ToString(), TreeReportingViewModel.IconType.DataWarehouse.ToString(), 
 						 dataWarehouse, true, true, MvvmColor.Red)
 		{
 			DataWarehouse = dataWarehouse;

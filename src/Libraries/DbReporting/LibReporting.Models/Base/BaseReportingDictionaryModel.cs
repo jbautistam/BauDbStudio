@@ -1,6 +1,7 @@
-﻿using Bau.Libraries.LibReporting.Models.DataWarehouses;
-using System;
+﻿using System;
 using System.Collections.Generic;
+
+using Bau.Libraries.LibReporting.Models.DataWarehouses;
 
 namespace Bau.Libraries.LibReporting.Models.Base
 {

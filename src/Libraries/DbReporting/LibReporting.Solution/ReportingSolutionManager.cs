@@ -103,6 +103,14 @@ namespace Bau.Libraries.LibReporting.Solution
 		}
 
 		/// <summary>
+		///		Combina un <see cref="DataWarehouseModel"/> con un archivo de esquema de base de datos
+		/// </summary>
+		public void Merge(DataWarehouseModel source, string schemaFile)
+		{
+			new Converters.SchemaConverter().Merge(source, schemaFile);
+		}
+
+		/// <summary>
 		///		Convierte un esquema en scripts de generación de la base de datos
 		/// </summary>
 		public void ConvertSchemaReportingToSql(string schemaFileName, string outputFileName)

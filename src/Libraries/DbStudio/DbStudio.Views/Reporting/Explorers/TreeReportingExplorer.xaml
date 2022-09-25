@@ -9,7 +9,7 @@
 			 xmlns:ConverterLocal="clr-namespace:Bau.Libraries.DbStudio.Views.Converters"
              d:DesignHeight="450" d:DesignWidth="800">
 	<UserControl.Resources>
-		<ConverterLocal:TreeIconConverter x:Key="TreeIconConverter"/>
+		<ConverterLocal:TreeReportingIconConverter x:Key="TreeIconConverter"/>
 	</UserControl.Resources>
 	<Grid>
 		<TreeView x:Name="trvExplorer" BorderThickness="0"
@@ -86,7 +86,7 @@
 							<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/Upload.png" />
 						</MenuItem.Icon>
 					</MenuItem>
-					<MenuItem Header="Modificar esquema físico" Command="{Binding Path=MergeSchemaCommand}">
+					<MenuItem Header="Actualizar esquema físico ..." Command="{Binding Path=MergeSchemaCommand}">
 						<MenuItem.Icon>
 							<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/Step.png" />
 						</MenuItem.Icon>

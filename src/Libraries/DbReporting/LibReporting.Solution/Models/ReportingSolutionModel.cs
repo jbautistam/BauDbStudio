@@ -32,11 +32,6 @@ namespace Bau.Libraries.LibReporting.Solution.Models
 			return string.Empty;
 		}
 
-		///// <summary>
-		/////		Nombre del archivo de solución
-		///// </summary>
-		//public string FileName { get; set; }
-
 		/// <summary>
 		///		Nombres de archivos
 		/// </summary>

@@ -8,7 +8,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 	<UserControl.Resources>
-		<ConverterLocal:TreeIconConverter x:Key="TreeIconConverter"/>
+		<ConverterLocal:TreeReportingIconConverter x:Key="TreeIconConverter"/>
 		<ConverterLocal:SortIconConverter x:Key="SortIconConverter"/>
 		<ConverterLocal:FilterIconConverter x:Key="FilterIconConverter"/>
 	</UserControl.Resources>

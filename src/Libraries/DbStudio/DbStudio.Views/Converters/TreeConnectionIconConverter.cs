@@ -7,9 +7,9 @@ using Bau.Libraries.DbStudio.ViewModels.Explorers.Connections;
 namespace Bau.Libraries.DbStudio.Views.Converters
 {
 	/// <summary>
-	///		Conversor de iconos
+	///		Conversor de iconos para el árbol de conexiones
 	/// </summary>
-	public class TreeIconConverter : IValueConverter
+	public class TreeConnectionIconConverter : IValueConverter
 	{
 		/// <summary>
 		///		Convierte un tipo en un icono
@@ -33,14 +33,8 @@ namespace Bau.Libraries.DbStudio.Views.Converters
 					return "/DbStudio.Views;component/Resources/Images/Connection.png";
 				case TreeConnectionsViewModel.IconType.Schema:
 					return "/DbStudio.Views;component/Resources/Images/Schema.png";
-				case TreeConnectionsViewModel.IconType.Storage:
-					return "/DbStudio.Views;component/Resources/Images/Storage.png";
 				case TreeConnectionsViewModel.IconType.Project:
 					return "/DbStudio.Views;component/Resources/Images/Project.png";
-				case TreeConnectionsViewModel.IconType.Path:
-					return "/DbStudio.Views;component/Resources/Images/FolderNode.png";
-				case TreeConnectionsViewModel.IconType.File:
-					return "/DbStudio.Views;component/Resources/Images/File.png";
 				case TreeConnectionsViewModel.IconType.Table:
 					return "/DbStudio.Views;component/Resources/Images/Table.png";
 				case TreeConnectionsViewModel.IconType.View:
@@ -53,12 +47,6 @@ namespace Bau.Libraries.DbStudio.Views.Converters
 					return "/DbStudio.Views;component/Resources/Images/DataError.png";
 				case TreeConnectionsViewModel.IconType.Loading:
 					return "/DbStudio.Views;component/Resources/Images/Loading.png";
-				case TreeConnectionsViewModel.IconType.DataSourceSql:
-					return "/DbStudio.Views;component/Resources/Images/FileSql.png";
-				case TreeConnectionsViewModel.IconType.Report:
-					return "/DbStudio.Views;component/Resources/Images/Report.png";
-				case TreeConnectionsViewModel.IconType.Dimension:
-					return "/DbStudio.Views;component/Resources/Images/ReportDimension.png";
 				default:
 					return null;
 			}

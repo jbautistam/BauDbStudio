@@ -27,6 +27,7 @@ namespace Bau.Libraries.LibReporting.Solution.Repositories
 		private const string TagDataSourceTable = "DataSourceTable";
 		private const string TagDataSourceSql = "DataSourceSql";
 		private const string TagSql = "Sql";
+		private const string TagIsView = "IsView";
 		private const string TagDimension = "Dimension";
 		private const string TagReport = "Report";
 		private const string TagDataSource = "DataSource";
@@ -94,6 +95,7 @@ namespace Bau.Libraries.LibReporting.Solution.Repositories
 				// Asigna el esquema y la tabla
 				dataSource.Schema = rootML.Attributes[TagSchema].Value.TrimIgnoreNull();
 				dataSource.Table = rootML.Attributes[TagTable].Value.TrimIgnoreNull();
+				dataSource.IsView = rootML.Attributes[TagIsView].Value.GetBool();
 				// El Id del origen de datos es el nombre completo de la tabla
 				dataSource.Id = dataSource.FullName;
 				// Carga las columnas
@@ -288,6 +290,7 @@ namespace Bau.Libraries.LibReporting.Solution.Repositories
 				nodeML.Attributes.Add(TagId, dataSource.FullName);
 				nodeML.Attributes.Add(TagSchema, dataSource.Schema);
 				nodeML.Attributes.Add(TagTable, dataSource.Table);
+				nodeML.Attributes.Add(TagIsView, dataSource.IsView);
 				// Añade las columnas visibles
 				nodeML.Nodes.AddRange(GetNodesColumns(dataSource.Columns));
 				// Devuelve el nodo

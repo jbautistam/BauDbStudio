@@ -50,7 +50,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 					parentDataSource.Children.Add(parentDimension);
 					// Añade los campos de la relación
 					foreach (RelationForeignKey column in relation.ForeignKeys)
-						parentDimension.Children.Add(new NodeRootViewModel(TreeViewModel, parentDimension, TreeReportingViewModel.NodeType.File, 
+						parentDimension.Children.Add(new NodeRootViewModel(TreeViewModel, parentDimension, TreeReportingViewModel.NodeType.Field, 
 																			$"{column.ColumnId} -> {column.TargetColumnId}", false,
 																			false, BauMvvm.ViewModels.Media.MvvmColor.Black));
 			}

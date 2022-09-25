@@ -24,6 +24,19 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses
 		}
 
 		/// <summary>
+		///		Obtiene un origen de datos por su nombre completo
+		/// </summary>
+		public DataSets.DataSourceTableModel GetDataTableByFullName(string fullName)
+		{
+			// Obtiene el dataTable por su nombre completo
+			foreach (DataSets.BaseDataSourceModel dataSource in DataSources.EnumerateValues())
+				if (dataSource is DataSets.DataSourceTableModel dataTable && dataTable.FullName.Equals(fullName, StringComparison.CurrentCultureIgnoreCase))
+					return dataTable;
+			// Si ha llegado hasta aquí es porque no ha encontrado nada
+			return null;
+		}
+
+		/// <summary>
 		///		Esquema
 		/// </summary>
 		public ReportingSchemaModel Schema { get; }

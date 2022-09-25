@@ -28,12 +28,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 			Table,
 			/// <summary>Raíz de archivos de proyecto</summary>
 			FilesRoot,
-			/// <summary>Archivo / directorio</summary>
-			File,
-			/// <summary>Conexión a storage</summary>
-			Storage,
-			/// <summary>Contenedor de storage</summary>
-			StorageContainer,
 			/// <summary>Mensaje (transitorio)</summary>
 			Message,
 			/// <summary>Almacén de datos</summary>
@@ -59,19 +53,19 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 			Unknown,
 			Connection,
 			Project,
-			Path,
-			File,
+			//Path,
+			//File,
 			Schema,
 			Table,
 			View,
 			Key,
 			Field,
 			Error,
-			Loading,
-			Storage,
-			Report,
-			DataSourceSql,
-			Dimension
+			Loading
+			//Storage,
+			//Report,
+			//DataSourceSql,
+			//Dimension
 		}
 		// Variables privadas
 		private ConnectionModel copiedConnection = null;

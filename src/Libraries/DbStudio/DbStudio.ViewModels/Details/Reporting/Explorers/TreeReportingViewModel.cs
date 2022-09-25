@@ -19,34 +19,18 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 		{
 			/// <summary>Desconocido. No se debería utilizar</summary>
 			Unknown,
-			/// <summary>Raíz de la conexión</summary>
-			ConnectionRoot,
-			/// <summary>Conexión</summary>
-			Connection,
-			/// <summary>Esquema de una conexión</summary>
-			SchemaRoot,
-			/// <summary>Tabla</summary>
-			Table,
-			/// <summary>Raíz de la distribución</summary>
-			DeploymentRoot,
-			/// <summary>Distribución</summary>
-			Deployment,
-			/// <summary>Raíz de archivos de proyecto</summary>
-			FilesRoot,
-			/// <summary>Archivo / directorio</summary>
-			File,
-			/// <summary>Conexión a storage</summary>
-			Storage,
-			/// <summary>Contenedor de storage</summary>
-			StorageContainer,
-			/// <summary>Mensaje (transitorio)</summary>
-			Message,
 			/// <summary>Almacén de datos</summary>
 			DataWarehouse,
 			/// <summary>Raíz de origen de datos</summary>
 			DataSourcesRoot,
+			/// <summary>Raíz de esquemas de origen de datos</summary>
+			DataSourceSchemasRoot,
 			/// <summary>Origen de datos</summary>
 			DataSource,
+			/// <summary>Tabla</summary>
+			Table,
+			/// <summary>Campo</summary>
+			Field,
 			/// <summary>Raíz de dimensiones</summary>
 			DimensionsRoot,
 			/// <summary>Dimensión</summary>
@@ -62,22 +46,17 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 		public enum IconType
 		{
 			Unknown,
-			Connection,
-			Deployment,
-			Project,
-			Path,
-			File,
-			Schema,
-			Table,
-			View,
+			DataWarehouse,
+			DataSourceRoot,
+			DataSourceTable,
+			DataSourceView,
 			Key,
 			Field,
 			Error,
-			Loading,
-			Storage,
 			Report,
 			DataSourceSql,
-			Dimension
+			Dimension,
+			Folder
 		}
 
 		public TreeReportingViewModel(ReportingSolutionViewModel reportingSolutionViewModel)
@@ -279,13 +258,22 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 																	"Archivo de esquema (*.xml)|*.xml|Todos los archivos (*.*)|*.*");
 
 							if (!string.IsNullOrWhiteSpace(schemaFileName) && System.IO.File.Exists(schemaFileName))
-							{
-								ReportingSolutionViewModel.SolutionViewModel.MainController.SystemController.ShowMessage($"Merge {dataWarehouseFileName} with {schemaFileName}");
-								//// Añade un almacén de datos a la solución
-								//ReportingSolutionViewModel.ReportingSolutionManager.AddDataWarehouse(schemaFileName);
-								//// Graba la solución y actualiza el árbol
-								//SaveSolution();
-							}
+								try
+								{
+									// Mezcla el datawarehouse con el archivo de esquema
+									ReportingSolutionViewModel.ReportingSolutionManager.Merge(node.DataWarehouse, schemaFileName);
+									// Graba la solución y actualiza el árbol
+									ReportingSolutionViewModel.ReportingSolutionManager.SaveDataWarehouse(node.DataWarehouse, dataWarehouseFileName);
+									SaveSolution();
+									// Mensaje
+									ReportingSolutionViewModel.SolutionViewModel.MainController.SystemController
+										.ShowMessage($"Final de la actualización de {dataWarehouseFileName} con {schemaFileName}");
+								}
+								catch (Exception exception)
+								{
+									ReportingSolutionViewModel.SolutionViewModel.MainController.SystemController
+										.ShowMessage($"Error al actualizar {node.DataWarehouse.Name} con {schemaFileName}. {exception.Message}");
+								}
 					}
 			}
 		}

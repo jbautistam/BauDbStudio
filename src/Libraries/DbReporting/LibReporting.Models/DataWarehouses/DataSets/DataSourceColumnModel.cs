@@ -33,6 +33,17 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets
 			DataSource = dataSource;
 		}
 
+		public DataSourceColumnModel Clone(BaseDataSourceModel targetDataSource)
+		{
+			return new DataSourceColumnModel(targetDataSource)
+							{
+								IsPrimaryKey = IsPrimaryKey,
+								Type = Type,
+								Visible = Visible,
+								Required = Required
+							};
+		}
+
 		/// <summary>
 		///		Compara el valor de dos elementos para ordenarlo
 		/// </summary>
