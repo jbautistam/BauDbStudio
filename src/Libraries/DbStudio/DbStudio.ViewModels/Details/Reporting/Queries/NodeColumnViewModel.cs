@@ -44,8 +44,14 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 			// Asigna la columna
 			ColumnNodeType = columnNodeType;
 			Column = column;
+			// Cambia el texto del nombre del campo por el alias si es necesario
+			if (Column is not null)
+			{
+				if (!string.IsNullOrWhiteSpace(Column.Alias) && !Column.Alias.Equals(Column.Id, StringComparison.CurrentCultureIgnoreCase))
+					Text = $"{Column.Alias} ({Column.Id})";
+			}
 			// Asigna las propiedades
-			if (column == null) // ... si no es una columna, es una cabecera
+			if (column is null) // ... si no es una columna, es una cabecera
 			{
 				IsBold = true;
 				Foreground = MvvmColor.Red;
@@ -147,7 +153,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 				bool hasFilters = false;
 
 					// Abre el cuadro de diálogo que muestra los filtros posibles
-					tree.ReportViewModel.ReportingSolutionViewModel.SolutionViewModel.MainController.OpenDialog(GetFilter(whereClause));
+					tree.ReportViewModel.ViewModel.SolutionViewModel.MainController.OpenDialog(GetFilter(whereClause));
 					// Cambia el valor que indica si tenemos filtros
 					hasFilters = GetFilter(whereClause).FiltersViewModel.Count > 0;
 					if (whereClause)

@@ -50,11 +50,11 @@ namespace Bau.Libraries.DbStudio.Views.Controllers
 				case ViewModels.Details.Reporting.Dimension.DimensionViewModel viewModel:
 						DbStudioViewManager.AppViewsController.OpenDocument(new Reporting.Details.Dimensions.DimensionView(viewModel), viewModel);
 					break;
-				case ViewModels.Details.Reporting.Queries.ReportViewModel viewModel:
-						DbStudioViewManager.AppViewsController.OpenDocument(new Reporting.Queries.ReportView(viewModel), viewModel);
-					break;
 				case ViewModels.Details.Reporting.Reports.ReportViewModel viewModel:
 						DbStudioViewManager.AppViewsController.OpenDocument(new Reporting.Details.Reports.ReportView(viewModel), viewModel);
+					break;
+				case ViewModels.Details.Reporting.Queries.ReportViewModel viewModel:
+						DbStudioViewManager.AppViewsController.OpenDocument(new Reporting.Queries.ReportView(viewModel), viewModel);
 					break;
 			}
 			// Devuelve el valor predeterminado

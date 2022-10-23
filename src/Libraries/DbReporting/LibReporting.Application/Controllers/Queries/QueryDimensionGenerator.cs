@@ -12,12 +12,29 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 	/// <summary>
 	///		Generador de consultas para una dimensión
 	/// </summary>
-	internal class QueryDimensionGenerator : BaseQueryGenerator
+	internal class QueryDimensionGenerator : QueryBaseGenerator
 	{
-		internal QueryDimensionGenerator(ReportQueryGenerator generator) : base(generator) {}
+		internal QueryDimensionGenerator(ReportBaseQueryGenerator generator) : base(generator) {}
 
 		/// <summary>
 		///		Obtiene la consulta para una dimensión del informe
+		/// </summary>
+		internal QueryModel GetQuery(DimensionModel dimension)
+		{
+			QueryModel query = new QueryModel(dimension.Id, QueryModel.QueryType.Dimension, dimension.Id);
+
+				// Prepara la consulta
+				query.Prepare(dimension.DataSource);
+				// Añade sólo los campos clave
+				foreach (DataSourceColumnModel column in dimension.DataSource.Columns.EnumerateValues())
+					if (column.IsPrimaryKey)
+						query.AddPrimaryKey(null, column.Id, column.Alias, true);
+				// Devuelve la consulta
+				return query;
+		}
+
+		/// <summary>
+		///		Obtiene la consulta para una solicitud de una dimensión del informe
 		/// </summary>
 		internal QueryModel GetQuery(DimensionRequestModel dimensionRequest)
 		{
@@ -67,14 +84,15 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 				// Añade los campos clave
 				foreach (DataSourceColumnModel column in dimension.DataSource.Columns.EnumerateValues())
 					if (column.IsPrimaryKey)
-						query.AddPrimaryKey(dimensionRequest.GetRequestColumn(column.Id), column.Id, CheckIsColumnAtColumnRequested(column, dimensionRequest.Columns));
+						query.AddPrimaryKey(dimensionRequest.GetRequestColumn(column.Id), column.Id, column.Alias, 
+											CheckIsColumnAtColumnRequested(column, dimensionRequest.Columns));
 				// Asigna los campos
 				foreach (DimensionColumnRequestModel columnRequest in dimensionRequest.Columns)
 				{
 					DataSourceColumnModel column = dimension.DataSource.Columns[columnRequest.ColumnId];
 
 						if (column != null && !column.IsPrimaryKey)
-							query.AddColumn(columnRequest.ColumnId, columnRequest);
+							query.AddColumn(columnRequest.ColumnId, column.Alias, columnRequest);
 				}
 				// Devuelve la consulta
 				return query;

@@ -34,13 +34,15 @@ namespace Bau.Libraries.LibReporting.Solution.Repositories
 		private const string TagPrimaryKey = "IsPrimaryKey";
 		private const string TagRelation = "Relation";
 		private const string TagForeignKey = "ForeignKey";
-		private const string TagDimensionColumn="DimensionColumn";
+		private const string TagDimensionColumn = "DimensionColumn";
 		private const string TagSchema = "Schema";
 		private const string TagTable = "Table";
 		private const string TagType = "Type";
+		private const string TagAlias = "Alias";
 		private const string TagRequired = "Required";
 		private const string TagParameter = "Parameter";
 		private const string TagValue = "Value";
+		private const string TagFormula = "Formula";
 
 		/// <summary>
 		///		Carga los datos de un <see cref="DataWarehouseModel"/>
@@ -138,10 +140,12 @@ namespace Bau.Libraries.LibReporting.Solution.Repositories
 
 				// Carga las propiedades
 				column.Id = rootML.Attributes[TagSourceId].Value.TrimIgnoreNull();
+				column.Alias = rootML.Attributes[TagAlias].Value.TrimIgnoreNull();
 				column.Type = rootML.Attributes[TagType].Value.GetEnum(DataSourceColumnModel.FieldType.Unknown);
 				column.Required = rootML.Attributes[TagRequired].Value.GetBool();
 				column.IsPrimaryKey = rootML.Attributes[TagPrimaryKey].Value.GetBool();
 				column.Visible = rootML.Attributes[TagVisible].Value.GetBool(true);
+				column.FormulaSql = rootML.Nodes[TagFormula].Value.TrimIgnoreNull();
 				// Devuelve el objeto
 				return column;
 		}
@@ -272,9 +276,10 @@ namespace Bau.Libraries.LibReporting.Solution.Repositories
 				// Añade los nodos de dimensión
 				foreach (DimensionModel dimension in dataWarehouse.Dimensions.EnumerateValues())
 					rootML.Nodes.Add(GetNodeDimension(dimension));
-				// Añade los informes
-				foreach (ReportModel report in dataWarehouse.Reports.EnumerateValues())
-					rootML.Nodes.Add(GetNodeReport(report));
+				// Añade los informes (sólo los normales, los avanzados se guardan en XML aparte
+				foreach (ReportBaseModel reportBase in dataWarehouse.Reports.EnumerateValues())
+					if (reportBase is ReportModel report)
+						rootML.Nodes.Add(GetNodeReport(report));
 				// Graba el archivo
 				new LibMarkupLanguage.Services.XML.XMLWriter().Save(fileName, fileML);
 		}
@@ -348,11 +353,13 @@ namespace Bau.Libraries.LibReporting.Solution.Repositories
 					MLNode nodeML = nodesML.Add(TagColumn);
 
 						// Añade los datos
+						nodeML.Attributes.AddIfNotEmpty(TagAlias, column.Alias);
 						nodeML.Attributes.Add(TagSourceId, column.Id);
 						nodeML.Attributes.Add(TagPrimaryKey, column.IsPrimaryKey);
 						nodeML.Attributes.Add(TagVisible, column.Visible);
 						nodeML.Attributes.Add(TagType, column.Type.ToString());
 						nodeML.Attributes.Add(TagRequired, column.Required);
+						nodeML.Nodes.AddIfNotEmpty(TagFormula, column.FormulaSql);
 				}
 				// Devuelve la colección de nodos
 				return nodesML;

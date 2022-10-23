@@ -170,7 +170,7 @@ namespace Bau.Libraries.LibReporting.Models.Base
 		/// </summary>
 		public Dictionary<string, TypeData> ToDictionary()
 		{
-			Dictionary<string, TypeData> converted = new Dictionary<string, TypeData>();
+			Dictionary<string, TypeData> converted = new();
 
 				// Convierte los valores
 				foreach ((string key, TypeData value) in Enumerate())
@@ -190,7 +190,7 @@ namespace Bau.Libraries.LibReporting.Models.Base
 		/// <summary>
 		///		Diccionario interno
 		/// </summary>
-		private Dictionary<string, TypeData> InternalDictionary { get; } = new Dictionary<string, TypeData>();
+		private Dictionary<string, TypeData> InternalDictionary { get; } = new();
 
 		/// <summary>
 		///		Reemplaza los duplicados

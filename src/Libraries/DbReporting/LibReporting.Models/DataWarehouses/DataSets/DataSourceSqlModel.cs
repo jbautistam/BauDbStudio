@@ -22,6 +22,14 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets
 		}
 
 		/// <summary>
+		///		Obtiene el nombre de tabla
+		/// </summary>
+		public override string GetTableAlias()
+		{
+			return Id;
+		}
+
+		/// <summary>
 		///		Comando SQL de consulta
 		/// </summary>
 		public string Sql { get; set; }

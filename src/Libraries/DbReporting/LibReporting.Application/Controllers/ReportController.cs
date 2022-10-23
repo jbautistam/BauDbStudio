@@ -21,26 +21,33 @@ namespace Bau.Libraries.LibReporting.Application.Controllers
 		/// </summary>
 		internal string GetResponse(ReportRequestModel request)
 		{
-			ReportModel report = SearchReport(request.ReportId);
+			ReportBaseModel reportBase = SearchReport(request.ReportId);
 
 				// Procesa el informe con la solicitud
-				if (report == null)
-					throw new Models.Exceptions.ReportingException($"Cant find the report {request.ReportId}");
-				else
-					return new Queries.ReportQueryGenerator(Manager.Schema, report, request).GetSql();
+				switch (reportBase)
+				{
+					case null:
+						throw new Models.Exceptions.ReportingException($"Cant find the report {request.ReportId}");
+					case ReportModel report:
+						return new Queries.ReportQueryGenerator(Manager.Schema, report, request).GetSql();
+					case ReportAdvancedModel report:
+						return new Queries.ReportQueryAdvancedGenerator(Manager.Schema, report, request).GetSql();
+					default:
+						throw new Models.Exceptions.ReportingException($"Cant find the report {request.ReportId}");
+				}
 		}
 
 		/// <summary>
 		///		Obtiene el informe solicitado
 		/// </summary>
-		private ReportModel SearchReport(string reportId)
+		private ReportBaseModel SearchReport(string reportId)
 		{
 			// Busca el informe entre los diferentes almacenes del esquema
 			foreach (DataWarehouseModel dataWarehouse in Manager.Schema.DataWarehouses.EnumerateValues())
 			{
-				ReportModel report = dataWarehouse.Reports[reportId];
+				ReportBaseModel report = dataWarehouse.Reports[reportId];
 
-					if (report != null)
+					if (report is not null)
 						return report;
 			}
 			// Si ha llegado hasta aquí, no se ha encontrado ningún informe

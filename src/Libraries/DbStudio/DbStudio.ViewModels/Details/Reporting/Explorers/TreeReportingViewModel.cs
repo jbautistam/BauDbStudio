@@ -38,7 +38,13 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 			/// <summary>Raíz de informes</summary>
 			ReportsRoot,
 			/// <summary>Informe</summary>
-			Report
+			Report,
+			/// <summary>Raíz de informes avanzados</summary>
+			ReportsAdvancedRoot,
+			/// <summary>Informe avanzado</summary>
+			ReportAdvanced,
+			/// <summary>Nodo con error</summary>
+			Error
 		}
 		/// <summary>
 		///		Tipo de icono
@@ -71,6 +77,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 			NewDimensionCommand = new BaseCommand(_ => OpenDimension(null), _ => CanExecuteAction(nameof(NewDimensionCommand)))
 										.AddListener(this, nameof(SelectedNode));
 			NewReportCommand = new BaseCommand(_ => OpenReport(null), _ => CanExecuteAction(nameof(NewReportCommand)))
+										.AddListener(this, nameof(SelectedNode));
+			NewReportAdvancedCommand = new BaseCommand(_ => OpenReportAdvanced(null), _ => CanExecuteAction(nameof(NewReportAdvancedCommand)))
 										.AddListener(this, nameof(SelectedNode));
 			QueryCommand = new BaseCommand(_ => OpenQuery(), _ => CanExecuteAction(nameof(QueryCommand)))
 										.AddListener(this, nameof(SelectedNode));
@@ -137,18 +145,20 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 					return true;
 				case nameof(NewDataSourceCommand):
 				case nameof(NewReportCommand):
+				case nameof(NewReportAdvancedCommand):
 					return ReportingSolutionViewModel.ReportingSolutionManager.Manager.Schema.DataWarehouses.Count > 0;
 				case nameof(NewDimensionCommand):
 					return SelectedNode is NodeDataSourceViewModel;
 				case nameof(OpenCommand):
 					return SelectedNode is NodeDimensionViewModel || SelectedNode is NodeDataSourceViewModel || SelectedNode is NodeReportViewModel;
 				case nameof(QueryCommand):
-					return SelectedNode is NodeReportViewModel || SelectedNode is NodeDataSourceViewModel;
+					return SelectedNode is NodeReportViewModel || SelectedNode is NodeDataSourceViewModel || SelectedNode is NodeReportAdvancedViewModel;
 				case nameof(SaveJsonCommand):
 					return SelectedNode is NodeReportViewModel || SelectedNode is NodeDataSourceViewModel || SelectedNode is NodeDimensionViewModel;
 				case nameof(DeleteCommand):
 					return SelectedNode is NodeDataWarehouseViewModel || SelectedNode is NodeReportViewModel || SelectedNode is NodeDimensionViewModel ||
-						   (SelectedNode is NodeDataSourceViewModel nodeDataSource && nodeDataSource.DataSource is DataSourceSqlModel);
+						   (SelectedNode is NodeDataSourceViewModel nodeDataSource && nodeDataSource.DataSource is DataSourceSqlModel) ||
+						   SelectedNode is NodeReportAdvancedViewModel;
 				case nameof(OpenExplorerCommand):
 				case nameof(OpenXmlCommand):
 				case nameof(MergeSchemaCommand):
@@ -173,6 +183,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 					break;
 				case NodeReportViewModel node:
 						OpenReport(node);
+					break;
+				case NodeReportAdvancedViewModel node:
+						OpenReportAdvanced(node);
 					break;
 			}
 		}
@@ -361,6 +374,54 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 		}
 
 		/// <summary>
+		///		Abre un informe avanzado
+		/// </summary>
+		private void OpenReportAdvanced(NodeReportAdvancedViewModel node)
+		{
+			if (node is not null)
+				ReportingSolutionViewModel.SolutionViewModel.MainController.HostPluginsController.OpenFile(node.Report.FileName);
+			else
+			{
+				DataWarehouseModel dataWarehouse = GetSelectedDataWarehouse(SelectedNode);
+
+					if (dataWarehouse is null)
+						ReportingSolutionViewModel.SolutionViewModel.MainController.SystemController.ShowMessage("You must select a datawarehouse");
+					else
+					{
+						string dataWarehouseFile = ReportingSolutionViewModel.ReportingSolutionManager.ReportingSolution.GetFileName(dataWarehouse);
+
+							if (string.IsNullOrWhiteSpace(dataWarehouseFile) || !System.IO.File.Exists(dataWarehouseFile))
+								ReportingSolutionViewModel.SolutionViewModel.MainController.SystemController.ShowMessage("Can't find the datawarehouse file name");
+							else
+							{
+								string fileName = ReportingSolutionViewModel.SolutionViewModel.MainController.DialogsController.OpenDialogSave
+														(System.IO.Path.GetDirectoryName(dataWarehouseFile), 
+														 "Archivos informe xml (*.report.xml)|*.report.xml|Todos los archivos (*.*)|*.*",
+														 "New report.report.xml", ".report.xml");
+
+									if (!string.IsNullOrWhiteSpace(fileName))
+									{
+										// Graba el archivo
+										System.IO.File.WriteAllText(fileName, 
+																	$@"
+																		<?xml version=""1.0"" encoding=""utf-8""?>
+																		<Report>
+																			<DataWarehouse Name = ""{dataWarehouse.Name}""/>
+																			<Name>{System.IO.Path.GetFileName(fileName)}</Name>
+																			<Description>
+																			</Description>
+																		</Report>
+																	"
+																	);
+										// y lo abre en el editor
+										ReportingSolutionViewModel.SolutionViewModel.MainController.HostPluginsController.OpenFile(fileName);
+									}
+							}
+					}
+			}
+		}
+
+		/// <summary>
 		///		Abre la ventana de consulta
 		/// </summary>
 		private void OpenQuery()
@@ -368,6 +429,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 			switch (SelectedNode)
 			{
 				case NodeReportViewModel node:
+						ReportingSolutionViewModel.SolutionViewModel.MainController.OpenWindow(new Queries.ReportViewModel(ReportingSolutionViewModel, node.Report));
+					break;
+				case NodeReportAdvancedViewModel node:
 						ReportingSolutionViewModel.SolutionViewModel.MainController.OpenWindow(new Queries.ReportViewModel(ReportingSolutionViewModel, node.Report));
 					break;
 				case NodeDataSourceViewModel node:
@@ -409,7 +473,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 					// y lo abre en el editor
 					ReportingSolutionViewModel.SolutionViewModel.MainController.HostPluginsController.OpenFile(fileName);
 				}
-
 		}
 
 		/// <summary>
@@ -430,6 +493,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 					break;
 				case LibReporting.Models.DataWarehouses.Reports.ReportModel item:
 						DeleteReport(item);
+					break;
+				case LibReporting.Models.DataWarehouses.Reports.ReportAdvancedModel item:
+						DeleteAdvancedReport(item);
 					break;
 			}
 		}
@@ -484,6 +550,21 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 			if (ReportingSolutionViewModel.SolutionViewModel.MainController.SystemController.ShowQuestion($"¿Realmente desea borrar los datos del informe {report.Id}?"))
 			{
 				// Borra el informe
+				report.DataWarehouse.Reports.Remove(report);
+				// Graba la solución y actualiza el árbol
+				SaveDataWarehouse(report.DataWarehouse);
+			}
+		}
+
+		/// <summary>
+		///		Elimina un informe avanzado
+		/// </summary>
+		private void DeleteAdvancedReport(LibReporting.Models.DataWarehouses.Reports.ReportAdvancedModel report)
+		{
+			if (ReportingSolutionViewModel.SolutionViewModel.MainController.SystemController.ShowQuestion($"¿Realmente desea borrar los datos del informe {report.Id}?"))
+			{
+				// Borra el informe
+				LibHelper.Files.HelperFiles.KillFile(report.FileName);
 				report.DataWarehouse.Reports.Remove(report);
 				// Graba la solución y actualiza el árbol
 				SaveDataWarehouse(report.DataWarehouse);
@@ -590,6 +671,11 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 		///		Comando de nuevo informe
 		/// </summary>
 		public BaseCommand NewReportCommand { get; }
+
+		/// <summary>
+		///		Comando de nuevo informe avanzado
+		/// </summary>
+		public BaseCommand NewReportAdvancedCommand { get; }
 
 		/// <summary>
 		///		Comando de consulta

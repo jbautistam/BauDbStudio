@@ -11,7 +11,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.DataSources
 	public class ListItemDataSourceColumnViewModel : BauMvvm.ViewModels.BaseObservableObject
 	{
 		// Variables privadas
-		private string _columnId, _type;
+		private string _columnId, _alias, _type, _formula;
 		private bool _isPrimaryKey, _visible, _required, _isUpdatable;
 		private ComboViewModel _comboTypes;
 
@@ -34,6 +34,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.DataSources
 			LoadComboTypes();
 			// Asigna las propiedades
 			ColumnId = Column.Id;
+			Alias = Column.Alias;
+			Formula = Column.FormulaSql;
 			Type = Column.Type.ToString();
 			IsPrimaryKey = Column.IsPrimaryKey;
 			Required = Column.Required;
@@ -87,6 +89,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.DataSources
 			return new DataSourceColumnModel(Column.DataSource)
 							{
 								Id = ColumnId,
+								Alias = Alias,
+								FormulaSql = Formula,
 								Type = GetSelectedType(),
 								IsPrimaryKey = IsPrimaryKey,
 								Required = Required,
@@ -122,6 +126,24 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.DataSources
 		{
 			get { return _columnId; }
 			set { CheckProperty(ref _columnId, value); }
+		}
+
+		/// <summary>
+		///		Alias de la columna
+		/// </summary>
+		public string Alias
+		{
+			get { return _alias; }
+			set { CheckProperty(ref _alias, value); }
+		}
+
+		/// <summary>
+		///		Fórmula asociada a la columna
+		/// </summary>
+		public string Formula
+		{
+			get { return _formula; }
+			set { CheckProperty(ref _formula, value); }
 		}
 
 		/// <summary>

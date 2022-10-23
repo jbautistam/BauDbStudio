@@ -14,9 +14,9 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 	/// <summary>
 	///		Clase base para los generadores de consultas
 	/// </summary>
-	internal abstract class BaseQueryGenerator
+	internal abstract class QueryBaseGenerator
 	{
-		protected BaseQueryGenerator(ReportQueryGenerator generator)
+		protected QueryBaseGenerator(ReportBaseQueryGenerator generator)
 		{
 			Generator = generator;
 		}
@@ -69,6 +69,6 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 		/// <summary>
 		///		Generador del informe
 		/// </summary>
-		protected ReportQueryGenerator Generator { get; }
+		protected ReportBaseQueryGenerator Generator { get; }
 	}
 }

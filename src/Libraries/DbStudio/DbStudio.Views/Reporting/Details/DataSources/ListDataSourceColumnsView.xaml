@@ -22,14 +22,23 @@
 		<ListView Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Path=Items}" SelectedItem="{Binding Path=SelectedItem}" Margin="0">
 			<ListView.View>
 				<GridView>
-					<GridViewColumn Width="200" Header="Columna">
+					<GridViewColumn Width="250" Header="Columna">
 						<GridViewColumn.CellTemplate>
 							<DataTemplate>
 								<StackPanel Orientation="Horizontal">
 									<TextBlock Text="{Binding Path=ColumnId}"  VerticalAlignment="Center" 
 										Visibility="{Binding Path=Updatable,Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
-									<TextBox Text="{Binding Path=ColumnId,UpdateSourceTrigger=PropertyChanged}" Width="170" VerticalAlignment="Center"
+									<TextBox Text="{Binding Path=ColumnId,UpdateSourceTrigger=PropertyChanged}" Width="220" VerticalAlignment="Center"
 										 Visibility="{Binding Path=Updatable,Converter={StaticResource BoolToVisibilityConverter}}"/>
+								</StackPanel>
+							</DataTemplate>
+						</GridViewColumn.CellTemplate>
+					</GridViewColumn>
+					<GridViewColumn Width="250" Header="Alias">
+						<GridViewColumn.CellTemplate>
+							<DataTemplate>
+								<StackPanel Orientation="Horizontal">
+									<TextBox Text="{Binding Path=Alias,UpdateSourceTrigger=PropertyChanged}" Width="220" VerticalAlignment="Center"/>
 								</StackPanel>
 							</DataTemplate>
 						</GridViewColumn.CellTemplate>

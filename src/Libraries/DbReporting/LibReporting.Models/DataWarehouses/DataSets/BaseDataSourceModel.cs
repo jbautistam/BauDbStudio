@@ -13,6 +13,11 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets
 		}
 
 		/// <summary>
+		///		Obtiene el nombre de tabla
+		/// </summary>
+		public abstract string GetTableAlias();
+
+		/// <summary>
 		///		Comprueba si este origen de datos tiene alguna columna con el Id solicitado
 		/// </summary>
 		public bool HasColumn(string columnId)

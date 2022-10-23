@@ -16,10 +16,10 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 		private ControlItemCollectionViewModel<ListItemReportColumnFilterViewModel> _listFiltersViewModel;
 		private ListItemReportColumnFilterViewModel _selectedItem;
 
-		public ListReportColumnFilterViewModel(ReportViewModel reportViewModel, NodeColumnViewModel nodeColumnViewModel)
+		public ListReportColumnFilterViewModel(ReportViewModel viewModel, NodeColumnViewModel nodeColumnViewModel)
 		{
 			// Inicializa las propiedades
-			ReportViewModel = reportViewModel;
+			ViewModel = viewModel;
 			NodeColumnViewModel = nodeColumnViewModel;
 			// Inicializa el viewModel
 			InitViewModel();
@@ -69,9 +69,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 
 				// Comprueba los datos introducidos
 				if (condition == FilterRequestModel.ConditionType.Undefined)
-					ReportViewModel.ReportingSolutionViewModel.SolutionViewModel.MainController.SystemController.ShowMessage("Seleccione la condición");
+					ViewModel.ViewModel.SolutionViewModel.MainController.SystemController.ShowMessage("Seleccione la condición");
 				else if (condition == FilterRequestModel.ConditionType.Contains && string.IsNullOrWhiteSpace(filter.Value1?.ToString()))
-					ReportViewModel.ReportingSolutionViewModel.SolutionViewModel.MainController.SystemController.ShowMessage("Seleccione el valor");
+					ViewModel.ViewModel.SolutionViewModel.MainController.SystemController.ShowMessage("Seleccione el valor");
 				else 
 					validated = true;
 				// Devuelve el valor que indica si los datos son correctos
@@ -127,7 +127,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 		/// <summary>
 		///		ViewModel del informe
 		/// </summary>
-		public  ReportViewModel ReportViewModel { get; }
+		public ReportViewModel ViewModel { get; }
 
 		/// <summary>
 		///		ViewModel del nodo de la columna

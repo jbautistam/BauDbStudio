@@ -8,13 +8,13 @@ namespace Bau.Libraries.LibReporting.Solution.Repositories
 	/// <summary>
 	///		Repositorio de <see cref="Models.ReportingSolutionModel"/>
 	/// </summary>
-	internal class ReportingRepository
+	internal class SolutionRepository
 	{
 		// Constantes privadas
 		private const string TagRoot = "Reporting";
 		private const string TagFile = "File";
 
-		internal ReportingRepository(ReportingSolutionManager manager)
+		internal SolutionRepository(ReportingSolutionManager manager)
 		{
 			Manager = manager;
 		}

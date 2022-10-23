@@ -45,6 +45,12 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 				case TreeReportingViewModel.NodeType.Table:
 						Icon = TreeReportingViewModel.IconType.DataSourceTable.ToString();
 					break;
+				case TreeReportingViewModel.NodeType.ReportsAdvancedRoot:
+						Icon = TreeReportingViewModel.IconType.Report.ToString();
+					break;
+				case TreeReportingViewModel.NodeType.Error:
+						Icon = TreeReportingViewModel.IconType.Error.ToString();
+					break;
 			}
 		}
 
@@ -66,6 +72,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 					break;
 				case TreeReportingViewModel.NodeType.ReportsRoot:
 						LoadReports();
+					break;
+				case TreeReportingViewModel.NodeType.ReportsAdvancedRoot:
+						LoadReportsAdvanced();
 					break;
 			}
 		}
@@ -143,8 +152,22 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 			DataWarehouseModel dataWarehouse = GetDataWarehouse();
 
 				if (dataWarehouse is not null)
-					foreach (ReportModel report in dataWarehouse.Reports.EnumerateValuesSorted())
-						Children.Add(new NodeReportViewModel(TreeViewModel, this, report));
+					foreach (ReportBaseModel reportBase in dataWarehouse.Reports.EnumerateValuesSorted())
+						if (reportBase is ReportModel report)
+							Children.Add(new NodeReportViewModel(TreeViewModel, this, report));
+		}
+
+		/// <summary>
+		///		Carga los informes avanzados
+		/// </summary>
+		private void LoadReportsAdvanced()
+		{
+			DataWarehouseModel dataWarehouse = GetDataWarehouse();
+
+				if (dataWarehouse is not null)
+					foreach (ReportBaseModel reportBase in dataWarehouse.Reports.EnumerateValuesSorted())
+						if (reportBase is ReportAdvancedModel report)
+							Children.Add(new NodeReportAdvancedViewModel(TreeViewModel, this, report));
 		}
 
 		/// <summary>

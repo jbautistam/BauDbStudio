@@ -14,7 +14,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 	/// <summary>
 	///		Generador de consultas para las expresiones
 	/// </summary>
-	internal class QueryExpressionsGenerator : BaseQueryGenerator
+	internal class QueryExpressionsGenerator : QueryBaseGenerator
 	{
 		internal QueryExpressionsGenerator(ReportQueryGenerator generator) : base(generator) {}
 
@@ -23,9 +23,20 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 		/// </summary>
 		internal QueryModel GetQuery(List<QueryModel> dimensionQueries)
 		{
+			if (Generator.Report is ReportModel report)
+				return GetQuery(report, dimensionQueries);
+			else
+				throw new NotImplementedException($"Can't get expressions report {Generator.Report.Id}. Type: {Generator.Report.GetType().ToString()}");
+		}
+
+		/// <summary>
+		///		Obtiene la consulta de las expresiones
+		/// </summary>
+		internal QueryModel GetQuery(ReportModel report, List<QueryModel> dimensionQueries)
+		{
 			//TODO En realidad, un informe puede tener varios orígenes de datos, cuál de los orígenes de datos se escoge, depende de ciertas condiciones como las dimensiones
 			//TODO escogidas en la solicitud, para las primeras pruebas, cogemos directamente la primera solicitud
-			ReportDataSourceModel reportDataSource = Generator.Report.ReportDataSources[0];
+			ReportDataSourceModel reportDataSource = report.ReportDataSources[0];
 			BaseDataSourceModel baseDataSource = reportDataSource.DataSource;
 			QueryModel query = new QueryModel(baseDataSource.Id, QueryModel.QueryType.Expressions, GetDataSourceAlias(baseDataSource));
 
@@ -58,7 +69,8 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 			// Agrega los campos de la dimensión
 			foreach (QueryFieldModel field in dimensionQuery.Fields)
 				if (field.Visible)
-					query.Fields.Add(new QueryFieldModel(query, field.IsPrimaryKey, dimensionAlias, field.Alias, field.OrderBy, field.Aggregation, field.Visible));
+					query.Fields.Add(new QueryFieldModel(query, field.IsPrimaryKey, dimensionAlias, field.Alias, field.Alias, 
+														 field.OrderBy, field.Aggregation, field.Visible));
 			// Añade los campos de las dimensiones hija
 			foreach (QueryJoinModel queryJoin in dimensionQuery.Joins)
 				ComputeDimensionFields(query, queryJoin.Query, dimensionAlias);
@@ -131,7 +143,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 					foreach (ExpressionColumnRequestModel requestColumn in expression.Columns)
 						foreach (DataSourceColumnModel column in dataSource.Columns.EnumerateValues())
 							if (requestColumn.ColumnId.Equals(column.Id, StringComparison.CurrentCultureIgnoreCase))
-								query.AddColumn(column.Id, requestColumn.AggregatedBy, requestColumn);
+								query.AddColumn(column.Id, column.Alias, requestColumn.AggregatedBy, requestColumn);
 		}
 	}
 }

@@ -19,9 +19,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 	/// </summary>
 	public class TreeQueryReportViewModel : BaseTreeViewModel
 	{
-		public TreeQueryReportViewModel(ReportViewModel reportViewModel)
+		public TreeQueryReportViewModel(ReportViewModel viewModel)
 		{
-			ReportViewModel = reportViewModel;
+			ReportViewModel = viewModel;
 		}
 
 		/// <summary>
@@ -32,7 +32,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 			// Añade los nodos de dimensiones
 			AddDimensionNodes(ReportViewModel.Report);
 			// Añade los nodos de expresiones
-			AddExpressionNodes(ReportViewModel.Report);
+			if (ReportViewModel.Report is ReportModel report)
+				AddExpressionNodes(report);
 			// Expande los nodos
 			ExpandAll();
 		}
@@ -40,16 +41,21 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 		/// <summary>
 		///		Añade los nodos de dimensiones
 		/// </summary>
-		private void AddDimensionNodes(ReportModel report)
+		private void AddDimensionNodes(ReportBaseModel report)
 		{
-			NodeColumnViewModel root = new NodeColumnViewModel(this, null, NodeColumnViewModel.NodeColumnType.DimensionsRoot, "Dimensiones", null);
 			BaseReportingDictionaryModel<DimensionModel> dimensions = GetDimensions(report);
 
 				// Añade las dimensiones
-				foreach (DimensionModel dimension in dimensions.EnumerateValuesSorted())
-					AddDimensionNodes(root, dimension);
-				// Añade el nodo raíz al árbol
-				Children.Add(root);
+				if (dimensions is not null)
+				{
+					NodeColumnViewModel root = new NodeColumnViewModel(this, null, NodeColumnViewModel.NodeColumnType.DimensionsRoot, "Dimensiones", null);
+
+						// Añade los nodos de dimensión
+						foreach (DimensionModel dimension in dimensions.EnumerateValuesSorted())
+							AddDimensionNodes(root, dimension);
+						// Añade el nodo raíz al árbol
+						Children.Add(root);
+				}
 		}
 
 		/// <summary>
@@ -79,7 +85,24 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 		/// <summary>
 		///		Obtiene las dimensiones de un informe
 		/// </summary>
-		private BaseReportingDictionaryModel<DimensionModel> GetDimensions(ReportModel report)
+		private BaseReportingDictionaryModel<DimensionModel> GetDimensions(ReportBaseModel reportBase)
+		{
+			switch (reportBase)
+			{
+				case ReportModel report:
+					return GetDimensionsColumns(report);
+				case ReportAdvancedModel report:
+					return GetDimensionsColumns(report);
+				default:
+					ReportViewModel.ViewModel.SolutionViewModel.MainController.SystemController.ShowMessage($"Report type unknown: {reportBase.GetType().ToString()}");
+					return null;
+			}
+		}
+
+		/// <summary>
+		///		Obtiene las dimensiones de un informe
+		/// </summary>
+		private BaseReportingDictionaryModel<DimensionModel> GetDimensionsColumns(ReportModel report)
 		{
 			BaseReportingDictionaryModel<DimensionModel> dimensions = new BaseReportingDictionaryModel<DimensionModel>();
 
@@ -88,6 +111,25 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 					foreach (DimensionRelationModel relation in dataSource.Relations)
 						if (dimensions[relation.Dimension.Id] == null)
 							dimensions.Add(relation.Dimension);
+				// Devuelve las dimensiones
+				return dimensions;
+		}
+
+		/// <summary>
+		///		Obtiene las dimensiones de un informe avancado
+		/// </summary>
+		private BaseReportingDictionaryModel<DimensionModel> GetDimensionsColumns(ReportAdvancedModel report)
+		{
+			BaseReportingDictionaryModel<DimensionModel> dimensions = new BaseReportingDictionaryModel<DimensionModel>();
+
+				// Añade las dimensiones
+				foreach (string key in report.DimensionKeys)
+				{
+					DimensionModel dimension = report.DataWarehouse.Dimensions[key];
+
+						if (dimension is not null)
+							dimensions.Add(dimension);
+				}
 				// Devuelve las dimensiones
 				return dimensions;
 		}
@@ -339,7 +381,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 		}
 
 		/// <summary>
-		///		ViewModel con el informe a consultar
+		///		ViewModel del informe
 		/// </summary>
 		public ReportViewModel ReportViewModel { get; }
 	}

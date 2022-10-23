@@ -6,33 +6,9 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses.Reports
 	/// <summary>
 	///		Clase con los datos de un informe
 	/// </summary>
-	public class ReportModel : Base.BaseReportingModel
+	public class ReportModel : ReportBaseModel
 	{
-		public ReportModel(DataWarehouseModel dataWarehouse)
-		{
-			DataWarehouse = dataWarehouse;
-		}
-
-		/// <summary>
-		///		Compara el valor de dos elementos para ordenarlo
-		/// </summary>
-		public override int CompareTo(Base.BaseReportingModel item)
-		{
-			if (item is ReportModel report)
-				return Id.CompareTo(report.Id);
-			else
-				return -1;
-		}
-
-		/// <summary>
-		///		Descripción del <see cref="ReportModel"/>
-		/// </summary>
-		public string Description { get; set; }
-
-		/// <summary>
-		///		<see cref="DataWarehouseModel"/> al que se asocia este <see cref="ReportModel"/>
-		/// </summary>
-		public DataWarehouseModel DataWarehouse { get; }
+		public ReportModel(DataWarehouseModel dataWarehouse) : base(dataWarehouse) {}
 
 		/// <summary>
 		///		Orígenes de datos de las expresiones del informe

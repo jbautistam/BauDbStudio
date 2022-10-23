@@ -16,11 +16,11 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 		private string _header;
 		private TreeQueryReportViewModel _treeColumns;
 
-		public ReportViewModel(ReportingSolutionViewModel reportingSolutionViewModel, ReportModel report) : base(false)
+		public ReportViewModel(ReportingSolutionViewModel viewModel, ReportBaseModel report) : base(false)
 		{
 			// Asigna las propiedades
-			ReportingSolutionViewModel = reportingSolutionViewModel;
-			QueryViewModel = new QueryViewModel(ReportingSolutionViewModel.SolutionViewModel, string.Empty, string.Empty, true);
+			ViewModel = viewModel;
+			QueryViewModel = new QueryViewModel(ViewModel.SolutionViewModel, string.Empty, string.Empty, true);
 			Report = report;
 			Header = report.Id;
 			// Inicializa el árbol de campos
@@ -53,7 +53,11 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 		/// </summary>
 		private string GetQueryRequested()
 		{
-			return ReportingSolutionViewModel.ReportingSolutionManager.GetSqlResponse(TreeColumns.GetReportRequest());
+			// Actualiza el informe recargando el archivo
+			if (Report is ReportAdvancedModel report)
+				ViewModel.ReportingSolutionManager.RefreshAdvancedReport(Report.DataWarehouse, report.FileName);
+			// Ejecuta la consulta
+			return ViewModel.ReportingSolutionManager.GetSqlResponse(TreeColumns.GetReportRequest());
 		}
 
 		/// <summary>
@@ -83,7 +87,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 		/// <summary>
 		///		ViewModel de la solución
 		/// </summary>
-		public ReportingSolutionViewModel ReportingSolutionViewModel { get; }
+		public ReportingSolutionViewModel ViewModel { get; }
 
 		/// <summary>
 		///		ViewModel de ejecución de la consulta
@@ -93,7 +97,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 		/// <summary>
 		///		Informe
 		/// </summary>
-		public ReportModel Report { get; }
+		public ReportBaseModel Report { get; }
 
 		/// <summary>
 		///		Cabecera

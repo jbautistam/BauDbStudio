@@ -61,9 +61,9 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 		/// <summary>
 		///		Añade un campo de clave primaria a la consulta
 		/// </summary>
-		internal void AddPrimaryKey(BaseColumnRequestModel requestColumn, string column, bool visible)
+		internal void AddPrimaryKey(BaseColumnRequestModel requestColumn, string columnId, string columnAlias, bool visible)
 		{
-			QueryFieldModel field = new QueryFieldModel(this, true, FromAlias, column, BaseColumnRequestModel.SortOrder.Undefined, 
+			QueryFieldModel field = new QueryFieldModel(this, true, FromAlias, columnId, columnAlias, BaseColumnRequestModel.SortOrder.Undefined, 
 														ExpressionColumnRequestModel.AggregationType.NoAggregated, visible);
 
 				// Añade los filtros
@@ -76,17 +76,18 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 		/// <summary>
 		///		Añade un campo a la consulta
 		/// </summary>
-		internal void AddColumn(string column, BaseColumnRequestModel requestColumn)
+		internal void AddColumn(string columnId, string columnAlias, BaseColumnRequestModel requestColumn)
 		{
-			AddColumn(column, ExpressionColumnRequestModel.AggregationType.NoAggregated, requestColumn);
+			AddColumn(columnId, columnAlias, ExpressionColumnRequestModel.AggregationType.NoAggregated, requestColumn);
 		}
 
 		/// <summary>
 		///		Añade un campo a la consulta
 		/// </summary>
-		internal void AddColumn(string column, ExpressionColumnRequestModel.AggregationType aggregatedBy, BaseColumnRequestModel requestColumn)
+		internal void AddColumn(string columnId, string columnAlias, ExpressionColumnRequestModel.AggregationType aggregatedBy, 
+								BaseColumnRequestModel requestColumn)
 		{
-			QueryFieldModel field = GetQueryField(column, aggregatedBy, requestColumn);
+			QueryFieldModel field = GetQueryField(columnId, columnAlias, aggregatedBy, requestColumn);
 
 				// Añade los filtros
 				field.FiltersWhere.AddRange(GetFilters(requestColumn.FiltersWhere));
@@ -98,13 +99,14 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 		/// <summary>
 		///		Obtiene el campo de la consulta
 		/// </summary>
-		private QueryFieldModel GetQueryField(string columnId, ExpressionColumnRequestModel.AggregationType aggregatedBy, BaseColumnRequestModel requestColumn)
+		private QueryFieldModel GetQueryField(string columnId, string columnAlias, ExpressionColumnRequestModel.AggregationType aggregatedBy, 
+											  BaseColumnRequestModel requestColumn)
 		{
 			QueryFieldModel field = Fields.FirstOrDefault(item => item.Field.Equals(columnId, StringComparison.CurrentCultureIgnoreCase));
 
 				// Si no existía, lo añade
 				if (field == null)
-					field = new QueryFieldModel(this, false, FromAlias, columnId, requestColumn.OrderBy, aggregatedBy, requestColumn.Visible);
+					field = new QueryFieldModel(this, false, FromAlias, columnId, columnAlias, requestColumn.OrderBy, aggregatedBy, requestColumn.Visible);
 				// Devuelve el campo
 				return field;
 		}
@@ -121,6 +123,20 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 					converted.Add(new QueryFilterModel(filter.Condition, filter.Values));
 				// Devuelve los filtros convertidos
 				return converted;
+		}
+
+		/// <summary>
+		///		Comprueba si existe el campo
+		/// </summary>
+		internal bool ExistsField(string dataSourceId, string alias)
+		{
+			// Comprueba si existe el campo
+			foreach (QueryFieldModel queryField in Fields)
+				if (queryField.Table.Equals(dataSourceId, StringComparison.CurrentCultureIgnoreCase) &&
+						queryField.Alias.Equals(alias, StringComparison.CurrentCultureIgnoreCase))
+					return true;
+			// Si ha llegado hasta aquí es porque el campo no existe
+			return false;
 		}
 
 		/// <summary>

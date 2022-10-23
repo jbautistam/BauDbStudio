@@ -27,6 +27,8 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets
 			/// <summary>Datos binarios</summary>
 			Binary
 		}
+		// Variables privadas
+		private string _alias;
 
 		public DataSourceColumnModel(BaseDataSourceModel dataSource)
 		{
@@ -38,6 +40,7 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets
 			return new DataSourceColumnModel(targetDataSource)
 							{
 								IsPrimaryKey = IsPrimaryKey,
+								Alias = Alias,
 								Type = Type,
 								Visible = Visible,
 								Required = Required
@@ -61,6 +64,21 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets
 		public BaseDataSourceModel DataSource { get; }
 
 		/// <summary>
+		///		Alias del campo
+		/// </summary>
+		public string Alias
+		{
+			get 
+			{ 
+				if (string.IsNullOrWhiteSpace(_alias)) 
+					return Id;
+				else
+					return _alias;
+			}
+			set { _alias = value; }
+		}
+
+		/// <summary>
 		///		Indica si esta columna es clave primaria
 		/// </summary>
 		public bool IsPrimaryKey { get; set; }
@@ -69,6 +87,11 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets
 		///		Tipo del campo
 		/// </summary>
 		public FieldType Type { get; set; }
+
+		/// <summary>
+		///		Fórmula SQL: el campo no es real, es una fórmula sobre otros campos
+		/// </summary>
+		public string FormulaSql { get; set; }
 
 		/// <summary>
 		///		Indica si la columna es visible

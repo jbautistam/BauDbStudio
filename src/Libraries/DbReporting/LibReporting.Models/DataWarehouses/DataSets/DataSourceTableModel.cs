@@ -39,6 +39,14 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets
 		}
 
 		/// <summary>
+		///		Obtiene el nombre de tabla (sin el esquema)
+		/// </summary>
+		public override string GetTableAlias()
+		{
+			return Table;
+		}
+
+		/// <summary>
 		///		Esquema origen
 		/// </summary>
 		public string Schema { get; set; }

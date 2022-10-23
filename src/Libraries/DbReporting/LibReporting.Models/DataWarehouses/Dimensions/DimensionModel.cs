@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using Bau.Libraries.LibReporting.Models.DataWarehouses.Relations;
 
@@ -59,6 +60,6 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses.Dimensions
 		/// <summary>
 		///		Relaciones de esta dimensión con su dimensión hijo
 		/// </summary>
-		public System.Collections.Generic.List<DimensionRelationModel> Relations { get; } = new System.Collections.Generic.List<DimensionRelationModel>();
+		public List<DimensionRelationModel> Relations { get; } = new();
 	}
 }

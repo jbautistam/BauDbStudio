@@ -10,13 +10,18 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 	/// </summary>
 	internal class QueryFieldModel
 	{
-		internal QueryFieldModel(QueryModel query, bool primaryKey, string table, string field, BaseColumnRequestModel.SortOrder orderBy, 
+		// Variables privadas
+		private string _alias;
+
+		internal QueryFieldModel(QueryModel query, bool primaryKey, string table, string field, string alias, 
+								 BaseColumnRequestModel.SortOrder orderBy, 
 								 ExpressionColumnRequestModel.AggregationType aggregation, bool visible)
 		{
 			Query = query;
 			IsPrimaryKey = primaryKey;
 			Table = table;
 			Field = field;
+			Alias = alias;
 			Aggregation = aggregation;
 			Visible = visible;
 			if (Visible)
@@ -74,30 +79,37 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 		{ 
 			get
 			{
-				string alias = $"{Table}_{Field}";
+				string alias = _alias;
 
-					// Añade la agregación si es necesario
-					switch (Aggregation)
+					// Si no se ha definido el alias, se calcula
+					if (string.IsNullOrWhiteSpace(_alias))
 					{
-						case ExpressionColumnRequestModel.AggregationType.Average:
-								alias += "_AVG";
-							break;
-						case ExpressionColumnRequestModel.AggregationType.Max:
-								alias += "_MAX";
-							break;
-						case ExpressionColumnRequestModel.AggregationType.Min:
-								alias += "_MIN";
-							break;
-						case ExpressionColumnRequestModel.AggregationType.StandardDeviation:
-								alias += "_STD";
-							break;
-						case ExpressionColumnRequestModel.AggregationType.Sum:
-								alias += "_SUM";
-							break;
+						// Genera el alias inicial
+						alias = $"{Table}_{Field}";
+						// Añade la agregación si es necesario
+						switch (Aggregation)
+						{
+							case ExpressionColumnRequestModel.AggregationType.Average:
+									alias += "_AVG";
+								break;
+							case ExpressionColumnRequestModel.AggregationType.Max:
+									alias += "_MAX";
+								break;
+							case ExpressionColumnRequestModel.AggregationType.Min:
+									alias += "_MIN";
+								break;
+							case ExpressionColumnRequestModel.AggregationType.StandardDeviation:
+									alias += "_STD";
+								break;
+							case ExpressionColumnRequestModel.AggregationType.Sum:
+									alias += "_SUM";
+								break;
+						}
 					}
 					// Devuelve el alias
 					return alias;
 			}
+			set { _alias = value; }
 		}
 
 		/// <summary>

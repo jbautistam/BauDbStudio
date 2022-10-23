@@ -18,6 +18,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 				Icon = TreeReportingViewModel.IconType.Key.ToString();
 			if (!column.Visible)
 				Foreground = BauMvvm.ViewModels.Media.MvvmColor.Gray;
+			if (!string.IsNullOrWhiteSpace(column.Alias) && !column.Alias.Equals(column.Id, StringComparison.CurrentCultureIgnoreCase))
+				Text = $"{column.Id} ({column.Alias})";
 		}
 
 		/// <summary>

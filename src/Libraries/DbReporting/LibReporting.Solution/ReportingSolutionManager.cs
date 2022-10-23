@@ -2,6 +2,7 @@
 using System.Linq;
 
 using Bau.Libraries.LibReporting.Models.DataWarehouses;
+using Bau.Libraries.LibReporting.Models.DataWarehouses.Reports;
 
 namespace Bau.Libraries.LibReporting.Solution
 {
@@ -23,7 +24,7 @@ namespace Bau.Libraries.LibReporting.Solution
 			// Limpia los archivos de la solución
 			ReportingSolution.Clear();
 			// Carga los nuevos archivos de solución
-			new Repositories.ReportingRepository(this).Load(fileName);
+			new Repositories.SolutionRepository(this).Load(fileName);
 			// Carga los esquemas de la solución
 			foreach (string file in ReportingSolution.Files)
 				AddDataWarehouse(file);
@@ -37,16 +38,38 @@ namespace Bau.Libraries.LibReporting.Solution
 			DataWarehouseModel dataWarehouse = new Repositories.DataWarehouseRepository().Load(Manager.Schema, fileName);
 
 				// Añade el datawarehouse al esquema y al diccionario
-				if (dataWarehouse != null)
+				if (dataWarehouse is not null)
 				{
 					// Añade el almacén de datos
 					Manager.AddDataWarehouse(dataWarehouse);
+					// Añade los informes avanzados a la lista
+					AddAdvancedReports(dataWarehouse, System.IO.Path.GetDirectoryName(fileName));
 					// Añade el archivo al diccionario
 					ReportingSolution.DataWarehousesFiles.Add((dataWarehouse.Id, fileName));
 					// Añade el archivo a la lista
 					if (ReportingSolution.Files.FirstOrDefault(item => item.Equals(fileName, StringComparison.CurrentCultureIgnoreCase)) == null)
 						ReportingSolution.Files.Add(fileName);
 				}
+		}
+
+		/// <summary>
+		///		Añade los informes avanzados
+		/// </summary>
+		private void AddAdvancedReports(DataWarehouseModel dataWarehouse, string path)
+		{
+			foreach (string fileName in System.IO.Directory.GetFiles(path, "*.report.xml"))
+				new Repositories.ReportRepository().Load(dataWarehouse, fileName);
+		}
+
+		/// <summary>
+		///		Recarga un informe
+		/// </summary>
+		public void RefreshAdvancedReport(DataWarehouseModel dataWarehouse, string fileName)
+		{
+			ReportAdvancedModel report = new Repositories.ReportRepository().LoadReport(dataWarehouse, fileName);
+
+				if (report is not null)
+					dataWarehouse.Reports.Add(report);
 		}
 
 		/// <summary>
@@ -79,7 +102,7 @@ namespace Bau.Libraries.LibReporting.Solution
 		/// </summary>
 		public void SaveSolution(string fileName)
 		{
-			new Repositories.ReportingRepository(this).Save(fileName);
+			new Repositories.SolutionRepository(this).Save(fileName);
 		}
 
 		/// <summary>

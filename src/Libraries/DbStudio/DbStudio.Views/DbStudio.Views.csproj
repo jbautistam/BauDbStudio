@@ -16,6 +16,7 @@
   <ItemGroup>
     <Compile Remove="Controllers\AppController.cs" />
     <Compile Remove="EtlProjects\CreateSchemaXmlView.xaml.cs" />
+    <Compile Remove="Reporting\Queries\ReportAdvancedView.xaml.cs" />
     <Compile Remove="Reporting\Tools\CreateSchemaReportingXmlView.xaml.cs" />
   </ItemGroup>
 
@@ -60,6 +61,7 @@
 
   <ItemGroup>
     <Page Remove="EtlProjects\CreateSchemaXmlView.xaml" />
+    <Page Remove="Reporting\Queries\ReportAdvancedView.xaml" />
     <Page Remove="Reporting\Tools\CreateSchemaReportingXmlView.xaml" />
   </ItemGroup>
 

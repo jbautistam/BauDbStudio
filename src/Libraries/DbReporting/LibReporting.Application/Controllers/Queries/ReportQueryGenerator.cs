@@ -12,14 +12,9 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 	/// <summary>
 	///		Generador de consultas SQL para un informe
 	/// </summary>
-	internal class ReportQueryGenerator
+	internal class ReportQueryGenerator : ReportBaseQueryGenerator
 	{
-		internal ReportQueryGenerator(ReportingSchemaModel schema, ReportModel report, ReportRequestModel request)
-		{
-			Schema = schema;
-			Report = report;
-			Request = request;
-		}
+		internal ReportQueryGenerator(ReportingSchemaModel schema, ReportBaseModel report, ReportRequestModel request) : base(schema, report, request) {}
 
 		/// <summary>
 		///		Obtiene la cadena SQL de un informe para responder a una solicitud
@@ -42,7 +37,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 		///				FROM tmpExpressions
 		///				ORDER BY Fields
 		/// </remarks>
-		internal string GetSql()
+		internal override string GetSql()
 		{
 			List<QueryModel> dimensionQueries = GetDimensionQueries(Request);
 			QueryModel expressionQuery = new QueryExpressionsGenerator(this).GetQuery(dimensionQueries);
@@ -204,20 +199,5 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 				// Devuelve la cadena SQL
 				return sqlFields;
 		}
-
-		/// <summary>
-		///		Esquema para las consultas
-		/// </summary>
-		internal ReportingSchemaModel Schema { get; }
-
-		/// <summary>
-		///		Informe solicitado
-		/// </summary>
-		internal ReportModel Report { get; }
-
-		/// <summary>
-		///		Datos de la solicitud
-		/// </summary>
-		internal ReportRequestModel Request { get; }
 	}
 }

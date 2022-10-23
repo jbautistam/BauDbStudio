@@ -54,16 +54,16 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses
 		/// <summary>
 		///		Orígenes de datos
 		/// </summary>
-		public Base.BaseReportingDictionaryModel<DataSets.BaseDataSourceModel> DataSources { get; } = new Base.BaseReportingDictionaryModel<DataSets.BaseDataSourceModel>();
+		public Base.BaseReportingDictionaryModel<DataSets.BaseDataSourceModel> DataSources { get; } = new();
 
 		/// <summary>
 		///		Dimensiones del esquema
 		/// </summary>
-		public Base.BaseReportingDictionaryModel<Dimensions.DimensionModel> Dimensions { get; } = new Base.BaseReportingDictionaryModel<Dimensions.DimensionModel>();
+		public Base.BaseReportingDictionaryModel<Dimensions.DimensionModel> Dimensions { get; } = new();
 
 		/// <summary>
 		///		Informes
 		/// </summary>
-		public Base.BaseReportingDictionaryModel<Reports.ReportModel> Reports { get; } = new Base.BaseReportingDictionaryModel<Reports.ReportModel>();
+		public Base.BaseReportingDictionaryModel<Reports.ReportBaseModel> Reports { get; } = new();
 	}
 }
