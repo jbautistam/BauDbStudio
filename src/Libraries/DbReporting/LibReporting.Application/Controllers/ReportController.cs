@@ -29,9 +29,9 @@ namespace Bau.Libraries.LibReporting.Application.Controllers
 					case null:
 						throw new Models.Exceptions.ReportingException($"Cant find the report {request.ReportId}");
 					case ReportModel report:
-						return new Queries.ReportQueryGenerator(Manager.Schema, report, request).GetSql();
+						return new Queries.ReportQueryGenerator(Manager.Schema, report, request.Clone()).GetSql();
 					case ReportAdvancedModel report:
-						return new Queries.ReportQueryAdvancedGenerator(Manager.Schema, report, request).GetSql();
+						return new Queries.ReportQueryAdvancedGenerator(Manager.Schema, report, request.Clone()).GetSql();
 					default:
 						throw new Models.Exceptions.ReportingException($"Cant find the report {request.ReportId}");
 				}

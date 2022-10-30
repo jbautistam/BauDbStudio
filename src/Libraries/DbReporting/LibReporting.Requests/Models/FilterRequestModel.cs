@@ -34,6 +34,23 @@ namespace Bau.Libraries.LibReporting.Requests.Models
 		}
 
 		/// <summary>
+		///		Clona un filtro
+		/// </summary>
+		internal FilterRequestModel Clone()
+		{
+			FilterRequestModel cloned =	new()
+											{
+												Condition = Condition
+											};
+
+				// Copia los valores
+				foreach (object value in Values)
+					cloned.Values.Add(value);
+				// Devuelve el objeto clonado
+				return cloned;
+		}
+
+		/// <summary>
 		///		Condición que se debe utilizar
 		/// </summary>
 		public ConditionType Condition { get; set; }

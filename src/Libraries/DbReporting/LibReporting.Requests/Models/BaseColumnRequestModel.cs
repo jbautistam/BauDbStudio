@@ -22,6 +22,22 @@ namespace Bau.Libraries.LibReporting.Requests.Models
 		}
 
 		/// <summary>
+		///		Copia los datos base en un objeto clonado
+		/// </summary>
+		protected void CopyBase(BaseColumnRequestModel cloned)
+		{
+			// Copoia los datos básicos
+			cloned.Visible = Visible;
+			cloned.OrderBy = OrderBy;
+			// Copia los filtros del WHERE
+			foreach (FilterRequestModel filter in FiltersWhere)
+				cloned.FiltersWhere.Add(filter.Clone());
+			// Copia los filtros del HAVING
+			foreach (FilterRequestModel filter in FiltersHaving)
+				cloned.FiltersHaving.Add(filter.Clone());
+		}
+
+		/// <summary>
 		///		Indica si esta columna es visible en la consulta final o sólo para los filtros
 		/// </summary>
 		public bool Visible { get; set; } = true;

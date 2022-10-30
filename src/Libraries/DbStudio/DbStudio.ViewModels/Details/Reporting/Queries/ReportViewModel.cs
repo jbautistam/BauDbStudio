@@ -2,8 +2,10 @@
 using System.Threading.Tasks;
 
 using Bau.Libraries.BauMvvm.ViewModels;
+//using Bau.Libraries.DbScripts.Manager.Models;
 using Bau.Libraries.DbStudio.ViewModels.Details.Queries;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.Reports;
+using Bau.Libraries.LibReporting.Requests.Models;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 {
@@ -42,22 +44,18 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 		/// </summary>
 		private async Task ExecuteQueryAsync()
 		{
-			// Obtiene la consulta
-			QueryViewModel.Query = GetQueryRequested();
-			// y la ejecuta
-			await QueryViewModel.ExecuteQueryAsync();
-		}
+			ReportRequestModel reportRequest = TreeColumns.GetReportRequest();
 
-		/// <summary>
-		///		Obtiene la consulta solicitada para este informe
-		/// </summary>
-		private string GetQueryRequested()
-		{
-			// Actualiza el informe recargando el archivo
-			if (Report is ReportAdvancedModel report)
-				ViewModel.ReportingSolutionManager.RefreshAdvancedReport(Report.DataWarehouse, report.FileName);
-			// Ejecuta la consulta
-			return ViewModel.ReportingSolutionManager.GetSqlResponse(TreeColumns.GetReportRequest());
+				// Actualiza el informe recargando el archivo
+				if (Report is ReportAdvancedModel report)
+					ViewModel.ReportingSolutionManager.RefreshAdvancedReport(Report.DataWarehouse, report.FileName);
+				// Obtiene la consulta
+				QueryViewModel.Query = ViewModel.ReportingSolutionManager.GetSqlResponse(reportRequest);
+				// Añade los parámetros
+				foreach (System.Collections.Generic.KeyValuePair<string, object> parameter in reportRequest.Parameters)
+					QueryViewModel.Arguments.Parameters.Add(parameter.Key, parameter.Value);
+				// y la ejecuta
+				await QueryViewModel.ExecuteQueryAsync();
 		}
 
 		/// <summary>

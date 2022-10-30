@@ -27,6 +27,23 @@ namespace Bau.Libraries.LibReporting.Requests.Models
 		}
 
 		/// <summary>
+		///		Clona los datos
+		/// </summary>
+		internal ExpressionColumnRequestModel Clone()
+		{
+			ExpressionColumnRequestModel cloned = new()
+													{
+														ColumnId = ColumnId,
+														AggregatedBy = AggregatedBy
+													};
+
+				// Clona los datos base
+				CopyBase(cloned);
+				// Devuelve el objeto clonado
+				return cloned;
+		}
+
+		/// <summary>
 		///		Código de columna solicitada
 		/// </summary>
 		public string ColumnId { get; set; }

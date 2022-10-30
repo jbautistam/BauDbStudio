@@ -10,13 +10,14 @@ using Bau.Libraries.LibReporting.Application.Controllers.Queries.Models;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.Dimensions;
 using Bau.Libraries.LibReporting.Application.Exceptions;
 using Bau.Libraries.LibReporting.Application.Controllers.Parsers;
+using Bau.Libraries.LibReporting.Application.Controllers.Parsers.Models;
 
 namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 {
-	/// <summary>
-	///		Generador de consultas SQL para un informe
-	/// </summary>
-	internal class ReportQueryAdvancedGenerator : ReportBaseQueryGenerator
+    /// <summary>
+    ///		Generador de consultas SQL para un informe
+    /// </summary>
+    internal class ReportQueryAdvancedGenerator : ReportBaseQueryGenerator
 	{
 		internal ReportQueryAdvancedGenerator(ReportingSchemaModel schema, ReportAdvancedModel report, ReportRequestModel request) 
 				: base(schema, report, request)
@@ -31,7 +32,37 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 			if (Report is not ReportAdvancedModel reportAdvanced)
 				throw new ReportingParserException($"Unknown report  {Report.Id}. {Report.GetType().ToString()}");
 			else
+			{
+				// Normaliza la solicitud
+				NormalizeRequest(Request, reportAdvanced);
+				// Devuelve la SQL generada
 				return GetSql(GetQueries(reportAdvanced.Blocks));
+			}
+		}
+
+		/// <summary>
+		///		Normaliza la solicitud
+		/// </summary>
+		private void NormalizeRequest(ReportRequestModel request, ReportAdvancedModel report)
+		{
+			foreach (ReportAdvancedRequestDimension fixedRequest in report.RequestDimensions)
+				if (fixedRequest.Required || CheckIsRequestedAnyField(request, fixedRequest))
+					foreach (ReportAdvancedRequestDimensionField field in fixedRequest.Fields)
+						request.Add(fixedRequest.DimensionKey, field.Field);
+
+			// Comprueba si se ha solicitado alguno de los campos considerados como obligatorios
+			bool CheckIsRequestedAnyField(ReportRequestModel reportRequest, ReportAdvancedRequestDimension fixedRequest)
+			{
+				DimensionRequestModel dimensionRequest = reportRequest.GetDimensionRequest(fixedRequest.DimensionKey);
+
+					// Si se ha solicitado la dimensión
+					if (dimensionRequest is not null)
+						foreach (ReportAdvancedRequestDimensionField field in fixedRequest.Fields)
+							if (dimensionRequest.GetRequestColumn(field.Field) is not null)
+								return true;
+					// Si ha llegado hasta aquí es porque no se ha solicitado
+					return false;
+			}
 		}
 
 		/// <summary>
@@ -215,8 +246,8 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 				if (dimensionJoin is null)
 					throw new ReportingParserException($"Can't find the dimension {dimensionKey}");
 				else if (required || 
-						 ((Request.IsRequested(dimensionJoin.Id) || Request.IsRequested(relatedDimensions)) && 
-							!Request.IsRequested(notRequestedDimensions)))
+						 ((Request.IsRequestedDimension(dimensionJoin.Id) || Request.IsRequestedDimension(relatedDimensions)) && 
+							!Request.IsRequestedDimension(notRequestedDimensions)))
 					return dimensionJoin;
 				else
 					return null;
@@ -250,6 +281,9 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 							break;
 						case ParserSectionModel.SectionType.CheckNull:
 								parser.Replace(section, GetSqlForCheckNull(section));
+							break;
+						case ParserSectionModel.SectionType.IfRequestExpression:
+								parser.Replace(section, GetSqlForRequestExpression(section));
 							break;
 						default:
 							throw new Exceptions.ReportingParserException($"Unknown section: {section.Type.ToString()}");
@@ -365,7 +399,9 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 							DimensionRequestModel request = Request.GetDimensionRequest(dimensionJoin.Id);
 
 								// Añade los campos solicitados a la SQL
-								sql = sql.AddWithSeparator(GetFields(new QueryDimensionGenerator(this).GetQuery(request), parserDimension.Table), ",");
+								sql = sql.AddWithSeparator(GetFields(new QueryDimensionGenerator(this).GetQuery(request), parserDimension.Table, 
+																	 parserDimension.WithPrimaryKeys), 
+														   ",");
 						}
 				}
 				// Añade la coma si es necesario
@@ -390,7 +426,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 
 						if (dimensionJoin is not null)
 						{
-							List<(string table, string field)> fields = GetFieldsRequest(parserDimension, false);
+							List<(string table, string field)> fields = GetFieldsRequest(parserDimension, parserDimension.WithPrimaryKeys);
 
 								// Añade las cláusulas IsNull de campos sobre n tablas
 								foreach ((string _, string field) in fields)
@@ -409,6 +445,21 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 				// Añade la coma si es necesario
 				if (section.WithComma && !string.IsNullOrWhiteSpace(sql))
 					sql += ", " + Environment.NewLine;
+				// Devuelve la cadena SQL
+				return sql;
+		}
+
+		/// <summary>
+		///		Obtiene la SQL necesaria para la consulta de una expresión
+		/// </summary>
+		private string GetSqlForRequestExpression(ParserSectionModel section)
+		{
+			string sql = string.Empty;
+
+				// Si se ha solicitado alguna de las expresiones, se añade la SQL
+				foreach (ParserExpressionModel parserExpression in section.ParserExpressions)
+					if (Request.IsRequestedExpression(parserExpression.ExpressionKeys))
+						sql = sql.AddWithSeparator(parserExpression.Sql, Environment.NewLine);
 				// Devuelve la cadena SQL
 				return sql;
 		}
@@ -457,17 +508,17 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 		/// <summary>
 		///		Obtiene los campos asociados a una consulta
 		/// </summary>
-		private string GetFields(QueryModel query, string tableAlias)
+		private string GetFields(QueryModel query, string tableAlias, bool includePrimaryKey)
 		{
 			string fields = string.Empty;
 
 				// Añade los campos de la consulta
 				foreach (QueryFieldModel field in query.Fields)
-					if (!field.IsPrimaryKey)
+					if (includePrimaryKey || !field.IsPrimaryKey)
 						fields = fields.AddWithSeparator(GetFieldName(tableAlias, field.Alias), ",");
 				// Añade los campos hijo
 				foreach (QueryJoinModel child in query.Joins)
-					fields = fields.AddWithSeparator(GetFields(child.Query, tableAlias), ",");
+					fields = fields.AddWithSeparator(GetFields(child.Query, tableAlias, includePrimaryKey), ",");
 				// Devuelve los campos
 				return fields;
 		}
@@ -544,7 +595,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 		/// </summary>
 		private List<QuerySqlModel> GetQueries(BlockIfRequest block)
 		{
-			if (Request.IsRequested(block.DimensionKeys))
+			if (Request.IsRequestedDimension(block.DimensionKeys))
 				return GetQueries(block.Then);
 			else
 				return GetQueries(block.Else);

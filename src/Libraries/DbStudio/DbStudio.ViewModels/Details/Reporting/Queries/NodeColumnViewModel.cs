@@ -29,7 +29,13 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 			/// <summary>Nombre de expresión</summary>
 			Expression,
 			/// <summary>Columna de expresión</summary>
-			ExpressionColumn
+			ExpressionColumn,
+			/// <summary>Campo de expresión de un informe avanzado</summary>
+			ExpressionField,
+			/// <summary>Raíz de parámetros</summary>
+			ParametersRoot,
+			/// <summary>Campo de parámetro</summary>
+			ParameterField
 		}
 		// Variables privadas
 		private bool _canSelect, _canSort, _canFilterWhere, _canAggregate, _canFilterHaving, _hasFiltersColumn, _hasFiltersHaving;
@@ -62,7 +68,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 				SortOrder = BaseColumnRequestModel.SortOrder.Undefined;
 			}
 			// Asigna los filtros
-			if (column != null && trvTree is TreeQueryReportViewModel tree)
+			if (column is not null && trvTree is TreeQueryReportViewModel tree)
 			{
 				FilterWhere = new ListReportColumnFilterViewModel(tree.ReportViewModel, this);
 				FilterHaving = new ListReportColumnFilterViewModel(tree.ReportViewModel, this);
@@ -95,10 +101,34 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 		/// </summary>
 		private void NormalizeProperties()
 		{
-			CanFilterWhere = CanSelect;
-			CanSort = IsChecked;
-			CanAggregate = IsChecked && !string.IsNullOrWhiteSpace(DataSourceId);
-			CanFilterHaving = CanAggregate && GeSelectedAggregation() != ExpressionColumnRequestModel.AggregationType.NoAggregated;
+			switch (ColumnNodeType)
+			{
+				case NodeColumnType.ExpressionField:
+						IsBold = false;
+						IsChecked = true;
+						CanSelect = true;
+						CanFilterHaving = false;
+						CanFilterWhere = false;
+						CanSort = false;
+						Foreground = MvvmColor.Black;
+						Icon = Explorers.TreeReportingViewModel.IconType.Dimension.ToString();
+					break;
+				case NodeColumnType.ParameterField:
+						IsBold = false;
+						CanSelect = false;
+						CanFilterHaving = false;
+						CanFilterWhere = true;
+						CanSort = false;
+						Foreground = MvvmColor.Black;
+						Icon = Explorers.TreeReportingViewModel.IconType.Field.ToString();
+					break;
+				default:
+						CanFilterWhere = CanSelect;
+						CanSort = IsChecked;
+						CanAggregate = IsChecked && !string.IsNullOrWhiteSpace(DataSourceId);
+						CanFilterHaving = CanAggregate && GeSelectedAggregation() != ExpressionColumnRequestModel.AggregationType.NoAggregated;
+					break;
+			}
 		}
 
 		/// <summary>

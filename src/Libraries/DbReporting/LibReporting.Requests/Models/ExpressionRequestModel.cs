@@ -9,6 +9,23 @@ namespace Bau.Libraries.LibReporting.Requests.Models
 	public class ExpressionRequestModel
 	{
 		/// <summary>
+		///		Clona los datos de una expresión
+		/// </summary>
+		internal ExpressionRequestModel Clone()
+		{
+			ExpressionRequestModel cloned = new()
+												{
+													ReportDataSourceId = ReportDataSourceId
+												};
+
+				// Clona las columnas
+				foreach (ExpressionColumnRequestModel column in Columns)
+					cloned.Columns.Add(column.Clone());
+				// Devuelve el objeto clonado
+				return cloned;
+		}
+
+		/// <summary>
 		///		Clave del informe de origen de datos
 		/// </summary>
 		public string ReportDataSourceId { get; set; }

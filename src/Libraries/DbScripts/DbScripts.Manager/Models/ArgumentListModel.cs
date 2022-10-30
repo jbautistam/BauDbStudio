@@ -13,7 +13,7 @@ namespace Bau.Libraries.DbScripts.Manager.Models
 		public LibDataStructures.Collections.NormalizedDictionary<object> Constants { get; } = new LibDataStructures.Collections.NormalizedDictionary<object>();
 
 		/// <summary>
-		///		Parámetros: indentificados en SQL como $name
+		///		Parámetros: identificados en SQL como $name
 		/// </summary>
 		public LibDataStructures.Collections.NormalizedDictionary<object> Parameters { get; } = new LibDataStructures.Collections.NormalizedDictionary<object>();
 	}

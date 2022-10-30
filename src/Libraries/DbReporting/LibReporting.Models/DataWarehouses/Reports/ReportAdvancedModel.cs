@@ -25,14 +25,20 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses.Reports
 		public string DataWarehouseKey { get; set; }
 
 		/// <summary>
-		///		Parámetros del informe
-		/// </summary>
-		public List<ReportParameterModel> Parameters { get; } = new();
-
-		/// <summary>
 		///		Claves de las dimensiones asociadas al informe
 		/// </summary>
 		public List<string> DimensionKeys { get; } = new();
+
+		/// <summary>
+		///		Datos asociados a las solicitudes, por ejemplo, dimensiones que se deben solicitar o campos que se deben
+		///	solicitar de forma conjunta
+		/// </summary>
+		public List<ReportAdvancedRequestDimension> RequestDimensions { get; } = new();
+
+		/// <summary>
+		///		Expresiones del informe
+		/// </summary>
+		public List<string> Expressions { get; } = new();
 
 		/// <summary>
 		///		Bloques del informe

@@ -9,6 +9,26 @@ namespace Bau.Libraries.LibReporting.Requests.Models
 	public class DimensionRequestModel
 	{
 		/// <summary>
+		///		Clona los datos
+		/// </summary>
+		internal DimensionRequestModel Clone()
+		{
+			DimensionRequestModel cloned = new()
+											{
+												DimensionId = DimensionId
+											};
+
+				// Clona las columnas
+				foreach (DimensionColumnRequestModel column in Columns)
+					cloned.Columns.Add(column.Clone());
+				// Clona las solicitudes hija
+				foreach (DimensionRequestModel child in Childs)
+					cloned.Childs.Add(child.Clone());
+				// Devuelve el objeto clonado
+				return cloned;
+		}
+
+		/// <summary>
 		///		Obtiene la solicitud de columna
 		/// </summary>
 		public DimensionColumnRequestModel GetRequestColumn(string columnId)

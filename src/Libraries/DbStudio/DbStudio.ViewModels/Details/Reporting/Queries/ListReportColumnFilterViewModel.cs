@@ -51,6 +51,33 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 		}
 
 		/// <summary>
+		///		Añade un filtro a la lista
+		/// </summary>
+		public void Add(FilterRequestModel.ConditionType condition, LibReporting.Models.DataWarehouses.DataSets.DataSourceColumnModel.FieldType type, string value)
+		{
+			FilterRequestModel filter = new()
+											{
+												Condition = condition
+											};
+
+				// Añade los valores al filtro
+				filter.Values.Add(value);
+				// Añade el filtro a la lista
+				FiltersViewModel.Add(new ListItemReportColumnFilterViewModel(this, filter));
+		}
+
+		/// <summary>
+		///		Obtiene el valor del primer filtro
+		/// </summary>
+		public object GetDefaultValue()
+		{
+			if (FiltersViewModel.Count > 0)
+				return FiltersViewModel[0].Value1;
+			else
+				return null;
+		}
+
+		/// <summary>
 		///		Elimina un filtro de la vista
 		/// </summary>
 		private void DeleteFilter()

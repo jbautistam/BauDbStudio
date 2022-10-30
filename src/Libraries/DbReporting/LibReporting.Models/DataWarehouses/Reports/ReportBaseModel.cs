@@ -33,5 +33,10 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses.Reports
 		///		<see cref="DataWarehouseModel"/> al que se asocia este <see cref="ReportModel"/>
 		/// </summary>
 		public DataWarehouseModel DataWarehouse { get; }
+
+		/// <summary>
+		///		Parámetros del informe
+		/// </summary>
+		public List<ReportParameterModel> Parameters { get; } = new();
 	}
 }

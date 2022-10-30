@@ -40,6 +40,8 @@ namespace Bau.Libraries.LibReporting.Solution.Repositories
 		private const string TagAlias = "Alias";
 		private const string TagRequired = "Required";
 		private const string TagFilter = "Filter";
+		private const string TagRequests = "Requests";
+		private const string TagExpression = "Expression";
 
 		/// <summary>
 		///		Carga el informe de un archivo sobre un <see cref="DataWarehouseModel"/>
@@ -86,6 +88,12 @@ namespace Bau.Libraries.LibReporting.Solution.Repositories
 										break;
 									case TagDimension:
 											report.DimensionKeys.Add(nodeML.Attributes[TagName].Value.TrimIgnoreNull());
+										break;
+									case TagRequests:
+											report.RequestDimensions.AddRange(LoadRequests(nodeML));
+										break;
+									case TagExpression:
+											report.Expressions.AddRange(LoadExpressions(nodeML));
 										break;
 								}
 				// Devuelve el informe
@@ -280,6 +288,57 @@ namespace Bau.Libraries.LibReporting.Solution.Repositories
 						}
 				// Devuelve el bloque
 				return block;
+		}
+
+		/// <summary>
+		///		Carga la información adicional sobre solicitudes para el informe
+		/// </summary>
+		private List<ReportAdvancedRequestDimension> LoadRequests(MLNode rootML)
+		{
+			List<ReportAdvancedRequestDimension> requests = new();
+
+				// Carga las dimensiones solicitadas
+				foreach (MLNode nodeML in rootML.Nodes)
+					if (nodeML.Name == TagDimension)
+					{
+						ReportAdvancedRequestDimension dimension = new()
+																		{
+																			DimensionKey = nodeML.Attributes[TagName].Value.TrimIgnoreNull(),
+																			Required = nodeML.Attributes[TagRequired].Value.TrimIgnoreNull().GetBool()
+																		};
+
+							// Añade los conjuntos de campos
+							foreach (MLNode childML in nodeML.Nodes)
+								if (childML.Name == TagField && !string.IsNullOrWhiteSpace(childML.Attributes[TagName].Value.TrimIgnoreNull()))
+									foreach (string field in childML.Attributes[TagName].Value.TrimIgnoreNull().Split(';'))
+										if (!string.IsNullOrWhiteSpace(field))
+											dimension.Fields.Add(new ReportAdvancedRequestDimensionField
+																				{
+																					Field = field.TrimIgnoreNull()
+																				}
+																);
+							// Añade los datos de la dimensión
+							requests.Add(dimension);
+					}
+				// Devuelve los datos de la solicitud
+				return requests;
+		}
+
+		/// <summary>
+		///		Carga la lista de expresiones
+		/// </summary>
+		private List<string> LoadExpressions(MLNode nodeML)
+		{
+			List<string> expressions = new();
+			string fields = nodeML.Attributes[TagName].Value.TrimIgnoreNull();
+
+				// Carga los campos en la lista
+				if (!string.IsNullOrWhiteSpace(fields))
+					foreach (string field in fields.Split(';'))
+						if (!string.IsNullOrWhiteSpace(field))
+							expressions.Add(field.TrimIgnoreNull());
+				// Devuelve la lista de expresiones
+				return expressions;
 		}
 
 		/// <summary>

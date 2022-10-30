@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using Bau.Libraries.LibHelper.Extensors;
+using Bau.Libraries.LibReporting.Application.Controllers.Parsers.Models;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.Reports.Blocks;
 
 namespace Bau.Libraries.LibReporting.Application.Controllers.Parsers
@@ -71,6 +72,8 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Parsers
 				return ParserForCheckNull(alias, placeholder.Substring("CheckNull ".Length), ParserSectionModel.SectionType.CheckNull);
 			else if (placeholder.StartsWith("FieldsIfNull ", StringComparison.CurrentCultureIgnoreCase))
 				return ParseForFields(alias, placeholder.Substring("FieldsIfNull ".Length), ParserSectionModel.SectionType.FieldsIfNull);
+			else if (placeholder.StartsWith("IfRequest ", StringComparison.CurrentCultureIgnoreCase))
+				return ParseForRequestExpression(alias, placeholder.Substring("IfRequest ".Length), ParserSectionModel.SectionType.IfRequestExpression);
 			else
 				throw new Exceptions.ReportingParserException($"Placeholder unknown: {placeholder}");
 		}
@@ -186,6 +189,8 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Parsers
 												dimension.AdditionalTables.AddRange(SplitStrings(sections[1].TrimIgnoreNull()));
 											else if (sections[0].Equals("Required", StringComparison.CurrentCultureIgnoreCase))
 												dimension.Required = sections[1].TrimIgnoreNull().GetBool();
+											else if (sections[0].Equals("WithPrimaryKey", StringComparison.CurrentCultureIgnoreCase))
+												dimension.WithPrimaryKeys = sections[1].TrimIgnoreNull().GetBool();
 											else if (sections[0].Equals("RelatedTo", StringComparison.CurrentCultureIgnoreCase))
 												dimension.TableRelated = sections[1].TrimIgnoreNull();
 											else if (sections[0].Equals("AliasRelated", StringComparison.CurrentCultureIgnoreCase))
@@ -281,6 +286,57 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Parsers
 				}
 				// Devuelve la lista de campos
 				return fields;
+		}
+
+		/// <summary>
+		///		Interpreta una comprobación de expresión
+		/// </summary>
+		/// <example>
+		///		{{ifRequest {Expression:SalesAchievementPercentage
+		///							-- % Consecución Ventas	Sum(Importe II) / Sum(ObjetivoVentas)
+		///							100.0 * SalesFirst.SalesTaxesIncluded / NullIf(SalesFirst.SalesTarget, 0) AS SalesAchievementPercentage,
+		///					}
+		///		}}
+		private ParserSectionModel ParseForRequestExpression(string placeholder, string marker, ParserSectionModel.SectionType type)
+		{
+			ParserSectionModel section = new(placeholder, type);
+			List<string> parts = marker.Extract("{", "}", false);
+
+				// Interpreta la sección
+				foreach (string part in parts)
+					if (!string.IsNullOrWhiteSpace(part))
+					{
+						string[] expressions = part.Split('\n');
+
+							// Si no se ha obtenido ningún valor partiendo por \n, parte por \r
+							if (expressions is null || expressions.Length == 0)
+								expressions = part.Split('\r');
+							// Interpreta las expresiones resultantes
+							if (expressions.Length > 0 && expressions[0].StartsWith("Expression:", StringComparison.CurrentCultureIgnoreCase))
+							{
+								ParserExpressionModel expression = new();
+								string expressionKeys = expressions[0].From("Expression:".Length);
+
+									if (string.IsNullOrWhiteSpace(expressionKeys))
+										throw new Exceptions.ReportingParserException($"Can't find the expression key: {part}");
+									else
+									{
+										// Asigna las claves de las expresiones
+										foreach (string expressionKey in expressionKeys.Split(';'))
+											if (!string.IsNullOrWhiteSpace(expressionKey))
+												expression.ExpressionKeys.Add(expressionKey.TrimIgnoreNull());
+										// Añade la SQL
+										for (int index = 1; index < expressions.Length; index++)
+											expression.Sql += expressions[index].TrimIgnoreNull() + Environment.NewLine;
+										// Añade la expresión a la sección
+										section.ParserExpressions.Add(expression);
+									}
+							}
+							else
+								throw new Exceptions.ReportingParserException($"Can't parse the expression: {placeholder}");
+					}
+				// Devuelve la sección generada
+				return section;
 		}
 
 		/// <summary>

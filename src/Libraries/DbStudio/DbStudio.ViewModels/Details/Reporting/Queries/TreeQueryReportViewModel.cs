@@ -11,6 +11,7 @@ using Bau.Libraries.LibReporting.Models.DataWarehouses.Reports;
 using Bau.Libraries.LibReporting.Requests.Models;
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
+using Bau.Libraries.DbScripts.Manager.Models;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 {
@@ -29,13 +30,52 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 		/// </summary>
 		protected override void AddRootNodes()
 		{
+			// Añade los nodos de parámetros
+			AddParameterNodes(ReportViewModel.Report);
 			// Añade los nodos de dimensiones
 			AddDimensionNodes(ReportViewModel.Report);
 			// Añade los nodos de expresiones
-			if (ReportViewModel.Report is ReportModel report)
-				AddExpressionNodes(report);
+			switch (ReportViewModel.Report)
+			{
+				case ReportModel report:
+						AddExpressionNodes(report);
+					break;
+				case ReportAdvancedModel report:
+						AddExpressionNodes(report);
+					break;
+			}
 			// Expande los nodos
 			ExpandAll();
+		}
+
+		/// <summary>
+		///		Añade los nodos de parámetros
+		/// </summary>
+		private void AddParameterNodes(ReportBaseModel report)
+		{
+			NodeColumnViewModel root = new NodeColumnViewModel(this, null, NodeColumnViewModel.NodeColumnType.ParametersRoot, "Parámetros", null);
+
+				// Carga los parámetros
+				foreach (ReportParameterModel parameter in report.Parameters)
+				{
+					DataSourceColumnModel column = new(null)
+														{
+															Id = parameter.Key,
+															IsPrimaryKey = false,
+															Alias = parameter.Key,
+															Type = parameter.Type,
+															Visible = true,
+															Required = true
+														};
+					NodeColumnViewModel node = new NodeColumnViewModel(this, root, NodeColumnViewModel.NodeColumnType.ParameterField, parameter.Key, column);
+
+						// Añade el filtro
+						node.FilterWhere.Add(FilterRequestModel.ConditionType.Equals, parameter.Type, parameter.DefaultValue);
+						// Añade el nodo raíz al árbol
+						root.Children.Add(node);
+				}
+				// Añade el nodo raíz al árbol
+				Children.Add(root);
 		}
 
 		/// <summary>
@@ -159,6 +199,20 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 		}
 
 		/// <summary>
+		///		Añade los nodos de expresiones de un <see cref="ReportAdvancedModel"/>
+		/// </summary>
+		private void AddExpressionNodes(ReportAdvancedModel report)
+		{
+			NodeColumnViewModel root = new NodeColumnViewModel(this, null, NodeColumnViewModel.NodeColumnType.ExpressionsRoot, "Expresiones", null);
+
+				// Añade las expresiones
+				foreach (string expression in report.Expressions)
+					root.Children.Add(new NodeColumnViewModel(this, root, NodeColumnViewModel.NodeColumnType.ExpressionField, expression, null));
+				// Añade el nodo raíz al árbol
+				Children.Add(root);
+		}
+
+		/// <summary>
 		///		Añade los nodos de columnas
 		/// </summary>
 		private void AddColumnNodes(NodeColumnViewModel root, BaseReportingDictionaryModel<DataSourceColumnModel> columns, 
@@ -190,6 +244,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 				// Obtiene las columnas de dimensión y de expresión
 				request.Dimensions.AddRange(GetRequestDimensions(Children));
 				request.Expressions.AddRange(GetRequestExpressions(Children));
+				AddRequestParameters(Children, request.Parameters);
 				// Devuelve la solicitud
 				return request;
 		}
@@ -271,37 +326,65 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 				// Obtiene las columnas seleccionadas de los nodos
 				foreach (IHierarchicalViewModel baseNodeRoot in nodes)
 					if (baseNodeRoot is NodeColumnViewModel root && root.ColumnNodeType == NodeColumnViewModel.NodeColumnType.ExpressionsRoot)
-					{
 						foreach (IHierarchicalViewModel baseNodeExpression in root.Children)
-							if (baseNodeExpression is NodeColumnViewModel nodeNameExpression && 
-								nodeNameExpression.ColumnNodeType == NodeColumnViewModel.NodeColumnType.Expression &&
-								MustIncludeAtQuery(nodeNameExpression))
-							{
-								ExpressionRequestModel expression = new ExpressionRequestModel();
+							if (baseNodeExpression is NodeColumnViewModel nodeNameExpression)
+								switch (nodeNameExpression.ColumnNodeType)
+								{
+									case NodeColumnViewModel.NodeColumnType.Expression:
+											if (MustIncludeAtQuery(nodeNameExpression))
+											{
+												ExpressionRequestModel expression = new ExpressionRequestModel();
 
-									// Asigna el identificador del origen de datos
-									expression.ReportDataSourceId = nodeNameExpression.DataSourceId;
-									// Carga las columnas
-									foreach (IHierarchicalViewModel baseExpression in nodeNameExpression.Children)
-										if (baseExpression is NodeColumnViewModel nodeExpression && MustIncludeAtQuery(nodeExpression))
-										{
-											ExpressionColumnRequestModel column = new ExpressionColumnRequestModel
+													// Asigna el identificador del origen de datos
+													expression.ReportDataSourceId = nodeNameExpression.DataSourceId;
+													// Carga las columnas
+													foreach (IHierarchicalViewModel baseExpression in nodeNameExpression.Children)
+														if (baseExpression is NodeColumnViewModel nodeExpression && MustIncludeAtQuery(nodeExpression))
+														{
+															ExpressionColumnRequestModel column = new ExpressionColumnRequestModel
+																									{
+																										ColumnId = nodeExpression.Column.Id,
+																										AggregatedBy = nodeExpression.GeSelectedAggregation()
+																									};
+
+																// Asigna las propiedades adicionales a la dimensión: filtros, ordenación ....
+																AssignProperties(column, nodeExpression, !string.IsNullOrWhiteSpace(nodeExpression.DataSourceId));
+																// Añade la columna a la solicitud de expresión
+																expression.Columns.Add(column);
+														}
+													// Asigna la expresión
+													expressions.Add(expression);
+											}
+										break;
+									case NodeColumnViewModel.NodeColumnType.ExpressionField:
+											ExpressionRequestModel expressionField = new ExpressionRequestModel();
+
+												// Añade los datos de la expresión
+												expressionField.Columns.Add(new ExpressionColumnRequestModel
 																					{
-																						ColumnId = nodeExpression.Column.Id,
-																						AggregatedBy = nodeExpression.GeSelectedAggregation()
-																					};
-
-												// Asigna las propiedades adicionales a la dimensión: filtros, ordenación ....
-												AssignProperties(column, nodeExpression, !string.IsNullOrWhiteSpace(nodeExpression.DataSourceId));
-												// Añade la columna a la solicitud de expresión
-												expression.Columns.Add(column);
-										}
-									// Asigna la expresión
-									expressions.Add(expression);
-							}
-					}
+																						ColumnId = nodeNameExpression.Text,
+																						AggregatedBy = ExpressionColumnRequestModel.AggregationType.NoAggregated
+																					}
+																		   );
+												// Añade la expresión
+												expressions.Add(expressionField);
+										break;
+								}
 				// Devuelve las columnas
 				return expressions;
+		}
+
+		/// <summary>
+		///		Obtiene los parámetros seleccionados
+		/// </summary>
+		private void AddRequestParameters(ObservableCollection<IHierarchicalViewModel> nodes, Dictionary<string, object> parameters)
+		{
+			foreach (IHierarchicalViewModel baseNodeRoot in nodes)
+				if (baseNodeRoot is NodeColumnViewModel root && root.ColumnNodeType == NodeColumnViewModel.NodeColumnType.ParametersRoot)
+					foreach (IHierarchicalViewModel baseNodeParameter in root.Children)
+						if (baseNodeParameter is NodeColumnViewModel nodeParameter && 
+								nodeParameter.ColumnNodeType == NodeColumnViewModel.NodeColumnType.ParameterField)
+							parameters.Add(nodeParameter.Text, nodeParameter.FilterWhere.GetDefaultValue());
 		}
 
 		/// <summary>
@@ -354,6 +437,15 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 						request.Add(filterViewModel.Filter);
 				// Devuelve los filtros
 				return request;
+		}
+
+		/// <summary>
+		///		Obtiene los valores de los parámetros de la consulta
+		/// </summary>
+		internal ArgumentListModel GetQueryParameters()
+		{
+			
+			return new();
 		}
 
 		/// <summary>

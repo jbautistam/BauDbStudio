@@ -8,6 +8,16 @@ namespace Bau.Libraries.LibReporting.Requests.Models
 	public class PaginationRequestModel
 	{
 		/// <summary>
+		///		Clona la definición de paginación
+		/// </summary>
+		internal void Clone(PaginationRequestModel basePagination)
+		{
+			MustPaginate = basePagination.MustPaginate;
+			Page = basePagination.Page;
+			RecordsPerPage = basePagination.RecordsPerPage;
+		}
+
+		/// <summary>
 		///		Indica si se debe paginar
 		/// </summary>
 		public bool MustPaginate { get; set; }

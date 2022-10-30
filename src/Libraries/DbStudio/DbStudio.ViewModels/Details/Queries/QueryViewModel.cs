@@ -21,6 +21,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Queries
 		public event EventHandler<PluginsStudio.ViewModels.Base.Controllers.EventArguments.EditorSelectedTextRequiredEventArgs> SelectedTextRequired;
 		// Variables privadas
 		private string _fileName, _query, _lastQuery, _executionTime, _executionPlanText;
+		private ArgumentListModel _arguments;
 		private DataTable _dataResults;
 		private ComboConnectionsViewModel _comboConnectionsViewModel;
 		private int _actualPage, _pageSize;
@@ -39,6 +40,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Queries
 			ChartViewModel = new ChartViewModel(this);
 			// Asigna las propiedades
 			Query = query;
+			Arguments = new ArgumentListModel();
 			PaginateQuery = false;
 			ActualPage = 1;
 			PageSize = 10_000;
@@ -405,6 +407,15 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Queries
 		{
 			get { return _query; }
 			set { CheckProperty(ref _query, value); }
+		}
+
+		/// <summary>
+		///		Argumentos de la consulta
+		/// </summary>
+		public ArgumentListModel Arguments
+		{
+			get { return _arguments; }
+			set { CheckProperty(ref _arguments, value); }
 		}
 
 		/// <summary>
