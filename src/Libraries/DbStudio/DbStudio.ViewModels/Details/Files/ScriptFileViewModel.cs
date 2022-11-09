@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 
 using Bau.Libraries.DbStudio.Models.Connections;
 using Bau.Libraries.DbScripts.Manager.Models;
+using Bau.Libraries.DbScripts.Manager.Builders;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Details.Files
 {
@@ -36,15 +37,29 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Files
 							selectedText = Content;
 						// Ejecuta la consulta
 						if (FileName.EndsWith(".sql", StringComparison.CurrentCultureIgnoreCase))
-							await SolutionViewModel.Manager.ExecuteQueryAsync(connection, selectedText, arguments, 
-																			  connection.TimeoutExecuteScript, cancellationToken);
+							await SolutionViewModel.Manager.ExecuteQueryAsync(GetQuery(connection, selectedText, arguments), cancellationToken);
 						else if (FileName.EndsWith(".sqlx", StringComparison.CurrentCultureIgnoreCase))
-							await SolutionViewModel.Manager.ExecuteInterpretedQueryAsync(connection, selectedText, arguments, cancellationToken);
+							await SolutionViewModel.Manager.ExecuteQueryAsync(GetQuery(connection, selectedText, arguments), cancellationToken);
 						else
 							block.Error("No se reconoce el tipo de archivo como SQL");
 						// Muestra el tiempo de ejecución
 						block.Info($"Tiempo de ejecución: {SolutionViewModel.ConnectionExecutionViewModel.ExecutionTime}");
 				}
+		}
+
+		/// <summary>
+		///		Obtiene la consulta
+		/// </summary>
+		private QueryModel GetQuery(ConnectionModel connection, string query, ArgumentListModel arguments)
+		{
+			QueryBuilder builder = new(connection);
+
+				// Añade los datos de la consulta
+				builder.WithSql(query, true);
+				builder.WithArguments(arguments);
+				builder.WithTimeout(connection.TimeoutExecuteScript);
+				// Devuelve la consulta
+				return builder.Build();
 		}
 
 		/// <summary>

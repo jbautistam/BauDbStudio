@@ -608,7 +608,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 				// Abre la consulta
 				if (!string.IsNullOrWhiteSpace(sql))
 					ReportingSolutionViewModel.SolutionViewModel.MainController
-							.OpenWindow(new Details.Queries.ExecuteQueryViewModel(ReportingSolutionViewModel.SolutionViewModel, string.Empty, sql));
+							.OpenWindow(new Details.Queries.ExecuteQueryViewModel(ReportingSolutionViewModel.SolutionViewModel, string.Empty, sql, false));
 		}
 
 		/// <summary>

@@ -6,6 +6,7 @@ using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.DbStudio.Models.Connections;
 using Bau.Libraries.LibLogger.Models.Log;
 using Bau.Libraries.DbScripts.Manager.Models;
+using Bau.Libraries.DbScripts.Manager.Builders;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Details.Connections
 {
@@ -114,7 +115,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Connections
 							// Arranca la ejecución
 							file.SetStatus(ExecuteFilesItemViewModel.Status.Start, "Ejecutando ...");
 							// Ejecuta la consulta
-							await SolutionViewModel.Manager.ExecuteQueryAsync(connection, content, arguments, connection.TimeoutExecuteScript, cancellationToken);
+							await SolutionViewModel.Manager.ExecuteQueryAsync(GetQuery(connection, content, arguments), cancellationToken);
 							// Detiene la ejecución
 							file.SetStatus(ExecuteFilesItemViewModel.Status.End, "Fin de ejecución");
 						}
@@ -132,6 +133,21 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Connections
 				timer.Dispose();
 				// Devuelve el valor que indica si se ha ejecutado correctamente
 				return !executed;
+		}
+
+		/// <summary>
+		///		Obtiene la consulta
+		/// </summary>
+		private QueryModel GetQuery(ConnectionModel connection, string query, ArgumentListModel arguments)
+		{
+			QueryBuilder builder = new(connection);
+
+				// Añade los datos de la consulta
+				builder.WithSql(query, true);
+				builder.WithArguments(arguments);
+				builder.WithTimeout(connection.TimeoutExecuteScript);
+				// Devuelve la consulta
+				return builder.Build();
 		}
 
 		/// <summary>

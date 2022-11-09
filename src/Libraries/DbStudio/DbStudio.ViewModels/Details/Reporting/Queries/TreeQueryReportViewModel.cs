@@ -20,6 +20,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 	/// </summary>
 	public class TreeQueryReportViewModel : BaseTreeViewModel
 	{
+		// Variables privadas
+		private int _sortIndex;
+
 		public TreeQueryReportViewModel(ReportViewModel viewModel)
 		{
 			ReportViewModel = viewModel;
@@ -357,17 +360,20 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 											}
 										break;
 									case NodeColumnViewModel.NodeColumnType.ExpressionField:
-											ExpressionRequestModel expressionField = new ExpressionRequestModel();
+											if (nodeNameExpression.IsChecked)
+											{
+												ExpressionRequestModel expressionField = new ExpressionRequestModel();
 
-												// Añade los datos de la expresión
-												expressionField.Columns.Add(new ExpressionColumnRequestModel
-																					{
-																						ColumnId = nodeNameExpression.Text,
-																						AggregatedBy = ExpressionColumnRequestModel.AggregationType.NoAggregated
-																					}
-																		   );
-												// Añade la expresión
-												expressions.Add(expressionField);
+													// Añade los datos de la expresión
+													expressionField.Columns.Add(new ExpressionColumnRequestModel
+																						{
+																							ColumnId = nodeNameExpression.Text,
+																							AggregatedBy = ExpressionColumnRequestModel.AggregationType.NoAggregated
+																						}
+																			   );
+													// Añade la expresión
+													expressions.Add(expressionField);
+											}
 										break;
 								}
 				// Devuelve las columnas
@@ -417,6 +423,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 			if (node.IsChecked)
 			{
 				// Añade la ordenación
+				columnRequest.OrderIndex = node.SortIndex;
 				columnRequest.OrderBy = node.SortOrder;
 				// Añade el filtro para la cláusula HAVING
 				if (withHaving)
@@ -440,12 +447,11 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 		}
 
 		/// <summary>
-		///		Obtiene los valores de los parámetros de la consulta
+		///		Obtiene el índice para la ordenación
 		/// </summary>
-		internal ArgumentListModel GetQueryParameters()
+		internal int GetSortIndex()
 		{
-			
-			return new();
+			return ++_sortIndex;
 		}
 
 		/// <summary>

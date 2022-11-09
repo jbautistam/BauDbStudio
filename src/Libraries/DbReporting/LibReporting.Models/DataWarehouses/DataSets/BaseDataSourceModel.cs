@@ -22,7 +22,23 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets
 		/// </summary>
 		public bool HasColumn(string columnId)
 		{
-			return Columns[columnId] != null;
+			return Columns[columnId] is not null;
+		}
+
+		/// <summary>
+		///		Obtiene la columna por su nombre o por su alias si es necesario
+		/// </summary>
+		public DataSourceColumnModel GetColumn(string columnId, bool compareWithAlias)
+		{
+			DataSourceColumnModel column = Columns[columnId];
+
+				// Si no se ha obtenido por el nombre, busca por el alias
+				if (column is null && compareWithAlias)
+					foreach (DataSourceColumnModel columnSearch in Columns.EnumerateValues())
+						if (column is null && columnSearch.Alias.Equals(columnId, StringComparison.CurrentCultureIgnoreCase))
+							column = columnSearch;
+				// Devuelve la columna localizada
+				return column;
 		}
 
 		/// <summary>

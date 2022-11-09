@@ -27,8 +27,21 @@ namespace Bau.Libraries.DbScripts.Manager.Interpreter
 		/// <summary>
 		///		Obtiene el datatable de una consulta
 		/// </summary>
-		internal async Task<DataTable> GetDataTableAsync(IDbProvider provider, string query, Models.ArgumentListModel arguments, 
-														 int actualPage, int pageSize, TimeSpan timeout, CancellationToken cancellationToken)
+		internal async Task<DataTable> GetDataTableAsync(Models.QueryModel query, CancellationToken cancellationToken)
+		{
+			if (query.ParseQuery)
+				return await GetDataTableAsync(Manager.GetDbProvider(query.Connection), query.Sql, query.Arguments, query.Pagination.Page, query.Pagination.PageSize,
+											   query.Timeout, cancellationToken);
+			else
+				return await GetDatatableParsedAsync(Manager.GetDbProvider(query.Connection), query.Sql, query.Arguments, query.Pagination.Page, query.Pagination.PageSize,
+													 query.Timeout, cancellationToken);
+		}
+
+		/// <summary>
+		///		Obtiene el datatable de una consulta
+		/// </summary>
+		private async Task<DataTable> GetDataTableAsync(IDbProvider provider, string query, Models.ArgumentListModel arguments, 
+														int actualPage, int pageSize, TimeSpan timeout, CancellationToken cancellationToken)
 		{
 			DataTable result = null;
 
@@ -67,9 +80,9 @@ namespace Bau.Libraries.DbScripts.Manager.Interpreter
 														sql.StartsWith("EXEC ", StringComparison.CurrentCultureIgnoreCase))
 													{
 														if (pageSize == 0)
-															result = await provider.GetDataTableAsync(sql, null, CommandType.Text, timeout, cancellationToken);
+															result = await provider.GetDataTableAsync(sql, parametersDb, CommandType.Text, timeout, cancellationToken);
 														else
-															result = await provider.GetDataTableAsync(sql, null, CommandType.Text, actualPage, pageSize, timeout, cancellationToken);
+															result = await provider.GetDataTableAsync(sql, parametersDb, CommandType.Text, actualPage, pageSize, timeout, cancellationToken);
 													}
 													else
 														result = await ExecuteScalarQueryAsync(provider, sql, timeout, cancellationToken);
@@ -85,10 +98,37 @@ namespace Bau.Libraries.DbScripts.Manager.Interpreter
 		}
 
 		/// <summary>
+		///		Obtiene el datatable de una consulta sin interpretarla
+		/// </summary>
+		private async Task<DataTable> GetDatatableParsedAsync(IDbProvider provider, string query, Models.ArgumentListModel arguments, 
+															  int actualPage, int pageSize, TimeSpan timeout, CancellationToken cancellationToken)
+		{
+			ParametersDbCollection parametersDb = ConvertParameters(provider, (arguments ?? new()).Parameters);
+
+				// Obtiene la tabla
+				if (pageSize == 0)
+					return await provider.GetDataTableAsync(query, parametersDb, CommandType.Text, timeout, cancellationToken);
+				else
+					return await provider.GetDataTableAsync(query, parametersDb, CommandType.Text, actualPage, pageSize, timeout, cancellationToken);
+		}
+
+		/// <summary>
 		///		Obtiene el datareader de una consulta
 		/// </summary>
-		internal async Task<DbDataReader> ExecuteReaderAsync(IDbProvider provider, string query, Models.ArgumentListModel arguments, 
-															 TimeSpan timeout, CancellationToken cancellationToken)
+		internal async Task<DbDataReader> ExecuteReaderAsync(Models.QueryModel query, CancellationToken cancellationToken)
+		{
+			if (query.ParseQuery)
+				return await ExecuteReaderAsync(Manager.GetDbProvider(query.Connection), query.Sql, query.Arguments, query.Timeout, cancellationToken);
+			else
+				return await ExecuteParsedReaderAsync(Manager.GetDbProvider(query.Connection), query.Sql, query.Arguments,
+													  query.Timeout, cancellationToken);
+		}
+
+		/// <summary>
+		///		Obtiene el datareader de una consulta
+		/// </summary>
+		private async Task<DbDataReader> ExecuteReaderAsync(IDbProvider provider, string query, Models.ArgumentListModel arguments, 
+															TimeSpan timeout, CancellationToken cancellationToken)
 		{
 			List<SqlSectionModel> scripts = new SqlParser().Tokenize(query, arguments.Constants.ToDictionary(), out string error);
 
@@ -113,6 +153,15 @@ namespace Bau.Libraries.DbScripts.Manager.Interpreter
 		}
 
 		/// <summary>
+		///		Obtiene el datareader de una consulta ya interpretada
+		/// </summary>
+		private async Task<DbDataReader> ExecuteParsedReaderAsync(IDbProvider provider, string query, Models.ArgumentListModel arguments, 
+																  TimeSpan timeout, CancellationToken cancellationToken)
+		{
+			return await provider.ExecuteReaderAsync(query, ConvertParameters(provider, arguments.Parameters), CommandType.Text, timeout, cancellationToken);
+		}
+
+		/// <summary>
 		///		Ejecuta una consulta escalar
 		/// </summary>
 		private async Task<DataTable> ExecuteScalarQueryAsync(IDbProvider provider, string query, TimeSpan timeout, CancellationToken cancellationToken)
@@ -130,11 +179,22 @@ namespace Bau.Libraries.DbScripts.Manager.Interpreter
 				// Devuelve la tabla resultante
 				return table;
 		}
+		
+		/// <summary>
+		///		Ejecuta los comandos de una cadena SQL
+		/// </summary>
+		internal async Task ExecuteAsync(Models.QueryModel query, CancellationToken cancellationToken)
+		{
+			if (query.ParseQuery)
+				await ExecuteAsync(Manager.GetDbProvider(query.Connection), query.Sql, query.Arguments, query.Timeout, cancellationToken);
+			else
+				throw new NotImplementedException("Can't execute query not parsed");
+		}
 
 		/// <summary>
 		///		Ejecuta los comandos de una cadena SQL
 		/// </summary>
-		internal async Task ExecuteAsync(IDbProvider provider, string sql, Models.ArgumentListModel arguments, TimeSpan timeout, CancellationToken cancellationToken)
+		private async Task ExecuteAsync(IDbProvider provider, string sql, Models.ArgumentListModel arguments, TimeSpan timeout, CancellationToken cancellationToken)
 		{
 			using (BlockLogModel block = Manager.Logger.Default.CreateBlock(LogModel.LogType.Info, "Execute script"))
 			{
@@ -193,25 +253,25 @@ namespace Bau.Libraries.DbScripts.Manager.Interpreter
 		/// <summary>
 		///		Obtiene el plan de ejecución de una consulta
 		/// </summary>
-		internal async Task<DataTable> GetExecutionPlanAsync(IDbProvider provider, string query, Models.ArgumentListModel arguments, 
-															 TimeSpan timeout, CancellationToken cancellationToken)
+		internal async Task<DataTable> GetExecutionPlanAsync(Models.QueryModel query, CancellationToken cancellationToken)
 		{
 			DataTable result = null;
 
 				// Obtiene la tabla
 				using (BlockLogModel block = Manager.Logger.Default.CreateBlock(LogModel.LogType.Info, "Get execution plan"))
 				{
-					if (string.IsNullOrWhiteSpace(query))
+					if (string.IsNullOrWhiteSpace(query.Sql))
 						block.Error("The query is empty");
 					else
 					{
-						List<SqlSectionModel> scripts = new SqlParser().Tokenize(query, arguments.Constants.ToDictionary(), out string error);
+						IDbProvider provider = Manager.GetDbProvider(query.Connection);
+						List<SqlSectionModel> scripts = new SqlParser().Tokenize(query.Sql, query.Arguments.Constants.ToDictionary(), out string error);
 
 							if (!string.IsNullOrWhiteSpace(error))
 								block.Error(error);
 							else
 							{
-								ParametersDbCollection parametersDb = ConvertParameters(provider, arguments.Parameters);
+								ParametersDbCollection parametersDb = ConvertParameters(provider, query.Arguments.Parameters);
 
 									// Obtiene el datatable
 									foreach (SqlSectionModel script in scripts)
@@ -224,7 +284,7 @@ namespace Bau.Libraries.DbScripts.Manager.Interpreter
 													// Log
 													block.Info($"Get execution plan: {sql}");
 													// Obtiene el plan de ejecución
-													result = await provider.GetExecutionPlanAsync(sql, null, CommandType.Text, timeout, cancellationToken);
+													result = await provider.GetExecutionPlanAsync(sql, null, CommandType.Text, query.Timeout, cancellationToken);
 												}
 										}
 									// Log

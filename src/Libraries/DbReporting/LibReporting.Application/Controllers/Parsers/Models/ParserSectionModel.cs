@@ -22,12 +22,16 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Parsers.Models
             GroupBy,
             /// <summary>Cláusula PARTITION BY</summary>
             PartitionBy,
+            /// <summary>Cláusula ORDER BY</summary>
+            OrderBy,
             /// <summary>Comprobación de campos NULL</summary>
             CheckNull,
-            /// <summary>Obtiene los campos de dos tablas: IfNull(x, y). Úil en los FULL OUTER JOIN</summary>
+            /// <summary>Obtiene los campos de dos tablas: IfNull(x, y). Útil en los FULL OUTER JOIN</summary>
             FieldsIfNull,
             /// <summary>SQL asociada a si se ha solicitado una expresión</summary>
-            IfRequestExpression
+            IfRequestExpression,
+            /// <summary>SQL asociada a la paginación</summary>
+            Pagination
         }
 
         internal ParserSectionModel(string placeholder, SectionType type)

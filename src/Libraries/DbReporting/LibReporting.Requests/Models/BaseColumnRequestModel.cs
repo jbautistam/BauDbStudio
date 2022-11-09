@@ -28,6 +28,7 @@ namespace Bau.Libraries.LibReporting.Requests.Models
 		{
 			// Copoia los datos básicos
 			cloned.Visible = Visible;
+			cloned.OrderIndex = OrderIndex;
 			cloned.OrderBy = OrderBy;
 			// Copia los filtros del WHERE
 			foreach (FilterRequestModel filter in FiltersWhere)
@@ -41,6 +42,11 @@ namespace Bau.Libraries.LibReporting.Requests.Models
 		///		Indica si esta columna es visible en la consulta final o sólo para los filtros
 		/// </summary>
 		public bool Visible { get; set; } = true;
+
+		/// <summary>
+		///		Indice para la ordenación del campo
+		/// </summary>
+		public int OrderIndex { get; set; }
 
 		/// <summary>
 		///		Modo de ordenación

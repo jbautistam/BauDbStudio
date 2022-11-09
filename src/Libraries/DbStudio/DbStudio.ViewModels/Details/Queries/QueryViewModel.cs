@@ -8,6 +8,8 @@ using Bau.Libraries.DbStudio.Models.Connections;
 using Bau.Libraries.DbStudio.ViewModels.Controllers.Exporter;
 using Bau.Libraries.DbStudio.ViewModels.Details.Connections;
 using Bau.Libraries.DbScripts.Manager.Models;
+using System.Data.Common;
+using Bau.Libraries.DbScripts.Manager.Builders;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Details.Queries
 {
@@ -33,13 +35,14 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Queries
 		private System.Timers.Timer _timer;
 		private System.Diagnostics.Stopwatch _stopwatch;
 
-		public QueryViewModel(DbStudioViewModel solutionViewModel, string selectedConnection, string query, bool raisePrepareExecution) : base(false)
+		public QueryViewModel(DbStudioViewModel solutionViewModel, string selectedConnection, string query, bool executeQueryByParts, bool raisePrepareExecution) : base(false)
 		{
 			// Asigna los viewModel
 			SolutionViewModel = solutionViewModel;
 			ChartViewModel = new ChartViewModel(this);
 			// Asigna las propiedades
 			Query = query;
+			ExecuteQueryByParts = executeQueryByParts;
 			Arguments = new ArgumentListModel();
 			PaginateQuery = false;
 			ActualPage = 1;
@@ -98,7 +101,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Queries
 							SolutionViewModel.MainController.HostController.SystemController.ShowMessage("Seleccione una conexión");
 						else
 						{
-							(ArgumentListModel arguments, string error) = SolutionViewModel.ConnectionExecutionViewModel.GetParameters();
+							(QueryModel query, string error) = GetQuery(connection, querySelected, true);
 
 								if (!string.IsNullOrWhiteSpace(error))
 									SolutionViewModel.MainController.HostController.SystemController.ShowMessage(error);
@@ -115,21 +118,13 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Queries
 										if (string.IsNullOrWhiteSpace(_lastQuery) || !querySelected.Equals(_lastQuery, StringComparison.CurrentCultureIgnoreCase))
 											ActualPage = 1;
 										// Carga la consulta
-										if (PaginateQuery)
-											DataResults = await SolutionViewModel.Manager.GetDatatableQueryAsync(connection, querySelected, arguments, 
-																												 ActualPage, PageSize, 
-																												 connection.TimeoutExecuteScript, 
-																												 _cancellationToken);
-										else
-											DataResults = await SolutionViewModel.Manager.GetDatatableQueryAsync(connection, querySelected, arguments, 0, 0,
-																												 connection.TimeoutExecuteScript, 
-																												 _cancellationToken);
+										DataResults = await SolutionViewModel.Manager.GetDatatableAsync(query, _cancellationToken);
 										// Guarda la consulta que se acaba de lanzar
 										_lastQuery = querySelected;
 									}
 									catch (Exception exception)
 									{
-										SolutionViewModel.Manager.Logger.Default.LogItems.Error($"Error al ejecutar la consulta. {exception.Message}");
+										SolutionViewModel.Manager.Logger.Default.LogItems.Error($"Error when execute the query. {exception.Message}");
 									}
 									// Detiene la ejecucion
 									StopQuery();
@@ -139,13 +134,57 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Queries
 		}
 
 		/// <summary>
+		///		Obtiene los argumentos
+		/// </summary>
+		private (ArgumentListModel arguments, string error) GetArguments()
+		{
+			(ArgumentListModel arguments, string error) = SolutionViewModel.ConnectionExecutionViewModel.GetParameters();
+
+				// Añade los argumentos predefinidos
+				if (string.IsNullOrWhiteSpace(error))
+				{
+					arguments.Constants.AddRange(Arguments.Constants);
+					arguments.Parameters.AddRange(Arguments.Parameters);
+				}
+				// Devuelve los resultados
+				return (arguments, error);
+		}
+
+		/// <summary>
+		///		Ejecuta una consulta
+		/// </summary>
+		private (QueryModel query, string error) GetQuery(ConnectionModel connection, string sql, bool includePagination)
+		{
+			(ArgumentListModel arguments, string error) = GetArguments();
+			QueryModel query = null;
+
+				// Obtiene la query
+				if (string.IsNullOrWhiteSpace(error))
+				{
+					QueryBuilder builder = new(connection);
+
+						// Asigna las propiedades
+						builder.WithSql(sql, ExecuteQueryByParts);
+						builder.WithTimeout(connection.TimeoutExecuteScript);
+						builder.WithArguments(arguments);
+						// Asigna la paginación
+						if (includePagination && PaginateQuery)
+							builder.WithPagination(ActualPage, PageSize);
+						// Obtiene los resultados
+						query = builder.Build();
+				}
+				// Devuelve los resultados
+				return (query, error);
+		}
+
+		/// <summary>
 		///		Muestra el plan de ejecución
 		/// </summary>
 		private async Task ShowExecutionPlanAsync()
 		{
-			string query = GetEditorSelectedText();
+			string querySelected = GetEditorSelectedText();
 
-				if (string.IsNullOrWhiteSpace(query))
+				if (string.IsNullOrWhiteSpace(querySelected))
 					SolutionViewModel.MainController.HostController.SystemController.ShowMessage("Introduzca una consulta");
 				else
 				{
@@ -155,15 +194,14 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Queries
 							SolutionViewModel.MainController.HostController.SystemController.ShowMessage("Seleccione una conexión");
 						else
 						{
-							(ArgumentListModel arguments, string error) = SolutionViewModel.ConnectionExecutionViewModel.GetParameters();
+							(QueryModel query, string error) = GetQuery(connection, querySelected, false);
 
 								if (!string.IsNullOrWhiteSpace(error))
 									SolutionViewModel.MainController.HostController.SystemController.ShowMessage(error);
 								else
 									try
 									{
-										DataTable table = await SolutionViewModel.Manager.GetExecutionPlanAsync(connection, query, arguments, 
-																												connection.TimeoutExecuteScript, _cancellationToken);
+										DataTable table = await SolutionViewModel.Manager.GetExecutionPlanAsync(query, _cancellationToken);
 										string plan = string.Empty;
 
 											// Obtiene el plan de ejecución
@@ -339,7 +377,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Queries
 						SolutionViewModel.MainController.HostController.SystemController.ShowMessage("Seleccione una conexión");
 					else
 					{
-						(ArgumentListModel arguments, string error) = SolutionViewModel.ConnectionExecutionViewModel.GetParameters();
+						(QueryModel query, string error) = GetQuery(connection, Query, false);
 
 							if (!string.IsNullOrWhiteSpace(error))
 								SolutionViewModel.MainController.HostController.SystemController.ShowMessage(error);
@@ -356,7 +394,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Queries
 										// Ejecuta la exportación
 										try
 										{
-											(bool exported, string exportError) = await ExportAsync(connection, arguments, fileName, _cancellationToken);
+											(bool exported, string exportError) = await ExportAsync(query, fileName, _cancellationToken);
 
 												if (!exported)
 													SolutionViewModel.MainController.HostController.SystemController.ShowMessage(error);
@@ -379,16 +417,14 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Queries
 		/// <summary>
 		///		Exporta el resultado de una consulta a un archivo 
 		/// </summary>
-		private async Task<(bool exported, string error)> ExportAsync(ConnectionModel connection, ArgumentListModel arguments, 
-																	  string fileName, CancellationToken cancellationToken)
+		private async Task<(bool exported, string error)> ExportAsync(QueryModel query, string fileName, CancellationToken cancellationToken)
 		{
-			using (System.Data.Common.DbDataReader reader = await SolutionViewModel.Manager.ExecuteReaderAsync(connection, Query, arguments,
-																											   connection.TimeoutExecuteScript,
-																											   cancellationToken))
+			using (System.Data.Common.DbDataReader reader = await SolutionViewModel.Manager.ExecuteReaderAsync(query, cancellationToken))
 			{
 				return await new ExportDataController().ExportAsync(SolutionViewModel.MainController.Logger, fileName, reader, cancellationToken);
 			}
 		}
+
 
 		/// <summary>
 		///		Solución
@@ -399,6 +435,11 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Queries
 		///		ViewModel para el gráfico
 		/// </summary>
 		public ChartViewModel ChartViewModel { get; }
+
+		/// <summary>
+		///		Indica si se debe ejecutar la consulta completa o particionarla como scripts
+		/// </summary>
+		public bool ExecuteQueryByParts { get; }
 
 		/// <summary>
 		///		Consulta a ejecutar

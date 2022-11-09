@@ -12,11 +12,11 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Queries
 		// Variables privadas
 		private string _header;
 
-		public ExecuteQueryViewModel(DbStudioViewModel solutionViewModel, string selectedConnection, string query) : base(false)
+		public ExecuteQueryViewModel(DbStudioViewModel solutionViewModel, string selectedConnection, string query, bool executeQueryByParts) : base(false)
 		{
 			// Asigna los viewModel
 			SolutionViewModel = solutionViewModel;
-			QueryViewModel = new QueryViewModel(solutionViewModel, selectedConnection, query, false);
+			QueryViewModel = new QueryViewModel(solutionViewModel, selectedConnection, query, executeQueryByParts, false);
 			// Asigna las propiedades
 			Header = "Consulta";
 		}

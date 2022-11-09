@@ -11,6 +11,7 @@ using Bau.Libraries.LibReporting.Models.DataWarehouses.Dimensions;
 using Bau.Libraries.LibReporting.Application.Exceptions;
 using Bau.Libraries.LibReporting.Application.Controllers.Parsers;
 using Bau.Libraries.LibReporting.Application.Controllers.Parsers.Models;
+using Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets;
 
 namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 {
@@ -276,6 +277,9 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 						case ParserSectionModel.SectionType.GroupBy:
 								parser.Replace(section, GetSqlForGroupBy(section));
 							break;
+						case ParserSectionModel.SectionType.OrderBy:
+								parser.Replace(section, GetSqlForOrderBy(section));
+							break;
 						case ParserSectionModel.SectionType.PartitionBy:
 								parser.Replace(section, GetSqlForPartitionBy(section));
 							break;
@@ -284,6 +288,9 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 							break;
 						case ParserSectionModel.SectionType.IfRequestExpression:
 								parser.Replace(section, GetSqlForRequestExpression(section));
+							break;
+						case ParserSectionModel.SectionType.Pagination:
+								parser.Replace(section, GetSqlForPagination());
 							break;
 						default:
 							throw new Exceptions.ReportingParserException($"Unknown section: {section.Type.ToString()}");
@@ -521,6 +528,76 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 					fields = fields.AddWithSeparator(GetFields(child.Query, tableAlias, includePrimaryKey), ",");
 				// Devuelve los campos
 				return fields;
+		}
+
+		/// <summary>
+		///		Obtiene la cláusula ORDER BY
+		/// </summary>
+		private string GetSqlForOrderBy(ParserSectionModel section)
+		{
+			List<(string table, string field, int orderIndex, DimensionColumnRequestModel.SortOrder sortOrder)> fieldsSort = new();
+			string sql = string.Empty;
+
+				// Obtiene los campos para ORDER BY
+				foreach (ParserDimensionModel parserDimension in section.ParserDimensions)
+				{
+					List<(string tableDimension, string fieldDimension)> fields = GetFieldsRequest(parserDimension, parserDimension.WithPrimaryKeys);
+					DimensionRequestModel requestDimension = Request.GetDimensionRequest(parserDimension.DimensionKey);
+
+						// Obtiene las columnas ordenables
+						if (requestDimension is not null)
+							foreach ((string table, string field) in fields)
+							{
+								DimensionModel dimension = Report.DataWarehouse.Dimensions[parserDimension.DimensionKey];
+
+									if (dimension is not null)
+									{
+										DataSourceColumnModel column = dimension.GetColumn(field, true);
+
+											if (column is not null)
+											{
+												DimensionColumnRequestModel requestColumn = requestDimension.GetRequestColumn(column.Id);
+
+													// Añade los datos de ordenación
+													if (requestColumn is not null && requestColumn.OrderBy != BaseColumnRequestModel.SortOrder.Undefined)
+														fieldsSort.Add((table, field, requestColumn.OrderIndex, requestColumn.OrderBy));
+											}
+									}
+							}
+				}
+				// Ordena por el índice
+				fieldsSort.Sort((first, second) => first.orderIndex.CompareTo(second.orderIndex));
+				// Obtiene la cadena SQL
+				foreach ((string table, string field, int orderIndex, DimensionColumnRequestModel.SortOrder sortOrder) in fieldsSort)
+					sql = sql.AddWithSeparator($"{GetFieldName(table, field)} {GetSorting(sortOrder)}", ",");
+				// Si es obligatorio y está vacío, ordena por el primer campo
+				if (section.Required && string.IsNullOrWhiteSpace(sql))
+					sql = "1";
+				// Añade el ORDER BY
+				if (!string.IsNullOrWhiteSpace(sql))
+					sql = $"ORDER BY {sql}";
+				// Devuelve la cadena SQL
+				return sql;
+
+				// Obtiene la cadena con el tipo de ordenación
+				string GetSorting(DimensionColumnRequestModel.SortOrder sortOrder)
+				{
+					if (sortOrder == BaseColumnRequestModel.SortOrder.Descending)
+						return "DESC";
+					else
+						return "ASC";
+				}
+		}
+
+		/// <summary>
+		///		Obtiene la cadena SQL de paginación
+		/// </summary>
+		private string GetSqlForPagination()
+		{
+			if (Request.Pagination.MustPaginate)
+				return $"OFFSET {(Request.Pagination.Page - 1) * Request.Pagination.RecordsPerPage} ROWS FETCH FIRST {Request.Pagination.RecordsPerPage} ROWS ONLY";
+			else
+				return string.Empty;
 		}
 
 		/// <summary>

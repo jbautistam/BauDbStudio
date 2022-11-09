@@ -48,6 +48,22 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses.Dimensions
 		}
 
 		/// <summary>
+		///		Obtiene una columna por su Id o por su alias
+		/// </summary>
+		public DataSets.DataSourceColumnModel GetColumn(string columnId, bool compareWithAlias)
+		{
+			DataSets.DataSourceColumnModel column = DataSource.GetColumn(columnId, compareWithAlias);
+
+				// Si no ha encontrado la columna, busca en las dimensiones hija
+				if (column is null)
+					foreach (DimensionRelationModel relation in Relations)
+						if (column is null)
+							column = relation.Dimension.GetColumn(columnId, compareWithAlias);
+				// Devuelve la columna
+				return column;
+		}
+
+		/// <summary>
 		///		Datawarehouse al que se asocia la dimensión
 		/// </summary>
 		public DataWarehouseModel DataWarehouse { get; }

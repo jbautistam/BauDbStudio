@@ -51,6 +51,8 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Parsers
 				return ParseForFields(alias, placeholder.Substring("Fields ".Length), ParserSectionModel.SectionType.Fields);
 			else if (placeholder.StartsWith("GroupBy ", StringComparison.CurrentCultureIgnoreCase))
 				return ParseForFields(alias, placeholder.Substring("GroupBy ".Length), ParserSectionModel.SectionType.GroupBy);
+			else if (placeholder.StartsWith("OrderBy ", StringComparison.CurrentCultureIgnoreCase))
+				return ParseForFields(alias, placeholder.Substring("OrderBy ".Length), ParserSectionModel.SectionType.OrderBy);
 			else if (placeholder.StartsWith("PartitionBy ", StringComparison.CurrentCultureIgnoreCase))
 				return ParseForFields(alias, placeholder.Substring("PartitionBy ".Length), ParserSectionModel.SectionType.PartitionBy);
 			else if (placeholder.StartsWith("InnerJoin ", StringComparison.CurrentCultureIgnoreCase))
@@ -74,6 +76,8 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Parsers
 				return ParseForFields(alias, placeholder.Substring("FieldsIfNull ".Length), ParserSectionModel.SectionType.FieldsIfNull);
 			else if (placeholder.StartsWith("IfRequest ", StringComparison.CurrentCultureIgnoreCase))
 				return ParseForRequestExpression(alias, placeholder.Substring("IfRequest ".Length), ParserSectionModel.SectionType.IfRequestExpression);
+			else if (placeholder.StartsWith("Pagination", StringComparison.CurrentCultureIgnoreCase))
+				return new ParserSectionModel(alias, ParserSectionModel.SectionType.Pagination);
 			else
 				throw new Exceptions.ReportingParserException($"Placeholder unknown: {placeholder}");
 		}

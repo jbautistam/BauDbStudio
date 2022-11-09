@@ -147,7 +147,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 		/// </summary>
 		private void OpenQuery(ConnectionTableModel table)
 		{
-			SolutionViewModel.MainController.OpenWindow(new Details.Queries.ExecuteQueryViewModel(SolutionViewModel, table?.Connection.Name, GetQuery(table)));
+			SolutionViewModel.MainController.OpenWindow(new Details.Queries.ExecuteQueryViewModel(SolutionViewModel, table?.Connection.Name, GetQuery(table), true));
 		}
 
 		/// <summary>

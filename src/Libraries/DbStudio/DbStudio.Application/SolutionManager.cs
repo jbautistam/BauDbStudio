@@ -60,45 +60,33 @@ namespace Bau.Libraries.DbStudio.Application
 		/// <summary>
 		///		Ejecuta una consulta sobre una conexión
 		/// </summary>
-		public async Task ExecuteQueryAsync(ConnectionModel connection, string query, ArgumentListModel arguments, 
-											TimeSpan timeout, CancellationToken cancellationToken)
+		public async Task ExecuteQueryAsync(QueryModel query, CancellationToken cancellationToken)
 		{
-			await DbScriptsManager.ExecuteQueryAsync(connection, query, arguments, timeout, cancellationToken);
+			await DbScriptsManager.ExecuteQueryAsync(query, cancellationToken);
 		}
 
 		/// <summary>
-		///		Ejecuta una consulta interpretada sobre una conexión
+		///		Obtiene un <see cref="DataTable"/> paginada con una consulta sobre una conexión sin interpretarla
 		/// </summary>
-		public async Task ExecuteInterpretedQueryAsync(ConnectionModel connection, string query, ArgumentListModel arguments, CancellationToken cancellationToken)
+		public async Task<DataTable> GetDatatableAsync(QueryModel query, CancellationToken cancellationToken)
 		{
-			await DbScriptsManager.ExecuteInterpretedQueryAsync(connection, query, arguments, cancellationToken);
-		}
-
-		/// <summary>
-		///		Obtiene un <see cref="DataTable"/> paginada con una consulta sobre una conexión
-		/// </summary>
-		public async Task<DataTable> GetDatatableQueryAsync(ConnectionModel connection, string query, ArgumentListModel arguments, 
-															int actualPage, int pageSize, TimeSpan timeout, CancellationToken cancellationToken)
-		{
-			return await DbScriptsManager.GetDatatableQueryAsync(connection, query, arguments, actualPage, pageSize, timeout, cancellationToken);
+			return await DbScriptsManager.GetDatatableAsync(query, cancellationToken);
 		}
 
 		/// <summary>
 		///		Obtiene el datareader de una consulta
 		/// </summary>
-		public async Task<System.Data.Common.DbDataReader> ExecuteReaderAsync(ConnectionModel connection, string query, ArgumentListModel arguments, 
-																			  TimeSpan timeout, CancellationToken cancellationToken)
+		public async Task<System.Data.Common.DbDataReader> ExecuteReaderAsync(QueryModel query, CancellationToken cancellationToken)
 		{
-			return await DbScriptsManager.ExecuteReaderAsync(connection, query, arguments, timeout, cancellationToken);
+			return await DbScriptsManager.ExecuteReaderAsync(query, cancellationToken);
 		}
 
 		/// <summary>
 		///		Obtiene el plan de ejecución de una consulta
 		/// </summary>
-		public async Task<DataTable> GetExecutionPlanAsync(ConnectionModel connection, string query, ArgumentListModel arguments, 
-														   TimeSpan timeout, CancellationToken cancellationToken)
+		public async Task<DataTable> GetExecutionPlanAsync(QueryModel query, CancellationToken cancellationToken)
 		{
-			return await DbScriptsManager.GetExecutionPlanAsync(connection, query, arguments, timeout, cancellationToken);
+			return await DbScriptsManager.GetExecutionPlanAsync(query, cancellationToken);
 		}
 
 		/// <summary>

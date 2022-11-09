@@ -39,6 +39,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 		}
 		// Variables privadas
 		private bool _canSelect, _canSort, _canFilterWhere, _canAggregate, _canFilterHaving, _hasFiltersColumn, _hasFiltersHaving;
+		private int _sortIndex;
 		private BaseColumnRequestModel.SortOrder _sortOrder;
 		private ComboViewModel _comboAggregationTypes;
 		private ListReportColumnFilterViewModel _filterWhere, _filterHaving;
@@ -65,6 +66,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 			else // ... es una columna, le asigna sus propiedades
 			{
 				CanSelect = true;
+				SortIndex = -1;
 				SortOrder = BaseColumnRequestModel.SortOrder.Undefined;
 			}
 			// Asigna los filtros
@@ -151,6 +153,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 		/// </summary>
 		private void UpdateSortOrder()
 		{
+			// Cambia el modo de ordenación
 			switch (SortOrder)
 			{
 				case BaseColumnRequestModel.SortOrder.Undefined:
@@ -163,6 +166,11 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 						SortOrder = BaseColumnRequestModel.SortOrder.Undefined;
 					break;
 			}
+			// Asigna el índice de ordenación
+			if (SortOrder == BaseColumnRequestModel.SortOrder.Undefined)
+				SortIndex = -1;
+			else if (SortIndex == -1)
+				SortIndex = (TreeViewModel as TreeQueryReportViewModel)?.GetSortIndex() ?? 0;
 		}
 
 		/// <summary>
@@ -284,6 +292,15 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 		{
 			get { return _canFilterHaving; }
 			set { CheckProperty(ref _canFilterHaving, value); }
+		}
+
+		/// <summary>
+		///		Indice para la ordenación
+		/// </summary>
+		public int SortIndex
+		{
+			get { return _sortIndex; }
+			set { CheckProperty(ref _sortIndex, value); }
 		}
 
 		/// <summary>

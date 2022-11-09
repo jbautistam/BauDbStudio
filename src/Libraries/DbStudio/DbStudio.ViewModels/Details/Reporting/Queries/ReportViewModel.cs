@@ -22,7 +22,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 		{
 			// Asigna las propiedades
 			ViewModel = viewModel;
-			QueryViewModel = new QueryViewModel(ViewModel.SolutionViewModel, string.Empty, string.Empty, true);
+			QueryViewModel = new QueryViewModel(ViewModel.SolutionViewModel, string.Empty, string.Empty, false, true);
 			Report = report;
 			Header = report.Id;
 			// Inicializa el árbol de campos
@@ -46,6 +46,13 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 		{
 			ReportRequestModel reportRequest = TreeColumns.GetReportRequest();
 
+				// Añade la paginación
+				if (QueryViewModel.PaginateQuery)
+				{
+					reportRequest.Pagination.MustPaginate = true;
+					reportRequest.Pagination.Page = QueryViewModel.ActualPage;
+					reportRequest.Pagination.RecordsPerPage = QueryViewModel.PageSize;
+				}
 				// Actualiza el informe recargando el archivo
 				if (Report is ReportAdvancedModel report)
 					ViewModel.ReportingSolutionManager.RefreshAdvancedReport(Report.DataWarehouse, report.FileName);
