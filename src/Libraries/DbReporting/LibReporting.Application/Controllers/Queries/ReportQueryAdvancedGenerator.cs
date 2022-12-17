@@ -346,30 +346,6 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 									if (!string.IsNullOrWhiteSpace(sqlDimension))
 										sqlJoins.Add((relation.Dimension.Table, relation.Dimension.TableAlias, sqlDimension));
 								}
-
-
-								//// Si realmente hay algo que relacionar
-								//if (!string.IsNullOrWhiteSpace(sqlDimension) || !string.IsNullOrWhiteSpace(relation.AdditionalJoinSql))
-								//{
-								//	// Si la tabla de la dimensión coincide con la tabla 
-								//	if (MustAddTable(lastTable, relation.Dimension))
-								//	{
-								//		sql += Environment.NewLine + section.GetJoin() + relation.Dimension.Table;
-								//		if (relation.Dimension.MustUseAlias)
-								//			sql += " AS " + relation.Dimension.TableAlias;
-								//	}
-								//	// Añade la consulta adicional
-								//	if (!string.IsNullOrWhiteSpace(relation.AdditionalJoinSql))
-								//		sqlDimension = sqlDimension.AddWithSeparator(relation.AdditionalJoinSql, Environment.NewLine + "AND");
-								//	// Añade el ON adicional necesario para las condiciones al JOIN
-								//	if (MustAddTable(lastTable, relation.Dimension))
-								//		sql += Environment.NewLine + " ON ";
-								//	// Añade las condiciones
-								//	//? esto es bastante posible que esté mal y no esté añadiendo los "AND" necesarios
-								//	sql += sqlDimension;
-								//	// Guarda la última tabla relacionada
-								//	lastTable = relation.Dimension.TableAlias;
-								//}
 							}
 					// Crea la cadena del JOIN final
 					if (sqlJoins.Count > 0)
@@ -403,24 +379,8 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 									sql = sql.AddWithSeparator(join, Environment.NewLine);
 							}
 					}
-
-					/*
-			                    -- LEFT JOIN CustomerFlowAnalysisCte
-			                    --		ON SalesFirst.A = CustomersFlowAnalysisCte.PointsOfSaleA
-			                    --			AND SalesFirst.B = CustomersFlowAnalysisCte.PointsOfSaleB
-			                    --			AND SalesFirst.C = CustomersFlowAnalysisCte.CalendarC
-			                    --			AND SalesFirst.D = CustomersFlowAnalysisCte.CalendarD
-			                    --			AND AdditionalSql
-					*/
-
 					// Devuelve la cadena SQL generada
 					return sql;
-			}
-
-			// Comprueba si se deben añadir las cláusulas necesarias para un join si no se han añadido antes
-			bool MustAddTable(string lastTable, ParserDimensionModel dimension)
-			{
-				return string.IsNullOrWhiteSpace(lastTable) || !lastTable.Equals(dimension.TableAlias, StringComparison.CurrentCultureIgnoreCase);
 			}
 
 			// Rutina para componer el nombre del campo
