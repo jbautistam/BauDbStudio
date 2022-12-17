@@ -11,13 +11,8 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses.Reports.Blocks
         public BlockCreateCteModel(string key) : base(key) {}
 
         /// <summary>
-        ///     Clave de la dimensión
+        ///     Bloques para la creación de la CTE
         /// </summary>
-        public string DimensionKey { get; set; }
-
-        /// <summary>
-        ///		Consulta
-        /// </summary>
-        public BlockQueyModel Query { get; set; }
+        public List<BaseBlockModel> Blocks { get; } = new();
     }
 }

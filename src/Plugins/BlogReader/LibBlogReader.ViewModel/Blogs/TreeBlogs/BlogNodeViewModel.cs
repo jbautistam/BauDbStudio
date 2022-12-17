@@ -14,7 +14,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs.TreeBlogs
 	public class BlogNodeViewModel : BaseBlogsNodeViewModel
 	{
 		public BlogNodeViewModel(BaseTreeViewModel trvTree, BlogReaderViewModel mainViewModel, FolderNodeViewModel parent, BlogModel blog) 
-					: base(trvTree, parent, blog.ID.ToString(), blog.Name, false)
+					: base(trvTree, parent, blog.Id.ToString(), blog.Name, false)
 		{
 			MainViewModel = mainViewModel;
 			Blog = blog;

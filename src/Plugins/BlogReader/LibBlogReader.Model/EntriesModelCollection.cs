@@ -71,7 +71,7 @@ namespace Bau.Libraries.LibBlogReader.Model
 		/// </summary>
 		internal bool Delete(EntryModel entry)
 		{
-			if (Exists(entry.ID))
+			if (Exists(entry.Id))
 			{
 				Remove(entry);
 				entry.Blog.IsDirty = true;

@@ -38,14 +38,14 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 		/// <summary>
 		///		Busca un origen de datos
 		/// </summary>
-		protected BaseDataSourceModel SearchDataSource(string dataSourceId)
+		protected BaseDataSourceModel? SearchDataSource(string dataSourceId)
 		{
 			// Busca el origen de datos
 			foreach (DataWarehouseModel dataWarehouse in Generator.Schema.DataWarehouses.EnumerateValues())
 			{
 				BaseDataSourceModel dataSource = dataWarehouse.DataSources[dataSourceId];
 
-					if (dataSource != null)
+					if (dataSource is not null)
 						return dataSource;
 			}
 			// Si ha llegado hasta aquí es porque no ha encontrado nada

@@ -37,6 +37,7 @@ namespace Bau.DbStudio
 			DbStudioViewsManager.AddPlugin(new Libraries.ChessDataBase.Plugin.ChessDataBasePlugin());
 			DbStudioViewsManager.AddPlugin(new Libraries.CloudStudio.Plugin.CloudStudioPlugin());
 			DbStudioViewsManager.AddPlugin(new Libraries.PasswordManager.Plugin.PasswordManagerPlugin());
+			DbStudioViewsManager.AddPlugin(new Libraries.ToDoManager.Plugin.ToDoManagerPlugin());
 			DbStudioViewsManager.AddPlugin(new Libraries.StructuredFilesStudio.Views.StructuredFilesStudioViewManager());
 			DbStudioViewsManager.Initialize();
 			// Inicializa el ViewModel

@@ -1,0 +1,172 @@
+﻿<UserControl xmlns:Editors="clr-namespace:Bau.Controls.Editors;assembly=BauControls" 
+			x:Class="Bau.Libraries.ToDoManager.Plugin.Views.TodoFileView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+			 xmlns:Converter="clr-namespace:Bau.Libraries.BauMvvm.Views.Converters;assembly=BauMvvm.Views"
+			 xmlns:ViewModel ="clr-namespace:Bau.Libraries.ToDoManager.ViewModel.Reader.Explorer;assembly=ToDoManager.ViewModel"
+			 Loaded="UserControl_Loaded"
+             mc:Ignorable="d" d:DesignHeight="600" d:DesignWidth="600" >
+	<UserControl.Resources>
+		<Converter:BoolToFontWeightConverter x:Key="BoolToFontWeightConverter"/>
+		<Converter:BoolToFontStyleConverter x:Key="BoolToFontStyleConverter"/>
+		<Converter:MVVMColorConverter x:Key="MVVMColorConverter"/>
+	</UserControl.Resources>
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="3*" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+
+		<ToolBarTray Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+			<ToolBar HorizontalAlignment="Stretch" >
+				<Button ToolTip="Nueva carpeta" Command="{Binding Path=Tree.NewFolderCommand}">
+					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Folder.png" />
+				</Button>
+				<Button ToolTip="Nuevo grupo" Command="{Binding Path=Tree.NewGroupCommand}">
+					<Image Width="16" Height="16" Source="/ToDoManager.Plugin;component/Resources/Task.png" />
+				</Button>
+				<Separator/>
+				<Button ToolTip="Borrar" Command="{Binding Path=Tree.DeleteCommand}">
+					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
+				</Button>
+			</ToolBar>
+		</ToolBarTray>
+
+		<TreeView x:Name="trvEntries" Grid.Row="1" Grid.Column="0"
+					SelectedItemChanged="trvEntries_SelectedItemChanged" BorderThickness="0"
+					ItemsSource="{Binding Path=Tree.Children}"
+					MouseDown="trvEntries_MouseDown"	
+					ContextMenu="{DynamicResource ResourceKey=mnuEntries}">
+			<TreeView.ItemContainerStyle>
+				<Style TargetType="{x:Type TreeViewItem}">
+					<Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+					<Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+				</Style>
+			</TreeView.ItemContainerStyle>
+
+			<TreeView.InputBindings>
+				<KeyBinding Key="Del" Command="{Binding Path=DeleteCommand}" />
+			</TreeView.InputBindings>
+
+			<TreeView.Resources>
+				<!-- Plantilla para las carpetas (FolderModel) -->
+				<HierarchicalDataTemplate DataType="{x:Type ViewModel:FolderNodeViewModel}" ItemsSource="{Binding Children}">
+					<StackPanel Orientation="Horizontal" Margin="2">
+						<Image Width="16" Height="16" Margin="3,0" Source="/BauControls;component/Themes/Images/Folder.png" />
+						<TextBlock Text="{Binding Path=Text}" 
+								FontWeight="Bold"
+								Foreground="{Binding Path=Foreground,Converter={StaticResource MVVMColorConverter}}" 
+								FontSize="14"
+								/>
+					</StackPanel>
+				</HierarchicalDataTemplate>
+				<!-- Plantilla para las entradas -->
+				<DataTemplate DataType="{x:Type ViewModel:GroupNodeViewModel}">
+					<StackPanel Orientation="Horizontal" Margin="2">
+						<Image Width="16" Height="16" Margin="3,0" Source="/ToDoManager.Plugin;component/Resources/ToDoFile.png" />
+						<TextBlock Text="{Binding Path=Text}"
+								Foreground="{Binding Path=Foreground,Converter={StaticResource MVVMColorConverter}}" 
+								FontSize="14"
+								/>
+					</StackPanel>
+				</DataTemplate>
+				<!-- Menú -->
+				<ContextMenu x:Key="mnuEntries">
+					<MenuItem Header="_Nuevo">
+						<MenuItem.Icon>
+							<Image Source="/BauControls;component/Themes/Images/NewItem.png" />
+						</MenuItem.Icon>
+						<MenuItem Header="_Carpeta" Command="{Binding Path=Tree.NewFolderCommand}">
+							<MenuItem.Icon>
+								<Image Source="/BauControls;component/Themes/Images/Folder.png" />
+							</MenuItem.Icon>
+						</MenuItem>
+						<MenuItem Header="_Entrada" Command="{Binding Path=Tree.NewEntryCommand}">
+							<MenuItem.Icon>
+								<Image Source="/ToDoManager.Plugin;component/Resources/Lock.png" />
+							</MenuItem.Icon>
+						</MenuItem>
+					</MenuItem>
+					<MenuItem Header="_Propiedades" Command="{Binding Path=Tree.OpenCommand}">
+						<MenuItem.Icon>
+							<Image Source="/BauControls;component/Themes/Images/Properties.gif" />
+						</MenuItem.Icon>
+					</MenuItem>
+					<MenuItem Header="_Borrar" Command="{Binding Path=Tree.DeleteCommand}">
+						<MenuItem.Icon>
+							<Image Source="/BauControls;component/Themes/Images/Delete.png" />
+						</MenuItem.Icon>
+					</MenuItem>
+				</ContextMenu>
+			</TreeView.Resources>
+		</TreeView>
+		<GridSplitter Grid.Column="0" Grid.Row="1" Background="#FF4A63A0" Width="2" Grid.RowSpan="2" />
+		<Grid Grid.Row="1" Grid.Column="1" Background="White" 
+		Visibility="{Binding IsSelectedEntry, Converter={StaticResource BoolToVisibilityConverter}}">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="*"/>
+			</Grid.RowDefinitions>
+			<GroupBox Grid.Row="0" Grid.Column="0" Header="Propiedades" Margin="2">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition Width="*"/>
+					</Grid.ColumnDefinitions>
+					<Label Grid.Row="0" Grid.Column="0" Content="Nombre:"/>
+					<TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=SelectedEntry.Name,UpdateSourceTrigger=PropertyChanged}"/>
+					<Label Grid.Row="1" Grid.Column="0" Content="Descripción:"/>
+					<TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Path=SelectedEntry.Description,UpdateSourceTrigger=PropertyChanged}" MinHeight="100"
+							 AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
+							 VerticalContentAlignment="Top"/>
+				</Grid>
+			</GroupBox>
+			<GroupBox Grid.Row="1" Grid.Column="0" Header="Definición" Margin="2">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition Width="Auto"/>
+					</Grid.ColumnDefinitions>
+					<Label Grid.Row="0" Grid.Column="0" Content="Url:"/>
+					<TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=SelectedEntry.Url,UpdateSourceTrigger=PropertyChanged}"/>
+					<Label Grid.Row="1" Grid.Column="0" Content="Usuario:"/>
+					<TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Path=SelectedEntry.User,UpdateSourceTrigger=PropertyChanged}"/>
+					<Label Grid.Row="2" Grid.Column="0" Content="Contraseña:"/>
+					<Editors:PasswordTextBox Grid.Row="2" Grid.Column="1" Margin="5" PasswordText="{Binding Path=SelectedEntry.Password,UpdateSourceTrigger=PropertyChanged}"/>
+					<Button Grid.Row="2" Grid.Column="2" Margin="5" ToolTip="Copiar al cortapapeles" Command="{Binding Path=SelectedEntry.CopyPasswordCommand}" IsTabStop="False">
+						<Image Width="16" Height="16" Source="/ToDoManager.Plugin;component/Resources/Copy.png" />
+					</Button>
+					<Button Grid.Row="2" Grid.Column="3" Margin="5" ToolTip="Crear contraseña" Command="{Binding Path=SelectedEntry.CreatePasswordCommand}" IsTabStop="False">
+						<Image Width="16" Height="16" Source="/ToDoManager.Plugin;component/Resources/Lock.png" />
+					</Button>
+					<Label Grid.Row="3" Grid.Column="0" Content="Repetir contraseña:"/>
+					<Editors:PasswordTextBox Grid.Row="3" Grid.Column="1" Margin="5" 
+							PasswordText="{Binding Path=SelectedEntry.RepeatPassword,UpdateSourceTrigger=PropertyChanged}"/>
+					<Label Grid.Row="4" Grid.Column="0" Content="Notas:"/>
+					<TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Path=SelectedEntry.Notes,UpdateSourceTrigger=PropertyChanged}" MinHeight="100"
+							 AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
+							 VerticalContentAlignment="Top"/>
+				</Grid>
+			</GroupBox>
+		</Grid>
+	</Grid>
+</UserControl>

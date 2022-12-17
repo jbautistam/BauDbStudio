@@ -120,32 +120,31 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 		/// </summary>
 		private string GetValue(object value, bool withApostrophe = true)
 		{
-			if (value == null)
-				return "NULL";
-			else
-				switch (value)
-				{
-					case int valueInteger:
-						return ConvertIntToSql(valueInteger);
-					case short valueInteger:
-						return ConvertIntToSql(valueInteger);
-					case long valueInteger:
-						return ConvertIntToSql(valueInteger);
-					case double valueDecimal:
-						return ConvertDecimalToSql(valueDecimal);
-					case float valueDecimal:
-						return ConvertDecimalToSql(valueDecimal);
-					case decimal valueDecimal:
-						return ConvertDecimalToSql((double) valueDecimal);
-					case string valueString:
-						return ConvertStringToSql(valueString, withApostrophe);
-					case DateTime valueDate:
-						return ConvertDateToSql(valueDate);
-					case bool valueBool:
-						return ConvertBooleanToSql(valueBool);
-					default:
-						return ConvertStringToSql(value.ToString(), withApostrophe);
-				}
+			switch (value)
+			{
+				case null:
+					return "NULL";
+				case int valueInteger:
+					return ConvertIntToSql(valueInteger);
+				case short valueInteger:
+					return ConvertIntToSql(valueInteger);
+				case long valueInteger:
+					return ConvertIntToSql(valueInteger);
+				case double valueDecimal:
+					return ConvertDecimalToSql(valueDecimal);
+				case float valueDecimal:
+					return ConvertDecimalToSql(valueDecimal);
+				case decimal valueDecimal:
+					return ConvertDecimalToSql((double) valueDecimal);
+				case string valueString:
+					return ConvertStringToSql(valueString, withApostrophe);
+				case DateTime valueDate:
+					return ConvertDateToSql(valueDate);
+				case bool valueBool:
+					return ConvertBooleanToSql(valueBool);
+				default:
+					return ConvertStringToSql(value?.ToString() ?? string.Empty, withApostrophe);
+			}
 		}
 
 		/// <summary>

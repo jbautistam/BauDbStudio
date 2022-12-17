@@ -6,6 +6,11 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses.Reports.Blocks
 	/// <summary>
 	///		Claúsula para asignar una relación
 	/// </summary>
+	/// <example>
+	/// <Join Dimension = "Users" Table = "UsersCte">
+	///		<Relation FromDimension = "UserId" RelatedTo = "UserId" />
+	/// </Join>
+	/// </example>
 	public class ClauseJoinModel
 	{
 		/// <summary>

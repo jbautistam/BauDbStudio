@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Bau.Libraries.LibHelper.Extensors;
+﻿using Bau.Libraries.LibHelper.Extensors;
+using Bau.Libraries.LibReporting.Application.Controllers.Parsers;
+using Bau.Libraries.LibReporting.Application.Controllers.Parsers.Models;
+using Bau.Libraries.LibReporting.Application.Controllers.Queries.Models;
+using Bau.Libraries.LibReporting.Application.Exceptions;
 using Bau.Libraries.LibReporting.Models;
+using Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets;
+using Bau.Libraries.LibReporting.Models.DataWarehouses.Dimensions;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.Reports;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.Reports.Blocks;
 using Bau.Libraries.LibReporting.Requests.Models;
-using Bau.Libraries.LibReporting.Application.Controllers.Queries.Models;
-using Bau.Libraries.LibReporting.Models.DataWarehouses.Dimensions;
-using Bau.Libraries.LibReporting.Application.Exceptions;
-using Bau.Libraries.LibReporting.Application.Controllers.Parsers;
-using Bau.Libraries.LibReporting.Application.Controllers.Parsers.Models;
-using Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets;
 
 namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 {
@@ -119,7 +116,10 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 						case BlockExecutionModel block:
 								queries.Add(GetQuery(block));
 							break;
-						case BlockQueyModel block:
+						case BlockQueryModel block:
+								queries.Add(GetQuery(block, queries));
+							break;
+						case BlockCreateCteDimensionModel block:
 								queries.Add(GetQuery(block));
 							break;
 						case BlockCreateCteModel block:
@@ -140,7 +140,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 		/// </summary>
 		private QuerySqlModel GetQuery(BlockWithModel block)
 		{
-			QuerySqlModel query = new(QuerySqlModel.QueryType.Block);
+			QuerySqlModel query = new(QuerySqlModel.QueryType.Block, block.Key, string.Empty);
 
 				// Interpreta los bloques
 				query.Queries.AddRange(GetQueries(block.Blocks));
@@ -153,48 +153,60 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 		/// </summary>
 		private QuerySqlModel GetQuery(BlockExecutionModel block)
 		{
-			return new(QuerySqlModel.QueryType.Execution)
-							{
-								Sql = block.Sql
-							};
+			return new(QuerySqlModel.QueryType.Execution, block.Key, block.Sql);
 		}
 
 		/// <summary>
 		///		Obtiene la SQL de un bloque de consulta
 		/// </summary>
-		private QuerySqlModel GetQuery(BlockQueyModel block)
+		private QuerySqlModel GetQuery(BlockQueryModel block, List<QuerySqlModel> queriesBlock)
 		{
-			return new(QuerySqlModel.QueryType.Query)
-							{
-								Sql = GetSqlJoin(block.Sql, block.Joins)
-							};
-		}
+			ParserSection parser = new(block.Sql);
 
-		/// <summary>
-		///		Crea la SQL de un bloque de CTE
-		/// </summary>
-		private QuerySqlModel GetQuery(BlockCreateCteModel cteBlock)
-		{
-			QuerySqlModel query = new QuerySqlModel(QuerySqlModel.QueryType.Cte)
-											{
-												Key = cteBlock.Key,
-											};
-
-				// Contenido
-				if (!string.IsNullOrWhiteSpace(cteBlock.DimensionKey))
-					query.Sql = GetSqlDimensionQuery(cteBlock);
-				else
-					query.Sql = GetSqlJoin(cteBlock.Query.Sql, cteBlock.Query.Joins);
-				// Añade los filtros adicionales a la consulta
-				query.Sql += GetSqlForFilters(cteBlock.Query.Filters);
+				// Convierte las secciones
+				foreach ((string marker, ParserBaseSectionModel section) in parser.Parse())
+					switch (section)
+					{ 
+						case ParserFieldsSectionModel item:
+								parser.Replace(marker, GetSqlForFields(item));
+							break;
+						case ParserJoinSectionModel item:
+								parser.Replace(marker, GetSqlForJoin(item));
+							break;
+						case ParserGroupBySectionModel item:
+								parser.Replace(marker, GetSqlForGroupBy(item));
+							break;
+						case ParserOrderBySectionModel item:
+								parser.Replace(marker, GetSqlForOrderBy(item));
+							break;
+						case ParserPartitionBySectionModel item:
+								parser.Replace(marker, GetSqlForPartitionBy(item));
+							break;
+						case ParserIfRequestExpressionSectionModel item:
+								parser.Replace(marker, GetSqlForRequestExpression(item));
+							break;
+						case ParserWhereSectionModel item:
+								parser.Replace(marker, GetSqlForWhere(item));
+							break;
+						case ParserSubquerySectionModel item:
+								parser.Replace(marker, GetSqlForSubqueries(item, queriesBlock));
+							break;
+						case ParserPaginationSectionModel item:
+								parser.Replace(marker, GetSqlForPagination());
+							break;
+						default:
+							throw new ReportingParserException($"Unknown section: {section.GetType().ToString()}");
+					}
+				// Quita los marcadores vacíos
+				parser.RemoveMarkers();
 				// Devuelve la consulta
-				return query;
+				return new(QuerySqlModel.QueryType.Query, block.Key, parser.Sql);
 		}
 
 		/// <summary>
-		///		Obtiene la consulta de una dimensión
+		///		Crea la SQL de un bloque de CTE a partir de una dimensión
 		/// </summary>
-		private string GetSqlDimensionQuery(BlockCreateCteModel block)
+		private QuerySqlModel GetQuery(BlockCreateCteDimensionModel block)
 		{
 			DimensionModel dimension = Report.DataWarehouse.Dimensions[block.DimensionKey];
 
@@ -202,16 +214,16 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 					throw new ReportingParserException($"Can't find the dimension {block.DimensionKey}");
 				else
 				{
-					string sql = GetSqlDimension(dimension, block.Query.Fields);
+					string sql = GetSqlDimension(dimension, block.Fields);
 					
 						// Añade los JOIN a la consulta
-						foreach (ClauseJoinModel join in block.Query.Joins)
+						foreach (ClauseJoinModel join in block.Joins)
 						{
-							DimensionModel dimensionJoin = GetDimensionIfRequest(join.DimensionKey, join.Required, join.RelatedRequestedDimensionKeys, null);
+							DimensionModel? dimensionJoin = GetDimensionIfRequest(join.DimensionKey, join.Required, join.RelatedRequestedDimensionKeys, null);
 
 								if (dimensionJoin is not null)
 								{
-									ParserSectionModel section = new ParserSectionModel("##_##", ParserSectionModel.SectionType.Join);
+									ParserJoinSectionModel section = new();
 									string sqlJoin;
 
 											// Convierte la sección a partir de la cláusula
@@ -223,15 +235,36 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 												sql += Environment.NewLine + sqlJoin;
 								}
 						}
-						// Devuelve la cadena SQL
-						return sql;
+						// Añade los filtros adicionales a la consulta
+						sql += Environment.NewLine + GetSqlForFilters(block.Filters);
+						// Devuelve la consulta
+						return new QuerySqlModel(QuerySqlModel.QueryType.Cte, block.Key, sql);
 				}
+		}
+
+		/// <summary>
+		///		Crea la SQL de un bloque de CTE
+		/// </summary>
+		private QuerySqlModel GetQuery(BlockCreateCteModel block)
+		{
+			List<QuerySqlModel> queries = GetQueries(block.Blocks);
+			string sql = string.Empty;
+
+				// Añade los valores de las consultas a la CTE
+				foreach (QuerySqlModel query in queries)
+					if (!query.IsSubquery)
+						sql = sql.AddWithSeparator(query.Sql, Environment.NewLine, false);
+				// Devuelve el resultado de la consulta
+				if (string.IsNullOrWhiteSpace(sql))
+					throw new ReportingParserException($"There is no SQL query in CTE block '{block.Key}'");
+				else
+					return new QuerySqlModel(QuerySqlModel.QueryType.Cte, block.Key, sql);
 		}
 
 		/// <summary>
 		///		Obtiene los datos de una dimensión si se ha solicitado
 		/// </summary>
-		private DimensionModel GetDimensionIfRequest(ParserDimensionModel parserDimension)
+		private DimensionModel? GetDimensionIfRequest(ParserDimensionModel parserDimension)
 		{
 			return GetDimensionIfRequest(parserDimension.DimensionKey, parserDimension.Required, parserDimension.RelatedDimensions, 
 										 parserDimension.IfNotRequestDimensions);
@@ -240,7 +273,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 		/// <summary>
 		///		Obtiene los datos de una dimensión si se ha solicitado
 		/// </summary>
-		private DimensionModel GetDimensionIfRequest(string dimensionKey, bool required, List<string> relatedDimensions, List<string> notRequestedDimensions)
+		private DimensionModel? GetDimensionIfRequest(string dimensionKey, bool required, List<string> relatedDimensions, List<string>? notRequestedDimensions)
 		{
 			DimensionModel dimensionJoin = Report.DataWarehouse.Dimensions[dimensionKey];
 
@@ -252,53 +285,6 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 					return dimensionJoin;
 				else
 					return null;
-		}
-
-		/// <summary>
-		///		Obtiene la cadena SQL de un JOIN
-		/// </summary>
-		private string GetSqlJoin(string sql, List<ClauseJoinModel> joins)
-		{
-			ParserSection parser = new(sql);
-
-				// Convierte las secciones
-				foreach (ParserSectionModel section in parser.Parse())
-					switch (section.Type)
-					{
-						case ParserSectionModel.SectionType.Fields:
-								parser.Replace(section, GetSqlForFields(section));
-							break;
-						case ParserSectionModel.SectionType.FieldsIfNull:
-								parser.Replace(section, GetSqlForFieldsIfNull(section));
-							break;
-						case ParserSectionModel.SectionType.Join:
-								parser.Replace(section, GetSqlForJoin(section));
-							break;
-						case ParserSectionModel.SectionType.GroupBy:
-								parser.Replace(section, GetSqlForGroupBy(section));
-							break;
-						case ParserSectionModel.SectionType.OrderBy:
-								parser.Replace(section, GetSqlForOrderBy(section));
-							break;
-						case ParserSectionModel.SectionType.PartitionBy:
-								parser.Replace(section, GetSqlForPartitionBy(section));
-							break;
-						case ParserSectionModel.SectionType.CheckNull:
-								parser.Replace(section, GetSqlForCheckNull(section));
-							break;
-						case ParserSectionModel.SectionType.IfRequestExpression:
-								parser.Replace(section, GetSqlForRequestExpression(section));
-							break;
-						case ParserSectionModel.SectionType.Pagination:
-								parser.Replace(section, GetSqlForPagination());
-							break;
-						default:
-							throw new Exceptions.ReportingParserException($"Unknown section: {section.Type.ToString()}");
-					}
-				// Quita los marcadores vacíos
-				parser.RemoveMarkers();
-				// Devuelve la cadena SQL
-				return parser.Sql;
 		}
 
 		/// <summary>
@@ -321,59 +307,120 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 		/// <summary>
 		///		Obtiene la SQL adecuada para el JOIN con una dimensión
 		/// </summary>
-		private string GetSqlForJoin(ParserSectionModel section)
+		private string GetSqlForJoin(ParserJoinSectionModel section)
 		{
-			if (section.ParserDimensions.Count == 0)
-				throw new Exceptions.ReportingParserException($"Can't find dimensions at join {section.Join.ToString()}");
+			if (section.Relations.Count == 0)
+				throw new ReportingParserException($"Can't find relations at join {section.Join.ToString()}");
 			else
 			{
 				string sql = string.Empty;
-				string sqlRelations = string.Empty;
+				List<(string dimensionTable, string dimensionAlias, string join)> sqlJoins = new();
 
-					// Añade el join adecuado
-					foreach (ParserDimensionModel parserDimension in section.ParserDimensions)
-						if (string.IsNullOrWhiteSpace(parserDimension.DimensionKey))
-						{
-							if (!string.IsNullOrWhiteSpace(parserDimension.AdditionalJoinSql))
-								sqlRelations = sqlRelations.AddWithSeparator(parserDimension.AdditionalJoinSql, Environment.NewLine + " AND ");
-							else
-								foreach ((string fieldDimension, string fieldTable) in parserDimension.Fields)
-									sqlRelations = sqlRelations.AddWithSeparator
-														($"{ComposeField(parserDimension.TableRelated, fieldTable, false)} = {ComposeField(parserDimension.TableDimensionAlias, fieldDimension, false)}",
-														Environment.NewLine + " AND ");
-						}
+					// Añade los campos JOINS de las relaciones
+					foreach (ParserJoinRelationSectionModel relation in section.Relations)
+						if (relation.Dimension is null)
+							throw new ReportingParserException($"Can't find dimension at relation join {section.Join.ToString()}");
 						else
 						{
-							DimensionModel dimensionJoin = GetDimensionIfRequest(parserDimension);
+							DimensionModel? dimensionJoin = GetDimensionIfRequest(relation.Dimension);
+							string sqlDimension = string.Empty;
 
-								// si se ha solicitado algo en la dimensión
+								// Si se ha solicitado algo en la dimensión
 								if (dimensionJoin is not null)
 								{
-									// Crea las condiciones
-									if (parserDimension.RelatedByFieldRequest)
-										foreach ((string tableDimension, string fieldDimension) in GetFieldsRequest(parserDimension, false))
-											sqlRelations = sqlRelations.AddWithSeparator
-															($"{ComposeField(parserDimension.TableRelated, fieldDimension, true)} = {ComposeField(tableDimension, fieldDimension, true)}",
+									// Crea las condiciones de las relaciones
+									if (relation.RelatedByFieldRequest)
+										foreach ((string tableDimension, string fieldDimension) in GetFieldsRequest(relation.Dimension, false))
+											sqlDimension = sqlDimension.AddWithSeparator
+															($"{ComposeField(section.TableJoin, fieldDimension, true)} = {ComposeField(tableDimension, fieldDimension, true)}",
 															 Environment.NewLine + " AND ");
 									else
-										foreach ((string fieldDimension, string fieldTable) in parserDimension.Fields)
-											sqlRelations = sqlRelations.AddWithSeparator
-															($"{ComposeField(parserDimension.TableRelated, fieldTable, false)} = {ComposeField(parserDimension.TableDimensionAlias, fieldDimension, false)}",
+										foreach ((string fieldDimension, string fieldTable) in relation.Fields)
+											sqlDimension = sqlDimension.AddWithSeparator
+															($"{ComposeField(section.TableJoin, fieldTable, false)} = {ComposeField(relation.Dimension.TableAlias, fieldDimension, false)}",
 															 Environment.NewLine + " AND ");
+									// Añade la SQL adicional si es necesario
+									if (!string.IsNullOrWhiteSpace(relation.AdditionalJoinSql))
+										sqlDimension = sqlDimension.AddWithSeparator(relation.AdditionalJoinSql, Environment.NewLine + " AND ");
+									// Si hay algo que añadir, lo añade a la lista de relaciones
+									if (!string.IsNullOrWhiteSpace(sqlDimension))
+										sqlJoins.Add((relation.Dimension.Table, relation.Dimension.TableAlias, sqlDimension));
 								}
-						}
-					// Si realmente hay alguna relación
-					if (!string.IsNullOrWhiteSpace(sqlRelations))
+
+
+								//// Si realmente hay algo que relacionar
+								//if (!string.IsNullOrWhiteSpace(sqlDimension) || !string.IsNullOrWhiteSpace(relation.AdditionalJoinSql))
+								//{
+								//	// Si la tabla de la dimensión coincide con la tabla 
+								//	if (MustAddTable(lastTable, relation.Dimension))
+								//	{
+								//		sql += Environment.NewLine + section.GetJoin() + relation.Dimension.Table;
+								//		if (relation.Dimension.MustUseAlias)
+								//			sql += " AS " + relation.Dimension.TableAlias;
+								//	}
+								//	// Añade la consulta adicional
+								//	if (!string.IsNullOrWhiteSpace(relation.AdditionalJoinSql))
+								//		sqlDimension = sqlDimension.AddWithSeparator(relation.AdditionalJoinSql, Environment.NewLine + "AND");
+								//	// Añade el ON adicional necesario para las condiciones al JOIN
+								//	if (MustAddTable(lastTable, relation.Dimension))
+								//		sql += Environment.NewLine + " ON ";
+								//	// Añade las condiciones
+								//	//? esto es bastante posible que esté mal y no esté añadiendo los "AND" necesarios
+								//	sql += sqlDimension;
+								//	// Guarda la última tabla relacionada
+								//	lastTable = relation.Dimension.TableAlias;
+								//}
+							}
+					// Crea la cadena del JOIN final
+					if (sqlJoins.Count > 0)
 					{
-						// Añade la cláusula JOIN con la tabla
-						sql += Environment.NewLine + section.GetJoin() + section.ParserDimensions[0].Table;
-						if (section.ParserDimensions[0].MustUseTableDimensionAlias)
-							sql += " AS " + section.ParserDimensions[0].TableDimensionAlias;
-						// Añade las condiciones al JOIN
-						sql += Environment.NewLine + " ON " + sqlRelations;
+						string lastTable = string.Empty;
+
+							// Genera la cadena SQL
+							foreach ((string dimensionTable, string dimensionAlias, string join) in sqlJoins)
+							{
+								string table = string.Empty;
+
+									// Añade la tabla
+									if (string.IsNullOrWhiteSpace(lastTable) || !lastTable.Equals(dimensionAlias, StringComparison.CurrentCultureIgnoreCase))
+									{
+										// Asigna el nombre de tabla
+										if (!dimensionTable.Equals(dimensionAlias, StringComparison.CurrentCultureIgnoreCase))
+											table = $"{dimensionTable} AS {dimensionAlias}";
+										else
+											table = dimensionTable;
+										// Guarda la última tabla añadida
+										lastTable = dimensionAlias;
+									}
+									// Si tiene que añadir un nombre de tabla, lo añade, si no, añade una cláusula AND
+									if (!string.IsNullOrWhiteSpace(table))
+										sql = sql.AddWithSeparator(@$"{section.GetJoin()} {table}
+																		ON ", 
+																	Environment.NewLine);
+									else
+										sql += " AND ";
+									// Añade la relación
+									sql = sql.AddWithSeparator(join, Environment.NewLine);
+							}
 					}
+
+					/*
+			                    -- LEFT JOIN CustomerFlowAnalysisCte
+			                    --		ON SalesFirst.A = CustomersFlowAnalysisCte.PointsOfSaleA
+			                    --			AND SalesFirst.B = CustomersFlowAnalysisCte.PointsOfSaleB
+			                    --			AND SalesFirst.C = CustomersFlowAnalysisCte.CalendarC
+			                    --			AND SalesFirst.D = CustomersFlowAnalysisCte.CalendarD
+			                    --			AND AdditionalSql
+					*/
+
 					// Devuelve la cadena SQL generada
 					return sql;
+			}
+
+			// Comprueba si se deben añadir las cláusulas necesarias para un join si no se han añadido antes
+			bool MustAddTable(string lastTable, ParserDimensionModel dimension)
+			{
+				return string.IsNullOrWhiteSpace(lastTable) || !lastTable.Equals(dimension.TableAlias, StringComparison.CurrentCultureIgnoreCase);
 			}
 
 			// Rutina para componer el nombre del campo
@@ -390,46 +437,75 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 		}
 
 		/// <summary>
-		///		Obtiene la cadena SQL para los campos solicitados de las dimensiones
+		///		Obtiene la SQL para una <see cref="ParserFieldsSectionModel"/>
 		/// </summary>
-		private string GetSqlForFields(ParserSectionModel section)
+		private string GetSqlForFields(ParserFieldsSectionModel section) 
 		{
-			string sql = string.Empty;
+			string sql = GetSqlFieldsForDimensions(section.ParserDimensions);
 
-				// Obtiene los campos
-				foreach (ParserDimensionModel parserDimension in section.ParserDimensions)
-				{
-					DimensionModel dimensionJoin = GetDimensionIfRequest(parserDimension);
-
-						if (dimensionJoin is not null)
-						{
-							DimensionRequestModel request = Request.GetDimensionRequest(dimensionJoin.Id);
-
-								// Añade los campos solicitados a la SQL
-								sql = sql.AddWithSeparator(GetFields(new QueryDimensionGenerator(this).GetQuery(request), parserDimension.Table, 
-																	 parserDimension.WithPrimaryKeys), 
-														   ",");
-						}
-				}
-				// Añade la coma si es necesario
-				if (section.WithComma && !string.IsNullOrWhiteSpace(sql))
-					sql += ", " + Environment.NewLine;
+				// Añade una coma si es obligatoria
+				if (!string.IsNullOrWhiteSpace(sql) && section.WithComma)
+					sql += ", ";
 				// Devuelve la cadena SQL
 				return sql;
 		}
 
 		/// <summary>
-		///		Obtiene la cadena SQL para los campos solicitados de las dimensiones cuando debe comprobar si son nulos en varias tablas relacionadas
-		///	(útil para los FULL OUTER JOIN)
+		///		Obtiene la cadena SQL para los campos solicitados de las dimensiones
 		/// </summary>
-		private string GetSqlForFieldsIfNull(ParserSectionModel section)
+		private string GetSqlFieldsForDimensions(List<ParserDimensionModel> dimensions)
 		{
 			string sql = string.Empty;
 
 				// Obtiene los campos
+				foreach (ParserDimensionModel dimension in dimensions)
+				{
+					DimensionModel? dimensionJoin = GetDimensionIfRequest(dimension);
+
+						if (dimensionJoin is not null)
+						{
+							DimensionRequestModel request = Request.GetDimensionRequest(dimensionJoin.Id);
+							List<(string table, string field)> fields = GetFieldsRequest(dimension, dimension.WithPrimaryKeys);
+
+								// Añade los campos solicitados a la SQL
+								foreach ((string table, string field) in fields)
+								{
+									string sqlField = string.Empty;
+
+										if (dimension.CheckIfNull)
+											sqlField = $"IsNull({GetFieldName(table, field)}, {GetFieldName(dimension.AdditionalTable, field)}) AS {field}";
+										else
+											sqlField = GetFieldName(table, field);
+										// Añade el campo a la cadena SQL
+										sql = sql.AddWithSeparator(sqlField, ",");
+								}
+						}
+				}
+				// Devuelve la cadena SQL
+				return sql;
+		}
+
+		/// <summary>
+		///		Obtiene la cadena SQL para una condición WHERE
+		/// </summary>
+		/// <example>
+		/// 	WHERE IsNull(PointsOfSaleCte.[PointOfSale], '') = IsNull(PointsOfSaleAccumulatedCte.[PointOfSale], '')
+		/// 	AND IsNull(PointsOfSaleCte.[ErpCode], '') = IsNull(PointsOfSaleAccumulatedCte.[ErpCode], '')
+		/// 	AND IsNull(PointsOfSaleCte.[PointOfSaleImageUrl], '') = IsNull(PointsOfSaleAccumulatedCte.[PointOfSaleImageUrl], '')
+		/// 	AND SalesAnalysisAccumulated.Date BETWEEN @StartDate AND SalesAnalysis.Date
+		/// 	AND SalesAnalysisAccumulated.Refund = 0
+		/// </example>
+		private string GetSqlForWhere(ParserWhereSectionModel section)
+		{
+			string sql = string.Empty;
+
+				sql = "falta interpretación de la sección Where";
+				/*
+				JAB: comentado por cambio en el modelo
+				// Obtiene las comparaciones de los campos
 				foreach (ParserDimensionModel parserDimension in section.ParserDimensions)
 				{
-					DimensionModel dimensionJoin = GetDimensionIfRequest(parserDimension);
+					DimensionModel? dimensionJoin = GetDimensionIfRequest(parserDimension);
 
 						if (dimensionJoin is not null)
 						{
@@ -449,9 +525,12 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 								}
 						}
 				}
-				// Añade la coma si es necesario
-				if (section.WithComma && !string.IsNullOrWhiteSpace(sql))
-					sql += ", " + Environment.NewLine;
+				// Añade la SQL adicional si es necesario
+				sql = sql.AddWithSeparator(section.AdditionalSql, " AND ");
+				// Añade la cláusula WHERE si es necesario
+				if (!string.IsNullOrWhiteSpace(sql))
+					sql = " WHERE " + sql;
+				*/
 				// Devuelve la cadena SQL
 				return sql;
 		}
@@ -459,87 +538,104 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 		/// <summary>
 		///		Obtiene la SQL necesaria para la consulta de una expresión
 		/// </summary>
-		private string GetSqlForRequestExpression(ParserSectionModel section)
+		private string GetSqlForRequestExpression(ParserIfRequestExpressionSectionModel section)
 		{
 			string sql = string.Empty;
 
 				// Si se ha solicitado alguna de las expresiones, se añade la SQL
-				foreach (ParserExpressionModel parserExpression in section.ParserExpressions)
-					if (Request.IsRequestedExpression(parserExpression.ExpressionKeys))
-						sql = sql.AddWithSeparator(parserExpression.Sql, Environment.NewLine);
+				foreach (string expression in section.ExpressionKeys)
+					if (Request.IsRequestedExpression(expression))
+						sql = sql.AddWithSeparator(section.Sql, Environment.NewLine);
 				// Devuelve la cadena SQL
 				return sql;
 		}
 
 		/// <summary>
-		///		Obtiene la cadena SQL para comprobar si una serie de campos es nulo
-		/// </summary>
-		private string GetSqlForCheckNull(ParserSectionModel section)
-		{
-			return "Working at CheckNull";
-		}
-
-		/// <summary>
 		///		Obtiene la cadena SQL necesaria para un GROUP BY
 		/// </summary>
-		private string GetSqlForGroupBy(ParserSectionModel section)
+		private string GetSqlForGroupBy(ParserGroupBySectionModel section)
 		{
-			return GetSqlForClause(section, "GROUP BY");
-		}
+			string sql = GetSqlFieldsForDimensions(section.Dimensions);
 
-		/// <summary>
-		///		Obtiene la cadena SQL necesaria para un GROUP BY
-		/// </summary>
-		private string GetSqlForPartitionBy(ParserSectionModel section)
-		{
-			return GetSqlForClause(section, "PARTITION BY");
-		}
-
-		/// <summary>
-		///		Obtiene la cadena SQL necesaria para un GROUP BY
-		/// </summary>
-		private string GetSqlForClause(ParserSectionModel section, string clause)
-		{
-			string fields = GetSqlForFields(section);
-
-				// Añade una coma si es necesario
-				if (!string.IsNullOrWhiteSpace(fields) && section.Required)
-					fields += ", ";
-				// Añade la cláusula GROUP BY si es necesario
-				if (!string.IsNullOrWhiteSpace(fields) || section.Required)
-					fields = $"{clause} {fields}" + Environment.NewLine;
+				// Añade la SQL adicional
+				sql = sql.AddWithSeparator(section.AdditionalSql, ",");
+				// Obtiene la cadena de salida
+				if (!string.IsNullOrWhiteSpace(sql))
+					sql = $" GROUP BY {sql}";
 				// Devuelve la cadena con los campos
+				return sql;
+		}
+
+		/// <summary>
+		///		Obtiene la cadena SQL necesaria para un GROUP BY
+		/// </summary>
+		private string GetSqlForPartitionBy(ParserPartitionBySectionModel section)
+		{
+			string sql = GetSqlFieldsForDimensions(section.Dimensions);
+
+				// Añade los campos adicionales
+				if (!string.IsNullOrWhiteSpace(section.Additional))
+					sql = sql.AddWithSeparator(section.Additional, ",");
+				// Añade la cláusula PARTITION BY si es necesario
+				if (!string.IsNullOrWhiteSpace(sql))
+					sql = $"PARTITION BY {sql}";
+				// Añade la cláusula ORDER BY si es necesario
+				if (!string.IsNullOrWhiteSpace(section.OrderBy))
+					sql = $"{sql} ORDER BY {section.OrderBy}";
+				// Devuelve la cadena SQL
+				return sql;
+		}
+
+		/// <summary>
+		///		Obtiene la lista con los campos asociados a una consulta
+		/// </summary>
+		private List<(string table, string field)> GetListFields(QueryModel query, string tableAlias, bool includePrimaryKey)
+		{
+			List<(string table, string field)> fields = new();
+
+				// Añade los campos de la consulta
+				foreach (QueryFieldModel field in query.Fields)
+					if (includePrimaryKey || !field.IsPrimaryKey)
+						fields.Add((tableAlias, field.Alias));
+				// Añade los campos hijo
+				foreach (QueryJoinModel child in query.Joins)
+					fields.AddRange(GetListFields(child.Query, tableAlias, includePrimaryKey));
+				// Devuelve los campos
 				return fields;
 		}
 
 		/// <summary>
 		///		Obtiene los campos asociados a una consulta
 		/// </summary>
-		private string GetFields(QueryModel query, string tableAlias, bool includePrimaryKey)
+		private string GetSqlFields(QueryModel query, string tableAlias, bool includePrimaryKey)
 		{
-			string fields = string.Empty;
+			return GetSqlFields(GetListFields(query, tableAlias, includePrimaryKey));
+		}
 
-				// Añade los campos de la consulta
-				foreach (QueryFieldModel field in query.Fields)
-					if (includePrimaryKey || !field.IsPrimaryKey)
-						fields = fields.AddWithSeparator(GetFieldName(tableAlias, field.Alias), ",");
-				// Añade los campos hijo
-				foreach (QueryJoinModel child in query.Joins)
-					fields = fields.AddWithSeparator(GetFields(child.Query, tableAlias, includePrimaryKey), ",");
-				// Devuelve los campos
-				return fields;
+		/// <summary>
+		///		Obtiene los campos asociados a una consulta
+		/// </summary>
+		private string GetSqlFields(List<(string table, string field)> fields)
+		{
+			string sql = string.Empty;
+
+				// Crea la cadena SQL con el nombre de los campos
+				foreach ((string table, string field) in fields)
+					sql = sql.AddWithSeparator(GetFieldName(table, field), ",");
+				// Devuelve la cadena SQL
+				return sql;
 		}
 
 		/// <summary>
 		///		Obtiene la cláusula ORDER BY
 		/// </summary>
-		private string GetSqlForOrderBy(ParserSectionModel section)
+		private string GetSqlForOrderBy(ParserOrderBySectionModel section)
 		{
 			List<(string table, string field, int orderIndex, DimensionColumnRequestModel.SortOrder sortOrder)> fieldsSort = new();
 			string sql = string.Empty;
 
 				// Obtiene los campos para ORDER BY
-				foreach (ParserDimensionModel parserDimension in section.ParserDimensions)
+				foreach (ParserDimensionModel parserDimension in section.Dimensions)
 				{
 					List<(string tableDimension, string fieldDimension)> fields = GetFieldsRequest(parserDimension, parserDimension.WithPrimaryKeys);
 					DimensionRequestModel requestDimension = Request.GetDimensionRequest(parserDimension.DimensionKey);
@@ -606,7 +702,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 		private List<(string tableDimension, string fieldDimension)> GetFieldsRequest(ParserDimensionModel parserDimension, bool includePrimaryKey)
 		{
 			List<(string tableDimension, string fieldDimension)> fields = new();
-			DimensionModel dimensionJoin = GetDimensionIfRequest(parserDimension);
+			DimensionModel? dimensionJoin = GetDimensionIfRequest(parserDimension);
 
 				// Si se ha solicitado algo de esta dimensión, se obtienen los datos
 				if (dimensionJoin is not null)
@@ -615,7 +711,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 
 						// Añade los campos solicitados a la SQL
 						foreach (string field in GetListFields(new QueryDimensionGenerator(this).GetQuery(request), includePrimaryKey))
-							fields.Add((parserDimension.TableDimensionAlias, field));
+							fields.Add((parserDimension.TableAlias, field));
 				}
 				// Devuelve la lista de campos
 				return fields;
@@ -668,14 +764,47 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 		}
 
 		/// <summary>
+		///		Obtiene la SQL de una serie de subconsultas
+		/// </summary>
+		private string GetSqlForSubqueries(ParserSubquerySectionModel section, List<QuerySqlModel> queriesBlock)
+		{
+			if (string.IsNullOrWhiteSpace(section.Name))
+				throw new NotImplementedException("Can't find name for clause 'Subquery'");
+			else
+			{
+				// Busca la consulta en el bloque de consultas hermanas
+				foreach (QuerySqlModel query in queriesBlock)
+					if (query.Key.Equals(section.Name))
+					{
+						// Indica que la consulta se utiliza como subconsulta
+						query.IsSubquery = true;
+						// Devuelve la consulta
+						return query.Sql;
+					}
+				// Lanza una excepción si no ha encontrado ninguna consulta con el nombre de la subconsulta
+				throw new NotImplementedException($"Can't find the query '{section.Name}' for clause 'Subquery'");
+			}
+		}
+
+		/// <summary>
 		///		Crea la sentencia SQL asociada a un bloque que comprueba si se ha solicitado una (o varias) dimensiones
 		/// </summary>
 		private List<QuerySqlModel> GetQueries(BlockIfRequest block)
 		{
-			if (Request.IsRequestedDimension(block.DimensionKeys))
-				return GetQueries(block.Then);
-			else
-				return GetQueries(block.Else);
+			bool mustExecute = false;
+
+				// Comprueba si se debe ejecutar
+				if (block.DimensionKeys.Count > 0)
+					mustExecute = Request.IsRequestedDimension(block.DimensionKeys);
+				else // ... si no hay dimensiones, se pone a true para que se comprueben las expresiones
+					mustExecute = true;
+				if (block.ExpressionKeys.Count > 0)
+					mustExecute &= Request.IsRequestedExpression(block.ExpressionKeys);
+				// Obtiene las consultas
+				if (mustExecute)
+					return GetQueries(block.Then);
+				else
+					return GetQueries(block.Else);
 		}
 
 		/// <summary>

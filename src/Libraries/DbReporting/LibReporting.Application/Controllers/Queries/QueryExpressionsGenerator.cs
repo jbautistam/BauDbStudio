@@ -116,17 +116,17 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries
 		{
 			QueryModel query = new QueryModel(dimension.Id, QueryModel.QueryType.Dimension, dimension.Id);
 			QueryJoinModel join = new QueryJoinModel(QueryJoinModel.JoinType.Inner, query, dimension.Id);
-			QueryModel relatedQuery = dimensionQueries.FirstOrDefault(item => item.SourceId.Equals(dimension.Id, StringComparison.CurrentCultureIgnoreCase));
+			QueryModel? relatedQuery = dimensionQueries.FirstOrDefault(item => item.SourceId.Equals(dimension.Id, StringComparison.CurrentCultureIgnoreCase));
 
 				// Asigna los datos apropiados a la consulta (sólo necesitamos los nombres de tabla)
 				query.Prepare(dimension.Id, dimension.Id);
 				// Añade las relaciones
-				if (relatedQuery != null)
+				if (relatedQuery is not null)
 					foreach (RelationForeignKey column in relation.ForeignKeys)
 					{
-						QueryFieldModel relatedField = relatedQuery.Fields.FirstOrDefault(item => item.Field.Equals(column.TargetColumnId, StringComparison.CurrentCultureIgnoreCase));
+						QueryFieldModel? relatedField = relatedQuery.Fields.FirstOrDefault(item => item.Field.Equals(column.TargetColumnId, StringComparison.CurrentCultureIgnoreCase));
 
-							if (relatedField != null)
+							if (relatedField is not null)
 								join.Relations.Add(new QueryRelationModel(column.ColumnId, relatedQuery.Alias, relatedField.Alias));
 					}
 				// Devuelve el join

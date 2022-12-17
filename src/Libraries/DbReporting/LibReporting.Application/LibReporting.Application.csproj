@@ -1,20 +1,23 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-	  <TargetFramework>net6.0</TargetFramework>
-    <RootNamespace>Bau.Libraries.LibReporting.Application</RootNamespace>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<RootNamespace>Bau.Libraries.LibReporting.Application</RootNamespace>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Controllers\Queries\Models\QueryGroupFieldModel.cs" />
-    <Compile Remove="Controllers\Queries\QueryDimensionGeneratorOld.cs" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Controllers\Parsers\ParserParametersSection.cs" />
+		<Compile Remove="Controllers\Queries\Models\QueryGroupFieldModel.cs" />
+		<Compile Remove="Controllers\Queries\QueryDimensionGeneratorOld.cs" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibHelper\src\LibHelper.csproj" />
-    <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibMarkup\src\LibMarkup.csproj" />
-    <ProjectReference Include="..\LibReporting.Models\LibReporting.Models.csproj" />
-    <ProjectReference Include="..\LibReporting.Requests\LibReporting.Requests.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibHelper\src\LibHelper.csproj" />
+		<ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibMarkup\src\LibMarkup.csproj" />
+		<ProjectReference Include="..\LibReporting.Models\LibReporting.Models.csproj" />
+		<ProjectReference Include="..\LibReporting.Requests\LibReporting.Requests.csproj" />
+	</ItemGroup>
 
 </Project>

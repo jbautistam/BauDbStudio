@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-	  <TargetFramework>net6.0-windows</TargetFramework>
+	  <TargetFramework>net7.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <RootNamespace>Bau.DbStudio</RootNamespace>
     <Authors>Jose Antonio Bautista</Authors>
@@ -102,6 +102,7 @@
     <ProjectReference Include="..\..\Plugins\JobsProcessor\JobsProcessor.Plugin\JobsProcessor.Plugin.csproj" />
     <ProjectReference Include="..\..\Plugins\PasswordManager\PasswordManager.Plugin\PasswordManager.Plugin.csproj" />
     <ProjectReference Include="..\..\Plugins\StructuredFilesStudio\StructuredFilesStudio.Views\StructuredFilesStudio.Views.csproj" />
+    <ProjectReference Include="..\..\Plugins\ToDoManager\ToDoManager.Plugin\ToDoManager.Plugin.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\BauDbStudio.ico" />

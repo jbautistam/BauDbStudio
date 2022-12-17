@@ -22,9 +22,25 @@ namespace Bau.Libraries.LibReporting.Models.DataWarehouses.Reports.Blocks
         }
 
         /// <summary>
-        ///		Claves de las dimensiones que se comprueba
+        ///     Añade una serie de expresiones
+        /// </summary>
+        public void AddExpressions(string key)
+        {
+            if (!string.IsNullOrWhiteSpace(key))
+                foreach (string part in key.Split(';'))
+                    if (!string.IsNullOrWhiteSpace(key))
+                        ExpressionKeys.Add(part.Trim());
+        }
+
+        /// <summary>
+        ///		Claves de las dimensiones que se comprueban
         /// </summary>
         public List<string> DimensionKeys { get; } = new();
+
+        /// <summary>
+        ///     Claves de las expresiones que se comprueban
+        /// </summary>
+        public List<string> ExpressionKeys { get; } = new();
 
         /// <summary>
         ///     Bloques a generar cuando se cumple la condición

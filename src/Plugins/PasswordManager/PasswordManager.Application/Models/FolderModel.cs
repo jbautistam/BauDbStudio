@@ -15,7 +15,7 @@ namespace Bau.Libraries.PasswordManager.Application.Models
 		public void Delete(FolderModel folder)
 		{
 			if (Folders.Search(folder.GlobalId) != null)
-				Folders.RemoveByID(folder.GlobalId);
+				Folders.RemoveById(folder.GlobalId);
 			else
 				foreach (FolderModel childFolder in Folders)
 					childFolder.Delete(folder);
@@ -31,7 +31,7 @@ namespace Bau.Libraries.PasswordManager.Application.Models
 				// Busca la entrada y la borra
 				if (Entries.Search(entry.GlobalId) != null)
 				{
-					Entries.RemoveByID(entry.GlobalId);
+					Entries.RemoveById(entry.GlobalId);
 					deleted = true;
 				}
 				else

@@ -54,7 +54,7 @@ namespace Bau.Libraries.LibBlogReader.Model
 		public void Delete(FolderModel folder)
 		{
 			if (Folders.Search(folder.GlobalId) != null)
-				Folders.RemoveByID(folder.GlobalId);
+				Folders.RemoveById(folder.GlobalId);
 			else
 				foreach (FolderModel childFolder in Folders)
 					childFolder.Delete(folder);
@@ -66,7 +66,7 @@ namespace Bau.Libraries.LibBlogReader.Model
 		public void Delete(BlogModel blog)
 		{
 			if (Blogs.Search(blog.GlobalId) != null)
-				Blogs.RemoveByID(blog.GlobalId);
+				Blogs.RemoveById(blog.GlobalId);
 			else
 				foreach (FolderModel childFolder in Folders)
 					childFolder.Delete(blog);

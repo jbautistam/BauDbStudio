@@ -105,10 +105,15 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 				MainViewModel.PluginsStudioController.MainWindowController.SystemController.ShowMessage("Seleccione la carpeta donde desea copiar los archivos");
 			else
 			{
-				// Copia los archivos
+				// Copia los archivos y/o directorios
 				foreach (string file in files)
-					if (!string.IsNullOrWhiteSpace(file) && System.IO.File.Exists(file))
-						LibHelper.Files.HelperFiles.CopyFile(file, System.IO.Path.Combine(path, System.IO.Path.GetFileName(file)));
+					if (!string.IsNullOrWhiteSpace(file))
+					{
+						if (System.IO.File.Exists(file))
+							LibHelper.Files.HelperFiles.CopyFile(file, System.IO.Path.Combine(path, System.IO.Path.GetFileName(file)));
+						else if (System.IO.Directory.Exists(file))
+							LibHelper.Files.HelperFiles.CopyPath(file, System.IO.Path.Combine(path, System.IO.Path.GetFileName(file)));
+					}
 				// Actualiza el árbol
 				Load();
 			}

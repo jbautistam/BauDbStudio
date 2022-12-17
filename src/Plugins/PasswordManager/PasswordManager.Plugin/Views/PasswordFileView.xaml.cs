@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Controls;
-using System.Threading.Tasks;
 
 using Bau.Libraries.PasswordManager.ViewModel.Reader;
 using System.Windows;
@@ -50,9 +49,9 @@ namespace Bau.Libraries.PasswordManager.Plugin.Views
 
 		private void trvEntries_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
 		{
-			Bau.Libraries.PasswordManager.ViewModel.Reader.PasswordFileViewModel context = trvEntries.DataContext as Bau.Libraries.PasswordManager.ViewModel.Reader.PasswordFileViewModel;
+			PasswordFileViewModel context = trvEntries.DataContext as PasswordFileViewModel;
 
-				if (context != null && (sender as TreeView).SelectedItem is Bau.Libraries.PasswordManager.ViewModel.Reader.Explorer.BaseNodeEntryViewModel node)
+				if (context != null && (sender as TreeView).SelectedItem is ViewModel.Reader.Explorer.BaseNodeEntryViewModel node)
 					context.Tree.SelectedNode = node;
 		}
 

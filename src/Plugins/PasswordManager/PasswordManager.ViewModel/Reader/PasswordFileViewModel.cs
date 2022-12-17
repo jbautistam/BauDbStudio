@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 using Bau.Libraries.BauMvvm.ViewModels;
-using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
 using Bau.Libraries.PasswordManager.Application.Models;
 
 namespace Bau.Libraries.PasswordManager.ViewModel.Reader
@@ -174,7 +171,7 @@ namespace Bau.Libraries.PasswordManager.ViewModel.Reader
 		/// <summary>
 		///		Arbol del explorador
 		/// </summary>
-		public Reader.Explorer.TreePasswordsViewModel Tree { get; }
+		public Explorer.TreePasswordsViewModel Tree { get; }
 
 		/// <summary>
 		///		Entrada seleccionada

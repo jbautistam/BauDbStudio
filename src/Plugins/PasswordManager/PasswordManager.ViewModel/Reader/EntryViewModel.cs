@@ -35,6 +35,9 @@ namespace Bau.Libraries.PasswordManager.ViewModel.Reader
 		/// </summary>
 		private void InitControl()
 		{
+			// Genera una contraseña si no existía
+			if (string.IsNullOrWhiteSpace(Entry.Password))
+				Entry.Password = "P4ssw0rd";
 			// Asigna las propiedades
 			Name = Entry.Name;
 			Description = Entry.Description;

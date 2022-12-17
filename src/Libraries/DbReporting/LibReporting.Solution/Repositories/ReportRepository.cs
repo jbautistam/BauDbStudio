@@ -160,30 +160,12 @@ namespace Bau.Libraries.LibReporting.Solution.Repositories
 		/// <summary>
 		///		Carga un bloque de consulta
 		/// </summary>
-		private BlockQueyModel LoadBlockQuery(MLNode rootML)
+		private BlockQueryModel LoadBlockQuery(MLNode rootML)
 		{
-			BlockQueyModel query = new (rootML.Attributes[TagName].Value.TrimIgnoreNull());
+			BlockQueryModel query = new(rootML.Attributes[TagName].Value.TrimIgnoreNull());
 
 				// Carga la consulta
-				if (rootML.Nodes.Count == 0)
-					query.Sql = rootML.Value.TrimIgnoreNull();
-				else
-					foreach (MLNode nodeML in rootML.Nodes)
-						switch (nodeML.Name)
-						{
-							case TagQuery:
-									query.Sql = nodeML.Value.TrimIgnoreNull();
-								break;
-							case TagJoin:
-									query.Joins.Add(LoadJoins(nodeML));
-								break;
-							case TagField:
-									query.Fields.Add(LoadField(nodeML));
-								break;
-							case TagFilter:
-									query.Filters.Add(LoadFilter(nodeML));
-								break;
-						}
+				query.Sql = rootML.Value.TrimIgnoreNull();
 				// Devuelve la consulta
 				return query;
 		}
@@ -202,16 +184,49 @@ namespace Bau.Libraries.LibReporting.Solution.Repositories
 		/// <summary>
 		///		Carga un bloque de Cte
 		/// </summary>
-		private BlockCreateCteModel LoadBlockCte(MLNode rootML)
+		private BaseBlockModel LoadBlockCte(MLNode rootML)
 		{
-			BlockCreateCteModel block = new(rootML.Attributes[TagName].Value.TrimIgnoreNull())
-												{
-													DimensionKey = rootML.Attributes[TagDimension].Value.TrimIgnoreNull(),
-												};
+			if (!string.IsNullOrWhiteSpace(rootML.Attributes[TagDimension].Value.TrimIgnoreNull()))
+				return LoadBlockCteDimension(rootML);
+			else
+			{
+				BlockCreateCteModel block = new(rootML.Attributes[TagName].Value.TrimIgnoreNull());
 
-				// Carga los datos de la consulta
-				block.Query = LoadBlockQuery(rootML);
-				// Devuelve los datos del bloque
+					// Carga los datos de la consulta
+					if (rootML.Nodes.Count == 0)
+						block.Blocks.Add(LoadBlockQuery(rootML));
+					else
+						block.Blocks.AddRange(LoadBlocks(rootML.Nodes));
+					// Devuelve los datos del bloque
+					return block;
+			}
+		}
+
+		/// <summary>
+		///		Carga un bloque de creación de CTE para una dimensión
+		/// </summary>
+		private BaseBlockModel LoadBlockCteDimension(MLNode rootML)
+		{
+			BlockCreateCteDimensionModel block = new(rootML.Attributes[TagName].Value.TrimIgnoreNull())
+													{ 
+														DimensionKey = rootML.Attributes[TagDimension].Value.TrimIgnoreNull()
+													};
+
+				// Carga los objetos asociados
+				foreach (MLNode nodeML in rootML.Nodes)
+					switch (nodeML.Name)
+					{
+						case TagJoin:
+								block.Joins.Add(LoadJoins(nodeML));
+							break;
+						case TagField:
+								block.Fields.Add(LoadField(nodeML));
+							break;
+						case TagFilter:
+								block.Filters.Add(LoadFilter(nodeML));
+							break;
+					}
+				// Devuelve el bloque
 				return block;
 		}
 
@@ -270,8 +285,9 @@ namespace Bau.Libraries.LibReporting.Solution.Repositories
 		{
 			BlockIfRequest block = new BlockIfRequest(string.Empty);
 
-				// Añade las dimensiones
+				// Añade las dimensiones y las expresiones que se comprueban
 				block.AddDimensions(rootML.Attributes[TagDimension].Value.TrimIgnoreNull());
+				block.AddExpressions(rootML.Attributes[TagExpression].Value.TrimIgnoreNull());
 				// Carga los bloques de las cláusulas then y else (si no hay nodo Then, todo el contenido pertenece al bloque then)
 				if (rootML.Nodes.Search(TagThen) is null)
 					block.Then.AddRange(LoadBlocks(rootML.Nodes));

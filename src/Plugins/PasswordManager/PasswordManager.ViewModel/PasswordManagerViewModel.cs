@@ -3,7 +3,7 @@
 namespace Bau.Libraries.PasswordManager.ViewModel
 {
 	/// <summary>
-	///		ViewModel principal del lector de cómics
+	///		ViewModel principal del administrador de contraseñas
 	/// </summary>
 	public class PasswordManagerViewModel : BauMvvm.ViewModels.BaseObservableObject
 	{

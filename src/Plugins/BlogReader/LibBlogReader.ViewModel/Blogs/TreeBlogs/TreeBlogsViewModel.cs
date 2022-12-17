@@ -191,7 +191,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs.TreeBlogs
 			foreach (BaseBlogsNodeViewModel node in nodes)
 				if (node is BlogNodeViewModel blogNode)
 				{
-					if (blogNode.Blog.ID == id)
+					if (blogNode.Blog.Id == id)
 						blogNode.IsChecked = true;
 				}
 				else
@@ -219,7 +219,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs.TreeBlogs
 				// Obtiene los nodos
 				foreach (IHierarchicalViewModel node in nodes)
 					if (node is BlogNodeViewModel && node.IsChecked)
-						ids.Add((node as BlogNodeViewModel).Blog.ID ?? 0);
+						ids.Add((node as BlogNodeViewModel).Blog.Id ?? 0);
 					else
 						ids.AddRange(GetCheckedNodes(ConvertNodes(node.Children)));
 				// Devuelve la colección de IDs

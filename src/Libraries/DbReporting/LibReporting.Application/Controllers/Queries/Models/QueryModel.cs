@@ -61,13 +61,13 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 		/// <summary>
 		///		Añade un campo de clave primaria a la consulta
 		/// </summary>
-		internal void AddPrimaryKey(BaseColumnRequestModel requestColumn, string columnId, string columnAlias, bool visible)
+		internal void AddPrimaryKey(BaseColumnRequestModel? requestColumn, string columnId, string columnAlias, bool visible)
 		{
 			QueryFieldModel field = new QueryFieldModel(this, true, FromAlias, columnId, columnAlias, BaseColumnRequestModel.SortOrder.Undefined, 
 														ExpressionColumnRequestModel.AggregationType.NoAggregated, visible);
 
 				// Añade los filtros
-				if (requestColumn != null)
+				if (requestColumn is not null)
 					field.FiltersWhere.AddRange(GetFilters(requestColumn.FiltersWhere));
 				// Añade el campo a la colección de campos de la consulta
 				Fields.Add(field);
@@ -102,10 +102,10 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 		private QueryFieldModel GetQueryField(string columnId, string columnAlias, ExpressionColumnRequestModel.AggregationType aggregatedBy, 
 											  BaseColumnRequestModel requestColumn)
 		{
-			QueryFieldModel field = Fields.FirstOrDefault(item => item.Field.Equals(columnId, StringComparison.CurrentCultureIgnoreCase));
+			QueryFieldModel? field = Fields.FirstOrDefault(item => item.Field.Equals(columnId, StringComparison.CurrentCultureIgnoreCase));
 
 				// Si no existía, lo añade
-				if (field == null)
+				if (field is null)
 					field = new QueryFieldModel(this, false, FromAlias, columnId, columnAlias, requestColumn.OrderBy, aggregatedBy, requestColumn.Visible);
 				// Devuelve el campo
 				return field;
@@ -356,7 +356,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models
 		/// <summary>
 		///		Obtiene la cadena de ordenación
 		/// </summary>
-		internal string GetOrderByFields(string tableAliasAtWith = null)
+		internal string GetOrderByFields(string? tableAliasAtWith = null)
 		{
 			string sql = string.Empty;
 

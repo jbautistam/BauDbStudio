@@ -183,7 +183,7 @@ namespace Bau.Libraries.PasswordManager.ViewModel.Reader.Explorer
 				// Obtiene la carpeta a la que se añade la entrada
 				if (entry == null)
 				{
-					FolderModel folder = null;
+					FolderModel folder;
 
 						// Crea el objeto
 						entry = new EntryModel();
