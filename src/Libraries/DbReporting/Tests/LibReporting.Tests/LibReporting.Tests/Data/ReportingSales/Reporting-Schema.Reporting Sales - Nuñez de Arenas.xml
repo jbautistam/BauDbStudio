@@ -1,0 +1,818 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<Dashboard Id = "478d6008-a4a0-4056-ba1c-0f6cca6d6dd6" >
+	<Name>Schema.Reporting Sales - Nuñez de Arenas</Name>
+	<Description/>
+	<DataSourceTable Id = "[Sync].[AchievementLevels]"  Schema = "Sync"  Table = "AchievementLevels"  IsView = "no" >
+		<Column Alias = "YearMonth"  SourceId = "YearMonth"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "ChannelId"  SourceId = "ChannelId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "ExpressionId"  SourceId = "ExpressionId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "UserType"  SourceId = "UserType"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "UserLevel"  SourceId = "UserLevel"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "AchievementLevel"  SourceId = "AchievementLevel"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Achievement"  SourceId = "Achievement"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Payment"  SourceId = "Payment"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+		<Column Alias = "PaymentType"  SourceId = "PaymentType"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "PointOfSaleTypeId"  SourceId = "PointOfSaleTypeId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Sync].[Bonus]"  Schema = "Sync"  Table = "Bonus"  IsView = "no" >
+		<Column Alias = "UserPointOfSaleId"  SourceId = "UserPointOfSaleId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "ExpressionId"  SourceId = "ExpressionId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "ClassificationMix"  SourceId = "ClassificationMix"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "Level"  SourceId = "Level"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "YearMonth"  SourceId = "YearMonth"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Value"  SourceId = "Value"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+		<Column Alias = "Target"  SourceId = "Target"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+		<Column Alias = "Achievement"  SourceId = "Achievement"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+		<Column Alias = "Bonus"  SourceId = "Bonus"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Fact].[Bonus]"  Schema = "Fact"  Table = "Bonus"  IsView = "no" >
+		<Column Alias = "UserPointOfSaleId"  SourceId = "UserPointOfSaleId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "ExpressionId"  SourceId = "ExpressionId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "ClassificationMix"  SourceId = "ClassificationMix"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "Level"  SourceId = "Level"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "YearMonth"  SourceId = "YearMonth"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Value"  SourceId = "Value"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+		<Column Alias = "Target"  SourceId = "Target"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+		<Column Alias = "Achievement"  SourceId = "Achievement"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+		<Column Alias = "Bonus"  SourceId = "Bonus"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Fact].[BonusAchievementLevels]"  Schema = "Fact"  Table = "BonusAchievementLevels"  IsView = "no" >
+		<Column Alias = "YearMonth"  SourceId = "YearMonth"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "ChannelId"  SourceId = "ChannelId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "ExpressionId"  SourceId = "ExpressionId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "UserType"  SourceId = "UserType"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "UserLevel"  SourceId = "UserLevel"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "AchievementLevel"  SourceId = "AchievementLevel"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Achievement"  SourceId = "Achievement"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Payment"  SourceId = "Payment"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+		<Column Alias = "PaymentType"  SourceId = "PaymentType"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "PointOfSaleTypeId"  SourceId = "PointOfSaleTypeId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Sync].[BonusAchievementLevels]"  Schema = "Sync"  Table = "BonusAchievementLevels"  IsView = "no" >
+		<Column Alias = "YearMonth"  SourceId = "YearMonth"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "ChannelId"  SourceId = "ChannelId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "ExpressionId"  SourceId = "ExpressionId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "UserType"  SourceId = "UserType"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "UserLevel"  SourceId = "UserLevel"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "AchievementLevel"  SourceId = "AchievementLevel"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Achievement"  SourceId = "Achievement"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Payment"  SourceId = "Payment"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+		<Column Alias = "PaymentType"  SourceId = "PaymentType"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "PointOfSaleTypeId"  SourceId = "PointOfSaleTypeId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Sync].[BonusWorkHours]"  Schema = "Sync"  Table = "BonusWorkHours"  IsView = "no" >
+		<Column Alias = "UserPointOfSaleId"  SourceId = "UserPointOfSaleId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "YearMonth"  SourceId = "YearMonth"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "HoursWorked"  SourceId = "HoursWorked"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Fact].[BonusWorkHours]"  Schema = "Fact"  Table = "BonusWorkHours"  IsView = "no" >
+		<Column Alias = "UserPointOfSaleId"  SourceId = "UserPointOfSaleId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "YearMonth"  SourceId = "YearMonth"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "HoursWorked"  SourceId = "HoursWorked"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Dim].[Calendar]"  Schema = "Dim"  Table = "Calendar"  IsView = "no" >
+		<Column Alias = "Date"  SourceId = "Date"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "Date"  Required = "yes" />
+		<Column Alias = "WeekDay"  SourceId = "WeekDay"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "YearNatural"  SourceId = "YearNatural"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+		<Column Alias = "MonthNatural"  SourceId = "MonthNatural"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+		<Column Alias = "WeekNatural"  SourceId = "WeekNatural"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+		<Column Alias = "DayNumberNatural"  SourceId = "DayNumberNatural"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+		<Column Alias = "Year445"  SourceId = "Year445"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+		<Column Alias = "Month445"  SourceId = "Month445"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+		<Column Alias = "Week445"  SourceId = "Week445"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+		<Column Alias = "DayNumber445"  SourceId = "DayNumber445"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+		<Column Alias = "Year454"  SourceId = "Year454"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+		<Column Alias = "Month454"  SourceId = "Month454"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+		<Column Alias = "Week454"  SourceId = "Week454"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+		<Column Alias = "DayNumber454"  SourceId = "DayNumber454"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+		<Column Alias = "Year544"  SourceId = "Year544"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+		<Column Alias = "Month544"  SourceId = "Month544"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+		<Column Alias = "Week544"  SourceId = "Week544"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+		<Column Alias = "DayNumber544"  SourceId = "DayNumber544"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Dim].[CalendarIso]"  Schema = "Dim"  Table = "CalendarIso"  IsView = "no" >
+		<Column Alias = "Date"  SourceId = "Date"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "Date"  Required = "yes" />
+		<Column Alias = "Year"  SourceId = "Year"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Month"  SourceId = "Month"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Day"  SourceId = "Day"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Week"  SourceId = "Week"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "YearWeek"  SourceId = "YearWeek"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "YearMonth"  SourceId = "YearMonth"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "WeekDay"  SourceId = "WeekDay"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "NaturalYear"  SourceId = "NaturalYear"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "NaturalWeek"  SourceId = "NaturalWeek"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "LastWeekDay"  SourceId = "LastWeekDay"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Boolean"  Required = "yes" />
+		<Column Alias = "LastMonthDay"  SourceId = "LastMonthDay"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Boolean"  Required = "yes" />
+		<Column Alias = "YearWeekIndex"  SourceId = "YearWeekIndex"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "YearMonthIndex"  SourceId = "YearMonthIndex"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Sync].[CalendarIso]"  Schema = "Sync"  Table = "CalendarIso"  IsView = "no" >
+		<Column Alias = "Date"  SourceId = "Date"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "Date"  Required = "yes" />
+		<Column Alias = "Year"  SourceId = "Year"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Month"  SourceId = "Month"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Day"  SourceId = "Day"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Week"  SourceId = "Week"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "YearWeek"  SourceId = "YearWeek"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "YearMonth"  SourceId = "YearMonth"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "WeekDay"  SourceId = "WeekDay"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "NaturalYear"  SourceId = "NaturalYear"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "NaturalWeek"  SourceId = "NaturalWeek"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "LastWeekDay"  SourceId = "LastWeekDay"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Boolean"  Required = "yes" />
+		<Column Alias = "LastMonthDay"  SourceId = "LastMonthDay"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Boolean"  Required = "yes" />
+		<Column Alias = "YearWeekIndex"  SourceId = "YearWeekIndex"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "YearMonthIndex"  SourceId = "YearMonthIndex"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Dim].[CalendarPeriods]"  Schema = "Dim"  Table = "CalendarPeriods"  IsView = "no" >
+		<Column Alias = "Type1"  SourceId = "Type1"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "Type2"  SourceId = "Type2"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "PeriodLabel"  SourceId = "PeriodLabel"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "Period"  SourceId = "Period"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+		<Column Alias = "StartDate"  SourceId = "StartDate"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Date"  Required = "no" />
+		<Column Alias = "EndDate"  SourceId = "EndDate"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Date"  Required = "no" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Dim].[Channels]"  Schema = "Dim"  Table = "Channels"  IsView = "no" >
+		<Column Alias = "ChannelDescription"  SourceId = "Description"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "no"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "IsWholesaleChannel"  SourceId = "IsWholesaleChannel"  IsPrimaryKey = "no"  Visible = "no"  Type = "Boolean"  Required = "yes" />
+		<Column Alias = "ChannelName"  SourceId = "Name"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Sync].[Channels]"  Schema = "Sync"  Table = "Channels"  IsView = "no" >
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Name"  SourceId = "Name"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "Description"  SourceId = "Description"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "IsWholesaleChannel"  SourceId = "IsWholesaleChannel"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Boolean"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Sync].[ClassificationLevelValues]"  Schema = "Sync"  Table = "ClassificationLevelValues"  IsView = "no" >
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "TypologyClassificationLevelId"  SourceId = "TypologyClassificationLevelId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Value"  SourceId = "Value"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Dim].[ClassificationLevelValues]"  Schema = "Dim"  Table = "ClassificationLevelValues"  IsView = "no" >
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "TypologyClassificationLevelId"  SourceId = "TypologyClassificationLevelId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Value"  SourceId = "Value"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Dim].[ClusterInSeasonAssignments]"  Schema = "Dim"  Table = "ClusterInSeasonAssignments"  IsView = "no" >
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "ClusterInSeasonId"  SourceId = "ClusterInSeasonId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "PointOfSaleId"  SourceId = "PointOfSaleId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Sync].[ClusterInSeasonAssignments]"  Schema = "Sync"  Table = "ClusterInSeasonAssignments"  IsView = "no" >
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "ClusterInSeasonId"  SourceId = "ClusterInSeasonId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "PointOfSaleId"  SourceId = "PointOfSaleId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Sync].[ClustersInSeason]"  Schema = "Sync"  Table = "ClustersInSeason"  IsView = "no" >
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Name"  SourceId = "Name"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "Type"  SourceId = "Type"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Position"  SourceId = "Position"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Dim].[ClustersInSeason]"  Schema = "Dim"  Table = "ClustersInSeason"  IsView = "no" >
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Name"  SourceId = "Name"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "Type"  SourceId = "Type"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Position"  SourceId = "Position"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Fact].[CoachAchievementEvolution]"  Schema = "Fact"  Table = "CoachAchievementEvolution"  IsView = "no" >
+		<Column Alias = "UserId"  SourceId = "UserId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "PointOfSaleId"  SourceId = "PointOfSaleId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "ExecutionDate"  SourceId = "ExecutionDate"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Date"  Required = "yes" />
+		<Column Alias = "DayOfMonth"  SourceId = "DayOfMonth"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "AchievementPercentage"  SourceId = "AchievementPercentage"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Fact].[CoachDaily]"  Schema = "Fact"  Table = "CoachDaily"  IsView = "no" >
+		<Column Alias = "UserId"  SourceId = "UserId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "PointOfSaleId"  SourceId = "PointOfSaleId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "ExecutionDate"  SourceId = "ExecutionDate"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Date"  Required = "yes" />
+		<Column Alias = "AchievementPercentage"  SourceId = "AchievementPercentage"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+		<Column Alias = "TargetAccomplished"  SourceId = "TargetAccomplished"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Boolean"  Required = "yes" />
+		<Column Alias = "ActualSalesAmount"  SourceId = "ActualSalesAmount"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+		<Column Alias = "TargetSalesAmount"  SourceId = "TargetSalesAmount"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+		<Column Alias = "DeltaSalesAmount"  SourceId = "DeltaSalesAmount"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+		<Column Alias = "Ranking"  SourceId = "Ranking"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "SalesMonthProjection"  SourceId = "SalesMonthProjection"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+		<Column Alias = "SalesMonthTarget"  SourceId = "SalesMonthTarget"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+		<Column Alias = "DeltaSalesMonthProjection"  SourceId = "DeltaSalesMonthProjection"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+		<Column Alias = "ActualAverageBasket"  SourceId = "ActualAverageBasket"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "no" />
+		<Column Alias = "TargetAverageBasket"  SourceId = "TargetAverageBasket"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "no" />
+		<Column Alias = "AccomplishedAverageBasket"  SourceId = "AccomplishedAverageBasket"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Boolean"  Required = "no" />
+		<Column Alias = "ActualUnitsPerTicket"  SourceId = "ActualUnitsPerTicket"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "no" />
+		<Column Alias = "TargetUnitsPerTicket"  SourceId = "TargetUnitsPerTicket"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "no" />
+		<Column Alias = "AccomplishedUnitsPerTicket"  SourceId = "AccomplishedUnitsPerTicket"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Boolean"  Required = "no" />
+		<Column Alias = "ActualAveragePrice"  SourceId = "ActualAveragePrice"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "no" />
+		<Column Alias = "TargetAveragePrice"  SourceId = "TargetAveragePrice"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "no" />
+		<Column Alias = "AccomplishedAveragePrice"  SourceId = "AccomplishedAveragePrice"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Boolean"  Required = "no" />
+		<Column Alias = "ActualConversion"  SourceId = "ActualConversion"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "no" />
+		<Column Alias = "TargetConversion"  SourceId = "TargetConversion"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "no" />
+		<Column Alias = "AccomplishedConversion"  SourceId = "AccomplishedConversion"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Boolean"  Required = "no" />
+		<Column Alias = "ActualMix"  SourceId = "ActualMix"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+		<Column Alias = "TargetMix"  SourceId = "TargetMix"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+		<Column Alias = "ActualTickets"  SourceId = "ActualTickets"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Fact].[CoachMessages]"  Schema = "Fact"  Table = "CoachMessages"  IsView = "no" >
+		<Column Alias = "UserId"  SourceId = "UserId"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "PointOfSaleId"  SourceId = "PointOfSaleId"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "ExecutionDate"  SourceId = "ExecutionDate"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Date"  Required = "yes" />
+		<Column Alias = "Messages"  SourceId = "Messages"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Dim].[CoachMessageTemplateLocalizations]"  Schema = "Dim"  Table = "CoachMessageTemplateLocalizations"  IsView = "no" >
+		<Column Alias = "CoachMessageTemplateId"  SourceId = "CoachMessageTemplateId"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Culture"  SourceId = "Culture"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "Message"  SourceId = "Message"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Dim].[CoachMessageTemplates]"  Schema = "Dim"  Table = "CoachMessageTemplates"  IsView = "no" >
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "MessageType"  SourceId = "MessageType"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "MessageKey"  SourceId = "MessageKey"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Dim].[Companies]"  Schema = "Dim"  Table = "Companies"  IsView = "no" >
+		<Column Alias = "Name"  SourceId = "Name"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "EMail"  SourceId = "EMail"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "Location"  SourceId = "Location"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "CurrencyId"  SourceId = "CurrencyId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "TimezoneId"  SourceId = "TimezoneId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "ImageUrl"  SourceId = "ImageUrl"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ContactPersonFirstName"  SourceId = "ContactPersonFirstName"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ContactPersonLastName"  SourceId = "ContactPersonLastName"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ContactPhone"  SourceId = "ContactPhone"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ContactEMail"  SourceId = "ContactEMail"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ContactImageUrl"  SourceId = "ContactImageUrl"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Enabled"  SourceId = "Enabled"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Boolean"  Required = "yes" />
+		<Column Alias = "Code"  SourceId = "Code"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "Provisioned"  SourceId = "Provisioned"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Boolean"  Required = "yes" />
+		<Column Alias = "SyncEnabled"  SourceId = "SyncEnabled"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Boolean"  Required = "yes" />
+		<Column Alias = "TimeZoneId2"  SourceId = "TimeZoneId2"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Sync].[Companies]"  Schema = "Sync"  Table = "Companies"  IsView = "no" >
+		<Column Alias = "Name"  SourceId = "Name"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "EMail"  SourceId = "EMail"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "Location"  SourceId = "Location"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "CurrencyId"  SourceId = "CurrencyId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "TimezoneId"  SourceId = "TimezoneId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "ImageUrl"  SourceId = "ImageUrl"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ContactPersonFirstName"  SourceId = "ContactPersonFirstName"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ContactPersonLastName"  SourceId = "ContactPersonLastName"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ContactPhone"  SourceId = "ContactPhone"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ContactEMail"  SourceId = "ContactEMail"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ContactImageUrl"  SourceId = "ContactImageUrl"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Enabled"  SourceId = "Enabled"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Boolean"  Required = "yes" />
+		<Column Alias = "Code"  SourceId = "Code"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "Provisioned"  SourceId = "Provisioned"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Boolean"  Required = "yes" />
+		<Column Alias = "SyncEnabled"  SourceId = "SyncEnabled"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Boolean"  Required = "yes" />
+		<Column Alias = "TimeZoneId2"  SourceId = "TimeZoneId2"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Sync].[CustomerFlowAnalysis]"  Schema = "Sync"  Table = "CustomerFlowAnalysis"  IsView = "no" >
+		<Column Alias = "PointOfSaleId"  SourceId = "PointOfSaleId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Date"  SourceId = "Date"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Date"  Required = "yes" />
+		<Column Alias = "Hour"  SourceId = "Hour"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "InternalCustomerFlow"  SourceId = "InternalCustomerFlow"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "ExternalCustomerFlow"  SourceId = "ExternalCustomerFlow"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Fact].[CustomerFlowAnalysis]"  Schema = "Fact"  Table = "CustomerFlowAnalysis"  IsView = "no" >
+		<Column Alias = "PointOfSaleId"  SourceId = "PointOfSaleId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Date"  SourceId = "Date"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Date"  Required = "no" />
+		<Column Alias = "Hour"  SourceId = "Hour"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "InternalCustomerFlow"  SourceId = "InternalCustomerFlow"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "ExternalCustomerFlow"  SourceId = "ExternalCustomerFlow"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Sync].[DeepClusterConfigurations]"  Schema = "Sync"  Table = "DeepClusterConfigurations"  IsView = "no" >
+		<Column Alias = "CreateDate"  SourceId = "CreateDate"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Date"  Required = "yes" />
+		<Column Alias = "CreateUser"  SourceId = "CreateUser"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "UpdateDate"  SourceId = "UpdateDate"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Date"  Required = "yes" />
+		<Column Alias = "UpdateUser"  SourceId = "UpdateUser"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Type"  SourceId = "Type"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "CompanyId"  SourceId = "CompanyId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Discriminator"  SourceId = "Discriminator"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Dim].[DeepClusterConfigurations]"  Schema = "Dim"  Table = "DeepClusterConfigurations"  IsView = "no" >
+		<Column Alias = "CreateDate"  SourceId = "CreateDate"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Date"  Required = "yes" />
+		<Column Alias = "CreateUser"  SourceId = "CreateUser"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "UpdateDate"  SourceId = "UpdateDate"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Date"  Required = "yes" />
+		<Column Alias = "UpdateUser"  SourceId = "UpdateUser"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Type"  SourceId = "Type"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "CompanyId"  SourceId = "CompanyId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Discriminator"  SourceId = "Discriminator"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Dim].[LevelJobLabels]"  Schema = "Dim"  Table = "LevelJobLabels"  IsView = "no" >
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "PositionType"  SourceId = "PositionType"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "Level"  SourceId = "Level"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+		<Column Alias = "Label"  SourceId = "Label"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Sync].[LevelJobLabels]"  Schema = "Sync"  Table = "LevelJobLabels"  IsView = "no" >
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "PositionType"  SourceId = "PositionType"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "Level"  SourceId = "Level"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+		<Column Alias = "Label"  SourceId = "Label"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Fact].[LostSales]"  Schema = "Fact"  Table = "LostSales"  IsView = "no" >
+		<Column Alias = "PointOfSaleId"  SourceId = "PointOfSaleId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "ProductId"  SourceId = "ProductId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Date"  SourceId = "Date"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Date"  Required = "yes" />
+		<Column Alias = "Units"  SourceId = "Units"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "no" />
+		<Column Alias = "Amount"  SourceId = "Amount"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "no" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Fact].[PointOfSaleAnalysis]"  Schema = "Fact"  Table = "PointOfSaleAnalysis"  IsView = "no" >
+		<Column Alias = "Date"  SourceId = "Date"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Date"  Required = "no" />
+		<Column Alias = "PointOfSaleId"  SourceId = "PointOfSaleId"  IsPrimaryKey = "no"  Visible = "no"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "SalesTarget"  SourceId = "SalesTarget"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Sync].[PointOfSaleAnalysis]"  Schema = "Sync"  Table = "PointOfSaleAnalysis"  IsView = "no" >
+		<Column Alias = "PointOfSaleId"  SourceId = "PointOfSaleId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Date"  SourceId = "Date"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Date"  Required = "yes" />
+		<Column Alias = "SalesTarget"  SourceId = "SalesTarget"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "no" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Sync].[PointOfSaleClassificationLevels]"  Schema = "Sync"  Table = "PointOfSaleClassificationLevels"  IsView = "no" >
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Position"  SourceId = "Position"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Name"  SourceId = "Name"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Dim].[PointOfSaleClassificationLevels]"  Schema = "Dim"  Table = "PointOfSaleClassificationLevels"  IsView = "no" >
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Position"  SourceId = "Position"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Name"  SourceId = "Name"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Dim].[PointOfSaleClassificationLevelValues]"  Schema = "Dim"  Table = "PointOfSaleClassificationLevelValues"  IsView = "no" >
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "PointOfSaleId"  SourceId = "PointOfSaleId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "PointOfSaleClassificationLevelId"  SourceId = "PointOfSaleClassificationLevelId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Value"  SourceId = "Value"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Sync].[PointOfSaleClassificationLevelValues]"  Schema = "Sync"  Table = "PointOfSaleClassificationLevelValues"  IsView = "no" >
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "PointOfSaleId"  SourceId = "PointOfSaleId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "PointOfSaleClassificationLevelId"  SourceId = "PointOfSaleClassificationLevelId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Value"  SourceId = "Value"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Sync].[PointOfSaleClassificationLevelValuesReadingModel]"  Schema = "Sync"  Table = "PointOfSaleClassificationLevelValuesReadingModel"  IsView = "no" >
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "ClassificationLevelValue1"  SourceId = "ClassificationLevelValue1"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevelValue2"  SourceId = "ClassificationLevelValue2"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevelValue3"  SourceId = "ClassificationLevelValue3"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevelValue4"  SourceId = "ClassificationLevelValue4"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevelValue5"  SourceId = "ClassificationLevelValue5"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevelValue6"  SourceId = "ClassificationLevelValue6"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevelValue7"  SourceId = "ClassificationLevelValue7"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevelValue8"  SourceId = "ClassificationLevelValue8"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevelValue9"  SourceId = "ClassificationLevelValue9"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevelValue10"  SourceId = "ClassificationLevelValue10"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "StoredProcedureId"  SourceId = "StoredProcedureId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Dim].[PointOfSaleClassificationLevelValuesReadingModel]"  Schema = "Dim"  Table = "PointOfSaleClassificationLevelValuesReadingModel"  IsView = "no" >
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "ClassificationLevelValue1"  SourceId = "ClassificationLevelValue1"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevelValue2"  SourceId = "ClassificationLevelValue2"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevelValue3"  SourceId = "ClassificationLevelValue3"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevelValue4"  SourceId = "ClassificationLevelValue4"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevelValue5"  SourceId = "ClassificationLevelValue5"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevelValue6"  SourceId = "ClassificationLevelValue6"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevelValue7"  SourceId = "ClassificationLevelValue7"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevelValue8"  SourceId = "ClassificationLevelValue8"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevelValue9"  SourceId = "ClassificationLevelValue9"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevelValue10"  SourceId = "ClassificationLevelValue10"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "StoredProcedureId"  SourceId = "StoredProcedureId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Dim].[PointOfSaleTypes]"  Schema = "Dim"  Table = "PointOfSaleTypes"  IsView = "no" >
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "no"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "PointOfSaleType"  SourceId = "Name"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Sync].[PointOfSaleTypes]"  Schema = "Sync"  Table = "PointOfSaleTypes"  IsView = "no" >
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Name"  SourceId = "Name"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Sync].[PointsOfSale]"  Schema = "Sync"  Table = "PointsOfSale"  IsView = "no" >
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Name"  SourceId = "Name"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "ChannelId"  SourceId = "ChannelId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "ImageUrl"  SourceId = "ImageUrl"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ErpCode"  SourceId = "ErpCode"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "City"  SourceId = "City"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "State"  SourceId = "State"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "Country"  SourceId = "Country"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "OpeningDate"  SourceId = "OpeningDate"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Date"  Required = "yes" />
+		<Column Alias = "ClosingDate"  SourceId = "ClosingDate"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Date"  Required = "no" />
+		<Column Alias = "ExpositionSurface"  SourceId = "ExpositionSurface"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+		<Column Alias = "StorageSurface"  SourceId = "StorageSurface"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+		<Column Alias = "TotalSurface"  SourceId = "TotalSurface"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+		<Column Alias = "PointOfSaleClassificationLevelValuesReadingModelId"  SourceId = "PointOfSaleClassificationLevelValuesReadingModelId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+		<Column Alias = "IsOnline"  SourceId = "IsOnline"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Boolean"  Required = "yes" />
+		<Column Alias = "CoachRoi"  SourceId = "CoachRoi"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Boolean"  Required = "yes" />
+		<Column Alias = "PointOfSaleTypeId"  SourceId = "PointOfSaleTypeId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+		<Column Alias = "Email"  SourceId = "Email"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ResponsibleUserId"  SourceId = "ResponsibleUserId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Dim].[PointsOfSale]"  Schema = "Dim"  Table = "PointsOfSale"  IsView = "no" >
+		<Column Alias = "ChannelId"  SourceId = "ChannelId"  IsPrimaryKey = "no"  Visible = "no"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "City"  SourceId = "City"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClosingDate"  SourceId = "ClosingDate"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Date"  Required = "no" />
+		<Column Alias = "CoachRoi"  SourceId = "CoachRoi"  IsPrimaryKey = "no"  Visible = "no"  Type = "Boolean"  Required = "yes" />
+		<Column Alias = "Country"  SourceId = "Country"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "Email"  SourceId = "Email"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ErpCode"  SourceId = "ErpCode"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ExpositionSurface"  SourceId = "ExpositionSurface"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+		<Column Alias = "PointOfSaleId"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "no"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "ImageUrl"  SourceId = "ImageUrl"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "IsOnline"  SourceId = "IsOnline"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Boolean"  Required = "yes" />
+		<Column Alias = "PointOfSale"  SourceId = "Name"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "OpeningDate"  SourceId = "OpeningDate"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Date"  Required = "yes" />
+		<Column Alias = "PointOfSaleClassificationLevelValuesReadingModelId"  SourceId = "PointOfSaleClassificationLevelValuesReadingModelId"  IsPrimaryKey = "no"  Visible = "no"  Type = "Integer"  Required = "no" />
+		<Column Alias = "PointOfSaleTypeId"  SourceId = "PointOfSaleTypeId"  IsPrimaryKey = "no"  Visible = "no"  Type = "Integer"  Required = "no" />
+		<Column Alias = "ResponsibleUserId"  SourceId = "ResponsibleUserId"  IsPrimaryKey = "no"  Visible = "no"  Type = "String"  Required = "no" />
+		<Column Alias = "State"  SourceId = "State"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "StorageSurface"  SourceId = "StorageSurface"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+		<Column Alias = "TotalSurface"  SourceId = "TotalSurface"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Dim].[PointsOfSaleUsersRoles]"  Schema = "Dim"  Table = "PointsOfSaleUsersRoles"  IsView = "no" >
+		<Column Alias = "UserId"  SourceId = "UserId"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "PointOfSaleId"  SourceId = "PointOfSaleId"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "UserSalesRolLevelId"  SourceId = "UserSalesRolLevelId"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Dim].[ProductClassificationLevelValues]"  Schema = "Dim"  Table = "ProductClassificationLevelValues"  IsView = "no" >
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "ProductId"  SourceId = "ProductId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "ClassificationLevelValueId"  SourceId = "ClassificationLevelValueId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Sync].[ProductClassificationLevelValues]"  Schema = "Sync"  Table = "ProductClassificationLevelValues"  IsView = "no" >
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "ProductId"  SourceId = "ProductId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "ClassificationLevelValueId"  SourceId = "ClassificationLevelValueId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Sync].[ProductClassificationLevelValuesReadingModel]"  Schema = "Sync"  Table = "ProductClassificationLevelValuesReadingModel"  IsView = "no" >
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "TypologyId"  SourceId = "TypologyId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "ClassificationLevelValue1"  SourceId = "ClassificationLevelValue1"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevelValue2"  SourceId = "ClassificationLevelValue2"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevelValue3"  SourceId = "ClassificationLevelValue3"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevelValue4"  SourceId = "ClassificationLevelValue4"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevelValue5"  SourceId = "ClassificationLevelValue5"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevelValue6"  SourceId = "ClassificationLevelValue6"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevelValue7"  SourceId = "ClassificationLevelValue7"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevelValue8"  SourceId = "ClassificationLevelValue8"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevelValue9"  SourceId = "ClassificationLevelValue9"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevelValue10"  SourceId = "ClassificationLevelValue10"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "StoredProcedureId"  SourceId = "StoredProcedureId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Dim].[ProductClassificationLevelValuesReadingModel]"  Schema = "Dim"  Table = "ProductClassificationLevelValuesReadingModel"  IsView = "no" >
+		<Column Alias = "ClassificationLevelValue1"  SourceId = "ClassificationLevelValue1"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevelValue10"  SourceId = "ClassificationLevelValue10"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevelValue2"  SourceId = "ClassificationLevelValue2"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevelValue3"  SourceId = "ClassificationLevelValue3"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevelValue4"  SourceId = "ClassificationLevelValue4"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevelValue5"  SourceId = "ClassificationLevelValue5"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevelValue6"  SourceId = "ClassificationLevelValue6"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevelValue7"  SourceId = "ClassificationLevelValue7"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevelValue8"  SourceId = "ClassificationLevelValue8"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevelValue9"  SourceId = "ClassificationLevelValue9"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "no"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "StoredProcedureId"  SourceId = "StoredProcedureId"  IsPrimaryKey = "no"  Visible = "no"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "TypologyId"  SourceId = "TypologyId"  IsPrimaryKey = "no"  Visible = "no"  Type = "Integer"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Dim].[Products]"  Schema = "Dim"  Table = "Products"  IsView = "no" >
+		<Column Alias = "BuyingPrice"  SourceId = "BuyingPrice"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+		<Column Alias = "Description"  SourceId = "Description"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "DiscontinuedProduct"  SourceId = "DiscontinuedProduct"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Boolean"  Required = "yes" />
+		<Column Alias = "Drop"  SourceId = "Drop"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Date"  Required = "no" />
+		<Column Alias = "EanCode"  SourceId = "EanCode"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ProductId"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "no"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "ProductClassificationLevelValuesReadingModelId"  SourceId = "ProductClassificationLevelValuesReadingModelId"  IsPrimaryKey = "no"  Visible = "no"  Type = "Integer"  Required = "no" />
+		<Column Alias = "ProductCode"  SourceId = "ProductCode"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "RootProductCode"  SourceId = "RootProductCode"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "SellingPrice"  SourceId = "SellingPrice"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+		<Column Alias = "Size"  SourceId = "Size"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "TypologyId"  SourceId = "TypologyId"  IsPrimaryKey = "no"  Visible = "no"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "UrlImage"  SourceId = "UrlImage"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "UrlThumbnail"  SourceId = "UrlThumbnail"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "Volumetry"  SourceId = "Volumetry"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "no" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Sync].[Products]"  Schema = "Sync"  Table = "Products"  IsView = "no" >
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "TypologyId"  SourceId = "TypologyId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "ProductCode"  SourceId = "ProductCode"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "RootProductCode"  SourceId = "RootProductCode"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "EanCode"  SourceId = "EanCode"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "Description"  SourceId = "Description"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "UrlThumbnail"  SourceId = "UrlThumbnail"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "UrlImage"  SourceId = "UrlImage"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "Size"  SourceId = "Size"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "BuyingPrice"  SourceId = "BuyingPrice"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+		<Column Alias = "SellingPrice"  SourceId = "SellingPrice"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+		<Column Alias = "ProductClassificationLevelValuesReadingModelId"  SourceId = "ProductClassificationLevelValuesReadingModelId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+		<Column Alias = "DiscontinuedProduct"  SourceId = "DiscontinuedProduct"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Boolean"  Required = "yes" />
+		<Column Alias = "Volumetry"  SourceId = "Volumetry"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "no" />
+		<Column Alias = "Drop"  SourceId = "Drop"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Date"  Required = "no" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Fact].[Sales3]"  Schema = "Fact"  Table = "Sales3"  IsView = "no" >
+		<Column Alias = "Date"  SourceId = "Date"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Date"  Required = "no" />
+		<Column Alias = "SalesQuantity"  SourceId = "SalesQuantity"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "no" />
+		<Column Alias = "SalesTurnover"  SourceId = "SalesTurnover"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+		<Column Alias = "AmountTaxesExcluded"  SourceId = "AmountTaxesExcluded"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+		<Column Alias = "TicketNumber"  SourceId = "TicketNumber"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ProductId"  SourceId = "ProductId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+		<Column Alias = "PointOfSaleId"  SourceId = "PointOfSaleId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+		<Column Alias = "Refund"  SourceId = "Refund"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Fact].[SalesAccelerations]"  Schema = "Fact"  Table = "SalesAccelerations"  IsView = "no" >
+		<Column Alias = "PointOfSaleId"  SourceId = "PointOfSaleId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "ProductId"  SourceId = "ProductId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "RootProductSellThrough"  SourceId = "RootProductSellThrough"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "no" />
+		<Column Alias = "ProductSellThrough"  SourceId = "ProductSellThrough"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "no" />
+		<Column Alias = "DaysInStore"  SourceId = "DaysInStore"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+		<Column Alias = "InitialStock"  SourceId = "InitialStock"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "no" />
+		<Column Alias = "ActualStock"  SourceId = "ActualStock"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "no" />
+		<Column Alias = "PendingReceptions"  SourceId = "PendingReceptions"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "no" />
+		<Column Alias = "Sales"  SourceId = "Sales"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "no" />
+		<Column Alias = "WarehouseStock"  SourceId = "WarehouseStock"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "no" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Fact].[SalesAnalysis]"  Schema = "Fact"  Table = "SalesAnalysis"  IsView = "no" >
+		<Column Alias = "UserPointOfSaleId"  SourceId = "UserPointOfSaleId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "ProductId"  SourceId = "ProductId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Ticket"  SourceId = "Ticket"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "Date"  SourceId = "Date"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Date"  Required = "no" />
+		<Column Alias = "Hour"  SourceId = "Hour"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "SalesQuantity"  SourceId = "SalesQuantity"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+		<Column Alias = "SalesAmountTaxesIncluded"  SourceId = "SalesAmountTaxesIncluded"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+		<Column Alias = "SalesAmountTaxesExcluded"  SourceId = "SalesAmountTaxesExcluded"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+		<Column Alias = "Refund"  SourceId = "Refund"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Boolean"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Sync].[SalesAnalysis]"  Schema = "Sync"  Table = "SalesAnalysis"  IsView = "no" >
+		<Column Alias = "UserPointOfSaleId"  SourceId = "UserPointOfSaleId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "ProductId"  SourceId = "ProductId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Ticket"  SourceId = "Ticket"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "Date"  SourceId = "Date"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Date"  Required = "yes" />
+		<Column Alias = "Hour"  SourceId = "Hour"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "SalesQuantity"  SourceId = "SalesQuantity"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+		<Column Alias = "SalesAmountTaxesIncluded"  SourceId = "SalesAmountTaxesIncluded"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+		<Column Alias = "SalesAmountTaxesExcluded"  SourceId = "SalesAmountTaxesExcluded"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+		<Column Alias = "Refund"  SourceId = "Refund"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Boolean"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Fact].[SalesDatasource]"  Schema = "Fact"  Table = "SalesDatasource"  IsView = "no" >
+		<Column Alias = "YearPeriod"  SourceId = "YearPeriod"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Channel"  SourceId = "Channel"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "City"  SourceId = "City"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "Country"  SourceId = "Country"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "State"  SourceId = "State"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "PointOfSale"  SourceId = "PointOfSale"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevel1"  SourceId = "ClassificationLevel1"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevel2"  SourceId = "ClassificationLevel2"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevel3"  SourceId = "ClassificationLevel3"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevel4"  SourceId = "ClassificationLevel4"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevel5"  SourceId = "ClassificationLevel5"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevel6"  SourceId = "ClassificationLevel6"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevel7"  SourceId = "ClassificationLevel7"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevel8"  SourceId = "ClassificationLevel8"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevel9"  SourceId = "ClassificationLevel9"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ClassificationLevel10"  SourceId = "ClassificationLevel10"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "Typology"  SourceId = "Typology"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ProductClassificationLevel1"  SourceId = "ProductClassificationLevel1"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ProductClassificationLevel2"  SourceId = "ProductClassificationLevel2"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ProductClassificationLevel3"  SourceId = "ProductClassificationLevel3"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ProductClassificationLevel4"  SourceId = "ProductClassificationLevel4"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ProductClassificationLevel5"  SourceId = "ProductClassificationLevel5"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ProductClassificationLevel6"  SourceId = "ProductClassificationLevel6"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ProductClassificationLevel7"  SourceId = "ProductClassificationLevel7"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ProductClassificationLevel8"  SourceId = "ProductClassificationLevel8"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ProductClassificationLevel9"  SourceId = "ProductClassificationLevel9"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ProductClassificationLevel10"  SourceId = "ProductClassificationLevel10"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "Turnover"  SourceId = "Turnover"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+		<Column Alias = "TotalCost"  SourceId = "TotalCost"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+		<Column Alias = "Quantity"  SourceId = "Quantity"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "ErpCode"  SourceId = "ErpCode"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "AmountTaxesExcluded"  SourceId = "AmountTaxesExcluded"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "no" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Fact].[SalesDatasourceByYearPeriod]"  Schema = "Fact"  Table = "SalesDatasourceByYearPeriod"  IsView = "no" >
+		<Column Alias = "YearPeriod"  SourceId = "YearPeriod"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Turnover"  SourceId = "Turnover"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+		<Column Alias = "TotalCost"  SourceId = "TotalCost"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+		<Column Alias = "Quantity"  SourceId = "Quantity"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "AmountTaxesExcluded"  SourceId = "AmountTaxesExcluded"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "no" />
+</DataSourceTable>
+	<DataSourceTable Id = "[dbo].[SchemaVersions]"  Schema = "dbo"  Table = "SchemaVersions"  IsView = "no" >
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "ScriptName"  SourceId = "ScriptName"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "Applied"  SourceId = "Applied"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Date"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[dbo].[Settings]"  Schema = "dbo"  Table = "Settings"  IsView = "no" >
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Key"  SourceId = "Key"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "Value"  SourceId = "Value"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Fact].[StockDatasource]"  Schema = "Fact"  Table = "StockDatasource"  IsView = "no" >
+		<Column Alias = "Year"  SourceId = "Year"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+		<Column Alias = "YearPeriod"  SourceId = "YearPeriod"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "ProductId"  SourceId = "ProductId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "PointOfSaleId"  SourceId = "PointOfSaleId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "AverageStock"  SourceId = "AverageStock"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "no" />
+		<Column Alias = "AverageStockCost"  SourceId = "AverageStockCost"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "no" />
+		<Column Alias = "BuyingPrice"  SourceId = "BuyingPrice"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "no" />
+		<Column Alias = "SalesQuantity"  SourceId = "SalesQuantity"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+		<Column Alias = "SalesTotalCost"  SourceId = "SalesTotalCost"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "no" />
+		<Column Alias = "InventoryTurnover"  SourceId = "InventoryTurnover"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "no" />
+		<Column Alias = "AggregatedByYear"  SourceId = "AggregatedByYear"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Boolean"  Required = "no" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Fact].[StocksDatasourceByYearPeriod]"  Schema = "Fact"  Table = "StocksDatasourceByYearPeriod"  IsView = "no" >
+		<Column Alias = "YearPeriod"  SourceId = "YearPeriod"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "AverageStock"  SourceId = "AverageStock"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+		<Column Alias = "PeriodLastDayStock"  SourceId = "PeriodLastDayStock"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+</DataSourceTable>
+	<DataSourceTable Id = "[dbo].[SynchronizationLog]"  Schema = "dbo"  Table = "SynchronizationLog"  IsView = "no" >
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "CreatedDate"  SourceId = "CreatedDate"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Date"  Required = "yes" />
+		<Column Alias = "Schema"  SourceId = "Schema"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "Table"  SourceId = "Table"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "File"  SourceId = "File"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "StartDate"  SourceId = "StartDate"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Date"  Required = "no" />
+		<Column Alias = "EndDate"  SourceId = "EndDate"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Date"  Required = "no" />
+		<Column Alias = "ElapsedTime"  SourceId = "ElapsedTime"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Date"  Required = "no" />
+		<Column Alias = "ContentLength"  SourceId = "ContentLength"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+		<Column Alias = "Thread"  SourceId = "Thread"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+		<Column Alias = "Status"  SourceId = "Status"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "StatusReason"  SourceId = "StatusReason"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Fact].[TicketsDatasourceByYearPeriod]"  Schema = "Fact"  Table = "TicketsDatasourceByYearPeriod"  IsView = "no" >
+		<Column Alias = "YearPeriod"  SourceId = "YearPeriod"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Tickets"  SourceId = "Tickets"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Sync].[Typologies]"  Schema = "Sync"  Table = "Typologies"  IsView = "no" >
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Name"  SourceId = "Name"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "DeepClusterConfigurationId"  SourceId = "DeepClusterConfigurationId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Dim].[Typologies]"  Schema = "Dim"  Table = "Typologies"  IsView = "no" >
+		<Column Alias = "DeepClusterConfigurationId"  SourceId = "DeepClusterConfigurationId"  IsPrimaryKey = "no"  Visible = "no"  Type = "Integer"  Required = "no" />
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "no"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Typology"  SourceId = "Name"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Dim].[TypologiesClassificationLevels]"  Schema = "Dim"  Table = "TypologiesClassificationLevels"  IsView = "no" >
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "TypologyId"  SourceId = "TypologyId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Name"  SourceId = "Name"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "EnabledForDeepClustering"  SourceId = "EnabledForDeepClustering"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Boolean"  Required = "yes" />
+		<Column Alias = "EnabledForDvs"  SourceId = "EnabledForDvs"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Boolean"  Required = "yes" />
+		<Column Alias = "EnabledForProjections"  SourceId = "EnabledForProjections"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Boolean"  Required = "yes" />
+		<Column Alias = "Position"  SourceId = "Position"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "EnabledForSpecificCoverage"  SourceId = "EnabledForSpecificCoverage"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Boolean"  Required = "yes" />
+		<Column Alias = "EnabledForCapacity"  SourceId = "EnabledForCapacity"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Boolean"  Required = "yes" />
+		<Column Alias = "EnabledForNovelty"  SourceId = "EnabledForNovelty"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Boolean"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Sync].[TypologiesClassificationLevels]"  Schema = "Sync"  Table = "TypologiesClassificationLevels"  IsView = "no" >
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "TypologyId"  SourceId = "TypologyId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Name"  SourceId = "Name"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "EnabledForDeepClustering"  SourceId = "EnabledForDeepClustering"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Boolean"  Required = "yes" />
+		<Column Alias = "EnabledForDvs"  SourceId = "EnabledForDvs"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Boolean"  Required = "yes" />
+		<Column Alias = "EnabledForProjections"  SourceId = "EnabledForProjections"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Boolean"  Required = "yes" />
+		<Column Alias = "Position"  SourceId = "Position"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "EnabledForSpecificCoverage"  SourceId = "EnabledForSpecificCoverage"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Boolean"  Required = "yes" />
+		<Column Alias = "EnabledForCapacity"  SourceId = "EnabledForCapacity"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Boolean"  Required = "yes" />
+		<Column Alias = "EnabledForNovelty"  SourceId = "EnabledForNovelty"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Boolean"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Sync].[UserImageUrls]"  Schema = "Sync"  Table = "UserImageUrls"  IsView = "no" >
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "ImageUrl"  SourceId = "ImageUrl"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Sync].[UserPointOfSale]"  Schema = "Sync"  Table = "UserPointOfSale"  IsView = "no" >
+		<Column Alias = "UserPointOfSaleId"  SourceId = "UserPointOfSaleId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "PointOfSaleId"  SourceId = "PointOfSaleId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "UserId"  SourceId = "UserId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "UserCode"  SourceId = "UserCode"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "UserType"  SourceId = "UserType"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "UserLevel"  SourceId = "UserLevel"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Sync].[UserRoleSales]"  Schema = "Sync"  Table = "UserRoleSales"  IsView = "no" >
+		<Column Alias = "UserId"  SourceId = "UserId"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "ParentId"  SourceId = "ParentId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "UserType"  SourceId = "UserType"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "UserLevel"  SourceId = "UserLevel"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "UserRole"  SourceId = "UserRole"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Sync].[Users]"  Schema = "Sync"  Table = "Users"  IsView = "no" >
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "Discriminator"  SourceId = "Discriminator"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "CreateDate"  SourceId = "CreateDate"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Date"  Required = "yes" />
+		<Column Alias = "Email"  SourceId = "Email"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "FirstName"  SourceId = "FirstName"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "LastName"  SourceId = "LastName"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "UpdateDate"  SourceId = "UpdateDate"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Date"  Required = "yes" />
+		<Column Alias = "UserType"  SourceId = "UserType"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "IsPosUser"  SourceId = "IsPosUser"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Boolean"  Required = "no" />
+		<Column Alias = "ErpCode"  SourceId = "ErpCode"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Dim].[Users]"  Schema = "Dim"  Table = "Users"  IsView = "no" >
+		<Column Alias = "CreateDate"  SourceId = "CreateDate"  IsPrimaryKey = "no"  Visible = "no"  Type = "Date"  Required = "yes" />
+		<Column Alias = "Discriminator"  SourceId = "Discriminator"  IsPrimaryKey = "no"  Visible = "no"  Type = "String"  Required = "yes" />
+		<Column Alias = "UserEmail"  SourceId = "Email"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "UserErpCode"  SourceId = "ErpCode"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "FirstName"  SourceId = "FirstName"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "UserId"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "no"  Type = "String"  Required = "yes" />
+		<Column Alias = "ImageUrl"  SourceId = "ImageUrl"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "IsPosUser"  SourceId = "IsPosUser"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Boolean"  Required = "no" />
+		<Column Alias = "LastName"  SourceId = "LastName"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "UpdateDate"  SourceId = "UpdateDate"  IsPrimaryKey = "no"  Visible = "no"  Type = "Date"  Required = "yes" />
+		<Column Alias = "UserParentId"  SourceId = "UserParentId"  IsPrimaryKey = "no"  Visible = "no"  Type = "String"  Required = "no" />
+		<Column Alias = "UserSalesRolId"  SourceId = "UserSalesRolId"  IsPrimaryKey = "no"  Visible = "no"  Type = "Integer"  Required = "no" />
+		<Column Alias = "UserSalesRolLevelId"  SourceId = "UserSalesRolLevelId"  IsPrimaryKey = "no"  Visible = "no"  Type = "Integer"  Required = "no" />
+		<Column Alias = "UserType"  SourceId = "UserType"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Dim].[UserSalesRoles]"  Schema = "Dim"  Table = "UserSalesRoles"  IsView = "no" >
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "no"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "Rol"  SourceId = "Label"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "PositionType"  SourceId = "PositionType"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Dim].[UserSalesRolLevels]"  Schema = "Dim"  Table = "UserSalesRolLevels"  IsView = "no" >
+		<Column Alias = "Id"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "no"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "LevelLabel"  SourceId = "Label"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "Level"  SourceId = "Level"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "RolId"  SourceId = "RolId"  IsPrimaryKey = "no"  Visible = "no"  Type = "Integer"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Dim].[UsersPointOfSale]"  Schema = "Dim"  Table = "UsersPointOfSale"  IsView = "no" >
+		<Column Alias = "UserPointOfSaleId"  SourceId = "Id"  IsPrimaryKey = "yes"  Visible = "no"  Type = "String"  Required = "yes" />
+		<Column Alias = "PointOfSaleId"  SourceId = "PointOfSaleId"  IsPrimaryKey = "no"  Visible = "no"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "UserCode"  SourceId = "UserCode"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "UserId"  SourceId = "UserId"  IsPrimaryKey = "no"  Visible = "no"  Type = "String"  Required = "yes" />
+		<Column Alias = "UserLevel"  SourceId = "UserLevel"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+		<Column Alias = "UserType"  SourceId = "UserType"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Dim].[UsersSubordinated]"  Schema = "Dim"  Table = "UsersSubordinated"  IsView = "no" >
+		<Column Alias = "UserId"  SourceId = "UserId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "UserSubordinatedId"  SourceId = "UserSubordinatedId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "UserMainId"  SourceId = "UserMainId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "no" />
+		<Column Alias = "Level"  SourceId = "Level"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "no" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Sync].[VendorAnalysis]"  Schema = "Sync"  Table = "VendorAnalysis"  IsView = "no" >
+		<Column Alias = "UserPointOfSaleId"  SourceId = "UserPointOfSaleId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "Date"  SourceId = "Date"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Date"  Required = "yes" />
+		<Column Alias = "SalesTarget"  SourceId = "SalesTarget"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+		<Column Alias = "AssignedHours"  SourceId = "AssignedHours"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+</DataSourceTable>
+	<DataSourceTable Id = "[Fact].[VendorAnalysis]"  Schema = "Fact"  Table = "VendorAnalysis"  IsView = "no" >
+		<Column Alias = "UserPointOfSaleId"  SourceId = "UserPointOfSaleId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "String"  Required = "yes" />
+		<Column Alias = "Date"  SourceId = "Date"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Date"  Required = "no" />
+		<Column Alias = "SalesTarget"  SourceId = "SalesTarget"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+		<Column Alias = "AssignedHours"  SourceId = "AssignedHours"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Decimal"  Required = "yes" />
+</DataSourceTable>
+	<Dimension Id = "Channels"  SourceId = "[Dim].[Channels]" >
+		<Description/>
+</Dimension>
+	<Dimension Id = "PointsOfSale"  SourceId = "[Dim].[PointsOfSale]" >
+		<Description/>
+		<Relation SourceId = "Channels" >
+			<ForeignKey Column = "ChannelId"  DimensionColumn = "Id" />
+</Relation>
+		<Relation SourceId = "PointOfSaleTypes" >
+			<ForeignKey Column = "PointOfSaleTypeId"  DimensionColumn = "Id" />
+</Relation>
+</Dimension>
+	<Dimension Id = "PointOfSaleTypes"  SourceId = "[Dim].[PointOfSaleTypes]" >
+		<Description/>
+</Dimension>
+	<Dimension Id = "Products"  SourceId = "[Dim].[Products]" >
+		<Description/>
+		<Relation SourceId = "Typologies" >
+			<ForeignKey Column = "TypologyId"  DimensionColumn = "Id" />
+</Relation>
+		<Relation SourceId = "ProductClassifications" >
+			<ForeignKey Column = "ProductClassificationLevelValuesReadingModelId"  DimensionColumn = "Id" />
+</Relation>
+</Dimension>
+	<Dimension Id = "ProductClassifications"  SourceId = "[Dim].[ProductClassificationLevelValuesReadingModel]" >
+		<Description/>
+</Dimension>
+	<Dimension Id = "Typologies"  SourceId = "[Dim].[Typologies]" >
+		<Description/>
+</Dimension>
+	<Dimension Id = "Users"  SourceId = "[Dim].[Users]" >
+		<Description/>
+		<Relation SourceId = "UserSalesRoles" >
+			<ForeignKey Column = "UserSalesRolId"  DimensionColumn = "Id" />
+</Relation>
+		<Relation SourceId = "UserSalesRolLevels" >
+			<ForeignKey Column = "UserSalesRolLevelId"  DimensionColumn = "Id" />
+</Relation>
+</Dimension>
+	<Dimension Id = "UsersPointOfSale"  SourceId = "[Dim].[UsersPointOfSale]" >
+		<Description/>
+</Dimension>
+	<Dimension Id = "UserSalesRoles"  SourceId = "[Dim].[UserSalesRoles]" >
+		<Description/>
+</Dimension>
+	<Dimension Id = "UserSalesRolLevels"  SourceId = "[Dim].[UserSalesRolLevels]" >
+		<Description/>
+</Dimension>
+	<Dimension Id = "Calendar"  SourceId = "[Dim].[CalendarIso]" >
+		<Description/>
+</Dimension>
+	<Report Id = "Mi primer informe de prueba" >
+		<Description/>
+		<DataSource SourceId = "[Fact].[PointOfSaleAnalysis]" >
+			<Relation SourceId = "PointsOfSale" >
+				<ForeignKey Column = "PointOfSaleId"  DimensionColumn = "Id" />
+</Relation>
+</DataSource>
+</Report>
+</Dashboard>

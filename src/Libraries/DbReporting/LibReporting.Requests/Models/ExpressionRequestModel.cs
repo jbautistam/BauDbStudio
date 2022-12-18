@@ -28,11 +28,11 @@ namespace Bau.Libraries.LibReporting.Requests.Models
 		/// <summary>
 		///		Clave del informe de origen de datos
 		/// </summary>
-		public string ReportDataSourceId { get; set; }
+		public string ReportDataSourceId { get; set; } = default!;
 
 		/// <summary>
 		///		Columnas solicitada
 		/// </summary>
-		public List<ExpressionColumnRequestModel> Columns { get; } = new List<ExpressionColumnRequestModel>();
+		public List<ExpressionColumnRequestModel> Columns { get; } = new();
 	}
 }

@@ -34,7 +34,7 @@ namespace Bau.Libraries.LibReporting.Requests.Models
 		/// <summary>
 		///		Obtiene los datos de solicitud de una dimensión
 		/// </summary>
-		public DimensionRequestModel GetDimensionRequest(string dimensionKey)
+		public DimensionRequestModel? GetDimensionRequest(string dimensionKey)
 		{
 			// Busca la dimensión entre las solicitudes
 			foreach (DimensionRequestModel request in Dimensions)
@@ -96,7 +96,7 @@ namespace Bau.Libraries.LibReporting.Requests.Models
 		/// </summary>
 		public void Add(string dimensionId, string columnId)
 		{
-			DimensionRequestModel dimension = GetDimensionRequest(dimensionId);
+			DimensionRequestModel? dimension = GetDimensionRequest(dimensionId);
 
 				// Añade la dimensión si no se había solicitado
 				if (dimension is null)
@@ -113,7 +113,7 @@ namespace Bau.Libraries.LibReporting.Requests.Models
 				if (dimension.GetRequestColumn(columnId) is null)
 					dimension.Columns.Add(new()
 											{
-												DimensionId = dimensionId,
+												//DimensionId = dimensionId,
 												ColumnId = columnId
 											}
 										 );
@@ -122,26 +122,26 @@ namespace Bau.Libraries.LibReporting.Requests.Models
 		/// <summary>
 		///		Código de informe solicitado
 		/// </summary>
-		public string ReportId { get; set; }
+		public string ReportId { get; set; } = default!;
 
 		/// <summary>
 		///		Parámetros
 		/// </summary>
-		public Dictionary<string, object> Parameters { get; } = new();
+		public Dictionary<string, object?> Parameters { get; } = new();
 
 		/// <summary>
 		///		Dimensiones solicitadas
 		/// </summary>
-		public List<DimensionRequestModel> Dimensions { get; } = new List<DimensionRequestModel>();
+		public List<DimensionRequestModel> Dimensions { get; } = new();
 
 		/// <summary>
 		///		Expresiones solicitadas
 		/// </summary>
-		public List<ExpressionRequestModel> Expressions { get; } = new List<ExpressionRequestModel>();
+		public List<ExpressionRequestModel> Expressions { get; } = new();
 
 		/// <summary>
 		///		Paginación
 		/// </summary>
-		public PaginationRequestModel Pagination { get; } = new PaginationRequestModel();
+		public PaginationRequestModel Pagination { get; } = new();
 	}
 }

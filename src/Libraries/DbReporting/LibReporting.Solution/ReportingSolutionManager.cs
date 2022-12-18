@@ -169,6 +169,22 @@ namespace Bau.Libraries.LibReporting.Solution
 		}
 
 		/// <summary>
+		///		Carga los datos de un <see cref="Requests.Models.ReportRequestModel"/> de un archivo
+		/// </summary>
+		public Requests.Models.ReportRequestModel LoadRequest(string fileName)
+		{
+			return new Repositories.RequestRepository().Load(fileName);
+		}
+
+		/// <summary>
+		///		Graba los datos de un <see cref="Requests.Models.ReportRequestModel"/> en un archivo
+		/// </summary>
+		public void SaveRequest(Requests.Models.ReportRequestModel request, string fileName)
+		{
+			new Repositories.RequestRepository().Save(request, fileName);
+		}
+
+		/// <summary>
 		///		Obtiene la SQL resultante de procesar una solicitud de informe
 		/// </summary>
 		public string GetSqlResponse(Requests.Models.ReportRequestModel request)
@@ -184,6 +200,6 @@ namespace Bau.Libraries.LibReporting.Solution
 		/// <summary>
 		///		Solución para informes
 		/// </summary>
-		public Models.ReportingSolutionModel ReportingSolution { get; } = new Models.ReportingSolutionModel();
+		public Models.ReportingSolutionModel ReportingSolution { get; } = new();
 	}
 }

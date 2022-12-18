@@ -46,7 +46,7 @@ namespace Bau.Libraries.LibReporting.Requests.Models
 		/// <summary>
 		///		Código de columna solicitada
 		/// </summary>
-		public string ColumnId { get; set; }
+		public string ColumnId { get; set; } = default!;
 
 		/// <summary>
 		///		Modo de agregación

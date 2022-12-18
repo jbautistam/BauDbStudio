@@ -15,7 +15,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 	public class ReportViewModel : BaseObservableObject, PluginsStudio.ViewModels.Base.Interfaces.IDetailViewModel
 	{
 		// Variables privadas
-		private string _header;
+		private string _header, _requestFileName;
 		private TreeQueryReportViewModel _treeColumns;
 
 		public ReportViewModel(ReportingSolutionViewModel viewModel, ReportBaseModel report) : base(false)
@@ -78,7 +78,26 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 		/// </summary>
 		public void SaveDetails(bool newName)
 		{
-			// No hace nada, sólo implementa la interface
+			bool mustSave = !newName;
+
+				// Obtiene el nuevo nombre de archivo si es necesario
+				if (string.IsNullOrWhiteSpace(_requestFileName) || newName)
+				{
+					string newFileName = ViewModel.SolutionViewModel.MainController.DialogsController
+												.OpenDialogSave(ViewModel.SolutionViewModel.MainController.DialogsController.LastPathSelected,
+																"Requests (*.request.xml)|*.request.xml|All files (*.*)|*.*",
+																"Request.request.xml", ".request.xml");
+
+						if (!string.IsNullOrWhiteSpace(newFileName))
+						{
+							_requestFileName = newFileName;
+							mustSave = true;
+						}
+
+				}
+				// Si se debe grabar el archivo
+				if (mustSave && !string.IsNullOrWhiteSpace(_requestFileName))
+					ViewModel.ReportingSolutionManager.SaveRequest(TreeColumns.GetReportRequest(), _requestFileName);
 		}
 
 		/// <summary>

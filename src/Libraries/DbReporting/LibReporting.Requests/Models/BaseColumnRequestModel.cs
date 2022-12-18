@@ -56,11 +56,11 @@ namespace Bau.Libraries.LibReporting.Requests.Models
 		/// <summary>
 		///		Filtro para la cláusula WHERE
 		/// </summary>
-		public List<FilterRequestModel> FiltersWhere { get; } = new List<FilterRequestModel>();
+		public List<FilterRequestModel> FiltersWhere { get; } = new();
 
 		/// <summary>
 		///		Filtro para la cláusula HAVING
 		/// </summary>
-		public List<FilterRequestModel> FiltersHaving { get; } = new List<FilterRequestModel>();
+		public List<FilterRequestModel> FiltersHaving { get; } = new();
 	}
 }

@@ -1,0 +1,939 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report>
+	<DataWarehouse Name = "Schema.Reporting Sales - Nuñez de Arenas"/>
+	<Name>Sales analysis date with transactions</Name>
+	
+	<Parameter Name = "StartDate" Type = "Date" />
+	<Parameter Name = "EndDate" Type = "Date" />
+	
+	<Dimension Name = "PointsOfSale" />
+	<Dimension Name = "Products" />
+	<Dimension Name = "Users" />
+	<Dimension Name = "UsersPointOfSale" />
+	<Dimension Name = "Calendar" />
+		
+	<Requests>
+		<Dimension Name = "PointsOfSale">
+			<Field Name = "Name;ErpCode;ImageUrl" />
+		</Dimension>
+		<Dimension Name = "Products">
+			<Field Name = "ProductCode;Description;UrlImage" />
+		</Dimension>
+		<Dimension Name = "Users">
+			<Field Name = "FirstName;LastName" />
+		</Dimension>
+		<Dimension Name = "Calendar" Required = "true" >
+			<Field Name = "Date;YearMonth" />
+		</Dimension>
+	</Requests>
+	
+	<Expression Name = "SalesTaxesIncluded;SalesTaxesIncludedAccumulated;SalesTaxesExcluded;Sales;SalesTargetTaxesIncluded;SalesTargetTaxesIncludedAccumulated" />
+	<Expression Name = "SalesAchievementPercentage;SalesAchievementPercentageAccumulated;MonthlyTargetAchievement;MonthlySalesProjection;SalesPerCalendarHour" />
+	<Expression Name = "WeeklyEvolutionPercentage;Transactions;TransactionsPerCalendarHour;AverageBasket;AverageBasketAccumulated" />
+	<Expression Name = "AveragePrice;AveragePriceAccumulated;UPT;UptAccumulated;ExternalCustomerFlow;InternalCustomerFlow;ExternalConversionRate;InternalConversionRate" />
+	
+	<Blocks>
+		<Execute>
+			<![CDATA[
+				DECLARE @StartInterval date = DateFromParts(YEAR(@StartDate), MONTH(@StartDate), 1);
+				DECLARE @EndInterval date = EoMonth(@EndDate);
+			]]>
+		</Execute>
+		
+		<With Name = "Main">
+			<IfRequest Dimension = "Products">
+				<Cte Name = "ProductsCte" Dimension = "Products" />
+			</IfRequest>
+			
+			<IfRequest Dimension = "PointsOfSale">
+				<Cte Name = "PointsOfSaleCte" Dimension = "PointsOfSale" />
+	 		</IfRequest>
+	 		
+			<IfRequest Dimension = "Users">
+				<Cte Name = "UsersCte" Dimension = "Users" />
+	 		</IfRequest>
+	 		
+	 		<IfRequest Dimension = "UsersPointOfSale;Users;PointsOfSale">
+	 			<Cte Name = "UsersPointOfSaleCte" Dimension = "UsersPointOfSale">
+	 				<Field Name = "UserId" />
+	 				<Field Name = "PointOfSaleId" />
+	 				<Join Dimension = "Users" Table = "UsersCte">
+	 					<Relation FromDimension = "UserId" RelatedTo = "UserId" />
+	 				</Join>
+	 				<Join Dimension = "PointsOfSale" Table = "PointsOfSaleCte">
+	 					<Relation FromDimension = "PointOfSaleId" RelatedTo = "PointOfSaleId" />
+	 				</Join>
+	 			</Cte>
+	 		</IfRequest>
+
+	 		<Cte Name = "CalendarCte" Dimension = "Calendar">
+	 			<Filter>
+					<![CDATA[
+	 					Date BETWEEN @StartInterval AND @EndInterval
+	 				]]>
+	 			</Filter>
+	 		</Cte>
+	 		
+ 			<Cte Name = "SalesAnalysisBaseCte">
+ 				<Query Name="SalesAnalysis">
+ 					<![CDATA[
+						SELECT {{
+									-Fields 
+										-Dimension: Users 
+											-Table: UsersCte
+										-Dimension: UsersPointOfSale 
+											-Table: UsersPointOfSaleCte
+										-Dimension: PointsOfSale 
+											-Table: PointsOfSaleCte
+										-Dimension: Products 
+											-Table: ProductsCte
+										-Dimension:
+											-Name:Calendar 
+											-Table:CalendarCte 
+											-WithPrimaryKey
+										-WithComma
+	                    		}}
+	                    		SalesAnalysis.SalesQuantity, SalesAnalysis.SalesAmountTaxesIncluded, SalesAnalysis.SalesAmountTaxesExcluded,
+	                    		SalesAnalysis.Refund, Accumulated.Transactions
+	                    	FROM Fact.SalesAnalysis
+	                    	{{
+	                    		-InnerJoin 
+	                    			-Dimension: UsersPointOfSale 
+		                    			-IfRequest: Users
+		                    			-IfRequest: PointsOfSale 
+		                    			-Table: UsersPointOfSaleCte 
+	                    			-Table: SalesAnalysis 
+	                    			-On: UserPointOfSaleId-UserPointOfSaleId
+	                    	}}
+	                    	{{
+	                    		-InnerJoin 
+	                    			-Dimension: Users 
+	                    				-Table: UsersCte
+									-Table: UsersPointOfSaleCte
+									-On:UserId-UserId
+	                    	}}
+	                    	{{
+	                    		-InnerJoin 
+	                    			-Dimension: PointsOfSale 
+	                    				-Table:PointsOfSaleCte
+									-Table:UsersPointOfSaleCte
+									-On:PointOfSaleId-PointOfSaleId
+	                    	}}
+	                    	{{
+	                    		-InnerJoin 
+	                    			-Dimension: Products 
+	                    				-Table: ProductsCte
+									-Table: SalesAnalysis
+									-On: ProductId-ProductId
+	                    	}}
+	                    	{{
+	                    		-InnerJoin 
+	                    			-Dimension: Calendar 
+	                    				-Required
+	                    				-Table: CalendarCte
+									-Table:SalesAnalysis
+									-On:Date-Date
+	                    	}}
+					]]>
+ 				</Query>
+
+		 		<IfRequest Expression = "AverageBasketAccumulated;UptAccumulated">
+		 			<Then>
+		 				<Query Name="TransactionAccumulated">
+			 				<![CDATA[
+					            OUTER APPLY 
+					                (SELECT COUNT(DISTINCT SalesAnalysisAccumulated.Ticket) AS Transactions
+										FROM Fact.SalesAnalysis AS SalesAnalysisAccumulated
+				                    	{{
+				                    		-InnerJoin 
+				                    			-Dimension: UsersPointOfSale
+				                    				-IfRequest: Users
+				                    				-IfRequest: PointsOfSale
+				                    				-Table: UsersPointOfSaleCte
+				                    				-Alias: UsersPointOfSaleAccumulatedCte
+												-Table: SalesAnalysisAccumulated
+												-On: UserPointOfSaleId-UserPointOfSaleId
+				                    	}}
+				                    	{{
+				                    		-InnerJoin
+				                    			-Dimension: Users
+				                    				-Table: UsersCte 
+				                    		  		-Alias: UsersAccumulatedCte
+												-Table: UsersPointOfSaleAccumulatedCte
+												-On: UserId-UserId
+				                    	}}
+				                    	{{
+				                    		-InnerJoin 
+				                    			-Dimension: PointsOfSale 
+				                    		  		-Table: PointsOfSaleCte 
+				                    		  		-Alias: PointsOfSaleAccumulatedCte
+												-Table: UsersPointOfSaleAccumulatedCte
+												-On: PointOfSaleId-PointOfSaleId
+				                    	}}
+				                    	{{
+				                    		-InnerJoin 
+				                    			-Dimension: Products 
+				                    		  		-Table: ProductsCte 
+				                    		  		-Alias: ProductsAccumulatedCte
+												-Table: SalesAnalysisAccumulated
+												-On: ProductId-ProductId
+				                    	}}
+				                    	
+				                    	{{
+											-Where 
+												-Equal
+													-Dimension: UsersPointOfSale 
+														-Table: UsersPointOfSaleCte
+													-Table: UsersPointOfSaleAccumulatedCte
+													-Template
+														IsNull(Dimension.Field, '') = IsNull(Table.Field, '')
+												-Equal
+													-Dimension:Users 
+														-Table:UsersCte 
+													-Table:UsersAccumulatedCte
+													-Template
+														IsNull(Dimension.Field, '') = IsNull(Table.Field, '')
+												-Equal
+													-Dimension:PointsOfSale 
+														Table:PointsOfSaleCte 
+													-Table:PointsOfSaleAccumulatedCte
+													-Template
+														IsNull(Dimension.Field, '') = IsNull(Table.Field, '')
+												-Equal
+													-Dimension:Products 
+														-Table:ProductsCte 
+													-Table:ProductsAccumulatedCte
+													-Template
+														IsNull(Dimension.Field, '') = IsNull(Table.Field, '')
+												-Additional
+													SalesAnalysisAccumulated.Date BETWEEN @StartDate AND SalesAnalysis.Date
+														AND SalesAnalysisAccumulated.Refund = 0
+				                    	}}
+				                    	
+				                    	-- Esto también hay que convertirlo
+									WHERE IsNull(PointsOfSaleCte.[PointOfSale], '') = IsNull(PointsOfSaleAccumulatedCte.[PointOfSale], '')
+										AND IsNull(PointsOfSaleCte.[ErpCode], '') = IsNull(PointsOfSaleAccumulatedCte.[ErpCode], '')
+										AND IsNull(PointsOfSaleCte.[PointOfSaleImageUrl], '') = IsNull(PointsOfSaleAccumulatedCte.[PointOfSaleImageUrl], '')
+										
+										AND SalesAnalysisAccumulated.Date BETWEEN @StartDate AND SalesAnalysis.Date
+										AND SalesAnalysisAccumulated.Refund = 0
+					
+									) AS Accumulated
+							]]>
+						</Query>
+		 			</Then>
+		 			<Else>
+						<Query Name="TransactionAccumulated">
+			 				<![CDATA[
+					            CROSS JOIN (SELECT 0 AS Transactions) AS Accumulated
+							]]>
+						 </Query>
+		 			</Else>
+		 		</IfRequest>
+		 		
+ 				<Query>
+					<![CDATA[
+						SELECT {{
+									-Fields 
+										-Dimension: Users
+										-Dimension: UsersPointOfSale
+										-Dimension: PointsOfSale
+										-Dimension: Products
+										-Dimension: Calendar 
+											-WithPrimaryKey
+										-WithComma
+								}}
+							    SUM(SalesQuantity) AS Sales, 
+							    SUM(SalesAmountTaxesIncluded) AS SalesTaxesIncluded,
+							    SUM(SalesAmountTaxesExcluded) AS SalesTaxesExcluded,
+							    SUM(CASE WHEN Refund = 0 THEN SalesQuantity ELSE 0 END) AS SalesQuantityNoRefund, 
+							    SUM(CASE WHEN Refund = 0 THEN SalesAmountTaxesIncluded ELSE 0 END) AS SalesAmountTaxesIncludedNoRefund,
+							    COUNT(DISTINCT CASE WHEN Refund = 0 
+						                                THEN Ticket 
+						                                ELSE NULL 
+						                        END) AS Transactions,
+								 MAX(Transactions) AS TransactionsStartToDate
+							FROM ({{
+										-Subquery: SalesAnalysis 
+								  }}
+					              {{
+					              		-Subquery: TransactionAccumulated 
+					              }}
+								) AS SalesAnalysisWithTransactions
+		                    {{
+								-GroupBy 
+									-Dimension:Users
+									-Dimension:UsersPointOfSale
+									-Dimension:PointsOfSale
+									-Dimension:Products
+									-Dimension:Calendar 
+										-WithPrimaryKey
+	                    	}}
+		             ]]>
+				</Query>
+			</Cte>
+			
+	 		<IfRequest Dimension = "Users;UsersPointOfSale">
+	 			<Then>
+		 			<Cte Name = "TargetBaseCte">
+						<![CDATA[
+		                    SELECT {{
+										-Fields 
+											-Dimension:Users 
+												-Table:UsersCte
+											-Dimension:UsersPointOfSale 
+												-Table:UsersPointOfSaleCte
+											-Dimension:PointsOfSale 
+												-Table:PointsOfSaleCte
+											-Dimension:Calendar 
+												-Table:CalendarCte 
+												-WithPrimaryKey
+											-WithComma
+                    				}}
+				                    SUM(VendorAnalysis.SalesTarget) AS SalesTarget, 
+				                    SUM(VendorAnalysis.AssignedHours) AS AssignedHours
+			                    FROM Fact.VendorAnalysis
+			                    {{
+			                    	-InnerJoin 
+			                    		-Dimension:UsersPointOfSale
+			                    			-IfRequest: Users
+			                    			-IfRequest: PointsOfSale
+			                    			-Table:UsersPointOfSaleCte
+			                    		-Table:VendorAnalysis
+			                    		-On:UserPointOfSaleId-UserPointOfSaleId
+			                    }}
+			                    {{
+			                    	-InnerJoin
+			                    		-Dimension:Users
+			                    			-Table:UsersCte
+			                    		-Table:UsersPointOfSaleCte
+			                    		-On:UserId-UserId
+			                    }}
+			                    {{
+			                    	-InnerJoin
+			                    		-Dimension:PointsOfSale
+			                    			-Table:PointsOfSaleCte
+			                    		-Table:UsersPointOfSaleCte
+			                    		-On:PointOfSaleId
+			                    }}
+			                    {{
+			                    	-InnerJoin
+			                    		-Dimension:Calendar
+			                    			-Table:CalendarCte
+			                    		-Table:VendorAnalysis
+			                    		-On:Date-Date
+			                    }}
+			                    WHERE VendorAnalysis.Date BETWEEN @StartDate AND @EndDate
+			                    {{
+									-GroupBy 
+										-Dimension:Users 
+											-Table:UsersCte
+										-Dimension:UsersPointOfSale 
+											-Table:UsersPointOfSaleCte
+										-Dimension:PointsOfSale 
+											-Table:PointsOfSaleCte
+										-Dimension:Calendar 
+											-Table:CalendarCte 
+											-WithPrimaryKey
+		                    	}}
+			             ]]>
+		 			</Cte>
+		 		</Then>
+		 		<Else>
+			 		<IfRequest Dimension = "PointsOfSale">
+			 			<Then>
+				 			<Cte Name = "TargetBaseCte">
+								<![CDATA[
+									SELECT {{
+												-Fields 
+													-Dimension:PointsOfSale 
+														-Table:TargetTemporal
+													-Dimension:Calendar 
+														-Table:CalendarCte 
+														-WithPrimaryKey
+													-WithComma
+				                    		}}
+		                           		   SUM(SalesTarget) AS SalesTarget, SUM(AssignedHours) AS AssignedHours
+				                        FROM (SELECT {{
+														-Fields 
+															-Dimension:PointsOfSale 
+																-Table:PointsOfSaleCte
+															-WithComma
+				                    				 }}
+							                         PointOfSaleAnalysis.Date, PointOfSaleAnalysis.SalesTarget, 0 AS AssignedHours
+						                        FROM Fact.PointOfSaleAnalysis
+						                        {{
+						                        	-InnerJoin 
+						                        		-Dimension:PointsOfSale 
+						                        			-Table:PointsOfSaleCte 
+						                        		-Table:PointOfSaleAnalysis 
+						                        		-On:PointOfSaleId-PointOfSaleId
+						                        	}}
+						                        WHERE PointOfSaleAnalysis.Date BETWEEN @StartDate AND @EndDate
+					                        UNION ALL
+					                        SELECT {{
+					                        			-Fields
+					                        				-Dimension:PointsOfSale 
+					                        					-Table:PointsOfSaleCte
+					                        				-WithComma
+				                    				 }}
+						                           VendorAnalysis.Date, 0 AS SalesTarget, VendorAnalysis.AssignedHours
+						                        FROM Fact.VendorAnalysis INNER JOIN Dim.UsersPointOfSale
+							                        ON VendorAnalysis.UserPointOfSaleId = UsersPointOfSale.Id
+								                        AND VendorAnalysis.Date BETWEEN @StartDate AND @EndDate
+												{{
+													-InnerJoin
+														-Dimension:PointsOfSale 
+															-Table:PointsOfSaleCte 
+														-Table:UsersPointOfSale 
+														-On:PointOfSaleId-PointOfSaleId
+												}}
+					                        ) AS TargetTemporal
+					                    {{
+					                    	-InnerJoin
+					                    		-Dimension:Calendar 
+					                    			-Table:CalendarCte 
+					                    		-Table:TargetTemporal 
+					                    		-On:Date-Date
+					                    }}
+										{{
+											-GroupBy
+												-Dimension:PointsOfSale
+													-Table:TargetTemporal
+												-Dimension:Calendar
+													-Table:CalendarCte
+													-WithPrimaryKey
+                    					}}
+					             ]]>
+				 			</Cte>
+				 		</Then>
+				 		<Else>
+				 			<Cte Name = "TargetBaseCte">
+								<![CDATA[
+									SELECT {{
+												-Fields
+													-Dimension:Calendar
+														-Table:CalendarCte
+														-WithPrimaryKey
+													-WithComma
+				                    		}}
+		                           		   SUM(SalesTarget) AS SalesTarget, SUM(AssignedHours) AS AssignedHours
+				                        FROM (SELECT PointOfSaleAnalysis.Date, PointOfSaleAnalysis.SalesTarget, 0 AS AssignedHours
+						                        FROM Fact.PointOfSaleAnalysis
+						                        WHERE PointOfSaleAnalysis.Date BETWEEN @StartDate AND @EndDate
+					                        UNION ALL
+					                        SELECT VendorAnalysis.Date, 0 AS SalesTarget, VendorAnalysis.AssignedHours
+						                        FROM Fact.VendorAnalysis
+						                        WHERE VendorAnalysis.Date BETWEEN @StartDate AND @EndDate
+					                        ) AS TargetTemporal
+					                    {{
+					                    	-InnerJoin
+					                    		-Dimension:Calendar
+					                    			-Table:CalendarCte
+					                    		-RelatedTo:TargetTemporal
+					                    		-On:Date-Date
+					                    }}
+										{{
+											-GroupBy 
+												-Dimension:Calendar
+													-Table:CalendarCte
+													-WithPrimaryKey
+                    					}}
+					             ]]>
+				 			</Cte>
+				 		</Else>
+	 				</IfRequest>
+		 		</Else>
+	 		</IfRequest>
+
+			<Cte Name = "SalesTargetCte">
+				<![CDATA[
+					SELECT {{
+								-Fields
+									-Dimension:Users 
+										-Table:SalesAnalysisBaseCte 
+										-AdditionalTable:TargetBaseCte
+										-CheckIfNull
+									-Dimension:UsersPointOfSale 
+										-Table:SalesAnalysisBaseCte 
+										-AdditionalTable:TargetBaseCte
+										-CheckIfNull
+									-Dimension:PointsOfSale
+										-Table:SalesAnalysisBaseCte
+										-AdditionalTable:TargetBaseCte
+										-CheckIfNull
+									-Dimension:Calendar 
+										-Table:SalesAnalysisBaseCte 
+										-AdditionalTable:TargetBaseCte 
+										-CheckIfNull
+										-WithPrimaryKey
+									-WithComma
+                    		}}
+							{{
+								-Fields 
+									-Dimension:Products
+										-Table:SalesAnalysisBaseCte
+									-WithComma
+							}}
+							SalesAnalysisBaseCte.Sales, SalesAnalysisBaseCte.SalesTaxesIncluded, SalesAnalysisBaseCte.SalesTaxesExcluded,
+							SalesAnalysisBaseCte.SalesQuantityNoRefund, SalesAnalysisBaseCte.SalesAmountTaxesIncludedNoRefund,
+							SalesAnalysisBaseCte.Transactions,
+							TargetBaseCte.SalesTarget, TargetBaseCte.AssignedHours
+						FROM SalesAnalysisBaseCte
+	                    {{
+	                    	-FullJoin 
+	                    		-Dimension:UsersPointOfSale
+	                    			-Table:TargetBaseCte
+	                    		-Table:SalesAnalysisBaseCte
+	                    		-On:RequestFields
+	                    }}
+	                    {{
+	                    	-FullJoin
+	                    		-Dimension:Users
+	                    			-Table:TargetBaseCte
+	                    		-Table:SalesAnalysisBaseCte
+	                    		-OnRequestFields
+	                    }}
+	                    {{
+	                    	-FullJoin
+	                    		-Dimension:PointsOfSale
+	                    			-Table:TargetBaseCte
+	                    		-Table:SalesAnalysisBaseCte
+	                    		-OnRequestFields
+	                    }}
+	                    {{
+	                    	-FullJoin
+								-Dimension:Calendar 
+									-Table:TargetBaseCte 
+	                    		-Table:SalesAnalysisBaseCte
+	                    		-OnRequestFields
+	                    }}
+				]]>
+			</Cte>
+			
+			<Cte Name = "SalesAnalysisAccumulatedCte">
+				<![CDATA[
+					SELECT {{
+								-Fields
+									-Dimension:Users
+									-Dimension:UsersPointOfSale
+									-Dimension:PointsOfSale
+									-Dimension:Products
+									-Dimension:Calendar
+										-WithPrimaryKey:true
+									-WithComma
+	                    	}}
+							Sales, 
+							SUM(IsNull(Sales, 0)) 
+								OVER ({{
+											-PartitionBy 
+												-Dimension:Users
+												-Dimension:UsersPointOfSale
+												-Dimension:PointsOfSale
+												-Dimension:Products
+												-Additional
+													YearMonth
+												-OrderBy
+													Date
+							          }}
+							          ) AS SalesStartToDate,
+							SUM(IsNull(Sales, 0)) 
+								OVER ({{
+											-PartitionBy
+												-Dimension:Users
+												-Dimension:UsersPointOfSale
+												-Dimension:PointsOfSale
+												-Dimension:Products
+												-Additional
+													YearMonth
+							           }}
+							          ) AS SalesMonth,
+							SalesTaxesIncluded,
+							SUM(IsNull(SalesTaxesIncluded, 0)) 
+								OVER ({{
+											-PartitionBy
+												-Dimension:Users
+												-Dimension:UsersPointOfSale
+												-Dimension:PointsOfSale
+												-Dimension:Products
+												-Additional
+													YearMonth
+												-OrderBy
+													Date
+							            }}) AS SalesTaxesIncludedMonthToDate,
+							SUM(IsNull(SalesTaxesIncluded, 0)) 
+								OVER ({{
+											-PartitionBy
+												-Dimension:Users
+												-Dimension:UsersPointOfSale
+												-Dimension:PointsOfSale
+												-Dimension:Products
+												-OrderBy
+													Date
+							            }}) AS SalesTaxesIncludedStartToDate,
+							SUM(IsNull(SalesTaxesIncluded, 0)) 
+								OVER ({{
+											-PartitionBy
+												-Dimension:Users
+												-Dimension:UsersPointOfSale
+												-Dimension:PointsOfSale
+												-Dimension:Products
+												-Additional
+													YearMonth
+							           }}) AS SalesTaxesIncludedMonth,
+							SalesTaxesExcluded,
+							SalesQuantityNoRefund, 
+							SUM(IsNull(SalesQuantityNoRefund, 0)) 
+								OVER ({{
+											-PartitionBy
+												-Dimension:Users
+												-Dimension:UsersPointOfSale
+												-Dimension:PointsOfSale
+												-Dimension:Products
+												-OrderBy
+													Date
+							           }}
+							           ) AS SalesQuantityNoRefundStartToDate,
+							SalesAmountTaxesIncludedNoRefund,
+							SUM(IsNull(SalesAmountTaxesIncludedNoRefund, 0)) 
+								OVER ({{
+											-PartitionBy
+												-Dimension:Users
+												-Dimension:UsersPointOfSale
+												-Dimension:PointsOfSale
+												-Dimension:Products
+												-OrderBy
+													Date
+							           }}
+							           ) AS SalesAmountTaxesIncludedNoRefundStartToDate,
+							Transactions,
+							SUM(IsNull(Transactions, 0)) 
+								OVER ({{
+											-PartitionBy
+												-Dimension:Users
+												-Dimension:UsersPointOfSale
+												-Dimension:PointsOfSale
+												-Dimension:Products
+												-OrderBy
+													Date
+							           }}
+							           ) AS TransactionsStartToDate,
+							SalesTarget,
+							SUM(IsNull(SalesTarget, 0)) 
+								OVER ({{
+											-PartitionBy
+												-Dimension:Users
+												-Dimension:UsersPointOfSale
+												-Dimension:PointsOfSale
+												-Dimension:Products
+												-Additional
+													YearMonth
+												-OrderBy
+													Date
+							            }}
+							            ) AS SalesTargetMonthToDate,
+							SUM(IsNull(SalesTarget, 0)) 
+								OVER ({{
+											-PartitionBy
+												-Dimension:Users
+												-Dimension:UsersPointOfSale
+												-Dimension:PointsOfSale
+												-Dimension:Products
+												-OrderBy
+													Date
+							           }}
+							           ) AS SalesTargetStartToDate,
+							SUM(IsNull(SalesTarget, 0)) 
+								OVER ({{
+											-PartitionBy
+												-Dimension:Users
+												-Dimension:UsersPointOfSale
+												-Dimension:PointsOfSale
+												-Dimension:Products
+												-Additional
+													YearMonth
+							           }}) AS SalesTargetMonth,
+							AssignedHours
+						FROM SalesTargetCte
+				]]>
+			</Cte>
+	 		<IfRequest Dimension = "PointsOfSale">
+	 			<Then>
+					<Cte Name = "CustomersFlowAnalysisCte">
+						<![CDATA[
+							SELECT {{
+										-Fields
+											-Dimension:PointsOfSale
+												-Table:PointsOfSaleCte
+											-Dimension:Calendar
+												-Table:CalendarCte
+												-WithPrimaryKey
+											-WithComma
+				                    }}
+				                    SUM(CustomerFlowAnalysis.InternalCustomerFlow) AS InternalCustomerFlow,
+				                    SUM(CustomerFlowAnalysis.ExternalCustomerFlow) AS ExternalCustomerFlow
+			                    FROM Fact.CustomerFlowAnalysis
+								{{
+									-InnerJoin 
+										-Dimension:PointsOfSale
+											-Table:PointsOfSaleCte
+										-Table:CustomerFlowAnalysis
+										-On:PointOfSaleId-PointOfSaleId
+								}}
+								{{
+									-InnerJoin
+										-Dimension:Calendar 
+											-Table:CalendarCte 
+										-Table:CustomerFlowAnalysis 
+										-On:Date-Date
+								}}
+								{{
+									-GroupBy
+										-Dimension:PointsOfSale
+											-Table:PointsOfSaleCte
+										-Dimension:Calendar
+											-Table:CalendarCte
+											-WithPrimaryKey
+                    			}}
+						]]>
+					</Cte>
+				</Then>
+				<Else>
+					<Cte Name = "CustomersFlowAnalysisCte">
+						<![CDATA[
+							SELECT NULL AS Date, NULL AS YearMonth, NULL AS InternalCustomerFlow, NULL AS ExternalCustomerFlow
+						]]>
+					</Cte>
+				</Else>
+			</IfRequest>
+			<Cte Name = "SalesAnalysisCte">
+						<![CDATA[
+							SELECT {{
+										-Fields 
+											-Dimension:Users 
+												-Table:SalesFirst
+											-Dimension:UsersPointOfSale 
+												-Table:SalesFirst
+											-Dimension:PointsOfSale
+												-Table:SalesFirst
+											-Dimension:Products
+												-Table:SalesFirst
+											-Dimension:Calendar
+												-Table:SalesFirst
+												-WithPrimaryKey
+											-WithComma
+			                    	}}
+									--[SalesFirst].[Date], [SalesFirst].[YearMonth], 
+									-- Ventas € II: Sum(Importe II)
+									SalesFirst.SalesTaxesIncluded, 
+									-- Ventas € II acm.: Sum(Importe II) desde el inicio del periodo hasta la fecha, inclusive
+									SalesFirst.SalesTaxesIncludedStartToDate AS SalesTaxesIncludedAccumulated,
+									-- Ventas € IE: Sum(Importe IE)
+									SalesFirst.SalesTaxesExcluded, 
+									-- Ventas: Sum(Cantidad)
+									SalesFirst.Sales, 
+					                SalesFirst.SalesStartToDate AS SalesAccumulated,
+									-- Objetivo Ventas € II: Sum(ObjetivoVentas)
+									SalesFirst.SalesTarget AS SalesTargetTaxesIncluded, 
+									-- Objetivo Ventas € II acm.: Sum(ObjetivoVentas) desde el inicio del periodo hasta la fecha, inclusive
+									SalesFirst.SalesTargetStartToDate AS SalesTargetTaxesIncludedAccumulated, 
+									{{
+										-IfRequest
+											-Expression:SalesAchievementPercentage
+											-Sql
+												-- % Consecución Ventas	Sum(Importe II) / Sum(ObjetivoVentas)
+												100.0 * SalesFirst.SalesTaxesIncluded / NullIf(SalesFirst.SalesTarget, 0) AS SalesAchievementPercentage,
+									}}
+									-- % Consecución Ventas acm: 
+									--		Sum(Importe II) desde el inicio del periodo hasta la fecha, inclusive 
+									--			/ Sum(ObjetivoVentas) desde el inicio del periodo hasta la fecha, inclusive
+									100.0 * SalesFirst.SalesTaxesIncludedStartToDate / NullIf(SalesFirst.SalesTargetStartToDate, 0) AS SalesAchievementPercentageAccumulated,
+									-- Consecución del mes:
+									--		Sum(Importe II) desde el día 1 del mes de la fecha hasta la fecha, inclusive
+									--			/ Sum(<total mes de la fecha> ObjetivoVenta)
+									100.0 * SalesFirst.SalesTaxesIncludedStartToDate / NullIf(SalesFirst.SalesTargetMonth, 0) AS MonthlyTargetAchievement,
+									-- Proyección cierre de mes	
+									--		[Sum(Importe II mes) mes de la fecha hasta la fecha, inclusive
+									--			/ Sum(ObjetivoVentas) desde el día 1 del mes de la fecha hasta la fecha, inclusive] 
+									--		* Sum(<total mes de la fecha> ObjetivoVentas)
+									(1.0 * SalesFirst.SalesTaxesIncludedMonthToDate / NullIf(SalesFirst.SalesTargetMonthToDate, 0))
+										* SalesFirst.SalesTargetMonth AS MonthlySalesProjection,
+									-- Participación Ventas € II:
+									--		Sum(Importe II) / Suma(<total filtrado> Importe II)	Importe total de la agrupación entre importe total filtrado
+									1.0 * SalesFirst.SalesTaxesIncluded / NullIf(SalesFirst.SalesTaxesIncludedMonth, 0) AS SalesParticipationTaxesIncluded,
+									-- Participación Ventas:
+									--		Sum(Cantidad) / Suma(<total filtrado> Cantidad)	Cantidad total de la agrupación entre cantidad total filtrada
+									1.0 * SalesFirst.Sales / NullIf(SalesFirst.SalesMonth, 0) AS SalesParticipation,
+									-- Venta por hora calendario: Sum(Importe II) / Sum(HorasCalendario)
+									1.0 * SalesFirst.SalesTaxesIncluded / NullIf(SalesFirst.AssignedHours, 0) AS SalesPerCalendarHour,
+									-- % Evolución semanal: 
+									--		[Sum(Importe II) desde el día 1 del mes de la fecha hasta la fecha, inclusive
+									--				/ Sum(ObjetivoVentas) desde el día 1 del mes de la fecha hasta la fecha, inclusive] 
+									--		- [Sum(Importe II) desde el día 1 del mes de la fecha hasta (la fecha - 7 días)
+									--				/ Sum(ObjetivoVentas) desde el día 1 del mes de la fecha hasta (la fecha - 7 días)]
+									CASE WHEN Day(SalesFirst.Date) < 9
+											THEN NULL
+											ELSE
+												100.0 * (1.0 * SalesFirst.SalesTaxesIncludedMonthToDate / NullIf(SalesFirst.SalesTargetMonthToDate, 0)
+															- 1.0 * SalesPrevious.SalesTaxesIncludedMonthToDate / NullIf(SalesPrevious.SalesTargetMonthToDate, 0)) 
+										END AS WeeklyEvolutionPercentage,
+									-- Transacciones: Count(distinct Tickets*)
+									SalesFirst.Transactions,
+					                SalesFirst.TransactionsStartToDate AS TransactionsAccumulated,
+									-- Transacciones por hora calendario: Transacciones / Sum(HorasCalendario)
+									1.0 * SalesFirst.Transactions / NullIf(SalesFirst.AssignedHours, 0) AS TransactionsPerCalendarHour,
+									-- Cesta Media: Sum(Importe II*) / Transacciones*
+									1.0 * SalesFirst.SalesAmountTaxesIncludedNoRefund / NullIf(SalesFirst.Transactions, 0) AS AverageBasket,
+									-- Cesta Media acm.: 
+									--		Sum(Importe II*) desde el inicio del periodo hasta la fecha, inclusive
+									--				/ Transacciones* desde el inicio del periodo hasta la fecha, inclusive
+									1.0 * SalesFirst.SalesAmountTaxesIncludedNoRefundStartToDate / NullIf(SalesFirst.TransactionsStartToDate, 0) AS AverageBasketAccumulated,
+									-- Precio Medio	Sum(Importe II*)/Sum(Cantidad*)
+									1.0 * SalesFirst.SalesAmountTaxesIncludedNoRefund / NullIf(SalesFirst.SalesQuantityNoRefund, 0) AS AveragePrice,
+									-- Precio Medio acm.:
+									--		Sum(Importe II*) desde el inicio del periodo hasta la fecha, inclusive
+									--			/ Sum(Cantidad*) desde el inicio del periodo hasta la fecha, inclusive
+									1.0 * SalesFirst.SalesAmountTaxesIncludedNoRefundStartToDate / NullIf(SalesFirst.SalesQuantityNoRefundStartToDate, 0) AS AveragePriceAccumulated,
+									-- UPT: Sum(Cantidad*) / Transacciones*
+									1.0 * SalesFirst.SalesQuantityNoRefund / NullIf(SalesFirst.Transactions, 0) AS UPT,
+									-- UPT acm.:
+									--		Sum(Cantidad*) desde el inicio del periodo hasta la fecha, inclusive
+									--		/ Transacciones* desde el inicio del periodo hasta la fecha, inclusive
+									1.0 * SalesFirst.SalesQuantityNoRefundStartToDate / NullIf(SalesFirst.TransactionsStartToDate, 0) AS UptAccumulated,
+									-- Flujo de clientes externo: Sum(FlujoClientesExterno)
+									CustomersFlowAnalysisCte.ExternalCustomerFlow AS ExternalCustomerFlow,
+									-- Flujo de clientes interno: Sum(FlujoClientesInterno)
+									CustomersFlowAnalysisCte.InternalCustomerFlow AS InternalCustomerFlow,
+									-- Conversión externa: Sum(FlujoClientesInterno) / Sum(FlujoClientesExterno)
+									100.0 * CustomersFlowAnalysisCte.InternalCustomerFlow / NullIf(CustomersFlowAnalysisCte.ExternalCustomerFlow, 0) AS ExternalConversionRate,
+									-- Conversión interna: Transacciones / Sum(FlujoClientesInterno)
+									100.0 * SalesFirst.Transactions / NullIf(CustomersFlowAnalysisCte.InternalCustomerFlow, 0) AS InternalConversionRate,
+									-- Jornada	Sum(HorasCalendario) + Turno || Descripción de Vacaciones o ausencia || Día libre
+									CAST(SalesFirst.AssignedHours AS nvarchar(50)) AS Worktime,
+									SalesFirst.SalesTaxesIncludedMonth, 
+									SalesPrevious.SalesTaxesIncluded AS SalesAmountTaxesPreviousWeek,
+									SalesFirst.SalesQuantityNoRefund, 
+									SalesFirst.SalesAmountTaxesIncludedNoRefund, 
+									SalesFirst.SalesTargetMonth,
+									SalesFirst.AssignedHours,
+									CASE WHEN Day(SalesFirst.Date) < 9
+											THEN NULL
+											ELSE SalesPrevious.SalesTarget
+										END AS SalesTargetPreviousWeek
+								FROM SalesAnalysisAccumulatedCte AS SalesFirst
+			                    {{
+			                    	-LeftJoin 
+			                    		-Dimension:UsersPointOfSale
+			                    			-Table:SalesAnalysisAccumulatedCte 
+			                    		-Dimension:Users
+			                    			-Table:SalesAnalysisAccumulatedCte
+			                    		-Dimension:PointsOfSale
+			                    			-Table:SalesAnalysisAccumulatedCte
+			                    		-Dimension:Products 
+			                    			-Table:SalesAnalysisAccumulatedCte
+			                    		-Table:SalesFirst 
+			                    		-Alias:SalesPrevious 
+			                    		-On:RequestFields
+			                    		-Additional
+			                    			DateAdd(day, -7, SalesFirst.Date) = SalesPrevious.Date
+			                    				AND SalesFirst.YearMonth = SalesPrevious.YearMonth
+			                    }}
+			                    {{
+			                    	-LeftJoin
+			                    		-Relation
+			                    			-Dimension:PointsOfSale
+			                    				-Table:CustomersFlowAnalysisCte
+			                    			-On:RequestFields
+			                    		-Relation
+			                    			-Dimension:Calendar
+			                    				-Table:CustomersFlowAnalysisCte
+			                    			-On:RequestFields
+			                    		-Table:SalesFirst
+			                    }}
+						]]>
+			</Cte>
+ 			<Query>
+				<![CDATA[
+					SELECT {{
+								-Fields 
+									-Dimension:Users
+									-Dimension:UsersPointOfSale
+									-Dimension:PointsOfSale
+									-Dimension:Products
+									-Dimension:Calendar 
+										-WithPrimaryKey
+									-WithComma
+	                    	}}
+							SalesTaxesIncluded, 
+							SalesTaxesIncludedAccumulated, 
+							SalesTaxesExcluded, 
+							Sales, 
+							SalesTargetTaxesIncluded, 
+							SalesTargetTaxesIncludedAccumulated, 
+							SalesAchievementPercentage, 
+							SalesAchievementPercentageAccumulated, 
+							MonthlyTargetAchievement, 
+							MonthlySalesProjection, 
+							SalesPerCalendarHour, 
+							WeeklyEvolutionPercentage, 
+							Transactions, 
+							TransactionsPerCalendarHour, 
+							AverageBasket, 
+							AverageBasketAccumulated, 
+							AveragePrice, 
+							AveragePriceAccumulated, 
+							UPT, 
+							UptAccumulated, 
+							ExternalCustomerFlow, 
+							InternalCustomerFlow, 
+							ExternalConversionRate, 
+							InternalConversionRate, 
+							 COUNT(*) OVER () AS TotalCount, 
+							SUM(SalesTaxesIncluded) OVER () AS TotalSalesTaxesIncluded, 
+							NULL AS TotalSalesTaxesIncludedAccumulated, 
+							SUM(SalesTaxesExcluded) OVER () AS TotalSalesTaxesExcluded, 
+							SUM(Sales) OVER () AS TotalSales, 
+							SUM(IsNull(SalesTargetTaxesIncluded, 0)) OVER () AS TotalSalesTargetTaxesIncluded, 
+							NULL AS TotalSalesTargetTaxesIncludedAccumulated, 
+							{{
+								-IfRequest 
+									-Expression:SalesAchievementPercentage
+									-Sql
+										100.0 * SUM(SalesTaxesIncluded) OVER () / NullIf(SUM(IsNull(SalesTargetTaxesIncluded, 0)) OVER (), 0) AS TotalSalesAchievementPercentage, 
+							}}
+							NULL AS TotalSalesAchievementPercentageAccumulated, 
+							100.0 * SUM(IsNull(SalesTaxesIncludedMonth, 0)) OVER () / NullIf(SUM(IsNull(SalesTargetMonth, 0)) OVER (), 0) AS TotalMonthlyTargetAchievement, 
+							NULL AS TotalMonthlySalesProjection, 
+							1.0 * SUM(IsNull(SalesTaxesIncluded, 0)) OVER () / NullIf(SUM(IsNull(AssignedHours, 0)) OVER(), 0) AS TotalSalesPerCalendarHour, 
+							NULL AS TotalWeeklyEvolutionPercentage, 
+							SUM(Transactions) OVER () AS TotalTransactions, 
+							1.0 * SUM(IsNull(Transactions, 0)) OVER () / NullIf(SUM(IsNull(AssignedHours, 0)) OVER(), 0) AS TotalTransactionsPerCalendarHour, 
+							1.0 * SUM(SalesAmountTaxesIncludedNoRefund) OVER () / NullIf(SUM(Transactions) OVER (), 0) AS TotalAverageBasket, 
+							1.0 * SUM(SalesTaxesIncludedAccumulated) OVER () / NullIf(SUM(TransactionsAccumulated) OVER (), 0) AS TotalAverageBasketAccumulated, 
+							1.0 * SUM(SalesAmountTaxesIncludedNoRefund) OVER () / NullIf(SUM(SalesQuantityNoRefund) OVER (), 0) AS TotalAveragePrice, 
+							1.0 * SUM(SalesTaxesIncludedAccumulated) OVER () / NullIf(SUM(SalesAccumulated) OVER (), 0) AS TotalAveragePriceAccumulated, 
+							1.0 * SUM(SalesQuantityNoRefund) OVER () / NullIf(SUM(Transactions) OVER (), 0) AS TotalUPT, 
+							1.0 * SUM(SalesAccumulated) OVER () / NullIf(SUM(TransactionsAccumulated) OVER (), 0) AS TotalUptAccumulated, 
+							SUM(IsNull(ExternalCustomerFlow, 0)) OVER () AS TotalExternalCustomerFlow, 
+							SUM(IsNull(InternalCustomerFlow, 0)) OVER () AS TotalInternalCustomerFlow, 
+							100.0 * SUM(IsNull(InternalCustomerFlow, 0)) OVER () / NullIf(SUM(IsNull(ExternalCustomerFlow, 0)) OVER (), 0) AS TotalExternalConversionRate, 
+							100.0 * SUM(Transactions) OVER () / NullIf(SUM(IsNull(InternalCustomerFlow, 0)) OVER (), 0) AS TotalInternalConversionRate
+	                   FROM SalesAnalysisCte
+	                   {{
+	                   		-OrderBy 
+	                   			-Dimension:Users
+	                   			-Dimension:UsersPointOfSale
+	                   			-Dimension:PointsOfSale
+	                   			-Dimension:Products
+	                   			-Dimension:Calendar 
+	                   				-WithPrimaryKey
+	                    		-Required
+	                   }}
+	                   {{
+	                   		-Pagination
+	                   }}
+				]]>
+ 			</Query>
+		</With>
+	</Blocks>
+</Report>

@@ -40,6 +40,6 @@ namespace Bau.Libraries.LibReporting.Solution.Models
 		/// <summary>
 		///		Dicionario de relación entre almacenes de datos y archivos
 		/// </summary>
-		public List<(string dataWarehouseId, string fileName)> DataWarehousesFiles { get; } = new List<(string dataWarehouseId, string fileName)>();
+		public List<(string dataWarehouseId, string fileName)> DataWarehousesFiles { get; } = new();
 	}
 }
