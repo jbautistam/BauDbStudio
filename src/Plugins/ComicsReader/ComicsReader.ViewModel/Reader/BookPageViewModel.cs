@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Bau.Libraries.ComicsReader.ViewModel.Reader
 {
 	/// <summary>
 	///		ViewModel para la página
 	/// </summary>
-	public class BookPageViewModel : Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.ControlItemViewModel
+	public class BookPageViewModel : BauMvvm.ViewModels.Forms.ControlItems.ControlItemViewModel
 	{
 		// Variables privadas
 		private string _fileName, _thumbFileName;

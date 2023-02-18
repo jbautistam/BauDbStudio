@@ -15,7 +15,7 @@ namespace Bau.Libraries.DbStudio.Views
 		/// <summary>
 		///		Inicializa el manager de vistas de DbStudio
 		/// </summary>
-		public void Initialize(PluginsStudio.Views.Base.Interfaces.IAppViewsController appViewsController, 
+		public void Initialize(IAppViewsController appViewsController, 
 							   PluginsStudio.ViewModels.Base.Controllers.IPluginsController pluginController)
 		{
 			AppViewsController = appViewsController;
@@ -51,27 +51,23 @@ namespace Bau.Libraries.DbStudio.Views
 		/// </summary>
 		public List<PaneModel> GetPanes()
 		{
-			List<PaneModel> panes = new List<PaneModel>();
-
-				// Añade los paneles de la aplicación principal
-				panes.Add(new PaneModel
+			return new()
+					{
+						new PaneModel
 								{
 									Id = "TreeConnectionsExplorer",
 									Title = "Connections",
 									Position = PaneModel.PositionType.Left,
 									View = new Explorers.TreeConnectionsExplorer(MainViewModel.TreeConnectionsViewModel)
-								}
-						 );
-				panes.Add(new PaneModel
+								},
+						new PaneModel
 								{
 									Id = "TreeReportingExplorer",
 									Title = "Reporting",
 									Position = PaneModel.PositionType.Left,
 									View = new Reporting.Explorers.TreeReportingExplorer(MainViewModel.ReportingSolutionViewModel.TreeReportingViewModel)
 								}
-						 );
-				// Devuelve la lista de paneles
-				return panes;
+					};
 		}
 
 		/// <summary>
@@ -79,17 +75,14 @@ namespace Bau.Libraries.DbStudio.Views
 		/// </summary>
 		public List<ToolBarModel> GetToolBars()
 		{
-			List<ToolBarModel> toolBars = new();
-
-				// Añade la barra de herramientas del control de ejecución
-				toolBars.Add(new ToolBarModel
+			return new()
+					{
+						new ToolBarModel
 										{
 											Id = "ExecutionToolBar",
 											ToolBar = new Controls.ExecutionToolBar(MainViewModel.ConnectionExecutionViewModel)
 										}
-							);
-				// Devuelve la lista
-				return toolBars;
+					};
 		}
 
 		/// <summary>
@@ -97,13 +90,11 @@ namespace Bau.Libraries.DbStudio.Views
 		/// </summary>
 		public List<MenuListModel> GetMenus()
 		{
-			List<MenuListModel> menus = new();
-
-				// Crea la lista de menús de "Nuevo elemento"
-				menus.Add(GetMenus(MenuListModel.SectionType.NewItem));
-				menus.Add(GetMenus(MenuListModel.SectionType.Tools));
-				// Devuelve la lista de menús
-				return menus;
+			return new()
+					{
+						GetMenus(MenuListModel.SectionType.NewItem),
+						GetMenus(MenuListModel.SectionType.Tools)
+					};
 		}
 
 		/// <summary>
@@ -166,27 +157,23 @@ namespace Bau.Libraries.DbStudio.Views
 		/// <summary>
 		///		Obtiene las extensiones de archivo asociadas al plugin
 		/// </summary>
-		public List<PluginsStudio.ViewModels.Base.Models.FileAssignedModel> GetFilesAssigned()
+		public List<FileAssignedModel> GetFilesAssigned()
 		{
-			List<PluginsStudio.ViewModels.Base.Models.FileAssignedModel> files = new List<FileAssignedModel>();
-
-				// Asigna las extensions
-				files.Add(new FileAssignedModel
+			return new()
+					{
+						new FileAssignedModel
 									{
 										Name = "Sql Script",
 										FileExtension = ".sql",
 										Icon = GetIcon("FileSql.png")
-									}
-						 );
-				files.Add(new FileAssignedModel
+									},
+						new FileAssignedModel
 									{
 										Name = "Sql Extended",
 										FileExtension = ".sqlx",
 										Icon = GetIcon("FileSqlExtended.png")
 									}
-						 );
-				// Devuelve la lista de archivos asignados
-				return files;
+					};
 		}
 
 		/// <summary>

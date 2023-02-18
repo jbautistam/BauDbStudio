@@ -13,19 +13,67 @@ public class reportAdvanced_should
 	///		Comprueba si se puede cargar un esquema de base de datos y sus informes
 	/// </summary>
 	[Theory]
-	[InlineData("ReportingSales/Reporting-Schema.Reporting Sales - Nuñez de Arenas.xml", 
-				"ReportingSales/Requests/Request_1.xml", "ReportingSales/Requests/Response_1.sql")]
-	public void convert_to_sql(string fileName, string fileRequest, string fileResponse)
+	[InlineData("ReportingSales/Test-Reporting-Schema.xml", 
+				"ReportingSales/Requests/Request_1.xml")]
+	public void convert_to_sql(string fileName, string fileRequest)
 	{
 		ReportingSolutionManager manager = new();
-		ReportRequestModel request = manager.LoadRequest(GetFullFileName(fileRequest));
+		ReportRequestModel request = manager.LoadRequest(Tools.FileHelper.GetFullFileName(fileRequest));
 
 			// Agrega el dataWarehouse
-			manager.AddDataWarehouse(GetFullFileName(fileName));
+			manager.AddDataWarehouse(Tools.FileHelper.GetFullFileName(fileName));
 			// Comprueba que realmente se haya cargado una solicitud
 			request.Should().NotBeNull();
 			// Obtiene la SQL del informe
-			AssertSqlWithFile(manager.GetSqlResponse(request), fileResponse);
+			AssertSqlWithFile(manager.GetSqlResponse(request), Tools.FileHelper.GetResponseFile(fileRequest));
+	}
+
+	/// <summary>
+	///		Comprueba si se puede cargar un esquema de base de datos y sus informes y ejecutar la cadena SQL contra la base de datos
+	/// </summary>
+	[Theory]
+	[InlineData("ReportingSales/Test-Reporting-Schema.xml", 
+				"ReportingSales/Requests/Request_1.xml",
+				"Server=(local);Database=Roivolution_NunezDeArena_Reporting_Sales;Trusted_Connection=True;MultipleActiveResultSets=True")]
+	public void execute_to_sql(string fileName, string fileRequest, string connectionString)
+	{
+		ReportingSolutionManager manager = new();
+		ReportRequestModel request = manager.LoadRequest(Tools.FileHelper.GetFullFileName(fileRequest));
+
+			// Agrega el dataWarehouse
+			manager.AddDataWarehouse(Tools.FileHelper.GetFullFileName(fileName));
+			// Comprueba que realmente se haya cargado una solicitud
+			request.Should().NotBeNull();
+			// Obtiene la SQL del informe
+			using (System.Data.SqlClient.SqlConnection connection = new(connectionString))
+			{
+				System.Data.SqlClient.SqlCommand command = connection.CreateCommand();
+
+					// Añade los argumentos al comando
+					foreach (KeyValuePair<string, object?> parameter in request.Parameters)
+					{
+						System.Data.SqlClient.SqlParameter sqlParameter = command.CreateParameter();
+						string key = parameter.Key;
+
+							// Normaliza el parámetro
+							if (!key.StartsWith("@"))
+								key = "@" + key;
+							// Asigna el parámetro
+							sqlParameter.ParameterName = key;
+							sqlParameter.Value = parameter.Value;
+							// Añade el parámetro a la colección
+							command.Parameters.Add(sqlParameter);
+					}
+					// Asigna las cadena al comando
+					command.CommandText = manager.GetSqlResponse(request);
+					command.CommandType = System.Data.CommandType.Text;
+					// Abre la conexión
+					connection.Open();
+					// Ejecuta la consulta SQL
+					command.ExecuteReader();
+					// Cierra la conexión
+					connection.Close();
+			}
 	}
 
 	/// <summary>
@@ -33,7 +81,7 @@ public class reportAdvanced_should
 	/// </summary>
 	private void AssertSqlWithFile(string sql, string fileResponse)
 	{
-		AssertSql(sql, File.ReadAllText(GetFullFileName(fileResponse)));
+		AssertSql(sql, File.ReadAllText(Tools.FileHelper.GetFullFileName(fileResponse)));
 	}
 
 	/// <summary>
@@ -61,21 +109,5 @@ public class reportAdvanced_should
 			sql = sql.Trim();
 		// Devuelve la cadena normalizada
 		return sql;
-	}
-
-	/// <summary>
-	///		Obtiene el nombre completo de un archivo
-	/// </summary>
-	private string GetFullFileName(string fileName)
-	{
-		return Path.Combine(GetExecutionPath(), "Data", fileName);
-	}
-
-	/// <summary>
-	///		Obtiene el directorio de ejecución del proyecto
-	/// </summary>
-	private string GetExecutionPath()
-	{
-		return Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) ?? default!;
 	}
 }

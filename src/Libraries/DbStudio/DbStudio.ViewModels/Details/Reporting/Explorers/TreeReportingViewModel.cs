@@ -403,15 +403,14 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 									{
 										// Graba el archivo
 										System.IO.File.WriteAllText(fileName, 
-																	$@"
-																		<?xml version=""1.0"" encoding=""utf-8""?>
+																	$@"<?xml version=""1.0"" encoding=""utf-8""?>
 																		<Report>
 																			<DataWarehouse Name = ""{dataWarehouse.Name}""/>
 																			<Name>{System.IO.Path.GetFileName(fileName)}</Name>
 																			<Description>
 																			</Description>
 																		</Report>
-																	"
+																	".Replace("\t", string.Empty).Trim()
 																	);
 										// y lo abre en el editor
 										ReportingSolutionViewModel.SolutionViewModel.MainController.HostPluginsController.OpenFile(fileName);

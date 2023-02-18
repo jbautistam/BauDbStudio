@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Controls;
 
-using Bau.Libraries.BauMvvm.Views.Wpf.Forms.Trees;
 using Bau.Libraries.DbStudio.ViewModels.Details.Queries;
 
 namespace Bau.Libraries.DbStudio.Views.Queries

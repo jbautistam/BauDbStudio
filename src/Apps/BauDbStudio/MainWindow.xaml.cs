@@ -39,6 +39,7 @@ namespace Bau.DbStudio
 			DbStudioViewsManager.AddPlugin(new Libraries.PasswordManager.Plugin.PasswordManagerPlugin());
 			DbStudioViewsManager.AddPlugin(new Libraries.ToDoManager.Plugin.ToDoManagerPlugin());
 			DbStudioViewsManager.AddPlugin(new Libraries.StructuredFilesStudio.Views.StructuredFilesStudioViewManager());
+			DbStudioViewsManager.AddPlugin(new Libraries.MultimediaFiles.Plugin.MultimediaFilesPlugin());
 			DbStudioViewsManager.Initialize();
 			// Inicializa el ViewModel
 			DataContext = ViewModel = DbStudioViewsManager.PluginsStudioViewModel;

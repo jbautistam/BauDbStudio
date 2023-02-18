@@ -12,6 +12,7 @@
     <PackageReference Include="Bau.Libraries.LibMarkup" Version="1.1.2" />
     <PackageReference Include="FluentAssertions" Version="6.8.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.1" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
     <PackageReference Include="xunit" Version="2.4.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -28,16 +29,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Data\ReportingSales\Reporting-Schema.Reporting Sales - Nuñez de Arenas.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="Data\ReportingSales\Requests\Response_1.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Data\ReportingSales\Requests\Request_1.xml">
+    <None Update="Data\ReportingSales\Test_01.report.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Data\ReportingSales\SalesAnalysisDateWithTransactions-NewSchema.report.xml">
+    <None Update="Data\ReportingSales\Test-Reporting-Schema.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\ReportingSales\Requests\Request_1.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

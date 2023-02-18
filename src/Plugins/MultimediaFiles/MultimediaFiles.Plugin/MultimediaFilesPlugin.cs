@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using Bau.Libraries.ComicsReader.ViewModel;
+using Bau.Libraries.MultimediaFiles.ViewModel;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Models;
 using Bau.Libraries.PluginsStudio.Views.Base.Interfaces;
 using Bau.Libraries.PluginsStudio.Views.Base.Models;
 
-namespace Bau.Libraries.ComicsReader.Plugin
+namespace Bau.Libraries.MultimediaFiles.Plugin
 {
 	/// <summary>
-	///		Plugin para el lector de cómics
+	///		Plugin para el lector de blogs
 	/// </summary>
-	public class ComicReaderPlugin : IPlugin
+	public class MultimediaFilesPlugin : IPlugin
 	{ 
 		/// <summary>
 		///		Inicializa el manager de vistas del lector de cómics
@@ -19,7 +19,7 @@ namespace Bau.Libraries.ComicsReader.Plugin
 		public void Initialize(IAppViewsController appViewsController, PluginsStudio.ViewModels.Base.Controllers.IPluginsController pluginController)
 		{
 			AppViewsController = appViewsController;
-			MainViewModel = new ComicReaderViewModel(new Controllers.ComicReaderController(this, pluginController));
+			MainViewModel = new MultimediaFilesViewModel(new Controllers.MultimediaFilesController(this, pluginController));
 			MainViewModel.Initialize();
 		}
 
@@ -52,7 +52,16 @@ namespace Bau.Libraries.ComicsReader.Plugin
 		/// </summary>
 		public List<PaneModel> GetPanes()
 		{
-			return new();
+			return new()
+						{
+							new PaneModel
+								{
+									Id = "MultimediaFiles",
+									Title = "Files multimedia",
+									Position = PaneModel.PositionType.Right,
+									View = new Views.MediaPlayerView(MainViewModel.MediaFileListViewModel)
+								}
+						 };
 		}
 
 		/// <summary>
@@ -82,27 +91,36 @@ namespace Bau.Libraries.ComicsReader.Plugin
 		/// <summary>
 		///		Obtiene las extensiones de archivo asociadas al plugin
 		/// </summary>
-		public List<PluginsStudio.ViewModels.Base.Models.FileAssignedModel> GetFilesAssigned()
+		public List<FileAssignedModel> GetFilesAssigned()
 		{
-			List<PluginsStudio.ViewModels.Base.Models.FileAssignedModel> files = new List<FileAssignedModel>();
+			return new() {
+							GetIcon(true, ".mp3"),
+							GetIcon(true, ".wav"),
+							GetIcon(false, ".mp4"),
+							GetIcon(false, ".mkv"),
+							GetIcon(false, ".avi")
+						 };
 
-				// Asigna las extensions
-				files.Add(GetIcon(".cbr"));
-				files.Add(GetIcon(".cbz"));
-				files.Add(GetIcon(".zip"));
-				files.Add(GetIcon(".rar"));
-				// Devuelve la lista de archivos asignados
-				return files;
-
-				FileAssignedModel GetIcon(string extension)
+				// Obtiene el icono asociado a una extensión
+				FileAssignedModel GetIcon(bool isAudio, string extension)
 				{
-					return new FileAssignedModel
-									{
-										Name = $"Comic {extension}",
-										FileExtension = extension,
-										Icon = "/ComicsReader.Plugin;component/Resources/FileCbr.png",
-										CanCreate = false
-									};
+					if (isAudio)
+						return new FileAssignedModel
+										{
+											Name = $"Audio {extension}",
+											FileExtension = extension,
+											Icon = "/MultimediaFiles.Plugin;component/Resources/AudioFile.png",
+											CanCreate = false
+										};
+					else
+						return new FileAssignedModel
+										{
+											Name = $"Vídeo {extension}",
+											FileExtension = extension,
+											Icon = "/MultimediaFiles.Plugin;component/Resources/VideoFile.png",
+											CanCreate = false
+										};
+
 				}
 		}
 
@@ -122,6 +140,6 @@ namespace Bau.Libraries.ComicsReader.Plugin
 		/// <summary>
 		///		ViewModel principal
 		/// </summary>
-		public ComicReaderViewModel MainViewModel { get; private set; }
+		public MultimediaFilesViewModel MainViewModel { get; private set; }
 	}
 }

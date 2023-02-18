@@ -48,14 +48,14 @@ namespace Bau.Libraries.ComicsReader.ViewModel.Reader
 			List<string> files = new();
 
 				// Crea el directorio temporal
-				Bau.Libraries.LibHelper.Files.HelperFiles.MakePath(tempPath);
+				LibHelper.Files.HelperFiles.MakePath(tempPath);
 				// Asigna el manejador de eventos
 				compressor.Progress += (sender, args) => files.Add(args.FileName);
 				compressor.End += (sender, args) => AddPages(files);
 				// Descomprime los archivos
 				try
 				{
-					await System.Threading.Tasks.Task.Run(() => compressor.Uncompress(FileName, tempPath));
+					await Task.Run(() => compressor.Uncompress(FileName, tempPath));
 				}
 				catch (Exception exception)
 				{
@@ -71,7 +71,7 @@ namespace Bau.Libraries.ComicsReader.ViewModel.Reader
 		private void AddPages(List<string> files)
 		{
 			foreach (string file in files)
-				if (Bau.Libraries.LibHelper.Files.HelperFiles.CheckIsImage(file))
+				if (LibHelper.Files.HelperFiles.CheckIsImage(file))
 					ComicPages.Add(new BookPageViewModel(this, file, file, ComicPages.Items.Count + 1), false);
 		}
 
