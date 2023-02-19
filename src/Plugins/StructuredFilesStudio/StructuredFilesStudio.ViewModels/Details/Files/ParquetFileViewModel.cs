@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Data;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Bau.Libraries.LibParquetFiles.Readers;
 
@@ -15,18 +17,20 @@ namespace Bau.Libraries.StructuredFilesStudio.ViewModels.Details.Files
 		/// <summary>
 		///		Carga la página del archivo
 		/// </summary>
-		protected override DataTable LoadFile(bool countRecords, out long totalRecords)
+		protected override async Task<(DataTable table, long totalRecords)> LoadFileAsync(bool countRecords, CancellationToken cancellationToken)
 		{
-			return new ParquetDataTableReader().ParquetReaderToDataTable(FileName, (ActualPage - 1) * RecordsPerPage, RecordsPerPage, out totalRecords);
+			return await new ParquetDataTableReader().ParquetReaderToDataTableAsync(FileName, (ActualPage - 1) * RecordsPerPage, RecordsPerPage, cancellationToken);
 		}
 
 		/// <summary>
 		///		Graba el archivo
 		/// </summary>
-		protected override void SaveFile(LibLogger.Models.Log.BlockLogModel block, string fileNameTarget)
+		protected override async Task SaveFileAsync(LibLogger.Models.Log.BlockLogModel block, string fileNameTarget, CancellationToken cancellationToken)
 		{
 			LibCsvFiles.Controllers.CsvDataReaderWriter writer = new LibCsvFiles.Controllers.CsvDataReaderWriter();
 
+				// Evita las advertencias
+				await Task.Delay(1);
 				// Escribe el archivo
 				using (ParquetDataReader reader = new ParquetDataReader())
 				{
@@ -46,8 +50,9 @@ namespace Bau.Libraries.StructuredFilesStudio.ViewModels.Details.Files
 		/// <summary>
 		///		Abre las propiedades del archivo
 		/// </summary>
-		protected override void OpenFileProperties()
+		protected override async Task OpenFilePropertiesAsync(CancellationToken cancellationToken)
 		{
+			await Task.Delay(1);
 			SolutionViewModel.MainController.OpenDialog(new ParquetFilePropertiesViewModel(SolutionViewModel, this));
 		}
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Bau.Libraries.BauMvvm.ViewModels;
@@ -42,32 +43,36 @@ namespace Bau.Libraries.StructuredFilesStudio.ViewModels.Details.Files
 			Records = 0;
 			RecordsPerPage = 10_000;
 			// Asigna los comandos
-			NextPageCommand = new BaseCommand(_ => GoToPage(ActualPage + 1), _ => ActualPage < Pages)
+			NextPageCommand = new BaseCommand(_ => Task.Run(async () => await GoToPageAsync(ActualPage + 1, CancellationToken.None)), 
+											  _ => ActualPage < Pages)
 										.AddListener(this, nameof(Records))
 										.AddListener(this, nameof(RecordsPerPage));
-			PreviousPageCommand = new BaseCommand(_ => GoToPage(ActualPage - 1), _ => ActualPage > 1)
+			PreviousPageCommand = new BaseCommand(_ => Task.Run(async () => await GoToPageAsync(ActualPage - 1, CancellationToken.None)), 
+												  _ => ActualPage > 1)
 										.AddListener(this, nameof(Records))
 										.AddListener(this, nameof(RecordsPerPage));
-			FirstPageCommand = new BaseCommand(_ => GoToPage(1), _ => ActualPage > 1)
+			FirstPageCommand = new BaseCommand(_ => Task.Run(async () => await GoToPageAsync(1, CancellationToken.None)), 
+											   _ => ActualPage > 1)
 										.AddListener(this, nameof(Records))
 										.AddListener(this, nameof(RecordsPerPage));
-			LastPageCommand = new BaseCommand(_ => GoToPage(Pages), _ => ActualPage < Pages)
+			LastPageCommand = new BaseCommand(_ => Task.Run(async () => await GoToPageAsync(Pages, CancellationToken.None)), 
+											  _ => ActualPage < Pages)
 										.AddListener(this, nameof(Records))
 										.AddListener(this, nameof(RecordsPerPage));
-			FilePropertiesCommand = new BaseCommand(_ => OpenFileProperties());
+			FilePropertiesCommand = new BaseCommand(_ => Task.Run(async () => await OpenFilePropertiesAsync(CancellationToken.None)));
 		}
 
 		/// <summary>
 		///		Carga el archivo
 		/// </summary>
-		public void LoadFile()
+		public async Task LoadFileAsync(CancellationToken cancellationToken)
 		{
 			long totalRecords = 0;
 
 				// Carga el archivo
 				try
 				{
-					DataResults = LoadFile(Records == 0, out totalRecords);
+					(DataResults, totalRecords) = await LoadFileAsync(Records == 0, cancellationToken);
 				}
 				catch (Exception exception)
 				{
@@ -82,12 +87,12 @@ namespace Bau.Libraries.StructuredFilesStudio.ViewModels.Details.Files
 		/// <summary>
 		///		Carga un archivo y obtiene una tabla paginada
 		/// </summary>
-		protected abstract DataTable LoadFile(bool countRecords, out long totalRecords);
+		protected abstract Task<(DataTable table, long totalRecords)> LoadFileAsync(bool countRecords, CancellationToken cancellationToken);
 
 		/// <summary>
 		///		Abre las propiedades del archivo
 		/// </summary>
-		protected abstract void OpenFileProperties();
+		protected abstract Task OpenFilePropertiesAsync(CancellationToken cancellationToken);
 
 		/// <summary>
 		///		Calcula el texto de las páginas formateadas
@@ -100,10 +105,10 @@ namespace Bau.Libraries.StructuredFilesStudio.ViewModels.Details.Files
 		/// <summary>
 		///		Carga la siguiente página
 		/// </summary>
-		private void GoToPage(int newPage)
+		private async Task GoToPageAsync(int newPage, CancellationToken cancellationToken)
 		{
 			ActualPage = newPage;
-			LoadFile();
+			await LoadFileAsync(cancellationToken);
 		}
 
 		/// <summary>
@@ -130,7 +135,7 @@ namespace Bau.Libraries.StructuredFilesStudio.ViewModels.Details.Files
 							// Graba el archivo
 							try
 							{
-								Task.Run(() => SaveFile(block, fileName));
+								Task.Run(async () => await SaveFileAsync(block, fileName, CancellationToken.None));
 							}
 							catch (Exception exception)
 							{
@@ -144,7 +149,7 @@ namespace Bau.Libraries.StructuredFilesStudio.ViewModels.Details.Files
 		/// <summary>
 		///		Graba el archivo
 		/// </summary>
-		protected abstract void SaveFile(LibLogger.Models.Log.BlockLogModel block, string fileName);
+		protected abstract Task SaveFileAsync(LibLogger.Models.Log.BlockLogModel block, string fileName, CancellationToken cancellationToken);
 
 		/// <summary>
 		///		Obtiene el mensaje que se debe mostrar al cerrar la ventana

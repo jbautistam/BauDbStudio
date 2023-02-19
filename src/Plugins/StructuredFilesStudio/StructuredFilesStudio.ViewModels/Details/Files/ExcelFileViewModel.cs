@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Data;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Bau.Libraries.LibExcelFiles.Data;
 using Bau.Libraries.LibParquetFiles.Writers;
@@ -16,21 +18,23 @@ namespace Bau.Libraries.StructuredFilesStudio.ViewModels.Details.Files
 		/// <summary>
 		///		Carga el archivo
 		/// </summary>
-		protected override DataTable LoadFile(bool countRecords, out long totalRecords)
+		protected override async Task<(DataTable table, long totalRecords)> LoadFileAsync(bool countRecords, CancellationToken cancellationToken)
 		{
-			// Inicializa los argumentos de salida
-			if (countRecords)
-				totalRecords = new ExcelDataTableReader().CountRows(FileName, 1, true);
-			else
-				totalRecords = 0;
-			// Carga el archivo
-			return new ExcelDataTableReader().LoadFile(FileName, 1, (ActualPage - 1) * RecordsPerPage, RecordsPerPage, true);
+			long totalRecords = 0;
+
+				// Evita las advertencias
+				await Task.Delay(1);
+				// Inicializa los argumentos de salida
+				if (countRecords)
+					totalRecords = new ExcelDataTableReader().CountRows(FileName, 1, true);
+				// Carga el archivo
+				return (new ExcelDataTableReader().LoadFile(FileName, 1, (ActualPage - 1) * RecordsPerPage, RecordsPerPage, true), totalRecords);
 		}
 
 		/// <summary>
 		///		Graba el archivo
 		/// </summary>
-		protected override void SaveFile(LibLogger.Models.Log.BlockLogModel block, string fileName)
+		protected override async Task SaveFileAsync(LibLogger.Models.Log.BlockLogModel block, string fileName, CancellationToken cancellationToken)
 		{
 			ExcelDataTableReader excelReader = new ExcelDataTableReader();
 			long rows = excelReader.CountRows(FileName, 1, true);
@@ -38,12 +42,12 @@ namespace Bau.Libraries.StructuredFilesStudio.ViewModels.Details.Files
 				// Graba el archivo
 				using (IDataReader reader = excelReader.LoadFile(FileName, 1, 0, rows, true).CreateDataReader())
 				{
-					using (ParquetWriter writer = new ParquetWriter(200_000))
+					await using (ParquetDataWriterAsync writer = new ParquetDataWriterAsync(200_000))
 					{
 						// Log
 						writer.Progress += (sender, args) => block.Progress(System.IO.Path.GetFileName(fileName), args.Records, args.Records + 1);
 						// Escribe el archivo
-						writer.Write(fileName, reader);
+						await writer.WriteAsync(fileName, reader, cancellationToken);
 					}
 				}
 				// Log
@@ -55,9 +59,10 @@ namespace Bau.Libraries.StructuredFilesStudio.ViewModels.Details.Files
 		/// <summary>
 		///		Abre las propiedades del archivo
 		/// </summary>
-		protected override void OpenFileProperties()
+		protected override async Task OpenFilePropertiesAsync(CancellationToken cancellationToken)
 		{
 			// No hace nada, sólo implementa la interface
+			await Task.Delay(1);
 		}
 
 		/// <summary>

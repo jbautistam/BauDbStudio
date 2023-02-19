@@ -42,7 +42,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Export
 						// Log
 						block.Info($"Start export table {table.FullName}");
 						// Exporta la tabla
-						await Task.Run(() => ExportTable(block, connection, table, path, formatType, blockSize));
+						await ExportTableAsync(block, connection, table, path, formatType, blockSize, cancellationToken);
 						// Log
 						block.Info($"End export table {table.FullName}");
 					}
@@ -58,8 +58,8 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Export
 		///		Exporta una tabla particionando la consulta en varios <see cref="IDataReader"/> (porque por ejemplo spark carga todo el dataReader en memoria
 		///	y da un error de OutOfMemory)
 		/// </summary>
-		private void ExportTable(BlockLogModel block, ConnectionModel connection, ConnectionTableModel table, string path, 
-								 SolutionManager.FormatType formatType, long blockSize)
+		private async Task ExportTableAsync(BlockLogModel block, ConnectionModel connection, ConnectionTableModel table, string path, 
+											SolutionManager.FormatType formatType, long blockSize, CancellationToken cancellationToken)
 		{
 			IDbProvider provider = Manager.DbScriptsManager.GetDbProvider(connection);
 			long records = 0;
@@ -91,7 +91,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Export
 						//Log
 						block.Info($"Reading page {actualPage + 1} / {records / blockSize + 1:#,##0} ({records:#,##0}) from table {table.Name}");
 						// Exporta la tabla
-						ExportTable(block, provider, sql, fileName, formatType, connection.TimeoutExecuteScript);
+						await ExportTableAsync(block, provider, sql, fileName, formatType, connection.TimeoutExecuteScript, cancellationToken);
 				}
 		}
 
@@ -116,7 +116,8 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Export
 		/// <summary>
 		///		Exporta una tabla
 		/// </summary>
-		private void ExportTable(BlockLogModel block, IDbProvider provider, string sql, string fileName, SolutionManager.FormatType formatType, TimeSpan timeout)
+		private async Task ExportTableAsync(BlockLogModel block, IDbProvider provider, string sql, string fileName, 
+											SolutionManager.FormatType formatType, TimeSpan timeout, CancellationToken cancellationToken)
 		{
 			using (IDataReader reader = provider.ExecuteReader(sql, null, CommandType.Text, timeout))
 			{
@@ -126,7 +127,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Export
 							ExportToCsv(block, fileName, reader);
 						break;
 					case SolutionManager.FormatType.Parquet:
-							ExportToParquet(block, fileName, reader);
+							await ExportToParquetAsync(block, fileName, reader, cancellationToken);
 						break;
 				}
 			}
@@ -148,14 +149,15 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Export
 		/// <summary>
 		///		Exporta la tabla a parquet
 		/// </summary>
-		private void ExportToParquet(BlockLogModel block, string fileName, IDataReader reader)
+		private async Task ExportToParquetAsync(BlockLogModel block, string fileName, IDataReader reader, CancellationToken cancellationToken)
 		{
-			LibParquetFiles.Writers.ParquetWriter writer = new LibParquetFiles.Writers.ParquetWriter(200_000);
-
+			await using (LibParquetFiles.Writers.ParquetDataWriterAsync writer = new LibParquetFiles.Writers.ParquetDataWriterAsync(200_000))
+			{
 				// Asigna el evento de progreso
 				writer.Progress += (sender, args) => block.Progress(System.IO.Path.GetFileName(fileName), args.Records, args.Records + 1);
 				// Graba el archivo
-				writer.Write(fileName, reader);
+				await writer.WriteAsync(fileName, reader, cancellationToken);
+			}
 		}
 
 		/// <summary>
