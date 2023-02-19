@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
-	  <TargetFramework>net6.0</TargetFramework>
+	  <TargetFramework>net7.0</TargetFramework>
     <RootNamespace>Bau.Libraries.DbStudio.Application</RootNamespace>
     <AssemblyName>DbStudio.Application</AssemblyName>
   </PropertyGroup>

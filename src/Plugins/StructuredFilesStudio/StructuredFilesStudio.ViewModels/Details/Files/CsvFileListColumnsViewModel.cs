@@ -33,7 +33,7 @@ namespace Bau.Libraries.StructuredFilesStudio.ViewModels.Details.Files
 			// Crea los elementos de la lista
 			Items = new ObservableCollection<CsvFileListItemColumnViewModel>();
 			// Carga el archivo
-			FileViewModel.LoadFile();
+			System.Threading.Tasks.Task.Run(async () => await FileViewModel.LoadFileAsync(System.Threading.CancellationToken.None)).Wait();
 			// Añade las columnas
 			foreach (System.Data.DataColumn column in FileViewModel.DataResults.Columns)
 				Items.Add(new CsvFileListItemColumnViewModel(this, column.ColumnName));

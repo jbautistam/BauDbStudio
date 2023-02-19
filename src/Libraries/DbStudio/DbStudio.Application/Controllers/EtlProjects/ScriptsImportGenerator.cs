@@ -5,8 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Bau.Libraries.LibHelper.Extensors;
-using Bau.Libraries.LibDataStructures.Collections;
-using Bau.Libraries.DbStudio.Models.Connections;
 using Bau.Libraries.LibDbProviders.Base;
 
 namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
@@ -43,7 +41,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 
 						// Recorre los archivos
 						foreach (string fileName in System.IO.Directory.GetFiles(Options.PathInputFiles, "*.parquet"))
-							content += PrepareImport(generator, fileName);
+							content += await PrepareImportAsync(generator, fileName, cancellationToken);
 						// Graba el archivo
 						generator.Save(System.IO.Path.GetFileName(Options.OutputFileName), content);
 				}
@@ -54,7 +52,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 		/// <summary>
 		///		Prepara las importaciones del archivo parquet
 		/// </summary>
-		private string PrepareImport(EtlFilesGenerator generator, string fileName)
+		private async Task<string> PrepareImportAsync(EtlFilesGenerator generator, string fileName, CancellationToken cancellationToken)
 		{
 			string tableName = $"{Options.PrefixOutputTable}{System.IO.Path.GetFileNameWithoutExtension(fileName)}";
 			string content = string.Empty;
@@ -63,7 +61,8 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 				content += generator.GetSqlDropTable(Options.DataBaseVariable, tableName) + Environment.NewLine;
 				content += generator.GetSqlSeparator();
 				// Instrucción de crear la tabla
-				content += generator.GetSqlCreateTable(Options.DataBaseVariable, tableName, GetSqlReadFile(generator, fileName));
+				content += generator.GetSqlCreateTable(Options.DataBaseVariable, tableName,
+													   await GetSqlReadFileAsync(generator, fileName, cancellationToken));
 				content += generator.GetSqlSeparator();
 				// Devuelve el contenido del script
 				return content;
@@ -72,9 +71,9 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 		/// <summary>
 		///		Obtiene la cadena SQL de lectura de archivo
 		/// </summary>
-		private string GetSqlReadFile(EtlFilesGenerator generator, string fileName)
+		private async Task<string> GetSqlReadFileAsync(EtlFilesGenerator generator, string fileName, CancellationToken cancellationToken)
 		{
-			DataTable table = new LibParquetFiles.Readers.ParquetDataTableReader().ParquetReaderToDataTable(fileName, 0, 50, out long records);
+			(DataTable table, long records) = await new LibParquetFiles.Readers.ParquetDataTableReader().ParquetReaderToDataTableAsync(fileName, 0, 50, cancellationToken);
 			string sql = string.Empty;
 				
 				// Si no hay filas para inferir el tipo, añade un comentario

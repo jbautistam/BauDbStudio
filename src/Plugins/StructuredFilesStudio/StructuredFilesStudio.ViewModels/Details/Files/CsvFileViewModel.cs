@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Bau.Libraries.LibCsvFiles;
 using Bau.Libraries.LibParquetFiles.Writers;
@@ -17,28 +19,33 @@ namespace Bau.Libraries.StructuredFilesStudio.ViewModels.Details.Files
 		/// <summary>
 		///		Carga el archivo
 		/// </summary>
-		protected override DataTable LoadFile(bool countRecords, out long totalRecords)
+		protected override async Task<(DataTable table, long totalRecords)> LoadFileAsync(bool countRecords, CancellationToken cancellationToken)
 		{
-			return new LibCsvFiles.Controllers.CsvDataTableReader(FileParameters)
-													.Load(FileName, ActualPage, RecordsPerPage, countRecords, out totalRecords);
+			DataTable table = new LibCsvFiles.Controllers.CsvDataTableReader(FileParameters)
+										.Load(FileName, ActualPage, RecordsPerPage, countRecords, out long totalRecords);
+
+				// Evita las advertencias
+				await Task.Delay(1);
+				// Devuelve la tabla
+				return (table, totalRecords);
 		}
 
 		/// <summary>
 		///		Graba el archivo
 		/// </summary>
-		protected override void SaveFile(LibLogger.Models.Log.BlockLogModel block, string fileName)
+		protected override async Task SaveFileAsync(LibLogger.Models.Log.BlockLogModel block, string fileName, CancellationToken cancellationToken)
 		{
 			// Graba el archivo
 			using (CsvReader reader = new CsvReader(FileParameters, FileColumns))
 			{
-				using (ParquetWriter writer = new ParquetWriter(200_000))
+				await using (ParquetDataWriterAsync writer = new ParquetDataWriterAsync(200_000))
 				{
 					// Log
 					writer.Progress += (sender, args) => block.Progress(System.IO.Path.GetFileName(fileName), args.Records, args.Records + 1);
 					// Abre el archivo
 					reader.Open(FileName);
 					// Escribe el archivo
-					writer.Write(fileName, reader);
+					await writer.WriteAsync(fileName, reader, cancellationToken);
 				}
 			}
 			// Log
@@ -50,10 +57,10 @@ namespace Bau.Libraries.StructuredFilesStudio.ViewModels.Details.Files
 		/// <summary>
 		///		Abre las propiedades del archivo
 		/// </summary>
-		protected override void OpenFileProperties()
+		protected override async Task OpenFilePropertiesAsync(CancellationToken cancellationToken)
 		{
 			if (SolutionViewModel.MainController.OpenDialog(new CsvFilePropertiesViewModel(SolutionViewModel, this)) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
-				LoadFile();
+				await LoadFileAsync(cancellationToken);
 		}
 
 		/// <summary>

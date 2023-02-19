@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 
 using Bau.Libraries.StructuredFilesStudio.ViewModels.Details.Files;
@@ -19,9 +21,9 @@ namespace Bau.Libraries.StructuredFilesStudio.Views.Files
 		/// <summary>
 		///		Inicializa el formulario
 		/// </summary>
-		private void InitForm()
+		private async Task InitFormAsync()
 		{
-			ViewModel.LoadFile();
+			await ViewModel.LoadFileAsync(CancellationToken.None);
 		}
 
 		/// <summary>
@@ -29,9 +31,9 @@ namespace Bau.Libraries.StructuredFilesStudio.Views.Files
 		/// </summary>
 		public BaseFileViewModel ViewModel { get; }
 
-		private void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
+		private async void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
 		{
-			InitForm();
+			await InitFormAsync();
 		}
 
 		private void DataGrid_LoadingRow(object sender, DataGridRowEventArgs e)
