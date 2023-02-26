@@ -1,28 +1,15 @@
-﻿namespace Bau.Libraries.ToDoManager.Application;
+﻿using System;
 
-/// <summary>
-///		Clase principal del manager de tareas
-/// </summary>
-public class ToDoManager
+namespace Bau.Libraries.ToDoManager.Application
 {
 	/// <summary>
-	///		Carga los datos de un archivo
+	///		Manager de la aplicación
 	/// </summary>
-	public void Load(string fileName)
+	public class ToDoManager
 	{
-		File = new Repository.ToDoRepository().Load(fileName);
+		/// <summary>
+		///		Manager de notas
+		/// </summary>
+		public ToDoNotesManager NotesManager { get; } = new();
 	}
-
-	/// <summary>
-	///		Graba el archivo
-	/// </summary>
-	public void Save(string fileName)
-	{
-		new Repository.ToDoRepository().Save(fileName, File);
-	}
-
-	/// <summary>
-	///		Archivo con los elementos de tarea
-	/// </summary>
-	public Models.FileModel File { get; private set; } = new();
 }

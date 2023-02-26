@@ -6,9 +6,9 @@
     <RootNamespace>Bau.DbStudio</RootNamespace>
     <Authors>Jose Antonio Bautista</Authors>
     <ApplicationIcon>Resources\BauDbStudio.ico</ApplicationIcon>
-    <AssemblyVersion>1.0.26.0</AssemblyVersion>
-    <FileVersion>1.0.26.0</FileVersion>
-    <Version>1.0.26</Version>
+    <AssemblyVersion>1.0.27.0</AssemblyVersion>
+    <FileVersion>1.0.27.0</FileVersion>
+    <Version>1.0.27</Version>
     <PackageProjectUrl>https://github.com/jbautistam/BauDbStudio</PackageProjectUrl>
     <RepositoryUrl>https://github.com/jbautistam/BauDbStudio</RepositoryUrl>
   </PropertyGroup>
@@ -47,6 +47,7 @@
     <None Remove="Resources\Images\FileImage.png" />
     <None Remove="Resources\Images\FileJson.png" />
     <None Remove="Resources\Images\FileMd.png" />
+    <None Remove="Resources\Images\FilePdf.png" />
     <None Remove="Resources\Images\FilePowershell.png" />
     <None Remove="Resources\Images\FilePython.png" />
     <None Remove="Resources\Images\FileSql.png" />
@@ -114,6 +115,7 @@
     <Resource Include="Resources\Images\Export.png" />
     <Resource Include="Resources\Images\FileImage.png" />
     <Resource Include="Resources\Images\FileMd.png" />
+    <Resource Include="Resources\Images\FilePdf.png" />
     <Resource Include="Resources\Images\FileTxt.png" />
     <Resource Include="Resources\Images\Filter.png" />
     <Resource Include="Resources\Images\Loading.png" />

@@ -16,6 +16,11 @@ namespace Bau.Libraries.PluginsStudio.Views.Base.Interfaces
 		SystemControllerEnums.ResultType OpenDialog(System.Windows.Window window);
 
 		/// <summary>
+		///		Abre una ventana no modal
+		/// </summary>
+		void OpenNoModalDialog(System.Windows.Window window);
+
+		/// <summary>
 		///		Abre un documento
 		/// </summary>
 		void OpenDocument(System.Windows.Controls.UserControl userControl, IDetailViewModel detailViewModel);

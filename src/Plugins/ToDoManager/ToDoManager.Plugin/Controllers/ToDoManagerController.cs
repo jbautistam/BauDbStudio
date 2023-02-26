@@ -1,4 +1,7 @@
-﻿using Bau.Libraries.BauMvvm.ViewModels.Controllers;
+﻿using System.Collections.Generic;
+using System.Windows;
+
+using Bau.Libraries.BauMvvm.ViewModels.Controllers;
 
 namespace Bau.Libraries.ToDoManager.Plugin.Controllers;
 
@@ -37,14 +40,31 @@ public class ToDoManagerController : ViewModel.Controllers.IToDoManagerControlle
 		SystemControllerEnums.ResultType result = SystemControllerEnums.ResultType.No;
 
 			// Abre la ventana
-			//switch (dialogViewModel)
-			//{
-			//	case ViewModel.Generator.GeneratorViewModel viewModel:
-			//			result = TaskManagerPlugin.AppViewsController.OpenDialog(new Views.GeneratorView(viewModel));
-			//		break;
-			//}
+			switch (dialogViewModel)
+			{
+				case ViewModel.Notes.NoteViewModel viewModel:
+						Window view = new Views.Notes.NoteView(viewModel);
+
+							// Abre la ventana de forma no modal
+							TaskManagerPlugin.AppViewsController.OpenNoModalDialog(view);
+							// Añade la ventana a la vista
+							WindowNotes.Add(view);
+					break;
+			}
 			// Devuelve el resultado
 			return result;
+	}
+
+	/// <summary>
+	///		Oculta las ventanas de notas
+	/// </summary>
+	public void HideNotes()
+	{
+		// Ocultas las ventanas de notas
+		foreach (Window window in WindowNotes)
+			window.Close();
+		// Limpia la lista
+		WindowNotes.Clear();
 	}
 
 	/// <summary>
@@ -56,4 +76,9 @@ public class ToDoManagerController : ViewModel.Controllers.IToDoManagerControlle
 	///		Controlador de plugin
 	/// </summary>
 	public PluginsStudio.ViewModels.Base.Controllers.IPluginsController PluginController { get; }
+
+	/// <summary>
+	///		Ventanas de notas
+	/// </summary>
+	private List<Window> WindowNotes { get; } = new();
 }

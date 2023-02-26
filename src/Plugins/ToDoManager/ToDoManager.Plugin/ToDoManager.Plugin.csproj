@@ -11,22 +11,42 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Blue.png" />
+    <None Remove="Resources\Close.png" />
     <None Remove="Resources\Copy.png" />
+    <None Remove="Resources\Green.png" />
+    <None Remove="Resources\Pin.png" />
+    <None Remove="Resources\Red.png" />
     <None Remove="Resources\Task.png" />
     <None Remove="Resources\ToDoFile.png" />
+    <None Remove="Resources\Trash.png" />
+    <None Remove="Resources\White.png" />
+    <None Remove="Resources\Yellow.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Blue.png" />
+    <Resource Include="Resources\Close.png" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\Controls\WPF\BauControls\src\BauControls.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.Views\BauMvvm.Views.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibSystem.Windows\LibSystem.Windows.csproj" />
     <ProjectReference Include="..\..\..\Libraries\PluginsStudio\PluginsStudio.Views.Base\PluginsStudio.Views.Base.csproj" />
     <ProjectReference Include="..\ToDoManager.ViewModel\ToDoManager.ViewModel.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Resources\Copy.png" />
+    <Resource Include="Resources\Green.png" />
+    <Resource Include="Resources\Pin.png" />
+    <Resource Include="Resources\Red.png" />
     <Resource Include="Resources\Task.png" />
     <Resource Include="Resources\ToDoFile.png" />
+    <Resource Include="Resources\Trash.png" />
+    <Resource Include="Resources\White.png" />
+    <Resource Include="Resources\Yellow.png" />
   </ItemGroup>
 
   <ItemGroup>

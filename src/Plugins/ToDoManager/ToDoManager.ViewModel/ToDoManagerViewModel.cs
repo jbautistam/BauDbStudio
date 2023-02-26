@@ -28,7 +28,7 @@ public class ToDoManagerViewModel : BauMvvm.ViewModels.BaseObservableObject
 	/// </summary>
 	public void Load(string path)
 	{
-		// no hace nada, simplemente implementa la interface
+		ToDoManager.NotesManager.Load(path);
 	}
 
 	/// <summary>
@@ -36,8 +36,7 @@ public class ToDoManagerViewModel : BauMvvm.ViewModels.BaseObservableObject
 	/// </summary>
 	public bool OpenFile(string fileName)
 	{
-		if (!string.IsNullOrWhiteSpace(fileName) && 
-			(fileName.EndsWith(ToDoFileExtension, StringComparison.CurrentCultureIgnoreCase)))
+		if (!string.IsNullOrWhiteSpace(fileName) && fileName.EndsWith(ToDoFileExtension, StringComparison.CurrentCultureIgnoreCase))
 		{
 			Reader.ToDoFileViewModel viewModel = new(this, fileName);
 
@@ -52,7 +51,38 @@ public class ToDoManagerViewModel : BauMvvm.ViewModels.BaseObservableObject
 	}
 
 	/// <summary>
+	///		Muestra las notas
+	/// </summary>
+	public void ShowNotes()
+	{
+		if (NotesVisible)
+			ViewsController.HideNotes();
+		else
+			foreach (Application.Models.Notes.NoteModel note in ToDoManager.NotesManager.Notes.Notes)
+				ViewsController.OpenDialog(new Notes.NoteViewModel(this, note, false));
+		NotesVisible = !NotesVisible;
+	}
+
+	/// <summary>
+	///		Crea una nueva nota
+	/// </summary>
+	public void CreateNewNote()
+	{
+		ViewsController.OpenDialog(new Notes.NoteViewModel(this, new Application.Models.Notes.NoteModel(), true));
+	}
+
+	/// <summary>
 	///		Controlador de vistas de aplicación
 	/// </summary>
 	public Controllers.IToDoManagerController ViewsController { get; }
+
+	/// <summary>
+	///		Manager de la aplicación ToDo
+	/// </summary>
+	public Application.ToDoManager ToDoManager { get; } = new();
+
+	/// <summary>
+	///		Indica si las notas están visibles
+	/// </summary>
+	public bool NotesVisible { get; private set; }
 }

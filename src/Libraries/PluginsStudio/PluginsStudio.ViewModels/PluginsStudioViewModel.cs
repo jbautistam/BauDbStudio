@@ -75,6 +75,8 @@ namespace Bau.Libraries.PluginsStudio.ViewModels
 		{
 			if (IsImage(fileName))
 				PluginsStudioController.OpenWindow(new Files.ImageViewModel(this, fileName));
+			else if (IsBrowserFile(fileName))
+				OpenWebBrowser(fileName);
 			else
 				PluginsStudioController.OpenWindow(new Files.FileTextViewModel(this, fileName));
 		}
@@ -85,6 +87,14 @@ namespace Bau.Libraries.PluginsStudio.ViewModels
 		public void OpenWebBrowser(string url)
 		{
 			PluginsStudioController.OpenWindow(new Tools.Web.WebViewModel(this, url));
+		}
+
+		/// <summary>
+		///		Comprueba si es un archivo que se puede abrir con el explorador
+		/// </summary>
+		private bool IsBrowserFile(string fileName)
+		{
+			return fileName.EndsWith(".pdf", StringComparison.CurrentCultureIgnoreCase);
 		}
 
 		/// <summary>

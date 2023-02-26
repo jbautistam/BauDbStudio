@@ -3,7 +3,7 @@
 namespace Bau.Libraries.ToDoManager.Application.Exceptions;
 
 /// <summary>
-///		Excepciones de <see cref="ToDoManager"/>
+///		Excepciones de <see cref="ToDoFileManager"/>
 /// </summary>
 public class ToDoFileException : Exception
 {

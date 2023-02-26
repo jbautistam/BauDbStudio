@@ -131,7 +131,7 @@ namespace Bau.DbStudio.Controllers
 		{
 			try
 			{
-				Bau.Libraries.LibHelper.Files.HelperFiles.SaveTextFile(fileName, GetPluginsConfiguration());
+				Libraries.LibHelper.Files.HelperFiles.SaveTextFile(fileName, GetPluginsConfiguration());
 			}
 			catch (Exception exception)
 			{

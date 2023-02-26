@@ -27,6 +27,14 @@ namespace Bau.DbStudio.Controllers
 		}
 
 		/// <summary>
+		///		Abre una ventana no modal
+		/// </summary>
+		public void OpenNoModalDialog(System.Windows.Window window)
+		{
+			DbStudioViewsManager.MainWindowsController.HostHelperController.ShowNoModal(DbStudioViewsManager.MainWindow, window);
+		}
+
+		/// <summary>
 		///		Abre un documento
 		/// </summary>
 		public void OpenDocument(System.Windows.Controls.UserControl userControl, IDetailViewModel detailViewModel)

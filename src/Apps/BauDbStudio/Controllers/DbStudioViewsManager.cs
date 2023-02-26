@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Models;
 using Bau.Libraries.PluginsStudio.Views.Base.Models;
 

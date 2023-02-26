@@ -20,6 +20,11 @@ namespace Bau.Libraries.ToDoManager.ViewModel.Controllers
 		SystemControllerEnums.ResultType OpenDialog(BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewModel dialogViewModel);
 
 		/// <summary>
+		///		Oculta las ventanas de notas
+		/// </summary>
+		void HideNotes();
+
+		/// <summary>
 		///		Controlador plugin
 		/// </summary>
 		PluginsStudio.ViewModels.Base.Controllers.IPluginsController PluginController { get; }

@@ -136,7 +136,7 @@ public class ToDoFileViewModel : BaseObservableObject, PluginsStudio.ViewModels.
 	/// <summary>
 	///		Manager de la aplicación de lista de tareas
 	/// </summary>
-	public Application.ToDoManager ToDoManager { get; } = new();
+	public Application.ToDoFileManager ToDoManager { get; } = new();
 
 	/// <summary>
 	///		Cabecera

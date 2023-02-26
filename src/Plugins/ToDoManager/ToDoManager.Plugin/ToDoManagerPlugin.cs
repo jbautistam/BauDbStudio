@@ -4,6 +4,8 @@ using Bau.Libraries.ToDoManager.ViewModel;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Models;
 using Bau.Libraries.PluginsStudio.Views.Base.Interfaces;
 using Bau.Libraries.PluginsStudio.Views.Base.Models;
+using Bau.Libraries.LibSystem.Windows.KeyboardHook;
+using System.Windows.Input;
 
 namespace Bau.Libraries.ToDoManager.Plugin;
 
@@ -17,9 +19,43 @@ public class ToDoManagerPlugin : IPlugin
 	/// </summary>
 	public void Initialize(IAppViewsController appViewsController, PluginsStudio.ViewModels.Base.Controllers.IPluginsController pluginController)
 	{
+		// Inicializa el controlador
 		AppViewsController = appViewsController;
 		MainViewModel = new ToDoManagerViewModel(new Controllers.ToDoManagerController(this, pluginController));
 		MainViewModel.Initialize();
+		// Inicializa el Hook de teclado
+		InitHookManager();
+	}
+
+	/// <summary>
+	///		Inicializa el manager de teclado
+	/// </summary>
+	private void InitHookManager()
+	{
+		// Registra las teclas
+		KeyboardHookManager.RegisterHotkey(KeyboardHookManager.ModifierKeys.Control | KeyboardHookManager.ModifierKeys.Alt, 
+										   KeyInterop.VirtualKeyFromKey(Key.F1), CreateNewNote);
+		KeyboardHookManager.RegisterHotkey(KeyboardHookManager.ModifierKeys.Control | KeyboardHookManager.ModifierKeys.Alt, 
+										   KeyInterop.VirtualKeyFromKey(Key.F2), ShowNotes);
+
+		// Arranca el manejador
+		KeyboardHookManager.Start();
+	}
+
+	/// <summary>
+	///		Crea una nueva nota
+	/// </summary>
+	private void CreateNewNote()
+	{
+		System.Windows.Application.Current.Dispatcher.Invoke(() => MainViewModel.CreateNewNote());
+	}
+
+	/// <summary>
+	///		Muestra las ventanas de notas
+	/// </summary>
+	private void ShowNotes()
+	{
+		System.Windows.Application.Current.Dispatcher.Invoke(() => MainViewModel.ShowNotes());
 	}
 
 	/// <summary>
@@ -111,4 +147,9 @@ public class ToDoManagerPlugin : IPlugin
 	///		ViewModel principal
 	/// </summary>
 	public ToDoManagerViewModel MainViewModel { get; private set; }
+
+	/// <summary>
+	///		Manager del Hook de teclado
+	/// </summary>
+	internal KeyboardHookManager KeyboardHookManager { get; } = new();
 }
