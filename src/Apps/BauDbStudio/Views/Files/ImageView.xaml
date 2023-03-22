@@ -61,9 +61,7 @@
 		</zoomAndPan:ZoomAndPanScrollViewer>
 
 		<Border x:Name="wndZoom" Grid.Row="2" Grid.Column="1" Width="200" Height="200" BorderBrush="White" Background="#AACCCCCC" BorderThickness="3">
-				<zoomAndPan:ZoomAndPanViewBox 
-											  DataContext="{Binding ElementName=ZoomAndPanControl}"
-											  Visual="{Binding ElementName=imgImage}"/>
+			<zoomAndPan:ZoomAndPanViewBox DataContext="{Binding ElementName=ZoomAndPanControl}" Visual="{Binding ElementName=imgImage}"/>
 		</Border>
 	</Grid>
 </UserControl>

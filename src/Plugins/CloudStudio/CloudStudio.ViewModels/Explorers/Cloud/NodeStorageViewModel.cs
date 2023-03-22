@@ -32,7 +32,7 @@ namespace Bau.Libraries.CloudStudio.ViewModels.Explorers.Cloud
 				// Carga los contenedores
 				try
 				{
-					ICloudStorageManager manager = new StorageManager().OpenAzureStorageBlob(Storage.GetNormalizedConnectionString());
+					AzureStorageBlobManager manager = new(Storage.GetNormalizedConnectionString());
 					List<string> containers = await manager.ListContainersAsync(string.Empty);
 
 						// Carga los contenedores

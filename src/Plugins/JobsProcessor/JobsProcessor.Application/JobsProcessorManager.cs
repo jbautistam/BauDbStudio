@@ -1,5 +1,4 @@
-﻿using System;
-using Bau.Libraries.JobsProcessor.Application.EventArguments;
+﻿using Bau.Libraries.JobsProcessor.Application.EventArguments;
 using Bau.Libraries.JobsProcessor.Application.Models;
 
 namespace Bau.Libraries.JobsProcessor.Application
@@ -10,12 +9,12 @@ namespace Bau.Libraries.JobsProcessor.Application
 	public class JobsProcessorManager
 	{
 		// Eventos públicos
-		public event EventHandler<EventArguments.JobProcessEventArgs> JobProcessing;
+		public event EventHandler<JobProcessEventArgs> JobProcessing;
 
 		/// <summary>
 		///		Carga los datos de ejecución de un comando
 		/// </summary>
-		public Models.ProjectModel Load(string fileName)
+		public ProjectModel Load(string fileName)
 		{
 			return new Repository.ConsoleRepository().Load(fileName);
 		}
@@ -23,7 +22,7 @@ namespace Bau.Libraries.JobsProcessor.Application
 		/// <summary>
 		///		Valida un proyecto
 		/// </summary>
-		public List<string> Validate(Models.ProjectModel project)
+		public List<string> Validate(ProjectModel project)
 		{
 			List<string> errors = new();
 
@@ -33,10 +32,10 @@ namespace Bau.Libraries.JobsProcessor.Application
 				else if (project.Commands.Count == 0)
 					errors.Add("There is no any command at file");
 				else
-					foreach (Application.Models.CommandModel command in project.Commands)
+					foreach (CommandModel command in project.Commands)
 						if (string.IsNullOrWhiteSpace(command.FileName))
 							errors.Add($"The executable file name for command {project.Commands.IndexOf(command).ToString()} is empty");
-						else if (!System.IO.File.Exists(command.FileName))
+						else if (!File.Exists(command.FileName))
 							errors.Add($"Can't find the executable file: {command.FileName}");
 				// Devuelve la lista de errores
 				return errors;
@@ -45,7 +44,7 @@ namespace Bau.Libraries.JobsProcessor.Application
 		/// <summary>
 		///		Ejecuta un proyecto
 		/// </summary>
-		public async Task ExecuteAsync(ProjectModel project, System.Threading.CancellationToken cancellationToken)
+		public async Task ExecuteAsync(ProjectModel project, CancellationToken cancellationToken)
 		{
 			// Log
 			AddLog(JobProcessEventArgs.StatusType.Information, $"Start project execution");
@@ -74,27 +73,29 @@ namespace Bau.Libraries.JobsProcessor.Application
 		/// </summary>
 		private async Task ExecuteCommandsAsync(List<CommandModel> commands, ContextModel context, CancellationToken cancellationToken)
 		{
-			foreach (Models.CommandModel command in commands)
+			foreach (CommandModel command in commands)
 				if (!cancellationToken.IsCancellationRequested)
 				{
 					// Log
-					AddLog(context, command, EventArguments.JobProcessEventArgs.StatusType.Start, 
-							$"Start execution {System.IO.Path.GetFileName(command.FileName)}", commands.IndexOf(command) + 1, commands.Count);
+					AddLog(context, command, JobProcessEventArgs.StatusType.Start, 
+							$"Start execution {Path.GetFileName(command.FileName)}", commands.IndexOf(command) + 1, commands.Count);
 					// Ejecuta el proceso
 					if (!await ExecuteProcessAsync(command, context, cancellationToken))
 					{
 						// Log
 						AddLog(JobProcessEventArgs.StatusType.Error, $"Error when execute command: '{command.FileName}'");
 						// Detiene el proceso si es necesario
-						if (command.StopWhenError)
-							throw new Exception($"Stop the process (command '{command.FileName}'.StopWhenError = true");
+						if (cancellationToken.IsCancellationRequested)
+							throw new Exception($"Stop the process (command '{command.FileName}'. Cancel request");
+						else if (command.StopWhenError)
+							throw new Exception($"Stop the process (command '{command.FileName}'. StopWhenError = true");
 					}
 					// Log
-					AddLog(context, command, EventArguments.JobProcessEventArgs.StatusType.End, 
-							$"End execution {System.IO.Path.GetFileName(command.FileName)}", commands.IndexOf(command) + 1, commands.Count);
+					AddLog(context, command, JobProcessEventArgs.StatusType.End, 
+							$"End execution {Path.GetFileName(command.FileName)}", commands.IndexOf(command) + 1, commands.Count);
 				}
 				else
-					AddLog(context, command, EventArguments.JobProcessEventArgs.StatusType.Error, "Canceled");
+					AddLog(context, command, JobProcessEventArgs.StatusType.Error, "Canceled");
 		}
 
 		/// <summary>
@@ -103,7 +104,7 @@ namespace Bau.Libraries.JobsProcessor.Application
 		private async Task<bool> ExecuteProcessAsync(CommandModel command, ContextModel context, CancellationToken cancellationToken)
 		{
 			Processes.SystemProcessHelper processor = new(this, context, command, false);
-			bool processed = true;
+			bool processed;
 
 				// Ejecuta la aplicación
 				try
@@ -115,9 +116,21 @@ namespace Bau.Libraries.JobsProcessor.Application
 				}
 				catch (Exception exception)
 				{
-					AddLog(JobProcessEventArgs.StatusType.Error, $"Error when execute {System.IO.Path.GetFileName(command.FileName)}. {exception.Message}");
+					AddLog(JobProcessEventArgs.StatusType.Error, $"Error when execute {Path.GetFileName(command.FileName)}. {exception.Message}");
 					processed = false;
 				}
+				// Elimina el proceso
+				if (cancellationToken.IsCancellationRequested)
+					try
+					{
+						processor.Kill(true, out string error);
+						if (!string.IsNullOrWhiteSpace(error))
+							AddLog(JobProcessEventArgs.StatusType.Error, $"Error when kill process {error}");
+					}
+					catch (Exception exception)
+					{
+						AddLog(JobProcessEventArgs.StatusType.Error, $"Error when kill process {Path.GetFileName(command.FileName)}. {exception.Message}");
+					}
 				// Devuelve el valor que indica si se ha ejecutado correctamente
 				return processed;
 		}
@@ -144,7 +157,7 @@ namespace Bau.Libraries.JobsProcessor.Application
 		private void AddLog(ContextModel context, CommandModel command, JobProcessEventArgs.StatusType status, string message = null,
 							int? actual = null, int? total = null)
 		{
-			JobProcessing?.Invoke(this, new EventArguments.JobProcessEventArgs(context, command, status, message, actual, total));
+			JobProcessing?.Invoke(this, new JobProcessEventArgs(context, command, status, message, actual, total));
 		}
 	}
 }

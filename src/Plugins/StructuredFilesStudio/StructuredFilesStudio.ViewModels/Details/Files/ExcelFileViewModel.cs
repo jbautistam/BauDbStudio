@@ -42,7 +42,7 @@ namespace Bau.Libraries.StructuredFilesStudio.ViewModels.Details.Files
 				// Graba el archivo
 				using (IDataReader reader = excelReader.LoadFile(FileName, 1, 0, rows, true).CreateDataReader())
 				{
-					await using (ParquetDataWriterAsync writer = new ParquetDataWriterAsync(200_000))
+					await using (ParquetDataWriter writer = new(200_000))
 					{
 						// Log
 						writer.Progress += (sender, args) => block.Progress(System.IO.Path.GetFileName(fileName), args.Records, args.Records + 1);
@@ -62,7 +62,7 @@ namespace Bau.Libraries.StructuredFilesStudio.ViewModels.Details.Files
 		protected override async Task OpenFilePropertiesAsync(CancellationToken cancellationToken)
 		{
 			// No hace nada, sólo implementa la interface
-			await Task.Delay(1);
+			await Task.Delay(1, cancellationToken);
 		}
 
 		/// <summary>

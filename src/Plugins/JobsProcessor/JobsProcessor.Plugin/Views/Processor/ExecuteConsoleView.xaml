@@ -25,12 +25,20 @@
 		<Editor:ctlEditor x:Name="udtEditor" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" 
 					Margin="0, 0, 10, 0" BorderBrush="Black" BorderThickness="1"
 					ReadOnly="True" />
-		<Button Grid.Row="2" Grid.Column="0" Command="{Binding Path=ExecuteCommand}" HorizontalAlignment="Center" Margin="5" Padding="5">
-			<StackPanel Orientation="Horizontal">
-				<Image Source="/JobsProcessor.Plugin;component/Resources/ArrowNext.png" />
-				<TextBlock Text="Ejecutar"/>
-			</StackPanel>
-		</Button>
+		<StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center">
+			<Button Command="{Binding Path=ExecuteCommand}" Margin="5" Padding="5">
+				<StackPanel Orientation="Horizontal">
+					<Image Source="/JobsProcessor.Plugin;component/Resources/ArrowNext.png" />
+					<TextBlock Text="Ejecutar"/>
+				</StackPanel>
+			</Button>
+			<Button Command="{Binding Path=CancelCommand}" Margin="5" Padding="5">
+				<StackPanel Orientation="Horizontal">
+					<Image Source="/JobsProcessor.Plugin;component/Resources/Cancel.png" />
+					<TextBlock Text="Cancelar"/>
+				</StackPanel>
+			</Button>
+		</StackPanel>
 		<GridSplitter Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" HorizontalAlignment="Right" VerticalAlignment="Stretch"
 					Background="AliceBlue" Width="8" Margin="2"/>
 

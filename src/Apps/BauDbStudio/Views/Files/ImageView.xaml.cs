@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 using Bau.Libraries.PluginsStudio.ViewModels.Files;
@@ -26,6 +27,34 @@ namespace Bau.DbStudio.Views.Files
 		/// </summary>
 		private void LoadImage(string fileName)
 		{
+			// Asigna la imagen
+			imgImage.Source = CreateBitmapImage(fileName);
+			// Muestra las propiedades de la imagen
+			// lblStatus.Text = $"Dimensiones {image.PixelWidth} x {image.PixelHeight}";
+			// Inicializa los controles
+			try
+			{
+				if (ZoomAndPanControl.ZoomAndPanContent is not null)
+				{
+					ZoomAndPanControl.ZoomAndPanContent.MinimumZoom = 0.25;
+					ZoomAndPanControl.ZoomAndPanContent.MaximumZoom = 4;
+					ZoomAndPanControl.ZoomAndPanContent.ZoomAndPanInitialPosition = Controls.ZoomAndPanControls.ZoomAndPanInitialPositionEnum.FitScreen;
+				}
+				// Oculta el thumb
+				chkShowThumb.IsChecked = false;
+				wndZoom.Visibility = System.Windows.Visibility.Collapsed;
+			}
+			catch (Exception exception)
+			{
+				System.Diagnostics.Debug.WriteLine($"Error when set image zoom. {exception.Message}");
+			}
+		}
+
+		/// <summary>
+		///		Crea la imagen en memoria
+		/// </summary>
+		private ImageSource CreateBitmapImage(string fileName)
+		{
 			BitmapImage image = new BitmapImage();
 
 				// Lee el archivo sobre la imagen
@@ -36,24 +65,7 @@ namespace Bau.DbStudio.Views.Files
 				// Libera el stream para evitar excepciones de acceso al archivo cuando se intenta borrar la imagen
 				image.StreamSource.Dispose();
 				// Asigna la imagen
-				imgImage.Source = image;
-				// Muestra las propiedades de la imagen
-				// lblStatus.Text = $"Dimensiones {image.PixelWidth} x {image.PixelHeight}";
-				// Inicializa los controles
-				try
-				{
-					// Cambia el zoom original
-					ZoomAndPanControl.ZoomAndPanContent.MinimumZoom = 0.25;
-					ZoomAndPanControl.ZoomAndPanContent.MaximumZoom = 4;
-					ZoomAndPanControl.ZoomAndPanContent.ZoomAndPanInitialPosition = Controls.ZoomAndPanControls.ZoomAndPanInitialPositionEnum.FitScreen;
-					// Oculta el thumb
-					chkShowThumb.IsChecked = false;
-					wndZoom.Visibility = System.Windows.Visibility.Collapsed;
-				}
-				catch (Exception exception)
-				{
-					System.Diagnostics.Debug.WriteLine($"Error when set image zoom. {exception.Message}");
-				}
+				return image;
 		}
 
 		private void chkShowThumb_Click(object sender, System.Windows.RoutedEventArgs e)

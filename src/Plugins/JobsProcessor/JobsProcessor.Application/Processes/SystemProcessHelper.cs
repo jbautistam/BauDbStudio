@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Collections.Generic;
-using System.Collections.Specialized;
 
 namespace Bau.Libraries.JobsProcessor.Application.Processes
 {
@@ -65,14 +63,20 @@ namespace Bau.Libraries.JobsProcessor.Application.Processes
 							Process.OutputDataReceived += (sender, e) =>
 																{
 																	if (e.Data == null)
-																		outputWaitHandle.Set();
+																	{
+																		if (!outputWaitHandle.SafeWaitHandle.IsClosed && !outputWaitHandle.SafeWaitHandle.IsInvalid)
+																			outputWaitHandle.Set();
+																	}
 																	else
 																		AddOutputLog(e.Data, EventArguments.JobProcessEventArgs.StatusType.Information);
 																};
 							Process.ErrorDataReceived += (sender, e) =>
 																{
 																	if (e.Data == null)
-																		errorWaitHandle.Set();
+																	{
+																		if (!errorWaitHandle.SafeWaitHandle.IsClosed && !errorWaitHandle.SafeWaitHandle.IsInvalid)
+																			errorWaitHandle.Set();
+																	}
 																	else
 																		AddOutputLog(e.Data, EventArguments.JobProcessEventArgs.StatusType.Error);
 																};

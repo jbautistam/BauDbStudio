@@ -151,7 +151,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Export
 		/// </summary>
 		private async Task ExportToParquetAsync(BlockLogModel block, string fileName, IDataReader reader, CancellationToken cancellationToken)
 		{
-			await using (LibParquetFiles.Writers.ParquetDataWriterAsync writer = new LibParquetFiles.Writers.ParquetDataWriterAsync(200_000))
+			await using (LibParquetFiles.Writers.ParquetDataWriter writer = new(200_000))
 			{
 				// Asigna el evento de progreso
 				writer.Progress += (sender, args) => block.Progress(System.IO.Path.GetFileName(fileName), args.Records, args.Records + 1);

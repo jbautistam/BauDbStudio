@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <None Remove="Resources\ArrowNext.png" />
+    <None Remove="Resources\Cancel.png" />
     <None Remove="Resources\File.png" />
     <None Remove="Resources\FileBat.png" />
     <None Remove="Resources\FolderNode.png" />
@@ -33,6 +34,7 @@
 
   <ItemGroup>
     <Resource Include="Resources\ArrowNext.png" />
+    <Resource Include="Resources\Cancel.png" />
     <Resource Include="Resources\File.png" />
     <Resource Include="Resources\FileBat.png" />
     <Resource Include="Resources\FolderNode.png" />

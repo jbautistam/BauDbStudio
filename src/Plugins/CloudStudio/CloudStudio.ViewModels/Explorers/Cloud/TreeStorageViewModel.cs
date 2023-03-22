@@ -144,7 +144,7 @@ namespace Bau.Libraries.CloudStudio.ViewModels.Explorers.Cloud
 							.ShowInputString("Introduzca el nombre del contenedor", ref container) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes &&
 					!string.IsNullOrWhiteSpace(container))
 				{
-					ICloudStorageManager manager = GetStorageManager();
+					AzureStorageBlobManager manager = GetStorageManager();
 
 						if (manager == null)
 							SolutionViewModel.MainController.SystemController.ShowMessage("Seleccione un sistema de almacenamiento en el árbol");
@@ -223,7 +223,7 @@ namespace Bau.Libraries.CloudStudio.ViewModels.Explorers.Cloud
 		/// </summary>
 		private async Task UploadFilesAsync(List<string> files)
 		{
-			ICloudStorageManager manager = GetStorageManager();
+			AzureStorageBlobManager manager = GetStorageManager();
 
 				// Sube los archivos
 				if (manager == null)
@@ -280,7 +280,7 @@ namespace Bau.Libraries.CloudStudio.ViewModels.Explorers.Cloud
 					SolutionViewModel.MainController.SystemController.ShowMessage("Seleccione un directorio");
 				else
 				{
-					ICloudStorageManager manager = GetStorageManager();
+					AzureStorageBlobManager manager = GetStorageManager();
 
 						// Descarga el contenedor, archivo o directorio
 						if (manager == null)
@@ -319,7 +319,7 @@ namespace Bau.Libraries.CloudStudio.ViewModels.Explorers.Cloud
 		/// <summary>
 		///		Descarga un contenedor o directorio
 		/// </summary>
-		private async Task DownloadFolderAsync(BlockLogModel block, ICloudStorageManager manager, string localPath, string container, string folder)
+		private async Task DownloadFolderAsync(BlockLogModel block, AzureStorageBlobManager manager, string localPath, string container, string folder)
 		{
 			List<LibBlobStorage.Metadata.BlobModel> blobs = await manager.ListBlobsAsync(container, folder);
 
@@ -347,7 +347,7 @@ namespace Bau.Libraries.CloudStudio.ViewModels.Explorers.Cloud
 		/// <summary>
 		///		Descarga un archivo del storage
 		/// </summary>
-		private async Task DownloadFileAsync(BlockLogModel block, ICloudStorageManager manager, string localPath, string container, string fileName)
+		private async Task DownloadFileAsync(BlockLogModel block, AzureStorageBlobManager manager, string localPath, string container, string fileName)
 		{
 			// Log
 			block.Info($"Comienza la descarga del archivo {container}/{fileName}");
@@ -402,7 +402,7 @@ namespace Bau.Libraries.CloudStudio.ViewModels.Explorers.Cloud
 					SolutionViewModel.MainController.SystemController.ShowQuestion($"¿Desea eliminar el contenedor '{item.Text}'?"))
 				try
 				{
-					ICloudStorageManager manager = new StorageManager().OpenAzureStorageBlob(item.Storage.GetNormalizedConnectionString());
+					AzureStorageBlobManager manager = GetStorageManager();
 
 						// Borra el contenedor
 						await manager.DeleteAsync(item.Container);
@@ -427,7 +427,7 @@ namespace Bau.Libraries.CloudStudio.ViewModels.Explorers.Cloud
 						// Borra los elementos
 						try
 						{
-							ICloudStorageManager manager = new StorageManager().OpenAzureStorageBlob(item.Storage.GetNormalizedConnectionString());
+							AzureStorageBlobManager manager = GetStorageManager();
 
 								// Borra cada uno de los blobs del nodo
 								foreach (BlobNodeModel blob in GetBlobs(item.Blob))
@@ -471,12 +471,12 @@ namespace Bau.Libraries.CloudStudio.ViewModels.Explorers.Cloud
 		/// <summary>
 		///		Obtiene el manager del storage
 		/// </summary>
-		private ICloudStorageManager GetStorageManager()
+		private AzureStorageBlobManager GetStorageManager()
 		{
 			Models.Cloud.StorageModel storage = GetSelectedStorage();
 
 				if (storage != null)
-					return new StorageManager().OpenAzureStorageBlob(storage.GetNormalizedConnectionString());
+					return new AzureStorageBlobManager(storage.StorageConnectionString);
 				else
 					return null;
 		}

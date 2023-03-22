@@ -36,7 +36,7 @@ namespace Bau.Libraries.CloudStudio.ViewModels.Explorers.Cloud
 				// Carga los blobs
 				try
 				{
-					ICloudStorageManager manager = new StorageManager().OpenAzureStorageBlob(Storage.GetNormalizedConnectionString());
+					AzureStorageBlobManager manager = new(Storage.GetNormalizedConnectionString());
 					List<BlobNodeModel> tree = TransformToTree(await manager.ListBlobsAsync(Container, string.Empty));
 
 						// Carga la lista dependiendo del tipo de nodo

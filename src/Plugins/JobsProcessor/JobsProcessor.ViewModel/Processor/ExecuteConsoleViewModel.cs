@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 using Bau.Libraries.BauMvvm.ViewModels;
-using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
 using Bau.Libraries.JobsProcessor.Application;
 using Bau.Libraries.JobsProcessor.Application.EventArguments;
 using Bau.Libraries.JobsProcessor.Application.Models;
@@ -17,6 +15,8 @@ namespace Bau.Libraries.JobsProcessor.ViewModel.Processor
 	{
 		// Variables privadas
 		private string _fileName, _logText;
+		private bool _isExecuting;
+		private System.Threading.CancellationTokenSource _projectCancellationTokenSource;
 
 		public ExecuteConsoleViewModel(JobsProcessorViewModel mainViewModel, string fileName) : base(false)
 		{ 
@@ -26,15 +26,18 @@ namespace Bau.Libraries.JobsProcessor.ViewModel.Processor
 			// Inicializa los objetos
 			TreeLogViewModel = new LogTree.TreeLogViewModel(this);
 			// Inicializa los comandos
-			ExecuteCommand = new BaseCommand(parameter => ExecuteProject());
+			ExecuteCommand = new BaseCommand(_ => ExecuteProject(), _ => !IsExecuting)
+										.AddListener(this, nameof(IsExecuting));
+			CancelCommand = new BaseCommand(_ => CancelProject(), _ => IsExecuting)
+										.AddListener(this, nameof(IsExecuting));
 		}
 
 		/// <summary>
 		///		Interpreta el archivo
 		/// </summary>
-		public Bau.Libraries.JobsProcessor.Application.Models.ProjectModel Parse()
+		public ProjectModel Parse()
 		{
-			Application.Models.ProjectModel project = null;
+			ProjectModel project = null;
 
 				// Carga el archivo
 				if (!System.IO.File.Exists(FileName))
@@ -44,7 +47,7 @@ namespace Bau.Libraries.JobsProcessor.ViewModel.Processor
 					// Carga el archivo
 					try
 					{
-						project = new Application.JobsProcessorManager().Load(FileName);
+						project = new JobsProcessorManager().Load(FileName);
 					}
 					catch (Exception exception)
 					{
@@ -60,20 +63,33 @@ namespace Bau.Libraries.JobsProcessor.ViewModel.Processor
 		/// </summary>
 		private async void ExecuteProject()
 		{
-			Application.Models.ProjectModel project = Parse();
+			ProjectModel project = Parse();
 
-				if (project != null)
+				if (project is not null)
 				{
-					Application.JobsProcessorManager manager = new();
+					JobsProcessorManager manager = new();
 
 						if (Validate(manager, project))
 						{
+							// Crea el token de cancelación
+							_projectCancellationTokenSource = new();
 							// Asigna el manejador de eventos
 							manager.JobProcessing += (_, args) => AddLog(args);
 							// Ejecuta el proceso
-							await manager.ExecuteAsync(project, System.Threading.CancellationToken.None);
+							IsExecuting = true;
+							await manager.ExecuteAsync(project, _projectCancellationTokenSource.Token);
+							IsExecuting = false;
 						}
 				}
+		}
+
+		/// <summary>
+		///		Cancela la ejecución de un proyecto
+		/// </summary>
+		private void CancelProject()
+		{
+			if (IsExecuting && _projectCancellationTokenSource is not null && _projectCancellationTokenSource.Token.CanBeCanceled)
+				_projectCancellationTokenSource.Cancel();
 		}
 
 		/// <summary>
@@ -190,8 +206,22 @@ namespace Bau.Libraries.JobsProcessor.ViewModel.Processor
 		}
 
 		/// <summary>
+		///		Indica si se está ejecutando algún proceso
+		/// </summary>
+		public bool IsExecuting
+		{
+			get { return _isExecuting; }
+			set { CheckProperty(ref _isExecuting, value); }
+		}
+
+		/// <summary>
 		///		Comando para ejecutar los comandos de un archivo
 		///	</summary>
 		public BaseCommand ExecuteCommand { get; }
+
+		/// <summary>
+		///		Comando para cancelar la ejecución de un archivo
+		/// </summary>
+		public BaseCommand CancelCommand { get; }
 	}
 }

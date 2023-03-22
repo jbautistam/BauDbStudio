@@ -38,7 +38,7 @@ namespace Bau.Libraries.StructuredFilesStudio.ViewModels.Details.Files
 			// Graba el archivo
 			using (CsvReader reader = new CsvReader(FileParameters, FileColumns))
 			{
-				await using (ParquetDataWriterAsync writer = new ParquetDataWriterAsync(200_000))
+				await using (ParquetDataWriter writer = new(200_000))
 				{
 					// Log
 					writer.Progress += (sender, args) => block.Progress(System.IO.Path.GetFileName(fileName), args.Records, args.Records + 1);
