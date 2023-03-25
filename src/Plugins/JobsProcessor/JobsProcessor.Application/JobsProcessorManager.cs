@@ -47,7 +47,7 @@ namespace Bau.Libraries.JobsProcessor.Application
 		public async Task ExecuteAsync(ProjectModel project, CancellationToken cancellationToken)
 		{
 			// Log
-			AddLog(JobProcessEventArgs.StatusType.Information, $"Start project execution");
+			AddLog(JobProcessEventArgs.StatusType.StartProject, $"Start project execution");
 			// Ejecuta los comandos
 			try
 			{
@@ -55,7 +55,16 @@ namespace Bau.Libraries.JobsProcessor.Application
 					await ExecuteCommandsAsync(project.Commands, new ContextModel(), cancellationToken);
 				else
 					foreach (ContextModel context in project.Contexts)
-						await ExecuteCommandsAsync(project.Commands, context, cancellationToken);
+					{
+						int contextIndex = project.Contexts.IndexOf(context) + 1;
+
+							// Log
+							AddLog(context, null, JobProcessEventArgs.StatusType.StartContext, $"Start execution context {contextIndex}", contextIndex, project.Contexts.Count);
+							// Ejecuta el comando
+							await ExecuteCommandsAsync(project.Commands, context, cancellationToken);
+							// Log
+							AddLog(context, null, JobProcessEventArgs.StatusType.EndContext, $"End execution context {contextIndex}", contextIndex, project.Contexts.Count);
+					}
 			}
 			catch (Exception exception)
 			{
@@ -63,9 +72,9 @@ namespace Bau.Libraries.JobsProcessor.Application
 			}
 			// Log
 			if (cancellationToken.IsCancellationRequested)
-				AddLog(null, null, JobProcessEventArgs.StatusType.Information, $"Cancel project execution");
+				AddLog(null, null, JobProcessEventArgs.StatusType.Error, $"Cancel project execution");
 			else
-				AddLog(null, null, JobProcessEventArgs.StatusType.Information, $"End project execution");
+				AddLog(null, null, JobProcessEventArgs.StatusType.EndProject, $"End project execution");
 		}
 
 		/// <summary>
@@ -77,8 +86,8 @@ namespace Bau.Libraries.JobsProcessor.Application
 				if (!cancellationToken.IsCancellationRequested)
 				{
 					// Log
-					AddLog(context, command, JobProcessEventArgs.StatusType.Start, 
-							$"Start execution {Path.GetFileName(command.FileName)}", commands.IndexOf(command) + 1, commands.Count);
+					AddLog(context, command, JobProcessEventArgs.StatusType.StartCommand, 
+						   $"Start execution {Path.GetFileName(command.FileName)}", commands.IndexOf(command) + 1, commands.Count);
 					// Ejecuta el proceso
 					if (!await ExecuteProcessAsync(command, context, cancellationToken))
 					{
@@ -91,11 +100,11 @@ namespace Bau.Libraries.JobsProcessor.Application
 							throw new Exception($"Stop the process (command '{command.FileName}'. StopWhenError = true");
 					}
 					// Log
-					AddLog(context, command, JobProcessEventArgs.StatusType.End, 
-							$"End execution {Path.GetFileName(command.FileName)}", commands.IndexOf(command) + 1, commands.Count);
+					AddLog(context, command, JobProcessEventArgs.StatusType.EndCommand, 
+						   $"End execution {Path.GetFileName(command.FileName)}", commands.IndexOf(command) + 1, commands.Count);
 				}
 				else
-					AddLog(context, command, JobProcessEventArgs.StatusType.Error, "Canceled");
+					AddLog(context, command, JobProcessEventArgs.StatusType.Error, "Canceled command");
 		}
 
 		/// <summary>

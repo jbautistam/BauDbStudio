@@ -12,10 +12,18 @@ namespace Bau.Libraries.JobsProcessor.Application.EventArguments
 		/// </summary>
 		public enum StatusType
 		{
-			/// <summary>Inicio del proceso</summary>
-			Start,
-			/// <summary>Fin del proceso</summary>
-			End,
+			/// <summary>Inicio de ejecución del proyecto</summary>
+			StartProject,
+			/// <summary>Fin de ejecución del proyecto</summary>
+			EndProject,
+			/// <summary>Inicio de ejecución del contexto</summary>
+			StartContext,
+			/// <summary>Final de ejecución del contexto</summary>
+			EndContext,
+			/// <summary>Inicio de ejecución de un comando</summary>
+			StartCommand,
+			/// <summary>Inicio de ejecución de un proyecto</summary>
+			EndCommand,
 			/// <summary>Error en el proceso</summary>
 			Error,
 			/// <summary>Datos informativos</summary>

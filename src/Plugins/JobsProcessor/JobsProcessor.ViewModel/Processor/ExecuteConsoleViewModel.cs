@@ -17,14 +17,13 @@ namespace Bau.Libraries.JobsProcessor.ViewModel.Processor
 		private string _fileName, _logText;
 		private bool _isExecuting;
 		private System.Threading.CancellationTokenSource _projectCancellationTokenSource;
+		private System.Threading.SynchronizationContext _contextUi = System.Threading.SynchronizationContext.Current;
 
 		public ExecuteConsoleViewModel(JobsProcessorViewModel mainViewModel, string fileName) : base(false)
 		{ 
 			// Inicializa las propiedades
 			MainViewModel = mainViewModel;
 			FileName = fileName;
-			// Inicializa los objetos
-			TreeLogViewModel = new LogTree.TreeLogViewModel(this);
 			// Inicializa los comandos
 			ExecuteCommand = new BaseCommand(_ => ExecuteProject(), _ => !IsExecuting)
 										.AddListener(this, nameof(IsExecuting));
@@ -41,7 +40,7 @@ namespace Bau.Libraries.JobsProcessor.ViewModel.Processor
 
 				// Carga el archivo
 				if (!System.IO.File.Exists(FileName))
-					WriteLog(JobProcessEventArgs.StatusType.Error, $"Can't find the file {FileName}");
+					WriteTextLog($"Can't find the file {FileName}", true);
 				else
 				{
 					// Carga el archivo
@@ -51,7 +50,7 @@ namespace Bau.Libraries.JobsProcessor.ViewModel.Processor
 					}
 					catch (Exception exception)
 					{
-						WriteLog(JobProcessEventArgs.StatusType.Error, $"Error when parse file {exception.Message}");
+						WriteTextLog($"Error when parse file {exception.Message}", true);
 					}
 				}
 				// Devuelve el proyecto
@@ -74,7 +73,7 @@ namespace Bau.Libraries.JobsProcessor.ViewModel.Processor
 							// Crea el token de cancelación
 							_projectCancellationTokenSource = new();
 							// Asigna el manejador de eventos
-							manager.JobProcessing += (_, args) => AddLog(args);
+							manager.JobProcessing += (_, args) => WriteTextLog(args);
 							// Ejecuta el proceso
 							IsExecuting = true;
 							await manager.ExecuteAsync(project, _projectCancellationTokenSource.Token);
@@ -93,14 +92,6 @@ namespace Bau.Libraries.JobsProcessor.ViewModel.Processor
 		}
 
 		/// <summary>
-		///		Añade los datos de proceso al log
-		/// </summary>
-		private void AddLog(JobProcessEventArgs args)
-		{
-			TreeLogViewModel.WriteLog(args);
-		}
-
-		/// <summary>
 		///		Valida los datos del proyecto
 		/// </summary>
 		private bool Validate(JobsProcessorManager manager, ProjectModel project)
@@ -110,17 +101,9 @@ namespace Bau.Libraries.JobsProcessor.ViewModel.Processor
 				// y lo valida
 				if (errors.Count > 0)
 					foreach (string error in errors)
-						WriteLog(JobProcessEventArgs.StatusType.Error, error);
+						WriteTextLog(error, true);
 				// Devuelve el valor que indica si el proyecto es correcto
 				return errors.Count == 0;
-		}
-
-		/// <summary>
-		///		Escribe un mensaje en el árbol de log
-		/// </summary>
-		private void WriteLog(JobProcessEventArgs.StatusType status, string message)
-		{
-			TreeLogViewModel.WriteLog(new JobProcessEventArgs(null, null, status, message));
 		}
 
 		/// <summary>
@@ -144,15 +127,110 @@ namespace Bau.Libraries.JobsProcessor.ViewModel.Processor
 		/// </summary>
 		public void Close()
 		{
-			System.Diagnostics.Debug.WriteLine("Debería cerrar los procesos");
+			CancelProject();
+		}
+
+		/// <summary>
+		///		Escribe el texto en el log
+		/// </summary>
+		private void WriteTextLog(JobProcessEventArgs item)
+		{
+			string header = string.Empty, body = string.Empty;
+			string message = $"{item.Date:HH:mm:ss.fff}: {item.Message}";
+
+				// Prepara cabecera y cuerpo del mensaje
+				switch (item.Status)
+				{
+					case JobProcessEventArgs.StatusType.StartProject:
+							header = "START";
+						break;
+					case JobProcessEventArgs.StatusType.EndProject:
+							header = "END";
+						break;
+					case JobProcessEventArgs.StatusType.StartContext:
+							header = "START CONTEXT";
+							if (item.Context is not null)
+								body = GetBody(item.Context);
+						break;
+					case JobProcessEventArgs.StatusType.EndContext:
+							header = "END CONTEXT";
+						break;
+					case JobProcessEventArgs.StatusType.StartCommand:
+							header = "START COMMAND";
+							if (item.Command is not null)
+								body = GetBody(item.Command);
+						break;
+					case JobProcessEventArgs.StatusType.EndCommand:
+							header = "END COMMAND";
+						break;
+					case JobProcessEventArgs.StatusType.Information:
+							header = "INFO";
+						break;
+					case JobProcessEventArgs.StatusType.Error:
+							header = "ERROR";
+						break;
+				}
+				// Añade el progreso
+				if (item.Actual is not null && item.Total is not null)
+					message += $" ({item.Actual:#,##0} / {item.Total:#,##0})";
+				// Añade el cuerpo
+				if (!string.IsNullOrWhiteSpace(body))
+					message += Environment.NewLine + body;
+				// Añade la cabecera
+				if (!string.IsNullOrWhiteSpace(header))
+					message = $"[{header}] {message}";
+				// Devuelve el mensaje completo
+				WriteTextLog(message, false);
+		}
+
+		/// <summary>
+		///		Obtiene el cuerpo de un mensaje de comando
+		/// </summary>
+		private string GetBody(CommandModel command)
+		{
+			string body = "Command data:" + Environment.NewLine;
+
+				// Añade los parámetros
+				body += $"\t-Executable: {command.FileName}" + Environment.NewLine;
+				foreach (ArgumentModel argument in command.Arguments)
+					body += $"\t-{argument.Parameter.Name}: {argument.Parameter.Value}" + Environment.NewLine;
+				// Devuelve el cuerpo del mensaje
+				return body;
+		}
+
+		/// <summary>
+		///		Obtiene el cuerpo de un mensaje de contexto
+		/// </summary>
+		private string GetBody(ContextModel context)
+		{
+			string body = "Context data:" + Environment.NewLine;
+
+				// Añade los parámetros
+				foreach (ParameterModel parameter in context.Parameters)
+					body += $"\t- {parameter.Name}: {parameter.Value}" + Environment.NewLine;
+				// Devuelve el cuerpo del mensaje
+				return body;
 		}
 
 		/// <summary>
 		///		Escribe el texto del log
 		/// </summary>
-		internal void WriteTextLog(LogTree.TreeLogViewModel.NodeType type, string text)
+		internal void WriteTextLog(string text, bool isError)
 		{
-			LogText += text + Environment.NewLine;
+			object state = new object();
+
+				//? _contexUi mantiene el contexto de sincronización que creó el ViewModel (que debería ser la interface de usuario)
+				//? Al generarse el log en un evento interno, no se puede añadir a ObservableCollection sin una
+				//? excepción del tipo "Este tipo de CollectionView no admite cambios en su SourceCollection desde un hilo diferente del hilo Dispatcher"
+				//? Por eso se tiene que añadir el mensaje de log desde el contexto de sincronización de la UI
+				// Añade el mensaje
+				_contextUi.Send(_ => {
+										if (isError)
+											LogText += "ERR: " + text + Environment.NewLine;
+										else
+											LogText += text + Environment.NewLine;
+									 }, state
+							   );
 		}
 
 		/// <summary>
@@ -190,11 +268,6 @@ namespace Bau.Libraries.JobsProcessor.ViewModel.Processor
 				}
 			}
 		}
-
-		/// <summary>
-		///		ViewModel con el árbol de log
-		/// </summary>
-		public LogTree.TreeLogViewModel TreeLogViewModel { get; }
 
 		/// <summary>
 		///		Texto de log

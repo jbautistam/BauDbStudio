@@ -14,7 +14,7 @@ namespace Bau.Libraries.JobsProcessor.Plugin
 	public class JobsProcessorPlugin : IPlugin
 	{ 
 		/// <summary>
-		///		Inicializa el manager de vistas del lector de cómics
+		///		Inicializa el manager de vistas del procesador
 		/// </summary>
 		public void Initialize(IAppViewsController appViewsController, PluginsStudio.ViewModels.Base.Controllers.IPluginsController pluginController)
 		{
@@ -50,26 +50,17 @@ namespace Bau.Libraries.JobsProcessor.Plugin
 		/// <summary>
 		///		Obtiene los paneles del plugin
 		/// </summary>
-		public List<PaneModel> GetPanes()
-		{
-			return new();
-		}
+		public List<PaneModel> GetPanes() => new();
 
 		/// <summary>
 		///		Obtiene las barras de herramientas del plugin
 		/// </summary>
-		public List<ToolBarModel> GetToolBars()
-		{
-			return new();
-		}
+		public List<ToolBarModel> GetToolBars() => new();
 
 		/// <summary>
 		///		Obtiene los menús del plugin
 		/// </summary>
-		public List<MenuListModel> GetMenus()
-		{
-			return new();
-		}
+		public List<MenuListModel> GetMenus() => new();
 
 		/// <summary>
 		///		Obtiene las opciones de menú asociadas a las extensiones de archivo y carpetas
@@ -92,25 +83,24 @@ namespace Bau.Libraries.JobsProcessor.Plugin
 		/// <summary>
 		///		Obtiene las extensiones de archivo asociadas al plugin
 		/// </summary>
-		public List<PluginsStudio.ViewModels.Base.Models.FileAssignedModel> GetFilesAssigned()
+		public List<FileAssignedModel> GetFilesAssigned()
 		{
-			List<PluginsStudio.ViewModels.Base.Models.FileAssignedModel> files = new List<FileAssignedModel>();
+			return new()
+					{
+						GetIcon(".cmd.xml", "FileBat.png")
+					};
 
-				// Asigna las extensiones
-				files.Add(GetIcon(".cmd.xml", "FileBat.png"));
-				// Devuelve la lista de archivos asignados
-				return files;
-
-				FileAssignedModel GetIcon(string extension, string name)
-				{
-					return new FileAssignedModel
-									{
-										Name = "Context command file",
-										FileExtension = extension,
-										Icon = GetIconName(name),
-										Template = GetTemplateCmdXml()
-									};
-				}
+			// Obtiene el icono asociado a la extensión
+			FileAssignedModel GetIcon(string extension, string name)
+			{
+				return new FileAssignedModel
+								{
+									Name = "Context command file",
+									FileExtension = extension,
+									Icon = GetIconName(name),
+									Template = GetTemplateCmdXml()
+								};
+			}
 		}
 
 		/// <summary>

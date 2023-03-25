@@ -6,7 +6,7 @@ using Bau.Libraries.JobsProcessor.ViewModel.Processor;
 namespace Bau.Libraries.JobsProcessor.Plugin.Views.Processor
 {
 	/// <summary>
-	///		Vista para ejecutar un proyecto de ETL
+	///		Vista para ejecutar una consola
 	/// </summary>
 	public partial class ExecuteEtlConsoleView : UserControl
 	{
@@ -41,7 +41,7 @@ namespace Bau.Libraries.JobsProcessor.Plugin.Views.Processor
 			else
 			{
 				udtEditor.FileName = fileName;
-				udtEditor.Text = Libraries.LibHelper.Files.HelperFiles.LoadTextFile(fileName);
+				udtEditor.Text = LibHelper.Files.HelperFiles.LoadTextFile(fileName);
 				udtEditor.ChangeHighLightByExtension(System.IO.Path.GetExtension(fileName));
 			}
 		}
@@ -52,12 +52,6 @@ namespace Bau.Libraries.JobsProcessor.Plugin.Views.Processor
 		private void ParseFile()
 		{
 			ViewModel.Parse();
-		}
-
-		private void trvExplorer_SelectedItemChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<object> e)
-		{
-			if ((sender as TreeView)?.SelectedItem is Bau.Libraries.JobsProcessor.ViewModel.Processor.LogTree.LogNodeViewModel node)
-				ViewModel.TreeLogViewModel.SelectedNode = node;
 		}
 
 		/// <summary>
