@@ -49,7 +49,6 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 			PasteClipboardImageCommand = new BaseCommand(_ => PasteClipboardImage(), _ => CanExecuteAction(nameof(PasteClipboardImageCommand)))
 											.AddListener(this, nameof(SelectedNode));
 			SeeAtExplorerCommand = new BaseCommand(_ => OpenFileExplorer());
-			PreviewMarkdownCommand
 		}
 
 		/// <summary>
@@ -432,13 +431,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 							if (option.Check(node.IsFolder, node.FileName))
 								menus.Add(option.Menu);
 					// Asocia las opciones propias
-					if (node.FileName.EndsWith(".md", StringComparison.CurrentCultureIgnoreCase))
-						menus.Add(new MenuModel
-											{
-												Header = "Visualizar markdown",
-												Command = PreviewMarkdownCommand
-											}
-								 );
+					// ... por ahora no tiene ninguna opción
 				}
 				// Devuelve la lista de menús
 				return menus;
@@ -687,10 +680,5 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 		///		Comando para abrir en el explorador
 		/// </summary>
 		public BaseCommand SeeAtExplorerCommand { get; }
-
-		/// <summary>
-		///		Comando para previsualizar un archivo Markdown
-		/// </summary>
-		public BaseCommand PreviewMarkdownCommand { get; }
 	}
 }
