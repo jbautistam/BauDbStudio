@@ -15,7 +15,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 		private string _fileName;
 
 		public NodeFolderRootViewModel(TreeFilesViewModel trvTree, IHierarchicalViewModel parent, string path) 
-					: base(trvTree, parent, path, TreeFilesViewModel.NodeType.FilesRoot.ToString(), TreeFilesViewModel.IconType.Project.ToString(), path, true, true, MvvmColor.Red)
+					: base(trvTree, parent, path, TreeFilesViewModel.NodeType.FilesRoot.ToString(), string.Empty, path, true, true, MvvmColor.Red)
 		{
 			FileName = path;
 		}

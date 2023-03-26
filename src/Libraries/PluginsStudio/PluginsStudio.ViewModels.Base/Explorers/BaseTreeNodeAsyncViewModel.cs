@@ -26,7 +26,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers
 		protected override void LoadNodes()
 		{
 			// Muestra el nodo de carga
-			Children.Add(new NodeMessageViewModel(TreeViewModel, this, "Cargando ..."));
+			Children.Add(GetNodeLoading());
 			// Carga los nodos
 			Task.Run(async () => await LoadNodesAsync(new CancellationToken()));
 		}
@@ -61,6 +61,11 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers
 												 },
 											state);
 		}
+
+		/// <summary>
+		///		Obtiene el nodo de carga
+		/// </summary>
+		protected virtual BaseTreeNodeViewModel GetNodeLoading() => new NodeMessageViewModel(TreeViewModel, this, "Cargando ...");
 
 		/// <summary>
 		///		Obtiene la lista de nodos hijo

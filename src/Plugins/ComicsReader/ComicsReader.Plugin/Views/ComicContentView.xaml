@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Bau.Libraries.ComicsReader.Plugin.Views.ComicContentView"
+﻿<UserControl xmlns:Graphical="clr-namespace:Bau.Controls.Graphical;assembly=BauControls"  x:Class="Bau.Libraries.ComicsReader.Plugin.Views.ComicContentView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -89,7 +89,7 @@
 				<DataTemplate>
 					<StackPanel Grid.Column="1" Margin = "3" >
 						<Border CornerRadius="5" BorderThickness="1" BorderBrush="Black" Padding="5">
-							<Image Source="{Binding Path=ThumbFileName}" Stretch="Fill" 
+							<Graphical:ImageNoLock SourceFile="{Binding Path=ThumbFileName}" Stretch="Fill" 
 										 Width="{Binding ElementName=sldThumbWidth,Path=Value}" 
 										 Height="{Binding ElementName=sldThumbWidth,Path=Value}" />
 						</Border>
@@ -127,7 +127,8 @@
 										   Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="2"
 										   MinimumZoomType="FitScreen" UseAnimations="True"
 										   ZoomAndPanInitialPosition="FillScreen" KeyDown="ZoomAndPanControl_KeyDown">
-				<Image x:Name="imgImage" Source="{Binding Path=ComicPages.SelectedItem.FileName}" />
+
+				<Graphical:ImageNoLock SourceFile="{Binding Path=ComicPages.SelectedItem.FileName}" />
 			</zoomAndPan:ZoomAndPanScrollViewer>
 
 			<Border x:Name="wndZoom" Grid.Row="2" Grid.Column="1" Width="200" Height="200" BorderBrush="White" Background="#AACCCCCC" BorderThickness="3">

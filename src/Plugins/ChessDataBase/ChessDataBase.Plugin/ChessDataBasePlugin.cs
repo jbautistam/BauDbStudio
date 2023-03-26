@@ -19,7 +19,7 @@ namespace Bau.Libraries.ChessDataBase.Plugin
 		public void Initialize(IAppViewsController appViewsController, PluginsStudio.ViewModels.Base.Controllers.IPluginsController pluginController)
 		{
 			AppViewsController = appViewsController;
-			MainViewModel = new ChessDataBase.ViewModels.MainViewModel(new Controllers.EBookReaderController(this, pluginController));
+			MainViewModel = new MainViewModel(new Controllers.EBookReaderController(this, pluginController));
 			MainViewModel.Initialize();
 		}
 
@@ -82,21 +82,18 @@ namespace Bau.Libraries.ChessDataBase.Plugin
 		/// <summary>
 		///		Obtiene las extensiones de archivo asociadas al plugin
 		/// </summary>
-		public List<PluginsStudio.ViewModels.Base.Models.FileAssignedModel> GetFilesAssigned()
+		public List<FileAssignedModel> GetFilesAssigned()
 		{
-			List<PluginsStudio.ViewModels.Base.Models.FileAssignedModel> files = new List<FileAssignedModel>();
-
-				// Asigna las extensions
-				files.Add(new FileAssignedModel
-									{
-										Name = "Chess game",
-										FileExtension = ".pgn",
-										Icon = "/ChessDataBase.Plugin;component/Resources/FilePgn.png",
-										CanCreate = false
-									}
-						 );
-				// Devuelve la lista de archivos asignados
-				return files;
+			return new List<FileAssignedModel>()
+								{
+									new FileAssignedModel
+											{
+												Name = "Chess game",
+												FileExtension = ".pgn",
+												Icon = "/ChessDataBase.Plugin;component/Resources/FilePgn.png",
+												CanCreate = false
+											}
+								};
 		}
 
 		/// <summary>
@@ -115,6 +112,6 @@ namespace Bau.Libraries.ChessDataBase.Plugin
 		/// <summary>
 		///		ViewModel principal
 		/// </summary>
-		public ChessDataBase.ViewModels.MainViewModel MainViewModel { get; private set; }
+		public MainViewModel MainViewModel { get; private set; }
 	}
 }

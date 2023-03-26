@@ -25,16 +25,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 			/// <summary>Archivo / directorio</summary>
 			File
 		}
-		/// <summary>
-		///		Tipo de icono
-		/// </summary>
-		public enum IconType
-		{
-			Unknown,
-			Project,
-			Path,
-			File
-		}
+
 		// Variables privadas
 		private NodeFileViewModel _nodeToCopy;
 
@@ -42,7 +33,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 		{ 
 			// Inicializa las propiedades
 			MainViewModel = solutionViewModel;
-			PluginsFileOptions = new List<Base.Models.FileOptionsModel>();
+			PluginsFileOptions = new List<FileOptionsModel>();
 			// Inicializa los comandos
 			NewFolderFilesCommand = new BaseCommand(_ => AddFolderToExplorer());
 			NewFolderCommand = new BaseCommand(_ => CreateFolder(), _ => CanCreateFileOrFolder())
@@ -58,6 +49,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 			PasteClipboardImageCommand = new BaseCommand(_ => PasteClipboardImage(), _ => CanExecuteAction(nameof(PasteClipboardImageCommand)))
 											.AddListener(this, nameof(SelectedNode));
 			SeeAtExplorerCommand = new BaseCommand(_ => OpenFileExplorer());
+			PreviewMarkdownCommand
 		}
 
 		/// <summary>
@@ -418,7 +410,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 		/// <summary>
 		///		Guarda las opciones de los plugins asociados a los archivos
 		/// </summary>
-		public void AddPluginOptions(List<Base.Models.FileOptionsModel> fileOptions)
+		public void AddPluginOptions(List<FileOptionsModel> fileOptions)
 		{
 			if (fileOptions is not null)
 				PluginsFileOptions.AddRange(fileOptions);
@@ -427,15 +419,27 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 		/// <summary>
 		///		Obtiene los menús asociados al archivo
 		/// </summary>
-		public List<Base.Models.MenuModel> GetFileMenus()
+		public List<MenuModel> GetFileMenus()
 		{
-			List<Base.Models.MenuModel> menus = new();
+			List<MenuModel> menus = new();
 
 				// Obtiene las opciones de menú asociadas al nodo
-				if (PluginsFileOptions != null && SelectedNode != null && SelectedNode is NodeFileViewModel node)
-					foreach (Base.Models.FileOptionsModel option in PluginsFileOptions)
-						if (option.Check(node.IsFolder, node.FileName))
-							menus.Add(option.Menu);
+				if (SelectedNode is not null && SelectedNode is NodeFileViewModel node)
+				{
+					// Asocia las opciones de los plugins
+					if (PluginsFileOptions is not null)
+						foreach (FileOptionsModel option in PluginsFileOptions)
+							if (option.Check(node.IsFolder, node.FileName))
+								menus.Add(option.Menu);
+					// Asocia las opciones propias
+					if (node.FileName.EndsWith(".md", StringComparison.CurrentCultureIgnoreCase))
+						menus.Add(new MenuModel
+											{
+												Header = "Visualizar markdown",
+												Command = PreviewMarkdownCommand
+											}
+								 );
+				}
 				// Devuelve la lista de menús
 				return menus;
 		}
@@ -642,7 +646,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 		/// <summary>
 		///		Opciones de los plugins asociadas a los archivos
 		/// </summary>
-		public List<Base.Models.FileOptionsModel> PluginsFileOptions { get; private set; }
+		public List<FileOptionsModel> PluginsFileOptions { get; private set; }
 
 		/// <summary>
 		///		Comando para añadir un directorio de archivos a la solución
@@ -683,5 +687,10 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 		///		Comando para abrir en el explorador
 		/// </summary>
 		public BaseCommand SeeAtExplorerCommand { get; }
+
+		/// <summary>
+		///		Comando para previsualizar un archivo Markdown
+		/// </summary>
+		public BaseCommand PreviewMarkdownCommand { get; }
 	}
 }

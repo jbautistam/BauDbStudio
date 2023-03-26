@@ -6,7 +6,7 @@ namespace Bau.Libraries.JobsProcessor.ViewModel
 	/// <summary>
 	///		ViewModel principal del procesador de trabajos
 	/// </summary>
-	public class JobsProcessorViewModel : BauMvvm.ViewModels.BaseObservableObject
+	public class JobsProcessorViewModel : BaseObservableObject
 	{
 		public JobsProcessorViewModel(Controllers.IJobsProcessorController mainController)
 		{
@@ -35,10 +35,7 @@ namespace Bau.Libraries.JobsProcessor.ViewModel
 		/// <summary>
 		///		Abre un archivo (no hace nada, sólo implementa la interface)
 		/// </summary>
-		public bool OpenFile(string fileName)
-		{
-			return false;
-		}
+		public bool OpenFile(string fileName) => false;
 
 		/// <summary>
 		///		Ejecuta el script de un archivo o una carpeta

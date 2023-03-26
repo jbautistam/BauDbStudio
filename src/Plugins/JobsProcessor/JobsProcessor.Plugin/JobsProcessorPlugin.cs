@@ -73,7 +73,7 @@ namespace Bau.Libraries.JobsProcessor.Plugin
 									.WithMenu(new MenuModel
 														{
 															Header = "Ejecutar",
-															Icon = GetIconName("ArrowNext.png"),
+															Icon = GetIconName("ArrowNext.png", true),
 															Command = MainViewModel.ExecuteFileCommand
 														}
 											 )
@@ -97,7 +97,7 @@ namespace Bau.Libraries.JobsProcessor.Plugin
 								{
 									Name = "Context command file",
 									FileExtension = extension,
-									Icon = GetIconName(name),
+									Icon = GetIconName(name, false),
 									Template = GetTemplateCmdXml()
 								};
 			}
@@ -137,18 +137,19 @@ namespace Bau.Libraries.JobsProcessor.Plugin
 		/// <summary>
 		///		Obtiene un nombre de recurso
 		/// </summary>
-		private string GetIconName(string name)
+		private string GetIconName(string name, bool packApplication)
 		{
-			return $"/JobsProcessor.Plugin;component/Resources/{name}";
+		// pack://application:,,,/ChessDataBase.Plugin;component/Resources/ChessBoard/{System.IO.Path.GetFileName(fileName)}", UriKind.Absolute);
+			if (packApplication)
+				return $"pack://application:,,,/JobsProcessor.Plugin;component/Resources/{name}";
+			else
+				return $"/JobsProcessor.Plugin;component/Resources/{name}";
 		}
 
 		/// <summary>
 		///		Obtiene la vista de configuración del plugin
 		/// </summary>
-		public IPluginConfigurationView GetConfigurationView()
-		{
-			return null;
-		}
+		public IPluginConfigurationView GetConfigurationView() => null;
 
 		/// <summary>
 		///		Controlador de aplicación

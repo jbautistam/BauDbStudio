@@ -157,7 +157,7 @@ namespace Bau.Libraries.JobsProcessor.Application
 		/// </summary>
 		private void AddLog(JobProcessEventArgs.StatusType status, string message = null, int? actual = null, int? total = null)
 		{
-			AddLog(null, null, status, message);
+			AddLog(null, null, status, message, actual, total);
 		}
 
 		/// <summary>

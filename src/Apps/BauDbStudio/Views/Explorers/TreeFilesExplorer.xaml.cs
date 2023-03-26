@@ -124,7 +124,7 @@ namespace Bau.DbStudio.Views.Explorers
 		/// </summary>
 		private MenuItem CreateMenu(string text, string icon, bool isCheckable, ICommand command, string fileName, object tag = null)
 		{
-			MenuItem mnuNewItem = new MenuItem();
+			MenuItem mnuNewItem = new();
 
 				// Asigna las propiedades
 				mnuNewItem.Header = text;

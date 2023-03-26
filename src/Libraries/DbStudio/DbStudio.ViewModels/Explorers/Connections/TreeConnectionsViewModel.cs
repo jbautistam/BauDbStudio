@@ -53,8 +53,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 			Unknown,
 			Connection,
 			Project,
-			//Path,
-			//File,
 			Schema,
 			Table,
 			View,
@@ -62,10 +60,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 			Field,
 			Error,
 			Loading
-			//Storage,
-			//Report,
-			//DataSourceSql,
-			//Dimension
 		}
 		// Variables privadas
 		private ConnectionModel copiedConnection = null;

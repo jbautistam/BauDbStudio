@@ -55,17 +55,10 @@ namespace Bau.DbStudio.Views.Files
 		/// </summary>
 		private ImageSource CreateBitmapImage(string fileName)
 		{
-			BitmapImage image = new BitmapImage();
-
-				// Lee el archivo sobre la imagen
-				image.BeginInit();
-				image.StreamSource = new System.IO.FileStream(fileName, System.IO.FileMode.Open, System.IO.FileAccess.Read);
-				image.CacheOption = BitmapCacheOption.OnLoad;
-				image.EndInit();
-				// Libera el stream para evitar excepciones de acceso al archivo cuando se intenta borrar la imagen
-				image.StreamSource.Dispose();
-				// Asigna la imagen
-				return image;
+			if (System.IO.File.Exists(fileName))
+				return new Libraries.BauMvvm.Views.Wpf.Tools.ImageToolsWpf().CreateBitmapImage(fileName);
+			else
+				return null;
 		}
 
 		private void chkShowThumb_Click(object sender, System.Windows.RoutedEventArgs e)

@@ -5,6 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Bau.DbStudio.Views.Explorers"
 			 xmlns:ViewModel="clr-namespace:Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;assembly=PluginsStudio.ViewModels.Base"
+			 xmlns:ViewModelFiles="clr-namespace:Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files;assembly=PluginsStudio.ViewModels"
+			 
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 	<Grid>
@@ -17,6 +19,15 @@
 				Drop="trvExplorer_Drop" AllowDrop="True" ContextMenuOpening="trvExplorer_ContextMenuOpening">
 			<TreeView.Resources>
 				<!-- Plantilla de los nodos -->
+				<HierarchicalDataTemplate DataType="{x:Type ViewModelFiles:NodeFileLoadingViewModel}" ItemsSource="{Binding Children}">
+					<StackPanel Orientation="Horizontal">
+						<Image Width="24" Height="24" Margin="3,0" ToolTip="{Binding Path=ToolTipText}" Source="/Resources/Images/Loading.png" />
+						<TextBlock Text="{Binding Text}" FontWeight="{Binding IsBold,Converter={StaticResource BoolToFontWeightConverter}}"
+								   Foreground="{Binding Path=Foreground,Converter={StaticResource MVVMColorConverter}}" 
+								   ToolTip="{Binding Path=ToolTipText }"
+								   VerticalAlignment="Center" />
+					</StackPanel>
+				</HierarchicalDataTemplate>
 				<HierarchicalDataTemplate DataType="{x:Type ViewModel:BaseTreeNodeViewModel}" ItemsSource="{Binding Children}">
 					<StackPanel Orientation="Horizontal">
 						<Image Width="24" Height="24" Margin="3,0" Source="{Binding Path=FileName,Converter={StaticResource FileNameIconConverter}}"

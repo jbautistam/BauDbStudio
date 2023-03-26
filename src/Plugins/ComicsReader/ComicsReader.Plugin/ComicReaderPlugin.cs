@@ -50,69 +50,53 @@ namespace Bau.Libraries.ComicsReader.Plugin
 		/// <summary>
 		///		Obtiene los paneles del plugin
 		/// </summary>
-		public List<PaneModel> GetPanes()
-		{
-			return new();
-		}
+		public List<PaneModel> GetPanes() => new();
 
 		/// <summary>
 		///		Obtiene las barras de herramientas del plugin
 		/// </summary>
-		public List<ToolBarModel> GetToolBars()
-		{
-			return new();
-		}
+		public List<ToolBarModel> GetToolBars() => new();
 
 		/// <summary>
 		///		Obtiene los menús del plugin
 		/// </summary>
-		public List<MenuListModel> GetMenus()
-		{
-			return new();
-		}
+		public List<MenuListModel> GetMenus() => new();
 
 		/// <summary>
 		///		Obtiene las opciones de menú asociadas a las extensiones de archivo y carpetas
 		/// </summary>
-		public List<FileOptionsModel> GetFilesOptions()
-		{
-			return null;
-		}
+		public List<FileOptionsModel> GetFilesOptions() => null;
 
 		/// <summary>
 		///		Obtiene las extensiones de archivo asociadas al plugin
 		/// </summary>
-		public List<PluginsStudio.ViewModels.Base.Models.FileAssignedModel> GetFilesAssigned()
+		public List<FileAssignedModel> GetFilesAssigned()
 		{
-			List<PluginsStudio.ViewModels.Base.Models.FileAssignedModel> files = new List<FileAssignedModel>();
+			return new List<FileAssignedModel>()
+								{
+									GetIcon(".cbr"),
+									GetIcon(".cbz"),
+									GetIcon(".zip"),
+									GetIcon(".rar")
+								};
 
-				// Asigna las extensions
-				files.Add(GetIcon(".cbr"));
-				files.Add(GetIcon(".cbz"));
-				files.Add(GetIcon(".zip"));
-				files.Add(GetIcon(".rar"));
-				// Devuelve la lista de archivos asignados
-				return files;
-
-				FileAssignedModel GetIcon(string extension)
-				{
-					return new FileAssignedModel
-									{
-										Name = $"Comic {extension}",
-										FileExtension = extension,
-										Icon = "/ComicsReader.Plugin;component/Resources/FileCbr.png",
-										CanCreate = false
-									};
-				}
+			// Obtiene los datos del archivo asignado
+			FileAssignedModel GetIcon(string extension)
+			{
+				return new FileAssignedModel
+								{
+									Name = $"Comic {extension}",
+									FileExtension = extension,
+									Icon = "/ComicsReader.Plugin;component/Resources/FileCbr.png",
+									CanCreate = false
+								};
+			}
 		}
 
 		/// <summary>
 		///		Obtiene la vista de configuración del plugin
 		/// </summary>
-		public IPluginConfigurationView GetConfigurationView()
-		{
-			return null;
-		}
+		public IPluginConfigurationView GetConfigurationView() => null;
 
 		/// <summary>
 		///		Controlador de aplicación

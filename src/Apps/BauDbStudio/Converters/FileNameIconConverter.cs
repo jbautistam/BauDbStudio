@@ -10,7 +10,7 @@ namespace Bau.DbStudio.Converters
 	public class FileNameIconConverter : IValueConverter
 	{
 		// Variables estáticas
-		private static List<Bau.Libraries.PluginsStudio.ViewModels.Base.Models.FileAssignedModel> _filesAssigned;
+		private static List<Libraries.PluginsStudio.ViewModels.Base.Models.FileAssignedModel> _filesAssigned;
 
 		/// <summary>
 		///		Convierte un tipo en un icono
@@ -48,7 +48,8 @@ namespace Bau.DbStudio.Converters
 							else if (fileName.EndsWith(".py", StringComparison.CurrentCultureIgnoreCase))
 								icon = "/Resources/Images/FilePython.png";
 							else if (fileName.EndsWith(".ps", StringComparison.CurrentCultureIgnoreCase) ||
-									 fileName.EndsWith(".ps1", StringComparison.CurrentCultureIgnoreCase))
+									 fileName.EndsWith(".ps1", StringComparison.CurrentCultureIgnoreCase) ||
+									 fileName.EndsWith(".ps2", StringComparison.CurrentCultureIgnoreCase))
 								icon = "/Resources/Images/FilePowershell.png";
 							else if (fileName.EndsWith(".cs", StringComparison.CurrentCultureIgnoreCase))
 								icon = "/Resources/Images/FileCsharp.png";
@@ -56,8 +57,6 @@ namespace Bau.DbStudio.Converters
 								icon = "/Resources/Images/FileMd.png";
 							else if (fileName.EndsWith(".pdf", StringComparison.CurrentCultureIgnoreCase))
 								icon = "/Resources/Images/FilePdf.png";
-							else if (fileName.EndsWith(".cmd.xml", StringComparison.CurrentCultureIgnoreCase))
-								icon = "/Resources/Images/FileCmd.png";
 							else if (fileName.EndsWith(".txt", StringComparison.CurrentCultureIgnoreCase))
 								icon = "/Resources/Images/FileTxt.png";
 							else if (IsImage(fileName))
@@ -89,7 +88,7 @@ namespace Bau.DbStudio.Converters
 		private string GetIconFilesAssigned(string fileName)
 		{
 			// Comprueba si la extensión está asignada a algún plugin
-			foreach (Bau.Libraries.PluginsStudio.ViewModels.Base.Models.FileAssignedModel fileAssigned in FilesAssignedIcons)
+			foreach (Libraries.PluginsStudio.ViewModels.Base.Models.FileAssignedModel fileAssigned in FilesAssignedIcons)
 				if (fileName.EndsWith(fileAssigned.FileExtension, StringComparison.CurrentCultureIgnoreCase))
 					return fileAssigned.Icon;
 			// Si ha llegado hasta aquí es porque no está
@@ -107,12 +106,12 @@ namespace Bau.DbStudio.Converters
 		/// <summary>
 		///		Lista de archivos asignados a los diferentes plugins con sus iconos
 		/// </summary>
-		private static List<Bau.Libraries.PluginsStudio.ViewModels.Base.Models.FileAssignedModel> FilesAssignedIcons
+		private static List<Libraries.PluginsStudio.ViewModels.Base.Models.FileAssignedModel> FilesAssignedIcons
 		{
 			get
 			{
 				// Obtiene los datos si no existían
-				if (_filesAssigned == null)
+				if (_filesAssigned is null)
 					_filesAssigned = MainWindow.DbStudioViewsManager.PluginsManager.GetFilesAssigned();
 				// Devuelve la lista
 				return _filesAssigned;

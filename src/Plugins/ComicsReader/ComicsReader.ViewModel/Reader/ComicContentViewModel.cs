@@ -17,6 +17,7 @@ namespace Bau.Libraries.ComicsReader.ViewModel.Reader
 		public EventHandler<EventArguments.ZoomEventArgs> UpdateZoom;
 		// Variables privadas
 		private ControlListViewModel _pages;
+		private string _tempPath;
 		private double _zoom;
 		private string _fileName;
 
@@ -43,19 +44,19 @@ namespace Bau.Libraries.ComicsReader.ViewModel.Reader
 		/// </summary>
 		public async Task ParseAsync()
 		{
-			string tempPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), Guid.NewGuid().ToString());
 			Compressor compressor = new();
 			List<string> files = new();
 
 				// Crea el directorio temporal
-				LibHelper.Files.HelperFiles.MakePath(tempPath);
+				_tempPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), Guid.NewGuid().ToString());
+				LibHelper.Files.HelperFiles.MakePath(_tempPath);
 				// Asigna el manejador de eventos
 				compressor.Progress += (sender, args) => files.Add(args.FileName);
 				compressor.End += (sender, args) => AddPages(files);
 				// Descomprime los archivos
 				try
 				{
-					await Task.Run(() => compressor.Uncompress(FileName, tempPath));
+					await Task.Run(() => compressor.Uncompress(FileName, _tempPath));
 				}
 				catch (Exception exception)
 				{
@@ -70,6 +71,9 @@ namespace Bau.Libraries.ComicsReader.ViewModel.Reader
 		/// </summary>
 		private void AddPages(List<string> files)
 		{
+			// Ordena los archivos
+			files.Sort((first, second) => first.CompareTo(second));
+			// Carga los archivos
 			foreach (string file in files)
 				if (LibHelper.Files.HelperFiles.CheckIsImage(file))
 					ComicPages.Add(new BookPageViewModel(this, file, file, ComicPages.Items.Count + 1), false);
@@ -195,10 +199,8 @@ namespace Bau.Libraries.ComicsReader.ViewModel.Reader
 		/// </summary>
 		public void Close()
 		{
-			if (ComicPages != null)
-				foreach (ControlItemViewModel itemViewModel in ComicPages.Items)
-					if (itemViewModel is BookPageViewModel pageViewModel)
-						Bau.Libraries.LibHelper.Files.HelperFiles.KillFile(pageViewModel.FileName);
+			if (!string.IsNullOrWhiteSpace(_tempPath) && System.IO.Directory.Exists(_tempPath))
+				LibHelper.Files.HelperFiles.KillPath(_tempPath);
 		}
 
 		/// <summary>
