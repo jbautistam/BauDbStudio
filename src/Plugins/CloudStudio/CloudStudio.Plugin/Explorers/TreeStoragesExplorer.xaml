@@ -15,6 +15,8 @@
 		<TreeView x:Name="trvExplorer" BorderThickness="0"
 				ContextMenu="{DynamicResource ResourceKey=mnuExplorer}" 
 				ItemsSource="{Binding Path=Children}"
+				VirtualizingStackPanel.IsVirtualizing="True"
+				VirtualizingStackPanel.VirtualizationMode="Recycling"
 				SelectedItemChanged="trvExplorer_SelectedItemChanged"
 				MouseDoubleClick="trvExplorer_MouseDoubleClick" MouseDown="trvExplorer_MouseDown" >
 			<TreeView.Resources>

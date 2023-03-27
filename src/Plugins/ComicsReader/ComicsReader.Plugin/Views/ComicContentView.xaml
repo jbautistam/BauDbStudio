@@ -83,6 +83,8 @@
 		</ToolBarTray>
 		<Slider Grid.Column="0" Grid.Row="2" x:Name="sldThumbWidth" Minimum="50" Maximum="150" Value="100" Width="100"/>
 		<ListBox x:Name="lstThumbs" Grid.Column="0" Grid.Row="1" ItemsSource="{Binding Path=ComicPages.Items}"
+				VirtualizingStackPanel.IsVirtualizing="True"
+				VirtualizingStackPanel.VirtualizationMode="Recycling"
 				 SelectedItem="{Binding Path=ComicPages.SelectedItem}"
 				 SelectionChanged="lstThumbs_SelectionChanged">
 			<ListBox.ItemTemplate>

@@ -14,9 +14,11 @@
 			<Converter:MVVMColorConverter x:Key="MVVMColorConverter"/>
 		</Grid.Resources>
 		<TreeView x:Name="trvBlogs" SelectedItemChanged="trvBlogs_SelectedItemChanged" BorderThickness="0"
-		 ItemsSource="{Binding Path=Children}"
-						 MouseDoubleClick="trvBlogs_MouseDoubleClick" MouseDown="trvBlogs_MouseDown"	
-						 ContextMenu="{DynamicResource ResourceKey=mnuBlogs}">
+				ItemsSource="{Binding Path=Children}"
+				VirtualizingStackPanel.IsVirtualizing="True"
+				VirtualizingStackPanel.VirtualizationMode="Recycling"
+				MouseDoubleClick="trvBlogs_MouseDoubleClick" MouseDown="trvBlogs_MouseDown"	
+				ContextMenu="{DynamicResource ResourceKey=mnuBlogs}">
 			<TreeView.ItemContainerStyle>
 				<Style TargetType="{x:Type TreeViewItem}">
 					<Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />

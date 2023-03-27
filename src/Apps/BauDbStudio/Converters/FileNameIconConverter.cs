@@ -11,6 +11,7 @@ namespace Bau.DbStudio.Converters
 	{
 		// Variables estáticas
 		private static List<Libraries.PluginsStudio.ViewModels.Base.Models.FileAssignedModel> _filesAssigned;
+		private static Libraries.BauMvvm.Views.Wpf.Tools.ImagesCache _cache = new();
 
 		/// <summary>
 		///		Convierte un tipo en un icono
@@ -28,42 +29,62 @@ namespace Bau.DbStudio.Converters
 		/// </summary>
 		private object GetIcon(string fileName)
 		{
-			string icon = "/Resources/Images/File.png";
+			string icon = GetUriApplicationImage("File.png");
 
 				// Obtiene el icono dependiendo de la extensión del archivo
 				if (!string.IsNullOrWhiteSpace(fileName))
 				{
 					if (System.IO.Directory.Exists(fileName))
-						icon = "/Resources/Images/FolderNode.png";
+						icon = GetUriApplicationImage("FolderNode.png");
 					else
 					{
 						string pluginIcon = GetIconFilesAssigned(fileName);
 
 							if (!string.IsNullOrWhiteSpace(pluginIcon))
-								icon = pluginIcon;
+								icon = GetUriPluginImage(pluginIcon);
 							else if (fileName.EndsWith(".json", StringComparison.CurrentCultureIgnoreCase))
-								icon = "/Resources/Images/FileJson.png";
+								icon = GetUriApplicationImage("FileJson.png");
 							else if (fileName.EndsWith(".xml", StringComparison.CurrentCultureIgnoreCase))
-								icon = "/Resources/Images/FileXml.png";
+								icon = GetUriApplicationImage("FileXml.png");
 							else if (fileName.EndsWith(".py", StringComparison.CurrentCultureIgnoreCase))
-								icon = "/Resources/Images/FilePython.png";
+								icon = GetUriApplicationImage("FilePython.png");
 							else if (fileName.EndsWith(".ps", StringComparison.CurrentCultureIgnoreCase) ||
 									 fileName.EndsWith(".ps1", StringComparison.CurrentCultureIgnoreCase) ||
 									 fileName.EndsWith(".ps2", StringComparison.CurrentCultureIgnoreCase))
-								icon = "/Resources/Images/FilePowershell.png";
+								icon = GetUriApplicationImage("FilePowershell.png");
 							else if (fileName.EndsWith(".cs", StringComparison.CurrentCultureIgnoreCase))
-								icon = "/Resources/Images/FileCsharp.png";
+								icon = GetUriApplicationImage("FileCsharp.png");
 							else if (fileName.EndsWith(".md", StringComparison.CurrentCultureIgnoreCase))
-								icon = "/Resources/Images/FileMd.png";
+								icon = GetUriApplicationImage("FileMd.png");
 							else if (fileName.EndsWith(".pdf", StringComparison.CurrentCultureIgnoreCase))
-								icon = "/Resources/Images/FilePdf.png";
+								icon = GetUriApplicationImage("FilePdf.png");
 							else if (fileName.EndsWith(".txt", StringComparison.CurrentCultureIgnoreCase))
-								icon = "/Resources/Images/FileTxt.png";
+								icon = GetUriApplicationImage("FileTxt.png");
 							else if (IsImage(fileName))
-								icon = "/Resources/Images/FileImage.png";
+								icon = GetUriApplicationImage("FileImage.png");
 					}
 				}
 				// Devuelve el icono
+				return _cache.GetImage(icon, true);
+		}
+
+		/// <summary>
+		///		Obtiene la URL de carga del icono desde un recurso de la aplicación
+		/// </summary>
+		private string GetUriApplicationImage(string icon)
+		{
+			return $"pack://application:,,,/BauDbStudio;component/Resources/Images/{icon}";
+		}
+
+		/// <summary>
+		///		Obtiene la URL de carga del icono desde un recurso de un plugin.
+		///		Por ejemplo: /EbooksReader.Plugin;component/Resources/FileEpub.png
+		/// </summary>
+		private string GetUriPluginImage(string icon)
+		{
+			if (!string.IsNullOrWhiteSpace(icon) && !icon.StartsWith("pack://"))
+				return $"pack://application:,,,{icon}";
+			else
 				return icon;
 		}
 

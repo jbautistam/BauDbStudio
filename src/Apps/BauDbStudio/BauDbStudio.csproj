@@ -6,9 +6,9 @@
     <RootNamespace>Bau.DbStudio</RootNamespace>
     <Authors>Jose Antonio Bautista</Authors>
     <ApplicationIcon>Resources\BauDbStudio.ico</ApplicationIcon>
-    <AssemblyVersion>1.0.28.0</AssemblyVersion>
-    <FileVersion>1.0.28.0</FileVersion>
-    <Version>1.0.28</Version>
+    <AssemblyVersion>1.0.29.0</AssemblyVersion>
+    <FileVersion>1.0.29.0</FileVersion>
+    <Version>1.0.29</Version>
     <PackageProjectUrl>https://github.com/jbautistam/BauDbStudio</PackageProjectUrl>
     <RepositoryUrl>https://github.com/jbautistam/BauDbStudio</RepositoryUrl>
   </PropertyGroup>
@@ -25,6 +25,7 @@
   <ItemGroup>
     <Compile Remove="Controllers\AppController.cs" />
     <Compile Remove="Converters\FileIconConverter.cs" />
+    <Compile Remove="Converters\FileNameIconConverter - Copia.cs" />
     <Compile Remove="Views\Files\ImageView - Copia.xaml.cs" />
     <Compile Remove="Views\Tools\ConfigurationView.xaml.cs" />
     <Compile Remove="Views\Tools\CreateFileView.xaml.cs" />

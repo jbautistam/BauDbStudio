@@ -56,7 +56,7 @@ namespace Bau.DbStudio.Views.Files
 		private ImageSource CreateBitmapImage(string fileName)
 		{
 			if (System.IO.File.Exists(fileName))
-				return new Libraries.BauMvvm.Views.Wpf.Tools.ImageToolsWpf().CreateBitmapImage(fileName);
+				return new Libraries.BauMvvm.Views.Wpf.Tools.ImageToolsWpf().GetFromFileName(fileName);
 			else
 				return null;
 		}

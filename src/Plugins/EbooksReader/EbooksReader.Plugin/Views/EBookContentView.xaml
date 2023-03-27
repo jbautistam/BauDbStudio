@@ -49,7 +49,10 @@
 		</ToolBarTray>
 
 		<TreeView x:Name="trvExplorer" BorderThickness="0" Grid.Row="1" Grid.Column="0"
-				ItemsSource="{Binding Path=TreePages.Children}" SelectedItemChanged="trvExplorer_SelectedItemChanged">
+				ItemsSource="{Binding Path=TreePages.Children}" 
+				VirtualizingStackPanel.IsVirtualizing="True"
+				VirtualizingStackPanel.VirtualizationMode="Recycling"
+				SelectedItemChanged="trvExplorer_SelectedItemChanged">
 			<TreeView.Resources>
 				<!-- Plantilla de los nodos -->
 				<HierarchicalDataTemplate DataType="{x:Type NodeViewModel:EbookNodeViewModel}" ItemsSource="{Binding Children}">
