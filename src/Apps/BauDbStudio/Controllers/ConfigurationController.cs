@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using Bau.Libraries.LibHelper.Extensors;
+using Bau.Libraries.LibMarkupLanguage;
+
 namespace Bau.DbStudio.Controllers
 {
 	/// <summary>
@@ -9,7 +12,13 @@ namespace Bau.DbStudio.Controllers
 	public class ConfigurationController : Libraries.PluginsStudio.ViewModels.Base.Controllers.IConfigurationController
 	{
 		// Constantes privadas
-		private const string SetupSeparator = "({#@~=#})";
+		private const string TagRoot = "Configuration";
+		private const string TagPlugin = "Plugin";
+		private const string TagName = "Name";
+		private const string TagKey = "Key";
+		private const string TagValue = "Value";
+		// Registros privados
+		private record PluginConfiguration(string Plugin, string Key, string Value);
 
 		public ConfigurationController(DbStudioViewsManager viewsManager)
 		{
@@ -50,23 +59,67 @@ namespace Bau.DbStudio.Controllers
 			if (!string.IsNullOrWhiteSpace(fileName) && System.IO.File.Exists(fileName))
 				try
 				{
-					string setup = Bau.Libraries.LibHelper.Files.HelperFiles.LoadTextFile(fileName);
+					MLFile fileML = new Libraries.LibMarkupLanguage.Services.XML.XMLParser().Load(fileName);
 
-						// Asigna la configuración
-						if (!string.IsNullOrWhiteSpace(setup))
+						if (fileML is not null)
 						{
-							string [] parts = setup.Split(SetupSeparator);
-
-								for (int index = 0; index < parts.Length; index += 3)
-									if (parts.Length > index + 3 && !string.IsNullOrWhiteSpace(parts[index]) && !string.IsNullOrWhiteSpace(parts[index + 1]))
-										PluginsConfiguration.Add((parts[index], parts[index + 1], parts[index + 2]));
+							foreach (MLNode rootML in fileML.Nodes)
+								if (rootML.Name == TagRoot)
+									foreach (MLNode nodeML in rootML.Nodes)
+										if (nodeML.Name == TagPlugin)
+											PluginsConfiguration.Add(GetConfiguration(nodeML));
 						}
+						else
+							ViewsManager.MainWindowsController.Logger.Default.LogItems.Error($"Can't open the configuration file {fileName}");
 				}
 				catch (Exception exception)
 				{
-					ViewsManager.MainWindowsController.HostController.SystemController
-							.ShowMessage($"Error when load the plugins configuration file {fileName}. {exception.Message}");
+					ViewsManager.MainWindowsController.Logger.Default.LogItems.Error($"Can't open the configuration file {fileName}", exception);
 				}
+				// Carga la configuración desde una cadena si no puede leer el XML
+				if (PluginsConfiguration.Count == 0)
+					try
+					{
+						LoadConfigurationFromString(fileName);
+					}
+					catch (Exception exception)
+					{
+						ViewsManager.MainWindowsController.Logger.Default.LogItems.Error($"Can't load configuration from text of the configuration file {fileName}", exception);
+					}
+		}
+
+		/// <summary>
+		///		Carga la configuración de una cadena
+		/// </summary>
+		private void LoadConfigurationFromString(string fileName)
+		{
+			string setup = Libraries.LibHelper.Files.HelperFiles.LoadTextFile(fileName);
+
+				// Asigna la configuración
+				if (!string.IsNullOrWhiteSpace(setup))
+				{
+					string [] parts = setup.Split("({#@~=#})");
+
+						for (int index = 0; index < parts.Length; index += 3)
+							if (parts.Length > index + 3 && !string.IsNullOrWhiteSpace(parts[index]) && !string.IsNullOrWhiteSpace(parts[index + 1]))
+								PluginsConfiguration.Add(new PluginConfiguration(parts[index], parts[index + 1], parts[index + 2]));
+				}
+		}
+
+		/// <summary>
+		///		Obtiene la configuración
+		/// </summary>
+		private PluginConfiguration GetConfiguration(MLNode nodeML)
+		{
+			string plugin = nodeML.Attributes[TagName].Value.TrimIgnoreNull();
+			string key = nodeML.Attributes[TagKey].Value.TrimIgnoreNull();
+			string value = nodeML.Attributes[TagValue].Value.TrimIgnoreNull();
+
+				// Si no hay un valor en el atributo, recoge el valor del nodo
+				if (string.IsNullOrWhiteSpace(value))
+					value = nodeML.Value.TrimIgnoreNull();
+				// Devuelve los valores
+				return new PluginConfiguration(plugin, key, value);
 		}
 
 		/// <summary>
@@ -76,10 +129,10 @@ namespace Bau.DbStudio.Controllers
 		{
 			// Busca la configuración del plugin
 			if (!string.IsNullOrWhiteSpace(plugin) && !string.IsNullOrWhiteSpace(key))
-				foreach ((string plugin, string key, string value) configuration in PluginsConfiguration)
-					if (configuration.plugin.Equals(plugin, StringComparison.CurrentCultureIgnoreCase) &&
-							configuration.key.Equals(key, StringComparison.CurrentCultureIgnoreCase))
-						return configuration.value;
+				foreach (PluginConfiguration configuration in PluginsConfiguration)
+					if (configuration.Plugin.Equals(plugin, StringComparison.CurrentCultureIgnoreCase) &&
+							configuration.Key.Equals(key, StringComparison.CurrentCultureIgnoreCase))
+						return configuration.Value;
 			// Si ha llegado hasta aquí es porque no ha encontrado nada
 			return string.Empty;
 		}
@@ -93,11 +146,11 @@ namespace Bau.DbStudio.Controllers
 			{
 				// Elimina la configuración del plugin para esa clave
 				for (int index = PluginsConfiguration.Count - 1; index >= 0; index--)
-					if (PluginsConfiguration[index].plugin.Equals(plugin, StringComparison.CurrentCultureIgnoreCase) &&
-							PluginsConfiguration[index].key.Equals(key, StringComparison.CurrentCultureIgnoreCase))
+					if (PluginsConfiguration[index].Plugin.Equals(plugin, StringComparison.CurrentCultureIgnoreCase) &&
+							PluginsConfiguration[index].Key.Equals(key, StringComparison.CurrentCultureIgnoreCase))
 						PluginsConfiguration.RemoveAt(index);
 				// Añade la configuración
-				PluginsConfiguration.Add((plugin, key, value));
+				PluginsConfiguration.Add(new PluginConfiguration(plugin, key, value));
 			}
 		}
 
@@ -129,17 +182,27 @@ namespace Bau.DbStudio.Controllers
 		/// </summary>
 		private void SavePluginsConfiguration(string fileName)
 		{
-			try
-			{
-				Libraries.LibHelper.Files.HelperFiles.SaveTextFile(fileName, GetPluginsConfiguration());
-			}
-			catch (Exception exception)
-			{
-				ViewsManager.MainWindowsController.HostController.SystemController
-					.ShowMessage($"Can't save the plugins configuration file {fileName}. {exception.Message}");
-			}
+			MLFile fileML = new();
+			MLNode rootML = fileML.Nodes.Add(TagRoot);
+
+				// Crea los nodos
+				foreach (PluginConfiguration configuration in PluginsConfiguration)
+				{
+					MLNode nodeML = new(TagPlugin);
+
+						// Añade los atributos
+						nodeML.Attributes.Add(TagName, configuration.Plugin);
+						nodeML.Attributes.Add(TagKey, configuration.Key);
+						nodeML.Attributes.Add(TagValue, configuration.Value);
+						// Añade el nodo a la colección
+						rootML.Nodes.Add(nodeML);
+				}
+				// Graba el archivo
+				if (!new Libraries.LibMarkupLanguage.Services.XML.XMLWriter().Save(fileName, fileML))
+					ViewsManager.MainWindowsController.Logger.Default.LogItems.Error($"Error saving the configuration file {fileName}");
 		}
 
+/*
 		/// <summary>
 		///		Obtiene la configuración de plugins
 		/// </summary>
@@ -159,6 +222,7 @@ namespace Bau.DbStudio.Controllers
 				// Devuelve la cadena resultante
 				return result;
 		}
+*/
 
 		/// <summary>
 		///		Obtiene el nombre del archivo de setup
@@ -236,6 +300,6 @@ namespace Bau.DbStudio.Controllers
 		/// <summary>
 		///		Configuraciones de los plugins
 		/// </summary>
-		private List<(string plugin, string key, string value)> PluginsConfiguration { get; } = new();
+		private List<PluginConfiguration> PluginsConfiguration { get; } = new();
 	}
 }

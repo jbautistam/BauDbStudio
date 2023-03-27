@@ -43,6 +43,14 @@ namespace Bau.DbStudio.Controllers
 		}
 
 		/// <summary>
+		///		Abre la ventana de edición de un archivo de texto
+		/// </summary>
+		public void OpenTextEditor(string fileName)
+		{
+			DbStudioViewManager.PluginStudioController.DbStudioViewManager.PluginsStudioViewModel.OpenFile(fileName);
+		}
+
+		/// <summary>
 		///		Abre un navegador sobre una URL
 		/// </summary>
 		public void OpenWebBrowser(string url)

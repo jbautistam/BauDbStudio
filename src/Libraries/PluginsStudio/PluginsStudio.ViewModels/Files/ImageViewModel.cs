@@ -1,8 +1,4 @@
-﻿using System;
-
-using Bau.Libraries.BauMvvm.ViewModels;
-
-namespace Bau.Libraries.PluginsStudio.ViewModels.Files
+﻿namespace Bau.Libraries.PluginsStudio.ViewModels.Files
 {
 	/// <summary>
 	///		ViewModel para un archivo de imagen

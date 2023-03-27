@@ -3,7 +3,6 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Threading;
 
-using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.LibBlogReader.ViewModel.Blogs;
 
 namespace Bau.Libraries.BlogReader.Views.Views

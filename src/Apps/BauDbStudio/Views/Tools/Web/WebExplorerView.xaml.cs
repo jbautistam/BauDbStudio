@@ -11,6 +11,9 @@ namespace Bau.DbStudio.Views.Tools.Web
 	/// </summary>
 	public partial class WebExplorerView : UserControl
 	{
+		// Variables privadas
+		private bool _isLoadedUrl;
+
 		public WebExplorerView(WebViewModel viewModel)
 		{
 			InitializeComponent();
@@ -22,13 +25,27 @@ namespace Bau.DbStudio.Views.Tools.Web
 											};
 			wbBrowser.OpenWindowRequested += (sender, args) => ViewModel.OpenBrowser(args.Url);
 			viewModel.Closed += async (sender, args) => await DestroyWindowAsync();
-			ViewModel.RefreshPage += async (sender, args) => await InitControlAsync();
+			ViewModel.RefreshPage += async (sender, args) => await ShowUrlAsync();
 		}
 
 		/// <summary>
 		///		Inicializa el control
 		/// </summary>
 		private async Task InitControlAsync()
+		{
+			if (!_isLoadedUrl) // ... entra por Loaded cada vez que se cambia de control (por tanto, cada vez que se cambia de ficha)
+			{
+				// Muestra la URL
+				await ShowUrlAsync();
+				// Indica que ya se ha cargado
+				_isLoadedUrl = true;
+			}
+		}
+
+		/// <summary>
+		///		Muestra la URL
+		/// </summary>
+		private async Task ShowUrlAsync()
 		{
 			await wbBrowser.ShowUrlAsync(ViewModel.Url);
 		}
@@ -51,5 +68,5 @@ namespace Bau.DbStudio.Views.Tools.Web
 		{
 			await InitControlAsync();
 		}
-	}
+    }
 }

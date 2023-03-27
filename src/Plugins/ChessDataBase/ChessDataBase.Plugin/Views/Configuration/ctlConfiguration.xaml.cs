@@ -6,7 +6,7 @@ using Bau.Libraries.ChessDataBase.ViewModels.Configuration;
 namespace Bau.Libraries.ChessDataBase.Plugin.Views.Configuration
 {
 	/// <summary>
-	///		Control de configuración del pluginc
+	///		Control de configuración del plugin
 	/// </summary>
 	public partial class ctlConfiguration : UserControl, PluginsStudio.Views.Base.Interfaces.IPluginConfigurationView
 	{
@@ -27,7 +27,7 @@ namespace Bau.Libraries.ChessDataBase.Plugin.Views.Configuration
 		}
 
 		/// <summary>
-		///		Compureba los datos introducidos
+		///		Comprueba los datos introducidos
 		/// </summary>
 		public bool ValidateData(out string error)
 		{
@@ -50,6 +50,6 @@ namespace Bau.Libraries.ChessDataBase.Plugin.Views.Configuration
 		/// <summary>
 		///		Cabecera del control
 		/// </summary>
-		public string Header { get; } = "BlogReader";
+		public string Header { get; } = "ChessDataBase";
 	}
 }

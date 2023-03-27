@@ -4,7 +4,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
 
 using Bau.Libraries.ChessDataBase.Models.Pieces;
 using Bau.Libraries.ChessDataBase.ViewModels.Games.Movements.Board;
@@ -148,36 +147,21 @@ namespace Bau.Libraries.ChessDataBase.Plugin.Views.ChessBoard.Controls
 		/// <summary>
 		///		Carga una imagen
 		/// </summary>
-		private BitmapImage LoadImage(string fileName)
+		private ImageSource LoadImage(string fileName)
 		{
-			BitmapImage image = new BitmapImage();
-
-				// Inicializa la carga de imagen
-				image.BeginInit();
-				// Carga la imagen
-				if (!string.IsNullOrEmpty(fileName) && System.IO.File.Exists(fileName))
-					image.UriSource = new Uri(fileName, UriKind.Relative);
-				else
-					image.UriSource = new Uri($"pack://application:,,,/ChessDataBase.Plugin;component/Resources/ChessBoard/{System.IO.Path.GetFileName(fileName)}", UriKind.Absolute);
-
-					// Icon = System.Windows.Media.Imaging.BitmapFrame.Create(new Uri("pack://application:,,,./Resources/BauDbStudio.ico", UriKind.RelativeOrAbsolute)); 
-					//pack://application:,,,/DbStudio.Views;component/Resources/Images/{resource}
-					//pack://application:,,,/BauControls;component/Themes/Images/Notifications/facebook-button.png
-
-				// Finaliza la carga de la imagen
-				image.CacheOption = BitmapCacheOption.OnLoad; // ... carga la imagen en este momento, no la deja en caché
-				image.EndInit();
-				// Devuelve la imagen cargada
-				return image;
+			if (!string.IsNullOrWhiteSpace(fileName) && System.IO.File.Exists(fileName))
+				return ChessDataBasePlugin.ImagesCache.GetImage(fileName, false);
+			else
+				return ChessDataBasePlugin.ImagesCache.GetImage(GetResource(System.IO.Path.GetFileName(fileName)), true);
 		}
 
-		///// <summary>
-		/////		Obtiene el siguiente color
-		///// </summary>
-		//private PieceBaseModel.PieceColor GetNextColor(PieceBaseModel.PieceColor color)
-		//{
-		//	return color == PieceBaseModel.PieceColor.White ? PieceBaseModel.PieceColor.Black : PieceBaseModel.PieceColor.White;
-		//}
+		/// <summary>
+		///		Obtiene la URL completa de un recurso
+		/// </summary>
+		private string GetResource(string icon)
+		{
+			return $"pack://application:,,,/ChessDataBase.Plugin;component/Resources/ChessBoard/{icon}";
+		}
 
 		/// <summary>
 		///		Muestra las imágenes

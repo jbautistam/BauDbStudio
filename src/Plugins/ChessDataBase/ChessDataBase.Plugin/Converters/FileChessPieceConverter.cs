@@ -25,7 +25,7 @@ namespace Bau.Libraries.ChessDataBase.Plugin.Converters
 		/// <summary>
 		///		Obtiene el icono asociado a un <see cref="MovementFigureModel"/>
 		/// </summary>
-		private string GetIcon(MovementFigureModel movement)
+		private object GetIcon(MovementFigureModel movement)
 		{	
 			string nameColor = "Black";
 			string namePiece = string.Empty;
@@ -57,7 +57,7 @@ namespace Bau.Libraries.ChessDataBase.Plugin.Converters
 				}
 				// Obtiene el nombre de la imagen
 				if (!string.IsNullOrEmpty(nameColor) && !string.IsNullOrEmpty(namePiece))
-					return $"/Resources/ChessBoard/{namePiece}{nameColor}.gif";
+					return ChessDataBasePlugin.ImagesCache.GetImage($"pack://application:,,,/ChessDataBase.Plugin;component/Resources/ChessBoard/{namePiece}{nameColor}.gif", true);
 				else
 					return null;
 		}

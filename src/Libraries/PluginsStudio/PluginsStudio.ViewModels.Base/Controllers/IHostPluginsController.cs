@@ -31,6 +31,11 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Controllers
 		void OpenEditor(Files.BaseTextFileViewModel viewModel);
 
 		/// <summary>
+		///		Abre la ventana de edición de un archivo de texto
+		/// </summary>
+		void OpenTextEditor(string fileName);
+
+		/// <summary>
 		///		Abre un navegador Web
 		/// </summary>
 		void OpenWebBrowser(string url);

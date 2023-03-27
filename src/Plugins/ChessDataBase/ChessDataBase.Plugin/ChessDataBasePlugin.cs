@@ -50,34 +50,22 @@ namespace Bau.Libraries.ChessDataBase.Plugin
 		/// <summary>
 		///		Obtiene los paneles del plugin
 		/// </summary>
-		public List<PaneModel> GetPanes()
-		{
-			return new();
-		}
+		public List<PaneModel> GetPanes() => new();
 
 		/// <summary>
 		///		Obtiene las barras de herramientas del plugin
 		/// </summary>
-		public List<ToolBarModel> GetToolBars()
-		{
-			return new();
-		}
+		public List<ToolBarModel> GetToolBars() => new();
 
 		/// <summary>
 		///		Obtiene los menús del plugin
 		/// </summary>
-		public List<MenuListModel> GetMenus()
-		{
-			return new();
-		}
+		public List<MenuListModel> GetMenus() => new();
 
 		/// <summary>
 		///		Obtiene las opciones de menú asociadas a las extensiones de archivo y carpetas
 		/// </summary>
-		public List<FileOptionsModel> GetFilesOptions()
-		{
-			return null;
-		}
+		public List<FileOptionsModel> GetFilesOptions() => null;
 
 		/// <summary>
 		///		Obtiene las extensiones de archivo asociadas al plugin
@@ -101,7 +89,7 @@ namespace Bau.Libraries.ChessDataBase.Plugin
 		/// </summary>
 		public IPluginConfigurationView GetConfigurationView()
 		{
-			return null;
+			return new Views.Configuration.ctlConfiguration(MainViewModel.ConfigurationViewModel);
 		}
 
 		/// <summary>
@@ -113,5 +101,10 @@ namespace Bau.Libraries.ChessDataBase.Plugin
 		///		ViewModel principal
 		/// </summary>
 		public MainViewModel MainViewModel { get; private set; }
+
+		/// <summary>
+		///		Caché de imágenes
+		/// </summary>
+		public static BauMvvm.Views.Wpf.Tools.ImagesCache ImagesCache = new();
 	}
 }

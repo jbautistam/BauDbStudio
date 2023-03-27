@@ -34,7 +34,7 @@ namespace Bau.Libraries.ChessDataBase.ViewModels.Games
 		/// </summary>
 		private void OpenFile()
 		{
-			MainViewModel.ViewsController.HostPluginsController.OpenFile(ChessGameViewModel.FileName);
+			MainViewModel.ViewsController.HostPluginsController.OpenTextEditor(ChessGameViewModel.FileName);
 		}
 
 		/// <summary>

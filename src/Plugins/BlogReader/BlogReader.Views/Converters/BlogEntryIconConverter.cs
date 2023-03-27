@@ -6,38 +6,44 @@ using Bau.Libraries.LibBlogReader.Model;
 namespace Bau.Libraries.BlogReader.Views.Views.Converters
 {
 	/// <summary>
-	///		Conversor para los iconos asociados a las entradas de un blog (leído, no leído, interesante
+	///		Conversor para los iconos asociados a las entradas de un blog (leído, no leído, interesante)
 	/// </summary>
 	public class BlogEntryIconConverter : IValueConverter
 	{
+		// Varaiables privadas
+		private static BauMvvm.Views.Wpf.Tools.ImagesCache _cache = new();
+
 		/// <summary>
-		///		Convierte un elemento <see cref="Libraries.LibBlogReader.ViewModel.Blogs.BlogEntryViewModel"/> en el icono asociado
+		///		Convierte un elemento <see cref="LibBlogReader.ViewModel.Blogs.BlogEntryViewModel"/> en el icono asociado
 		/// </summary>
 		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
 		{
 			string icon = null;
 
 				// Convierte la entrada según el estado en el icono asociado
-				if (value is EntryModel.StatusEntry)
-				{
-					EntryModel.StatusEntry status = (EntryModel.StatusEntry) ((int) value);
-
-						// Obtiene la dirección del icono
-						switch (status)
-						{
-							case EntryModel.StatusEntry.Interesting:
-									icon = "/BlogReader.Views;component/Resources/EntryInteresting.png";
-								break;
-							case EntryModel.StatusEntry.NotRead:
-									icon = "/BlogReader.Views;component/Resources/EntryNotRead.png";
-								break;
-							case EntryModel.StatusEntry.Read:
-									icon = "/BlogReader.Views;component/Resources/EntryRead.png";
-								break;
-						}
-				}
+				if (value is EntryModel.StatusEntry status)
+					switch (status)
+					{
+						case EntryModel.StatusEntry.Interesting:
+								icon = GetIconRoute("EntryInteresting.png");
+							break;
+						case EntryModel.StatusEntry.NotRead:
+								icon = GetIconRoute("EntryNotRead.png");
+							break;
+						case EntryModel.StatusEntry.Read:
+								icon = GetIconRoute("EntryRead.png");
+							break;
+					}
 				// Devuelve la dirección del icono
-				return icon;
+				return _cache.GetImage(icon, true);
+		}
+
+		/// <summary>
+		///		Obtiene la ruta del icono
+		/// </summary>
+		private string GetIconRoute(string icon)
+		{
+			return $"pack://application:,,,/BlogReader.Views;component/Resources/{icon}";
 		}
 
 		/// <summary>

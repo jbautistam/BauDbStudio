@@ -57,6 +57,8 @@
 			<!-- Lista de entradas RSS -->
 			<ListView x:Name="lswEntries" Grid.Column="0" Grid.Row="1"
 				ItemsSource="{Binding Entries}" SelectionMode="Extended" SelectedItem="{Binding SelectedEntry}" 
+				VirtualizingStackPanel.IsVirtualizing="True"
+				VirtualizingStackPanel.VirtualizationMode="Recycling"
 				SelectionChanged="lswEntries_SelectionChanged"
 				ContextMenu="{DynamicResource ResourceKey=mnuEntries}">
 				<ListView.Resources>

@@ -1,7 +1,5 @@
 ﻿using System;
 
-using Bau.Libraries.LibHelper.Extensors;
-
 namespace Bau.Libraries.PluginsStudio.ViewModels.Files
 {
 	/// <summary>

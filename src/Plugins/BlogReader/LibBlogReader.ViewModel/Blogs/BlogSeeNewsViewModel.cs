@@ -359,13 +359,24 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 		private string RemoveIframe(string text)
 		{
 			string result = text;
+			int loops = 0;
 
-				//// Quita la etiqueta "iframe"
-				//while (!result.IsEmpty() && result.IndexOf("<iframe") >= 0)
-				//	result = System.Text.RegularExpressions.Regex.Replace(result, "<iframe(.|\n)*?</iframe>", string.Empty);
+				// Quita la etiqueta "iframe"
+				while (!string.IsNullOrEmpty(result) && result.Contains("<iframe") && result.Contains("</iframe>") && loops++ < 10)
+					result = System.Text.RegularExpressions.Regex.Replace(result, "<iframe(.|\n)*?</iframe>", string.Empty, 
+																		  System.Text.RegularExpressions.RegexOptions.IgnoreCase | 
+																			System.Text.RegularExpressions.RegexOptions.Multiline |
+																			System.Text.RegularExpressions.RegexOptions.Compiled);
+				// Elimina los iframe que hayan podido quedarse descolgados
+				if (!string.IsNullOrWhiteSpace(result))
+				{
+					result = result.Replace("<iframe", "<span");
+					result = result.Replace("</iframe", "</span>");
+				}
 				// Devuelve el resultado
 				return result;
 		}
+
 
 		/// <summary>
 		///		Obtiene un vínculo a una llamada de función externa en JavaScript
