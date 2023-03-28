@@ -63,14 +63,6 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Files
 		}
 
 		/// <summary>
-		///		Cierra el viewmodel
-		/// </summary>
-		public override void Close()
-		{
-			// ... no hace nada, sólo implementa la interface
-		}
-
-		/// <summary>
 		///		ViewModel principal
 		/// </summary>
 		public PluginsStudioViewModel MainViewModel { get; }

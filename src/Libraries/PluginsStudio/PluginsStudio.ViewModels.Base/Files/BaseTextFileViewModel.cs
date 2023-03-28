@@ -106,6 +106,14 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Files
 		}
 
 		/// <summary>
+		///		Cierra la ventana
+		/// </summary>
+		public override void Close()
+		{
+			Content = string.Empty;
+		}
+
+		/// <summary>
 		///		Controlador de plugins
 		/// </summary>
 		public Controllers.IPluginsController PluginsController { get; }
