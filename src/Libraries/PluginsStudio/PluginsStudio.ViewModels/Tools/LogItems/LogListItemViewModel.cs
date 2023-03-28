@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.Log
+namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.LogItems
 {
 	/// <summary>
 	///		ViewModel con los datos de un elemento de log
@@ -11,7 +11,8 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.Log
 		private string _type, _content, _formattedHour;
 		private DateTime _createdAt;
 
-		public LogListItemViewModel(LogListViewModel listViewModel, string type, string content, DateTime createdAt, BauMvvm.ViewModels.Media.MvvmColor color) : base(content, null, false, color)
+		public LogListItemViewModel(LogListViewModel listViewModel, string type, string content, DateTime createdAt, BauMvvm.ViewModels.Media.MvvmColor color) 
+					: base(content, null, false, color)
 		{
 			// Asigna las propiedades
 			ListViewModel = listViewModel;

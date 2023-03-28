@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.DbStudio.Models.Connections;
-using Bau.Libraries.LibLogger.Models.Log;
 using Bau.Libraries.DbScripts.Manager.Models;
 using Bau.Libraries.DbScripts.Manager.Builders;
+using Microsoft.Extensions.Logging;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Details.Connections
 {
@@ -67,33 +67,33 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Connections
 			else if (connection == null)
 				SolutionViewModel.MainController.SystemController.ShowMessage("Seleccione una conexión");
 			else 
-				using (BlockLogModel block = SolutionViewModel.Manager.Logger.Default.CreateBlock(LogModel.LogType.Info, "Comienza la ejecución de los archivos"))
-				{
-					System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
-					bool hasError = false;
+			{
+				System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
+				bool hasError = false;
 
-						// Arranca el temporizador
-						stopwatch.Start();
-						// Ejecuta los archivos
-						foreach (ExecuteFilesItemViewModel file in Files)
-							if (file.State == ExecuteFilesItemViewModel.Status.Enqueued)
-							{
-								if (hasError)
-									file.SetStatus(ExecuteFilesItemViewModel.Status.Canceled, "Cancelado por un error anterior");
-								else
-									hasError = await ExecuteFileAsync(block, file, connection, arguments, cancellationToken);
-							}
-						// Muestra el tiempo de ejecución
-						stopwatch.Stop();
-						block.Info($"Tiempo de ejecución: {stopwatch.Elapsed.ToString()}");
-						SolutionViewModel.Manager.Logger.Flush();
-				}
+					// Log
+					SolutionViewModel.Manager.Logger.LogInformation("Comienza la ejecución de los archivos");
+					// Arranca el temporizador
+					stopwatch.Start();
+					// Ejecuta los archivos
+					foreach (ExecuteFilesItemViewModel file in Files)
+						if (file.State == ExecuteFilesItemViewModel.Status.Enqueued)
+						{
+							if (hasError)
+								file.SetStatus(ExecuteFilesItemViewModel.Status.Canceled, "Cancelado por un error anterior");
+							else
+								hasError = await ExecuteFileAsync(file, connection, arguments, cancellationToken);
+						}
+					// Muestra el tiempo de ejecución
+					stopwatch.Stop();
+					SolutionViewModel.Manager.Logger.LogInformation($"Tiempo de ejecución: {stopwatch.Elapsed.ToString()}");
+			}
 		}
 
 		/// <summary>
 		///		Ejecuta un archivo
 		/// </summary>
-		private async Task<bool> ExecuteFileAsync(BlockLogModel block, ExecuteFilesItemViewModel file, ConnectionModel connection, 
+		private async Task<bool> ExecuteFileAsync(ExecuteFilesItemViewModel file, ConnectionModel connection, 
 												  ArgumentListModel arguments, System.Threading.CancellationToken cancellationToken)
 		{
 			bool executed = false;
@@ -124,8 +124,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Connections
 				}
 				catch (Exception exception)
 				{
-					block.Error($"Error al ejecutar el archivo '{file.FileName}'");
-					block.Error(exception.Message);
+					SolutionViewModel.Manager.Logger.LogError(exception, $"Error al ejecutar el archivo '{file.FileName}'");
 					file.SetStatus(ExecuteFilesItemViewModel.Status.Error, $"Error al ejecutar el archivo. {exception.Message}");
 				}
 				// Detiene el reloj

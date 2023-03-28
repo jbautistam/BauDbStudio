@@ -2,6 +2,7 @@
 
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.ToDoManager.Application.Models;
+using Microsoft.Extensions.Logging;
 
 namespace Bau.Libraries.ToDoManager.ViewModel.Reader;
 
@@ -43,8 +44,7 @@ public class ToDoFileViewModel : BaseObservableObject, PluginsStudio.ViewModels.
 			}
 			catch (Exception exception)
 			{
-				MainViewModel.ViewsController.Logger.Default.LogItems.Add(new(null, LibLogger.Models.Log.LogModel.LogType.Error,
-																			  $"Error when load {FileName}. {exception.Message}"));
+				MainViewModel.ViewsController.Logger.LogError(exception, $"Error when load {FileName}. {exception.Message}");
 				MainViewModel.ViewsController.SystemController.ShowMessage($"Error when load {FileName}. {exception.Message}");
 			}
 			// Devuelve el valor que indica si ha podido cargar el archivo

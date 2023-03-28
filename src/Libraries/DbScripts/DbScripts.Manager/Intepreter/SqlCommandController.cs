@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.LibDataStructures.Collections;
-using Bau.Libraries.LibLogger.Models.Log;
 using Bau.Libraries.LibDbProviders.Base;
 using Bau.Libraries.LibDbProviders.Base.Parameters;
 using Bau.Libraries.LibDbScripts.Parser;
+using Microsoft.Extensions.Logging;
 
 namespace Bau.Libraries.DbScripts.Manager.Interpreter
 {
@@ -48,50 +48,49 @@ namespace Bau.Libraries.DbScripts.Manager.Interpreter
 				// Normaliza los argumentos
 				if (arguments == null)
 					arguments = new Models.ArgumentListModel();
+				// Log
+				Manager.Logger.LogInformation("Execute query");
 				// Obtiene la tabla
-				using (BlockLogModel block = Manager.Logger.Default.CreateBlock(LogModel.LogType.Info, "Execute query"))
+				if (string.IsNullOrWhiteSpace(query))
+					Manager.Logger.LogError("The query is empty");
+				else
 				{
-					if (string.IsNullOrWhiteSpace(query))
-						block.Error("The query is empty");
-					else
-					{
-						List<SqlSectionModel> scripts = new SqlParser().Tokenize(query, arguments.Constants.ToDictionary(), out string error);
+					List<SqlSectionModel> scripts = new SqlParser().Tokenize(query, arguments.Constants.ToDictionary(), out string error);
 
-							if (!string.IsNullOrWhiteSpace(error))
-								block.Error(error);
-							else
-							{
-								ParametersDbCollection parametersDb = ConvertParameters(provider, arguments.Parameters);
+						if (!string.IsNullOrWhiteSpace(error))
+							Manager.Logger.LogError(error);
+						else
+						{
+							ParametersDbCollection parametersDb = ConvertParameters(provider, arguments.Parameters);
 
-									// Obtiene el datatable
-									foreach (SqlSectionModel script in scripts)
-										if (script.Type == SqlSectionModel.SectionType.Sql)
-										{
-											string sql = provider.SqlHelper.ConvertSqlNoParameters(script.Content, parametersDb).TrimIgnoreNull();
+								// Obtiene el datatable
+								foreach (SqlSectionModel script in scripts)
+									if (script.Type == SqlSectionModel.SectionType.Sql)
+									{
+										string sql = provider.SqlHelper.ConvertSqlNoParameters(script.Content, parametersDb).TrimIgnoreNull();
 
-												if (!string.IsNullOrWhiteSpace(sql))
+											if (!string.IsNullOrWhiteSpace(sql))
+											{
+												// Log
+												Manager.Logger.LogDebug($"Executing: {sql}");
+												// Obtiene la consulta
+												if (sql.StartsWith("SELECT", StringComparison.CurrentCultureIgnoreCase) ||
+													sql.StartsWith("WITH ", StringComparison.CurrentCultureIgnoreCase) ||
+													sql.StartsWith("EXECUTE ", StringComparison.CurrentCultureIgnoreCase) ||
+													sql.StartsWith("EXEC ", StringComparison.CurrentCultureIgnoreCase))
 												{
-													// Log
-													block.Info($"Executing: {sql}");
-													// Obtiene la consulta
-													if (sql.StartsWith("SELECT", StringComparison.CurrentCultureIgnoreCase) ||
-														sql.StartsWith("WITH ", StringComparison.CurrentCultureIgnoreCase) ||
-														sql.StartsWith("EXECUTE ", StringComparison.CurrentCultureIgnoreCase) ||
-														sql.StartsWith("EXEC ", StringComparison.CurrentCultureIgnoreCase))
-													{
-														if (pageSize == 0)
-															result = await provider.GetDataTableAsync(sql, parametersDb, CommandType.Text, timeout, cancellationToken);
-														else
-															result = await provider.GetDataTableAsync(sql, parametersDb, CommandType.Text, actualPage, pageSize, timeout, cancellationToken);
-													}
+													if (pageSize == 0)
+														result = await provider.GetDataTableAsync(sql, parametersDb, CommandType.Text, timeout, cancellationToken);
 													else
-														result = await ExecuteScalarQueryAsync(provider, sql, timeout, cancellationToken);
+														result = await provider.GetDataTableAsync(sql, parametersDb, CommandType.Text, actualPage, pageSize, timeout, cancellationToken);
 												}
-										}
-									// Log
-									block.Info("End query");
-							}
-					}
+												else
+													result = await ExecuteScalarQueryAsync(provider, sql, timeout, cancellationToken);
+											}
+									}
+								// Log
+								Manager.Logger.LogInformation("End query");
+						}
 				}
 				// Devuelve la última tabla obtenida
 				return result;
@@ -196,39 +195,39 @@ namespace Bau.Libraries.DbScripts.Manager.Interpreter
 		/// </summary>
 		private async Task ExecuteAsync(IDbProvider provider, string sql, Models.ArgumentListModel arguments, TimeSpan timeout, CancellationToken cancellationToken)
 		{
-			using (BlockLogModel block = Manager.Logger.Default.CreateBlock(LogModel.LogType.Info, "Execute script"))
+			// Log
+			Manager.Logger.LogInformation("Execute script");
+			// Ejecuta la consulta
+			if (string.IsNullOrWhiteSpace(sql))
+				Manager.Logger.LogError("The query is empty");
+			else
 			{
-				if (string.IsNullOrWhiteSpace(sql))
-					block.Error("The query is empty");
-				else
-				{
-					List<SqlSectionModel> scripts = new SqlParser().Tokenize(sql, arguments.Constants.ToDictionary(), out string error);
+				List<SqlSectionModel> scripts = new SqlParser().Tokenize(sql, arguments.Constants.ToDictionary(), out string error);
 
-						if (!string.IsNullOrWhiteSpace(error))
-							block.Error(error);
-						else
-						{
-							int scriptsExecuted = 0;
+					if (!string.IsNullOrWhiteSpace(error))
+						Manager.Logger.LogError(error);
+					else
+					{
+						int scriptsExecuted = 0;
 
-								// Ejecuta los scripts
-								if (scripts.Count > 0)
-									scriptsExecuted = await ExecuteCommandsAsync(block, provider, scripts, 
-																				 ConvertParameters(provider, arguments.Parameters), 
-																				 timeout, cancellationToken);
-								// Log
-								if (scriptsExecuted == 0)
-									block.Error("The query is empty");
-								else
-									block.Info($"{scriptsExecuted} command/s executed");
-						}
-				}
+							// Ejecuta los scripts
+							if (scripts.Count > 0)
+								scriptsExecuted = await ExecuteCommandsAsync(provider, scripts, 
+																			 ConvertParameters(provider, arguments.Parameters), 
+																			 timeout, cancellationToken);
+							// Log
+							if (scriptsExecuted == 0)
+								Manager.Logger.LogError("The query is empty");
+							else
+								Manager.Logger.LogInformation($"{scriptsExecuted} command/s executed");
+					}
 			}
 		}
 
 		/// <summary>
 		///		Ejecuta una serie de comandos
 		/// </summary>
-		private async Task<int> ExecuteCommandsAsync(BlockLogModel block, IDbProvider provider, 
+		private async Task<int> ExecuteCommandsAsync(IDbProvider provider, 
 													 List<SqlSectionModel> commands, ParametersDbCollection parametersDb, 
 													 TimeSpan timeout, CancellationToken cancellationToken)
 		{
@@ -239,7 +238,7 @@ namespace Bau.Libraries.DbScripts.Manager.Interpreter
 					if (!cancellationToken.IsCancellationRequested && command.Type == SqlSectionModel.SectionType.Sql)
 					{
 						// Log
-						block.Debug($"Execute: {command.Content}");
+						Manager.Logger.LogDebug($"Execute: {command.Content}");
 						// Ejecuta la cadena SQL
 						await provider.ExecuteAsync(provider.SqlHelper.ConvertSqlNoParameters(command.Content, parametersDb), 
 													null, CommandType.Text, timeout, cancellationToken);
@@ -257,40 +256,39 @@ namespace Bau.Libraries.DbScripts.Manager.Interpreter
 		{
 			DataTable result = null;
 
+				// Log
+				Manager.Logger.LogInformation("Get execution plan");
 				// Obtiene la tabla
-				using (BlockLogModel block = Manager.Logger.Default.CreateBlock(LogModel.LogType.Info, "Get execution plan"))
+				if (string.IsNullOrWhiteSpace(query.Sql))
+					Manager.Logger.LogError("The query is empty");
+				else
 				{
-					if (string.IsNullOrWhiteSpace(query.Sql))
-						block.Error("The query is empty");
-					else
-					{
-						IDbProvider provider = Manager.GetDbProvider(query.Connection);
-						List<SqlSectionModel> scripts = new SqlParser().Tokenize(query.Sql, query.Arguments.Constants.ToDictionary(), out string error);
+					IDbProvider provider = Manager.GetDbProvider(query.Connection);
+					List<SqlSectionModel> scripts = new SqlParser().Tokenize(query.Sql, query.Arguments.Constants.ToDictionary(), out string error);
 
-							if (!string.IsNullOrWhiteSpace(error))
-								block.Error(error);
-							else
-							{
-								ParametersDbCollection parametersDb = ConvertParameters(provider, query.Arguments.Parameters);
+						if (!string.IsNullOrWhiteSpace(error))
+							Manager.Logger.LogError(error);
+						else
+						{
+							ParametersDbCollection parametersDb = ConvertParameters(provider, query.Arguments.Parameters);
 
-									// Obtiene el datatable
-									foreach (SqlSectionModel script in scripts)
-										if (script.Type == SqlSectionModel.SectionType.Sql)
-										{
-											string sql = provider.SqlHelper.ConvertSqlNoParameters(script.Content, parametersDb).TrimIgnoreNull();
+								// Obtiene el datatable
+								foreach (SqlSectionModel script in scripts)
+									if (script.Type == SqlSectionModel.SectionType.Sql)
+									{
+										string sql = provider.SqlHelper.ConvertSqlNoParameters(script.Content, parametersDb).TrimIgnoreNull();
 
-												if (!string.IsNullOrWhiteSpace(sql))
-												{
-													// Log
-													block.Info($"Get execution plan: {sql}");
-													// Obtiene el plan de ejecución
-													result = await provider.GetExecutionPlanAsync(sql, null, CommandType.Text, query.Timeout, cancellationToken);
-												}
-										}
-									// Log
-									block.Info("End query");
-							}
-					}
+											if (!string.IsNullOrWhiteSpace(sql))
+											{
+												// Log
+												Manager.Logger.LogInformation($"Get execution plan: {sql}");
+												// Obtiene el plan de ejecución
+												result = await provider.GetExecutionPlanAsync(sql, null, CommandType.Text, query.Timeout, cancellationToken);
+											}
+									}
+								// Log
+								Manager.Logger.LogInformation("End query");
+						}
 				}
 				// Devuelve la última tabla obtenida
 				return result;

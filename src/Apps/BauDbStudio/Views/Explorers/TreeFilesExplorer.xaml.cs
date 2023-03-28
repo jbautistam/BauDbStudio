@@ -9,6 +9,7 @@ using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
 using Bau.Libraries.BauMvvm.Views.Wpf.Forms.Trees;
 using Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
+using Microsoft.Extensions.Logging;
 
 namespace Bau.DbStudio.Views.Explorers
 {
@@ -201,7 +202,7 @@ namespace Bau.DbStudio.Views.Explorers
 					}
 					catch (Exception exception)
 					{
-						ViewModel.MainViewModel.PluginsStudioController.MainWindowController.Logger.Default.LogItems.Error("Error when drop files", exception);
+						ViewModel.MainViewModel.PluginsStudioController.MainWindowController.Logger.LogError(exception, "Error when drop files");
 					}
 		}
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Bau.Libraries.DbStudio.Models.Connections;
 using Bau.Libraries.DbScripts.Manager.Interpreter;
 using Bau.Libraries.DbScripts.Manager.Models;
-using Bau.Libraries.LibLogger.Core;
+using Microsoft.Extensions.Logging;
 
 namespace Bau.Libraries.DbScripts.Manager
 {
@@ -15,7 +15,7 @@ namespace Bau.Libraries.DbScripts.Manager
 	/// </summary>
 	public class DbScriptsManager
 	{
-		public DbScriptsManager(LogManager logger)
+		public DbScriptsManager(ILogger logger)
 		{
 			Logger = logger;
 			ConnectionManager = new Connections.ConnectionManager(this);
@@ -32,7 +32,7 @@ namespace Bau.Libraries.DbScripts.Manager
 		/// <summary>
 		///		Ejecuta una consulta sobre una conexión
 		/// </summary>
-		public async Task ExecuteQueryAsync(Models.QueryModel query, CancellationToken cancellationToken)
+		public async Task ExecuteQueryAsync(QueryModel query, CancellationToken cancellationToken)
 		{
 			await Task.Run(() => new SqlCommandController(this).ExecuteAsync(query, cancellationToken));
 		}
@@ -40,7 +40,7 @@ namespace Bau.Libraries.DbScripts.Manager
 		/// <summary>
 		///		Obtiene un <see cref="DataTable"/> paginada con una consulta sobre una conexión
 		/// </summary>
-		public async Task<DataTable> GetDatatableAsync(Models.QueryModel query, CancellationToken cancellationToken)
+		public async Task<DataTable> GetDatatableAsync(QueryModel query, CancellationToken cancellationToken)
 		{
 			return await Task.Run(() => new SqlCommandController(this).GetDataTableAsync(query, cancellationToken));
 		}
@@ -48,7 +48,7 @@ namespace Bau.Libraries.DbScripts.Manager
 		/// <summary>
 		///		Obtiene el datareader de una consulta
 		/// </summary>
-		public async Task<System.Data.Common.DbDataReader> ExecuteReaderAsync(Models.QueryModel query, CancellationToken cancellationToken)
+		public async Task<System.Data.Common.DbDataReader> ExecuteReaderAsync(QueryModel query, CancellationToken cancellationToken)
 		{
 			return await Task.Run(() => new SqlCommandController(this).ExecuteReaderAsync(query, cancellationToken));
 		}
@@ -80,7 +80,7 @@ namespace Bau.Libraries.DbScripts.Manager
 		/// <summary>
 		///		Manager de log
 		/// </summary>
-		internal LogManager Logger { get; }
+		internal ILogger Logger { get; }
 
 		/// <summary>
 		///		Manager de conexiones

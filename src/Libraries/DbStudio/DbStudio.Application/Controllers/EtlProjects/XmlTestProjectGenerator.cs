@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 using Bau.Libraries.LibMarkupLanguage;
-using Bau.Libraries.LibLogger.Models.Log;
 using Bau.Libraries.DbStudio.Models.Connections;
 
 namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
@@ -24,7 +24,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 		/// <summary>
 		///		Genera los archivos
 		/// </summary>
-		public async Task<bool> GenerateAsync(BlockLogModel block, string provider, string pathVariable, string databaseVariable, string sufixTestTables,
+		public async Task<bool> GenerateAsync(string provider, string pathVariable, string databaseVariable, string sufixTestTables,
 											  string fileNameTest, string fileNameAssert, CancellationToken cancellationToken)
 		{
 			// Limpia los errores
@@ -35,18 +35,18 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 			if (!cancellationToken.IsCancellationRequested)
 			{
 				// Genera el archivo de parámetros
-				SaveParametersFile(block, "Sample.Test.Context.xml", provider, pathVariable, databaseVariable);
+				SaveParametersFile("Sample.Test.Context.xml", provider, pathVariable, databaseVariable);
 				// Genera el archivo de proyecto y parámetros
 				if (!string.IsNullOrWhiteSpace(fileNameTest))
-					SaveProjectFile(block, fileNameTest, "Create test files");
+					SaveProjectFile(fileNameTest, "Create test files");
 				if (!string.IsNullOrWhiteSpace(fileNameAssert))
-					SaveProjectFile(block, fileNameAssert, "Check files");
+					SaveProjectFile(fileNameAssert, "Check files");
 				// Genera el archivo de prueba
 				if (!string.IsNullOrWhiteSpace(fileNameTest))
-					SaveTestFile(block, fileNameTest, provider, pathVariable, databaseVariable, sufixTestTables);
+					SaveTestFile(fileNameTest, provider, pathVariable, databaseVariable, sufixTestTables);
 				// Genera el archivo de comparación
 				if (!string.IsNullOrWhiteSpace(fileNameAssert))
-					SaveAssertFile(block, fileNameAssert, provider, pathVariable, databaseVariable, sufixTestTables);
+					SaveAssertFile(fileNameAssert, provider, pathVariable, databaseVariable, sufixTestTables);
 			}
 			// Devuelve el valor que indica si la generación ha sido correcta
 			return Errors.Count == 0;
@@ -55,14 +55,14 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 		/// <summary>
 		///		Graba el archivo de proyecto para la creación del archivo de pruebas
 		/// </summary>
-		private void SaveProjectFile(BlockLogModel block, string fileNameTest, string message)
+		private void SaveProjectFile(string fileNameTest, string message)
 		{
 			MLFile fileML = new MLFile();
 			MLNode rootML = fileML.Nodes.Add("EtlProject");
 			string fileName = System.IO.Path.GetFileNameWithoutExtension(fileNameTest) + ".project" + System.IO.Path.GetExtension(fileNameTest);
 
 				// Log
-				block.Info($"Start generation project '{fileName}'");
+				Manager.Logger.LogInformation($"Start generation project '{fileName}'");
 				// Añade el nombre del proyecto
 				rootML.Nodes.Add("Name", message);
 				// Añade los archivos de scripts
@@ -70,7 +70,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 				// Graba el archivo
 				new LibMarkupLanguage.Services.XML.XMLWriter().Save(System.IO.Path.Combine(Path, fileName), fileML);
 				// Log
-				block.Info($"End generation project '{fileName}'");
+				Manager.Logger.LogInformation($"End generation project '{fileName}'");
 		}
 
 		/// <summary>
@@ -94,13 +94,13 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 		/// <summary>
 		///		Graba un archivo de pruebas
 		/// </summary>
-		private void SaveTestFile(BlockLogModel block, string fileName, string provider, string pathVariable, string databaseVariable, string sufixTestTables)
+		private void SaveTestFile(string fileName, string provider, string pathVariable, string databaseVariable, string sufixTestTables)
 		{
 			MLFile fileML = new MLFile();
 			MLNode rootML = fileML.Nodes.Add("DbScript");
 
 				// Log
-				block.Info($"Start generate file '{fileName}'");
+				Manager.Logger.LogInformation($"Start generate file '{fileName}'");
 				// Crea los nodos de creación de los archivos de pruebas
 				foreach (ConnectionTableModel table in Connection.Tables)
 					if (!string.IsNullOrWhiteSpace(DataBase) && DataBase.Equals(table.Schema, StringComparison.CurrentCultureIgnoreCase))
@@ -124,19 +124,19 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 				// Graba el archivo
 				new LibMarkupLanguage.Services.XML.XMLWriter().Save(System.IO.Path.Combine(Path, fileName), fileML);
 				// Log
-				block.Info($"End generation file '{fileName}'");
+				Manager.Logger.LogInformation($"End generation file '{fileName}'");
 		}
 
 		/// <summary>
 		///		Graba el archivo de comparación de tablas
 		/// </summary>
-		private void SaveAssertFile(BlockLogModel block, string fileName, string provider, string pathVariable, string databaseVariable, string sufixTestTables)
+		private void SaveAssertFile(string fileName, string provider, string pathVariable, string databaseVariable, string sufixTestTables)
 		{
 			MLFile fileML = new MLFile();
 			MLNode rootML = fileML.Nodes.Add("DbScript");
 
 				// Log
-				block.Info($"Start generate file '{fileName}'");
+				Manager.Logger.LogInformation($"Start generate file '{fileName}'");
 				// Crea los nodos de creación de los archivos de pruebas
 				foreach (ConnectionTableModel table in Connection.Tables)
 					if (!string.IsNullOrWhiteSpace(DataBase) && DataBase.Equals(table.Schema, StringComparison.CurrentCultureIgnoreCase))
@@ -156,7 +156,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 				// Graba el archivo
 				new LibMarkupLanguage.Services.XML.XMLWriter().Save(System.IO.Path.Combine(Path, fileName), fileML);
 				// Log
-				block.Info($"End generation file '{fileName}'");
+				Manager.Logger.LogInformation($"End generation file '{fileName}'");
 		}
 
 		/// <summary>
@@ -204,7 +204,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 		/// <summary>
 		///		Graba el archivo de ejemplo de parámetros
 		/// </summary>
-		private void SaveParametersFile(BlockLogModel block, string fileName, string provider, string pathVariable, string databaseVariable)
+		private void SaveParametersFile(string fileName, string provider, string pathVariable, string databaseVariable)
 		{
 			MLFile fileML = new MLFile();
 			MLNode rootML = fileML.Nodes.Add("EtlContext");
@@ -212,7 +212,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 			MLNode contextML = rootML.Nodes.Add("Context");
 
 				// Log
-				block.Info($"Start generate file '{fileName}'");
+				Manager.Logger.LogInformation($"Start generate file '{fileName}'");
 				// Añade los nodos básicos
 				rootML.Nodes.Add("Name", "Test context sample");
 				// Añade los parámetros globales
@@ -224,7 +224,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 				// Graba el archivo
 				new LibMarkupLanguage.Services.XML.XMLWriter().Save(System.IO.Path.Combine(Path, fileName), fileML);
 				// Log
-				block.Info($"End generation file '{fileName}'");
+				Manager.Logger.LogInformation($"End generation file '{fileName}'");
 		}
 
 		/// <summary>

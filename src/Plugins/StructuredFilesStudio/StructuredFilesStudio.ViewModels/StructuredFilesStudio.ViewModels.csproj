@@ -24,7 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibLogger\src\LibLogger.Core\LibLogger.Core.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibSystem.Windows\LibSystem.Windows.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Formats\LibCsvFiles\src\LibCsvFiles.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Formats\LibExcelFiles\src\LibExcelFiles.csproj" />

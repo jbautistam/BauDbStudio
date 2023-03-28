@@ -1,10 +1,5 @@
-﻿using System;
-using System.Data;
-using System.Threading;
-using System.Threading.Tasks;
-
-using Bau.Libraries.LibLogger.Core;
-using Bau.Libraries.CloudStudio.Models;
+﻿using Bau.Libraries.CloudStudio.Models;
+using Microsoft.Extensions.Logging;
 
 namespace Bau.Libraries.CloudStudio.Application
 {
@@ -13,7 +8,7 @@ namespace Bau.Libraries.CloudStudio.Application
 	/// </summary>
 	public class SolutionManager
 	{
-		public SolutionManager(LogManager logger)
+		public SolutionManager(ILogger logger)
 		{
 			Logger = logger;
 		}
@@ -37,6 +32,6 @@ namespace Bau.Libraries.CloudStudio.Application
 		/// <summary>
 		///		Manager de log
 		/// </summary>
-		public LogManager Logger { get; }
+		public ILogger Logger { get; }
 	}
 }

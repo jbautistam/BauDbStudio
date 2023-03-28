@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Bau.Libraries.BauMvvm.ViewModels.Controllers;
+using Microsoft.Extensions.Logging;
 
 namespace Bau.Libraries.JobsProcessor.ViewModel.Controllers
 {
@@ -52,6 +53,6 @@ namespace Bau.Libraries.JobsProcessor.ViewModel.Controllers
 		/// <summary>
 		///		Controlador de log
 		/// </summary>
-		LibLogger.Core.LogManager Logger => MainWindowController.Logger;
+		ILogger Logger => MainWindowController.Logger;
 	}
 }

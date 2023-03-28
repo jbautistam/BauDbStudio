@@ -7,7 +7,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibHelper\src\LibHelper.csproj" />
-    <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibLogger\src\LibLogger.Core\LibLogger.Core.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\DbScripts\LibDbScripts.Parser\LibDbScripts.Parser.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DataBaseProviders\LibDbProviders.Base\LibDbProviders.Base.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DataBaseProviders\LibDbProviders.MySql\LibDbProviders.MySql.csproj" />

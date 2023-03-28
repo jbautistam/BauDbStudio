@@ -9,8 +9,8 @@ using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.ComboItems;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Interfaces;
 using Bau.Libraries.DbScripts.Manager.Models;
 using Bau.Libraries.DbStudio.Models.Connections;
-using Bau.Libraries.LibLogger.Models.Log;
 using Bau.Libraries.DbStudio.ViewModels.Details.EtlProjects;
+using Microsoft.Extensions.Logging;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Details.Connections
 {
@@ -208,39 +208,34 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Connections
 
 					if (SolutionViewModel.MainController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 					{
-						// Exporta los datos
-						using (BlockLogModel block = SolutionViewModel.MainController.Logger.Default
-														.CreateBlock(LogModel.LogType.Info, $"Exportando archivos de {viewModel.ComboConnections.GetSelectedConnection().Name} {viewModel.DataBase}"))
-						{
-							// Arranca la ejecución
-							StartExecution();
-							// Ejecuta la exportación
-							try
-							{
-								Application.Controllers.Export.ExportDataBaseGenerator generator = new Application.Controllers.Export.ExportDataBaseGenerator(SolutionViewModel.Manager);
-
-									if (await generator.ExportAsync(block, viewModel.ComboConnections.GetSelectedConnection(),
-																	viewModel.DataBase, viewModel.OutputPath, viewModel.FormatType, viewModel.BlockSize, CancellationToken.None))
-									{
-										block.Info($"Fin de la exportación de la base de datos {viewModel.DataBase}");
-										SolutionViewModel.MainController.MainWindowController
-												.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
-																  "Explotación de archivos",
-																  "Ha terminado correctamente la exportación de archivos");
-									}
-									else
-										block.Error($"Error en la exportación de datos. {generator.Errors.Concatenate()}");
-
-							}
-							catch (Exception exception)
-							{
-								block.Error("Exception when create files", exception);
-							}
-							// Detiene la ejecución
-							StopExecuting();
-						}
 						// Log
-						SolutionViewModel.MainController.Logger.Flush();
+						SolutionViewModel.MainController.Logger.LogInformation($"Exportando archivos de {viewModel.ComboConnections.GetSelectedConnection().Name} {viewModel.DataBase}");
+						// Arranca la ejecución
+						StartExecution();
+						// Ejecuta la exportación
+						try
+						{
+							Application.Controllers.Export.ExportDataBaseGenerator generator = new Application.Controllers.Export.ExportDataBaseGenerator(SolutionViewModel.Manager);
+
+								if (await generator.ExportAsync(viewModel.ComboConnections.GetSelectedConnection(),
+																viewModel.DataBase, viewModel.OutputPath, viewModel.FormatType, viewModel.BlockSize, CancellationToken.None))
+								{
+									SolutionViewModel.MainController.Logger.LogInformation($"Fin de la exportación de la base de datos {viewModel.DataBase}");
+									SolutionViewModel.MainController.MainWindowController
+											.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
+																"Explotación de archivos",
+																"Ha terminado correctamente la exportación de archivos");
+								}
+								else
+									SolutionViewModel.MainController.Logger.LogError($"Error en la exportación de datos. {generator.Errors.Concatenate()}");
+
+						}
+						catch (Exception exception)
+						{
+							SolutionViewModel.MainController.Logger.LogError(exception, "Exception when create files", exception);
+						}
+						// Detiene la ejecución
+						StopExecuting();
 					}
 			}
 		}
@@ -278,8 +273,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Connections
 			IsExecuting = false;
 			// Vacía el token de cancelación
 			_cancellationToken = CancellationToken.None;
-			// Log
-			SolutionViewModel.MainController.Logger.Flush();
 		}
 
 		/// <summary>
@@ -336,7 +329,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Connections
 							}
 							catch (Exception exception)
 							{
-								SolutionViewModel.MainController.Logger.Default.LogItems.Error($"Error al ejecutar la consulta. {exception.Message}");
+								SolutionViewModel.MainController.Logger.LogError(exception, $"Error al ejecutar la consulta. {exception.Message}");
 							}
 							// Indica que ha finalizado la tarea y detiene el temporizador
 							StopExecuting();
@@ -378,7 +371,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Connections
 				// Cancela las tareas
 				_tokenSource.Cancel();
 				// Log
-				SolutionViewModel.MainController.Logger.Default.LogItems.Info("Consulta cancelada");
+				SolutionViewModel.MainController.Logger.LogInformation("Consulta cancelada");
 				// Indica que ya no está en ejecución
 				StopExecuting();
 			}

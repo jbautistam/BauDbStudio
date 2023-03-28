@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.LibBlobStorage;
-using Bau.Libraries.LibLogger.Models.Log;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
+using Microsoft.Extensions.Logging;
 
 namespace Bau.Libraries.CloudStudio.ViewModels.Explorers.Cloud
 {
@@ -158,7 +158,7 @@ namespace Bau.Libraries.CloudStudio.ViewModels.Explorers.Cloud
 							}
 							catch (Exception exception)
 							{
-								SolutionViewModel.MainController.Logger.Default.LogItems.Error($"Error al crear el contenedor {container}", exception);
+								SolutionViewModel.MainController.Logger.LogError(exception, $"Error al crear el contenedor {container}");
 							}
 				}
 		}
@@ -237,33 +237,29 @@ namespace Bau.Libraries.CloudStudio.ViewModels.Explorers.Cloud
 						else
 						{
 							// Sube los archivos
-							using (BlockLogModel block = SolutionViewModel.MainController.Logger.Default.CreateBlock(LogModel.LogType.Info, "Comienzo de la subida de archivos"))
-							{
-								// Sube cada archivo
-								foreach (string file in files)
-									if (!string.IsNullOrWhiteSpace(file) && System.IO.File.Exists(file))
-									{
-										string targetFile = System.IO.Path.GetFileName(file);
+							SolutionViewModel.MainController.Logger.LogInformation("Comienzo de la subida de archivos");
+							// Sube cada archivo
+							foreach (string file in files)
+								if (!string.IsNullOrWhiteSpace(file) && System.IO.File.Exists(file))
+								{
+									string targetFile = System.IO.Path.GetFileName(file);
 
-											// Si es un directorio, añade el directorio
-											if (isFolder && !string.IsNullOrWhiteSpace(remoteFileName))
-												targetFile = System.IO.Path.Combine(remoteFileName, targetFile);
-											else if (!isFolder && !string.IsNullOrWhiteSpace(remoteFileName))
-												targetFile = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(remoteFileName), targetFile);
-											// Log
-											block.Info($"Comienza la subida del archivo {file}");
-											// Sube el archivo
-											await manager.UploadAsync(container, targetFile, file);
-											// Log
-											block.Info($"Finaliza la subida del archivo {file}");
-									}
-								// Log
-								block.Info("Fin de la subida de archivos");
-							}
+										// Si es un directorio, añade el directorio
+										if (isFolder && !string.IsNullOrWhiteSpace(remoteFileName))
+											targetFile = System.IO.Path.Combine(remoteFileName, targetFile);
+										else if (!isFolder && !string.IsNullOrWhiteSpace(remoteFileName))
+											targetFile = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(remoteFileName), targetFile);
+										// Log
+										SolutionViewModel.MainController.Logger.LogInformation($"Comienza la subida del archivo {file}");
+										// Sube el archivo
+										await manager.UploadAsync(container, targetFile, file);
+										// Log
+										SolutionViewModel.MainController.Logger.LogInformation($"Finaliza la subida del archivo {file}");
+								}
+							// Log
+							SolutionViewModel.MainController.Logger.LogInformation("Fin de la subida de archivos");
 							// Actualiza el árbol
 							Load();
-							// Log 
-							SolutionViewModel.MainController.Logger.Flush();
 						}
 				}
 		}
@@ -287,30 +283,24 @@ namespace Bau.Libraries.CloudStudio.ViewModels.Explorers.Cloud
 							SolutionViewModel.MainController.SystemController.ShowMessage("Seleccione una cuenta de almacenamiento");
 						else 
 						{
-							// Descarga de archivos
-							using (BlockLogModel block = SolutionViewModel.MainController.Logger.Default.CreateBlock(LogModel.LogType.Info, "Comienza la descarga de archivos"))
+							// Descarga el contenedor, directorio o archivo
+							try
 							{
-								// Descarga el contenedor, directorio o archivo
-								try
-								{
-									if (SelectedNode is NodeStorageContainerViewModel item)
-										await DownloadFolderAsync(block, manager, path, item.Container, string.Empty);
-									else if (SelectedNode is NodeStorageContainerFileViewModel folder && folder.IsFolder)
-										await DownloadFolderAsync(block, manager, path, folder.Blob.Blob.Container, System.IO.Path.GetDirectoryName(folder.Blob.Blob.FullFileName));
-									else if (SelectedNode is NodeStorageContainerFileViewModel file && !file.IsFolder)
-										await DownloadFileAsync(block, manager, path, file.Blob.Blob.Container, file.Blob.Blob.FullFileName);
-									else
-										SolutionViewModel.MainController.SystemController.ShowMessage("Seleccione un contenedor, directorio o archivo para descargar");
-								}
-								catch (Exception exception)
-								{
-									SolutionViewModel.MainController.Logger.Default.LogItems.Error("Error al descargar los archivos", exception);
-								}
-								// Log
-								block.Info("Fin de la descarga de archivos");
+								if (SelectedNode is NodeStorageContainerViewModel item)
+									await DownloadFolderAsync(manager, path, item.Container, string.Empty);
+								else if (SelectedNode is NodeStorageContainerFileViewModel folder && folder.IsFolder)
+									await DownloadFolderAsync(manager, path, folder.Blob.Blob.Container, System.IO.Path.GetDirectoryName(folder.Blob.Blob.FullFileName));
+								else if (SelectedNode is NodeStorageContainerFileViewModel file && !file.IsFolder)
+									await DownloadFileAsync(manager, path, file.Blob.Blob.Container, file.Blob.Blob.FullFileName);
+								else
+									SolutionViewModel.MainController.SystemController.ShowMessage("Seleccione un contenedor, directorio o archivo para descargar");
 							}
-							// Log 
-							SolutionViewModel.MainController.Logger.Flush();
+							catch (Exception exception)
+							{
+								SolutionViewModel.MainController.Logger.LogError(exception, "Error al descargar los archivos");
+							}
+							// Log
+							SolutionViewModel.MainController.Logger.LogInformation("Fin de la descarga de archivos");
 						}
 				}
 			}
@@ -319,12 +309,12 @@ namespace Bau.Libraries.CloudStudio.ViewModels.Explorers.Cloud
 		/// <summary>
 		///		Descarga un contenedor o directorio
 		/// </summary>
-		private async Task DownloadFolderAsync(BlockLogModel block, AzureStorageBlobManager manager, string localPath, string container, string folder)
+		private async Task DownloadFolderAsync(AzureStorageBlobManager manager, string localPath, string container, string folder)
 		{
 			List<LibBlobStorage.Metadata.BlobModel> blobs = await manager.ListBlobsAsync(container, folder);
 
 				// Log
-				block.Info($"Start download '{container}/{folder}' to '{localPath}' ({blobs.Count} archivos)");
+				SolutionViewModel.MainController.Logger.LogInformation($"Start download '{container}/{folder}' to '{localPath}' ({blobs.Count} archivos)");
 				// Crea la carpeta
 				LibHelper.Files.HelperFiles.MakePath(localPath);
 				// Descarga los archivos
@@ -334,27 +324,27 @@ namespace Bau.Libraries.CloudStudio.ViewModels.Explorers.Cloud
 						string fileName = System.IO.Path.Combine(localPath, blob.LocalFileName);
 
 							// Log
-							block.Info($"Download '{blob.FullFileName}'");
+							SolutionViewModel.MainController.Logger.LogInformation($"Download '{blob.FullFileName}'");
 							// Crea el directorio
 							LibHelper.Files.HelperFiles.MakePath(System.IO.Path.GetDirectoryName(fileName));
 							// Descarga el archivo
 							await manager.DownloadAsync(container, blob.FullFileName, fileName);
 					}
 				// Log
-				block.Info($"End download '{container}/{folder}' to '{localPath}'");
+				SolutionViewModel.MainController.Logger.LogInformation($"End download '{container}/{folder}' to '{localPath}'");
 		}
 
 		/// <summary>
 		///		Descarga un archivo del storage
 		/// </summary>
-		private async Task DownloadFileAsync(BlockLogModel block, AzureStorageBlobManager manager, string localPath, string container, string fileName)
+		private async Task DownloadFileAsync(AzureStorageBlobManager manager, string localPath, string container, string fileName)
 		{
 			// Log
-			block.Info($"Comienza la descarga del archivo {container}/{fileName}");
+			SolutionViewModel.MainController.Logger.LogInformation($"Comienza la descarga del archivo {container}/{fileName}");
 			// Descarga el archivo
 			await manager.DownloadAsync(container, fileName, System.IO.Path.Combine(localPath, System.IO.Path.GetFileName(fileName)));
 			// Log
-			block.Info($"Finaliza la descarga del archivo {container}/{fileName}");
+			SolutionViewModel.MainController.Logger.LogInformation($"Finaliza la descarga del archivo {container}/{fileName}");
 		}
 
 		/// <summary>
@@ -411,7 +401,7 @@ namespace Bau.Libraries.CloudStudio.ViewModels.Explorers.Cloud
 				}
 				catch (Exception exception)
 				{
-					SolutionViewModel.MainController.Logger.Default.LogItems.Error($"Error al borrar el contenedor {item.Text}. {exception.Message}");
+					SolutionViewModel.MainController.Logger.LogError(exception, $"Error al borrar el contenedor {item.Text}. {exception.Message}");
 				}
 		}
 
@@ -421,34 +411,31 @@ namespace Bau.Libraries.CloudStudio.ViewModels.Explorers.Cloud
 		private async Task DeleteBlobAsync(NodeStorageContainerFileViewModel item)
 		{
 			if (item != null &&
-					SolutionViewModel.MainController.SystemController.ShowQuestion($"¿Desea eliminar el blob '{item.Text}'?"))
-				using (BlockLogModel block = SolutionViewModel.MainController.Logger.Default.CreateBlock(LogModel.LogType.Info, "Comienza el borrado de blobs"))
+				SolutionViewModel.MainController.SystemController.ShowQuestion($"¿Desea eliminar el blob '{item.Text}'?"))
+			{
+				// Borra los elementos
+				try
 				{
-						// Borra los elementos
-						try
-						{
-							AzureStorageBlobManager manager = GetStorageManager();
+					AzureStorageBlobManager manager = GetStorageManager();
 
-								// Borra cada uno de los blobs del nodo
-								foreach (BlobNodeModel blob in GetBlobs(item.Blob))
-								{
-									// Log
-									block.Info($"Borrando {blob.Blob.FullFileName}");
-									// Borra el blob
-									await manager.DeleteAsync(blob.Blob.Container, blob.Blob.FullFileName);
-								}
-						}
-						catch (Exception exception)
+						// Borra cada uno de los blobs del nodo
+						foreach (BlobNodeModel blob in GetBlobs(item.Blob))
 						{
-							SolutionViewModel.MainController.Logger.Default.LogItems.Error($"Error al borrar el blob. {exception.Message}");
+							// Log
+							SolutionViewModel.MainController.Logger.LogInformation($"Borrando {blob.Blob.FullFileName}");
+							// Borra el blob
+							await manager.DeleteAsync(blob.Blob.Container, blob.Blob.FullFileName);
 						}
-						// Log
-						block.Info("Fin del borrado de blobs");
-						SolutionViewModel.MainController.Logger.Flush();
-						// Actualiza el árbol
-						Load();
-
 				}
+				catch (Exception exception)
+				{
+					SolutionViewModel.MainController.Logger.LogError(exception, $"Error al borrar el blob. {exception.Message}");
+				}
+				// Log
+				SolutionViewModel.MainController.Logger.LogInformation("Fin del borrado de blobs");
+				// Actualiza el árbol
+				Load();
+			}
 		}
 
 		/// <summary>

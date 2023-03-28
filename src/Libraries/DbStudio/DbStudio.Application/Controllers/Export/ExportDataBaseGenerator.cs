@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.DbStudio.Models.Connections;
-using Bau.Libraries.LibLogger.Models.Log;
 using Bau.Libraries.LibDbProviders.Base;
 
 namespace Bau.Libraries.DbStudio.Application.Controllers.Export
@@ -24,7 +24,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Export
 		/// <summary>
 		///		Exporta las tablas de una conexión a una serie de archivos
 		/// </summary>
-		public async Task<bool> ExportAsync(BlockLogModel block, ConnectionModel connection, string dataBase, string path, 
+		public async Task<bool> ExportAsync(ConnectionModel connection, string dataBase, string path, 
 											SolutionManager.FormatType formatType, long blockSize, CancellationToken cancellationToken)
 		{
 			// Limpia los errores
@@ -40,15 +40,15 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Export
 					try
 					{
 						// Log
-						block.Info($"Start export table {table.FullName}");
+						Manager.Logger.LogInformation($"Start export table {table.FullName}");
 						// Exporta la tabla
-						await ExportTableAsync(block, connection, table, path, formatType, blockSize, cancellationToken);
+						await ExportTableAsync(connection, table, path, formatType, blockSize, cancellationToken);
 						// Log
-						block.Info($"End export table {table.FullName}");
+						Manager.Logger.LogInformation($"End export table {table.FullName}");
 					}
 					catch (Exception exception)
 					{
-						block.Error($"Error when export {table.FullName}", exception);
+						Manager.Logger.LogError(exception, $"Error when export {table.FullName}");
 					}
 			// Devuelve el valor que indica si la exportación ha sido correcta
 			return Errors.Count == 0;
@@ -58,7 +58,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Export
 		///		Exporta una tabla particionando la consulta en varios <see cref="IDataReader"/> (porque por ejemplo spark carga todo el dataReader en memoria
 		///	y da un error de OutOfMemory)
 		/// </summary>
-		private async Task ExportTableAsync(BlockLogModel block, ConnectionModel connection, ConnectionTableModel table, string path, 
+		private async Task ExportTableAsync(ConnectionModel connection, ConnectionTableModel table, string path, 
 											SolutionManager.FormatType formatType, long blockSize, CancellationToken cancellationToken)
 		{
 			IDbProvider provider = Manager.DbScriptsManager.GetDbProvider(connection);
@@ -89,9 +89,9 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Export
 						else
 							sql = GetSparkPaginatedSql(provider, table, actualPage, blockSize);
 						//Log
-						block.Info($"Reading page {actualPage + 1} / {records / blockSize + 1:#,##0} ({records:#,##0}) from table {table.Name}");
+						Manager.Logger.LogInformation($"Reading page {actualPage + 1} / {records / blockSize + 1:#,##0} ({records:#,##0}) from table {table.Name}");
 						// Exporta la tabla
-						await ExportTableAsync(block, provider, sql, fileName, formatType, connection.TimeoutExecuteScript, cancellationToken);
+						await ExportTableAsync(provider, sql, fileName, formatType, connection.TimeoutExecuteScript, cancellationToken);
 				}
 		}
 
@@ -116,7 +116,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Export
 		/// <summary>
 		///		Exporta una tabla
 		/// </summary>
-		private async Task ExportTableAsync(BlockLogModel block, IDbProvider provider, string sql, string fileName, 
+		private async Task ExportTableAsync(IDbProvider provider, string sql, string fileName, 
 											SolutionManager.FormatType formatType, TimeSpan timeout, CancellationToken cancellationToken)
 		{
 			using (IDataReader reader = provider.ExecuteReader(sql, null, CommandType.Text, timeout))
@@ -124,10 +124,10 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Export
 				switch (formatType)
 				{
 					case SolutionManager.FormatType.Csv:
-							ExportToCsv(block, fileName, reader);
+							ExportToCsv(fileName, reader);
 						break;
 					case SolutionManager.FormatType.Parquet:
-							await ExportToParquetAsync(block, fileName, reader, cancellationToken);
+							await ExportToParquetAsync(fileName, reader, cancellationToken);
 						break;
 				}
 			}
@@ -136,12 +136,12 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Export
 		/// <summary>
 		///		Exporta la tabla a CSV
 		/// </summary>
-		private void ExportToCsv(BlockLogModel block, string fileName, IDataReader reader)
+		private void ExportToCsv(string fileName, IDataReader reader)
 		{
 			LibCsvFiles.Controllers.CsvDataReaderWriter writer = new LibCsvFiles.Controllers.CsvDataReaderWriter();
 			
 				// Asigna el evento de progreso
-				writer.Progress += (sender, args) => block.Progress(System.IO.Path.GetFileName(fileName), args.Records, args.Records + 1);
+				writer.Progress += (sender, args) => Manager.Logger.LogInformation($"Exporting to {System.IO.Path.GetFileName(fileName)} ({args.Records:#,##0} / {args.Records + 1:#,##0})");
 				// Graba el archivo
 				writer.Save(reader, fileName);
 		}
@@ -149,12 +149,12 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Export
 		/// <summary>
 		///		Exporta la tabla a parquet
 		/// </summary>
-		private async Task ExportToParquetAsync(BlockLogModel block, string fileName, IDataReader reader, CancellationToken cancellationToken)
+		private async Task ExportToParquetAsync(string fileName, IDataReader reader, CancellationToken cancellationToken)
 		{
 			await using (LibParquetFiles.Writers.ParquetDataWriter writer = new(200_000))
 			{
 				// Asigna el evento de progreso
-				writer.Progress += (sender, args) => block.Progress(System.IO.Path.GetFileName(fileName), args.Records, args.Records + 1);
+				writer.Progress += (sender, args) => Manager.Logger.LogInformation($"Exporting to {System.IO.Path.GetFileName(fileName)} ({args.Records:#,##0} / {args.Records + 1:#,##0})");
 				// Graba el archivo
 				await writer.WriteAsync(fileName, reader, cancellationToken);
 			}

@@ -3,10 +3,10 @@ using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
 
-using Bau.Libraries.LibLogger.Core;
 using Bau.Libraries.DbStudio.Models;
 using Bau.Libraries.DbStudio.Models.Connections;
 using Bau.Libraries.DbScripts.Manager.Models;
+using Microsoft.Extensions.Logging;
 
 namespace Bau.Libraries.DbStudio.Application
 {
@@ -27,7 +27,7 @@ namespace Bau.Libraries.DbStudio.Application
 			Parquet
 		}
 
-		public SolutionManager(LogManager logger)
+		public SolutionManager(ILogger logger)
 		{
 			Logger = logger;
 			DbScriptsManager = new DbScripts.Manager.DbScriptsManager(logger);
@@ -92,7 +92,7 @@ namespace Bau.Libraries.DbStudio.Application
 		/// <summary>
 		///		Manager de log
 		/// </summary>
-		public LogManager Logger { get; }
+		public ILogger Logger { get; }
 
 		/// <summary>
 		///		Manager para el tratamiento de scripts

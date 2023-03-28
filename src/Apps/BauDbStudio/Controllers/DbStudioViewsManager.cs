@@ -82,33 +82,30 @@ namespace Bau.DbStudio.Controllers
 		/// </summary>
 		public List<PaneModel> GetPanes()
 		{
-			List<PaneModel> panes = new List<PaneModel>();
-
-				// Añade los paneles de la aplicación principal
-				panes.Add(new PaneModel
-								{
-									Id = "LogView",
-									Title = "Log",
-									Position = PaneModel.PositionType.Bottom,
-									View = new Views.Tools.Log.LogView(PluginsStudioViewModel.LogViewModel)
-								}
-						 );
-				panes.Add(new PaneModel
-								{
-									Id = "SearchView",
-									Title = "Search",
-									Position = PaneModel.PositionType.Right,
-									View = new Views.Tools.Search.SearchView(PluginsStudioViewModel.SearchFilesViewModel)
-								}
-						 );
-				panes.Add(new PaneModel
-								{
-									Id = "FilesExplorerView",
-									Title = "Files explorer",
-									Position = PaneModel.PositionType.Left,
-									View = new Views.Explorers.TreeFilesExplorer(PluginsStudioViewModel.TreeFoldersViewModel)
-								}
-						 );
+			List<PaneModel> panes = new()
+										{
+											new PaneModel
+													{
+														Id = "LogView",
+														Title = "Log",
+														Position = PaneModel.PositionType.Bottom,
+														View = new Views.Tools.Log.LogView(PluginsStudioViewModel.LogViewModel)
+													},
+											new PaneModel
+													{
+														Id = "SearchView",
+														Title = "Search",
+														Position = PaneModel.PositionType.Right,
+														View = new Views.Tools.Search.SearchView(PluginsStudioViewModel.SearchFilesViewModel)
+													},
+											new PaneModel
+													{
+														Id = "FilesExplorerView",
+														Title = "Files explorer",
+														Position = PaneModel.PositionType.Left,
+														View = new Views.Explorers.TreeFilesExplorer(PluginsStudioViewModel.TreeFoldersViewModel)
+													}
+								};
 				// Añade los paneles de los plugins
 				panes.AddRange(PluginsManager.GetPanes());
 				// Devuelve la colección de paneles

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Bau.Libraries.DbStudio.Models.Connections;
 using Bau.Libraries.DbScripts.Manager.Models;
 using Bau.Libraries.DbScripts.Manager.Builders;
+using Microsoft.Extensions.Logging;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Details.Files
 {
@@ -27,24 +28,24 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Files
 			else if (connection == null)
 				SolutionViewModel.MainController.SystemController.ShowMessage("Seleccione una conexión");
 			else 
-				using (LibLogger.Models.Log.BlockLogModel block = SolutionViewModel.Manager.Logger.Default.CreateBlock(LibLogger.Models.Log.LogModel.LogType.Info,
-																													   $"Comienza la ejecución de la consulta"))
-				{
-					string selectedText = GetEditorSelectedText();
+			{
+				string selectedText = GetEditorSelectedText();
 
-						// Si no hay nada seleccionado, se ejecuta todo el contenido
-						if (string.IsNullOrWhiteSpace(selectedText))
-							selectedText = Content;
-						// Ejecuta la consulta
-						if (FileName.EndsWith(".sql", StringComparison.CurrentCultureIgnoreCase))
-							await SolutionViewModel.Manager.ExecuteQueryAsync(GetQuery(connection, selectedText, arguments), cancellationToken);
-						else if (FileName.EndsWith(".sqlx", StringComparison.CurrentCultureIgnoreCase))
-							await SolutionViewModel.Manager.ExecuteQueryAsync(GetQuery(connection, selectedText, arguments), cancellationToken);
-						else
-							block.Error("No se reconoce el tipo de archivo como SQL");
-						// Muestra el tiempo de ejecución
-						block.Info($"Tiempo de ejecución: {SolutionViewModel.ConnectionExecutionViewModel.ExecutionTime}");
-				}
+					// Log
+					SolutionViewModel.Manager.Logger.LogInformation($"Comienza la ejecución de la consulta");
+					// Si no hay nada seleccionado, se ejecuta todo el contenido
+					if (string.IsNullOrWhiteSpace(selectedText))
+						selectedText = Content;
+					// Ejecuta la consulta
+					if (FileName.EndsWith(".sql", StringComparison.CurrentCultureIgnoreCase))
+						await SolutionViewModel.Manager.ExecuteQueryAsync(GetQuery(connection, selectedText, arguments), cancellationToken);
+					else if (FileName.EndsWith(".sqlx", StringComparison.CurrentCultureIgnoreCase))
+						await SolutionViewModel.Manager.ExecuteQueryAsync(GetQuery(connection, selectedText, arguments), cancellationToken);
+					else
+						SolutionViewModel.Manager.Logger.LogError("No se reconoce el tipo de archivo como SQL");
+					// Muestra el tiempo de ejecución
+					SolutionViewModel.Manager.Logger.LogInformation($"Tiempo de ejecución: {SolutionViewModel.ConnectionExecutionViewModel.ExecutionTime}");
+			}
 		}
 
 		/// <summary>

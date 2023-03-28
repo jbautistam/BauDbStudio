@@ -4,7 +4,7 @@
              xmlns:local="clr-namespace:Bau.DbStudio"
 			 xmlns:converter="clr-namespace:Bau.Libraries.BauMvvm.Views.Converters;assembly=BauMvvm.Views"
 			 xmlns:converterLocal="clr-namespace:Bau.DbStudio.Converters"
-             StartupUri="MainWindow.xaml">
+			 StartupUri="MainWindow.xaml">
     <Application.Resources>
 		<ResourceDictionary>
 			<!-- Estilos -->

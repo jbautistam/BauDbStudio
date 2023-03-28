@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 
 using Bau.Libraries.BauMvvm.ViewModels.Controllers;
 
@@ -86,8 +87,8 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Controllers
         IHostMessengerController MessengerController => HostController.MessengerController;
 
 		/// <summary>
-		///		Controlador de log
+		///		Controlador de log (Microsoft Logger)
 		/// </summary>
-		LibLogger.Core.LogManager Logger { get; }
+		ILogger<IMainWindowController> Logger { get; }
 	}
 }

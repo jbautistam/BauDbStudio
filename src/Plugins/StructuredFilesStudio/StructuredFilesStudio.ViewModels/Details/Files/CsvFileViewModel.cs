@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using Bau.Libraries.LibCsvFiles;
 using Bau.Libraries.LibParquetFiles.Writers;
+using Microsoft.Extensions.Logging;
 
 namespace Bau.Libraries.StructuredFilesStudio.ViewModels.Details.Files
 {
@@ -33,7 +34,7 @@ namespace Bau.Libraries.StructuredFilesStudio.ViewModels.Details.Files
 		/// <summary>
 		///		Graba el archivo
 		/// </summary>
-		protected override async Task SaveFileAsync(LibLogger.Models.Log.BlockLogModel block, string fileName, CancellationToken cancellationToken)
+		protected override async Task SaveFileAsync(ILogger logger, string fileName, CancellationToken cancellationToken)
 		{
 			// Graba el archivo
 			using (CsvReader reader = new CsvReader(FileParameters, FileColumns))
@@ -41,7 +42,7 @@ namespace Bau.Libraries.StructuredFilesStudio.ViewModels.Details.Files
 				await using (ParquetDataWriter writer = new(200_000))
 				{
 					// Log
-					writer.Progress += (sender, args) => block.Progress(System.IO.Path.GetFileName(fileName), args.Records, args.Records + 1);
+					writer.Progress += (sender, args) => logger.LogInformation($"Save '{System.IO.Path.GetFileName(fileName)}' {args.Records:0,##0} / {args.Records + 1:#,##0}");
 					// Abre el archivo
 					reader.Open(FileName);
 					// Escribe el archivo
@@ -49,9 +50,7 @@ namespace Bau.Libraries.StructuredFilesStudio.ViewModels.Details.Files
 				}
 			}
 			// Log
-			block.Progress(System.IO.Path.GetFileName(fileName), 0, 0);
-			block.Info($"Fin de la grabación del archivo '{fileName}'");
-			SolutionViewModel.MainController.Logger.Flush();
+			logger.LogInformation($"Fin de la grabación del archivo '{fileName}'");
 		}
 
 		/// <summary>

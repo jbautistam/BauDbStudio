@@ -7,6 +7,7 @@ using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
 using Bau.Libraries.BauMvvm.ViewModels.Media;
 using Bau.Libraries.DbStudio.Models.Connections;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
+using Microsoft.Extensions.Logging;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 {
@@ -54,8 +55,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 				catch (Exception exception)
 				{
 					nodes.Add(new NodeMessageViewModel(TreeViewModel, this, "No se puede cargar el esquema de la conexión", TreeConnectionsViewModel.IconType.Error.ToString()));
-					(TreeViewModel as TreeSolutionBaseViewModel).SolutionViewModel.MainController.MainWindowController.Logger.Default.LogItems.Error("Error when load schema", exception);
-					(TreeViewModel as TreeSolutionBaseViewModel).SolutionViewModel.MainController.Logger.Flush();
+					(TreeViewModel as TreeSolutionBaseViewModel).SolutionViewModel.MainController.MainWindowController.Logger
+							.LogError(exception, "Error when load schema", exception);
 				}
 				// Devuelve la colección de nodos
 				return nodes;

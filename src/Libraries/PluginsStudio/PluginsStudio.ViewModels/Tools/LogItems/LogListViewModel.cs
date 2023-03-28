@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading;
+using Microsoft.Extensions.Logging;
 
 using Bau.Libraries.BauMvvm.ViewModels.Media;
-using Bau.Libraries.LibLogger.Models.Log;
 
-namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.Log
+namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.LogItems
 {
 	/// <summary>
 	///		ViewModel con los datos de log
@@ -20,72 +20,64 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.Log
 		public LogListViewModel(PluginsStudioViewModel mainViewModel)
 		{
 			MainViewModel = mainViewModel;
-			MainViewModel.PluginsStudioController.MainWindowController.Logger.Logged += (sender, args) => WriteLog(args.Item);
 		}
 
 		/// <summary>
 		///		Escribe la información en el log
 		/// </summary>
-		private void WriteLog(LogModel item)
+		public void WriteLog(LogLevel level, string content, Exception? exception)
 		{
-			if (item.Type != LogModel.LogType.Progress)
-			{
-				object state = new object();
+			object state = new object();
 
-					//? _contexUi mantiene el contexto de sincronización que creó el ViewModel (que debería ser la interface de usuario)
-					//? Al generarse el log en un evento interno, no se puede añadir a ObservableCollection sin una
-					//? excepción del tipo "Este tipo de CollectionView no admite cambios en su SourceCollection desde un hilo diferente del hilo Dispatcher"
-					//? Por eso se tiene que añadir el mensaje de log desde el contexto de sincronización de la UI
-					// Limpia los elementos antiguos
-					if (Items.Count > LogMaximum)
-						while (Items.Count > LogMaximum - LogItemsRemove)
-							_contextUi.Send(_ => Items.RemoveAt(Items.Count - 1), state);
-					// Añade el mensaje
-					_contextUi.Send(_ => {
-											// Crea un elemento al principio de la lista y lo selecciona
-											Items.Insert(0, new LogListItemViewModel(this, item.Type.ToString(), GetLogMessage(item), item.CreatedAt, GetColor(item.Type)));
-											SelectedItem = Items[0];
-											// Lanza una notificación
-											if (item.Type == LogModel.LogType.Error || item.Type == LogModel.LogType.AssertError)
-												MainViewModel.PluginsStudioController.MainWindowController
-														.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Error,
-																		  "Error", item.Message);
-										  },
-									state);
-			}
+			//? _contexUi mantiene el contexto de sincronización que creó el ViewModel (que debería ser la interface de usuario)
+			//? Al generarse el log en un evento interno, no se puede añadir a ObservableCollection sin una
+			//? excepción del tipo "Este tipo de CollectionView no admite cambios en su SourceCollection desde un hilo diferente del hilo Dispatcher"
+			//? Por eso se tiene que añadir el mensaje de log desde el contexto de sincronización de la UI
+			// Limpia los elementos antiguos
+			if (Items.Count > LogMaximum)
+				while (Items.Count > LogMaximum - LogItemsRemove)
+					_contextUi.Send(_ => Items.RemoveAt(Items.Count - 1), state);
+			// Añade el mensaje
+			_contextUi.Send(_ =>
+									{
+										// Crea un elemento al principio de la lista y lo selecciona
+										Items.Insert(0, new LogListItemViewModel(this, level.ToString(), GetLogMessage(content, exception), DateTime.Now, GetColor(level)));
+										SelectedItem = Items[0];
+										// Lanza una notificación
+										if (level == LogLevel.Error)
+											MainViewModel.PluginsStudioController.MainWindowController
+													.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Error,
+																	  "Error", content);
+									},
+							state);
 		}
 
 		/// <summary>
 		///		Obtiene el mensaje de log
 		/// </summary>
-		private string GetLogMessage(LogModel item)
+		private string GetLogMessage(string content, Exception exception)
 		{
-			string message = item.Message;
+			string message = content;
 
-				// Añade los datos de la excepción
-				if (item.Exception != null)
-					message += Environment.NewLine + item.Exception.Message;
-				// Añade los datos de progreso
-				if (item.Type == LogModel.LogType.Progress)
-					message += $" - {item.ActualProgress:#,##0}";
-				// Devuelve el mensaje
-				return message;
+			// Añade los datos de la excepción
+			if (exception != null)
+				message += Environment.NewLine + exception.Message;
+			// Devuelve el mensaje
+			return message;
 		}
 
 		/// <summary>
 		///		Obtiene el color dependiendo del tipo
 		/// </summary>
-		private MvvmColor GetColor(LogModel.LogType type)
+		private MvvmColor GetColor(LogLevel level)
 		{
-			switch (type)
+			return level switch
 			{
-				case LogModel.LogType.Error:
-					return MvvmColor.Red;
-				case LogModel.LogType.Warning:
-					return MvvmColor.Navy;
-				default:
-					return MvvmColor.Black;
-			}
+				LogLevel.Error or LogLevel.Critical => MvvmColor.Red,
+				LogLevel.Debug => MvvmColor.OrangeRed,
+				LogLevel.Trace => MvvmColor.Brown,
+				_ => MvvmColor.Black
+			};
 		}
 
 		/// <summary>

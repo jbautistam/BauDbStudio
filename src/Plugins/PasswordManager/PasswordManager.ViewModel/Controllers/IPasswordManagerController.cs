@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Extensions.Logging;
 
 using Bau.Libraries.BauMvvm.ViewModels.Controllers;
 
@@ -52,6 +53,6 @@ namespace Bau.Libraries.PasswordManager.ViewModel.Controllers
 		/// <summary>
 		///		Controlador de log
 		/// </summary>
-		LibLogger.Core.LogManager Logger => MainWindowController.Logger;
+		ILogger Logger => MainWindowController.Logger;
 	}
 }

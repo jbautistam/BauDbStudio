@@ -9,6 +9,7 @@ using Bau.Libraries.CloudStudio.Models.Cloud;
 using Bau.Libraries.LibBlobStorage;
 using Bau.Libraries.LibBlobStorage.Metadata;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
+using Microsoft.Extensions.Logging;
 
 namespace Bau.Libraries.CloudStudio.ViewModels.Explorers.Cloud
 {
@@ -45,7 +46,8 @@ namespace Bau.Libraries.CloudStudio.ViewModels.Explorers.Cloud
 				catch (Exception exception)
 				{
 					nodes.Add(new NodeMessageViewModel(TreeViewModel, this, $"Error al cargar los archivos del contenedor. {exception.Message}"));
-					(TreeViewModel as TreeStorageViewModel).SolutionViewModel.MainController.MainWindowController.Logger.Default.LogItems.Error($"Error al cargar los archivos del contenedor. {exception.Message}");
+					(TreeViewModel as TreeStorageViewModel).SolutionViewModel.MainController
+						.Logger.LogError(exception, $"Error al cargar los archivos del contenedor. {exception.Message}");
 				}
 				// Devuelve la colección de nodos
 				return nodes;

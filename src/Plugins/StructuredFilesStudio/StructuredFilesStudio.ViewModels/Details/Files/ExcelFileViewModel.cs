@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 using Bau.Libraries.LibExcelFiles.Data;
 using Bau.Libraries.LibParquetFiles.Writers;
+using Microsoft.Extensions.Logging;
 
 namespace Bau.Libraries.StructuredFilesStudio.ViewModels.Details.Files
 {
@@ -34,7 +35,7 @@ namespace Bau.Libraries.StructuredFilesStudio.ViewModels.Details.Files
 		/// <summary>
 		///		Graba el archivo
 		/// </summary>
-		protected override async Task SaveFileAsync(LibLogger.Models.Log.BlockLogModel block, string fileName, CancellationToken cancellationToken)
+		protected override async Task SaveFileAsync(ILogger logger, string fileName, CancellationToken cancellationToken)
 		{
 			ExcelDataTableReader excelReader = new ExcelDataTableReader();
 			long rows = excelReader.CountRows(FileName, 1, true);
@@ -45,15 +46,13 @@ namespace Bau.Libraries.StructuredFilesStudio.ViewModels.Details.Files
 					await using (ParquetDataWriter writer = new(200_000))
 					{
 						// Log
-						writer.Progress += (sender, args) => block.Progress(System.IO.Path.GetFileName(fileName), args.Records, args.Records + 1);
+						writer.Progress += (sender, args) => logger.LogInformation($"Save '{System.IO.Path.GetFileName(fileName)}' {args.Records:0,##0} / {args.Records + 1:#,##0}");;
 						// Escribe el archivo
 						await writer.WriteAsync(fileName, reader, cancellationToken);
 					}
 				}
 				// Log
-				block.Progress(System.IO.Path.GetFileName(fileName), 0, 0);
-				block.Info($"Fin de la grabación del archivo '{fileName}'");
-				SolutionViewModel.MainController.Logger.Flush();
+				logger.LogInformation($"Fin de la grabación del archivo '{fileName}'");
 		}
 
 		/// <summary>

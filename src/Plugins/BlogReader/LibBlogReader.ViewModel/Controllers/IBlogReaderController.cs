@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Bau.Libraries.BauMvvm.ViewModels.Controllers;
+using Microsoft.Extensions.Logging;
 
 namespace Bau.Libraries.LibBlogReader.ViewModel.Controllers
 {
@@ -37,21 +38,21 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Controllers
 		/// <summary>
 		///		Controlador principal
 		/// </summary>
-		BauMvvm.ViewModels.Controllers.IHostController HostController => MainWindowController.HostController;
+		IHostController HostController => MainWindowController.HostController;
 
 		/// <summary>
 		///		Controlador de diálogos del sistema
 		/// </summary>
-		BauMvvm.ViewModels.Controllers.IHostDialogsController DialogsController => MainWindowController.HostController.DialogsController;
+		IHostDialogsController DialogsController => MainWindowController.HostController.DialogsController;
 
 		/// <summary>
 		///		Controlador con ventanas de sistema
 		/// </summary>
-		BauMvvm.ViewModels.Controllers.IHostSystemController SystemController => MainWindowController.HostController.SystemController;
+		IHostSystemController SystemController => MainWindowController.HostController.SystemController;
 
 		/// <summary>
 		///		Controlador de log
 		/// </summary>
-		LibLogger.Core.LogManager Logger => MainWindowController.Logger;
+		ILogger Logger => MainWindowController.Logger;
 	}
 }

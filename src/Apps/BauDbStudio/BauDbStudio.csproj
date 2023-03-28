@@ -3,6 +3,7 @@
     <OutputType>WinExe</OutputType>
 	  <TargetFramework>net7.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
+	  <Nullable>enable</Nullable>
     <RootNamespace>Bau.DbStudio</RootNamespace>
     <Authors>Jose Antonio Bautista</Authors>
     <ApplicationIcon>Resources\BauDbStudio.ico</ApplicationIcon>
@@ -11,6 +12,7 @@
     <Version>1.0.29</Version>
     <PackageProjectUrl>https://github.com/jbautistam/BauDbStudio</PackageProjectUrl>
     <RepositoryUrl>https://github.com/jbautistam/BauDbStudio</RepositoryUrl>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DebugType>none</DebugType>
@@ -24,6 +26,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Controllers\AppController.cs" />
+    <Compile Remove="Controllers\Helpers\LoggingHelper.cs" />
     <Compile Remove="Converters\FileIconConverter.cs" />
     <Compile Remove="Converters\FileNameIconConverter - Copia.cs" />
     <Compile Remove="Views\Files\ImageView - Copia.xaml.cs" />
@@ -76,6 +79,9 @@
     <Page Remove="Views\Tools\ConfigurationView.xaml" />
     <Page Remove="Views\Tools\CreateFileView.xaml" />
     <Page Remove="Views\Tools\FindView.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="App.xaml" />
@@ -188,7 +194,6 @@
     </Page>
     <Page Update="Views\Tools\LogItems\LogView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Tools\Search\SearchView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>

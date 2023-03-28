@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Windows.Controls;
 
-using Bau.Libraries.PluginsStudio.ViewModels.Tools.Log;
+using Bau.Libraries.PluginsStudio.ViewModels.Tools.LogItems;
 
 namespace Bau.DbStudio.Views.Tools.Log
 {
 	/// <summary>
-	///		Vista para el log
+	///		Vista para los log
 	/// </summary>
 	public partial class LogView : UserControl
 	{

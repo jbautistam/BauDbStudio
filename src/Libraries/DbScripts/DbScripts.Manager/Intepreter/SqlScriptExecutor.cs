@@ -8,7 +8,7 @@ using Bau.Libraries.LibDataStructures.Collections;
 using Bau.Libraries.LibDbProviders.Base;
 using Bau.Libraries.LibDbProviders.Base.Parameters;
 using Bau.Libraries.LibDbScripts.Parser;
-using Bau.Libraries.LibLogger.Models.Log;
+using Microsoft.Extensions.Logging;
 
 namespace Bau.Libraries.DbScripts.Manager.Interpreter
 {
@@ -35,34 +35,33 @@ namespace Bau.Libraries.DbScripts.Manager.Interpreter
 		/// </summary>
 		public async Task<(bool executed, List<string> errors)> ExecuteAsync(string sql, Dictionary<string, object> parameters, CancellationToken cancellationToken)
 		{
+			// Log
+			Manager.Logger.LogInformation("Execute script");
 			// Ejecuta la sentencia
-			using (BlockLogModel block = Manager.Logger.Default.CreateBlock(LogModel.LogType.Info, "Execute script"))
+			if (string.IsNullOrWhiteSpace(sql))
+				Errors.Add("The query is empty");
+			else
 			{
-				if (string.IsNullOrWhiteSpace(sql))
-					Errors.Add("The query is empty");
-				else
-				{
-					ArgumentListModel arguments = GetArguments(parameters);
-					List<SqlSectionModel> scripts = new SqlParser().Tokenize(sql, arguments.Constants.ToDictionary(), out string error);
+				ArgumentListModel arguments = GetArguments(parameters);
+				List<SqlSectionModel> scripts = new SqlParser().Tokenize(sql, arguments.Constants.ToDictionary(), out string error);
 
-						if (!string.IsNullOrWhiteSpace(error))
-							Errors.Add(error);
-						else
-						{
-							int scriptsExecuted = 0;
+					if (!string.IsNullOrWhiteSpace(error))
+						Errors.Add(error);
+					else
+					{
+						int scriptsExecuted = 0;
 
-								// Ejecuta los scripts
-								if (scripts.Count > 0)
-									scriptsExecuted = await ExecuteCommandsAsync(block, _dbProvider, scripts, 
-																				 ConvertParameters(_dbProvider, arguments.Parameters), 
-																				 _timeout, cancellationToken);
-								// Log
-								if (scriptsExecuted == 0)
-									Errors.Add("The query is empty");
-								else
-									block.Info($"{scriptsExecuted} command/s executed");
-						}
-				}
+							// Ejecuta los scripts
+							if (scripts.Count > 0)
+								scriptsExecuted = await ExecuteCommandsAsync(_dbProvider, scripts, 
+																			 ConvertParameters(_dbProvider, arguments.Parameters), 
+																			 _timeout, cancellationToken);
+							// Log
+							if (scriptsExecuted == 0)
+								Errors.Add("The query is empty");
+							else
+								Manager.Logger.LogInformation($"{scriptsExecuted} command/s executed");
+					}
 			}
 			// Indica que se ha ejecutado
 			return (Errors.Count == 0, Errors);
@@ -71,7 +70,7 @@ namespace Bau.Libraries.DbScripts.Manager.Interpreter
 		/// <summary>
 		///		Ejecuta una serie de comandos
 		/// </summary>
-		private async Task<int> ExecuteCommandsAsync(BlockLogModel block, IDbProvider provider, 
+		private async Task<int> ExecuteCommandsAsync(IDbProvider provider, 
 													 List<SqlSectionModel> commands, ParametersDbCollection parametersDb, 
 													 TimeSpan timeout, CancellationToken cancellationToken)
 		{
@@ -82,7 +81,7 @@ namespace Bau.Libraries.DbScripts.Manager.Interpreter
 					if (!cancellationToken.IsCancellationRequested && command.Type == SqlSectionModel.SectionType.Sql)
 					{
 						// Log
-						block.Debug($"Execute: {command.Content}");
+						Manager.Logger.LogDebug($"Execute: {command.Content}");
 						// Ejecuta la cadena SQL
 						await provider.ExecuteAsync(provider.SqlHelper.ConvertSqlNoParameters(command.Content, parametersDb), 
 													null, System.Data.CommandType.Text, timeout, cancellationToken);
@@ -132,7 +131,7 @@ namespace Bau.Libraries.DbScripts.Manager.Interpreter
 		/// </summary>
 		public void ConsoleWriteLine(string message)
 		{
-			Manager.Logger.Default.LogItems.Console(message);
+			Manager.Logger.LogInformation(message);
 		}
 
 		/// <summary>

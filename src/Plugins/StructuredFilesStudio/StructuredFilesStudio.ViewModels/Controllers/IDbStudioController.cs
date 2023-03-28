@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Extensions.Logging;
 
 namespace Bau.Libraries.StructuredFilesStudio.ViewModels.Controllers
 {
@@ -50,6 +51,6 @@ namespace Bau.Libraries.StructuredFilesStudio.ViewModels.Controllers
 		/// <summary>
 		///		Controlador de log
 		/// </summary>
-		LibLogger.Core.LogManager Logger => MainWindowController.Logger;
+		ILogger Logger => MainWindowController.Logger;
 	}
 }

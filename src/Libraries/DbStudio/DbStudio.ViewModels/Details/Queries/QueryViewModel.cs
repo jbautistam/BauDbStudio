@@ -8,8 +8,8 @@ using Bau.Libraries.DbStudio.Models.Connections;
 using Bau.Libraries.DbStudio.ViewModels.Controllers.Exporter;
 using Bau.Libraries.DbStudio.ViewModels.Details.Connections;
 using Bau.Libraries.DbScripts.Manager.Models;
-using System.Data.Common;
 using Bau.Libraries.DbScripts.Manager.Builders;
+using Microsoft.Extensions.Logging;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Details.Queries
 {
@@ -124,7 +124,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Queries
 									}
 									catch (Exception exception)
 									{
-										SolutionViewModel.Manager.Logger.Default.LogItems.Error($"Error when execute the query. {exception.Message}");
+										SolutionViewModel.Manager.Logger.LogError(exception, $"Error when execute the query. {exception.Message}");
 									}
 									// Detiene la ejecucion
 									StopQuery();
@@ -220,7 +220,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Queries
 									}
 									catch (Exception exception)
 									{
-										SolutionViewModel.MainController.Logger.Default.LogItems.Error($"Error al obtener el plan de ejecución. {exception.Message}");
+										SolutionViewModel.MainController.Logger.LogError(exception, $"Error al obtener el plan de ejecución. {exception.Message}");
 									}
 						}
 				}
@@ -276,8 +276,6 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Queries
 			// Indica que ya no se está ejecutando
 			ExecutionTimeColor = BauMvvm.ViewModels.Media.MvvmColor.Black;
 			IsExecuting = false;
-			// Log
-			SolutionViewModel.Manager.Logger.Flush();
 			// Prepara el gráfico
 			PrepareDraw();
 		}
@@ -292,7 +290,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Queries
 				// Cancela las tareas
 				_tokenSource.Cancel();
 				// Log
-				SolutionViewModel.MainController.Logger.Default.LogItems.Info("Consulta cancelada");
+				SolutionViewModel.MainController.Logger.LogInformation("Consulta cancelada");
 				// Indica que ya no está en ejecución
 				StopQuery();
 			}
@@ -403,7 +401,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Queries
 										}
 										catch (Exception exception)
 										{
-											SolutionViewModel.MainController.Logger.Default.LogItems.Error($"Error al grabar el archivo '{fileName}'", exception);
+											SolutionViewModel.MainController.Logger.LogError(exception, $"Error al grabar el archivo '{fileName}'");
 											SolutionViewModel.MainController.HostController.SystemController.ShowMessage($"Error al grabar el archivo '{fileName}'");
 										}
 										// Detiene la consulta

@@ -46,7 +46,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\Controls\WPF\BauCharts\src\LibCharts\LibCharts.csproj" />
-    <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibLogger\src\LibLogger.Core\LibLogger.Core.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibSystem.Windows\LibSystem.Windows.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Formats\LibExcelFiles\src\LibExcelFiles.csproj" />
     <ProjectReference Include="..\..\DbReporting\LibReporting.Solution\LibReporting.Solution.csproj" />

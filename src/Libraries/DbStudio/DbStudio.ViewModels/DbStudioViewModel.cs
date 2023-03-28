@@ -2,12 +2,12 @@
 using System.Threading.Tasks;
 
 using Bau.Libraries.LibHelper.Extensors;
-using Bau.Libraries.LibLogger.Models.Log;
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.DbStudio.Application;
 using Bau.Libraries.DbStudio.Application.Controllers.EtlProjects;
 using Bau.Libraries.DbStudio.Models;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace Bau.Libraries.DbStudio.ViewModels
 {
@@ -101,34 +101,33 @@ namespace Bau.Libraries.DbStudio.ViewModels
 			Details.EtlProjects.CreateTestXmlViewModel viewModel = new Details.EtlProjects.CreateTestXmlViewModel(this);
 
 				if (MainController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
-					using (BlockLogModel block = MainController.Logger.Default.CreateBlock(LogModel.LogType.Info, "Comienzo de la creación de proyectos de pruebas"))
-					{
-						XmlTestProjectGenerator generator = new XmlTestProjectGenerator(Manager, viewModel.ComboConnections.GetSelectedConnection(),
-																						viewModel.DataBase, viewModel.OutputPath);
+				{
+					XmlTestProjectGenerator generator = new XmlTestProjectGenerator(Manager, viewModel.ComboConnections.GetSelectedConnection(),
+																					viewModel.DataBase, viewModel.OutputPath);
 
-							// Genera los archivos
-							try
+						// Log
+						MainController.Logger.LogInformation("Comienzo de la creación de proyectos de pruebas");
+						// Genera los archivos
+						try
+						{
+							if (!await generator.GenerateAsync(viewModel.Provider, viewModel.PathVariable, viewModel.DataBaseVariable, viewModel.SufixTestTables,
+																viewModel.FileNameTest, viewModel.FileNameAssert, 
+																System.Threading.CancellationToken.None))
+								MainController.Logger.LogError($"Error en la generación de los archivos de pruebas. {generator.Errors.Concatenate()}");
+							else
 							{
-								if (!await generator.GenerateAsync(block, viewModel.Provider, viewModel.PathVariable, viewModel.DataBaseVariable, viewModel.SufixTestTables,
-																   viewModel.FileNameTest, viewModel.FileNameAssert, 
-																   System.Threading.CancellationToken.None))
-									block.Error($"Error en la generación de los archivos de pruebas. {generator.Errors.Concatenate()}");
-								else
-								{
-									block.Info("Fin de la creación de proyectos de pruebas");
-									MainController.MainWindowController
-											.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
-															  "Generación de proyectos XML",
-															  "Ha terminado correctamente la generación del archivo de pruebas");
-								}
+								MainController.Logger.LogInformation("Fin de la creación de proyectos de pruebas");
+								MainController.MainWindowController
+										.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
+															"Generación de proyectos XML",
+															"Ha terminado correctamente la generación del archivo de pruebas");
 							}
-							catch (Exception exception)
-							{
-								block.Error($"Error en la generación de los archivos de pruebas {exception.Message}");
-							}
-							// Log
-							MainController.Logger.Flush();
-					}
+						}
+						catch (Exception exception)
+						{
+							MainController.Logger.LogInformation(exception, $"Error en la generación de los archivos de pruebas {exception.Message}");
+						}
+				}
 		}
 
 		/// <summary>
@@ -139,53 +138,52 @@ namespace Bau.Libraries.DbStudio.ViewModels
 			Details.EtlProjects.CreateValidationScriptsViewModel viewModel = new Details.EtlProjects.CreateValidationScriptsViewModel(this);
 
 				if (MainController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
-					using (BlockLogModel block = MainController.Logger.Default.CreateBlock(LogModel.LogType.Info, "Comienzo de la creación de archivos de validación"))
-					{
-						ScriptsValidationOptions options = new ScriptsValidationOptions
-																	{
-																		Connection = viewModel.TreeConnection.Connection,
-																		Tables = viewModel.TreeConnection.GetSelectedTables(),
-																		OutputPath = viewModel.OutputPath,
-																		DataBaseComputeVariable = viewModel.DataBaseComputeVariable,
-																		DataBaseValidateVariable = viewModel.DataBaseValidateVariable,
-																		Mode = viewModel.ValidateFiles ? ScriptsValidationOptions.ValidationMode.Files : ScriptsValidationOptions.ValidationMode.Database,
-																		MountPathVariable = viewModel.MountPathVariable,
-																		MountPathContent = viewModel.MountPathContent,
-																		FormatType = viewModel.FormatType,
-																		SubpathValidate = viewModel.PathValidate,
-																		DatabaseTarget = viewModel.DataBaseTarget,
-																		GenerateQvs = viewModel.GenerateQvs,
-																		TablePrefixes = viewModel.TablePrefixes,
-																		CompareString = viewModel.CompareString,
-																		DateFormat = viewModel.DateFormat,
-																		DecimalSeparator = viewModel.DecimalSeparator,
-																		DecimalType = viewModel.DecimalType,
-																		BitFields = viewModel.BitFields,
-																		CompareOnlyAlphaAndDigits = viewModel.CompareOnlyAlphaAndDigits
-																	};
-						ScriptsValidationGenerator generator = new ScriptsValidationGenerator(Manager, options);
+				{
+					ScriptsValidationOptions options = new ScriptsValidationOptions
+																{
+																	Connection = viewModel.TreeConnection.Connection,
+																	Tables = viewModel.TreeConnection.GetSelectedTables(),
+																	OutputPath = viewModel.OutputPath,
+																	DataBaseComputeVariable = viewModel.DataBaseComputeVariable,
+																	DataBaseValidateVariable = viewModel.DataBaseValidateVariable,
+																	Mode = viewModel.ValidateFiles ? ScriptsValidationOptions.ValidationMode.Files : ScriptsValidationOptions.ValidationMode.Database,
+																	MountPathVariable = viewModel.MountPathVariable,
+																	MountPathContent = viewModel.MountPathContent,
+																	FormatType = viewModel.FormatType,
+																	SubpathValidate = viewModel.PathValidate,
+																	DatabaseTarget = viewModel.DataBaseTarget,
+																	GenerateQvs = viewModel.GenerateQvs,
+																	TablePrefixes = viewModel.TablePrefixes,
+																	CompareString = viewModel.CompareString,
+																	DateFormat = viewModel.DateFormat,
+																	DecimalSeparator = viewModel.DecimalSeparator,
+																	DecimalType = viewModel.DecimalType,
+																	BitFields = viewModel.BitFields,
+																	CompareOnlyAlphaAndDigits = viewModel.CompareOnlyAlphaAndDigits
+																};
+					ScriptsValidationGenerator generator = new ScriptsValidationGenerator(Manager, options);
 
-							// Crea los archivos de prueba
-							try
+						// Log
+						MainController.Logger.LogInformation("Comienzo de la creación de archivos de validación");
+						// Crea los archivos de prueba
+						try
+						{
+							if (!await generator.GenerateAsync(System.Threading.CancellationToken.None))
+								MainController.Logger.LogError($"Error en la generación de los archivos de validación. {generator.Errors.Concatenate()}");
+							else
 							{
-								if (!await generator.GenerateAsync(System.Threading.CancellationToken.None))
-									block.Error($"Error en la generación de los archivos de validación. {generator.Errors.Concatenate()}");
-								else
-								{
-									block.Info("Fin de la creación de archivos de validación");
-									MainController.MainWindowController
-											.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
-															  "Generación de archivos de validación",
-															  "Ha terminado correctamente la generación de los archivos de validación");
-								}
+								MainController.Logger.LogInformation("Fin de la creación de archivos de validación");
+								MainController.MainWindowController
+										.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
+															"Generación de archivos de validación",
+															"Ha terminado correctamente la generación de los archivos de validación");
 							}
-							catch (Exception exception)
-							{
-								block.Error($"Error en la generación de archivos de validación {exception.Message}");
-							}
-							// Log
-							MainController.Logger.Flush();
-					}
+						}
+						catch (Exception exception)
+						{
+							MainController.Logger.LogError(exception, $"Error en la generación de archivos de validación {exception.Message}");
+						}
+				}
 		}
 
 		/// <summary>
@@ -196,41 +194,40 @@ namespace Bau.Libraries.DbStudio.ViewModels
 			Details.EtlProjects.CreateImportFilesScriptViewModel viewModel = new Details.EtlProjects.CreateImportFilesScriptViewModel(this);
 
 				if (MainController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
-					using (BlockLogModel block = MainController.Logger.Default.CreateBlock(LogModel.LogType.Info, "Comienzo de la creación de archivos de importación"))
-					{
-						ScriptsImportOptions options = new ScriptsImportOptions
-																	{
-																		Connection = viewModel.ComboConnections.GetSelectedConnection(),
-																		DataBaseVariable = viewModel.DataBaseVariable,
-																		PrefixOutputTable = viewModel.PrefixOutputTable,
-																		MountPathVariable = viewModel.MountPathVariable,
-																		SubPath = viewModel.SubPath,
-																		PathInputFiles = viewModel.PathInputFiles,
-																		OutputFileName = viewModel.OutputFileName
-																	};
-						ScriptsImportGenerator generator = new ScriptsImportGenerator(Manager, options);
+				{
+					ScriptsImportOptions options = new ScriptsImportOptions
+																{
+																	Connection = viewModel.ComboConnections.GetSelectedConnection(),
+																	DataBaseVariable = viewModel.DataBaseVariable,
+																	PrefixOutputTable = viewModel.PrefixOutputTable,
+																	MountPathVariable = viewModel.MountPathVariable,
+																	SubPath = viewModel.SubPath,
+																	PathInputFiles = viewModel.PathInputFiles,
+																	OutputFileName = viewModel.OutputFileName
+																};
+					ScriptsImportGenerator generator = new ScriptsImportGenerator(Manager, options);
 
-							// Crea los archivos de prueba
-							try
+						// Log
+						MainController.Logger.LogInformation("Comienzo de la creación de archivos de importación");
+						// Crea los archivos de prueba
+						try
+						{
+							if (!await generator.GenerateAsync(System.Threading.CancellationToken.None))
+								MainController.Logger.LogError($"Error en la generación de los archivos de importación. {generator.Errors.Concatenate()}");
+							else
 							{
-								if (!await generator.GenerateAsync(System.Threading.CancellationToken.None))
-									block.Error($"Error en la generación de los archivos de importación. {generator.Errors.Concatenate()}");
-								else
-								{
-									block.Info("Fin de la creación de archivos de importación");
-									MainController.MainWindowController
-											.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
-															  "Generación de archivos de importación",
-															  "Ha terminado correctamente la generación de los archivos de importación");
-								}
+								MainController.Logger.LogInformation("Fin de la creación de archivos de importación");
+								MainController.MainWindowController
+										.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
+															"Generación de archivos de importación",
+															"Ha terminado correctamente la generación de los archivos de importación");
 							}
-							catch (Exception exception)
-							{
-								block.Error($"Error en la generación de archivos de importación {exception.Message}");
-							}
-							// Log
-							MainController.Logger.Flush();
-					}
+						}
+						catch (Exception exception)
+						{
+							MainController.Logger.LogError(exception, $"Error en la generación de archivos de importación {exception.Message}");
+						}
+				}
 		}
 
 		/// <summary>
@@ -241,29 +238,28 @@ namespace Bau.Libraries.DbStudio.ViewModels
 			Details.Reporting.Tools.CreateScriptsSqlReportingViewModel viewModel = new Details.Reporting.Tools.CreateScriptsSqlReportingViewModel(this);
 
 				if (MainController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
-					using (BlockLogModel block = MainController.Logger.Default.CreateBlock(LogModel.LogType.Info, "Comienzo de la creación de scripts SQL de reporting"))
+				{
+					// Crea los archivos de esquema
+					try
 					{
-						// Crea los archivos de esquema
-						try
-						{
-							LibReporting.Solution.ReportingSolutionManager manager = new LibReporting.Solution.ReportingSolutionManager();
+						LibReporting.Solution.ReportingSolutionManager manager = new LibReporting.Solution.ReportingSolutionManager();
 
-								// Graba el archivo
-								manager.ConvertSchemaReportingToSql(viewModel.SchemaFileName, viewModel.OutputFileName);
-								// Log
-								block.Info("Fin de la creación de archivos de scripts SQL para informes");
-								MainController.MainWindowController
-										.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
-														  "Generación de archivos SQL para informes",
-														  "Ha terminado correctamente la generación de los archivos SQL de esquema para informes");
-						}
-						catch (Exception exception)
-						{
-							block.Error($"Error en la generación de archivos de esquema. {exception.Message}");
-						}
-						// Log
-						MainController.Logger.Flush();
+							// Log
+							MainController.Logger.LogInformation("Comienzo de la creación de scripts SQL de reporting");
+							// Graba el archivo
+							manager.ConvertSchemaReportingToSql(viewModel.SchemaFileName, viewModel.OutputFileName);
+							// Log
+							MainController.Logger.LogInformation("Fin de la creación de archivos de scripts SQL para informes");
+							MainController.MainWindowController
+									.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
+														"Generación de archivos SQL para informes",
+														"Ha terminado correctamente la generación de los archivos SQL de esquema para informes");
 					}
+					catch (Exception exception)
+					{
+						MainController.Logger.LogError(exception, $"Error en la generación de archivos de esquema. {exception.Message}");
+					}
+				}
 		}
 
 		/// <summary>

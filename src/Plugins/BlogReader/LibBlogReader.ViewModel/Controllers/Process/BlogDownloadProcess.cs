@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Extensions.Logging;
 
 using Bau.Libraries.LibBlogReader.Application.Services.Reader;
 using Bau.Libraries.LibBlogReader.Application.Services.EventArguments;
@@ -63,21 +64,20 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Controllers.Process
 			switch (type)
 			{
 				case DownloadEventArgs.ActionType.StartDownload:
-						MainViewModel.ViewsController.Logger.Default.LogItems.Info("Start blogs download");
+						MainViewModel.ViewsController.Logger.LogInformation("Start blogs download");
 					break;
 				case DownloadEventArgs.ActionType.StartDownloadBlog:
 				case DownloadEventArgs.ActionType.EndDownloadBlog:
-						MainViewModel.ViewsController.Logger.Default.LogItems.Info(description);
+						MainViewModel.ViewsController.Logger.LogInformation(description);
 					break;
 				case DownloadEventArgs.ActionType.ErrorDonwloadBlog:
-						MainViewModel.ViewsController.Logger.Default.LogItems.Error(description);
+						MainViewModel.ViewsController.Logger.LogError(description);
 					break;
 				case DownloadEventArgs.ActionType.EndDownload:
-						MainViewModel.ViewsController.Logger.Default.LogItems.Info("End blogs download");
+						MainViewModel.ViewsController.Logger.LogInformation("End blogs download");
 						MainViewModel.TreeBlogs.Load();
 					break;
 			}
-			MainViewModel.ViewsController.Logger.Flush();
 		}
 
 		/// <summary>

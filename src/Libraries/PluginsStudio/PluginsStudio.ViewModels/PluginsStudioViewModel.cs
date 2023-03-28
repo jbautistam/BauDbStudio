@@ -14,7 +14,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels
 		// Variables privadas
 		private Tools.LastFiles.LastFilesListViewModel _lastFilesViewModel;
 		private Tools.Workspaces.WorkspaceListViewModel _workspacesViewModel;
-		private Tools.Log.LogListViewModel _logViewModel;
+		private Tools.LogItems.LogListViewModel _logViewModel;
 		private Tools.Search.SearchFilesViewModel _searchFilesViewModel;
 		private Base.Interfaces.IDetailViewModel _selectedDetailsViewModel;
 		private Explorers.Files.TreeFilesViewModel _treeFoldersViewModel;
@@ -26,7 +26,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels
 			// Inicializa los objetos principales
 			LastFilesViewModel = new Tools.LastFiles.LastFilesListViewModel(this);
 			WorkspacesViewModel = new Tools.Workspaces.WorkspaceListViewModel(this);
-			LogViewModel = new Tools.Log.LogListViewModel(this);
+			LogViewModel = new Tools.LogItems.LogListViewModel(this);
 			SearchFilesViewModel = new Tools.Search.SearchFilesViewModel(this);
 			TreeFoldersViewModel = new Explorers.Files.TreeFilesViewModel(this);
 			// Asigna los comandos
@@ -183,7 +183,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels
 		/// <summary>
 		///		ViewModel de log
 		/// </summary>
-		public Tools.Log.LogListViewModel LogViewModel
+		public Tools.LogItems.LogListViewModel LogViewModel
 		{
 			get { return _logViewModel; }
 			set { CheckObject(ref _logViewModel, value); }

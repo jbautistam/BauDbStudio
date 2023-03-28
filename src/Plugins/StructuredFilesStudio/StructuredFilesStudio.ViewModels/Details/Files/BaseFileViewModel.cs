@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Bau.Libraries.BauMvvm.ViewModels;
+using Microsoft.Extensions.Logging;
 
 namespace Bau.Libraries.StructuredFilesStudio.ViewModels.Details.Files
 {
@@ -128,28 +129,27 @@ namespace Bau.Libraries.StructuredFilesStudio.ViewModels.Details.Files
 															$".{ExportFilesExtensions}");
 
 					if (!string.IsNullOrEmpty(fileName))
-						using (LibLogger.Models.Log.BlockLogModel block = SolutionViewModel.MainController.Logger.Default.
-																				CreateBlock(LibLogger.Models.Log.LogModel.LogType.Debug,
-																							$"Comienzo de grabación del archivo {fileName}"))
+					{
+						// Log
+						SolutionViewModel.MainController.Logger.LogInformation($"Comienzo de grabación del archivo {fileName}");
+						// Graba el archivo
+						try
 						{
-							// Graba el archivo
-							try
-							{
-								Task.Run(async () => await SaveFileAsync(block, fileName, CancellationToken.None));
-							}
-							catch (Exception exception)
-							{
-								block.Error($"Error al grabar el archivo {fileName}. {exception.Message}");
-								SolutionViewModel.MainController.HostController.SystemController.ShowMessage($"Error al grabar el archivo {fileName}. {exception.Message}");
-							}
+							Task.Run(async () => await SaveFileAsync(SolutionViewModel.MainController.Logger, fileName, CancellationToken.None));
 						}
+						catch (Exception exception)
+						{
+							SolutionViewModel.MainController.Logger.LogError(exception, $"Error al grabar el archivo {fileName}. {exception.Message}");
+							SolutionViewModel.MainController.HostController.SystemController.ShowMessage($"Error al grabar el archivo {fileName}. {exception.Message}");
+						}
+					}
 			}
 		}
 
 		/// <summary>
 		///		Graba el archivo
 		/// </summary>
-		protected abstract Task SaveFileAsync(LibLogger.Models.Log.BlockLogModel block, string fileName, CancellationToken cancellationToken);
+		protected abstract Task SaveFileAsync(ILogger logger, string fileName, CancellationToken cancellationToken);
 
 		/// <summary>
 		///		Obtiene el mensaje que se debe mostrar al cerrar la ventana

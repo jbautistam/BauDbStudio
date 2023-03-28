@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
 using Bau.Libraries.BauMvvm.ViewModels.Media;
@@ -42,7 +43,8 @@ namespace Bau.Libraries.CloudStudio.ViewModels.Explorers.Cloud
 				catch (Exception exception)
 				{
 					nodes.Add(new NodeMessageViewModel(TreeViewModel, this, $"Error al cargar los contenedores. {exception.Message}", TreeStorageViewModel.IconType.Error.ToString()));
-					(TreeViewModel as TreeStorageViewModel).SolutionViewModel.MainController.MainWindowController.Logger.Default.LogItems.Error($"Error al cargar los contenedores. {exception.Message}");
+					(TreeViewModel as TreeStorageViewModel).SolutionViewModel.MainController.MainWindowController
+						.Logger.LogError(exception, $"Error al cargar los contenedores. {exception.Message}");
 				}
 				// Devuelve la colección de nodos
 				return nodes;

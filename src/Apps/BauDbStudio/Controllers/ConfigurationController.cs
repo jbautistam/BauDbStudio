@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.LibMarkupLanguage;
+using Microsoft.Extensions.Logging;
 
 namespace Bau.DbStudio.Controllers
 {
@@ -70,11 +71,11 @@ namespace Bau.DbStudio.Controllers
 											PluginsConfiguration.Add(GetConfiguration(nodeML));
 						}
 						else
-							ViewsManager.MainWindowsController.Logger.Default.LogItems.Error($"Can't open the configuration file {fileName}");
+							ViewsManager.MainWindowsController.Logger.LogError($"Can't open the configuration file {fileName}");
 				}
 				catch (Exception exception)
 				{
-					ViewsManager.MainWindowsController.Logger.Default.LogItems.Error($"Can't open the configuration file {fileName}", exception);
+					ViewsManager.MainWindowsController.Logger.LogError(exception, $"Can't open the configuration file {fileName}");
 				}
 				// Carga la configuración desde una cadena si no puede leer el XML
 				if (PluginsConfiguration.Count == 0)
@@ -84,7 +85,7 @@ namespace Bau.DbStudio.Controllers
 					}
 					catch (Exception exception)
 					{
-						ViewsManager.MainWindowsController.Logger.Default.LogItems.Error($"Can't load configuration from text of the configuration file {fileName}", exception);
+						ViewsManager.MainWindowsController.Logger.LogError(exception, $"Can't load configuration from text of the configuration file {fileName}");
 					}
 		}
 
@@ -199,30 +200,8 @@ namespace Bau.DbStudio.Controllers
 				}
 				// Graba el archivo
 				if (!new Libraries.LibMarkupLanguage.Services.XML.XMLWriter().Save(fileName, fileML))
-					ViewsManager.MainWindowsController.Logger.Default.LogItems.Error($"Error saving the configuration file {fileName}");
+					ViewsManager.MainWindowsController.Logger.LogError($"Error saving the configuration file {fileName}");
 		}
-
-/*
-		/// <summary>
-		///		Obtiene la configuración de plugins
-		/// </summary>
-		private string GetPluginsConfiguration()
-		{
-			string result = string.Empty;
-
-				// Añade las configuraciones a la cadena
-				foreach ((string plugin, string key, string value) in PluginsConfiguration)
-				{
-					// Añade el separador si es necesario
-					if (!string.IsNullOrWhiteSpace(result))
-						result += SetupSeparator;
-					// Añade los datos
-					result += plugin + SetupSeparator + key + SetupSeparator + value;
-				}
-				// Devuelve la cadena resultante
-				return result;
-		}
-*/
 
 		/// <summary>
 		///		Obtiene el nombre del archivo de setup
