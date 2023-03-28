@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-using Bau.Libraries.LibCompressor;
 using Bau.Libraries.BauMvvm.ViewModels;
-using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
 
 namespace Bau.Libraries.EbooksReader.ViewModel.Reader
 {
@@ -54,12 +52,12 @@ namespace Bau.Libraries.EbooksReader.ViewModel.Reader
 			// Asigna el directorio temporal
 			_tempPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), Guid.NewGuid().ToString());
 			// Crea el directorio temporal
-			Bau.Libraries.LibHelper.Files.HelperFiles.MakePath(_tempPath);
+			LibHelper.Files.HelperFiles.MakePath(_tempPath);
 			// Carga el libro
 			try
 			{
-				Bau.Libraries.LibEBooks.Services.EBooksManager manager = new();
-				Bau.Libraries.LibEBooks.Models.eBook.Book eBook = manager.Load(LibEBooks.Services.EBooksManager.BookType.ePub, FileName, _tempPath);
+				LibEBooks.Services.EBooksManager manager = new();
+				LibEBooks.Models.eBook.Book eBook = manager.Load(LibEBooks.Services.EBooksManager.BookType.ePub, FileName, _tempPath);
 
 					// Rellena el árbol de páginas
 					_bookNodePages = TreePages.Load(eBook);
@@ -222,7 +220,7 @@ namespace Bau.Libraries.EbooksReader.ViewModel.Reader
 		public void Close()
 		{
 			if (!string.IsNullOrWhiteSpace(_tempPath))
-				Bau.Libraries.LibHelper.Files.HelperFiles.KillPath(_tempPath);
+				LibHelper.Files.HelperFiles.KillPath(_tempPath);
 		}
 
 		/// <summary>

@@ -21,21 +21,6 @@ namespace Bau.Libraries.LibBlogReader.Model
 		}
 
 		/// <summary>
-		///		Borra una entrada de la carpeta
-		/// </summary>
-		internal bool Delete(EntryModel entry)
-		{
-			bool deleted = false;
-
-				// Recorre las carpetas borrando la entrada
-				foreach (FolderModel folder in this)
-					if (!deleted)
-						deleted = folder.Delete(entry);
-				// Devuelve el valor que indica si se ha borrado
-				return deleted;
-		}
-
-		/// <summary>
 		///		Obtiene el número de elementos no leídos
 		/// </summary>
 		internal int GetNumberNotRead()

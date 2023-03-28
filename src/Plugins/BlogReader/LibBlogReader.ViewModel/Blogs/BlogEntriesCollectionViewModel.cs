@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.ObjectModel;
 
 using Bau.Libraries.LibHelper.Extensors;
+using Bau.Libraries.LibBlogReader.Model;
 
 namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 {
@@ -11,6 +12,37 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 	/// </summary>
 	public class BlogEntriesCollectionViewModel : ObservableCollection<BlogEntryViewModel>
 	{
+		///// <summary>
+		/////		Obtiene el número de elementos no leidos de un blog
+		///// </summary>
+		//internal int GetNumberNotRead(BlogModel blog)
+		//{
+		//	int number = 0;
+
+		//		// Obtiene el número de elementos no leidos de este blog
+		//		foreach (BlogEntryViewModel entry in Items)
+		//			if (entry.Entry.Blog.GlobalId.Equals(blog.GlobalId, StringComparison.CurrentCultureIgnoreCase) &&
+		//					entry.Status == EntryModel.StatusEntry.NotRead)
+		//				number++;
+		//		// Devuelve el número
+		//		return number;
+		//}
+
+		/// <summary>
+		///		Obtiene las entradas de un blog
+		/// </summary>
+		internal EntriesModelCollection GetEntries(BlogModel blog)
+		{
+			EntriesModelCollection entries = new();
+
+				// Obtiene el número de elementos no leidos de este blog
+				foreach (BlogEntryViewModel entry in Items)
+					if (entry.Entry.Blog.GlobalId.Equals(blog.GlobalId, StringComparison.CurrentCultureIgnoreCase))
+						entries.Add(entry.Entry);
+				// Devuelve las entradas
+				return entries;
+		}
+
 		/// <summary>
 		///		Obtiene las entradas seleccionadas
 		/// </summary>
@@ -29,15 +61,15 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 		/// <summary>
 		///		Obtiene las entradas no leídas
 		/// </summary>
-		internal BlogEntriesCollectionViewModel GetByParameters(bool blnSeeNotRead, bool blnSeeRead, bool blnSeeInteresting)
+		internal BlogEntriesCollectionViewModel GetByParameters(bool seeNotRead, bool seeRead, bool seeInteresting)
 		{
 			BlogEntriesCollectionViewModel entries = new BlogEntriesCollectionViewModel();
 
 				// Obtiene las entradas no leídas
 				foreach (BlogEntryViewModel entry in this)
-					if ((entry.Status == Model.EntryModel.StatusEntry.NotRead && blnSeeNotRead) ||
-							(entry.Status == Model.EntryModel.StatusEntry.Read && blnSeeRead) ||
-							(entry.Status == Model.EntryModel.StatusEntry.Interesting && blnSeeInteresting))
+					if ((entry.Status == EntryModel.StatusEntry.NotRead && seeNotRead) ||
+							(entry.Status == EntryModel.StatusEntry.Read && seeRead) ||
+							(entry.Status == EntryModel.StatusEntry.Interesting && seeInteresting))
 						entries.Add(entry);
 				// Devuelve la colección de entradas
 				return entries;
@@ -52,7 +84,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 
 				// Obtiene las entradas no leídas
 				foreach (BlogEntryViewModel entry in this)
-					if (entry.Status == Model.EntryModel.StatusEntry.Read)
+					if (entry.Status == EntryModel.StatusEntry.Read)
 						entries.Add(entry);
 				// Devuelve la colección de entradas
 				return entries;

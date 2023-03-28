@@ -49,7 +49,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 		private void ChangeStatus()
 		{ 
 			// Inicializa las propiedades
-			Foreground = MvvmColor.Black; // = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 0, 0));
+			Foreground = MvvmColor.Black;
 			IsBold = false;
 			IsItalic = false;
 			// Cambia las propiedades
@@ -161,7 +161,6 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 				if (CheckProperty(ref _status, value))
 				{
 					Entry.Status = value;
-					Entry.Blog.IsDirty = true;
 					ChangeStatus();
 				}
 			}

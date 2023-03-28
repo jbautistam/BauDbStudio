@@ -13,10 +13,7 @@ namespace Bau.Libraries.LibBlogReader.Application.Bussiness.Blogs
 		/// <summary>
 		///		Carga las carpetas y blogs
 		/// </summary>
-		public FolderModel Load(string path)
-		{
-			return new BlogsStructureRepository().Load(path);
-		}
+		public FolderModel Load(string path) => new BlogsStructureRepository().Load(path);
 
 		/// <summary>
 		///		Graba las carpetas y blogs

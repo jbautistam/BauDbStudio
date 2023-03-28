@@ -66,17 +66,22 @@ namespace Bau.Libraries.LibBlogReader.Application.Services.Reader
 								// Descarga el archivo Atom / Rss						
 								atom = await processor.DownloadAsync(blog.URL);
 								// Añade los mensajes
-								if (atom != null)
+								if (atom is not null)
 								{
 									EntriesModelCollection downloaded = AddMessages(blog, atom);
 
-										if (downloaded.Count > 0 && blog.DownloadPodcast)
-											entriesForDownload.AddRange(downloaded);
+										// Añade los elementos descargado a las entradas que pueden descargar adjuntos
+										if (downloaded.Count > 0)
+										{
+											// Añade el número de entradas no leidas
+											blog.NumberNotRead += downloaded.Count;
+											// Añade las entradas a la descarga pendiente de adjuntos
+											if (blog.DownloadPodcast)
+												entriesForDownload.AddRange(downloaded);
+										}
 								}
-								// Modifica la fecha de última descarga
+								// Modifica la fecha de última descarga y el número de entradas no leidas
 								blog.DateLastDownload = DateTime.Now;
-								// Indica que en las entradas del blog se han hecho modificaciones (para el recálculo de elementos leídos)
-								blog.IsDirty = true;
 								// Lanza el evento
 								RaiseEvent(EventArguments.DownloadEventArgs.ActionType.EndDownloadBlog, $"End download {blog.Name}");
 							}
@@ -85,7 +90,7 @@ namespace Bau.Libraries.LibBlogReader.Application.Services.Reader
 								RaiseEvent(EventArguments.DownloadEventArgs.ActionType.ErrorDonwloadBlog, $"Error when download {blog.Name}. {exception.Message}");
 							}
 					}
-				// Graba los blogs
+				// Graba la estructura de los blogs
 				_blogManager.Save();
 				// Descarga los adjuntos
 				if (entriesForDownload.Count > 0)
@@ -99,13 +104,14 @@ namespace Bau.Libraries.LibBlogReader.Application.Services.Reader
 		/// </summary>
 		private EntriesModelCollection AddMessages(BlogModel blog, AtomChannel channel)
 		{
-			EntriesModelCollection downloaded = new EntriesModelCollection();
+			EntriesModelCollection existingEntries = _blogManager.LoadEntries(blog);
+			EntriesModelCollection downloadedEntries = new();
 
 				// Graba las entradas nuevas
 				foreach (AtomEntry entry in channel.Entries)
-					if (entry.Links != null && !blog.Entries.ExistsURL(GetUrlAlternate(entry.Links)))
+					if (entry.Links != null && !existingEntries.ExistsURL(GetUrlAlternate(entry.Links)))
 					{
-						EntryModel blogEntry = new EntryModel();
+						EntryModel blogEntry = new();
 
 							// Asigna el blog
 							blogEntry.Blog = blog;
@@ -122,14 +128,18 @@ namespace Bau.Libraries.LibBlogReader.Application.Services.Reader
 							// Lanza el evento de descarga de una entrada
 							RaiseEvent(blogEntry);
 							// Añade la entrada al blog y a la lista de elementos descargados
-							blog.Entries.Add(blogEntry);
-							downloaded.Add(blogEntry);
+							downloadedEntries.Add(blogEntry);
 					}
 				// Si se ha añadido algo, graba las entradas
-				if (downloaded.Count > 0)
-					_blogManager.SaveBlog(blog);
+				if (downloadedEntries.Count > 0)
+				{
+					// Añade las entradas descargadas a las existentes
+					existingEntries.AddRange(downloadedEntries);
+					// Graba las entradas
+					_blogManager.SaveBlog(blog, existingEntries);
+				}
 				// Devuelve los elementos descargados
-				return downloaded;
+				return downloadedEntries;
 		}
 
 		/// <summary>

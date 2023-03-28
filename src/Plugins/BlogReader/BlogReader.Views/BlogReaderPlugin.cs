@@ -11,12 +11,12 @@ namespace Bau.Libraries.BlogReader.Views
 	/// <summary>
 	///		Plugin para el lector de blogs
 	/// </summary>
-	public class BlogReaderPlugin : PluginsStudio.Views.Base.Interfaces.IPlugin
+	public class BlogReaderPlugin : IPlugin
 	{ 
 		/// <summary>
 		///		Inicializa el manager de vistas de DbStudio
 		/// </summary>
-		public void Initialize(PluginsStudio.Views.Base.Interfaces.IAppViewsController appViewsController, 
+		public void Initialize(IAppViewsController appViewsController, 
 							   PluginsStudio.ViewModels.Base.Controllers.IPluginsController pluginController)
 		{
 			AppViewsController = appViewsController;
@@ -53,52 +53,37 @@ namespace Bau.Libraries.BlogReader.Views
 		/// </summary>
 		public List<PaneModel> GetPanes()
 		{
-			List<PaneModel> panes = new List<PaneModel>();
-
-				// Añade los paneles de la aplicación principal
-				panes.Add(new PaneModel
-								{
-									Id = "TreeBlogs",
-									Title = "Blogs",
-									Position = PaneModel.PositionType.Left,
-									View = new Views.BlogTreeControlView(MainViewModel.TreeBlogs)
-								}
-						 );
-				// Devuelve la lista de paneles
-				return panes;
+			return new()
+						{
+							new PaneModel
+									{
+										Id = "TreeBlogs",
+										Title = "Blogs",
+										Position = PaneModel.PositionType.Left,
+										View = new Views.BlogTreeControlView(MainViewModel.TreeBlogs)
+									}
+						};
 		}
 
 		/// <summary>
 		///		Obtiene las barras de herramientas del plugin
 		/// </summary>
-		public List<ToolBarModel> GetToolBars()
-		{
-			return new();
-		}
+		public List<ToolBarModel> GetToolBars() => new();
 
 		/// <summary>
 		///		Obtiene los menús del plugin
 		/// </summary>
-		public List<MenuListModel> GetMenus()
-		{
-			return new();
-		}
+		public List<MenuListModel> GetMenus() => new();
 
 		/// <summary>
 		///		Obtiene las extensiones de archivo asociadas al plugin
 		/// </summary>
-		public List<PluginsStudio.ViewModels.Base.Models.FileAssignedModel> GetFilesAssigned()
-		{
-			return new();
-		}
+		public List<FileAssignedModel> GetFilesAssigned() => new();
 
 		/// <summary>
 		///		Obtiene las opciones de menú asociadas a las extensiones de archivo y carpetas
 		/// </summary>
-		public List<FileOptionsModel> GetFilesOptions()
-		{
-			return null;
-		}
+		public List<FileOptionsModel> GetFilesOptions() => null;
 
 		/// <summary>
 		///		Obtiene la vista de configuración del plugin

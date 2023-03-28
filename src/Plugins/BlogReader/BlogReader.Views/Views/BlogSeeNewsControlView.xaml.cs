@@ -27,7 +27,7 @@ namespace Bau.Libraries.BlogReader.Views.Views
 			// Inicializa el ViewModel
 			ViewModel = viewModel;
 			grdData.DataContext = ViewModel;
-			lswEntries.ItemsSource = ViewModel.Entries;
+			lswEntries.ItemsSource = ViewModel.EntriesList;
 			// Observa el evento PropertyChanged para ver cuándo se cambia el Html
 			ViewModel.PropertyChanged += (sender, args) =>
 												{

@@ -24,7 +24,7 @@ namespace Bau.Libraries.LibBlogReader.Application
 		public void Load()
 		{
 			if (!Configuration.PathBlogs.IsEmpty() && System.IO.Directory.Exists(Configuration.PathBlogs))
-				File = new Bussiness.Blogs.FolderBussiness().Load(Configuration.PathBlogs);
+				File = new Repository.BlogsStructureRepository().Load(Configuration.PathBlogs);
 		}
 
 		/// <summary>
@@ -32,7 +32,7 @@ namespace Bau.Libraries.LibBlogReader.Application
 		/// </summary>
 		public void Save()
 		{
-			new Bussiness.Blogs.FolderBussiness().Save(File, Configuration.PathBlogs);
+			new Repository.BlogsStructureRepository().Save(File, Configuration.PathBlogs);
 		}
 
 		/// <summary>
@@ -52,11 +52,19 @@ namespace Bau.Libraries.LibBlogReader.Application
 		}
 
 		/// <summary>
+		///		Carga las entradas de un blog
+		/// </summary>
+		public EntriesModelCollection LoadEntries(BlogModel blog)
+		{
+			return new Repository.EntryXmlRepository().Load(blog, Configuration.PathBlogs);
+		}
+
+		/// <summary>
 		///		Guarda los datos de un blog
 		/// </summary>
-		public void SaveBlog(BlogModel blog)
+		public void SaveBlog(BlogModel blog, EntriesModelCollection entries)
 		{
-			new Repository.EntryXmlRepository().Save(blog, Configuration.PathBlogs);
+			new Repository.EntryXmlRepository().Save(blog, entries, Configuration.PathBlogs);
 		}
 
 		/// <summary>
@@ -72,7 +80,7 @@ namespace Bau.Libraries.LibBlogReader.Application
 			get
 			{ 
 				// Crea el objeto de configuración si no estaba en memoria
-				if (_configuration == null)
+				if (_configuration is null)
 					_configuration = new Controllers.Configuration();
 				// Devuelve el objeto de configuración
 				return _configuration;

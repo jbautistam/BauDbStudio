@@ -73,17 +73,17 @@ namespace Bau.Libraries.LibBlogReader.Model
 		}
 
 		/// <summary>
-		///		Borra una entrada
+		///		Actualiza el número de elementos no leidos de un blog
 		/// </summary>
-		public bool Delete(EntryModel entry)
+		public void UpdateNumberNotRead(BlogModel blog, int numberNotRead)
 		{
-			bool deleted = Blogs.Delete(entry);
-
-				// Borra la entrada de las carpetas
-				if (!deleted)
-					deleted = Folders.Delete(entry);
-				// Devuelve el valor que indica si se ha borrado
-				return deleted;
+			// Modifica los blogs de las carpetas
+			foreach (FolderModel folder in Folders)
+				folder.UpdateNumberNotRead(blog, numberNotRead);
+			// Modifica los blogs hijo
+			foreach (BlogModel child in Blogs)
+				if (child.GlobalId.Equals(blog.GlobalId, StringComparison.CurrentCultureIgnoreCase))
+					child.NumberNotRead = numberNotRead;
 		}
 
 		/// <summary>
@@ -99,12 +99,12 @@ namespace Bau.Libraries.LibBlogReader.Model
 		/// <summary>
 		///		Carpetas contenidas en esta carpeta
 		/// </summary>
-		public FoldersModelCollection Folders { get; } = new FoldersModelCollection();
+		public FoldersModelCollection Folders { get; } = new();
 
 		/// <summary>
 		///		Blogs de esta carpeta
 		/// </summary>
-		public BlogsModelCollection Blogs { get; } = new BlogsModelCollection();
+		public BlogsModelCollection Blogs { get; } = new();
 
 		/// <summary>
 		///		Nombre completo de la carpeta

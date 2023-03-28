@@ -9,22 +9,22 @@ namespace Bau.Libraries.LibBlogReader.Application.Bussiness.Blogs
 	/// </summary>
 	public class BlogBussiness
 	{
-		/// <summary>
-		///		Modifica el número de elementos no leídos
-		/// </summary>
-		public void UpdateNumberNotRead(BlogsModelCollection blogs)
-		{
-			foreach (BlogModel blog in blogs)
-				UpdateNumberNotRead(blog);
-		}
+		///// <summary>
+		/////		Modifica el número de elementos no leídos
+		///// </summary>
+		//public void UpdateNumberNotRead(BlogsModelCollection blogs)
+		//{
+		//	foreach (BlogModel blog in blogs)
+		//		UpdateNumberNotRead(blog);
+		//}
 
-		/// <summary>
-		///		Modifica el número de elementos no leídos
-		/// </summary>
-		public void UpdateNumberNotRead(BlogModel blog)
-		{
-			if (blog.Folder != null)
-				new FolderBussiness().UpdateNumberNotRead(blog.Folder);
-		}
+		///// <summary>
+		/////		Modifica el número de elementos no leídos
+		///// </summary>
+		//public void UpdateNumberNotRead(BlogModel blog)
+		//{
+		//	if (blog.Folder != null)
+		//		new FolderBussiness().UpdateNumberNotRead(blog.Folder);
+		//}
 	}
 }

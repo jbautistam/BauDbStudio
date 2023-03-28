@@ -8,7 +8,7 @@ using Bau.Libraries.LibBlogReader.Model;
 namespace Bau.Libraries.LibBlogReader.Repository
 {
 	/// <summary>
-	///		Repository para las entradas de un blog
+	///		Repositorio para las entradas de un blog
 	/// </summary>
 	internal class EntryXmlRepository
 	{ 
@@ -52,7 +52,7 @@ namespace Bau.Libraries.LibBlogReader.Repository
 
 				// Carga los datos de la entrada
 				entry.Blog = blog;
-				entry.DatePublish = nodeML.Attributes[TagDatePublish].Value.GetDateTime() ?? DateTime.Now;
+				entry.DatePublish = nodeML.Attributes[TagDatePublish].Value.GetDateTime(DateTime.Now);
 				entry.Status = (EntryModel.StatusEntry) nodeML.Attributes[TagStatus].Value.GetInt(0);
 				entry.Name = nodeML.Nodes[TagName].Value;
 				entry.URL = nodeML.Nodes[TagUrl].Value;
@@ -67,15 +67,13 @@ namespace Bau.Libraries.LibBlogReader.Repository
 		/// <summary>
 		///		Graba las entradas de un blog
 		/// </summary>
-		internal void Save(BlogModel blog, string path)
+		internal void Save(BlogModel blog, EntriesModelCollection entries, string path)
 		{
 			MLFile fileML = new MLFile();
 			MLNode objMLRoot = fileML.Nodes.Add(TagRoot);
 
-				// Elimina los borrados antiguos
-				blog.Entries.DeleteOldData();
 				// Añade las entradas
-				foreach (EntryModel entry in blog.Entries)
+				foreach (EntryModel entry in entries)
 				{
 					MLNode nodeML = objMLRoot.Nodes.Add(TagEntry);
 

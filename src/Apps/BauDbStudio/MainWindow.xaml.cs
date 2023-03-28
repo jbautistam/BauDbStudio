@@ -85,17 +85,13 @@ namespace Bau.DbStudio
 		/// </summary>
 		private Controls.DockLayout.DockLayoutManager.DockPosition ConvertPosition(Libraries.PluginsStudio.Views.Base.Models.PaneModel.PositionType position)
 		{
-			switch (position)
+			return position switch
 			{
-				case Libraries.PluginsStudio.Views.Base.Models.PaneModel.PositionType.Top:
-					return Controls.DockLayout.DockLayoutManager.DockPosition.Top;
-				case Libraries.PluginsStudio.Views.Base.Models.PaneModel.PositionType.Right:
-					return Controls.DockLayout.DockLayoutManager.DockPosition.Right;
-				case Libraries.PluginsStudio.Views.Base.Models.PaneModel.PositionType.Bottom:
-					return Controls.DockLayout.DockLayoutManager.DockPosition.Bottom;
-				default:
-					return Controls.DockLayout.DockLayoutManager.DockPosition.Left;
-			}
+				Libraries.PluginsStudio.Views.Base.Models.PaneModel.PositionType.Top => Controls.DockLayout.DockLayoutManager.DockPosition.Top,
+				Libraries.PluginsStudio.Views.Base.Models.PaneModel.PositionType.Right => Controls.DockLayout.DockLayoutManager.DockPosition.Right,
+				Libraries.PluginsStudio.Views.Base.Models.PaneModel.PositionType.Bottom => Controls.DockLayout.DockLayoutManager.DockPosition.Bottom,
+				_ => Controls.DockLayout.DockLayoutManager.DockPosition.Left
+			};
 		}
 
 		/// <summary>

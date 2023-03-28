@@ -42,9 +42,9 @@ namespace Bau.Libraries.LibBlogReader.Repository
 						if (nodeML.Name == TagRoot)
 							foreach (MLNode childML in nodeML.Nodes)
 								if (childML.Name == TagFolder)
-									folder.Folders.Add(LoadFolder(path, folder, childML));
+									folder.Folders.Add(LoadFolder(folder, childML));
 								else if (childML.Name == TagBlog)
-									folder.Blogs.Add(LoadBlog(path, folder, childML));
+									folder.Blogs.Add(LoadBlog(folder, childML));
 				// Devuelve la carpeta cargada
 				return folder;
 		}
@@ -52,7 +52,7 @@ namespace Bau.Libraries.LibBlogReader.Repository
 		/// <summary>
 		///		Carga los datos de una carpeta de un nodo
 		/// </summary>
-		private FolderModel LoadFolder(string path, FolderModel parent, MLNode nodeML)
+		private FolderModel LoadFolder(FolderModel parent, MLNode nodeML)
 		{
 			FolderModel folder = new FolderModel();
 
@@ -63,9 +63,9 @@ namespace Bau.Libraries.LibBlogReader.Repository
 				// Carga los hijos de la carpetas
 				foreach (MLNode childML in nodeML.Nodes)
 					if (childML.Name == TagFolder)
-						folder.Folders.Add(LoadFolder(path, folder, childML));
+						folder.Folders.Add(LoadFolder(folder, childML));
 					else if (childML.Name == TagBlog)
-						folder.Blogs.Add(LoadBlog(path, folder, childML));
+						folder.Blogs.Add(LoadBlog(folder, childML));
 				// Devuelve la carpeta
 				return folder;
 		}
@@ -73,7 +73,7 @@ namespace Bau.Libraries.LibBlogReader.Repository
 		/// <summary>
 		///		Carga los datos de un blog
 		/// </summary>
-		private BlogModel LoadBlog(string path, FolderModel parent, MLNode nodeML)
+		private BlogModel LoadBlog(FolderModel parent, MLNode nodeML)
 		{
 			BlogModel blog = new BlogModel();
 
@@ -84,12 +84,11 @@ namespace Bau.Libraries.LibBlogReader.Repository
 				blog.Description = nodeML.Nodes[TagDescription].Value;
 				blog.Path = nodeML.Nodes[TagPath].Value;
 				blog.URL = nodeML.Nodes[TagUrl].Value;
+				blog.NumberNotRead = nodeML.Attributes[TagNumberNotRead].Value.GetInt(0);
 				blog.DateLastDownload = nodeML.Attributes[TagDateLastDownload].Value.GetDateTime();
 				blog.DateLastEntry = nodeML.Attributes[TagDateLastEntry].Value.GetDateTime();
 				blog.DownloadPodcast = nodeML.Attributes[TagDownloadPodcast].Value.GetBool();
 				blog.Enabled = nodeML.Attributes[TagEnabled].Value.GetBool();
-				// Asigna el lazy de entradas
-				blog.LazyEntries.LazyData = new Lazy<EntriesModelCollection>(() => new EntryXmlRepository().Load(blog, path));
 				// Devuelve los datos del blog
 				return blog;
 		}

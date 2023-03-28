@@ -34,20 +34,5 @@ namespace Bau.Libraries.LibBlogReader.Model
 				// Devuelve el número de elementos no leídos
 				return number;
 		}
-
-		/// <summary>
-		///		Borra una entrada
-		/// </summary>
-		internal bool Delete(EntryModel entry)
-		{
-			bool deleted = false;
-
-				// Borra la entrada de los blogs
-				foreach (BlogModel blog in this)
-					if (!deleted)
-						deleted = blog.Delete(entry);
-				// Devuelve el valor que indica si se ha borrado
-				return deleted;
-		}
 	}
 }

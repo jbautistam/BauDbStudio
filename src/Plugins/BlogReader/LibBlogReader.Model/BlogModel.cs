@@ -1,7 +1,5 @@
 ﻿using System;
 
-using Bau.Libraries.LibHelper.Extensors;
-
 namespace Bau.Libraries.LibBlogReader.Model
 {
 	/// <summary>
@@ -11,14 +9,6 @@ namespace Bau.Libraries.LibBlogReader.Model
 	{ 
 		// Variables privadas
 		private string path;
-
-		/// <summary>
-		///		Borra una entrada
-		/// </summary>
-		internal bool Delete(EntryModel entry)
-		{
-			return Entries.Delete(entry);
-		}
 
 		/// <summary>
 		///		Directorio para grabación de las entradas
@@ -64,43 +54,11 @@ namespace Bau.Libraries.LibBlogReader.Model
 		/// <summary>
 		///		Número de elementos no leídos
 		/// </summary>
-		public int NumberNotRead 
-		{ 
-			get
-			{
-				int count = 0;
-
-					// Cuenta los elementos no leidos
-					foreach (EntryModel entry in Entries)
-						if (entry.Status == EntryModel.StatusEntry.NotRead)
-							count++;
-					// Devuelve el número de elementos
-					return count;
-			}
-		}
+		public int NumberNotRead { get; set; }
 
 		/// <summary>
 		///		Carpeta a la que pertenece el blog
 		/// </summary>
 		public FolderModel Folder { get; set; }
-
-		/// <summary>
-		///		Indica si se ha modificado
-		/// </summary>
-		public bool IsDirty { get; set; }
-
-		/// <summary>
-		///		Entradas del blog (Lazy)
-		/// </summary>
-		public LibDataStructures.Base.LazyObject<EntriesModelCollection> LazyEntries { get; } = new LibDataStructures.Base.LazyObject<EntriesModelCollection>();
-
-		/// <summary>
-		///		Entradas del blog
-		/// </summary>
-		public EntriesModelCollection Entries
-		{
-			get { return LazyEntries.Data; }
-			set { CheckProperty<EntriesModelCollection, EntryModel>(LazyEntries, value); }
-		}
 	}
 }

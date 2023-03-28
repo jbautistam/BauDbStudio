@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.BauMvvm.ViewModels;
-using Bau.Libraries.LibBlogReader.Application.Bussiness.Blogs;
 using Bau.Libraries.LibBlogReader.Model;
 
 namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
@@ -33,6 +32,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 		// Eventos públicos
 		public event EventHandler Closed;
 		// Variables privadas
+		private EntriesModelCollection _blogEntries = new();
 		private BlogEntriesCollectionViewModel _entries, _entriesForView;
 		private BlogEntryViewModel _selectedEntry;
 		private bool _mustSeeInteresting, _mustSeeNotRead, _mustSeeRead, _isDirty;
@@ -80,12 +80,40 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 		{
 			// Guarda el Id del documento
 			TabId = $"{GetType().ToString()}_{GetBlogSeeNewsTabId()}";
-			// Obtiene los datos de configuración (asigna las variables, no las propiedades porque las propiedades lanzan TreatSelectedEntriesChanged
+			// Obtiene los datos de configuración (asigna las variables, no las propiedades porque las propiedades lanzan TreatSelectedEntriesChanged)
 			_mustSeeRead = MainViewModel.ConfigurationViewModel.SeeEntriesRead;
 			_mustSeeNotRead = MainViewModel.ConfigurationViewModel.SeeEntriesNotRead;
 			_mustSeeInteresting = MainViewModel.ConfigurationViewModel.SeeEntriesInteresting;
+			// Carga las entradas de los blogs
+			LoadBlogsEntries();
 			// Carga las noticias
 			TreatSelectedEntriesChanged();
+		}
+
+		/// <summary>
+		///		Carga todos los blogs
+		/// </summary>
+		private void LoadBlogsEntries()
+		{
+			// Limpia la lista de entrada
+			_blogEntries.Clear();
+			// Carga las entradas de los blogs seleccionados
+			foreach (BlogModel blog in Blogs)
+				_blogEntries.AddRange(MainViewModel.BlogManager.LoadEntries(blog));
+			// Ordena las entradas
+			_blogEntries.Sort((first, second) => {
+													if (first.Blog.Name.Equals(second.Blog.Name, StringComparison.CurrentCultureIgnoreCase))
+														return -1 * first.DatePublish.CompareTo(second.DatePublish);
+													else
+														return first.Blog.Name.CompareTo(second.Blog.Name);
+												 }
+							 );
+			// -1 * first.DatePublish.CompareTo(second.DatePublish));
+			// Carga las entradas en las entradas de la lista
+			EntriesList = new BlogEntriesCollectionViewModel();
+			foreach (EntryModel entry in _blogEntries)
+				if (entry.Status != EntryModel.StatusEntry.Deleted)
+					EntriesList.Add(new BlogEntryViewModel(entry.Blog.Name, entry));
 		}
 
 		/// <summary>
@@ -166,7 +194,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 				case nameof(NextPageCommand):
 					return ActualPage < Pages;
 				case nameof(DeleteCommand):
-					return SelectedEntry != null || (SelectedEntry == null && Blogs.GetNumberNotRead() == 0 && Entries.Count > 0);
+					return SelectedEntry != null || (SelectedEntry == null && Blogs.GetNumberNotRead() == 0 && EntriesList.Count > 0);
 				case nameof(MarkAsReadCommand):
 				case nameof(MarkAsNotReadCommand):
 				case nameof(MarkAsInterestingCommand):
@@ -197,12 +225,14 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 				// Asigna las entradas
 				foreach (BlogModel blog in Blogs)
 				{ 
-					// Ordena las entradas por fecha
-					blog.Entries.SortByDate(false);
-					// Añade las entradas a la vista (no hace un foreach porque puede que se cambie la colección en las descargas)
-					for (int index = 0; index < blog.Entries.Count; index++)
-						if (blog.Entries[index].Status != EntryModel.StatusEntry.Deleted)
-							entriesViewModel.Add(new BlogEntryViewModel(blog.Name, blog.Entries[index]));
+					EntriesModelCollection entries = MainViewModel.BlogManager.LoadEntries(blog);
+
+						// Ordena las entradas por fecha
+						entries.SortByDate(false);
+						// Añade las entradas a la vista (no hace un foreach porque puede que se cambie la colección en las descargas)
+						for (int index = 0; index < entries.Count; index++)
+							if (entries[index].Status != EntryModel.StatusEntry.Deleted)
+								entriesViewModel.Add(new BlogEntryViewModel(blog.Name, entries[index]));
 				}
 				// Devuelve las entradas
 				return entriesViewModel;
@@ -213,10 +243,10 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 		/// </summary>
 		private BlogEntriesCollectionViewModel GetEntriesSelected()
 		{
-			if (Entries.CountSelected > 0)
-				return Entries.GetSelected();
+			if (EntriesList.CountSelected > 0)
+				return EntriesList.GetSelected();
 			else
-				return Entries.GetByParameters(SeeNotRead, SeeRead, SeeInteresting);
+				return EntriesList.GetByParameters(SeeNotRead, SeeRead, SeeInteresting);
 		}
 
 		/// <summary>
@@ -224,11 +254,11 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 		/// </summary>
 		private void DeleteSelectedEntries()
 		{
-			BlogEntriesCollectionViewModel entriesForDelete = Entries.GetSelected();
+			BlogEntriesCollectionViewModel entriesForDelete = EntriesList.GetSelected();
 
 				// Si no se ha seleccionado ninguna, obtiene las no leídas para borrarlas
 				if (entriesForDelete.Count == 0)
-					entriesForDelete = Entries.GetRead();
+					entriesForDelete = EntriesList.GetRead();
 				// Si hay algo que se pueda borrar ...
 				if (entriesForDelete.Count > 0 &&
 						MainViewModel.ViewsController.SystemController.ShowQuestion("¿Realmente desea eliminar las entradas seleccionadas?"))
@@ -251,10 +281,8 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 						// Añade el blog de la entrada
 						if (!blogsUpdated.Exists(entryViewModel.Entry.Blog.GlobalId))
 							blogsUpdated.Add(entryViewModel.Entry.Blog);
-						// Marca como borrado y añade el ID para borrarlo en la base de datos
-						entryViewModel.Entry.Status = EntryModel.StatusEntry.Deleted;
-						// Quita la entrada de la colección
-						Entries.Remove(entryViewModel);
+						// Marca como borrado la entrada del blog
+						_blogEntries.UpdateStatus(entryViewModel.Entry.Blog, entryViewModel.Entry.GlobalId, EntryModel.StatusEntry.Deleted);
 						// Elimina los archivos asociados
 						if (!string.IsNullOrEmpty(entryViewModel.Entry.DownloadFileName) &&
 								System.IO.File.Exists(entryViewModel.Entry.DownloadFileName))
@@ -264,7 +292,13 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 					}
 					// Si realmente hay algo que borrar
 					if (deleted)
+					{
+						// Graba los archivos
 						TreatUpdateEntries(blogsUpdated);
+						// Elimina las entradas de la lista
+						foreach (BlogEntryViewModel entryViewModel in entriesForDelete)
+							EntriesList.Remove(entryViewModel);
+					}
 			}
 		}
 
@@ -273,7 +307,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 		/// </summary>
 		private string GetHtmlNews()
 		{
-			BlogEntriesCollectionViewModel entries = EntriesForView;
+			BlogEntriesCollectionViewModel entries = LastEntriesSelectedForView;
 			System.Text.StringBuilder sbHtml = new System.Text.StringBuilder();
 			string lastBlog = null;
 			int startIndex, endIndex;
@@ -397,7 +431,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 
 					if (parameters.Length == 2)
 					{
-						BlogEntryViewModel entry = Entries.Search(parameters[1]);
+						BlogEntryViewModel entry = EntriesList.Search(parameters[1]);
 
 							if (entry != null)
 							{
@@ -442,26 +476,28 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 		/// </summary>
 		private void SetStatusEntriesSelected(EntryModel.StatusEntry idNewStatus)
 		{
-			SetStatusEntries(GetEntriesSelected(), idNewStatus);
+			SetStatusEntries(LastEntriesSelectedForView, idNewStatus);
 		}
 
 		/// <summary>
 		///		Modifica el estado de las entradas seleccionadas
 		/// </summary>
-		private void SetStatusEntries(BlogEntriesCollectionViewModel entries, EntryModel.StatusEntry idNewStatus)
+		private void SetStatusEntries(BlogEntriesCollectionViewModel entries, EntryModel.StatusEntry newStatus)
 		{
 			BlogsModelCollection blogsUpdated = new BlogsModelCollection();
 			bool updated = false;
 
 				// Marca los elementos seleccionados como leídos
 				foreach (BlogEntryViewModel entry in entries)
-					if (CanChangeStatus(entry, idNewStatus))
+					if (CanChangeStatus(entry, newStatus))
 					{ 
 						// Cambia el estado
-						entry.Status = idNewStatus;
+						entry.Status = newStatus;
 						// Añade el blog
 						if (!blogsUpdated.Exists(entry.Entry.Blog.GlobalId))
 							blogsUpdated.Add(entry.Entry.Blog);
+						// Modifica la entrada
+						_blogEntries.UpdateStatus(entry.Entry.Blog, entry.Entry.GlobalId, newStatus);
 						// Indica que se ha modificado
 						updated = true;
 					}
@@ -475,11 +511,18 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 		/// </summary>
 		private void TreatUpdateEntries(BlogsModelCollection blogsUpdated)
 		{
-			// Graba las entradas de los blogs modificados
+			// Graba los archivos de los blogs modificados
 			foreach (BlogModel blog in blogsUpdated)
-				MainViewModel.BlogManager.SaveBlog(blog);
-			// Modifica el número de elementos no leídos
-			new BlogBussiness().UpdateNumberNotRead(blogsUpdated);
+			{
+				EntriesModelCollection entries = _blogEntries.GetFrom(blog);
+
+					// Graba las entradas del blog
+					MainViewModel.BlogManager.SaveBlog(blog, entries);
+					// Graba el blog
+					blog.NumberNotRead = entries.GetNumberNotRead();
+					// Actualiza el número de elementos no leidos del manager
+					MainViewModel.BlogManager.File.UpdateNumberNotRead(blog, blog.NumberNotRead);
+			}
 			// Graba el archivo con los blogs y las carpetas
 			MainViewModel.BlogManager.Save();
 			// Cambia el estado del comando borrar
@@ -545,14 +588,15 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 
 				if (!string.IsNullOrWhiteSpace(fileName))
 				{
-					BlogEntriesCollectionViewModel entriesViewModel = EntriesForView;
-					BlogModel blog = new BlogModel();
+					BlogEntriesCollectionViewModel entriesViewModel = LastEntriesSelectedForView;
+					BlogModel blog = new();
+					EntriesModelCollection entries = new();
 
 						// Crea los datos del blog
 						blog.Name = "Export";
 						// Añade las entradas
 						foreach (BlogEntryViewModel entryViewModel in entriesViewModel)
-							blog.Entries.Add(new EntryModel
+							entries.Add(new EntryModel
 													{
 														Name = entryViewModel.Title,
 														Content = entryViewModel.Content,
@@ -560,7 +604,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 													}
 											);
 						// Graba los datos del blog
-						MainViewModel.BlogManager.SaveBlog(blog);
+						MainViewModel.BlogManager.SaveBlog(blog, entries);
 				}
 		}
 
@@ -589,8 +633,8 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 		/// </summary>
 		private void PlayEntry()
 		{
-			BlogEntriesCollectionViewModel entries = GetEntriesSelected();
-			var attachments = new Dictionary<string, List<KeyValuePair<string, string>>>();
+			BlogEntriesCollectionViewModel entries = LastEntriesSelectedForView;
+			Dictionary<string, List<KeyValuePair<string, string>>> attachments = new();
 
 				// Obtiene los nombres de los archivos adjuntos
 				foreach (BlogEntryViewModel entry in entries)
@@ -637,6 +681,11 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 		/// </summary>
 		public void Close()
 		{
+			// Limpia los datos
+			EntriesList.Clear();
+			LastEntriesSelectedForView.Clear();
+			HtmlNews = string.Empty;
+			// Cierra la ventana
 			Closed?.Invoke(this, EventArgs.Empty);
 		}
 
@@ -670,7 +719,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 		/// <summary>
 		///		Entradas
 		/// </summary>
-		public BlogEntriesCollectionViewModel Entries
+		public BlogEntriesCollectionViewModel EntriesList
 		{
 			get
 			{ 
@@ -684,9 +733,9 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 		}
 
 		/// <summary>
-		///		Entradas que se ven en el explorador
+		///		Entradas seleccionadoas para verlas y tratarlas desde el explorador
 		/// </summary>
-		private BlogEntriesCollectionViewModel EntriesForView
+		private BlogEntriesCollectionViewModel LastEntriesSelectedForView
 		{
 			get
 			{

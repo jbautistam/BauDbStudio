@@ -11,7 +11,18 @@ namespace Bau.Libraries.LibBlogReader.Model
 	public class EntriesModelCollection : LibDataStructures.Base.BaseExtendedModelCollection<EntryModel>
 	{   
 		// Constantes privadas
-		private const int MaxItems = 40;
+		private const int MaxItems = 100;
+
+		/// <summary>
+		///		Cambia el estado de una entrada
+		/// </summary>
+		public void UpdateStatus(BlogModel blog, string globalId, EntryModel.StatusEntry newStatus)
+		{
+			foreach (EntryModel entry in this)
+				if (entry.Blog.GlobalId.Equals(blog.GlobalId, StringComparison.CurrentCultureIgnoreCase) && 
+						entry.GlobalId.Equals(globalId, StringComparison.CurrentCultureIgnoreCase))
+					entry.Status = newStatus;
+		}
 
 		/// <summary>
 		///		Ordena las entradas por nombre de blog y fecha
@@ -29,7 +40,7 @@ namespace Bau.Libraries.LibBlogReader.Model
 			if (string.IsNullOrWhiteSpace(url))
 				return null;
 			else
-				return this.FirstOrDefault<EntryModel>(entry => entry.URL.EqualsIgnoreCase(url));
+				return this.FirstOrDefault(entry => entry.URL.EqualsIgnoreCase(url));
 		}
 
 		/// <summary>
@@ -56,6 +67,21 @@ namespace Bau.Libraries.LibBlogReader.Model
 		}
 
 		/// <summary>
+		///		Obtiene las entradas de un blog
+		/// </summary>
+		public EntriesModelCollection GetFrom(BlogModel blog)
+		{
+			EntriesModelCollection entries = new();
+
+				// Busca las entradas del blog
+				foreach (EntryModel entry in this)
+					if (entry.Blog.GlobalId.Equals(blog.GlobalId, StringComparison.CurrentCultureIgnoreCase))
+						entries.Add(entry);
+				// Devuelve las entradas
+				return entries;
+		}
+
+		/// <summary>
 		///		Borra los datos antiguos
 		/// </summary>
 		public void DeleteOldData()
@@ -64,21 +90,6 @@ namespace Bau.Libraries.LibBlogReader.Model
 				if (Count > MaxItems && this[index].DatePublish < DateTime.Now.AddDays(-60) &&
 						this[index].Status == EntryModel.StatusEntry.Deleted)
 					RemoveAt(index);
-		}
-
-		/// <summary>
-		///		Borra una entrada
-		/// </summary>
-		internal bool Delete(EntryModel entry)
-		{
-			if (Exists(entry.Id))
-			{
-				Remove(entry);
-				entry.Blog.IsDirty = true;
-				return true;
-			}
-			else
-				return false;
 		}
 	}
 }
