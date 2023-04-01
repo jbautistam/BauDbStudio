@@ -81,7 +81,7 @@ namespace Bau.Libraries.DbStudio.Views.Queries
 			e.Effects = System.Windows.DragDropEffects.All;
 		}
 
-		private void udtEditor_Drop(object sender, System.Windows.DragEventArgs e)
+		private async void udtEditor_Drop(object sender, System.Windows.DragEventArgs e)
 		{
 			object data = _dragDropController.GetDragDropFileNode(e.Data);
 
@@ -90,7 +90,8 @@ namespace Bau.Libraries.DbStudio.Views.Queries
 					string content = baseNodeViewModel.GetTextForEditor(e.KeyStates == System.Windows.DragDropKeyStates.ShiftKey);
 
 						if (!string.IsNullOrWhiteSpace(content))
-							udtEditor.InsertText(ViewModel.TreatTextDropped(content, e.KeyStates == System.Windows.DragDropKeyStates.ShiftKey), 
+							udtEditor.InsertText(await ViewModel.TreatTextDroppedAsync(content, e.KeyStates == System.Windows.DragDropKeyStates.ShiftKey,
+																					   System.Threading.CancellationToken.None), 
 												 e.GetPosition(udtEditor));
 				}
 		}

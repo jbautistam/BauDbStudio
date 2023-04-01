@@ -66,9 +66,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Files
 		/// <summary>
 		///		Obtiene la cadena asociada a un archivo cuando se arrastra un nodo sobre el editor de texto
 		/// </summary>
-		public override string TreatTextDropped(string content, bool shiftPressed)
+		public override async Task<string> TreatTextDroppedAsync(string content, bool shiftPressed, System.Threading.CancellationToken cancellationToken)
 		{
-			return new Controllers.DropItems.NodeTextDropHelper(false).TreatTextDropped(content, shiftPressed);
+			return await new Controllers.DropItems.NodeTextDropHelper(false).TreatTextDroppedAsync(content, shiftPressed, cancellationToken);
 		}
 
 		/// <summary>

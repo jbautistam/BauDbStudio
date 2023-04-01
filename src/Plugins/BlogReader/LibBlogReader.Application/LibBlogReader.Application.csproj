@@ -7,8 +7,11 @@
 
   <ItemGroup>
     <Compile Remove="Bussiness\Blogs\**" />
+    <Compile Remove="Services\EventArguments\**" />
     <EmbeddedResource Remove="Bussiness\Blogs\**" />
+    <EmbeddedResource Remove="Services\EventArguments\**" />
     <None Remove="Bussiness\Blogs\**" />
+    <None Remove="Services\EventArguments\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,6 +21,10 @@
 
   <ItemGroup>
     <Folder Include="Bussiness\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
   </ItemGroup>
 
 </Project>

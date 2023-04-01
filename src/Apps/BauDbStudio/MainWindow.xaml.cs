@@ -28,7 +28,7 @@ public partial class MainWindow : Window
 																	System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Bau.DbStudio"),
 																	this);
 
-		DbStudioViewsManager.MainWindowsController.Logger.LogError("Start application");
+		DbStudioViewsManager.MainWindowsController.Logger.LogInformation("Start application");
 		// Añade los plugins
 		DbStudioViewsManager.AddPlugin(new Libraries.JobsProcessor.Plugin.JobsProcessorPlugin());
 		DbStudioViewsManager.AddPlugin(new Libraries.DbStudio.Views.DbStudioViewManager());
@@ -157,7 +157,7 @@ public partial class MainWindow : Window
 		{
 			Version? version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
 
-				return $"{version?.Major.ToString()}.{version?.Minor:00}.{version?.Build:00}.{version?.MinorRevision:0000}";
+				return $"{version?.Major.ToString()}.{version?.Minor.ToString()}.{version?.Build.ToString()}.{version?.MinorRevision.ToString()}";
 		}
 		catch (Exception exception)
 		{
@@ -235,13 +235,10 @@ public partial class MainWindow : Window
 	/// </summary>
 	private void UpdateSelectedTab()
 	{
-		IDetailViewModel? details = null;
-
-			// Obtiene los detalles de la ficha seleccionada
-			if (dckManager.ActiveDocument != null)
-				details = dckManager.ActiveDocument.Tag as IDetailViewModel;
-			// Cambia la ficha seleccionada en el ViewModel
+		if (dckManager.ActiveDocument is IDetailViewModel details)
 			ViewModel.SelectedDetailsViewModel = details;
+		else
+			ViewModel.SelectedDetailsViewModel = null;
 	}
 
 	/// <summary>
@@ -401,17 +398,25 @@ public partial class MainWindow : Window
 	/// </summary>
 	private bool CanExitApp()
 	{
-		// Comprueba si alguna de las vistas tiene modificaciones pendientes
-		foreach (object view in dckManager.GetOpenedViews())
-			if (view is IDetailViewModel viewModel && viewModel.IsUpdated)
+		List<IDetailViewModel> views = new();
+		bool canExit = true;
+
+			// Comprueba si alguna de las vistas tiene modificaciones pendientes
+			foreach (object view in dckManager.GetOpenedViews())
+				if (view is IDetailViewModel viewModel && viewModel.IsUpdated)
+					views.Add(viewModel);
+			// Muestra la ventana que solicita grabar las ventanas
+			if (views.Count > 0)
 			{
-				// Mensaje para el usuario
-				ViewModel.PluginsStudioController.MainWindowController.SystemController.ShowMessage("Grabe las últimas modificaciones antes de cerrar la aplicación");
-				// Indica que no puede salir de la aplicación
-				return false;
+				bool cancel = ViewModel.PluginsStudioController.OpenDialog(new Libraries.PluginsStudio.ViewModels.Tools.SaveOpenFilesViewModel(ViewModel, views)) 
+								== Libraries.BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.No;
+
+					// No se puede salir si se ha cancelado
+					if (cancel)
+						canExit = false;
 			}
-		// Si ha llegado hasta aquí, se puede cerrar
-		return true;
+			// Devuelve el valor que indica si se puede grabar
+			return canExit;
 	}
 
 	/// <summary>

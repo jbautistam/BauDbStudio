@@ -79,7 +79,8 @@ namespace Bau.Libraries.ToDoManager.ViewModel.Notes
 		/// </summary>
 		public void Delete()
 		{
-			if (MainViewModel.ViewsController.HostController.SystemController.ShowQuestion("¿Desea borrar esta nota?"))
+			if ((string.IsNullOrWhiteSpace(Title) && string.IsNullOrWhiteSpace(Content)) || 
+				MainViewModel.ViewsController.HostController.SystemController.ShowQuestion("¿Desea borrar esta nota?"))
 			{
 				// Indica que se ha borrado
 				IsDeleted = true;

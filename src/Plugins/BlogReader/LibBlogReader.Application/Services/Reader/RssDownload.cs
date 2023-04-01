@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
-using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.LibFeeds.Syndication.Atom.Data;
 using Bau.Libraries.LibFeeds.Process;
 using Bau.Libraries.LibBlogReader.Model;
@@ -12,9 +14,6 @@ namespace Bau.Libraries.LibBlogReader.Application.Services.Reader
 	/// </summary>
 	public class RssDownload
 	{ 
-		// Eventos públicos
-		public event EventHandler<EventArguments.DownloadEventArgs> Process;
-		public event EventHandler<EventArguments.BlogEntryDownloadEventArgs> BlogEntryDownload;
 		// Variables privadas
 		private BlogReaderManager _blogManager;
 
@@ -26,40 +25,33 @@ namespace Bau.Libraries.LibBlogReader.Application.Services.Reader
 		/// <summary>
 		///		Descarga un blog
 		/// </summary>
-		public void Download(bool includeDisabled, BlogModel blog)
+		public async Task<int> DownloadAsync(bool includeDisabled, BlogModel blog, CancellationToken cancellationToken)
 		{
-			Download(includeDisabled, new BlogsModelCollection { blog });
+			return await DownloadAsync(includeDisabled, new BlogsModelCollection { blog }, cancellationToken);
 		}
 
 		/// <summary>
 		///		Descarga los blogs
 		/// </summary>
-		public void Download(bool includeDisabled, BlogsModelCollection blogs = null)
-		{
-			System.Threading.Tasks.Task.Run(async () => await DownloadProcessAsync(includeDisabled, blogs));
-		}
-
-		/// <summary>
-		///		Descarg los blogs
-		/// </summary>
-		private async System.Threading.Tasks.Task DownloadProcessAsync(bool includeDisabled, BlogsModelCollection blogs = null)
+		public async Task<int> DownloadAsync(bool includeDisabled, BlogsModelCollection? blogs, CancellationToken cancellationToken)
 		{
 			FeedProcessor processor = new FeedProcessor();
 			EntriesModelCollection entriesForDownload = new EntriesModelCollection();
+			int dowloadedItems = 0;
 
-				// Lanza el evento de inicio
-				RaiseEvent(EventArguments.DownloadEventArgs.ActionType.StartDownload, "Start download process");
+				// Log
+				_blogManager.Logger.LogInformation("Start download process");
 				// Crea la colección de blogs si estaba vacía
-				if (blogs == null)
+				if (blogs is null)
 					blogs = _blogManager.File.GetBlogsRecursive();
 				// Descarga los blogs
 				foreach (BlogModel blog in blogs)
-					if (blog.Enabled || (includeDisabled && !blog.Enabled))
+					if (blog.Enabled || (includeDisabled && !blog.Enabled) && !cancellationToken.IsCancellationRequested)
 					{
 						AtomChannel atom;
 
-							// Lanza el evento
-							RaiseEvent(EventArguments.DownloadEventArgs.ActionType.StartDownloadBlog, $"Start download {blog.Name}");
+							// Log
+							_blogManager.Logger.LogInformation($"Start download {blog.Name}");
 							// Descarga el archivo
 							try
 							{ 
@@ -78,25 +70,29 @@ namespace Bau.Libraries.LibBlogReader.Application.Services.Reader
 											// Añade las entradas a la descarga pendiente de adjuntos
 											if (blog.DownloadPodcast)
 												entriesForDownload.AddRange(downloaded);
+											// Añade el número de elementos descargados
+											dowloadedItems += downloaded.Count;
 										}
 								}
 								// Modifica la fecha de última descarga y el número de entradas no leidas
 								blog.DateLastDownload = DateTime.Now;
-								// Lanza el evento
-								RaiseEvent(EventArguments.DownloadEventArgs.ActionType.EndDownloadBlog, $"End download {blog.Name}");
+								// Log
+								_blogManager.Logger.LogInformation($"End download {blog.Name}");
 							}
 							catch (Exception exception)
 							{
-								RaiseEvent(EventArguments.DownloadEventArgs.ActionType.ErrorDonwloadBlog, $"Error when download {blog.Name}. {exception.Message}");
+								_blogManager.Logger.LogError(exception, $"Error when download {blog.Name}. {exception.Message}");
 							}
 					}
 				// Graba la estructura de los blogs
 				_blogManager.Save();
 				// Descarga los adjuntos
 				if (entriesForDownload.Count > 0)
-					await DownloadAttachmentsAsync(entriesForDownload);
-				// Lanza el evento de fin
-				RaiseEvent(EventArguments.DownloadEventArgs.ActionType.EndDownload, "End download blogs");
+					await DownloadAttachmentsAsync(entriesForDownload, cancellationToken);
+				// Log
+				_blogManager.Logger.LogInformation("End download blogs");
+				// Devuelve el número de elementos descargados
+				return dowloadedItems;
 		}
 
 		/// <summary>
@@ -125,8 +121,6 @@ namespace Bau.Libraries.LibBlogReader.Application.Services.Reader
 								blogEntry.Author = entry.Authors[0].Name;
 							blogEntry.DatePublish = entry.DatePublished;
 							blogEntry.Status = EntryModel.StatusEntry.NotRead;
-							// Lanza el evento de descarga de una entrada
-							RaiseEvent(blogEntry);
 							// Añade la entrada al blog y a la lista de elementos descargados
 							downloadedEntries.Add(blogEntry);
 					}
@@ -199,38 +193,22 @@ namespace Bau.Libraries.LibBlogReader.Application.Services.Reader
 		/// <summary>
 		///		Descarga los adjuntos
 		/// </summary>
-		private async System.Threading.Tasks.Task DownloadAttachmentsAsync(EntriesModelCollection entries)
+		private async Task DownloadAttachmentsAsync(EntriesModelCollection entries, CancellationToken cancellationToken)
 		{
-			var webClient = new LibHelper.Communications.HttpWebClient();
+			LibHelper.Communications.HttpWebClient webClient = new();
 
 				foreach (EntryModel entry in entries)
-					if (!string.IsNullOrEmpty(entry.DownloadFileName))
+					if (!string.IsNullOrEmpty(entry.DownloadFileName) && !cancellationToken.IsCancellationRequested)
 					{
 						string fileName = System.IO.Path.Combine(_blogManager.Configuration.PathBlogs, entry.DownloadFileName);
 
 							// Descarga el archivo
 							if (!System.IO.File.Exists(fileName))
 							{
-								RaiseEvent(EventArguments.DownloadEventArgs.ActionType.StartDownload, $"Descargando el archivo adjunto de {entry.Description}");
+								_blogManager.Logger.LogInformation($"Donwloaded attachment file for {entry.Description}");
 								await webClient.DownloadFileAsync(entry.UrlEnclosure, fileName);
 							}
 					}
-		}
-
-		/// <summary>
-		///		Lanza el evento de descarga de una entrada de un blog
-		/// </summary>
-		private void RaiseEvent(EntryModel blogEntry)
-		{
-			BlogEntryDownload?.Invoke(this, new EventArguments.BlogEntryDownloadEventArgs(blogEntry));
-		}
-
-		/// <summary>
-		///		Lanza un evento de proceso
-		/// </summary>
-		private void RaiseEvent(EventArguments.DownloadEventArgs.ActionType action, string description)
-		{
-			Process?.Invoke(this, new EventArguments.DownloadEventArgs(action, description));
 		}
 	}
 }

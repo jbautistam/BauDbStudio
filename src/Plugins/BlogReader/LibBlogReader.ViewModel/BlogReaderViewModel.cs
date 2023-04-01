@@ -13,12 +13,12 @@ namespace Bau.Libraries.LibBlogReader.ViewModel
 		public BlogReaderViewModel(Controllers.IBlogReaderController mainController)
 		{
 			// Asigna el manager de blogs y el controlador de vistas
-			BlogManager = new Application.BlogReaderManager();
+			BlogManager = new Application.BlogReaderManager(mainController.Logger);
 			ViewsController = mainController;
 			// Asigna los objetos
 			ConfigurationViewModel = new Configuration.ConfigurationViewModel(this);
 			TreeBlogs = new Blogs.TreeBlogs.TreeBlogsViewModel(this);
-			BlogDownloadProcess = new Controllers.Process.BlogDownloadProcess(this);
+			BlogDownloadProcesor = new Controllers.Process.BlogDownloadProcessor(this);
 		}
 
 		/// <summary>
@@ -29,7 +29,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel
 			// Carga la configuración
 			ConfigurationViewModel.Load();
 			// Arranca el procesador de descargas
-			BlogDownloadProcess.Start();
+			BlogDownloadProcesor.Start();
 		}
 
 		/// <summary>
@@ -74,6 +74,6 @@ namespace Bau.Libraries.LibBlogReader.ViewModel
 		/// <summary>
 		///		Proceso de descarga de blogs
 		/// </summary>
-		internal Controllers.Process.BlogDownloadProcess BlogDownloadProcess { get; }
+		internal Controllers.Process.BlogDownloadProcessor BlogDownloadProcesor { get; }
 	}
 }

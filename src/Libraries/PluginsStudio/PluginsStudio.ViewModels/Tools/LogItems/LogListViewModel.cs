@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using Microsoft.Extensions.Logging;
 
 using Bau.Libraries.BauMvvm.ViewModels.Media;
@@ -14,8 +13,8 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.LogItems
 		// Constantes privadas
 		private const int LogMaximum = 4500;
 		private const int LogItemsRemove = 500;
-		// Variables privadas
-		private SynchronizationContext _contextUi = SynchronizationContext.Current;
+		//// Variables privadas
+		//private SynchronizationContext _contextUi = SynchronizationContext.Current;
 
 		public LogListViewModel(PluginsStudioViewModel mainViewModel)
 		{
@@ -27,6 +26,24 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.LogItems
 		/// </summary>
 		public void WriteLog(LogLevel level, string content, Exception? exception)
 		{
+			// Limpia los elementos antiguos
+			if (Items.Count > LogMaximum)
+				while (Items.Count > LogMaximum - LogItemsRemove)
+					Dispatch(_ => Items.RemoveAt(Items.Count - 1));
+			// Añade el mensaje
+			Dispatch(_ =>
+							{
+								// Crea un elemento al principio de la lista y lo selecciona
+								Items.Insert(0, new LogListItemViewModel(this, level.ToString(), GetLogMessage(content, exception), DateTime.Now, GetColor(level)));
+								SelectedItem = Items[0];
+								// Lanza una notificación
+								if (level == LogLevel.Error)
+									MainViewModel.PluginsStudioController.MainWindowController
+											.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Error,
+																"Error", content);
+							}
+					);
+/*
 			object state = new object();
 
 			//? _contexUi mantiene el contexto de sincronización que creó el ViewModel (que debería ser la interface de usuario)
@@ -50,6 +67,8 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.LogItems
 																	  "Error", content);
 									},
 							state);
+
+*/
 		}
 
 		/// <summary>
@@ -59,11 +78,11 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.LogItems
 		{
 			string message = content;
 
-			// Añade los datos de la excepción
-			if (exception != null)
-				message += Environment.NewLine + exception.Message;
-			// Devuelve el mensaje
-			return message;
+				// Añade los datos de la excepción
+				if (exception is not null)
+					message += Environment.NewLine + exception.Message;
+				// Devuelve el mensaje
+				return message;
 		}
 
 		/// <summary>
@@ -72,12 +91,12 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.LogItems
 		private MvvmColor GetColor(LogLevel level)
 		{
 			return level switch
-			{
-				LogLevel.Error or LogLevel.Critical => MvvmColor.Red,
-				LogLevel.Debug => MvvmColor.OrangeRed,
-				LogLevel.Trace => MvvmColor.Brown,
-				_ => MvvmColor.Black
-			};
+						{
+							LogLevel.Error or LogLevel.Critical => MvvmColor.Red,
+							LogLevel.Debug => MvvmColor.OrangeRed,
+							LogLevel.Trace => MvvmColor.Brown,
+							_ => MvvmColor.Black
+						};
 		}
 
 		/// <summary>

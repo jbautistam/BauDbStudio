@@ -1,22 +1,21 @@
 ﻿using System;
-using Microsoft.Extensions.Logging;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Bau.Libraries.LibBlogReader.Application.Services.Reader;
-using Bau.Libraries.LibBlogReader.Application.Services.EventArguments;
 
 namespace Bau.Libraries.LibBlogReader.ViewModel.Controllers.Process
 {
 	/// <summary>
 	///		Proceso de descarga de blogs
 	/// </summary>
-	internal class BlogDownloadProcess : IDisposable
+	internal class BlogDownloadProcessor : IDisposable
 	{   
 		// Variables privadas
-		private RssDownload _downloader = null;
 		private System.Timers.Timer _timer;
 		private object _lock = new();
 
-		internal BlogDownloadProcess(BlogReaderViewModel mainViewModel)
+		internal BlogDownloadProcessor(BlogReaderViewModel mainViewModel)
 		{
 			MainViewModel = mainViewModel;
 		}
@@ -49,7 +48,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Controllers.Process
 					// Guarda la fecha de última descarga
 					LastDownload = DateTime.Now;
 					// Descarga los datos
-					Downloader.Download(false);
+					Task.Run(async () => await DownloadBlogsAsync(CancellationToken.None));
 					// Y arranca el temporizador de nuevo
 					_timer.Start();
 				}
@@ -57,47 +56,23 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Controllers.Process
 		}
 
 		/// <summary>
-		///		Trata el proceso de descarga
+		///		Descarga los blogs
 		/// </summary>
-		private void TreatDownloadProcess(DownloadEventArgs.ActionType type, string description)
+		private async Task DownloadBlogsAsync(CancellationToken cancellationToken)
 		{
-			switch (type)
-			{
-				case DownloadEventArgs.ActionType.StartDownload:
-						MainViewModel.ViewsController.Logger.LogInformation("Start blogs download");
-					break;
-				case DownloadEventArgs.ActionType.StartDownloadBlog:
-				case DownloadEventArgs.ActionType.EndDownloadBlog:
-						MainViewModel.ViewsController.Logger.LogInformation(description);
-					break;
-				case DownloadEventArgs.ActionType.ErrorDonwloadBlog:
-						MainViewModel.ViewsController.Logger.LogError(description);
-					break;
-				case DownloadEventArgs.ActionType.EndDownload:
-						MainViewModel.ViewsController.Logger.LogInformation("End blogs download");
-						MainViewModel.TreeBlogs.Load();
-					break;
-			}
+			await DownloadBlogsAsync(false, MainViewModel.BlogManager.File.GetBlogsRecursive(), cancellationToken);
 		}
 
 		/// <summary>
-		///		Proceso de descarga
+		///		Descarga los blogs
 		/// </summary>
-		private RssDownload Downloader
+		public async Task DownloadBlogsAsync(bool includeDisabled, Model.BlogsModelCollection blogs, CancellationToken cancellationToken)
 		{
-			get
-			{ 
-				// Crea el objeto si no existía
-				if (_downloader == null)
-				{ 
-					// Crea el objeto
-					_downloader = new RssDownload(MainViewModel.BlogManager);
-					// Asigna los manejadores de eventos
-					_downloader.Process += (sender, evntArgs) => TreatDownloadProcess(evntArgs.Action, evntArgs.Description);
-				}
-				// Devuelve el objeto de descarga
-				return _downloader;
-			}
+			RssDownload downloader = new(MainViewModel.BlogManager);
+
+				// Descarga los blogs
+				if (await downloader.DownloadAsync(includeDisabled, blogs, cancellationToken) > 0)
+					MainViewModel.TreeBlogs.Load();
 		}
 
 		/// <summary>

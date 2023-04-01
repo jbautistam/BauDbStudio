@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Extensions.Logging;
 
 using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.LibBlogReader.Model;
@@ -13,9 +14,10 @@ namespace Bau.Libraries.LibBlogReader.Application
 		// Variables privadas
 		private Controllers.Configuration _configuration;
 
-		public BlogReaderManager()
+		public BlogReaderManager(ILogger logger)
 		{
 			File = new FolderModel();
+			Logger = logger;
 		}
 
 		/// <summary>
@@ -86,5 +88,10 @@ namespace Bau.Libraries.LibBlogReader.Application
 				return _configuration;
 			}
 		}
+
+		/// <summary>
+		///		Logger
+		/// </summary>
+		public ILogger Logger { get; }
 	}
 }

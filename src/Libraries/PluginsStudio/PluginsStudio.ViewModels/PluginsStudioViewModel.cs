@@ -10,14 +10,14 @@ namespace Bau.Libraries.PluginsStudio.ViewModels
 	public class PluginsStudioViewModel : BaseObservableObject
 	{
 		// Eventos públicos
-		public event EventHandler WorkspacesChanged;
+		public event EventHandler? WorkspacesChanged;
 		// Variables privadas
-		private Tools.LastFiles.LastFilesListViewModel _lastFilesViewModel;
-		private Tools.Workspaces.WorkspaceListViewModel _workspacesViewModel;
-		private Tools.LogItems.LogListViewModel _logViewModel;
-		private Tools.Search.SearchFilesViewModel _searchFilesViewModel;
-		private Base.Interfaces.IDetailViewModel _selectedDetailsViewModel;
-		private Explorers.Files.TreeFilesViewModel _treeFoldersViewModel;
+		private Tools.LastFiles.LastFilesListViewModel _lastFilesViewModel = default!;
+		private Tools.Workspaces.WorkspaceListViewModel _workspacesViewModel = default!;
+		private Tools.LogItems.LogListViewModel _logViewModel = default!;
+		private Tools.Search.SearchFilesViewModel _searchFilesViewModel = default!;
+		private Base.Interfaces.IDetailViewModel? _selectedDetailsViewModel;
+		private Explorers.Files.TreeFilesViewModel _treeFoldersViewModel = default!;
 
 		public PluginsStudioViewModel(Controllers.IPluginsStudioController pluginsStudioController)
 		{
@@ -156,7 +156,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels
 		/// <summary>
 		///		ViewModel de detalles seleccionado en la ventana principal
 		/// </summary>
-		public Base.Interfaces.IDetailViewModel SelectedDetailsViewModel
+		public Base.Interfaces.IDetailViewModel? SelectedDetailsViewModel
 		{
 			get { return _selectedDetailsViewModel; }
 			set { CheckObject(ref _selectedDetailsViewModel, value); }

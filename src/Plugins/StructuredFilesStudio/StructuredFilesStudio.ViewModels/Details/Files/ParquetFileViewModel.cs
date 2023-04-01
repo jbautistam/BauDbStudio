@@ -38,7 +38,7 @@ namespace Bau.Libraries.StructuredFilesStudio.ViewModels.Details.Files
 					// Log
 					writer.Progress += (sender, args) => logger.LogInformation($"Save '{System.IO.Path.GetFileName(fileNameTarget)}' {args.Records:0,##0} / {args.Records + 1:#,##0}");
 					// Abre el archivo
-					reader.Open(FileName);
+					await reader.OpenAsync(FileName, cancellationToken);
 					// Escribe el archivo
 					writer.Save(reader, fileNameTarget);
 				}

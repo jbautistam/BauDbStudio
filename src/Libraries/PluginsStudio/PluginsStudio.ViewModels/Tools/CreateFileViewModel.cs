@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.ComboItems;

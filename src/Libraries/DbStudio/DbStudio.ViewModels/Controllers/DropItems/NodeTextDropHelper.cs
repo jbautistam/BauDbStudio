@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Controllers.DropItems
 {
@@ -15,18 +17,19 @@ namespace Bau.Libraries.DbStudio.ViewModels.Controllers.DropItems
 		/// <summary>
 		///		Trata el texto pasado a un editor
 		/// </summary>
-		internal string TreatTextDropped(string content, bool shiftPressed)
+		internal async Task<string> TreatTextDroppedAsync(string content, bool shiftPressed, CancellationToken cancellationToken)
 		{
 			string result = content;
 
 				// Obtiene el texto adecuado dependiendo de la extensión
-				if (IsQueryViewModel && !string.IsNullOrWhiteSpace(content) && content.IndexOf('\r') < 0 && 
-					content.Length < 10_000 && content.IndexOf('.') >= 0)
+				if (!string.IsNullOrWhiteSpace(content) && content.IndexOf('\r') < 0 && content.Length < 10_000 && content.IndexOf('.') >= 0)
 				{
-					if (content.EndsWith(".sql", StringComparison.CurrentCultureIgnoreCase) || content.EndsWith(".sqlx", StringComparison.CurrentCultureIgnoreCase))
+					if (shiftPressed)
+						result = content;
+					else if (content.EndsWith(".sql", StringComparison.CurrentCultureIgnoreCase) || content.EndsWith(".sqlx", StringComparison.CurrentCultureIgnoreCase))
 						result = LibHelper.Files.HelperFiles.LoadTextFile(content);
 					else if (content.EndsWith(".parquet", StringComparison.CurrentCultureIgnoreCase))
-						result = GetParquetSchema(content);
+						result = await GetParquetSchemaAsync(content, cancellationToken);
 					else if (content.EndsWith(".csv", StringComparison.CurrentCultureIgnoreCase))
 						result = GetCsvSchema(content);
 				}
@@ -37,7 +40,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Controllers.DropItems
 		/// <summary>
 		///		Obtiene el esquema de un archivo parquet
 		/// </summary>
-		private string GetParquetSchema(string fileName)
+		private async Task<string> GetParquetSchemaAsync(string fileName, CancellationToken cancellationToken)
 		{
 			string sql = "SELECT ";
 			int length = 80;
@@ -46,11 +49,11 @@ namespace Bau.Libraries.DbStudio.ViewModels.Controllers.DropItems
 				try
 				{
 					// Añade los nombres de campos
-					using (LibParquetFiles.Readers.ParquetDataReader reader = new LibParquetFiles.Readers.ParquetDataReader())
+					using (LibParquetFiles.Readers.ParquetDataReader reader = new())
 					{
 						// Abre el archivo
-						reader.Open(fileName);
-						// Añade los nombres de campo
+						await reader.OpenAsync(fileName, cancellationToken);
+						// Añade los nombres de campos
 						for (int index = 0; index < reader.FieldCount; index++)
 						{
 							// Añade un salto de línea si es necesario

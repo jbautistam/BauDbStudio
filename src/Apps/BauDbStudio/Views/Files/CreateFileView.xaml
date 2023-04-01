@@ -51,7 +51,6 @@
 				<ComboBox Grid.Row="2" Grid.Column="1" Margin="5" 
 						  ItemsSource="{Binding ComboEncoding.Items}" DisplayMemberPath="Text" 
 						  SelectedItem="{Binding ComboEncoding.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
 			</Grid>
 		</GroupBox>
 		<StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">

@@ -355,9 +355,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Queries
 		/// <summary>
 		///		Trata el contenido que se inserta cuando se suelta un nodo del explorador sobre el editor
 		/// </summary>
-		public string TreatTextDropped(string content, bool shiftPressed)
+		public async Task<string> TreatTextDroppedAsync(string content, bool shiftPressed, CancellationToken cancellationToken)
 		{
-			return new Controllers.DropItems.NodeTextDropHelper(true).TreatTextDropped(content, shiftPressed);
+			return await new Controllers.DropItems.NodeTextDropHelper(true).TreatTextDroppedAsync(content, shiftPressed, cancellationToken);
 		}
 
 		/// <summary>

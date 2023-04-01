@@ -49,6 +49,8 @@ namespace Bau.DbStudio.Controllers
 			{
 				case Libraries.PluginsStudio.ViewModels.Tools.CreateFileViewModel viewModel:
 					return DbStudioViewManager.AppViewController.OpenDialog(new Views.Files.CreateFileView(viewModel));
+				case Libraries.PluginsStudio.ViewModels.Tools.SaveOpenFilesViewModel viewModel:
+					return DbStudioViewManager.AppViewController.OpenDialog(new Views.Files.SaveOpenFilesView(viewModel));
 			}
 			// Devuelve el valor predeterminado
 			return SystemControllerEnums.ResultType.No;

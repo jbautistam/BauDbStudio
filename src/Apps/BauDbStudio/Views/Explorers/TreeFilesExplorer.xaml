@@ -6,7 +6,6 @@
              xmlns:local="clr-namespace:Bau.DbStudio.Views.Explorers"
 			 xmlns:ViewModel="clr-namespace:Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;assembly=PluginsStudio.ViewModels.Base"
 			 xmlns:ViewModelFiles="clr-namespace:Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files;assembly=PluginsStudio.ViewModels"
-			 
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 	<Grid>

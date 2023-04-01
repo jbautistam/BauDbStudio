@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Files
 {
@@ -100,8 +102,9 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Files
 		/// <summary>
 		///		Trata el texto que se arrastra sobre el editor desde un árbol
 		/// </summary>
-		public virtual string TreatTextDropped(string content, bool shiftPressed)
+		public virtual async Task<string> TreatTextDroppedAsync(string content, bool shiftPressed, CancellationToken cancellationToken)
 		{
+			await Task.Delay(1, cancellationToken);
 			return content;
 		}
 

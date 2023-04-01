@@ -14,8 +14,8 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.Workspaces
 		private const string DefaultWorkSpace = "Default";
 		private const string WorkspaceExtension = "sxml";
 		// Variables privadas
-		private ObservableCollection<WorkSpaceViewModel> _items;
-		private WorkSpaceViewModel _selectedItem;
+		private ObservableCollection<WorkSpaceViewModel> _items = default!;
+		private WorkSpaceViewModel? _selectedItem;
 
 		public WorkspaceListViewModel(PluginsStudioViewModel mainViewModel)
 		{
@@ -39,9 +39,9 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.Workspaces
 			// Añade el espacio de trabajo predeterminado
 			Add(DefaultWorkSpace);
 			// Obtiene los espacios de trabajo
-			if (System.IO.Directory.Exists(path))
-				foreach (string childPath in System.IO.Directory.EnumerateDirectories(path))
-					foreach (string fileName in System.IO.Directory.GetFiles(childPath, $"*.{WorkspaceExtension}"))
+			if (Directory.Exists(path))
+				foreach (string childPath in Directory.EnumerateDirectories(path))
+					foreach (string fileName in Directory.GetFiles(childPath, $"*.{WorkspaceExtension}"))
 						if (!System.IO.Path.GetFileName(childPath).Equals(DefaultWorkSpace, StringComparison.CurrentCultureIgnoreCase))
 							Add(System.IO.Path.GetFileName(childPath));
 		}
@@ -62,12 +62,16 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.Workspaces
 					if (workSpace.Name.Equals(actual, StringComparison.CurrentCultureIgnoreCase))
 						SelectedItem = workSpace;
 				// Si no se ha seleccionado uno, selecciona el predeterminado
-				if (SelectedItem == null && Items.Count > 0)
+				if (SelectedItem is null && Items.Count > 0)
 					SelectedItem = Items[0];
-				// Carga el espacio de trabajo
-				SelectedItem.Load();
-				// Actualiza el espacio de trabajo
-				MainViewModel.SelectWorkspace(SelectedItem.Name);
+				// Selecciona el espacio de trabajo
+				if (SelectedItem is not null)
+				{
+					// Carga el espacio de trabajo
+					SelectedItem.Load();
+					// Actualiza el espacio de trabajo
+					MainViewModel.SelectWorkspace(SelectedItem.Name);
+				}
 			}
 		}
 
@@ -89,7 +93,8 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.Workspaces
 						// Cambia el Workspace
 						Select(workspace);
 						// Graba un archivo vacío
-						LibHelper.Files.HelperFiles.SaveTextFile(SelectedItem.FileName, string.Empty);
+						if (SelectedItem is not null)
+							LibHelper.Files.HelperFiles.SaveTextFile(SelectedItem.FileName, string.Empty);
 						// y lanza el evento de modificación
 						MainViewModel.SelectWorkspace(workspace);
 					}
@@ -126,7 +131,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.Workspaces
 		/// <summary>
 		///		Directorio donde se encuentran los espacios de trabajo
 		/// </summary>
-		public string Path { get; private set; }
+		public string Path { get; private set; } = default!;
 
 		/// <summary>
 		///		Espacios de trabajo
@@ -140,7 +145,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.Workspaces
 		/// <summary>
 		///		Espacio de trabajo seleccionado
 		/// </summary>
-		public WorkSpaceViewModel SelectedItem
+		public WorkSpaceViewModel? SelectedItem
 		{
 			get { return _selectedItem; }
 			set { CheckObject(ref _selectedItem, value); }
@@ -150,11 +155,6 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.Workspaces
 		///		Crea un nuevo espacio de trabajo
 		/// </summary>
 		public BaseCommand NewWorkspaceCommand { get; }
-
-		/// <summary>
-		///		Modifica el espacio de trabajo seleccionado
-		/// </summary>
-		public BaseCommand UpdateWorkspaceCommand { get; }
 
 		/// <summary>
 		///		Borra el espacio de trabajo seleccionado

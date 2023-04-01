@@ -177,14 +177,15 @@ namespace Bau.DbStudio.Views.Files
 			e.Effects = System.Windows.DragDropEffects.All;
 		}
 
-		private void udtEditor_Drop(object sender, System.Windows.DragEventArgs e)
+		private async void udtEditor_Drop(object sender, System.Windows.DragEventArgs e)
 		{
 			if (_dragDropController.GetDragDropFileNode(e.Data) is  Libraries.PluginsStudio.ViewModels.Base.Explorers.BaseTreeNodeViewModel nodeViewModel)
 			{
 				string text = nodeViewModel.GetTextForEditor(e.KeyStates == System.Windows.DragDropKeyStates.ShiftKey);
 
 					if (!string.IsNullOrWhiteSpace(text))
-						udtEditor.InsertText(ViewModel.TreatTextDropped(text, e.KeyStates == System.Windows.DragDropKeyStates.ShiftKey), e.GetPosition(udtEditor));
+						udtEditor.InsertText(await ViewModel.TreatTextDroppedAsync(text, e.KeyStates == System.Windows.DragDropKeyStates.ShiftKey, CancellationToken.None), 
+											 e.GetPosition(udtEditor));
 			}
 		}
 

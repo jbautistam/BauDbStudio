@@ -15,8 +15,10 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Files
 		/// <summary>
 		///		Obtiene el texto asociado a un nodo arrastrado a la pantalla
 		/// </summary>
-		public override string TreatTextDropped(string content, bool shiftPressed)
+		public override async Task<string> TreatTextDroppedAsync(string content, bool shiftPressed, CancellationToken cancellationToken)
 		{
+			// Evita las advertencias
+			await Task.Delay(1, cancellationToken);
 			// Obtiene el texto asociado a un nombre de archivo
 			if (IsFileName(content))
 			{
@@ -32,8 +34,8 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Files
 		/// </summary>
 		private string GetTextDroppedOnMarkdown(string droppedFile)
 		{
-			string name = System.IO.Path.GetFileName(droppedFile);
-			string link = string.Empty;
+			string name = Path.GetFileName(droppedFile);
+			string? link = string.Empty;
 
 				// Obtiene la cadena adecuada
 				if (LibHelper.Files.HelperFiles.CheckIsImage(droppedFile))
@@ -42,13 +44,16 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Files
 				{
 					// Asigna el nombre de archivo (sin extensión o sin directorio final)
 					if (droppedFile.EndsWith("_index.md", StringComparison.CurrentCultureIgnoreCase))
-						link = System.IO.Path.GetDirectoryName(droppedFile);
+						link = Path.GetDirectoryName(droppedFile);
 					else if (droppedFile.EndsWith(".md", StringComparison.CurrentCultureIgnoreCase))
-						link = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(droppedFile), System.IO.Path.GetFileNameWithoutExtension(droppedFile));
+						link = Path.Combine(Path.GetDirectoryName(droppedFile) ?? string.Empty, Path.GetFileNameWithoutExtension(droppedFile));
 					else
 						link = droppedFile;
 					// Asigna el vínculo
-					link = $"[{name}]({link.Replace('\\', '/')})";
+					if (!string.IsNullOrWhiteSpace(link))
+						link = $"[{name}]({link.Replace('\\', '/')})";
+					else
+						link = $"[{name}]";
 				}
 				// Devuelve el vínculo
 				return link;

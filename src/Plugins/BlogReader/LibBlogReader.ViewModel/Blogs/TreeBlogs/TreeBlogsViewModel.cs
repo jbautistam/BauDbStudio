@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.LibBlogReader.Model;
@@ -36,7 +37,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs.TreeBlogs
 									.AddListener(this, nameof(SelectedNode));
 			NewBlogCommand = new BaseCommand(_ => ExecuteAction(nameof(NewBlogCommand)), _ => CanExecuteAction(nameof(NewBlogCommand)))
 									.AddListener(this, nameof(SelectedNode));
-			DownloadCommand = new BaseCommand(_ => ExecuteAction(nameof(DownloadCommand)), _ => CanExecuteAction(nameof(DownloadCommand)))
+			DownloadCommand = new BaseCommand(async _ => await DownloadItemsAsync(), _ => CanExecuteAction(nameof(DownloadCommand)))
 									.AddListener(this, nameof(SelectedNode));
 			SeeNewsCommand = new BaseCommand(_ => ExecuteAction(nameof(SeeNewsCommand)), _ => CanExecuteAction(nameof(SeeNewsCommand)))
 									.AddListener(this, nameof(SelectedNode));
@@ -103,9 +104,6 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs.TreeBlogs
 					break;
 				case nameof(NewBlogCommand):
 						OpenFormUpdateBlog(null);
-					break;
-				case nameof(DownloadCommand):
-						DownloadItems();
 					break;
 				case nameof(SeeNewsCommand):
 						SeeNews();
@@ -313,7 +311,6 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs.TreeBlogs
 			}
 		}
 
-
 		/// <summary>
 		///		Borra una carpeta
 		/// </summary>
@@ -364,15 +361,10 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs.TreeBlogs
 		/// <summary>
 		///		Descarga los elementos
 		/// </summary>
-		private void DownloadItems()
+		private async Task DownloadItemsAsync()
 		{
-			if (SelectedNode is BaseBlogsNodeViewModel node && node != null)
-			{
-				BlogsModelCollection blogs = node.GetBlogs();
-
-					// Descarga los blogs
-					new Application.Services.Reader.RssDownload(MainViewModel.BlogManager).Download(true, blogs);
-			}
+			if (SelectedNode is BaseBlogsNodeViewModel node)
+				await MainViewModel.BlogDownloadProcesor.DownloadBlogsAsync(true, node.GetBlogs(), System.Threading.CancellationToken.None);
 		}
 
 		/// <summary>

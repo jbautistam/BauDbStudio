@@ -52,7 +52,7 @@ namespace Bau.DbStudio.Views.Files
 		/// <summary>
 		///		Crea la imagen en memoria
 		/// </summary>
-		private ImageSource CreateBitmapImage(string fileName)
+		private ImageSource? CreateBitmapImage(string fileName)
 		{
 			if (System.IO.File.Exists(fileName))
 				return new Libraries.BauMvvm.Views.Wpf.Tools.ImageToolsWpf().GetFromFileName(fileName);
@@ -69,6 +69,11 @@ namespace Bau.DbStudio.Views.Files
 				else
 					wndZoom.Visibility = System.Windows.Visibility.Collapsed;
 			}
+		}
+
+		private void UserControl_Unloaded(object sender, System.Windows.RoutedEventArgs e)
+		{
+			imgImage.Source = null;
 		}
 	}
 }
