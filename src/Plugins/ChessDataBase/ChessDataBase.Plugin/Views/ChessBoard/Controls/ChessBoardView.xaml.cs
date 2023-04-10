@@ -56,8 +56,18 @@ namespace Bau.Libraries.ChessDataBase.Plugin.Views.ChessBoard.Controls
 			foreach (ScapeBaseViewModel scape in ViewModel.Scapes.Scapes)
 				if (scape is FigureViewModel figure)
 					udtCanvas.Children.Add(CreateFigure(figure));
+			// Limpia las celdas seleccionadas
+			CleanSelectedCells();
 			// Muestra las imágenes
 			ShowImages();
+		}
+
+		/// <summary>
+		///		Limpia las celdas seleccionadas
+		/// </summary>
+		private void CleanSelectedCells()
+		{
+			ViewModel.Scapes.CleanSelectedCells();
 		}
 
 		/// <summary>
@@ -85,6 +95,10 @@ namespace Bau.Libraries.ChessDataBase.Plugin.Views.ChessBoard.Controls
 
 				// Asigna el tag
 				image.Tag = cell;
+				cell.PropertyChanged += (sender, args) => {
+															if (args.PropertyName.Equals(nameof(CellViewModel.FileImage), StringComparison.CurrentCultureIgnoreCase))
+																UpdateImage(image, cell.FileImage);
+														  };
 				// Devuelve el control
 				return image;
 		}
@@ -125,6 +139,18 @@ namespace Bau.Libraries.ChessDataBase.Plugin.Views.ChessBoard.Controls
 				}
 				// Devuelve el control
 				return view;
+		}
+
+		/// <summary>
+		///		Modifica una imagen (porque ha cambiado el nombre del archivo, por ejemplo, al seleccionar una celda)
+		/// </summary>
+		private void UpdateImage(Image image, string fileName)
+		{
+			ImageSource? source = LoadImage(fileName);
+
+				// Si se ha podido cargar
+				if (source is not null)
+					image.Source = source;
 		}
 
 		/// <summary>
@@ -384,7 +410,7 @@ namespace Bau.Libraries.ChessDataBase.Plugin.Views.ChessBoard.Controls
 		/// <summary>
 		///		Busca una pieza
 		/// </summary>
-		private Image SearchPiece(PieceBaseModel.PieceType type, PieceBaseModel.PieceColor color, int row, int column)
+		private Image? SearchPiece(PieceBaseModel.PieceType type, PieceBaseModel.PieceColor color, int row, int column)
 		{
 			// Busca la pieza
 			foreach (FrameworkElement control in udtCanvas.Children)
@@ -396,6 +422,38 @@ namespace Bau.Libraries.ChessDataBase.Plugin.Views.ChessBoard.Controls
 		}
 
 		/// <summary>
+		///		Selecciona una celda
+		/// </summary>
+		private void SelectCell(Point point)
+		{
+			if (point.X > LabelWidth && point.Y > LabelHeight)
+			{
+				int column = (int) (point.X - LabelWidth) / GetImageWidth();
+				int row = (int) (point.Y - LabelHeight) / GetImageHeight();
+
+					// Selecciona la celda
+					ViewModel.Scapes.SelectCell(row, column, CellViewModel.StatusCell.Selected);
+					// Si hay dos elementos seleccionados, realiza el movimiento
+					MoveFromSelections();
+			}
+		}
+
+		/// <summary>
+		///		Mueve a partir de las celdas seleccionadas
+		/// </summary>
+		private void MoveFromSelections()
+		{
+			List<CellViewModel> selected = ViewModel.Scapes.GetCellsWithStatus(CellViewModel.StatusCell.Selected);
+
+				if (selected.Count == 2)
+				{
+					MessageBox.Show("Move");
+					// Limpia los movimientos
+					ViewModel.Scapes.CleanSelectedCells();
+				}
+		}
+
+		/// <summary>
 		///		ViewModel
 		/// </summary>
 		public GameBoardViewModel ViewModel { get; private set; }
@@ -403,6 +461,12 @@ namespace Bau.Libraries.ChessDataBase.Plugin.Views.ChessBoard.Controls
 		private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
 		{
 			ShowImages();
+		}
+
+		private void udtCanvas_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+		{
+			if (e.ChangedButton == System.Windows.Input.MouseButton.Left)
+				SelectCell(e.GetPosition(udtCanvas));
 		}
 	}
 }

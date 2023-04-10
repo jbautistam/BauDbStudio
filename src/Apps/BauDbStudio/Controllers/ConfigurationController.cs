@@ -247,11 +247,6 @@ namespace Bau.DbStudio.Controllers
 		public double EditorZoom { get; set; } = 1.0;
 
 		/// <summary>
-		///		Nombre del ejecutable de la consola
-		/// </summary>
-		public string ConsoleExecutable { get; set; }
-
-		/// <summary>
 		///		Ultimo workspace seleccionado
 		/// </summary>
 		public string LastWorkSpace { get; set; }

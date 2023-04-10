@@ -3,10 +3,14 @@
   <PropertyGroup>
     <TargetFramework>net7.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
-    <RootNamespace>Bau.Libraries.ChessDataBase.Plugin</RootNamespace>
+    <RootNamespace>Bau.Libraries.$(MSBuildProjectName)</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\ChessBoard\BoardDarkSelected.gif" />
+    <None Remove="Resources\ChessBoard\BoardLightSelected.gif" />
     <None Remove="Resources\Folder.png" />
   </ItemGroup>
 
@@ -25,7 +29,9 @@
     <Resource Include="Resources\ChessBoard\BishopBlack.gif" />
     <Resource Include="Resources\ChessBoard\BishopWhite.gif" />
     <Resource Include="Resources\ChessBoard\BoardDark.gif" />
+    <Resource Include="Resources\ChessBoard\BoardDarkSelected.gif" />
     <Resource Include="Resources\ChessBoard\BoardLight.gif" />
+    <Resource Include="Resources\ChessBoard\BoardLightSelected.gif" />
     <Resource Include="Resources\ChessBoard\Image.png" />
     <Resource Include="Resources\ChessBoard\KingBlack.gif" />
     <Resource Include="Resources\ChessBoard\KingWhite.gif" />

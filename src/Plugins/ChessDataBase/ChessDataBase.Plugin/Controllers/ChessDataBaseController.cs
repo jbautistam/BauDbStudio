@@ -4,11 +4,11 @@ using Bau.Libraries.BauMvvm.ViewModels.Controllers;
 namespace Bau.Libraries.ChessDataBase.Plugin.Controllers
 {
 	/// <summary>
-	///		Controlador del lector de eBooks
+	///		Controlador de motor de bases de datos de ajedrez
 	/// </summary>
-	public class EBookReaderController : ViewModels.Controllers.IChessDataBaseController
+	public class ChessDataBaseController : ViewModels.Controllers.IChessDataBaseController
 	{
-		public EBookReaderController(ChessDataBasePlugin plugin, PluginsStudio.ViewModels.Base.Controllers.IPluginsController pluginController)
+		public ChessDataBaseController(ChessDataBasePlugin plugin, PluginsStudio.ViewModels.Base.Controllers.IPluginsController pluginController)
 		{
 			ChessDataBasePlugin = plugin;
 			PluginController = pluginController;
@@ -22,8 +22,11 @@ namespace Bau.Libraries.ChessDataBase.Plugin.Controllers
 			// Abre la ventana
 			switch (detailsViewModel)
 			{
-				case Bau.Libraries.ChessDataBase.ViewModels.Games.GameBoardPgnViewModel viewModel:
+				case ViewModels.Games.GameBoardPgnViewModel viewModel:
 						ChessDataBasePlugin.AppViewsController.OpenDocument(new Views.ChessBoard.ChessboardPgnView(viewModel), viewModel);
+					break;
+				case ViewModels.Games.GameBoardViewModel viewModel:
+						ChessDataBasePlugin.AppViewsController.OpenDocument(new Views.ChessBoard.ChessboardGameView(viewModel), viewModel);
 					break;
 			}
 			// Devuelve el valor predeterminado

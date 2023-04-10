@@ -235,7 +235,7 @@ public partial class MainWindow : Window
 	/// </summary>
 	private void UpdateSelectedTab()
 	{
-		if (dckManager.ActiveDocument is IDetailViewModel details)
+		if (dckManager.ActiveDocument?.Tag is IDetailViewModel details)
 			ViewModel.SelectedDetailsViewModel = details;
 		else
 			ViewModel.SelectedDetailsViewModel = null;
@@ -246,8 +246,8 @@ public partial class MainWindow : Window
 	/// </summary>
 	internal IDetailViewModel? GetActiveDetails()
 	{
-		if (dckManager.ActiveDocument != null)
-			return dckManager.ActiveDocument.Tag as IDetailViewModel;
+		if (dckManager.ActiveDocument?.Tag is IDetailViewModel details)
+			return details;
 		else
 			return null;
 	}

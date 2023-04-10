@@ -19,7 +19,7 @@ namespace Bau.Libraries.ChessDataBase.Plugin
 		public void Initialize(IAppViewsController appViewsController, PluginsStudio.ViewModels.Base.Controllers.IPluginsController pluginController)
 		{
 			AppViewsController = appViewsController;
-			MainViewModel = new MainViewModel(new Controllers.EBookReaderController(this, pluginController));
+			MainViewModel = new MainViewModel(new Controllers.ChessDataBaseController(this, pluginController));
 			MainViewModel.Initialize();
 		}
 
@@ -42,10 +42,7 @@ namespace Bau.Libraries.ChessDataBase.Plugin
 		/// <summary>
 		///		Intenta abrir un archivo en un plugin
 		/// </summary>
-		public bool OpenFile(string fileName)
-		{
-			return MainViewModel.OpenFile(fileName);
-		}
+		public bool OpenFile(string fileName) => MainViewModel.OpenFile(fileName);
 
 		/// <summary>
 		///		Obtiene los paneles del plugin
@@ -60,7 +57,15 @@ namespace Bau.Libraries.ChessDataBase.Plugin
 		/// <summary>
 		///		Obtiene los menús del plugin
 		/// </summary>
-		public List<MenuListModel> GetMenus() => new();
+		public List<MenuListModel> GetMenus()
+		{
+			MenuListModel menuList = new(MenuListModel.SectionType.Tools);
+
+				// Añade la opción del menú
+				menuList.Add("_Jugar partida ajedrez", MainViewModel.PlayChessCommand, GetIcon("Images/PgnFile.png"));
+				// Devuelve la lista de menús
+				return new List<MenuListModel> { menuList };
+		}
 
 		/// <summary>
 		///		Obtiene las opciones de menú asociadas a las extensiones de archivo y carpetas
@@ -78,19 +83,21 @@ namespace Bau.Libraries.ChessDataBase.Plugin
 											{
 												Name = "Chess game",
 												FileExtension = ".pgn",
-												Icon = "/ChessDataBase.Plugin;component/Resources/FilePgn.png",
+												Icon = GetIcon("FilePgn.png"),
 												CanCreate = false
 											}
 								};
 		}
 
 		/// <summary>
+		///		Obtiene la dirección de un icono
+		/// </summary>
+		private string GetIcon(string name) => $"/ChessDataBase.Plugin;component/Resources/{name}";
+
+		/// <summary>
 		///		Obtiene la vista de configuración del plugin
 		/// </summary>
-		public IPluginConfigurationView GetConfigurationView()
-		{
-			return new Views.Configuration.ctlConfiguration(MainViewModel.ConfigurationViewModel);
-		}
+		public IPluginConfigurationView GetConfigurationView() => new Views.Configuration.ctlConfiguration(MainViewModel.ConfigurationViewModel);
 
 		/// <summary>
 		///		Controlador de aplicación

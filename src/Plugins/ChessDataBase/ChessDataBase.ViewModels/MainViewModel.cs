@@ -15,6 +15,8 @@ namespace Bau.Libraries.ChessDataBase.ViewModels
 			ViewsController = mainController;
 			// Asigna los objetos
 			ConfigurationViewModel = new Configuration.ConfigurationViewModel(this);
+			// Asigna los comandos
+			PlayChessCommand = new BaseCommand(_ => OpenPlayWindow());
 		}
 
 		/// <summary>
@@ -42,6 +44,14 @@ namespace Bau.Libraries.ChessDataBase.ViewModels
 		}
 
 		/// <summary>
+		///		Abre una ventana con una nueva partida
+		/// </summary>
+		public void OpenPlayWindow()
+		{
+			ViewsController.OpenWindow(new Games.GameBoardViewModel(this));
+		}
+
+		/// <summary>
 		///		Controlador de vistas de aplicación
 		/// </summary>
 		public Controllers.IChessDataBaseController ViewsController { get; }
@@ -50,5 +60,10 @@ namespace Bau.Libraries.ChessDataBase.ViewModels
 		///		ViewModel de configuración
 		/// </summary>
 		public Configuration.ConfigurationViewModel ConfigurationViewModel { get; }
+
+		/// <summary>
+		///		Comando para iniciar una partida
+		/// </summary>
+		public BaseCommand PlayChessCommand { get; }
 	}
 }

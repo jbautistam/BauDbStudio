@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 
 using Bau.Libraries.PluginsStudio.Views.Base.Interfaces;
@@ -13,7 +11,7 @@ namespace Bau.DbStudio.Views.Tools.Configuration
 	public partial class ConfigurationView : Window
 	{   
 		// Variables privadas
-		private List<IPluginConfigurationView> _configurationViews;
+		private List<IPluginConfigurationView>? _configurationViews;
 
 		public ConfigurationView(Controllers.DbStudioViewsManager viewsManager)
 		{ 
@@ -24,6 +22,7 @@ namespace Bau.DbStudio.Views.Tools.Configuration
 			// Inicializa los controles
 			InitForm();
 		}
+
 		/// <summary>
 		///		Inicializa el formulario con la configuración
 		/// </summary>
@@ -31,7 +30,8 @@ namespace Bau.DbStudio.Views.Tools.Configuration
 		{
 			// Rellena el combo de fuentes
 			for (int index = 0; index < cboFontChooser.Items.Count; index++)
-				if (cboFontChooser.Items[index].ToString().Equals(MainWindow.DbStudioViewsManager.ConfigurationController.EditorFontName, StringComparison.CurrentCultureIgnoreCase))
+				if ((cboFontChooser.Items[index]?.ToString() ?? string.Empty).Equals(MainWindow.DbStudioViewsManager.ConfigurationController.EditorFontName, 
+																					 StringComparison.CurrentCultureIgnoreCase))
 					cboFontChooser.SelectedItem = cboFontChooser.Items[index];
 			// Selecciona la fuente
 			if (cboFontChooser.SelectedItem == null && cboFontChooser.Items.Count > 0)
@@ -39,7 +39,6 @@ namespace Bau.DbStudio.Views.Tools.Configuration
 			// Asigna las propiedades
 			txtFontSize.Value = MainWindow.DbStudioViewsManager.ConfigurationController.EditorFontSize;
 			chkShowLineNumber.IsChecked = MainWindow.DbStudioViewsManager.ConfigurationController.EditorShowLinesNumber;
-			fnConsole.FileName = MainWindow.DbStudioViewsManager.ConfigurationController.ConsoleExecutable;
 			chkShowNotifications.IsChecked = MainWindow.DbStudioViewsManager.ConfigurationController.ShowWindowNotifications;
 			// Inicializa los controles de configuración de los plugins
 			InitPluginsControls();
@@ -94,14 +93,15 @@ namespace Bau.DbStudio.Views.Tools.Configuration
 			bool validated = true; // ... supone que los datos son correctos
 
 				// Comprueba los datos
-				foreach (IPluginConfigurationView configurationView in _configurationViews)
-					if (validated && !configurationView.ValidateData(out string error))
-					{ 
-						// Muestra el error
-						ViewsManager.MainWindowsController.HostController.SystemController.ShowMessage(error);
-						// Indica que la validación no es correcta
-						validated = false;
-					}
+				if (_configurationViews is not null)
+					foreach (IPluginConfigurationView configurationView in _configurationViews)
+						if (validated && !configurationView.ValidateData(out string error))
+						{ 
+							// Muestra el error
+							ViewsManager.MainWindowsController.HostController.SystemController.ShowMessage(error);
+							// Indica que la validación no es correcta
+							validated = false;
+						}
 				// Devuelve el valor que indica si los datos son correctos
 				return validated;
 		}
@@ -115,10 +115,9 @@ namespace Bau.DbStudio.Views.Tools.Configuration
 			{
 				// Cambia los valores
 				if (cboFontChooser.SelectedItem != null)
-					MainWindow.DbStudioViewsManager.ConfigurationController.EditorFontName = cboFontChooser.SelectedItem.ToString();
+					MainWindow.DbStudioViewsManager.ConfigurationController.EditorFontName = cboFontChooser.SelectedItem?.ToString() ?? string.Empty;
 				MainWindow.DbStudioViewsManager.ConfigurationController.EditorFontSize = txtFontSize.Value;
 				MainWindow.DbStudioViewsManager.ConfigurationController.EditorShowLinesNumber = chkShowLineNumber.IsChecked ?? false;
-				MainWindow.DbStudioViewsManager.ConfigurationController.ConsoleExecutable = fnConsole.FileName;
 				MainWindow.DbStudioViewsManager.ConfigurationController.ShowWindowNotifications = chkShowNotifications.IsChecked ?? false;
 				// Graba los datos de los plugins
 				SavePluginsData();
@@ -134,8 +133,9 @@ namespace Bau.DbStudio.Views.Tools.Configuration
 		/// </summary>
 		private void SavePluginsData()
 		{
-			foreach (IPluginConfigurationView configurationView in _configurationViews)
-				configurationView.Save();
+			if (_configurationViews is not null)
+				foreach (IPluginConfigurationView configurationView in _configurationViews)
+					configurationView.Save();
 		}
 
 		/// <summary>

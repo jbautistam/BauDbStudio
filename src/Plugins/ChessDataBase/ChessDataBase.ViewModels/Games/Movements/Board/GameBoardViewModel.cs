@@ -6,6 +6,7 @@ using Bau.Libraries.ChessDataBase.Models.Board.Movements;
 using Bau.Libraries.ChessDataBase.Models.Games;
 using Bau.Libraries.ChessDataBase.ViewModels.Games.Movements.Board.Actions;
 using Bau.Libraries.ChessDataBase.ViewModels.Games.Movements.Board.Movements;
+using Bau.Libraries.ChessDataBase.ViewModels.Games.Movements.Board.Scapes;
 
 namespace Bau.Libraries.ChessDataBase.ViewModels.Games.Movements.Board
 {
@@ -328,7 +329,7 @@ namespace Bau.Libraries.ChessDataBase.ViewModels.Games.Movements.Board
 		/// <summary>
 		///		Escaques
 		/// </summary>
-		public Scapes.ScapesBoardViewModel Scapes
+		public ScapesBoardViewModel Scapes
 		{
 			get { return _scapes; }
 			set { CheckObject(ref _scapes, value); }

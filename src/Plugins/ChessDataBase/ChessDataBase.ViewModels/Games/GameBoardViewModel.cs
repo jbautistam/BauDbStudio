@@ -17,8 +17,8 @@ namespace Bau.Libraries.ChessDataBase.ViewModels.Games
 			MainViewModel = mainViewModel;
 			Header = "Game";
 			ChessGameViewModel = new Movements.ChessGameViewModel(MainViewModel.ConfigurationViewModel.PathBoardImages,
-																				MainViewModel.ConfigurationViewModel.PathPiecesImages,
-																				mainViewModel.ConfigurationViewModel.ShowAnimations);
+																  MainViewModel.ConfigurationViewModel.PathPiecesImages,
+																  mainViewModel.ConfigurationViewModel.ShowAnimations);
 		}
 
 		/// <summary>

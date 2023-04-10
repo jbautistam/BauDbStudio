@@ -6,5 +6,5 @@
              xmlns:local="clr-namespace:Bau.Libraries.ChessDataBase.Plugin.Views.ChessBoard.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" SizeChanged="UserControl_SizeChanged">
-	<Canvas x:Name="udtCanvas" />
+	<Canvas x:Name="udtCanvas" MouseDown="udtCanvas_MouseDown" />
 </UserControl>

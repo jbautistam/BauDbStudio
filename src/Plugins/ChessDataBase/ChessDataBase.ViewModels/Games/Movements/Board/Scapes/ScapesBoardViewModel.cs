@@ -42,7 +42,7 @@ namespace Bau.Libraries.ChessDataBase.ViewModels.Games.Movements.Board.Scapes
 					// Rellena por columnas
 					for (int column = 0; column < 8; column++)
 					{
-						Scapes.Add(new CellViewModel(row, column, color));
+						Scapes.Add(new CellViewModel(row, column, color, CellViewModel.StatusCell.Unselected, 0));
 						color = GetNextColor(color);
 					}
 					// Cambia el color de inicio de la siguiente fila
@@ -82,6 +82,47 @@ namespace Bau.Libraries.ChessDataBase.ViewModels.Games.Movements.Board.Scapes
 						if (piece != null)
 							Scapes.Add(new FigureViewModel(row, column, piece.Type, piece.Color));
 				}
+		}
+
+		/// <summary>
+		///		Limpia las celadas seleccionadas
+		/// </summary>
+		public void CleanSelectedCells()
+		{
+			foreach (ScapeBaseViewModel scape in Scapes)
+				if (scape is CellViewModel cell)
+					cell.Status = CellViewModel.StatusCell.Unselected;
+		}
+
+		/// <summary>
+		///		Selecciona una celda
+		/// </summary>
+		public void SelectCell(int row, int column, CellViewModel.StatusCell status)
+		{
+			foreach (ScapeBaseViewModel scape in Scapes)
+				if (scape is CellViewModel cell && cell.Row == row && cell.Column == column)
+				{
+					// Se deselecciona si ya estaba seleccionada
+					if (status == CellViewModel.StatusCell.Selected && cell.Status == CellViewModel.StatusCell.Selected)
+						status = CellViewModel.StatusCell.Unselected;
+					// Cambia el estado
+					cell.Status = status;
+				}
+		}
+
+		/// <summary>
+		///		Obtiene las celdas con determinado estado
+		/// </summary>
+		public List<CellViewModel> GetCellsWithStatus(CellViewModel.StatusCell status)
+		{
+			List<CellViewModel> cells = new();
+
+				// Busca las celdas con el estado
+				foreach (ScapeBaseViewModel scape in Scapes)
+					if (scape is CellViewModel cell && cell.Status == status)
+						cells.Add(cell);
+				// Devuelve la lista de celdas
+				return cells;
 		}
 
 		/// <summary>

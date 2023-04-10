@@ -12,7 +12,7 @@ namespace Bau.Libraries.ChessDataBase.ViewModels.Configuration
 		// Constantes privadas
 		private const string AppName = "ChessDataBase";
 		// Variables privadas
-		private string _pathBoardImages, _pathPiecesImages;
+		private string _pathBoardImages, _fileNameEngine, _pathEngine;
 		private bool _showAnimations;
 
 		public ConfigurationViewModel(MainViewModel mainViewModel)
@@ -28,6 +28,7 @@ namespace Bau.Libraries.ChessDataBase.ViewModels.Configuration
 			PathBoardImages = MainViewModel.ViewsController.PluginController.ConfigurationController.GetConfiguration(AppName, nameof(PathBoardImages));
 			PathPiecesImages = MainViewModel.ViewsController.PluginController.ConfigurationController.GetConfiguration(AppName, nameof(PathPiecesImages));
 			ShowAnimations = MainViewModel.ViewsController.PluginController.ConfigurationController.GetConfiguration(AppName, nameof(ShowAnimations)).GetBool();
+			FileNameEngine = MainViewModel.ViewsController.PluginController.ConfigurationController.GetConfiguration(AppName, nameof(FileNameEngine));
 		}
 
 		/// <summary>
@@ -47,6 +48,7 @@ namespace Bau.Libraries.ChessDataBase.ViewModels.Configuration
 			MainViewModel.ViewsController.PluginController.ConfigurationController.SetConfiguration(AppName, nameof(PathBoardImages), PathBoardImages);
 			MainViewModel.ViewsController.PluginController.ConfigurationController.SetConfiguration(AppName, nameof(PathPiecesImages), PathPiecesImages);
 			MainViewModel.ViewsController.PluginController.ConfigurationController.SetConfiguration(AppName, nameof(ShowAnimations), ShowAnimations.ToString());
+			MainViewModel.ViewsController.PluginController.ConfigurationController.SetConfiguration(AppName, nameof(FileNameEngine), FileNameEngine);
 		}
 
 		/// <summary>
@@ -68,8 +70,8 @@ namespace Bau.Libraries.ChessDataBase.ViewModels.Configuration
 		/// </summary>
 		public string PathPiecesImages
 		{ 
-			get { return _pathPiecesImages; }
-			set { CheckProperty(ref _pathPiecesImages, value); }
+			get { return _fileNameEngine; }
+			set { CheckProperty(ref _fileNameEngine, value); }
 		}
 
 		/// <summary>
@@ -79,6 +81,15 @@ namespace Bau.Libraries.ChessDataBase.ViewModels.Configuration
 		{ 
 			get { return _showAnimations; }
 			set { CheckProperty(ref _showAnimations, value); }
+		}
+
+		/// <summary>
+		///		Nombre del archivo ejecutable del motor de juego
+		/// </summary>
+		public string FileNameEngine
+		{ 
+			get { return _fileNameEngine; }
+			set { CheckProperty(ref _fileNameEngine, value); }
 		}
 	}
 }

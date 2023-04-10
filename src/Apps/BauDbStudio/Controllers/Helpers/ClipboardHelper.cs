@@ -46,7 +46,7 @@ namespace Bau.DbStudio.Controllers.Helpers
 						// Graba la imagen
 						using (FileStream file = new FileStream(fileName, FileMode.Create))
 						{
-							BitmapEncoder encoder = GetEncoderFromFilename(fileName);
+							BitmapEncoder? encoder = GetEncoderFromFilename(fileName);
 
 								if (encoder != null)
 								{
@@ -66,7 +66,7 @@ namespace Bau.DbStudio.Controllers.Helpers
 		/// <summary>
 		///		Obtiene el codificador adecuado para el archivo
 		/// </summary>
-		private BitmapEncoder GetEncoderFromFilename(string fileName)
+		private BitmapEncoder? GetEncoderFromFilename(string fileName)
 		{
 			if (fileName.EndsWith(".jpg", StringComparison.CurrentCultureIgnoreCase) || fileName.EndsWith(".jpeg", StringComparison.CurrentCultureIgnoreCase))
 				return new JpegBitmapEncoder();

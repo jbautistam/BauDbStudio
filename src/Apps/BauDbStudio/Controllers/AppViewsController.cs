@@ -11,7 +11,7 @@ namespace Bau.DbStudio.Controllers
 	public class AppViewsController : Libraries.PluginsStudio.Views.Base.Interfaces.IAppViewsController
 	{
 		// Eventos públicos
-		public event EventHandler<EventArguments.OpenDocumentEventArgs> OpenDocumentRequired;
+		public event EventHandler<EventArguments.OpenDocumentEventArgs>? OpenDocumentRequired;
 
 		public AppViewsController(DbStudioViewsManager dbStudioViewsManager)
 		{

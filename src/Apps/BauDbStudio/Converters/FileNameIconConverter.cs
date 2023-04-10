@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows.Data;
 
 namespace Bau.DbStudio.Converters
@@ -10,13 +9,13 @@ namespace Bau.DbStudio.Converters
 	public class FileNameIconConverter : IValueConverter
 	{
 		// Variables estáticas
-		private static List<Libraries.PluginsStudio.ViewModels.Base.Models.FileAssignedModel> _filesAssigned;
+		private static List<Libraries.PluginsStudio.ViewModels.Base.Models.FileAssignedModel>? _filesAssigned;
 		private static Libraries.BauMvvm.Views.Wpf.Tools.ImagesCache _cache = new();
 
 		/// <summary>
 		///		Convierte un tipo en un icono
 		/// </summary>
-		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		public object? Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
 		{ 
 			if (value is string fileName)
 				return GetIcon(fileName);

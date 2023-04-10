@@ -9,15 +9,62 @@ namespace Bau.Libraries.ChessDataBase.ViewModels.Games.Movements.Board.Scapes
 	/// </summary>
 	public class CellViewModel : ScapeBaseViewModel
 	{
+		// Enumerados privados
+		public enum StatusCell
+		{
+			/// <summary>No seleccionada</summary>
+			Unselected,
+			/// <summary>Seleccionada por el usuario</summary>
+			Selected
+		};
 		// Variables privadas
 		private string _fileImage;
+		private StatusCell _status;
+		private int _selectPosition;
 
-		public CellViewModel(int row, int column, PieceBaseModel.PieceColor color) : base(row, column, color) 
+		public CellViewModel(int row, int column, PieceBaseModel.PieceColor color, StatusCell status, int selectPosition) : base(row, column, color) 
 		{
-			if (color == PieceBaseModel.PieceColor.White)
-				FileImage = "BoardLight.gif";
-			else
-				FileImage = "BoardDark.gif";
+			Status = status;
+			FileImage = GetFileImage();
+		}
+
+		/// <summary>
+		///		Obtiene el archivo de imagen
+		/// </summary>
+		private string GetFileImage()
+		{
+			string status = string.Empty;
+
+				// Cambia el sufijo con el estado
+				if (Status == StatusCell.Selected)
+					status = "selected";
+				// Devuelve la imagen de la celda
+				if (Color == PieceBaseModel.PieceColor.White)
+					return $"BoardLight{status}.gif";
+				else
+					return $"BoardDark{status}.gif";
+		}
+
+		/// <summary>
+		///		Estado de la celda
+		/// </summary>
+		public StatusCell Status
+		{
+			get { return _status; }
+			set 
+			{ 
+				if (CheckProperty(ref _status, value))
+					FileImage = GetFileImage();
+			}
+		}
+
+		/// <summary>
+		///		Orden en el que se ha seleccionado esta celda
+		/// </summary>
+		public int SelectPosition
+		{
+			get { return _selectPosition; }
+			set { CheckProperty(ref _selectPosition, value); }
 		}
 
 		/// <summary>

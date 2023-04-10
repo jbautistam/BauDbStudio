@@ -33,10 +33,8 @@ namespace Bau.DbStudio.Converters
         {
             try
             {
-                Control control = obj as Control;
-
-				    if (control != null && ((args.NewValue as bool?) ?? false))
-                        control.Loaded += (sender, e) => control.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+                if (obj is Control control && ((args.NewValue as bool?) ?? false))
+                    control.Loaded += (sender, e) => control.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
             }
             catch (Exception exception)
             {
