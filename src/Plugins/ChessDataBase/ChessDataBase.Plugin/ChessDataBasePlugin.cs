@@ -57,20 +57,12 @@ namespace Bau.Libraries.ChessDataBase.Plugin
 		/// <summary>
 		///		Obtiene los menús del plugin
 		/// </summary>
-		public List<MenuListModel> GetMenus()
-		{
-			MenuListModel menuList = new(MenuListModel.SectionType.Tools);
-
-				// Añade la opción del menú
-				menuList.Add("_Jugar partida ajedrez", MainViewModel.PlayChessCommand, GetIcon("Images/PgnFile.png"));
-				// Devuelve la lista de menús
-				return new List<MenuListModel> { menuList };
-		}
+		public List<MenuListModel> GetMenus() => new();
 
 		/// <summary>
 		///		Obtiene las opciones de menú asociadas a las extensiones de archivo y carpetas
 		/// </summary>
-		public List<FileOptionsModel> GetFilesOptions() => null;
+		public List<FileOptionsModel> GetFilesOptions() => new();
 
 		/// <summary>
 		///		Obtiene las extensiones de archivo asociadas al plugin

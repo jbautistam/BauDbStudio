@@ -12,7 +12,11 @@ public class ToDoManagerViewModel : BauMvvm.ViewModels.BaseObservableObject
 
 	public ToDoManagerViewModel(Controllers.IToDoManagerController mainController)
 	{
+		// Inicializa los controladores
 		ViewsController = mainController;
+		// Inicializa los comandos
+		CreateNewNoteCommand = new BauMvvm.ViewModels.BaseCommand(_ => CreateNewNote());
+		ShowNotesCommand = new BauMvvm.ViewModels.BaseCommand(_ => ShowNotes());
 	}
 
 	/// <summary>
@@ -55,11 +59,13 @@ public class ToDoManagerViewModel : BauMvvm.ViewModels.BaseObservableObject
 	/// </summary>
 	public void ShowNotes()
 	{
+		// Muestra / oculta las notas
 		if (NotesVisible)
 			ViewsController.HideNotes();
 		else
 			foreach (Application.Models.Notes.NoteModel note in ToDoManager.NotesManager.Notes.Notes)
 				ViewsController.OpenDialog(new Notes.NoteViewModel(this, note, false));
+		// Cambia el valor que indica si las notas están visibles
 		NotesVisible = !NotesVisible;
 	}
 
@@ -85,4 +91,14 @@ public class ToDoManagerViewModel : BauMvvm.ViewModels.BaseObservableObject
 	///		Indica si las notas están visibles
 	/// </summary>
 	public bool NotesVisible { get; private set; }
+
+	/// <summary>
+	///		Comando para crear nueva nota
+	/// </summary>
+	public BauMvvm.ViewModels.BaseCommand CreateNewNoteCommand { get; }
+
+	/// <summary>
+	///		Comando para mostrar las notas
+	/// </summary>
+	public BauMvvm.ViewModels.BaseCommand ShowNotesCommand { get; }
 }

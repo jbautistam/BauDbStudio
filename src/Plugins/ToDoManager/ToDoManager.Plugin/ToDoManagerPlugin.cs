@@ -1,21 +1,22 @@
 ﻿using System.Collections.Generic;
+using System.Windows.Input;
 
+using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.ToDoManager.ViewModel;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Models;
 using Bau.Libraries.PluginsStudio.Views.Base.Interfaces;
 using Bau.Libraries.PluginsStudio.Views.Base.Models;
 using Bau.Libraries.LibSystem.Windows.KeyboardHook;
-using System.Windows.Input;
 
 namespace Bau.Libraries.ToDoManager.Plugin;
 
 /// <summary>
-///		Plugin para el administrador de contraseñas
+///		Plugin para el gestor de tareas
 /// </summary>
 public class ToDoManagerPlugin : IPlugin
 { 
 	/// <summary>
-	///		Inicializa el manager de vistas del administrador de contraseñas
+	///		Inicializa el manager de vistas del gestor de tareas
 	/// </summary>
 	public void Initialize(IAppViewsController appViewsController, PluginsStudio.ViewModels.Base.Controllers.IPluginsController pluginController)
 	{
@@ -32,14 +33,17 @@ public class ToDoManagerPlugin : IPlugin
 	/// </summary>
 	private void InitHookManager()
 	{
-		// Registra las teclas
-		KeyboardHookManager.RegisterHotkey(KeyboardHookManager.ModifierKeys.Control | KeyboardHookManager.ModifierKeys.Alt, 
-										   KeyInterop.VirtualKeyFromKey(Key.F1), CreateNewNote);
-		KeyboardHookManager.RegisterHotkey(KeyboardHookManager.ModifierKeys.Control | KeyboardHookManager.ModifierKeys.Alt, 
-										   KeyInterop.VirtualKeyFromKey(Key.F2), ShowNotes);
+		if (MainViewModel.ViewsController.PluginController.ConfigurationController.GetConfiguration(nameof(ToDoManagerPlugin), "HookGlobal").GetBool())
+		{
+			// Registra las teclas
+			KeyboardHookManager.RegisterHotkey(KeyboardHookManager.ModifierKeys.Control | KeyboardHookManager.ModifierKeys.Alt, 
+											   KeyInterop.VirtualKeyFromKey(Key.F1), CreateNewNote);
+			KeyboardHookManager.RegisterHotkey(KeyboardHookManager.ModifierKeys.Control | KeyboardHookManager.ModifierKeys.Alt, 
+											   KeyInterop.VirtualKeyFromKey(Key.F2), ShowNotes);
 
-		// Arranca el manejador
-		KeyboardHookManager.Start();
+			// Arranca el manejador
+			KeyboardHookManager.Start();
+		}
 	}
 
 	/// <summary>
@@ -47,7 +51,7 @@ public class ToDoManagerPlugin : IPlugin
 	/// </summary>
 	private void CreateNewNote()
 	{
-		System.Windows.Application.Current.Dispatcher.Invoke(() => MainViewModel.CreateNewNote());
+		System.Windows.Application.Current.Dispatcher.Invoke(MainViewModel.CreateNewNote);
 	}
 
 	/// <summary>
@@ -55,7 +59,7 @@ public class ToDoManagerPlugin : IPlugin
 	/// </summary>
 	private void ShowNotes()
 	{
-		System.Windows.Application.Current.Dispatcher.Invoke(() => MainViewModel.ShowNotes());
+		System.Windows.Application.Current.Dispatcher.Invoke(MainViewModel.ShowNotes);
 	}
 
 	/// <summary>
@@ -85,34 +89,29 @@ public class ToDoManagerPlugin : IPlugin
 	/// <summary>
 	///		Obtiene los paneles del plugin
 	/// </summary>
-	public List<PaneModel> GetPanes()
-	{
-		return new();
-	}
+	public List<PaneModel> GetPanes() => new();
 
 	/// <summary>
 	///		Obtiene las barras de herramientas del plugin
 	/// </summary>
-	public List<ToolBarModel> GetToolBars()
-	{
-		return new();
-	}
+	public List<ToolBarModel> GetToolBars() => new();
 
 	/// <summary>
 	///		Obtiene los menús del plugin
 	/// </summary>
 	public List<MenuListModel> GetMenus()
 	{
-		return new();
+		return new PluginsStudio.ViewModels.Base.Models.Builders.MenuBuilder()
+							.WithMenu(MenuListModel.SectionType.Tools)
+								.WithItem("Create note", MainViewModel.CreateNewNoteCommand, GetIcon("Pin.png"))
+								.WithItem("Show notes", MainViewModel.ShowNotesCommand, GetIcon("Task.png"))
+						.Build();
 	}
 
 	/// <summary>
 	///		Obtiene las opciones de menú asociadas a las extensiones de archivo y carpetas
 	/// </summary>
-	public List<FileOptionsModel> GetFilesOptions()
-	{
-		return null;
-	}
+	public List<FileOptionsModel> GetFilesOptions() => null;
 
 	/// <summary>
 	///		Obtiene las extensiones de archivo asociadas al plugin
@@ -125,10 +124,15 @@ public class ToDoManagerPlugin : IPlugin
 							{
 								Name = "ToDo file",
 								FileExtension = ToDoManagerViewModel.ToDoFileExtension,
-								Icon = "/ToDoManager.Plugin;component/Resources/ToDoFile.png"
+								Icon = GetIcon("ToDoFile.png")
 							}
 				};
 	}
+
+	/// <summary>
+	///		Obtiene la ruta de un icono
+	/// </summary>
+	private string GetIcon(string name) => $"/ToDoManager.Plugin;component/Resources/{name}";
 
 	/// <summary>
 	///		Obtiene la vista de configuración del plugin

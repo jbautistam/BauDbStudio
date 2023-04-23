@@ -70,10 +70,5 @@ namespace Bau.DbStudio.Views.Files
 					wndZoom.Visibility = System.Windows.Visibility.Collapsed;
 			}
 		}
-
-		private void UserControl_Unloaded(object sender, System.Windows.RoutedEventArgs e)
-		{
-			imgImage.Source = null;
-		}
 	}
 }
