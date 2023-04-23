@@ -24,6 +24,9 @@ public class ToDoManagerController : ViewModel.Controllers.IToDoManagerControlle
 		// Abre la ventana
 		switch (detailsViewModel)
 		{
+			case ViewModel.PatternsFile.PatternFileViewModel viewModel:
+					TaskManagerPlugin.AppViewsController.OpenDocument(new Views.PatternFile.PatternFileView(viewModel), viewModel);
+				break;
 			case ViewModel.Reader.ToDoFileViewModel viewModel:
 					TaskManagerPlugin.AppViewsController.OpenDocument(new Views.TodoFileView(viewModel), viewModel);
 				break;

@@ -8,7 +8,7 @@ internal class FormulaTextParser
 	// Variables privadas
 	private int _actualChar;
 
-	internal FormulaTextParser(Models.PatternFormulaModel formula)
+	internal FormulaTextParser(string formula)
 	{
 		Formula = formula;
 	}
@@ -34,7 +34,7 @@ internal class FormulaTextParser
 	/// </summary>
 	private TokenModel? ReadToken()
 	{
-		if (string.IsNullOrWhiteSpace(Formula.Text) || _actualChar >= Formula.Text.Length)
+		if (string.IsNullOrWhiteSpace(Formula) || _actualChar >= Formula.Length)
 			return null;
 		else
 		{
@@ -94,7 +94,7 @@ internal class FormulaTextParser
 		string content = string.Empty;
 
 			// Lee el identificador
-			while (_actualChar < Formula.Text.Length && !separatorFunction())
+			while (_actualChar < Formula.Length && !separatorFunction())
 			{
 				// Añade el carácter al identificador
 				content += GetChar();
@@ -128,15 +128,15 @@ internal class FormulaTextParser
 	/// <summary>
 	///		Obtiene el carácter
 	/// </summary>
-	private char GetChar() => Formula.Text[_actualChar];
+	private char GetChar() => Formula[_actualChar];
 
 	/// <summary>
 	///		Obtiene el siguiente carácter
 	/// </summary>
 	private char GetNextChar()
 	{
-		if (_actualChar + 1 < Formula.Text.Length)
-			return Formula.Text[_actualChar + 1];
+		if (_actualChar + 1 < Formula.Length)
+			return Formula[_actualChar + 1];
 		else
 			return ' ';
 	}
@@ -159,5 +159,5 @@ internal class FormulaTextParser
 	/// <summary>
 	///		Fórmula
 	/// </summary>
-	internal Models.PatternFormulaModel Formula { get; }
+	internal string Formula { get; }
 }

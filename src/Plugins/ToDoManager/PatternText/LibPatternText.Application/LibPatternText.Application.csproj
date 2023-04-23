@@ -8,7 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Models\PatternResultModel.cs" />
+    <ProjectReference Include="..\..\..\..\..\..\..\Libraries\Common\LibHelper\src\LibHelper.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\..\Libraries\Common\LibMarkup\src\LibMarkup.csproj" />
+    <ProjectReference Include="..\LibPatternText\LibPatternText.csproj" />
   </ItemGroup>
 
 </Project>

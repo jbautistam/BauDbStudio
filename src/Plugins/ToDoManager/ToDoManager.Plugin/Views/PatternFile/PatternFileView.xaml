@@ -1,0 +1,43 @@
+﻿<UserControl xmlns:CodeEditor="clr-namespace:Bau.Controls.CodeEditor;assembly=CodeEditor"  x:Class="Bau.Libraries.ToDoManager.Plugin.Views.PatternFile.PatternFileView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+			 xmlns:Converter="clr-namespace:Bau.Libraries.BauMvvm.Views.Converters;assembly=BauMvvm.Views"
+			 Loaded="UserControl_Loaded"
+             mc:Ignorable="d" d:DesignHeight="600" d:DesignWidth="600" >
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+
+		<ToolBarTray Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+			<ToolBar HorizontalAlignment="Stretch" >
+				<Button ToolTip="Ejecutar" Click="cmdExecute_Click">
+					<Image Width="16" Height="16" Source="/ToDoManager.Plugin;component/Resources/PatternFile.png" />
+				</Button>
+				<Separator/>
+				<Button ToolTip="Borrar" Click="cmdDelete_Click">
+					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
+				</Button>
+			</ToolBar>
+		</ToolBarTray>
+		<GroupBox Grid.Row="1" Grid.Column="0" Header="Sample" Margin="2">
+			<CodeEditor:ctlEditor x:Name="txtSource" TextChanged="txtSource_TextChanged" />
+		</GroupBox>
+		<GridSplitter Grid.Column="0" Grid.Row="1" Background="#FF4A63A0" Height="2" VerticalAlignment="Bottom" />
+		<GroupBox Grid.Row="2" Grid.Column="0" Header="Command" Margin="2">
+			<CodeEditor:ctlEditor x:Name="txtCommand" TextChanged="txtCommand_TextChanged"/>
+		</GroupBox>
+		<GridSplitter Grid.Column="0" Grid.Row="2" Background="#FF4A63A0" Height="2" VerticalAlignment="Bottom" />
+		<GroupBox Grid.Row="3" Grid.Column="0" Header="Result" Margin="2">
+			<CodeEditor:ctlEditor x:Name="txtResult" />
+		</GroupBox>
+	</Grid>
+</UserControl>

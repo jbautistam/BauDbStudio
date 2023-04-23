@@ -9,6 +9,7 @@ public class ToDoManagerViewModel : BauMvvm.ViewModels.BaseObservableObject
 {
 	// Constantes públicas
 	public const string ToDoFileExtension = ".bau.todo";
+	public const string PatternFileExtension = ".pattern";
 
 	public ToDoManagerViewModel(Controllers.IToDoManagerController mainController)
 	{
@@ -40,18 +41,31 @@ public class ToDoManagerViewModel : BauMvvm.ViewModels.BaseObservableObject
 	/// </summary>
 	public bool OpenFile(string fileName)
 	{
-		if (!string.IsNullOrWhiteSpace(fileName) && fileName.EndsWith(ToDoFileExtension, StringComparison.CurrentCultureIgnoreCase))
-		{
-			Reader.ToDoFileViewModel viewModel = new(this, fileName);
+		bool open = false;
 
-				// Carga el archivo con la contraseña pasada como parámetro y si puede hacerlo, abre el documento
-				if (viewModel.LoadFile())
-					ViewsController.OpenWindow(viewModel);
-				// e indica que ha podido abrir el archivo (para que no se abra ningún documento)
-				return true;
-		}
-		else
-			return false;
+			// Abre el archivo
+			if (!string.IsNullOrWhiteSpace(fileName)) 
+			{
+				if (fileName.EndsWith(ToDoFileExtension, StringComparison.CurrentCultureIgnoreCase))
+				{
+					Reader.ToDoFileViewModel viewModel = new(this, fileName);
+
+						// Carga el archivo
+						if (viewModel.LoadFile())
+							ViewsController.OpenWindow(viewModel);
+						// e indica que ha podido abrir el archivo (para que no se abra ningún documento)
+						open = true;
+				}
+				else if (fileName.EndsWith(PatternFileExtension, StringComparison.CurrentCultureIgnoreCase))
+				{
+					// Abre el archivo
+					ViewsController.OpenWindow(new PatternsFile.PatternFileViewModel(this, fileName));
+					// indica que ha podido abrir el archivo
+					open = true;
+				}
+			}
+			// Devuelve el valor que indica si se ha abierto
+			return open;
 	}
 
 	/// <summary>

@@ -10,10 +10,10 @@ internal class SourceTextReader : IDisposable
 	// Variables privadas
 	private StreamReader _fileReader = default!;
 
-	internal SourceTextReader(Models.PatternSourceModel source)
+	internal SourceTextReader(Models.PatternModel pattern)
 	{
-		Source = source;
-		_fileReader = new StreamReader(new MemoryStream(System.Text.Encoding.UTF8.GetBytes(source.Source)));
+		Pattern = pattern;
+		_fileReader = new StreamReader(new MemoryStream(System.Text.Encoding.UTF8.GetBytes(Pattern.Source)));
 	}
 
 	/// <summary>
@@ -22,7 +22,7 @@ internal class SourceTextReader : IDisposable
 	internal void ReadHeader()
 	{
 		// Lee la cabecera si realmente hay algo que leer
-		if (!_fileReader.EndOfStream && Source.WithHeader)
+		if (!_fileReader.EndOfStream && Pattern.WithHeader)
 		{
 			string? line = _fileReader.ReadLine();
 
@@ -153,7 +153,7 @@ internal class SourceTextReader : IDisposable
 				{
 					if (actual == '"')
 						isInQuotes = true;
-					else if (actual == Source.Separator[0])
+					else if (actual == Pattern.Separator[0])
 					{
 						// Convierte la cadena
 						fields.Add(Normalize(field));
@@ -209,7 +209,7 @@ internal class SourceTextReader : IDisposable
 	/// <summary>
 	///		Origen de los datos
 	/// </summary>
-	internal Models.PatternSourceModel Source { get; }
+	internal Models.PatternModel Pattern { get; }
 
 	/// <summary>
 	///		Columnas del texto

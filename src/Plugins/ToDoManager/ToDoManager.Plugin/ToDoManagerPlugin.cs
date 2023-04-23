@@ -125,6 +125,12 @@ public class ToDoManagerPlugin : IPlugin
 								Name = "ToDo file",
 								FileExtension = ToDoManagerViewModel.ToDoFileExtension,
 								Icon = GetIcon("ToDoFile.png")
+							},
+					new FileAssignedModel
+							{
+								Name = "Pattern text file",
+								FileExtension = ToDoManagerViewModel.PatternFileExtension,
+								Icon = GetIcon("PatternFile.png")
 							}
 				};
 	}

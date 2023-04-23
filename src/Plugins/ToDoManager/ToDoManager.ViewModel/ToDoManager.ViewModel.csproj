@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Libraries\PluginsStudio\PluginsStudio.ViewModels\PluginsStudio.ViewModels.csproj" />
+    <ProjectReference Include="..\PatternText\LibPatternText.Application\LibPatternText.Application.csproj" />
     <ProjectReference Include="..\ToDoManager.Application\ToDoManager.Application.csproj" />
   </ItemGroup>
 

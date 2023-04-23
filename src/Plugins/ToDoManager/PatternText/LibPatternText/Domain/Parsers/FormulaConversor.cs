@@ -1,4 +1,5 @@
 ﻿using Bau.Libraries.LibPatternText.Domain.Parsers.Source;
+using Bau.Libraries.LibPatternText.Models;
 
 namespace Bau.Libraries.LibPatternText.Domain.Parsers;
 
@@ -7,10 +8,9 @@ namespace Bau.Libraries.LibPatternText.Domain.Parsers;
 /// </summary>
 internal class FormulaConversor
 {
-	internal FormulaConversor(Models.PatternSourceModel source, Models.PatternFormulaModel formula)
+	internal FormulaConversor(PatternModel pattern)
 	{
-		Source = source;
-		Formula = formula;
+		Pattern = pattern;
 	}
 
 	/// <summary>
@@ -18,7 +18,7 @@ internal class FormulaConversor
 	/// </summary>
 	internal string Convert()
 	{
-		List<Formulas.TokenModel> tokens = new Formulas.FormulaTextParser(Formula).Parse().ToList();
+		List<Formulas.TokenModel> tokens = new Formulas.FormulaTextParser(Pattern.Formula).Parse().ToList();
 		System.Text.StringBuilder builder = new();
 
 			if (tokens.Count == 0)
@@ -26,7 +26,7 @@ internal class FormulaConversor
 			else
 			{
 				// Lee los datos y los convierte
-				using (SourceTextReader reader = new(Source))
+				using (SourceTextReader reader = new(Pattern))
 				{
 					// Lee la cabecera
 					reader.ReadHeader();
@@ -91,12 +91,7 @@ internal class FormulaConversor
 	}
 
 	/// <summary>
-	///		Origen de datos
+	///		Patrón
 	/// </summary>
-	internal Models.PatternSourceModel Source { get; } 
-	
-	/// <summary>
-	///		Fórmula
-	/// </summary>
-	internal Models.PatternFormulaModel Formula { get; }
+	internal PatternModel Pattern { get; }
 }

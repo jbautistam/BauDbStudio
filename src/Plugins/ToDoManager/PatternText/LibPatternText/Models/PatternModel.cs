@@ -1,19 +1,14 @@
 ﻿namespace Bau.Libraries.LibPatternText.Models;
 
 /// <summary>
-///		Fuente sobre la que se va a aplicar el patrón
+///		Clase con los datos de origen y fórmula de un patrón
 /// </summary>
-public class PatternSourceModel
+public class PatternModel
 {
-	public PatternSourceModel(string source)
-	{
-		Source = source;
-	}
-
 	/// <summary>
 	///		Texto sobre el que se van a aplicar los patrones
 	/// </summary>
-	public string Source { get; }
+	public string Source { get; set; } = default!;
 
 	/// <summary>
 	///		Indica si el texto tiene cabeceras
@@ -29,4 +24,9 @@ public class PatternSourceModel
 	///		Carácter que se considera comillas (para unir varios campos)
 	/// </summary>
 	public string? QuoteChar { get; set; } = "\"";
+
+	/// <summary>
+	///		Fórmula a aplicar
+	/// </summary>
+	public string Formula { get; set; } = default!;
 }

@@ -8,9 +8,9 @@
 		/// <summary>
 		///		Convierte una cadena de texto en una serie de cadenas correspondientes a un patrón
 		/// </summary>
-		public string Convert(Models.PatternSourceModel source, Models.PatternFormulaModel formula)
+		public string Convert(Models.PatternModel pattern)
 		{
-			return new Domain.Parsers.FormulaConversor(source, formula).Convert();
+			return new Domain.Parsers.FormulaConversor(pattern).Convert();
 		}
 	}
 }
