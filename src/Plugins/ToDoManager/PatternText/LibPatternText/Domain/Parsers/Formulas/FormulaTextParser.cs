@@ -44,6 +44,7 @@ internal class FormulaTextParser
 					{
 						TokenModel.TokenType.Field => new TokenModel(type, GetIdentifier()),
 						TokenModel.TokenType.Separator => new TokenModel(type, GetSeparator()),
+						TokenModel.TokenType.Dolar => new TokenModel(type, GetContentScape()),
 						_ => new TokenModel(type, GetContent())
 					};
 		}
@@ -58,7 +59,7 @@ internal class FormulaTextParser
 		{
 			case '$':
 				if (GetNextChar() == '$')
-					return TokenModel.TokenType.Word;
+					return TokenModel.TokenType.Dolar;
 				else
 					return TokenModel.TokenType.Field;
 			case ' ':
@@ -74,7 +75,35 @@ internal class FormulaTextParser
 	/// <summary>
 	///		Obtiene un identificador
 	/// </summary>
-	private string GetIdentifier() => GetContentTo(IsIdentifierSeparator);
+	private string GetIdentifier()
+	{
+		string content = string.Empty;
+		bool mustContinue = true;
+
+			// Mientras que quede algo por leer del identificador
+			while (_actualChar < Formula.Length && mustContinue)
+			{
+				char character = GetChar();
+
+					// Sólo puede haber un carácter H o -, el resto deben ser dígitos
+					if (character.Equals('H') || character.Equals('h') || character.Equals('-') || character.Equals('$'))
+					{
+						if (!content.Contains(character, StringComparison.CurrentCultureIgnoreCase))
+							content += character;
+						else
+							mustContinue = false;
+					}
+					else if (char.IsDigit(character))
+						content += character;
+					else
+						mustContinue = false;
+					// Pasa al siguiente carácter
+					if (mustContinue)
+						_actualChar++;
+			}
+			// Devuelve el contenido
+			return content;
+	}
 
 	/// <summary>
 	///		Obtiene un contenido
@@ -106,9 +135,15 @@ internal class FormulaTextParser
 	}
 
 	/// <summary>
-	///		Comprueba si el carácter es un separador de un identificador
+	///		Obtiene el contenido quitando el dólar escapado
 	/// </summary>
-	private bool IsIdentifierSeparator() => IsSpace() || CharIn(',', '.', '(', ')', '\'', '"');
+	private string GetContentScape()
+	{
+		// Incrementa el contador
+		_actualChar += 2;
+		// Devuelve el signo dólar
+		return "$";
+	}
 
 	/// <summary>
 	///		Comprueba si el carácter es un separador de contenido

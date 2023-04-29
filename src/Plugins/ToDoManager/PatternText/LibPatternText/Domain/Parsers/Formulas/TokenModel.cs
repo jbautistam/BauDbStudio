@@ -12,7 +12,8 @@
 		{
 			Word,
 			Field,
-			Separator
+			Separator,
+			Dolar
 		}
 
 		internal TokenModel(TokenType type, string content)

@@ -20,7 +20,7 @@
 		<ToolBarTray Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
 			<ToolBar HorizontalAlignment="Stretch" >
 				<Button ToolTip="Ejecutar" Click="cmdExecute_Click">
-					<Image Width="16" Height="16" Source="/ToDoManager.Plugin;component/Resources/PatternFile.png" />
+					<Image Width="16" Height="16" Source="/ToDoManager.Plugin;component/Resources/Execute.png" />
 				</Button>
 				<Separator/>
 				<Button ToolTip="Borrar" Click="cmdDelete_Click">
