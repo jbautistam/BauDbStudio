@@ -59,6 +59,11 @@ namespace Bau.DbStudio.Converters
 								icon = GetUriApplicationImage("FilePdf.png");
 							else if (fileName.EndsWith(".txt", StringComparison.CurrentCultureIgnoreCase))
 								icon = GetUriApplicationImage("FileTxt.png");
+							else if (fileName.EndsWith(".css", StringComparison.CurrentCultureIgnoreCase))
+								icon = GetUriApplicationImage("FileCss.png");
+							else if (fileName.EndsWith(".htm", StringComparison.CurrentCultureIgnoreCase) ||
+									 fileName.EndsWith(".html", StringComparison.CurrentCultureIgnoreCase))
+								icon = GetUriApplicationImage("FileHtml.png");
 							else if (IsImage(fileName))
 								icon = GetUriApplicationImage("FileImage.png");
 					}

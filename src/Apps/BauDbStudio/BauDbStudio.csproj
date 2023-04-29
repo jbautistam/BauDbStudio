@@ -48,6 +48,8 @@
     <None Remove="Resources\Images\Export.png" />
     <None Remove="Resources\Images\File.png" />
     <None Remove="Resources\Images\FileCsharp.png" />
+    <None Remove="Resources\Images\FileCss.png" />
+    <None Remove="Resources\Images\FileHtml.png" />
     <None Remove="Resources\Images\FileImage.png" />
     <None Remove="Resources\Images\FileJson.png" />
     <None Remove="Resources\Images\FileMd.png" />
@@ -121,6 +123,8 @@
     <Resource Include="Resources\Images\ArrowUp.png" />
     <Resource Include="Resources\Images\DataError.png" />
     <Resource Include="Resources\Images\Export.png" />
+    <Resource Include="Resources\Images\FileCss.png" />
+    <Resource Include="Resources\Images\FileHtml.png" />
     <Resource Include="Resources\Images\FileImage.png" />
     <Resource Include="Resources\Images\FileMd.png" />
     <Resource Include="Resources\Images\FilePdf.png" />
