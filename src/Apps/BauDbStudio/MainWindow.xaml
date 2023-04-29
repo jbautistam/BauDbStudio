@@ -68,7 +68,7 @@
 				<Separator/>
 				<MenuItem x:Name="mnuWorkspace" Header="_Espacio de trabajo" >
 					<MenuItem.Icon>
-						<Image Width="16" Height="16" Source="Resources/Images/Project.png" />
+						<Image Width="16" Height="16" Source="/Resources/Images/Project.png" />
 					</MenuItem.Icon>
 					<MenuItem Header="_Nuevo" Command="{Binding Path=WorkspacesViewModel.NewWorkspaceCommand}" >
 						<MenuItem.Icon>

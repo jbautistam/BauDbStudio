@@ -25,9 +25,9 @@ public partial class MainWindow : Window
 		Icon = System.Windows.Media.Imaging.BitmapFrame.Create(new Uri("pack://application:,,,./Resources/BauDbStudio.ico", UriKind.RelativeOrAbsolute)); 
 		// Inicializa el contexto y los controles
 		DbStudioViewsManager = new Controllers.DbStudioViewsManager("BauDbStudio", 
-																	System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Bau.DbStudio"),
+																	System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), 
+																						   "Bau.DbStudio"),
 																	this);
-
 		DbStudioViewsManager.MainWindowsController.Logger.LogInformation("Start application");
 		// Añade los plugins
 		DbStudioViewsManager.AddPlugin(new Libraries.JobsProcessor.Plugin.JobsProcessorPlugin());
@@ -88,12 +88,12 @@ public partial class MainWindow : Window
 	private Controls.DockLayout.DockLayoutManager.DockPosition ConvertPosition(Libraries.PluginsStudio.Views.Base.Models.PaneModel.PositionType position)
 	{
 		return position switch
-		{
-			Libraries.PluginsStudio.Views.Base.Models.PaneModel.PositionType.Top => Controls.DockLayout.DockLayoutManager.DockPosition.Top,
-			Libraries.PluginsStudio.Views.Base.Models.PaneModel.PositionType.Right => Controls.DockLayout.DockLayoutManager.DockPosition.Right,
-			Libraries.PluginsStudio.Views.Base.Models.PaneModel.PositionType.Bottom => Controls.DockLayout.DockLayoutManager.DockPosition.Bottom,
-			_ => Controls.DockLayout.DockLayoutManager.DockPosition.Left
-		};
+					{
+						Libraries.PluginsStudio.Views.Base.Models.PaneModel.PositionType.Top => Controls.DockLayout.DockLayoutManager.DockPosition.Top,
+						Libraries.PluginsStudio.Views.Base.Models.PaneModel.PositionType.Right => Controls.DockLayout.DockLayoutManager.DockPosition.Right,
+						Libraries.PluginsStudio.Views.Base.Models.PaneModel.PositionType.Bottom => Controls.DockLayout.DockLayoutManager.DockPosition.Bottom,
+						_ => Controls.DockLayout.DockLayoutManager.DockPosition.Left
+					};
 	}
 
 	/// <summary>
@@ -331,7 +331,7 @@ public partial class MainWindow : Window
 					mnuWorkspace.Items.Insert(++startIndex, mnuNewWorkspace);
 					// Añade el manejador
 					mnuNewWorkspace.Click += (sender, args) => {
-																	Libraries.PluginsStudio.ViewModels.Tools.Workspaces.WorkSpaceViewModel? workSpace = (sender as MenuItem).Tag as Libraries.PluginsStudio.ViewModels.Tools.Workspaces.WorkSpaceViewModel;
+																	Libraries.PluginsStudio.ViewModels.Tools.Workspaces.WorkSpaceViewModel? workSpace = (sender as MenuItem)?.Tag as Libraries.PluginsStudio.ViewModels.Tools.Workspaces.WorkSpaceViewModel;
 
 																		// Selecciona el espacio de trabajo
 																		if (workSpace != null)
@@ -362,7 +362,7 @@ public partial class MainWindow : Window
 			// Recorre los menús seleccionando / deseleccionando
 			for (int index = startIndex; index < indexEnd; index++)
 				if (mnuWorkspace.Items[index] is MenuItem child && child.Tag is Libraries.PluginsStudio.ViewModels.Tools.Workspaces.WorkSpaceViewModel workSpace)
-					child.IsChecked = workSpace.Name.Equals(ViewModel.WorkspacesViewModel.SelectedItem.Name);
+					child.IsChecked = workSpace.Name.Equals(ViewModel.WorkspacesViewModel.SelectedItem?.Name, StringComparison.CurrentCultureIgnoreCase);
 	}
 
 	/// <summary>
@@ -427,7 +427,7 @@ public partial class MainWindow : Window
 		// Graba la configuración
 		if (!string.IsNullOrWhiteSpace(ViewModel.PluginsStudioController.MainWindowController.HostController.DialogsController.LastPathSelected))
 			DbStudioViewsManager.ConfigurationController.LastPathSelected = ViewModel.PluginsStudioController.MainWindowController.HostController.DialogsController.LastPathSelected;
-		DbStudioViewsManager.ConfigurationController.LastWorkSpace = ViewModel.WorkspacesViewModel.SelectedItem.Name;
+		DbStudioViewsManager.ConfigurationController.LastWorkSpace = ViewModel.WorkspacesViewModel.SelectedItem?.Name ?? string.Empty;
 		DbStudioViewsManager.ConfigurationController.LastFiles = ViewModel.LastFilesViewModel.GetFiles();
 		DbStudioViewsManager.ConfigurationController.Save();
 		// Cierra la aplicación (puede que dé una excepción al cerrar porque ya se está cerrando en el evento Closing)

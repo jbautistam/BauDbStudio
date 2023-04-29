@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Files;
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.ComboItems;
@@ -12,9 +11,10 @@ namespace Bau.Libraries.ToDoManager.ViewModel.PatternsFile;
 public class PatternFileViewModel : BaseFileViewModel, PluginsStudio.ViewModels.Base.Interfaces.IDetailViewModel
 {
 	// Variables privadas
-	private string _source, _separator, _quoteChar, _formula, _extensionHighlight;
+	private string _source = string.Empty, _separator = string.Empty, _quoteChar = string.Empty;
+	private string _formula = string.Empty, _extensionHighlight = string.Empty;
 	private bool _withHeader;
-	private ComboViewModel _comboSeparators, _comboExtensions;
+	private ComboViewModel? _comboSeparators, _comboExtensions;
 
 	public PatternFileViewModel(ToDoManagerViewModel mainViewModel, string fileName) : base(fileName)
 	{ 
@@ -32,7 +32,7 @@ public class PatternFileViewModel : BaseFileViewModel, PluginsStudio.ViewModels.
 	{
 		try
 		{
-			LibPatternText.Models.PatternModel pattern = new LibPatternText.Application.PatternTextApplication().Load(FileName);
+			LibPatternText.Models.PatternModel pattern = new LibPatternText.PatternManager().Load(FileName);
 
 				// Carga los datos
 				Source = pattern.Source;
@@ -96,7 +96,7 @@ public class PatternFileViewModel : BaseFileViewModel, PluginsStudio.ViewModels.
 	/// </summary>
 	private void LoadComboExtensions(string extensionHighligth)
 	{
-		List<string> extensions = new() { ".sql", ".cs", ".py", ".md", ".txt" };
+		List<string> extensions = new() { ".sql", ".cs", ".py", ".md", ".txt", ".htm" };
 		bool added = false;
 
 			// Normaliza la extensión
@@ -141,7 +141,7 @@ public class PatternFileViewModel : BaseFileViewModel, PluginsStudio.ViewModels.
 		if (!string.IsNullOrWhiteSpace(FileName))
 		{
 			// Graba el archivo
-			new LibPatternText.Application.PatternTextApplication().Save(FileName, GetPattern());
+			new LibPatternText.PatternManager().Save(FileName, GetPattern());
 			// Actualiza el árbol
 			MainViewModel.ViewsController.HostPluginsController.RefreshFiles();
 			// Añade el archivo a los últimos archivos abiertos
@@ -262,7 +262,7 @@ public class PatternFileViewModel : BaseFileViewModel, PluginsStudio.ViewModels.
 	/// </summary>
 	public ComboViewModel ComboSeparators
 	{
-		get { return _comboSeparators; }
+		get { return _comboSeparators ?? default!; }
 		set { CheckObject(ref _comboSeparators, value); }
 	}
 
@@ -271,7 +271,7 @@ public class PatternFileViewModel : BaseFileViewModel, PluginsStudio.ViewModels.
 	/// </summary>
 	public ComboViewModel ComboExtensions
 	{
-		get { return _comboExtensions; }
+		get { return _comboExtensions ?? default!; }
 		set { CheckObject(ref _comboExtensions, value); }
 	}
 
