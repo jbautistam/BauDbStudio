@@ -9,7 +9,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files;
 /// </summary>
 public class NodeFileLoadingViewModel : BaseTreeNodeViewModel
 {
-	public NodeFileLoadingViewModel(BaseTreeViewModel trvTree, IHierarchicalViewModel parent, string text) 
+	public NodeFileLoadingViewModel(BaseTreeViewModel? trvTree, IHierarchicalViewModel? parent, string text) 
 				: base(trvTree, parent, text, TreeFilesViewModel.NodeType.File.ToString(), string.Empty, null, false, false, MvvmColor.Gray)
 	{
 	}
