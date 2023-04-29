@@ -35,28 +35,38 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Files
 		private string GetTextDroppedOnMarkdown(string droppedFile)
 		{
 			string name = Path.GetFileName(droppedFile);
-			string? link = string.Empty;
+			string link = string.Empty;
 
 				// Obtiene la cadena adecuada
 				if (LibHelper.Files.HelperFiles.CheckIsImage(droppedFile))
-					link = $"![{name}]({droppedFile.Replace('\\', '/')} \"{name}\")";
+					link = $"![{name}]({NormalizeFileName(droppedFile)} \"{name}\")";
 				else
 				{
 					// Asigna el nombre de archivo (sin extensión o sin directorio final)
 					if (droppedFile.EndsWith("_index.md", StringComparison.CurrentCultureIgnoreCase))
-						link = Path.GetDirectoryName(droppedFile);
+						link = Path.GetDirectoryName(droppedFile) ?? string.Empty;
 					else if (droppedFile.EndsWith(".md", StringComparison.CurrentCultureIgnoreCase))
 						link = Path.Combine(Path.GetDirectoryName(droppedFile) ?? string.Empty, Path.GetFileNameWithoutExtension(droppedFile));
 					else
 						link = droppedFile;
 					// Asigna el vínculo
 					if (!string.IsNullOrWhiteSpace(link))
-						link = $"[{name}]({link.Replace('\\', '/')})";
+						link = $"[{name}]({NormalizeFileName(link)})";
 					else
 						link = $"[{name}]";
 				}
 				// Devuelve el vínculo
 				return link;
+
+				// Normaliza el nombre del archivo: cambia las barras y sustituye los espacios por %20
+				string NormalizeFileName(string fileName)
+				{	
+					if (!string.IsNullOrWhiteSpace(fileName))
+						return fileName.Replace('\\', '/').Replace(" ", "%20");
+					else
+						return fileName;
+						
+				}
 		}
 
 		/// <summary>

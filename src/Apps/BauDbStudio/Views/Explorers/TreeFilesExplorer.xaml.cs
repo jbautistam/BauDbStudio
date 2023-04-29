@@ -3,7 +3,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Collections.Generic;
 
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
 using Bau.Libraries.BauMvvm.Views.Wpf.Forms.Trees;
@@ -147,8 +146,8 @@ namespace Bau.DbStudio.Views.Explorers
 
 		private void trvExplorer_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
 		{ 
-			if (trvExplorer.DataContext is TreeFilesViewModel && (sender as TreeView)?.SelectedItem is BaseTreeNodeViewModel node)
-				ViewModel.SelectedNode = node;
+			if (trvExplorer.DataContext is TreeFilesViewModel)
+				ViewModel.SelectedNode = (sender as TreeView)?.SelectedItem as BaseTreeNodeViewModel;
 		}
 
 		private void trvExplorer_MouseDoubleClick(object sender, MouseButtonEventArgs e)

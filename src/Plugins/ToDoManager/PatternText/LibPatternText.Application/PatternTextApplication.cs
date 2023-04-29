@@ -8,10 +8,7 @@ public class PatternTextApplication
 	/// <summary>
 	///		Carga los datos de un archivo
 	/// </summary>
-	public Models.PatternModel Load(string fileName)
-	{
-		return new Repositories.PatternTextRepository().Load(fileName);
-	}
+	public Models.PatternModel Load(string fileName) => new Repositories.PatternTextRepository().Load(fileName);
 
 	/// <summary>
 	///		Graba los datos de un patrón en un archivo

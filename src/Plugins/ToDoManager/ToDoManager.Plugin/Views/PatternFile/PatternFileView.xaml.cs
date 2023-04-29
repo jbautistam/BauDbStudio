@@ -7,7 +7,7 @@ using Bau.Libraries.ToDoManager.ViewModel.PatternsFile;
 namespace Bau.Libraries.ToDoManager.Plugin.Views.PatternFile;
 
 /// <summary>
-///		Formulario para mostrar el contenido de un grupo de tareas
+///		Formulario para mostrar el contenido de un patrón de texto y sus resultados
 /// </summary>
 public partial class PatternFileView : UserControl
 {
@@ -20,6 +20,11 @@ public partial class PatternFileView : UserControl
 		InitializeComponent();
 		// Asigna la clase del documento
 		DataContext = ViewModel = viewModel;
+		// Asigna los manejadores de eventos
+		ViewModel.PropertyChanged += (sender, args) => {
+															if (args.PropertyName.Equals(nameof(PatternFileViewModel.ExtensionHighlight), StringComparison.CurrentCultureIgnoreCase))
+																UpdateHighlights();
+													   };
 	}
 
 	/// <summary>
@@ -32,11 +37,20 @@ public partial class PatternFileView : UserControl
 			// Indica que ya no se debe cargar de nuevo
 			_isLoaded = true;
 			// Carga el archivo
-			ViewModel.LoadFile();
+			ViewModel.Load();
 			// Asigna las propiedades
 			txtSource.Text = ViewModel.Source;
 			txtCommand.Text = ViewModel.Formula;
 		}
+	}
+
+	/// <summary>
+	///		Modifica el intérprete de los editores de texto
+	/// </summary>
+	private void UpdateHighlights()
+	{
+		txtCommand.ChangeHighLightByExtension(ViewModel.ExtensionHighlight);
+		txtResult.ChangeHighLightByExtension(ViewModel.ExtensionHighlight);
 	}
 
 	/// <summary>

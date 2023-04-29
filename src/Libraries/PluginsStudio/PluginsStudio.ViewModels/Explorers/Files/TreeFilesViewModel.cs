@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Bau.Libraries.LibHelper.Extensors;
+﻿using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Models;
@@ -27,7 +24,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 		}
 
 		// Variables privadas
-		private NodeFileViewModel _nodeToCopy;
+		private NodeFileViewModel? _nodeToCopy;
 
 		public TreeFilesViewModel(PluginsStudioViewModel solutionViewModel)
 		{ 
@@ -61,10 +58,10 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 				// Añade los directorios
 				if (MainViewModel.WorkspacesViewModel.SelectedItem != null)
 					foreach (string path in MainViewModel.WorkspacesViewModel.SelectedItem.Folders)
-						if (!string.IsNullOrWhiteSpace(path) && System.IO.Directory.Exists(path))
+						if (!string.IsNullOrWhiteSpace(path) && Directory.Exists(path))
 							paths.Add(path);
 				// Ordena por el nombre del directorio
-				paths.Sort((first, second) => System.IO.Path.GetFileName(first).CompareTo(System.IO.Path.GetFileName(second)));
+				paths.Sort((first, second) => Path.GetFileName(first).CompareTo(Path.GetFileName(second)));
 				// Recarga los nodos
 				foreach (string path in paths)
 					Children.Add(new NodeFolderRootViewModel(this, null, path));
@@ -78,10 +75,10 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 			// Selecciona la carpeta
 			MainViewModel.PluginsStudioController.MainWindowController.DialogsController.OpenDialogSelectPath(string.Empty, out string folder);
 			// Añade la carpeta a la solución
-			if (!string.IsNullOrWhiteSpace(folder) && System.IO.Directory.Exists(folder))
+			if (!string.IsNullOrWhiteSpace(folder) && Directory.Exists(folder))
 			{
 				// Añade la carpeta a la solución
-				MainViewModel.WorkspacesViewModel.SelectedItem.AddFolder(folder);
+				MainViewModel.WorkspacesViewModel.SelectedItem?.AddFolder(folder);
 				// Carga el árbol
 				Load();
 			}
@@ -92,7 +89,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 		/// </summary>
 		public void CopyFromExplorer(string path, string[] files)
 		{
-			if (string.IsNullOrWhiteSpace(path) || !System.IO.Directory.Exists(path))
+			if (string.IsNullOrWhiteSpace(path) || !Directory.Exists(path))
 				MainViewModel.PluginsStudioController.MainWindowController.SystemController.ShowMessage("Seleccione la carpeta donde desea copiar los archivos");
 			else
 			{
@@ -100,10 +97,10 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 				foreach (string file in files)
 					if (!string.IsNullOrWhiteSpace(file))
 					{
-						if (System.IO.File.Exists(file))
-							LibHelper.Files.HelperFiles.CopyFile(file, System.IO.Path.Combine(path, System.IO.Path.GetFileName(file)));
-						else if (System.IO.Directory.Exists(file))
-							LibHelper.Files.HelperFiles.CopyPath(file, System.IO.Path.Combine(path, System.IO.Path.GetFileName(file)));
+						if (File.Exists(file))
+							LibHelper.Files.HelperFiles.CopyFile(file, Path.Combine(path, Path.GetFileName(file)));
+						else if (Directory.Exists(file))
+							LibHelper.Files.HelperFiles.CopyPath(file, Path.Combine(path, Path.GetFileName(file)));
 					}
 				// Actualiza el árbol
 				Load();
@@ -135,6 +132,8 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 						return type == NodeType.File;
 					case nameof(PasteCommand):
 						return _nodeToCopy != null && SelectedNode != null && isFolder;
+					case nameof(DeleteCommand):
+						return SelectedNode is not null;
 					case nameof(PasteClipboardImageCommand):
 						return isFolder && MainViewModel.PluginsStudioController.MainWindowController.ClipboardContainImage();
 					default:
@@ -182,7 +181,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 							fileName = fileName.TrimIgnoreNull();
 							// Crea el directorio  y actualiza el árbol
 							if (!string.IsNullOrWhiteSpace(fileName) &&
-									LibHelper.Files.HelperFiles.MakePath(System.IO.Path.Combine(path, fileName)))
+									LibHelper.Files.HelperFiles.MakePath(Path.Combine(path, fileName)))
 								Load();
 						}
 				}
@@ -266,7 +265,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 						if (pathNode.IsFolder)
 							path = pathNode.FileName;
 						else
-							path = System.IO.Path.GetDirectoryName(pathNode.FileName);
+							path = Path.GetDirectoryName(pathNode.FileName);
 					}
 				}
 				// Devuelve la carpeta
@@ -295,14 +294,14 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 				string source = _nodeToCopy.FileName;
 
 					// Copia el directorio o el archivo
-					if (System.IO.Directory.Exists(source))
+					if (Directory.Exists(source))
 					{
 						if (target.StartsWith(source, StringComparison.CurrentCultureIgnoreCase))
 							MainViewModel.PluginsStudioController.MainWindowController.SystemController.ShowMessage($"No se pude copiar {source} sobre {target}");
 						else
 						{
 							// Obtiene el nombre del directorio destino
-							target = LibHelper.Files.HelperFiles.GetConsecutivePath(target, System.IO.Path.GetFileName(source));
+							target = LibHelper.Files.HelperFiles.GetConsecutivePath(target, Path.GetFileName(source));
 							// Copia el directorio
 							LibHelper.Files.HelperFiles.CopyPath(source, target);
 						}
@@ -310,7 +309,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 					else
 					{
 						// Obtiene el nombre del archivo
-						target = LibHelper.Files.HelperFiles.GetConsecutiveFileName(target, System.IO.Path.GetFileName(source));
+						target = LibHelper.Files.HelperFiles.GetConsecutiveFileName(target, Path.GetFileName(source));
 						// Copia el archivo
 						LibHelper.Files.HelperFiles.CopyFile(source, target);
 					}
@@ -380,9 +379,9 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 		/// </summary>
 		private void DeleteFile(string fileName)
 		{
-			if (System.IO.Directory.Exists(fileName))
+			if (Directory.Exists(fileName))
 			{
-				if (MainViewModel.PluginsStudioController.MainWindowController.SystemController.ShowQuestion($"¿Realmente desea eliminar el directorio {System.IO.Path.GetFileName(fileName)}?"))
+				if (MainViewModel.PluginsStudioController.MainWindowController.SystemController.ShowQuestion($"¿Realmente desea eliminar el directorio {Path.GetFileName(fileName)}?"))
 				{
 					// Elimina el directorio
 					LibHelper.Files.HelperFiles.KillPath(fileName);
@@ -392,9 +391,9 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 					Load();
 				}
 			}
-			else if (System.IO.File.Exists(fileName))
+			else if (File.Exists(fileName))
 			{
-				if (MainViewModel.PluginsStudioController.MainWindowController.SystemController.ShowQuestion($"¿Realmente desea eliminar el archivo {System.IO.Path.GetFileName(fileName)}?"))
+				if (MainViewModel.PluginsStudioController.MainWindowController.SystemController.ShowQuestion($"¿Realmente desea eliminar el archivo {Path.GetFileName(fileName)}?"))
 				{
 					// Elimina el archivo
 					LibHelper.Files.HelperFiles.KillFile(fileName);
@@ -463,7 +462,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 						if (fileNode.IsFolder)
 							path = fileNode.FileName;
 						else
-							path = System.IO.Path.GetDirectoryName(fileNode.FileName);
+							path = Path.GetDirectoryName(fileNode.FileName);
 					}
 					else if (SelectedNode is NodeFolderRootViewModel filePath)
 						path = filePath.FileName;
@@ -482,11 +481,11 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 
 				// Obtiene el directorio a abrir
 				if (!string.IsNullOrWhiteSpace(file))
-					path = System.IO.Path.GetDirectoryName(file);
+					path = Path.GetDirectoryName(file);
 				else
 					path = GetSelectedPath();
 				// Abre el explorador sobre el directorio
-				if (!string.IsNullOrWhiteSpace(path) && System.IO.Directory.Exists(path))
+				if (!string.IsNullOrWhiteSpace(path) && Directory.Exists(path))
 					MainViewModel.PluginsStudioController.MainWindowController.OpenExplorer(path);
 		}
 
@@ -507,12 +506,12 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 				// Obtiene el nombre de archivo
 				if (!string.IsNullOrWhiteSpace(oldFileName))
 				{
-					string newFileName = GetNewFileName(System.IO.Path.GetFileName(oldFileName), isFolder);
+					string newFileName = GetNewFileName(Path.GetFileName(oldFileName), isFolder);
 
 						if (!string.IsNullOrWhiteSpace(newFileName))
 						{
 							// Obtiene el nombre completo del archivo / carpeta
-							newFileName = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(oldFileName), newFileName);
+							newFileName = Path.Combine(Path.GetDirectoryName(oldFileName), newFileName);
 							// Cambia el nombre
 							if (LibHelper.Files.HelperFiles.Rename(oldFileName, newFileName))
 							{
@@ -566,9 +565,9 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 					bool mustUpdate = false;
 
 						// Cambia el nombre si se trata de un directorio
-						if (isFolder && System.IO.Path.GetDirectoryName(fileViewModel.FileName).Equals(oldFileName, StringComparison.CurrentCultureIgnoreCase))
+						if (isFolder && Path.GetDirectoryName(fileViewModel.FileName).Equals(oldFileName, StringComparison.CurrentCultureIgnoreCase))
 						{
-							newName = System.IO.Path.Combine(newFileName, System.IO.Path.GetFileName(fileViewModel.FileName));
+							newName = Path.Combine(newFileName, Path.GetFileName(fileViewModel.FileName));
 							mustUpdate = true;
 						}
 						else if (!isFolder && fileViewModel.FileName.Equals(oldFileName, StringComparison.CurrentCultureIgnoreCase))
@@ -617,7 +616,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 					viewModelFileName = fileViewModel.FileName;
 				// Comprueba si se debe cerrar
 				if (!string.IsNullOrWhiteSpace(viewModelFileName))
-					mustClose = (isFolder && System.IO.Path.GetDirectoryName(viewModelFileName).Equals(fileName, StringComparison.CurrentCultureIgnoreCase)) ||
+					mustClose = (isFolder && Path.GetDirectoryName(viewModelFileName).Equals(fileName, StringComparison.CurrentCultureIgnoreCase)) ||
 								(!isFolder && viewModelFileName.Equals(fileName, StringComparison.CurrentCultureIgnoreCase));
 				// Devuelve el valor que indica si se debe cerrar
 				return mustClose;
@@ -626,10 +625,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files
 		/// <summary>
 		///		Indica si se puede renombrar un archivo o carpeta
 		/// </summary>
-		private bool CanRename()
-		{
-			return !string.IsNullOrEmpty(GetSelectedPath());
-		}
+		private bool CanRename() => !string.IsNullOrEmpty(GetSelectedPath());
 
 		/// <summary>
 		///		ViewModel principal

@@ -23,7 +23,12 @@ public class PatternModel
 	/// <summary>
 	///		Carácter que se considera comillas (para unir varios campos)
 	/// </summary>
-	public string? QuoteChar { get; set; } = "\"";
+	public string QuoteChar { get; set; } = "\"";
+
+	/// <summary>
+	///		Extensión de la salida
+	/// </summary>
+	public string ExtensionHighlight { get; set; } = default!;
 
 	/// <summary>
 	///		Fórmula a aplicar

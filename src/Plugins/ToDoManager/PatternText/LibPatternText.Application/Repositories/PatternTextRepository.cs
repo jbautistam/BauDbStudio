@@ -16,6 +16,9 @@ internal class PatternTextRepository
 	private const string TagSeparator = "Separator";
 	private const string TagQuotes = "Quotes";
 	private const string TagFormula = "Formula";
+	private const string TagExtensionHighlight = "Extension";
+	private const string SeparatorTab = "Tab";
+	private const string SeparatorSpace = "Space";
 
 	/// <summary>
 	///		Carga los datos de un archivo
@@ -39,7 +42,15 @@ internal class PatternTextRepository
 										pattern.Source = nodeML.Value.TrimIgnoreNull();
 										pattern.WithHeader = nodeML.Attributes[TagWithHeader].Value.GetBool(true);
 										pattern.Separator = nodeML.Attributes[TagSeparator].Value.TrimIgnoreNull();
+										if (!string.IsNullOrWhiteSpace(pattern.Separator))
+										{
+											if (pattern.Separator.Equals(SeparatorTab, StringComparison.CurrentCultureIgnoreCase))
+												pattern.Separator = "\t";
+											else if (pattern.Separator.Equals(SeparatorSpace, StringComparison.CurrentCultureIgnoreCase))
+												pattern.Separator = " ";
+										}
 										pattern.QuoteChar = nodeML.Attributes[TagQuotes].Value.TrimIgnoreNull();
+										pattern.ExtensionHighlight = nodeML.Attributes[TagExtensionHighlight].Value.TrimIgnoreNull();
 										if (string.IsNullOrEmpty(pattern.Separator))
 											pattern.Separator = ",";
 										if (string.IsNullOrEmpty(pattern.QuoteChar))
@@ -61,8 +72,17 @@ internal class PatternTextRepository
 			
 			// Añade los datos del origen
 			nodeML.Attributes.Add(TagWithHeader, pattern.WithHeader);
-			nodeML.Attributes.Add(TagSeparator, pattern.Separator);
+			if (!string.IsNullOrEmpty(pattern.Separator))
+			{
+				if (pattern.Separator == "\t")
+					nodeML.Attributes.Add(TagSeparator, SeparatorTab);
+				else if (pattern.Separator == " ")
+					nodeML.Attributes.Add(TagSeparator, SeparatorSpace);
+				else
+					nodeML.Attributes.Add(TagSeparator, pattern.Separator);
+			}
 			nodeML.Attributes.Add(TagQuotes, pattern.QuoteChar);
+			nodeML.Attributes.Add(TagExtensionHighlight, pattern.ExtensionHighlight);
 			// Añade la fórmula
 			rootML.Nodes.Add(TagFormula, pattern.Formula);
 			// Graba el archivo
