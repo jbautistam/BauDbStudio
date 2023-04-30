@@ -6,7 +6,7 @@
 internal class FormulaTextParser
 {
 	// Variables privadas
-	private int _actualChar;
+	private int _actualChar, _bracketsOpened;
 
 	internal FormulaTextParser(string formula)
 	{
@@ -93,6 +93,16 @@ internal class FormulaTextParser
 						else
 							mustContinue = false;
 					}
+					else if (character.Equals('['))
+					{
+						// Obtiene el texto hasta el corchete de cierre
+						content += GetContentTo(IsBracketEnd);
+						// Añade el corchete de cierre
+						content += ']';
+						_actualChar++;
+						// Indica que ya no debe continuar
+						mustContinue = false;
+					}
 					else if (char.IsDigit(character))
 						content += character;
 					else
@@ -159,6 +169,20 @@ internal class FormulaTextParser
 	///		Comprueba si el carácter es un carácter interpretable (no es un espacio)
 	/// </summary>
 	private bool IsLegible() => !IsSpace();
+
+	/// <summary>
+	///		Comprueba si se ha llegado al corchete de cierre
+	/// </summary>
+	private bool IsBracketEnd()
+	{
+		// Ajusta el número de corchetes
+		if (CharIn('['))
+			_bracketsOpened++;
+		else if (CharIn(']'))
+			_bracketsOpened--;
+		// Comprueba si se ha llegado al final
+		return _bracketsOpened == 0;
+	}
 
 	/// <summary>
 	///		Obtiene el carácter

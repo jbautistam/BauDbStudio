@@ -8,6 +8,9 @@ namespace Bau.Libraries.LibPatternText.Domain.Parsers;
 /// </summary>
 internal class FormulaConversor
 {
+	// Variables privadas
+	private Formulas.IdentifierParser _identifierParser = new();
+
 	internal FormulaConversor(PatternModel pattern)
 	{
 		Pattern = pattern;
@@ -133,7 +136,7 @@ internal class FormulaConversor
 										builder.Append(token.Content);
 									break;
 								case Formulas.TokenModel.TokenType.Field:
-										builder.Append(ConvertField(reader, token.Content));
+										builder.Append(_identifierParser.Convert(reader, token.Content));
 									break;
 							}
 						// Añade un salto de línea
@@ -145,66 +148,6 @@ internal class FormulaConversor
 			}
 	}
 
-	/// <summary>
-	///		Convierte el contenido de un campo con el valor leido
-	/// </summary>
-	private string ConvertField(SourceTextReader reader, string content)
-	{
-		(bool header, int? field) = GetFieldIndex(content);
-
-			if (field is null)
-				throw new Exceptions.PatternTextException($"Can't parse field index at {content}");
-			else if (field > reader.RecordValues.Count)
-				throw new Exceptions.PatternTextException($"Can't find the value '{content}'");
-			else if (field < 0 && reader.Columns.Count - (field ?? 0) < 0)
-				throw new Exceptions.PatternTextException($"Can't find a value with inndex '{content}'");
-			{
-				if (header)
-				{
-					if (field >= 0)
-						return reader.Columns[(field ?? 0) - 1];
-					else
-						return reader.Columns[reader.Columns.Count + (field ?? 0)];
-				}
-				else 
-				{
-					if (field >= 0)
-						return reader.RecordValues[(field ?? 0) - 1];
-					else
-						return reader.RecordValues[reader.Columns.Count + (field ?? 0)];
-				}
-			}
-	}
-
-	/// <summary>
-	///		Obtiene el índice del campo
-	/// </summary>
-	private (bool header, int? index) GetFieldIndex(string value)
-	{
-		bool header = false;
-		int? index = null;
-
-			// Obtiene el índice
-			if (!string.IsNullOrWhiteSpace(value))
-			{
-				// Quita los espacios
-				value = value.Trim();
-				// Quita el separador
-				if (value.StartsWith('$'))
-					value = value.Substring(1);
-				// Quita el valor que indica si es cabecera
-				if (!string.IsNullOrWhiteSpace(value) && value.StartsWith("H", StringComparison.CurrentCultureIgnoreCase))
-				{
-					header = true;
-					value = value.Substring(1);
-				}
-				// Obtiene el valor numérico
-				if (int.TryParse(value, out int result))
-					index = result;
-			}
-			// Si ha llegado hasta aquí es porque no ha podido convertir el índice
-			return (header, index);
-	}
 
 	/// <summary>
 	///		Patrón
