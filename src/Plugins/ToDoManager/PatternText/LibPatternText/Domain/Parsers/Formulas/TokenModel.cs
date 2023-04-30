@@ -1,35 +1,34 @@
-﻿namespace Bau.Libraries.LibPatternText.Domain.Parsers.Formulas
+﻿namespace Bau.Libraries.LibPatternText.Domain.Parsers.Formulas;
+
+/// <summary>
+///		Clase con los datos de un token
+/// </summary>
+internal class TokenModel
 {
 	/// <summary>
-	///		Clase con los datos de un token
+	///		Tipos de token
 	/// </summary>
-	internal class TokenModel
+	internal enum TokenType
 	{
-		/// <summary>
-		///		Tipos de token
-		/// </summary>
-		internal enum TokenType
-		{
-			Word,
-			Field,
-			Separator,
-			Dolar
-		}
-
-		internal TokenModel(TokenType type, string content)
-		{
-			Type = type;
-			Content = content;
-		}
-
-		/// <summary>
-		///		Tipo de token
-		/// </summary>
-		internal TokenType Type { get; }
-
-		/// <summary>
-		///		Contenido
-		/// </summary>
-		internal string Content { get; }
+		Word,
+		Field,
+		Separator,
+		Dolar
 	}
+
+	internal TokenModel(TokenType type, string content)
+	{
+		Type = type;
+		Content = content;
+	}
+
+	/// <summary>
+	///		Tipo de token
+	/// </summary>
+	internal TokenType Type { get; }
+
+	/// <summary>
+	///		Contenido
+	/// </summary>
+	internal string Content { get; }
 }
