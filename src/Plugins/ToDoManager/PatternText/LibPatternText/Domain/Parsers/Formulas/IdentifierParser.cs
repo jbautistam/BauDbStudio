@@ -27,7 +27,7 @@ internal class IdentifierParser
 	/// <summary>
 	///		Convierte el contenido de un campo con el valor leido
 	/// </summary>
-	internal string Convert(SourceTextReader reader, string content)
+	internal string Convert(SourceTextReader reader, int row, string content)
 	{
 		(bool header, int? field, string format) = SplitIdentifierParts(content);
 
@@ -47,7 +47,9 @@ internal class IdentifierParser
 				}
 				else 
 				{
-					if (field >= 0)
+					if (field == 0)
+						return ApplyFormat(row.ToString(), format);
+					else if (field >= 0)
 						return ApplyFormat(reader.RecordValues[(field ?? 0) - 1], format);
 					else
 						return ApplyFormat(reader.RecordValues[reader.Columns.Count + (field ?? 0)], format);

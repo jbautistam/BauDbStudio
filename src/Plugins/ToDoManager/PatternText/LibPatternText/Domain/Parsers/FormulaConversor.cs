@@ -112,36 +112,40 @@ internal class FormulaConversor
 	private string ConvertFormula(string formula)
 	{
 		List<Formulas.TokenModel> tokens = new Formulas.FormulaTextParser(formula).Parse().ToList();
-		System.Text.StringBuilder builder = new();
 
 			if (tokens.Count == 0)
 				throw new Exceptions.PatternTextException("Can't find any token at formula");
 			else
 			{
-				// Lee los datos y los convierte
-				using (SourceTextReader reader = new(Pattern))
-				{
-					// Lee la cabecera
-					reader.ReadHeader();
-					// Interpreta el contenido
-					while (reader.Read())
+				System.Text.StringBuilder builder = new();
+				int row = 1;
+
+					// Lee los datos y los convierte
+					using (SourceTextReader reader = new(Pattern))
 					{
-						// Interpreta los tokens
-						foreach (Formulas.TokenModel token in tokens)
-							switch (token.Type)
-							{
-								case Formulas.TokenModel.TokenType.Separator:
-								case Formulas.TokenModel.TokenType.Word:
-								case Formulas.TokenModel.TokenType.Dolar:
-										builder.Append(token.Content);
-									break;
-								case Formulas.TokenModel.TokenType.Field:
-										builder.Append(_identifierParser.Convert(reader, token.Content));
-									break;
-							}
-						// Añade un salto de línea
-						builder.AppendLine();
-					}
+						// Lee la cabecera
+						reader.ReadHeader();
+						// Interpreta el contenido
+						while (reader.Read())
+						{
+							// Interpreta los tokens
+							foreach (Formulas.TokenModel token in tokens)
+								switch (token.Type)
+								{
+									case Formulas.TokenModel.TokenType.Separator:
+									case Formulas.TokenModel.TokenType.Word:
+									case Formulas.TokenModel.TokenType.Dolar:
+											builder.Append(token.Content);
+										break;
+									case Formulas.TokenModel.TokenType.Field:
+											builder.Append(_identifierParser.Convert(reader, row, token.Content));
+										break;
+								}
+							// Añade un salto de línea
+							builder.AppendLine();
+							// Incrementa el número de línea
+							row++;
+						}
 				}
 				// Devuelve los datos generados
 				return builder.ToString();

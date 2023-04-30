@@ -165,6 +165,16 @@ public class PatternManager_Should
 				  INSERT INTO Customer (FullName)
 					VALUES ('Fernández, Pablo');
 				 ")]
+	[InlineData(@"FirstName, LastName
+				  Ana, Rodríguez
+				  Pablo, Fernández",
+				@"INSERT INTO Customer (Id, FullName)
+					VALUES ($0, '$2, $1');",
+				@"INSERT INTO Customer (Id, FullName)
+					VALUES (1, 'Rodríguez, Ana');
+				  INSERT INTO Customer (Id, FullName)
+					VALUES (2, 'Fernández, Pablo');
+				 ")]
 	public void parse_text(string source, string formula, string result)
 	{
 		string converted = new PatternManager().Convert(GetPatternModel(source, formula));
@@ -188,6 +198,18 @@ public class PatternManager_Should
 					VALUES (02, 'Row2-2');
 				  INSERT INTO Customer (FirstName, LastName)
 					VALUES (03, 'Row3-2');")]
+	[InlineData(@"Header1, Header2, Header3
+				  1, O'Donnel, Row1-3
+				  2, Row2-2, Row2-3
+				  3, Row3-2, Row3-3",
+				@"INSERT INTO Customer (FirstName, LastName)
+					VALUES ($1[int,[00]], '$2');",
+				@"INSERT INTO Customer (FirstName, LastName)
+					VALUES ([01], 'O'Donnel');
+				  INSERT INTO Customer (FirstName, LastName)
+					VALUES ([02], 'Row2-2');
+				  INSERT INTO Customer (FirstName, LastName)
+					VALUES ([03], 'Row3-2');")]
 	[InlineData(@"FirstName, LastName, Other
 				  1, O'Donnel, 1.8
 				  2, Row2-2, 2.9
@@ -201,16 +223,16 @@ public class PatternManager_Should
 				  INSERT INTO Customer (FirstName, LastName, Other)
 					VALUES (3, 'Row3-2', 3.4);")]
 	[InlineData(@"FirstName, LastName, Decimal, Date
-				  1, O'Donnel, 1.8, 2023-02-10 18:30:20
-				  2, Row2-2, 2.9, 2023-02-11 19:30:20
-				  3, Row3-2, 3.4, 2023-02-12 20:30:20",
-				@"INSERT INTO Customer ($h1, $h2, $h3, $h4)
-					VALUES ($1[int,sql], '$2[string,sql]', $3[decimal,sql], '$4[date,sql]');",
-				@"INSERT INTO Customer (FirstName, LastName, Decimal, Date)
-					VALUES (1, 'O''Donnel', 1.8, '2023-02-10 18:30:20');
-				  INSERT INTO Customer (FirstName, LastName, Decimal, Date)
+				  O'Donnel, Skip last, , 2023-02-10 18:30:20
+				  Row2-2, Skip last, 2.9, 2023-02-11 19:30:20
+				  Row3-2, Skip last, 3.4, 2023-02-12 20:30:20",
+				@"INSERT INTO Customer (Id, $h1, $h3, $h4)
+					VALUES ($0[int,sql], '$1[string,sql]', $3[decimal,sql], '$4[date,sql]');",
+				@"INSERT INTO Customer (Id, FirstName, Decimal, Date)
+					VALUES (1, 'O''Donnel', NULL, '2023-02-10 18:30:20');
+				  INSERT INTO Customer (Id, FirstName, Decimal, Date)
 					VALUES (2, 'Row2-2', 2.9, '2023-02-11 19:30:20');
-				  INSERT INTO Customer (FirstName, LastName, Decimal, Date)
+				  INSERT INTO Customer (Id, FirstName, Decimal, Date)
 					VALUES (3, 'Row3-2', 3.4, '2023-02-12 20:30:20');")]
 	public void parse_text_with_formats(string source, string formula, string result)
 	{
