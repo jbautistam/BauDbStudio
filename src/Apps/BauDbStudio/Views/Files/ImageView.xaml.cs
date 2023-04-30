@@ -15,6 +15,8 @@ namespace Bau.DbStudio.Views.Files
 		{
 			// Inicializa los componentes
 			InitializeComponent();
+			// Indica al viewmodel que se cargue
+			viewModel.Load();
 			// Carga el archivo
 			LoadImage(viewModel.FileName);
 			//// Cambia el zoom

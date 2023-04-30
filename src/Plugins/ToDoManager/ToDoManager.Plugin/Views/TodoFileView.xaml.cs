@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows.Controls;
-
-using Bau.Libraries.ToDoManager.ViewModel.Reader;
 using System.Windows;
 using System.Windows.Input;
+
+using Bau.Libraries.ToDoManager.ViewModel.Reader;
 
 namespace Bau.Libraries.ToDoManager.Plugin.Views;
 

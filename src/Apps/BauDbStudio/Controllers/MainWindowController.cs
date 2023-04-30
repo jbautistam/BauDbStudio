@@ -39,18 +39,12 @@ public class MainWindowController : Libraries.PluginsStudio.ViewModels.Base.Cont
 	/// <summary>
 	///		Obtiene el viewModel activo de detalles
 	/// </summary>
-	public IDetailViewModel GetActiveDetails()
-	{
-		return DbStudioViewsManager.MainWindow.GetActiveDetails();
-	}
+	public IDetailViewModel? GetActiveDetails() => DbStudioViewsManager.MainWindow.GetActiveDetails();
 
 	/// <summary>
 	///		Obtiene la lista de viewmodel de detalles abiertos
 	/// </summary>
-	public List<IDetailViewModel> GetOpenedDetails()
-	{
-		return DbStudioViewsManager.MainWindow.GetOpenedDetails();
-	}
+	public List<IDetailViewModel> GetOpenedDetails() => DbStudioViewsManager.MainWindow.GetOpenedDetails();
 
 	/// <summary>
 	///		Modifica el TabId de un documento abierto
@@ -90,10 +84,7 @@ public class MainWindowController : Libraries.PluginsStudio.ViewModels.Base.Cont
 	/// <summary>
 	///		Comprueba si en el portapapeles hay alguna imagen
 	/// </summary>
-	public bool ClipboardContainImage()
-	{
-		return new Helpers.ClipboardHelper().ContainsImage();
-	}
+	public bool ClipboardContainImage() => new Helpers.ClipboardHelper().ContainsImage();
 
 	/// <summary>
 	///		Graba la imagen del portapapeles

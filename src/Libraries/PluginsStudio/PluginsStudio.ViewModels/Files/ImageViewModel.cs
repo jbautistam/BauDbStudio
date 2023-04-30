@@ -17,7 +17,10 @@
 		/// </summary>
 		public override void Load()
 		{
+			// Indica que no ha habido modificaciones
 			IsUpdated = false;
+			// Añade el archivo a los últimos archivos abiertos
+			MainViewModel.PluginsStudioController.HostPluginsController.AddFileUsed(FileName);
 		}
 
 		/// <summary>

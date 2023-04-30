@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Bau.Libraries.ToDoManager.ViewModel;
+﻿namespace Bau.Libraries.ToDoManager.ViewModel;
 
 /// <summary>
 ///		ViewModel principal del manager de listas de tareas
@@ -15,6 +13,8 @@ public class ToDoManagerViewModel : BauMvvm.ViewModels.BaseObservableObject
 	{
 		// Inicializa los controladores
 		ViewsController = mainController;
+		// Inicializa los ViewModel hijos
+		ConfigurationViewModel = new Configuration.ConfigurationViewModel(this);
 		// Inicializa los comandos
 		CreateNewNoteCommand = new BauMvvm.ViewModels.BaseCommand(_ => CreateNewNote());
 		ShowNotesCommand = new BauMvvm.ViewModels.BaseCommand(_ => ShowNotes());
@@ -25,7 +25,7 @@ public class ToDoManagerViewModel : BauMvvm.ViewModels.BaseObservableObject
 	/// </summary>
 	public void Initialize()
 	{
-		// no hace nada, simplemente implementa la interface
+		ConfigurationViewModel.Initialize();
 	}
 
 	/// <summary>
@@ -95,6 +95,11 @@ public class ToDoManagerViewModel : BauMvvm.ViewModels.BaseObservableObject
 	///		Controlador de vistas de aplicación
 	/// </summary>
 	public Controllers.IToDoManagerController ViewsController { get; }
+	
+	/// <summary>
+	///		ViewModel de la configuración
+	/// </summary>
+	public Configuration.ConfigurationViewModel ConfigurationViewModel { get; }
 
 	/// <summary>
 	///		Manager de la aplicación ToDo

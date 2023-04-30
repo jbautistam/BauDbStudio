@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Input;
 
-using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.ToDoManager.ViewModel;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Models;
 using Bau.Libraries.PluginsStudio.Views.Base.Interfaces;
@@ -33,8 +32,10 @@ public class ToDoManagerPlugin : IPlugin
 	/// </summary>
 	private void InitHookManager()
 	{
-		if (MainViewModel.ViewsController.PluginController.ConfigurationController.GetConfiguration(nameof(ToDoManagerPlugin), "HookGlobal").GetBool())
+		if (MainViewModel.ConfigurationViewModel.HookGlobal)
 		{
+			// Inicializa el manager de teclado
+			KeyboardHookManager = new KeyboardHookManager();
 			// Registra las teclas
 			KeyboardHookManager.RegisterHotkey(KeyboardHookManager.ModifierKeys.Control | KeyboardHookManager.ModifierKeys.Alt, 
 											   KeyInterop.VirtualKeyFromKey(Key.F1), CreateNewNote);
@@ -81,10 +82,7 @@ public class ToDoManagerPlugin : IPlugin
 	/// <summary>
 	///		Intenta abrir un archivo en un plugin
 	/// </summary>
-	public bool OpenFile(string fileName)
-	{
-		return MainViewModel.OpenFile(fileName);
-	}
+	public bool OpenFile(string fileName) => MainViewModel.OpenFile(fileName);
 
 	/// <summary>
 	///		Obtiene los paneles del plugin
@@ -145,7 +143,7 @@ public class ToDoManagerPlugin : IPlugin
 	/// </summary>
 	public IPluginConfigurationView GetConfigurationView()
 	{
-		return null;
+		return new Views.Configuration.ctlConfiguration(MainViewModel.ConfigurationViewModel);
 	}
 
 	/// <summary>
@@ -161,5 +159,5 @@ public class ToDoManagerPlugin : IPlugin
 	/// <summary>
 	///		Manager del Hook de teclado
 	/// </summary>
-	internal KeyboardHookManager KeyboardHookManager { get; } = new();
+	internal KeyboardHookManager? KeyboardHookManager { get; private set; }
 }
