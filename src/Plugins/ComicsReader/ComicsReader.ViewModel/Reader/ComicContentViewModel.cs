@@ -4,14 +4,14 @@ using System.Threading.Tasks;
 
 using Bau.Libraries.LibCompressor;
 using Bau.Libraries.BauMvvm.ViewModels;
-using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
+using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.ListView;
 
 namespace Bau.Libraries.ComicsReader.ViewModel.Reader
 {
-	/// <summary>
-	///		ViewModel para ver el contenido de un <see cref="BookModel"/>
-	/// </summary>
-	public class ComicContentViewModel : BaseObservableObject, PluginsStudio.ViewModels.Base.Interfaces.IDetailViewModel
+    /// <summary>
+    ///		ViewModel para ver el contenido de un <see cref="BookModel"/>
+    /// </summary>
+    public class ComicContentViewModel : BaseObservableObject, PluginsStudio.ViewModels.Base.Interfaces.IDetailViewModel
 	{
 		// Eventos públícos
 		public EventHandler<EventArguments.ZoomEventArgs> UpdateZoom;

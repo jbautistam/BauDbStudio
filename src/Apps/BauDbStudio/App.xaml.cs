@@ -86,7 +86,6 @@ public partial class App : Application
 		{
 			System.Diagnostics.Trace.TraceError($"Unhandled exception when log: {newException?.Message}");
 		}
-
 	}
 
 	/// <summary>

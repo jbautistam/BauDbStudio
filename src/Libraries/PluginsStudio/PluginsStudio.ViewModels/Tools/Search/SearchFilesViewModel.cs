@@ -5,13 +5,14 @@ using System.Threading.Tasks;
 
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
+using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.ListView;
 
 namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.Search
 {
-	/// <summary>
-	///		ViewModel para búsqueda de archivos
-	/// </summary>
-	public class SearchFilesViewModel : BaseObservableObject
+    /// <summary>
+    ///		ViewModel para búsqueda de archivos
+    /// </summary>
+    public class SearchFilesViewModel : BaseObservableObject
 	{
 		// Variables privadas
 		private string _textSearch;

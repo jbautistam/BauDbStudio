@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.BauMvvm.ViewModels;
+using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
+using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.ListView;
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.ComboItems;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Interfaces;
 using Bau.Libraries.DbScripts.Manager.Models;
 using Bau.Libraries.DbStudio.Models.Connections;
 using Bau.Libraries.DbStudio.ViewModels.Details.EtlProjects;
-using Microsoft.Extensions.Logging;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Details.Connections
 {
@@ -46,7 +48,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Connections
 		private CancellationToken _cancellationToken = CancellationToken.None;
 		private System.Timers.Timer _timer;
 		private System.Diagnostics.Stopwatch _stopwatch;
-		private BauMvvm.ViewModels.Forms.ControlItems.ControlGenericListViewModel<LastParameterFileViewModel> _lastParametersFileViewModel;
+		private ControlGenericListViewModel<LastParameterFileViewModel> _lastParametersFileViewModel;
 
 		public ConnectionExecutionViewModel(DbStudioViewModel solutionViewModel)
 		{
@@ -91,7 +93,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Connections
 				}
 				// Selecciona la conexión anterior
 				if (selectedConnection != null)
-					foreach (ComboItem item in Connections.Items)
+					foreach (ControlItemViewModel item in Connections.Items)
 						if ((item.Tag as ConnectionModel)?.GlobalId.Equals(selectedConnection?.GlobalId, StringComparison.CurrentCultureIgnoreCase) ?? false)
 							Connections.SelectedItem = item;
 				// Si no se ha seleccionado nada, selecciona el primer elemento
@@ -113,7 +115,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Connections
 																	}
 																 };
 				// Inicializa la lista de parámetros
-				LastParameterFiles = new BauMvvm.ViewModels.Forms.ControlItems.ControlGenericListViewModel<LastParameterFileViewModel>();
+				LastParameterFiles = new BauMvvm.ViewModels.Forms.ControlItems.ListView.ControlGenericListViewModel<LastParameterFileViewModel>();
 				LoadListParameterFiles();
 				LastParameterFiles.PropertyChanged += (sender, args) =>
 															{
@@ -593,7 +595,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Connections
 		/// <summary>
 		///		Ultimos archivos de parámetros
 		/// </summary>
-		public BauMvvm.ViewModels.Forms.ControlItems.ControlGenericListViewModel<LastParameterFileViewModel> LastParameterFiles
+		public ControlGenericListViewModel<LastParameterFileViewModel> LastParameterFiles
 		{
 			get { return _lastParametersFileViewModel; }
 			set { CheckObject(ref _lastParametersFileViewModel, value); }
