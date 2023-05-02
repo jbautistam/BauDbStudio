@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-
-using Bau.Libraries.ToDoManager.Application.Models;
+﻿using Bau.Libraries.ToDoManager.Application.Models;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
 
 namespace Bau.Libraries.ToDoManager.ViewModel.Reader.Explorer;
@@ -11,9 +6,9 @@ namespace Bau.Libraries.ToDoManager.ViewModel.Reader.Explorer;
 /// <summary>
 ///		Nodo del árbol <see cref="FolderModel"/>
 /// </summary>
-public class FolderNodeViewModel : BaseNodeViewModel
+public class FolderNodeViewModel : TodoBaseNodeViewModel
 {
-	public FolderNodeViewModel(PluginTreeViewModel trvTree, ToDoFileViewModel mainViewModel, FolderNodeViewModel parent, FolderModel folder) 
+	public FolderNodeViewModel(PluginTreeViewModel trvTree, ToDoFileViewModel mainViewModel, FolderNodeViewModel? parent, FolderModel folder) 
 				: base(trvTree, parent, folder.Name, false)
 	{
 		MainViewModel = mainViewModel;

@@ -1,6 +1,4 @@
-﻿using System;
-
-using Bau.Libraries.LibHelper.Extensors;
+﻿using Bau.Libraries.LibHelper.Extensors;
 
 namespace Bau.Libraries.ChessDataBase.ViewModels.Configuration
 {
@@ -12,7 +10,7 @@ namespace Bau.Libraries.ChessDataBase.ViewModels.Configuration
 		// Constantes privadas
 		private const string AppName = "ChessDataBase";
 		// Variables privadas
-		private string _pathBoardImages, _fileNameEngine, _pathEngine;
+		private string _pathBoardImages, _fileNameEngine;
 		private bool _showAnimations;
 
 		public ConfigurationViewModel(MainViewModel mainViewModel)

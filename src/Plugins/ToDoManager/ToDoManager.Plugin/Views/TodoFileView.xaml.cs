@@ -51,7 +51,7 @@ public partial class TodoFileView : UserControl
 	{
 		ToDoFileViewModel context = trvEntries.DataContext as ToDoFileViewModel;
 
-			if (context != null && (sender as TreeView).SelectedItem is ViewModel.Reader.Explorer.BaseNodeViewModel node)
+			if (context != null && (sender as TreeView).SelectedItem is ViewModel.Reader.Explorer.TodoBaseNodeViewModel node)
 				context.Tree.SelectedNode = node;
 	}
 

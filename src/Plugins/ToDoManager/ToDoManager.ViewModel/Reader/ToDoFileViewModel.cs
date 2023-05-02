@@ -177,7 +177,7 @@ public class ToDoFileViewModel : BaseObservableObject, PluginsStudio.ViewModels.
 	/// <summary>
 	///		Grupo seleccionado
 	/// </summary>
-	public GroupViewModel SelectedGroup 
+	public GroupViewModel? SelectedGroup 
 	{ 
 		get { return _selectedGroup; }
 		set

@@ -11,7 +11,7 @@ namespace Bau.Libraries.ToDoManager.ViewModel.Reader;
 public class GroupViewModel : BaseObservableObject
 {
 	// Variables privadas
-	private string _name, _description;
+	private string _name = string.Empty, _description = string.Empty;
 
 	public GroupViewModel(ToDoFileViewModel fileViewModel, GroupModel group)
 	{
@@ -22,7 +22,7 @@ public class GroupViewModel : BaseObservableObject
 		InitControl();
 		// Asigna el controlador de modificaciones
 		PropertyChanged += (sender, args) => {
-												if (args.PropertyName.Equals(nameof(IsUpdated), StringComparison.CurrentCultureIgnoreCase))
+												if ((args.PropertyName ?? string.Empty).Equals(nameof(IsUpdated), StringComparison.CurrentCultureIgnoreCase))
 													FileViewModel.IsUpdated = true;
 											 };
 	}

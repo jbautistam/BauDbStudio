@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 
 using Bau.Libraries.ToDoManager.ViewModel;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Models;
@@ -109,7 +108,7 @@ public class ToDoManagerPlugin : IPlugin
 	/// <summary>
 	///		Obtiene las opciones de menú asociadas a las extensiones de archivo y carpetas
 	/// </summary>
-	public List<FileOptionsModel> GetFilesOptions() => null;
+	public List<FileOptionsModel> GetFilesOptions() => new();
 
 	/// <summary>
 	///		Obtiene las extensiones de archivo asociadas al plugin

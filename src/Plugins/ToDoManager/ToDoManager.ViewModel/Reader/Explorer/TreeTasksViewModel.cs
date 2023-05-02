@@ -36,7 +36,7 @@ public class TreeTasksViewModel : PluginTreeViewModel
 	/// <summary>
 	///		Añade los nodos de una carpeta
 	/// </summary>
-	private void AddChildFolderNodes(FolderNodeViewModel parent, FolderModel folder)
+	private void AddChildFolderNodes(FolderNodeViewModel? parent, FolderModel folder)
 	{
 		// Ordena las carpetas
 		folder.Folders.SortByName();
@@ -154,7 +154,7 @@ public class TreeTasksViewModel : PluginTreeViewModel
 					// Crea la carpeta
 					folder = new FolderModel();
 					// La añade al padre
-					parent.Folders.Add(folder);
+					parent?.Folders.Add(folder);
 					// y abre el nodo
 					if (SelectedNode is not null)
 						SelectedNode.IsExpanded = true;

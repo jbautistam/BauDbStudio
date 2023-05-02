@@ -6,9 +6,9 @@ namespace Bau.Libraries.ToDoManager.ViewModel.Reader.Explorer;
 /// <summary>
 ///		Nodo del árbol <see cref="GroupModel"/>
 /// </summary>
-public class GroupNodeViewModel : BaseNodeViewModel
+public class GroupNodeViewModel : TodoBaseNodeViewModel
 {
-	public GroupNodeViewModel(PluginTreeViewModel trvTree, ToDoFileViewModel mainViewModel, FolderNodeViewModel parent, GroupModel group) 
+	public GroupNodeViewModel(PluginTreeViewModel trvTree, ToDoFileViewModel mainViewModel, FolderNodeViewModel? parent, GroupModel group) 
 				: base(trvTree, parent, group.Name, false)
 	{
 		MainViewModel = mainViewModel;
@@ -22,7 +22,7 @@ public class GroupNodeViewModel : BaseNodeViewModel
 	protected override async Task<List<PluginNodeViewModel>> GetChildNodesAsync(CancellationToken cancellationToken)
 	{
 		await Task.Delay(1);
-		return null;
+		return new();
 	}
 
 	/// <summary>
