@@ -10,7 +10,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs.TreeFolders
 	/// <summary>
 	///		ViewModel para un árbol de carpetas
 	/// </summary>
-	public class TreeFoldersViewModel : PluginsStudio.ViewModels.Base.Explorers.BaseTreeViewModel
+	public class TreeFoldersViewModel : PluginsStudio.ViewModels.Base.Explorers.PluginTreeViewModel
 	{ 
 		// Variables privadas
 		private bool _isTreeUpdated;

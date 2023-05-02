@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Bau.Libraries.BauMvvm.ViewModels;
+using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.Trees;
 using Bau.Libraries.LibReporting.Models.DataWarehouses;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
@@ -10,7 +11,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 	/// <summary>
 	///		ViewModel para el árbol de almacenes de datos
 	/// </summary>
-	public class TreeReportingViewModel : BaseTreeViewModel
+	public class TreeReportingViewModel : PluginTreeViewModel
 	{
 		/// <summary>
 		///		Tipo de nodo
@@ -315,12 +316,12 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 		/// <summary>
 		///		Obtiene el <see cref="DataWarehouseModel"/> seleccionado en el árbol buscando los padres
 		/// </summary>
-		private DataWarehouseModel GetSelectedDataWarehouse(BaseTreeNodeViewModel node)
+		private DataWarehouseModel GetSelectedDataWarehouse(ControlHierarchicalViewModel node)
 		{
 			if (node is NodeDataWarehouseViewModel nodeDataWarehouse)
 				return nodeDataWarehouse.DataWarehouse;
 			else if (node?.Parent != null)
-				return GetSelectedDataWarehouse(node.Parent as BaseTreeNodeViewModel);
+				return GetSelectedDataWarehouse(node.Parent);
 			else
 				return null;
 		}

@@ -32,7 +32,7 @@ namespace Bau.Libraries.DbStudio.Views.Reporting.Queries
 
 		private void trvExplorer_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
 		{ 
-			if (trvExplorer.DataContext is TreeQueryReportViewModel && (sender as TreeView)?.SelectedItem is BaseTreeNodeViewModel node)
+			if (trvExplorer.DataContext is TreeQueryReportViewModel && (sender as TreeView)?.SelectedItem is PluginNodeViewModel node)
 				ViewModel.SelectedNode = node;
 		}
 	}

@@ -9,9 +9,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 	/// <summary>
 	///		ViewModel de un nodo de informe
 	/// </summary>
-	public class NodeReportViewModel : BaseTreeNodeViewModel
+	public class NodeReportViewModel : PluginNodeViewModel
 	{
-		public NodeReportViewModel(BaseTreeViewModel trvTree, BaseTreeNodeViewModel parent, ReportModel report) : 
+		public NodeReportViewModel(PluginTreeViewModel trvTree, PluginNodeViewModel parent, ReportModel report) : 
 					base(trvTree, parent, report.Id, TreeReportingViewModel.NodeType.Report.ToString(), TreeReportingViewModel.IconType.Report.ToString(), 
 						 report, true, true, BauMvvm.ViewModels.Media.MvvmColor.Navy)
 		{

@@ -15,13 +15,13 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 	/// <summary>
 	///		ViewModel de un nodo raíz (raíz de origen de datos, informes...)
 	/// </summary>
-	public class NodeRootViewModel : BaseTreeNodeViewModel
+	public class NodeRootViewModel : PluginNodeViewModel
 	{
 		// Constantes privadas
 		private const string PhysicalSchema = "Default schema";
 		private const string LogicalSchema = "Logical schema";
 
-		public NodeRootViewModel(BaseTreeViewModel trvTree, ControlHierarchicalViewModel parent, TreeReportingViewModel.NodeType type, 
+		public NodeRootViewModel(PluginTreeViewModel trvTree, ControlHierarchicalViewModel parent, TreeReportingViewModel.NodeType type, 
 								 string text, bool lazyLoad = true, bool bold = true, MvvmColor color = null) :
 					base(trvTree, parent, text, type.ToString(), TreeReportingViewModel.IconType.Unknown.ToString(), type, lazyLoad, bold, color ?? MvvmColor.Red)
 		{

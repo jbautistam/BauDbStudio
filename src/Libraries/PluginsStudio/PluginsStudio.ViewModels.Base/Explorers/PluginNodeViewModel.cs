@@ -4,18 +4,15 @@ using Bau.Libraries.BauMvvm.ViewModels.Media;
 namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
 
 /// <summary>
-///		ViewModel base de un nodo del árbol de exploración
+///		ViewModel base de un nodo de un árbol
 /// </summary>
-public abstract class BaseTreeNodeViewModel : ControlHierarchicalViewModel
+public abstract class PluginNodeViewModel : ControlHierarchicalViewModel
 {	
-	public BaseTreeNodeViewModel(BaseTreeViewModel trvTree, ControlHierarchicalViewModel parent, string text, 
-								 string type, string icon, object tag, 
-								 bool lazyLoad, bool isBold = false, MvvmColor foreground = null) 
-						: base(parent, text, tag, lazyLoad, isBold, foreground)
+	protected PluginNodeViewModel(PluginTreeViewModel trvTree, ControlHierarchicalViewModel parent, string text, 
+								    string type, string icon, object tag, bool lazyLoad, bool isBold = false, MvvmColor foreground = null) 
+						: base(parent, text, type, icon, tag, lazyLoad, isBold, foreground)
 	{ 
 		TreeViewModel = trvTree;
-		Type = type;
-		Icon = icon;
 	}
 
 	/// <summary>
@@ -30,14 +27,6 @@ public abstract class BaseTreeNodeViewModel : ControlHierarchicalViewModel
 	///		Carga los nodos hijo
 	/// </summary>
 	protected abstract void LoadNodes();
-
-	/// <summary>
-	///		Comprueba si dos nodos son iguales
-	/// </summary>
-	public virtual bool IsEquals(BaseTreeNodeViewModel node)
-	{
-		return Text.Equals(node.Text, StringComparison.CurrentCultureIgnoreCase) && Icon.Equals(node.Icon, StringComparison.CurrentCultureIgnoreCase);
-	}
 
 	/// <summary>
 	///		Obtiene el calor pasado como parámetro o el color por defecto si no está activo
@@ -58,10 +47,5 @@ public abstract class BaseTreeNodeViewModel : ControlHierarchicalViewModel
 	/// <summary>
 	///		ViewModel del árbol
 	/// </summary>
-	public BaseTreeViewModel TreeViewModel { get; }
-
-	/// <summary>
-	///		Tipo de nodo
-	/// </summary>
-	public string Type { get; protected set; }
+	public PluginTreeViewModel TreeViewModel { get; }
 }

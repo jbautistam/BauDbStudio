@@ -10,9 +10,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 	/// <summary>
 	///		ViewModel de un nodo de informe
 	/// </summary>
-	public class NodeReportAdvancedViewModel : BaseTreeNodeViewModel
+	public class NodeReportAdvancedViewModel : PluginNodeViewModel
 	{
-		public NodeReportAdvancedViewModel(BaseTreeViewModel trvTree, BaseTreeNodeViewModel parent, ReportAdvancedModel report) : 
+		public NodeReportAdvancedViewModel(PluginTreeViewModel trvTree, PluginNodeViewModel parent, ReportAdvancedModel report) : 
 					base(trvTree, parent, report.Id, TreeReportingViewModel.NodeType.Report.ToString(), TreeReportingViewModel.IconType.Report.ToString(), 
 						 report, true, true, BauMvvm.ViewModels.Media.MvvmColor.Navy)
 		{

@@ -8,9 +8,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 	/// <summary>
 	///		ViewModel de un nodo de origen de datos
 	/// </summary>
-	public class NodeDataSourceViewModel : BaseTreeNodeViewModel
+	public class NodeDataSourceViewModel : PluginNodeViewModel
 	{
-		public NodeDataSourceViewModel(BaseTreeViewModel trvTree, BaseTreeNodeViewModel parent, BaseDataSourceModel dataSource) : 
+		public NodeDataSourceViewModel(PluginTreeViewModel trvTree, PluginNodeViewModel parent, BaseDataSourceModel dataSource) : 
 					base(trvTree, parent, dataSource.Id, TreeReportingViewModel.NodeType.DataSource.ToString(), TreeReportingViewModel.IconType.DataSourceTable.ToString(), 
 						 dataSource, true, true, BauMvvm.ViewModels.Media.MvvmColor.Navy)
 		{

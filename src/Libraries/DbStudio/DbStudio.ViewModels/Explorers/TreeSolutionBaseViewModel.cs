@@ -7,7 +7,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers
 	/// <summary>
 	///		ViewModel base para los árboles
 	/// </summary>
-	public abstract class TreeSolutionBaseViewModel : BaseTreeViewModel
+	public abstract class TreeSolutionBaseViewModel : PluginTreeViewModel
 	{
 		public TreeSolutionBaseViewModel(DbStudioViewModel solutionViewModel)
 		{

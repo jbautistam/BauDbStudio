@@ -8,7 +8,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 	/// <summary>
 	///		ViewModel de un nodo de tabla
 	/// </summary>
-	public class NodeTableViewModel : BaseTreeNodeViewModel
+	public class NodeTableViewModel : PluginNodeViewModel
 	{
 		public NodeTableViewModel(TreeSolutionBaseViewModel trvTree, NodeConnectionViewModel parent, ConnectionTableModel table, bool isTable) : 
 					base(trvTree, parent, table.FullName, TreeConnectionsViewModel.NodeType.Table.ToString(), 

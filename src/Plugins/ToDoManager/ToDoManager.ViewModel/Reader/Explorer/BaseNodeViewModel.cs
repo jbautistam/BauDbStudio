@@ -6,9 +6,9 @@ namespace Bau.Libraries.ToDoManager.ViewModel.Reader.Explorer;
 /// <summary>
 ///		Clase base para los nodos del árbol <see cref="TreeTasksViewModel"/>
 /// </summary>
-public abstract class BaseNodeViewModel : BaseTreeNodeAsyncViewModel
+public abstract class BaseNodeViewModel : PluginNodeAsyncViewModel
 {
-	public BaseNodeViewModel(BaseTreeViewModel trvTree, ControlHierarchicalViewModel parent, string text, bool lazyLoadChildren = true)
+	public BaseNodeViewModel(PluginTreeViewModel trvTree, ControlHierarchicalViewModel parent, string text, bool lazyLoadChildren = true)
 							: base(trvTree, parent, text, "Node", string.Empty, null, lazyLoadChildren)
 	{
 	}

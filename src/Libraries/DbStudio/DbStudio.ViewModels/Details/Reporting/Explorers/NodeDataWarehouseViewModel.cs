@@ -10,9 +10,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 	/// <summary>
 	///		ViewModel de un nodo de conexión
 	/// </summary>
-	public class NodeDataWarehouseViewModel : BaseTreeNodeViewModel
+	public class NodeDataWarehouseViewModel : PluginNodeViewModel
 	{
-		public NodeDataWarehouseViewModel(BaseTreeViewModel trvTree, ControlHierarchicalViewModel parent, DataWarehouseModel dataWarehouse) : 
+		public NodeDataWarehouseViewModel(PluginTreeViewModel trvTree, ControlHierarchicalViewModel parent, DataWarehouseModel dataWarehouse) : 
 					base(trvTree, parent, dataWarehouse.Name, TreeReportingViewModel.NodeType.DataWarehouse.ToString(), TreeReportingViewModel.IconType.DataWarehouse.ToString(), 
 						 dataWarehouse, true, true, MvvmColor.Red)
 		{

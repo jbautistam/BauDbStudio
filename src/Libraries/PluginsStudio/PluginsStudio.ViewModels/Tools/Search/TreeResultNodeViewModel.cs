@@ -16,7 +16,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.Search
 
 		public TreeResultNodeViewModel(TreeSearchFilesResultViewModel trvTree, ControlHierarchicalViewModel parent, 
 									   string text, string fileName, int line, string textFound, bool isBold, MvvmColor foreground) 
-						: base(parent, text, null, false, isBold, foreground)
+						: base(parent, text, string.Empty, string.Empty, null, false, isBold, foreground)
 		{ 
 			TreeViewModel = trvTree;
 			if (!string.IsNullOrWhiteSpace(fileName) && line < 1)

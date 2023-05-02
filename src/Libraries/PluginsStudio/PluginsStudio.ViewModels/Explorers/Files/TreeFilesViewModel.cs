@@ -8,7 +8,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files;
 /// <summary>
 ///		ViewModel de un árbol de archivos
 /// </summary>
-public class TreeFilesViewModel : BaseTreeViewModel
+public class TreeFilesViewModel : PluginTreeViewModel
 {
 	/// <summary>
 	///		Tipo de nodo

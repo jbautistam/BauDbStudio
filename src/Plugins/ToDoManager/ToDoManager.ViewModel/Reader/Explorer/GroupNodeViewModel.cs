@@ -8,7 +8,7 @@ namespace Bau.Libraries.ToDoManager.ViewModel.Reader.Explorer;
 /// </summary>
 public class GroupNodeViewModel : BaseNodeViewModel
 {
-	public GroupNodeViewModel(BaseTreeViewModel trvTree, ToDoFileViewModel mainViewModel, FolderNodeViewModel parent, GroupModel group) 
+	public GroupNodeViewModel(PluginTreeViewModel trvTree, ToDoFileViewModel mainViewModel, FolderNodeViewModel parent, GroupModel group) 
 				: base(trvTree, parent, group.Name, false)
 	{
 		MainViewModel = mainViewModel;
@@ -19,7 +19,7 @@ public class GroupNodeViewModel : BaseNodeViewModel
 	/// <summary>
 	///		Obtiene los nodos, en este caso sólo implementa la interface
 	/// </summary>
-	protected override async Task<List<BaseTreeNodeViewModel>> GetChildNodesAsync(CancellationToken cancellationToken)
+	protected override async Task<List<PluginNodeViewModel>> GetChildNodesAsync(CancellationToken cancellationToken)
 	{
 		await Task.Delay(1);
 		return null;

@@ -10,7 +10,7 @@ namespace Bau.Libraries.EbooksReader.ViewModel.Reader.Explorer
 	/// <summary>
 	///		Clase base para los nodos del árbol <see cref="TreeEbookViewModel"/>
 	/// </summary>
-	public class EbookNodeViewModel : BaseTreeNodeViewModel
+	public class EbookNodeViewModel : PluginNodeViewModel
 	{
 		public EbookNodeViewModel(TreeEbookViewModel trvTree, ControlHierarchicalViewModel parent, string text, TreeEbookViewModel.NodeType type, 
 								  string urlBase, object tag)

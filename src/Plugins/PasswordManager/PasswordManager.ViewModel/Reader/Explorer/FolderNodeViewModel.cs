@@ -13,7 +13,7 @@ namespace Bau.Libraries.PasswordManager.ViewModel.Reader.Explorer
 	/// </summary>
 	public class FolderNodeViewModel : BaseNodeEntryViewModel
 	{
-		public FolderNodeViewModel(BaseTreeViewModel trvTree, PasswordFileViewModel mainViewModel, FolderNodeViewModel parent, FolderModel folder) 
+		public FolderNodeViewModel(PluginTreeViewModel trvTree, PasswordFileViewModel mainViewModel, FolderNodeViewModel parent, FolderModel folder) 
 					: base(trvTree, parent, folder.Name, false)
 		{
 			MainViewModel = mainViewModel;
@@ -24,9 +24,9 @@ namespace Bau.Libraries.PasswordManager.ViewModel.Reader.Explorer
 		/// <summary>
 		///		Obtiene los nodos hijo
 		/// </summary>
-		protected override async Task<List<BaseTreeNodeViewModel>> GetChildNodesAsync(CancellationToken cancellationToken)
+		protected override async Task<List<PluginNodeViewModel>> GetChildNodesAsync(CancellationToken cancellationToken)
 		{
-			List<BaseTreeNodeViewModel> nodes = new();
+			List<PluginNodeViewModel> nodes = new();
 
 				// Evita el warning de async
 				await Task.Delay(1);

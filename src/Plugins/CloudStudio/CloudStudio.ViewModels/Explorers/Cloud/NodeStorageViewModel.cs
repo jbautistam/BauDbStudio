@@ -15,9 +15,9 @@ namespace Bau.Libraries.CloudStudio.ViewModels.Explorers.Cloud
 	/// <summary>
 	///		ViewModel de un nodo de storage
 	/// </summary>
-	public class NodeStorageViewModel : BaseTreeNodeAsyncViewModel
+	public class NodeStorageViewModel : PluginNodeAsyncViewModel
 	{
-		public NodeStorageViewModel(BaseTreeViewModel trvTree, ControlHierarchicalViewModel  parent, StorageModel storage) 
+		public NodeStorageViewModel(PluginTreeViewModel trvTree, ControlHierarchicalViewModel  parent, StorageModel storage) 
 					: base(trvTree, parent, storage.Name, TreeStorageViewModel.NodeType.Storage.ToString(), TreeStorageViewModel.IconType.Storage.ToString(), storage, true, true, MvvmColor.Navy)
 		{
 			Storage = storage;
@@ -26,9 +26,9 @@ namespace Bau.Libraries.CloudStudio.ViewModels.Explorers.Cloud
 		/// <summary>
 		///		Carga los contenedores
 		/// </summary>
-		protected override async Task<List<BaseTreeNodeViewModel>> GetChildNodesAsync(CancellationToken cancellationToken)
+		protected override async Task<List<PluginNodeViewModel>> GetChildNodesAsync(CancellationToken cancellationToken)
 		{
-			List<BaseTreeNodeViewModel> nodes = new List<BaseTreeNodeViewModel>();
+			List<PluginNodeViewModel> nodes = new List<PluginNodeViewModel>();
 
 				// Carga los contenedores
 				try
@@ -42,7 +42,7 @@ namespace Bau.Libraries.CloudStudio.ViewModels.Explorers.Cloud
 				}
 				catch (Exception exception)
 				{
-					nodes.Add(new NodeMessageViewModel(TreeViewModel, this, $"Error al cargar los contenedores. {exception.Message}", TreeStorageViewModel.IconType.Error.ToString()));
+					nodes.Add(new PluginNodeMessageViewModel(TreeViewModel, this, $"Error al cargar los contenedores. {exception.Message}", TreeStorageViewModel.IconType.Error.ToString()));
 					(TreeViewModel as TreeStorageViewModel).SolutionViewModel.MainController.MainWindowController
 						.Logger.LogError(exception, $"Error al cargar los contenedores. {exception.Message}");
 				}

@@ -13,7 +13,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs.TreeBlogs
 	/// </summary>
 	public class BlogNodeViewModel : BaseBlogsNodeViewModel
 	{
-		public BlogNodeViewModel(BaseTreeViewModel trvTree, BlogReaderViewModel mainViewModel, FolderNodeViewModel parent, BlogModel blog) 
+		public BlogNodeViewModel(PluginTreeViewModel trvTree, BlogReaderViewModel mainViewModel, FolderNodeViewModel parent, BlogModel blog) 
 					: base(trvTree, parent, blog.Id.ToString(), blog.Name, false)
 		{
 			MainViewModel = mainViewModel;
@@ -28,7 +28,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs.TreeBlogs
 		/// <summary>
 		///		Obtiene los nodos, en este caso sólo implementa la interface
 		/// </summary>
-		protected override async Task<List<BaseTreeNodeViewModel>> GetChildNodesAsync(CancellationToken cancellationToken)
+		protected override async Task<List<PluginNodeViewModel>> GetChildNodesAsync(CancellationToken cancellationToken)
 		{
 			await Task.Delay(1);
 			return null;

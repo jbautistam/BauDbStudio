@@ -7,7 +7,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files;
 /// <summary>
 ///		ViewModel de un nodo de carpeta de la solución
 /// </summary>
-public class NodeFolderRootViewModel : BaseTreeNodeViewModel
+public class NodeFolderRootViewModel : PluginNodeViewModel
 {
 	// Variables privadas
 	private string _fileName = string.Empty;
@@ -39,7 +39,7 @@ public class NodeFolderRootViewModel : BaseTreeNodeViewModel
 	/// <summary>
 	///		Comprueba si este nodo es igual a otro
 	/// </summary>
-	public override bool IsEquals(BaseTreeNodeViewModel node)
+	public override bool IsEquals(ControlHierarchicalViewModel node)
 	{
 		if (node is NodeFolderRootViewModel target)
 			return FileName.Equals(target.FileName, StringComparison.CurrentCultureIgnoreCase);

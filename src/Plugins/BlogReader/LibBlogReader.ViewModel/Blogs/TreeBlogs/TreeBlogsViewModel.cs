@@ -14,7 +14,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs.TreeBlogs
 	/// <summary>
 	///		ViewModel para el árbol de blogs
 	/// </summary>
-	public class TreeBlogsViewModel : PluginsStudio.ViewModels.Base.Explorers.BaseTreeViewModel
+	public class TreeBlogsViewModel : PluginsStudio.ViewModels.Base.Explorers.PluginTreeViewModel
 	{   
 		// Constantes privadas
 		private const string OpmlFilter = "Archivos OPML (*.opml)|*.opml|Todos los archivos (*.*)|*.*";

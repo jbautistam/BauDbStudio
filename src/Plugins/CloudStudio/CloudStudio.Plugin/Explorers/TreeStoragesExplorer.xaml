@@ -21,7 +21,7 @@
 				MouseDoubleClick="trvExplorer_MouseDoubleClick" MouseDown="trvExplorer_MouseDown" >
 			<TreeView.Resources>
 				<!-- Plantilla de los nodos -->
-				<HierarchicalDataTemplate DataType="{x:Type ViewModel:BaseTreeNodeViewModel}" ItemsSource="{Binding Children}">
+				<HierarchicalDataTemplate DataType="{x:Type ViewModel:PluginNodeViewModel}" ItemsSource="{Binding Children}">
 					<StackPanel Orientation="Horizontal">
 						<Image Width="20" Height="20" Margin="3,0" Source="{Binding Path=Icon,Converter={StaticResource TreeIconConverter}}"
 							 ToolTip="{Binding Path=ToolTipText}" />

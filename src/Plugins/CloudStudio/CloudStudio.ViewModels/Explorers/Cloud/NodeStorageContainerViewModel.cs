@@ -16,9 +16,9 @@ namespace Bau.Libraries.CloudStudio.ViewModels.Explorers.Cloud
 	/// <summary>
 	///		ViewModel de un nodo de contenedor del storage
 	/// </summary>
-	public class NodeStorageContainerViewModel : BaseTreeNodeAsyncViewModel
+	public class NodeStorageContainerViewModel : PluginNodeAsyncViewModel
 	{
-		public NodeStorageContainerViewModel(BaseTreeViewModel trvTree, ControlHierarchicalViewModel parent, StorageModel storage, 
+		public NodeStorageContainerViewModel(PluginTreeViewModel trvTree, ControlHierarchicalViewModel parent, StorageModel storage, 
 											 string container) 
 					: base(trvTree, parent, container, TreeStorageViewModel.NodeType.StorageContainer.ToString(), TreeStorageViewModel.IconType.Folder.ToString(), container, true, 
 						   true, MvvmColor.Green)
@@ -30,9 +30,9 @@ namespace Bau.Libraries.CloudStudio.ViewModels.Explorers.Cloud
 		/// <summary>
 		///		Obtiene los nodos hijo de un contenedor
 		/// </summary>
-		protected override async Task<List<BaseTreeNodeViewModel>> GetChildNodesAsync(CancellationToken cancellationToken)
+		protected override async Task<List<PluginNodeViewModel>> GetChildNodesAsync(CancellationToken cancellationToken)
 		{
-			List<BaseTreeNodeViewModel> nodes = new List<BaseTreeNodeViewModel>();
+			List<PluginNodeViewModel> nodes = new List<PluginNodeViewModel>();
 
 				// Carga los blobs
 				try
@@ -45,7 +45,7 @@ namespace Bau.Libraries.CloudStudio.ViewModels.Explorers.Cloud
 				}
 				catch (Exception exception)
 				{
-					nodes.Add(new NodeMessageViewModel(TreeViewModel, this, $"Error al cargar los archivos del contenedor. {exception.Message}"));
+					nodes.Add(new PluginNodeMessageViewModel(TreeViewModel, this, $"Error al cargar los archivos del contenedor. {exception.Message}"));
 					(TreeViewModel as TreeStorageViewModel).SolutionViewModel.MainController
 						.Logger.LogError(exception, $"Error al cargar los archivos del contenedor. {exception.Message}");
 				}
@@ -56,9 +56,9 @@ namespace Bau.Libraries.CloudStudio.ViewModels.Explorers.Cloud
 		/// <summary>
 		///		Obtiene los blobs de un contenedor
 		/// </summary>
-		private List<BaseTreeNodeViewModel> GetBlobsFromContainer(List<BlobNodeModel> tree)
+		private List<PluginNodeViewModel> GetBlobsFromContainer(List<BlobNodeModel> tree)
 		{
-			List<BaseTreeNodeViewModel> nodes = new List<BaseTreeNodeViewModel>();
+			List<PluginNodeViewModel> nodes = new List<PluginNodeViewModel>();
 
 				// Transforma el árbol de blob en un árbol de nodos
 				nodes.AddRange(GetTreeNodes(tree, Parent));
@@ -69,21 +69,21 @@ namespace Bau.Libraries.CloudStudio.ViewModels.Explorers.Cloud
 		/// <summary>
 		///		Añade un nodo al árbol de nodos reproduciendo la estructura de directorios
 		/// </summary>
-		private List<BaseTreeNodeViewModel> GetTreeNodes(List<BlobNodeModel> blobs, ControlHierarchicalViewModel  parent)
+		private List<PluginNodeViewModel> GetTreeNodes(List<BlobNodeModel> blobs, ControlHierarchicalViewModel  parent)
 		{
-			List<BaseTreeNodeViewModel> nodes = new List<BaseTreeNodeViewModel>();
+			List<PluginNodeViewModel> nodes = new List<PluginNodeViewModel>();
 
 				// Añade los nodos
 				foreach (BlobNodeModel blob in blobs)
 				{
-					BaseTreeNodeViewModel node = new NodeStorageContainerFileViewModel(TreeViewModel, parent, Storage, blob, blob.Children.Count > 0);
+					PluginNodeViewModel node = new NodeStorageContainerFileViewModel(TreeViewModel, parent, Storage, blob, blob.Children.Count > 0);
 
 						// Añade los nodos hijo
 						if (blob.Children.Count > 0)
 						{
-							List<BaseTreeNodeViewModel> children = GetTreeNodes(blob.Children, node);
+							List<PluginNodeViewModel> children = GetTreeNodes(blob.Children, node);
 
-								foreach (BaseTreeNodeViewModel child in children)
+								foreach (PluginNodeViewModel child in children)
 									node.Children.Add(child);
 						}
 						// Añade el nodo a la lista

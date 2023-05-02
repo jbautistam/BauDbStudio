@@ -146,12 +146,12 @@ public partial class TreeFilesExplorer : UserControl
 	private void trvExplorer_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
 	{ 
 		if (trvExplorer.DataContext is TreeFilesViewModel)
-			ViewModel.SelectedNode = (sender as TreeView)?.SelectedItem as BaseTreeNodeViewModel;
+			ViewModel.SelectedNode = (sender as TreeView)?.SelectedItem as PluginNodeViewModel;
 	}
 
 	private void trvExplorer_MouseDoubleClick(object sender, MouseButtonEventArgs e)
 	{ 
-		if (trvExplorer.DataContext is TreeFilesViewModel && (sender as TreeView)?.SelectedItem is BaseTreeNodeViewModel node)
+		if (trvExplorer.DataContext is TreeFilesViewModel && (sender as TreeView)?.SelectedItem is PluginNodeViewModel node)
 		{
 			ViewModel.SelectedNode = node;
 			ViewModel.OpenCommand.Execute(null);

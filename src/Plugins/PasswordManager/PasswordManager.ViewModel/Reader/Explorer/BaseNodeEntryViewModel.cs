@@ -8,9 +8,9 @@ namespace Bau.Libraries.PasswordManager.ViewModel.Reader.Explorer;
 /// <summary>
 ///		Clase base para los nodos del árbol <see cref="TreePasswordsViewModel"/>
 /// </summary>
-public abstract class BaseNodeEntryViewModel : BaseTreeNodeAsyncViewModel
+public abstract class BaseNodeEntryViewModel : PluginNodeAsyncViewModel
 {
-	public BaseNodeEntryViewModel(BaseTreeViewModel trvTree, ControlHierarchicalViewModel parent, string text, bool lazyLoadChildren = true)
+	public BaseNodeEntryViewModel(PluginTreeViewModel trvTree, ControlHierarchicalViewModel parent, string text, bool lazyLoadChildren = true)
 							: base(trvTree, parent, text, "Node", string.Empty, null, lazyLoadChildren)
 	{
 	}

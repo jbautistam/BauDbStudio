@@ -9,9 +9,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 	/// <summary>
 	///		ViewModel de un nodo de dimensión
 	/// </summary>
-	public class NodeDimensionViewModel : BaseTreeNodeViewModel
+	public class NodeDimensionViewModel : PluginNodeViewModel
 	{
-		public NodeDimensionViewModel(BaseTreeViewModel trvTree, BaseTreeNodeViewModel parent, DimensionModel dimension) : 
+		public NodeDimensionViewModel(PluginTreeViewModel trvTree, PluginNodeViewModel parent, DimensionModel dimension) : 
 					base(trvTree, parent, dimension.Id, TreeReportingViewModel.NodeType.Dimension.ToString(), TreeReportingViewModel.IconType.Dimension.ToString(), 
 						 dimension, true, true, BauMvvm.ViewModels.Media.MvvmColor.Navy)
 		{

@@ -10,7 +10,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 	/// <summary>
 	///		ViewModel de un nodo raíz (raíz de conexiones, raíz de distribución, ...)
 	/// </summary>
-	public class NodeRootViewModel : BaseTreeNodeViewModel
+	public class NodeRootViewModel : PluginNodeViewModel
 	{
 		public NodeRootViewModel(TreeSolutionBaseViewModel trvTree, ControlHierarchicalViewModel parent, TreeConnectionsViewModel.NodeType type, string text, bool lazyLoad = true) :
 					base(trvTree, parent, text, type.ToString(), TreeConnectionsViewModel.IconType.Connection.ToString(), type, lazyLoad, true, MvvmColor.Red)
@@ -61,7 +61,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 		private void CheckChildNodes()
 		{
 			if (NodeType == TreeConnectionsViewModel.NodeType.SchemaRoot)
-				foreach (BaseTreeNodeViewModel node in Children)
+				foreach (PluginNodeViewModel node in Children)
 					node.IsChecked = IsChecked;
 		}
 

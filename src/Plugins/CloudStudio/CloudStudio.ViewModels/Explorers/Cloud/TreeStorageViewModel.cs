@@ -13,7 +13,7 @@ namespace Bau.Libraries.CloudStudio.ViewModels.Explorers.Cloud
 	/// <summary>
 	///		ViewModel de un árbol de storage
 	/// </summary>
-	public class TreeStorageViewModel : BaseTreeViewModel
+	public class TreeStorageViewModel : PluginTreeViewModel
 	{	
 		/// <summary>
 		///		Tipo de nodo

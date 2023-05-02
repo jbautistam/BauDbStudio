@@ -10,13 +10,13 @@ namespace Bau.Libraries.CloudStudio.ViewModels.Explorers.Cloud
 	/// <summary>
 	///		ViewModel de un nodo de archivo de un contenedor
 	/// </summary>
-	public class NodeStorageContainerFileViewModel : BaseTreeNodeViewModel
+	public class NodeStorageContainerFileViewModel : PluginNodeViewModel
 	{
 		// Variables privadas
 		private string _fileName;
 		private bool _isFolder;
 
-		public NodeStorageContainerFileViewModel(BaseTreeViewModel trvTree, ControlHierarchicalViewModel parent, 
+		public NodeStorageContainerFileViewModel(PluginTreeViewModel trvTree, ControlHierarchicalViewModel parent, 
 												 StorageModel storage, BlobNodeModel blob, bool isFolder)
 					: base(trvTree, parent, blob.Name, TreeStorageViewModel.NodeType.File.ToString(), 
 						   (isFolder ? TreeStorageViewModel.IconType.Folder : TreeStorageViewModel.IconType.File).ToString(), 

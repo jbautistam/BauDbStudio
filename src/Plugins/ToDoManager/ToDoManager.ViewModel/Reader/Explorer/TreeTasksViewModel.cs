@@ -2,16 +2,17 @@
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.BauMvvm.ViewModels.Controllers;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
+using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.Trees;
 
 namespace Bau.Libraries.ToDoManager.ViewModel.Reader.Explorer;
 
 /// <summary>
 ///		ViewModel para el árbol de tareas
 /// </summary>
-public class TreeTasksViewModel : BaseTreeViewModel
+public class TreeTasksViewModel : PluginTreeViewModel
 {   
 	// Variables privadas
-	private BaseTreeNodeViewModel _selectedNode;
+	private ControlHierarchicalViewModel _selectedNode;
 
 	public TreeTasksViewModel(ToDoFileViewModel mainViewModel)
 	{
@@ -280,7 +281,7 @@ public class TreeTasksViewModel : BaseTreeViewModel
 	/// <summary>
 	///		Actualiza el nodo seleccionado
 	/// </summary>
-	public override BaseTreeNodeViewModel SelectedNode
+	public override ControlHierarchicalViewModel SelectedNode
 	{
 		get { return _selectedNode; }
 		set

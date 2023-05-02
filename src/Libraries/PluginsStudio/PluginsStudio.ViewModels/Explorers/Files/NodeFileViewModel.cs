@@ -8,7 +8,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files;
 /// <summary>
 ///		ViewModel de un nodo de archivo
 /// </summary>
-public class NodeFileViewModel : BaseTreeNodeAsyncViewModel
+public class NodeFileViewModel : PluginNodeAsyncViewModel
 {
 	// Variables privadas
 	private string _fileName = string.Empty;
@@ -33,9 +33,9 @@ public class NodeFileViewModel : BaseTreeNodeAsyncViewModel
 	/// <summary>
 	///		Obtiene la lista de nodos hijo
 	/// </summary>
-	protected override async Task<List<BaseTreeNodeViewModel>> GetChildNodesAsync(CancellationToken cancellationToken)
+	protected override async Task<List<PluginNodeViewModel>> GetChildNodesAsync(CancellationToken cancellationToken)
 	{
-		List<BaseTreeNodeViewModel> nodes = new();
+		List<PluginNodeViewModel> nodes = new();
 
 			// Evita las advertencias
 			await Task.Delay(1);
@@ -56,7 +56,7 @@ public class NodeFileViewModel : BaseTreeNodeAsyncViewModel
 	/// <summary>
 	///		Comprueba si dos nodos son iguales
 	/// </summary>
-	public override bool IsEquals(BaseTreeNodeViewModel node)
+	public override bool IsEquals(ControlHierarchicalViewModel node)
 	{
 		if (node is NodeFileViewModel target)
 			return FileName.Equals(target.FileName, StringComparison.CurrentCultureIgnoreCase);

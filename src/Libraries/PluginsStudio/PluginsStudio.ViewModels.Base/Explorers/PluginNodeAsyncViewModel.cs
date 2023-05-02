@@ -6,11 +6,10 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
 /// <summary>
 ///		ViewModel base de un nodo del árbol de exploración de una solución con carga asíncrona de nodos
 /// </summary>
-public abstract class BaseTreeNodeAsyncViewModel : BaseTreeNodeViewModel
+public abstract class PluginNodeAsyncViewModel : PluginNodeViewModel
 {	
-	public BaseTreeNodeAsyncViewModel(BaseTreeViewModel trvTree, ControlHierarchicalViewModel parent, string text, 
-									  string type, string icon, object tag, 
-									  bool lazyLoad, bool isBold = false, MvvmColor foreground = null) 
+	protected PluginNodeAsyncViewModel(PluginTreeViewModel trvTree, ControlHierarchicalViewModel parent, string text, 
+										 string type, string icon, object tag, bool lazyLoad, bool isBold = false, MvvmColor foreground = null) 
 						: base(trvTree, parent, text, type, icon, tag, lazyLoad, isBold, foreground)
 	{ 
 	}
@@ -32,7 +31,7 @@ public abstract class BaseTreeNodeAsyncViewModel : BaseTreeNodeViewModel
 	private async Task LoadNodesAsync(CancellationToken cancellationToken)
 	{
 		object state = new object();
-		List<BaseTreeNodeViewModel> nodes = await GetChildNodesAsync(cancellationToken);
+		List<PluginNodeViewModel> nodes = await GetChildNodesAsync(cancellationToken);
 
 			// Carga los nodos en el árbol
 			//? _contexUi mantiene el contexto de sincronización que creó el ViewModel (que debería ser la interface de usuario)
@@ -46,7 +45,7 @@ public abstract class BaseTreeNodeAsyncViewModel : BaseTreeNodeViewModel
 													Children.Clear();
 													// Añade la lista de contenedores
 													if (nodes != null)
-														foreach (BaseTreeNodeViewModel node in nodes)
+														foreach (PluginNodeViewModel node in nodes)
 															Children.Add(node);
 												}
 												catch (Exception exception)
@@ -60,10 +59,10 @@ public abstract class BaseTreeNodeAsyncViewModel : BaseTreeNodeViewModel
 	/// <summary>
 	///		Obtiene el nodo de carga
 	/// </summary>
-	protected virtual BaseTreeNodeViewModel GetNodeLoading() => new NodeMessageViewModel(TreeViewModel, this, "Loading ...");
+	protected virtual PluginNodeViewModel GetNodeLoading() => new PluginNodeMessageViewModel(TreeViewModel, this, "Loading ...");
 
 	/// <summary>
 	///		Obtiene la lista de nodos hijo
 	/// </summary>
-	protected abstract Task<List<BaseTreeNodeViewModel>> GetChildNodesAsync(CancellationToken cancellationToken);
+	protected abstract Task<List<PluginNodeViewModel>> GetChildNodesAsync(CancellationToken cancellationToken);
 }

@@ -14,7 +14,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 	/// <summary>
 	///		ViewModel de un nodo de conexión
 	/// </summary>
-	public class NodeConnectionViewModel : BaseTreeNodeAsyncViewModel
+	public class NodeConnectionViewModel : PluginNodeAsyncViewModel
 	{
 		public NodeConnectionViewModel(TreeSolutionBaseViewModel trvTree, ControlHierarchicalViewModel parent, ConnectionModel connection) : 
 					base(trvTree, parent, connection.Name, TreeConnectionsViewModel.NodeType.Connection.ToString(), TreeConnectionsViewModel.IconType.Connection.ToString(), 
@@ -26,9 +26,9 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 		/// <summary>
 		///		Carga los nodos de forma asíncrona
 		/// </summary>
-		protected override async Task<List<BaseTreeNodeViewModel>> GetChildNodesAsync(CancellationToken cancellationToken)
+		protected override async Task<List<PluginNodeViewModel>> GetChildNodesAsync(CancellationToken cancellationToken)
 		{
-			List<BaseTreeNodeViewModel> nodes = new List<BaseTreeNodeViewModel>();
+			List<PluginNodeViewModel> nodes = new List<PluginNodeViewModel>();
 
 				// Carga el esquema de las conexiones
 				try
@@ -54,7 +54,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 				}
 				catch (Exception exception)
 				{
-					nodes.Add(new NodeMessageViewModel(TreeViewModel, this, "No se puede cargar el esquema de la conexión", TreeConnectionsViewModel.IconType.Error.ToString()));
+					nodes.Add(new PluginNodeMessageViewModel(TreeViewModel, this, "No se puede cargar el esquema de la conexión", TreeConnectionsViewModel.IconType.Error.ToString()));
 					(TreeViewModel as TreeSolutionBaseViewModel).SolutionViewModel.MainController.MainWindowController.Logger
 							.LogError(exception, "Error when load schema", exception);
 				}

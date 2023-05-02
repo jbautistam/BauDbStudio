@@ -13,7 +13,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 	/// <summary>
 	///		ViewModel de un nodo de columna
 	/// </summary>
-	public class NodeColumnViewModel : BaseTreeNodeViewModel
+	public class NodeColumnViewModel : PluginNodeViewModel
 	{
 		// Tipo de nodo
 		public enum NodeColumnType
@@ -44,7 +44,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 		private ComboViewModel _comboAggregationTypes;
 		private ListReportColumnFilterViewModel _filterWhere, _filterHaving;
 
-		public NodeColumnViewModel(BaseTreeViewModel trvTree, ControlHierarchicalViewModel parent, NodeColumnType columnNodeType, string text, DataSourceColumnModel column) :
+		public NodeColumnViewModel(PluginTreeViewModel trvTree, ControlHierarchicalViewModel parent, NodeColumnType columnNodeType, string text, DataSourceColumnModel column) :
 					base(trvTree, parent, text, Explorers.TreeReportingViewModel.NodeType.Field.ToString(), 
 						 Explorers.TreeReportingViewModel.IconType.DataWarehouse.ToString(), column, false, false, MvvmColor.Black)
 		{

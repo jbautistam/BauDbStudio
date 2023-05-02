@@ -3,9 +3,9 @@
 /// <summary>
 ///		ViewModel de un mensaje sobre el árbol
 /// </summary>
-public class NodeMessageViewModel : BaseTreeNodeViewModel
+public class PluginNodeMessageViewModel : PluginNodeViewModel
 {
-	public NodeMessageViewModel(BaseTreeViewModel trvTree, BaseTreeNodeViewModel parent, string message, string type = "Message", string icon = "Loading") : 
+	public PluginNodeMessageViewModel(PluginTreeViewModel trvTree, PluginNodeViewModel parent, string message, string type = "Message", string icon = "Loading") : 
 				base(trvTree, parent, message, type, icon, null, false, false, BauMvvm.ViewModels.Media.MvvmColor.DarkGreen)
 	{
 	}

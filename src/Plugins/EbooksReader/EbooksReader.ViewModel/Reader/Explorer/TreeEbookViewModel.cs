@@ -13,7 +13,7 @@ namespace Bau.Libraries.EbooksReader.ViewModel.Reader.Explorer
 	/// <summary>
 	///		ViewModel para el árbol de páginas de un libro
 	/// </summary>
-	public class TreeEbookViewModel : PluginsStudio.ViewModels.Base.Explorers.BaseTreeViewModel
+	public class TreeEbookViewModel : PluginsStudio.ViewModels.Base.Explorers.PluginTreeViewModel
 	{   
 		// Enumerados públicos
 		/// <summary>Tipo de nodo</summary>

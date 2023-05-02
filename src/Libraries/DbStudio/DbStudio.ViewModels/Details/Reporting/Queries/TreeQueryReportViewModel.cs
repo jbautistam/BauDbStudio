@@ -17,7 +17,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 	/// <summary>
 	///		ViewModel para el árbol con los campos a consultar en un informe
 	/// </summary>
-	public class TreeQueryReportViewModel : BaseTreeViewModel
+	public class TreeQueryReportViewModel : PluginTreeViewModel
 	{
 		// Variables privadas
 		private int _sortIndex;

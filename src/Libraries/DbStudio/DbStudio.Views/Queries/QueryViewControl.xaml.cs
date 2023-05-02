@@ -85,7 +85,7 @@ namespace Bau.Libraries.DbStudio.Views.Queries
 		{
 			object data = _dragDropController.GetDragDropFileNode(e.Data);
 
-				if (data is PluginsStudio.ViewModels.Base.Explorers.BaseTreeNodeViewModel baseNodeViewModel)
+				if (data is PluginsStudio.ViewModels.Base.Explorers.PluginNodeViewModel baseNodeViewModel)
 				{
 					string content = baseNodeViewModel.GetTextForEditor(e.KeyStates == System.Windows.DragDropKeyStates.ShiftKey);
 

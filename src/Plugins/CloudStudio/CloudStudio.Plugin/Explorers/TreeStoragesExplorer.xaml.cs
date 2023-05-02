@@ -26,13 +26,13 @@ namespace Bau.Libraries.CloudStudio.Plugin.Explorers
 
 		private void trvExplorer_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
 		{ 
-			if (trvExplorer.DataContext is TreeStorageViewModel && (sender as TreeView)?.SelectedItem is BaseTreeNodeViewModel node)
+			if (trvExplorer.DataContext is TreeStorageViewModel && (sender as TreeView)?.SelectedItem is PluginNodeViewModel node)
 				ViewModel.SelectedNode = node;
 		}
 
 		private void trvExplorer_MouseDoubleClick(object sender, MouseButtonEventArgs e)
 		{ 
-			if (trvExplorer.DataContext is TreeStorageViewModel && (sender as TreeView)?.SelectedItem is BaseTreeNodeViewModel node)
+			if (trvExplorer.DataContext is TreeStorageViewModel && (sender as TreeView)?.SelectedItem is PluginNodeViewModel node)
 			{
 				ViewModel.SelectedNode = node;
 				ViewModel.OpenCommand.Execute(null);
