@@ -65,7 +65,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs.TreeBlogs
 					IsBold = true;
 				}
 				// Calcula el número de elementos no leidos de los hijos
-				foreach (BauMvvm.ViewModels.Forms.ControlItems.IHierarchicalViewModel node in Children)
+				foreach (BauMvvm.ViewModels.Forms.ControlItems.Trees.ControlHierarchicalViewModel node in Children)
 					if (node is BaseBlogsNodeViewModel child)
 						child.ComputeNumberNotRead();
 		}

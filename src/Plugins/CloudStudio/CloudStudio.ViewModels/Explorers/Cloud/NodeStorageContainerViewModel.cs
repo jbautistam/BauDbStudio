@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
+using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.Trees;
 using Bau.Libraries.BauMvvm.ViewModels.Media;
 using Bau.Libraries.CloudStudio.Models.Cloud;
 using Bau.Libraries.LibBlobStorage;
@@ -18,7 +18,7 @@ namespace Bau.Libraries.CloudStudio.ViewModels.Explorers.Cloud
 	/// </summary>
 	public class NodeStorageContainerViewModel : BaseTreeNodeAsyncViewModel
 	{
-		public NodeStorageContainerViewModel(BaseTreeViewModel trvTree, IHierarchicalViewModel parent, StorageModel storage, 
+		public NodeStorageContainerViewModel(BaseTreeViewModel trvTree, ControlHierarchicalViewModel parent, StorageModel storage, 
 											 string container) 
 					: base(trvTree, parent, container, TreeStorageViewModel.NodeType.StorageContainer.ToString(), TreeStorageViewModel.IconType.Folder.ToString(), container, true, 
 						   true, MvvmColor.Green)
@@ -69,7 +69,7 @@ namespace Bau.Libraries.CloudStudio.ViewModels.Explorers.Cloud
 		/// <summary>
 		///		Añade un nodo al árbol de nodos reproduciendo la estructura de directorios
 		/// </summary>
-		private List<BaseTreeNodeViewModel> GetTreeNodes(List<BlobNodeModel> blobs, IHierarchicalViewModel parent)
+		private List<BaseTreeNodeViewModel> GetTreeNodes(List<BlobNodeModel> blobs, ControlHierarchicalViewModel  parent)
 		{
 			List<BaseTreeNodeViewModel> nodes = new List<BaseTreeNodeViewModel>();
 

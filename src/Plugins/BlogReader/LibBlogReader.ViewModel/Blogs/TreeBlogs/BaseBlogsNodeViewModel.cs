@@ -2,7 +2,7 @@
 
 using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
-using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
+using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.Trees;
 using Bau.Libraries.LibBlogReader.Model;
 
 namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs.TreeBlogs
@@ -12,7 +12,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs.TreeBlogs
 	/// </summary>
 	public abstract class BaseBlogsNodeViewModel : BaseTreeNodeAsyncViewModel
 	{
-		public BaseBlogsNodeViewModel(BaseTreeViewModel trvTree, IHierarchicalViewModel parent, string nodeID, string text, bool lazyLoadChildren = true)
+		public BaseBlogsNodeViewModel(BaseTreeViewModel trvTree, ControlHierarchicalViewModel parent, string nodeID, string text, bool lazyLoadChildren = true)
 								: base(trvTree, parent, text, TreeBlogsViewModel.NodeType.Unknown.ToString(), TreeBlogsViewModel.NodeType.Unknown.ToString(), null, lazyLoadChildren)
 		{
 			NodeId = nodeID;

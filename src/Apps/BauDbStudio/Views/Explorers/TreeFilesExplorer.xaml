@@ -20,7 +20,7 @@
 				Drop="trvExplorer_Drop" AllowDrop="True" ContextMenuOpening="trvExplorer_ContextMenuOpening">
 			<TreeView.Resources>
 				<!-- Plantilla de los nodos -->
-				<HierarchicalDataTemplate DataType="{x:Type ViewModelFiles:NodeFileLoadingViewModel}" ItemsSource="{Binding Children}">
+				<HierarchicalDataTemplate DataType="{x:Type ViewModel:NodeMessageViewModel}" ItemsSource="{Binding Children}">
 					<StackPanel Orientation="Horizontal">
 						<Image Width="24" Height="24" Margin="3,0" ToolTip="{Binding Path=ToolTipText}" Source="/Resources/Images/Loading.png" />
 						<TextBlock Text="{Binding Text}" FontWeight="{Binding IsBold,Converter={StaticResource BoolToFontWeightConverter}}"

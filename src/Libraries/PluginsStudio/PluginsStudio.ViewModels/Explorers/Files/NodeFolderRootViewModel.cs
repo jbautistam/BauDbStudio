@@ -1,4 +1,4 @@
-﻿using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
+﻿using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.Trees;
 using Bau.Libraries.BauMvvm.ViewModels.Media;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
 
@@ -12,7 +12,7 @@ public class NodeFolderRootViewModel : BaseTreeNodeViewModel
 	// Variables privadas
 	private string _fileName = string.Empty;
 
-	public NodeFolderRootViewModel(TreeFilesViewModel? trvTree, IHierarchicalViewModel? parent, string path) 
+	public NodeFolderRootViewModel(TreeFilesViewModel? trvTree, ControlHierarchicalViewModel? parent, string path) 
 				: base(trvTree, parent, path, TreeFilesViewModel.NodeType.FilesRoot.ToString(), string.Empty, path, true, true, MvvmColor.Red)
 	{
 		FileName = path;
@@ -34,6 +34,17 @@ public class NodeFolderRootViewModel : BaseTreeNodeViewModel
 				foreach (string fileName in Directory.EnumerateFiles(path))
 					AddNode(fileName, false);
 			}
+	}
+
+	/// <summary>
+	///		Comprueba si este nodo es igual a otro
+	/// </summary>
+	public override bool IsEquals(BaseTreeNodeViewModel node)
+	{
+		if (node is NodeFolderRootViewModel target)
+			return FileName.Equals(target.FileName, StringComparison.CurrentCultureIgnoreCase);
+		else
+			return base.IsEquals(node);
 	}
 
 	/// <summary>

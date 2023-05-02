@@ -7,7 +7,7 @@ using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.LibBlogReader.Model;
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.BauMvvm.ViewModels.Controllers;
-using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
+using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.Trees;
 
 namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs.TreeBlogs
 {
@@ -170,7 +170,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs.TreeBlogs
 		/// <summary>
 		///		Convierte la colección de <see cref="Children"/> a <see cref="ObservableCollection{T}"/>
 		/// </summary>
-		private List<BaseBlogsNodeViewModel> ConvertNodes(ObservableCollection<IHierarchicalViewModel> nodes) 
+		private List<BaseBlogsNodeViewModel> ConvertNodes(ObservableCollection<ControlHierarchicalViewModel> nodes) 
 		{
 			List<BaseBlogsNodeViewModel> converted = new List<BaseBlogsNodeViewModel>();
 
@@ -215,7 +215,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs.TreeBlogs
 			List<int> ids = new List<int>();
 
 				// Obtiene los nodos
-				foreach (IHierarchicalViewModel node in nodes)
+				foreach (ControlHierarchicalViewModel node in nodes)
 					if (node is BlogNodeViewModel && node.IsChecked)
 						ids.Add((node as BlogNodeViewModel).Blog.Id ?? 0);
 					else

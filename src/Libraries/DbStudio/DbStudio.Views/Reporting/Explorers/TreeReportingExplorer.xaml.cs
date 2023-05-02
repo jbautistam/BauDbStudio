@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
+using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.Trees;
 using Bau.Libraries.BauMvvm.Views.Wpf.Forms.Trees;
 using Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
@@ -68,7 +68,7 @@ namespace Bau.Libraries.DbStudio.Views.Reporting.Explorers
 						pntMouse.Y < trvExplorer.ActualHeight - 50 &&
 							(Math.Abs(vctDifference.X) > SystemParameters.MinimumHorizontalDragDistance ||
 							 Math.Abs(vctDifference.Y) > SystemParameters.MinimumVerticalDragDistance))
-						_dragDropController.InitDragOperation(trvExplorer, trvExplorer.SelectedItem as IHierarchicalViewModel);
+						_dragDropController.InitDragOperation(trvExplorer, trvExplorer.SelectedItem as ControlHierarchicalViewModel);
 			}
 		}
 	}

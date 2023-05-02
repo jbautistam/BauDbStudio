@@ -1,40 +1,37 @@
-﻿using System;
+﻿namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Interfaces;
 
-namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Interfaces
+/// <summary>
+///		Interface para los viewModel de detalles
+/// </summary>
+public interface IDetailViewModel
 {
 	/// <summary>
-	///		Interface para los viewModel de detalles
+	///		Obtiene el mensaje que se debe mostrar al cerrar la ventana
 	/// </summary>
-	public interface IDetailViewModel
-	{
-		/// <summary>
-		///		Obtiene el mensaje que se debe mostrar al cerrar la ventana
-		/// </summary>
-		string GetSaveAndCloseMessage();
+	string GetSaveAndCloseMessage();
 
-		/// <summary>
-		///		Graba los datos
-		/// </summary>
-		void SaveDetails(bool newName);
+	/// <summary>
+	///		Graba los datos
+	/// </summary>
+	void SaveDetails(bool newName);
 
-		/// <summary>
-		///		Cierra la ventana
-		/// </summary>
-		void Close();
+	/// <summary>
+	///		Cierra la ventana
+	/// </summary>
+	void Close();
 
-		/// <summary>
-		///		Título de la ficha
-		/// </summary>
-		string Header { get; }
+	/// <summary>
+	///		Título de la ficha
+	/// </summary>
+	string Header { get; }
 
-		/// <summary>
-		///		Id de la ficha
-		/// </summary>
-		string TabId { get; }
+	/// <summary>
+	///		Id de la ficha
+	/// </summary>
+	string TabId { get; }
 
-		/// <summary>
-		///		Indica si se ha modificado el ViewModel
-		/// </summary>
-		bool IsUpdated { get; set; }
-	}
+	/// <summary>
+	///		Indica si se ha modificado el ViewModel
+	/// </summary>
+	bool IsUpdated { get; set; }
 }

@@ -2,7 +2,7 @@
 
 using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
-using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
+using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.Trees;
 using Bau.Libraries.LibEBooks.Models.eBook;
 
 namespace Bau.Libraries.EbooksReader.ViewModel.Reader.Explorer
@@ -12,7 +12,7 @@ namespace Bau.Libraries.EbooksReader.ViewModel.Reader.Explorer
 	/// </summary>
 	public class EbookNodeViewModel : BaseTreeNodeViewModel
 	{
-		public EbookNodeViewModel(TreeEbookViewModel trvTree, IHierarchicalViewModel parent, string text, TreeEbookViewModel.NodeType type, 
+		public EbookNodeViewModel(TreeEbookViewModel trvTree, ControlHierarchicalViewModel parent, string text, TreeEbookViewModel.NodeType type, 
 								  string urlBase, object tag)
 								: base(trvTree, parent, text, type.ToString(), string.Empty, tag, false, type == TreeEbookViewModel.NodeType.Package)
 		{

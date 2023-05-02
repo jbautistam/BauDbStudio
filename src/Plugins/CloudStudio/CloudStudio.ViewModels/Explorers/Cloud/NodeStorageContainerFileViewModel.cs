@@ -1,6 +1,6 @@
 ﻿using System;
 
-using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
+using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.Trees;
 using Bau.Libraries.BauMvvm.ViewModels.Media;
 using Bau.Libraries.CloudStudio.Models.Cloud;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
@@ -16,7 +16,7 @@ namespace Bau.Libraries.CloudStudio.ViewModels.Explorers.Cloud
 		private string _fileName;
 		private bool _isFolder;
 
-		public NodeStorageContainerFileViewModel(BaseTreeViewModel trvTree, IHierarchicalViewModel parent, 
+		public NodeStorageContainerFileViewModel(BaseTreeViewModel trvTree, ControlHierarchicalViewModel parent, 
 												 StorageModel storage, BlobNodeModel blob, bool isFolder)
 					: base(trvTree, parent, blob.Name, TreeStorageViewModel.NodeType.File.ToString(), 
 						   (isFolder ? TreeStorageViewModel.IconType.Folder : TreeStorageViewModel.IconType.File).ToString(), 

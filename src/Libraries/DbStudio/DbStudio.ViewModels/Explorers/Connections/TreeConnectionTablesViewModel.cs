@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
+using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.Trees;
 using Bau.Libraries.DbStudio.Models.Connections;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections

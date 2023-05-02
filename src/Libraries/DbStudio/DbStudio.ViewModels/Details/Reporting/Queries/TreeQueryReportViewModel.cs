@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 using Bau.Libraries.LibReporting.Models.Base;
-using Bau.Libraries.LibDataStructures.Base;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.Dimensions;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.Relations;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.Reports;
 using Bau.Libraries.LibReporting.Requests.Models;
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
+using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.Trees;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
-using Bau.Libraries.DbScripts.Manager.Models;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 {
@@ -255,14 +254,14 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 		/// <summary>
 		///		Obtiene las columnas de las dimensiones solicitadas
 		/// </summary>
-		private List<DimensionRequestModel> GetRequestDimensions(ObservableCollection<IHierarchicalViewModel> nodes)
+		private List<DimensionRequestModel> GetRequestDimensions(ObservableCollection<ControlHierarchicalViewModel> nodes)
 		{
 			List<DimensionRequestModel> dimensions = new List<DimensionRequestModel>();
 
 				// Obtiene las columnas seleccionadas de los nodos
-				foreach (IHierarchicalViewModel baseNodeRoot in nodes)
+				foreach (ControlHierarchicalViewModel baseNodeRoot in nodes)
 					if (baseNodeRoot is NodeColumnViewModel root && root.ColumnNodeType == NodeColumnViewModel.NodeColumnType.DimensionsRoot)
-						foreach (IHierarchicalViewModel baseNodeDimension in root.Children)
+						foreach (ControlHierarchicalViewModel baseNodeDimension in root.Children)
 							if (baseNodeDimension is NodeColumnViewModel nodeDimension &&
 								nodeDimension.ColumnNodeType == NodeColumnViewModel.NodeColumnType.Dimension)
 							{
@@ -291,7 +290,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 												DimensionId = root.DimensionId,
 											};
 					// Añade las columnas y dimensiones hija
-					foreach (IHierarchicalViewModel baseChild in root.Children)
+					foreach (ControlHierarchicalViewModel baseChild in root.Children)
 						if (baseChild is NodeColumnViewModel node && MustIncludeAtQuery(node))
 								switch (node.ColumnNodeType)
 								{
@@ -322,14 +321,14 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 		/// <summary>
 		///		Obtiene las columnas de las expresiones solicitadas
 		/// </summary>
-		private List<ExpressionRequestModel> GetRequestExpressions(ObservableCollection<IHierarchicalViewModel> nodes)
+		private List<ExpressionRequestModel> GetRequestExpressions(ObservableCollection<ControlHierarchicalViewModel> nodes)
 		{
 			List<ExpressionRequestModel> expressions = new List<ExpressionRequestModel>();
 
 				// Obtiene las columnas seleccionadas de los nodos
-				foreach (IHierarchicalViewModel baseNodeRoot in nodes)
+				foreach (ControlHierarchicalViewModel baseNodeRoot in nodes)
 					if (baseNodeRoot is NodeColumnViewModel root && root.ColumnNodeType == NodeColumnViewModel.NodeColumnType.ExpressionsRoot)
-						foreach (IHierarchicalViewModel baseNodeExpression in root.Children)
+						foreach (ControlHierarchicalViewModel baseNodeExpression in root.Children)
 							if (baseNodeExpression is NodeColumnViewModel nodeNameExpression)
 								switch (nodeNameExpression.ColumnNodeType)
 								{
@@ -341,7 +340,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 													// Asigna el identificador del origen de datos
 													expression.ReportDataSourceId = nodeNameExpression.DataSourceId;
 													// Carga las columnas
-													foreach (IHierarchicalViewModel baseExpression in nodeNameExpression.Children)
+													foreach (ControlHierarchicalViewModel baseExpression in nodeNameExpression.Children)
 														if (baseExpression is NodeColumnViewModel nodeExpression && MustIncludeAtQuery(nodeExpression))
 														{
 															ExpressionColumnRequestModel column = new ExpressionColumnRequestModel
@@ -383,11 +382,11 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 		/// <summary>
 		///		Obtiene los parámetros seleccionados
 		/// </summary>
-		private void AddRequestParameters(ObservableCollection<IHierarchicalViewModel> nodes, Dictionary<string, object> parameters)
+		private void AddRequestParameters(ObservableCollection<ControlHierarchicalViewModel> nodes, Dictionary<string, object> parameters)
 		{
-			foreach (IHierarchicalViewModel baseNodeRoot in nodes)
+			foreach (ControlHierarchicalViewModel baseNodeRoot in nodes)
 				if (baseNodeRoot is NodeColumnViewModel root && root.ColumnNodeType == NodeColumnViewModel.NodeColumnType.ParametersRoot)
-					foreach (IHierarchicalViewModel baseNodeParameter in root.Children)
+					foreach (ControlHierarchicalViewModel baseNodeParameter in root.Children)
 						if (baseNodeParameter is NodeColumnViewModel nodeParameter && 
 								nodeParameter.ColumnNodeType == NodeColumnViewModel.NodeColumnType.ParameterField)
 							parameters.Add(nodeParameter.Text, nodeParameter.FilterWhere.GetDefaultValue());
@@ -403,7 +402,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 
 				// Si no se debe incluir, se comprueba si se debe incluir alguno de los nodos hijo
 				if (!mustInclude)
-					foreach (IHierarchicalViewModel baseNode in node.Children)
+					foreach (ControlHierarchicalViewModel baseNode in node.Children)
 						if (!mustInclude && baseNode is NodeColumnViewModel child && MustIncludeAtQuery(child))
 							mustInclude = true;
 				// Devuelve el valor que indica si se debe incluir

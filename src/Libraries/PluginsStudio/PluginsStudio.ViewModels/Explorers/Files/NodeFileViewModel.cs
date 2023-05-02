@@ -1,5 +1,5 @@
 ﻿using Bau.Libraries.LibHelper.Extensors;
-using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
+using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.Trees;
 using Bau.Libraries.BauMvvm.ViewModels.Media;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
 
@@ -14,7 +14,7 @@ public class NodeFileViewModel : BaseTreeNodeAsyncViewModel
 	private string _fileName = string.Empty;
 	private bool _isFolder;
 
-	public NodeFileViewModel(TreeFilesViewModel? trvTree, IHierarchicalViewModel? parent, string fileName, bool isFolder) 
+	public NodeFileViewModel(TreeFilesViewModel? trvTree, ControlHierarchicalViewModel? parent, string fileName, bool isFolder) 
 				: base(trvTree, parent, string.Empty, TreeFilesViewModel.NodeType.File.ToString(), 
 					   string.Empty, fileName, isFolder, isFolder,
 					   isFolder ? MvvmColor.Navy : MvvmColor.Black)
@@ -40,13 +40,13 @@ public class NodeFileViewModel : BaseTreeNodeAsyncViewModel
 			// Evita las advertencias
 			await Task.Delay(1);
 			// Carga los nodos
-			if (!string.IsNullOrWhiteSpace(FileName) && System.IO.Directory.Exists(FileName))
+			if (!string.IsNullOrWhiteSpace(FileName) && Directory.Exists(FileName))
 			{
 				// Carga los directorios
-				foreach (string fileName in System.IO.Directory.EnumerateDirectories(FileName))
+				foreach (string fileName in Directory.EnumerateDirectories(FileName))
 					nodes.Add(GetNode(fileName, true));
 				// Carga los archivos
-				foreach (string fileName in System.IO.Directory.EnumerateFiles(FileName))
+				foreach (string fileName in Directory.EnumerateFiles(FileName))
 					nodes.Add(GetNode(fileName, false));
 			}
 			// Devuelve la lista
@@ -54,17 +54,20 @@ public class NodeFileViewModel : BaseTreeNodeAsyncViewModel
 	}
 
 	/// <summary>
-	///		Obtiene el texto que se debe lanzar al editor
+	///		Comprueba si dos nodos son iguales
 	/// </summary>
-	public override string GetTextForEditor(bool shiftPressed)
+	public override bool IsEquals(BaseTreeNodeViewModel node)
 	{
-		return FileName;
+		if (node is NodeFileViewModel target)
+			return FileName.Equals(target.FileName, StringComparison.CurrentCultureIgnoreCase);
+		else
+			return base.IsEquals(node);
 	}
 
 	/// <summary>
-	///		Obtiene el nodo de carga
+	///		Obtiene el texto que se debe lanzar al editor
 	/// </summary>
-	protected override BaseTreeNodeViewModel GetNodeLoading() => new NodeFileLoadingViewModel(TreeViewModel, this, "Loading ...");
+	public override string GetTextForEditor(bool shiftPressed) => FileName;
 
 	/// <summary>
 	///		Obtiene un nodo

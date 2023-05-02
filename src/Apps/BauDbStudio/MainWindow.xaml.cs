@@ -368,7 +368,7 @@ public partial class MainWindow : Window
 	/// <summary>
 	///		Crea una opción de menú
 	/// </summary>
-	private MenuItem CreateMenu(string text, string icon, bool isCheckable, System.Windows.Input.ICommand command, object? tag = null)
+	private MenuItem CreateMenu(string text, string icon, bool isCheckable, System.Windows.Input.ICommand? command, object? tag = null)
 	{
 		MenuItem mnuNewItem = new MenuItem();
 

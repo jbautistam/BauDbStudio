@@ -1,6 +1,6 @@
 ﻿using System;
 
-using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
+using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.Trees;
 using Bau.Libraries.BauMvvm.ViewModels.Media;
 using Bau.Libraries.LibReporting.Models.DataWarehouses;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
@@ -12,7 +12,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 	/// </summary>
 	public class NodeDataWarehouseViewModel : BaseTreeNodeViewModel
 	{
-		public NodeDataWarehouseViewModel(BaseTreeViewModel trvTree, IHierarchicalViewModel parent, DataWarehouseModel dataWarehouse) : 
+		public NodeDataWarehouseViewModel(BaseTreeViewModel trvTree, ControlHierarchicalViewModel parent, DataWarehouseModel dataWarehouse) : 
 					base(trvTree, parent, dataWarehouse.Name, TreeReportingViewModel.NodeType.DataWarehouse.ToString(), TreeReportingViewModel.IconType.DataWarehouse.ToString(), 
 						 dataWarehouse, true, true, MvvmColor.Red)
 		{

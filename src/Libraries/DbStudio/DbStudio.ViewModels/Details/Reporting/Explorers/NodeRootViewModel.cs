@@ -6,7 +6,7 @@ using Bau.Libraries.LibReporting.Models.DataWarehouses;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.Dimensions;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.Reports;
-using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
+using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.Trees;
 using Bau.Libraries.BauMvvm.ViewModels.Media;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
 
@@ -21,7 +21,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 		private const string PhysicalSchema = "Default schema";
 		private const string LogicalSchema = "Logical schema";
 
-		public NodeRootViewModel(BaseTreeViewModel trvTree, IHierarchicalViewModel parent, TreeReportingViewModel.NodeType type, 
+		public NodeRootViewModel(BaseTreeViewModel trvTree, ControlHierarchicalViewModel parent, TreeReportingViewModel.NodeType type, 
 								 string text, bool lazyLoad = true, bool bold = true, MvvmColor color = null) :
 					base(trvTree, parent, text, type.ToString(), TreeReportingViewModel.IconType.Unknown.ToString(), type, lazyLoad, bold, color ?? MvvmColor.Red)
 		{
@@ -175,7 +175,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers
 		/// </summary>
 		private DataWarehouseModel GetDataWarehouse()
 		{
-			IHierarchicalViewModel nodeParent = Parent;
+			ControlHierarchicalViewModel nodeParent = Parent;
 
 				// Sube por el árbol hasta encontrar un nodo que contenga un dataWarehouse
 				while (nodeParent is not null)

@@ -3,7 +3,7 @@
 using Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets;
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.BauMvvm.ViewModels.Media;
-using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
+using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.Trees;
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.ComboItems;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
 using Bau.Libraries.LibReporting.Requests.Models;
@@ -44,7 +44,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries
 		private ComboViewModel _comboAggregationTypes;
 		private ListReportColumnFilterViewModel _filterWhere, _filterHaving;
 
-		public NodeColumnViewModel(BaseTreeViewModel trvTree, IHierarchicalViewModel parent, NodeColumnType columnNodeType, string text, DataSourceColumnModel column) :
+		public NodeColumnViewModel(BaseTreeViewModel trvTree, ControlHierarchicalViewModel parent, NodeColumnType columnNodeType, string text, DataSourceColumnModel column) :
 					base(trvTree, parent, text, Explorers.TreeReportingViewModel.NodeType.Field.ToString(), 
 						 Explorers.TreeReportingViewModel.IconType.DataWarehouse.ToString(), column, false, false, MvvmColor.Black)
 		{

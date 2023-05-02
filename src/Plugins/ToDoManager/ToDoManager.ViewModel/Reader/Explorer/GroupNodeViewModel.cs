@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-
-using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
+﻿using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
 using Bau.Libraries.ToDoManager.Application.Models;
 
 namespace Bau.Libraries.ToDoManager.ViewModel.Reader.Explorer;

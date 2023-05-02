@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
+using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.Trees;
 using Bau.Libraries.BauMvvm.ViewModels.Media;
 using Bau.Libraries.DbStudio.Models.Connections;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
@@ -16,7 +16,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 	/// </summary>
 	public class NodeConnectionViewModel : BaseTreeNodeAsyncViewModel
 	{
-		public NodeConnectionViewModel(TreeSolutionBaseViewModel trvTree, IHierarchicalViewModel parent, ConnectionModel connection) : 
+		public NodeConnectionViewModel(TreeSolutionBaseViewModel trvTree, ControlHierarchicalViewModel parent, ConnectionModel connection) : 
 					base(trvTree, parent, connection.Name, TreeConnectionsViewModel.NodeType.Connection.ToString(), TreeConnectionsViewModel.IconType.Connection.ToString(), 
 						 connection, true, true, MvvmColor.Red)
 		{

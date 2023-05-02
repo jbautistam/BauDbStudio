@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
-using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
+using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.Trees;
 using Bau.Libraries.BauMvvm.ViewModels.Media;
 using Bau.Libraries.CloudStudio.Models.Cloud;
 using Bau.Libraries.LibBlobStorage;
@@ -17,7 +17,7 @@ namespace Bau.Libraries.CloudStudio.ViewModels.Explorers.Cloud
 	/// </summary>
 	public class NodeStorageViewModel : BaseTreeNodeAsyncViewModel
 	{
-		public NodeStorageViewModel(BaseTreeViewModel trvTree, IHierarchicalViewModel parent, StorageModel storage) 
+		public NodeStorageViewModel(BaseTreeViewModel trvTree, ControlHierarchicalViewModel  parent, StorageModel storage) 
 					: base(trvTree, parent, storage.Name, TreeStorageViewModel.NodeType.Storage.ToString(), TreeStorageViewModel.IconType.Storage.ToString(), storage, true, true, MvvmColor.Navy)
 		{
 			Storage = storage;

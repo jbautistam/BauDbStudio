@@ -1,7 +1,7 @@
 ﻿using System;
 
 using Bau.Libraries.LibHelper.Extensors;
-using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
+using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.Trees;
 using Bau.Libraries.BauMvvm.ViewModels.Media;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
 
@@ -12,7 +12,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections
 	/// </summary>
 	public class NodeRootViewModel : BaseTreeNodeViewModel
 	{
-		public NodeRootViewModel(TreeSolutionBaseViewModel trvTree, IHierarchicalViewModel parent, TreeConnectionsViewModel.NodeType type, string text, bool lazyLoad = true) :
+		public NodeRootViewModel(TreeSolutionBaseViewModel trvTree, ControlHierarchicalViewModel parent, TreeConnectionsViewModel.NodeType type, string text, bool lazyLoad = true) :
 					base(trvTree, parent, text, type.ToString(), TreeConnectionsViewModel.IconType.Connection.ToString(), type, lazyLoad, true, MvvmColor.Red)
 		{
 			switch (type)
