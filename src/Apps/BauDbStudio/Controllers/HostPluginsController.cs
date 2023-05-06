@@ -123,7 +123,7 @@ public class HostPluginsController : Libraries.PluginsStudio.ViewModels.Base.Con
 
 			// Añade los archivos de plugin
 			foreach (FileAssignedModel file in DbStudioViewManager.PluginsManager.GetFilesAssigned())
-				if (file.CanCreate && files.Any(item => item.FileExtension.Equals(file.FileExtension, StringComparison.CurrentCultureIgnoreCase)))
+				if (file.CanCreate && !files.Any(item => item.FileExtension.Equals(file.FileExtension, StringComparison.CurrentCultureIgnoreCase)))
 					files.Add(file);
 			// Ordena los archivos
 			files.Sort((first, second) => $"{first.Name}{first.FileExtension}".CompareTo($"{second.Name}{second.FileExtension}"));
