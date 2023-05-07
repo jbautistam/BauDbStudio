@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AppUpdater Version = "1.0.35">
+	<Url>https://github.com/jbautistam/BauDbStudio/releases/tag/1.0.33/BauDbStudio.zip</Url>
+	<UrlChangeLog></UrlChangeLog>
+	<ChangeLog>
+		Información de la versión
+	</ChangeLog>
+</AppUpdater>
