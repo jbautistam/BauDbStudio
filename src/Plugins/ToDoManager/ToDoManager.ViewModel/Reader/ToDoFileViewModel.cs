@@ -84,7 +84,7 @@ public class ToDoFileViewModel : BaseObservableObject, PluginsStudio.ViewModels.
 		{
 			// Actualiza la entrada con los datos de la pantalla
 			if (IsSelectedGroup)
-				SelectedGroup.UpdateGroup();
+				SelectedGroup?.UpdateGroup();
 			// Graba el archivo
 			ToDoManager.Save(FileName);
 			// Actualiza el árbol

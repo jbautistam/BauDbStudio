@@ -5,12 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bau.Libraries.DbStudio.Views.EtlProjects"
         xmlns:Files="clr-namespace:Bau.Controls.Files;assembly=BauControls"
+		xmlns:ConverterLocal="clr-namespace:Bau.Libraries.DbStudio.Views.Converters"
 		xmlns:ViewModel="clr-namespace:Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;assembly=PluginsStudio.ViewModels.Base"
 		x:Class="Bau.Libraries.DbStudio.Views.EtlProjects.CreateValidationScriptView"
         mc:Ignorable="d"
         Title="Creación de scripts de validación" Height="650" Width="1200" ResizeMode="NoResize" ShowInTaskbar="False"
 		xmlns:Behaviors="clr-namespace:Bau.Libraries.BauMvvm.Views.Converters;assembly=BauMvvm.Views"
 		Behaviors:FocusBehavior.FocusFirst="true">
+		<!--ViewModel="clr-namespace:Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;assembly=PluginsStudio.ViewModels.Base"-->
+	<Window.Resources>
+		<ConverterLocal:TreeConnectionIconConverter x:Key="TreeIconConverter"/>
+	</Window.Resources>
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
@@ -45,18 +50,17 @@
 			</Grid>
 		</GroupBox>
 		<GroupBox Grid.Row="1" Grid.Column="0" Header="Tablas a comparar">
-			<TreeView x:Name="trvExplorer" BorderThickness="0" 
-						  ItemsSource="{Binding Path=TreeConnection.Children}" >
+			<TreeView x:Name="trvExplorer" BorderThickness="0" ItemsSource="{Binding Path=TreeConnection.Children}" >
 				<TreeView.Resources>
 					<!-- Plantilla de los nodos -->
 					<HierarchicalDataTemplate DataType="{x:Type ViewModel:PluginNodeViewModel}" ItemsSource="{Binding Children}">
 						<StackPanel Orientation="Horizontal">
 							<CheckBox IsChecked="{Binding Path=IsChecked}" />
-							<Image Width="20" Height="20" Margin="3,0" Source="{Binding Path=Icon,Converter={StaticResource FileIconConverter}}"
+							<Image Width="20" Height="20" Margin="3,0" Source="{Binding Path=Icon,Converter={StaticResource TreeIconConverter}}"
 										ToolTip="{Binding Path=ToolTipText}" />
 							<TextBlock Text="{Binding Text}" FontWeight="{Binding IsBold,Converter={StaticResource BoolToFontWeightConverter}}"
 										   Foreground="{Binding Path=Foreground,Converter={StaticResource MVVMColorConverter}}" 
-										   ToolTip="{Binding Path=ToolTipText }" VerticalAlignment="Center" />
+										   VerticalAlignment="Center" />
 						</StackPanel>
 					</HierarchicalDataTemplate>
 				</TreeView.Resources>

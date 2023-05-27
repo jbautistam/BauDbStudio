@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-
-using Bau.Libraries.LibDataStructures.Collections;
+﻿using Bau.Libraries.LibDataStructures.Collections;
 using Bau.Libraries.DbStudio.Models.Connections;
 using Bau.Libraries.LibDbProviders.Base;
 
@@ -41,7 +36,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 						// Genera el archivo de creación de la base de datos
 						generator.WriteFileCreateConnection(Options.DataBaseValidateVariable, Options.MountPathVariable, "00. Create database.sql");
 						// Carga el esquema
-						await Manager.DbScriptsManager.LoadSchemaAsync(Options.Connection, cancellationToken);
+						await Manager.DbScriptsManager.LoadSchemaAsync(Options.Connection, false, cancellationToken);
 						// Prepara los archivos de validación de tablas
 						foreach ((string schema, List<ConnectionTableModel> tables) in schemaTables.Enumerate())
 							if (!cancellationToken.IsCancellationRequested)
@@ -320,6 +315,6 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 		/// <summary>
 		///		Errores de la generación
 		/// </summary>
-		public List<string> Errors { get; } = new List<string>();
+		public List<string> Errors { get; } = new();
 	}
 }

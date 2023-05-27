@@ -99,7 +99,8 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 			_blogEntries.Clear();
 			// Carga las entradas de los blogs seleccionados
 			foreach (BlogModel blog in Blogs)
-				_blogEntries.AddRange(MainViewModel.BlogManager.LoadEntries(blog));
+				if (blog.Enabled || MainViewModel.ConfigurationViewModel.ShowNewsDisabledBlogs)
+					_blogEntries.AddRange(MainViewModel.BlogManager.LoadEntries(blog));
 			// Ordena las entradas
 			_blogEntries.Sort((first, second) => {
 													if (first.Blog.Name.Equals(second.Blog.Name, StringComparison.CurrentCultureIgnoreCase))

@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="Bau.Libraries.DbStudio.Views.Configuration.ctlConfiguration"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="203" d:DesignWidth="590">
+	<GroupBox Header="Arbol de conexiones">
+		<Grid>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
+			<CheckBox Content="Mostrar tablas de sistema" IsChecked="{Binding Path=SeeSystemTables}" 
+					Grid.Row="0" Grid.Column="1" Margin = "5" VerticalAlignment="Center" />
+		</Grid>
+	</GroupBox>
+</UserControl>

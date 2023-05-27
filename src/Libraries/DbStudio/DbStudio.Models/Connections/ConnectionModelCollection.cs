@@ -1,11 +1,8 @@
-﻿using System;
+﻿namespace Bau.Libraries.DbStudio.Models.Connections;
 
-namespace Bau.Libraries.DbStudio.Models.Connections
+/// <summary>
+///		Colección de <see cref="ConnectionModel"/>
+/// </summary>
+public class ConnectionModelCollection : LibDataStructures.Base.BaseExtendedModelCollection<ConnectionModel>
 {
-	/// <summary>
-	///		Colección de <see cref="ConnectionModel"/>
-	/// </summary>
-	public class ConnectionModelCollection : LibDataStructures.Base.BaseExtendedModelCollection<ConnectionModel>
-	{
-	}
 }

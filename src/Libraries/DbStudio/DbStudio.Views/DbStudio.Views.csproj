@@ -3,7 +3,9 @@
   <PropertyGroup>
     <TargetFramework>net7.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
-    <RootNamespace>Bau.Libraries.DbStudio.Views</RootNamespace>
+    <RootNamespace>Bau.Libraries.$(MSBuildProjectName)</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -37,6 +39,7 @@
     <None Remove="Resources\Images\Filter.png" />
     <None Remove="Resources\Images\FilterSelected.png" />
     <None Remove="Resources\Images\FolderNode.png" />
+    <None Remove="Resources\Images\Import.png" />
     <None Remove="Resources\Images\Key.png" />
     <None Remove="Resources\Images\Loading.png" />
     <None Remove="Resources\Images\NoSort.png" />
@@ -91,6 +94,7 @@
     <Resource Include="Resources\Images\Filter.png" />
     <Resource Include="Resources\Images\FilterSelected.png" />
     <Resource Include="Resources\Images\FolderNode.png" />
+    <Resource Include="Resources\Images\Import.png" />
     <Resource Include="Resources\Images\Key.png" />
     <Resource Include="Resources\Images\Loading.png" />
     <Resource Include="Resources\Images\NoSort.png" />

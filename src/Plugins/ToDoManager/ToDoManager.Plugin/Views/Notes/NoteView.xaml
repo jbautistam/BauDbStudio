@@ -61,7 +61,7 @@
 			<Image Width="32" Height="32" Source="/ToDoManager.Plugin;component/Resources/Close.png" />
 		</Button>
 		<TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Text="{Binding Path=Content,UpdateSourceTrigger=PropertyChanged}" Margin="5"
-			TextAlignment="Left" VerticalContentAlignment="Top"
+			TextAlignment="Left" VerticalContentAlignment="Top" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
 			VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MaxLines="200" AcceptsReturn="True" AcceptsTab="True"/>
 	</Grid>
 </Window>

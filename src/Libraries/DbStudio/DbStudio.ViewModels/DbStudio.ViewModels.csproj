@@ -3,7 +3,9 @@
   <PropertyGroup>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
 	  <TargetFramework>net7.0</TargetFramework>
-    <RootNamespace>Bau.Libraries.DbStudio.ViewModels</RootNamespace>
+    <RootNamespace>Bau.Libraries.$(MSBuildProjectName)</RootNamespace>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -12,19 +14,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Configuration\**" />
     <Compile Remove="Controllers\EventArguments\**" />
     <Compile Remove="Details\Files\ScriptsManager\**" />
     <Compile Remove="Details\Files\Structured\**" />
     <Compile Remove="Explorers\Files\**" />
     <Compile Remove="Explorers\Files\**" />
-    <EmbeddedResource Remove="Configuration\**" />
     <EmbeddedResource Remove="Controllers\EventArguments\**" />
     <EmbeddedResource Remove="Details\Files\ScriptsManager\**" />
     <EmbeddedResource Remove="Details\Files\Structured\**" />
     <EmbeddedResource Remove="Explorers\Files\**" />
     <EmbeddedResource Remove="Explorers\Files\**" />
-    <None Remove="Configuration\**" />
     <None Remove="Controllers\EventArguments\**" />
     <None Remove="Details\Files\ScriptsManager\**" />
     <None Remove="Details\Files\Structured\**" />

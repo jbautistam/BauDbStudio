@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.LibDbProviders.Base;
+using Bau.Libraries.LibDbProviders.Base.Extensors;
 
 namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 {

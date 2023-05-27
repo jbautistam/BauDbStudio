@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bau.Libraries.StructuredFilesStudio.Views.Files"
 		x:Class="Bau.Libraries.StructuredFilesStudio.Views.Files.CsvFilePropertiesView"
-		xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="Datos del archivo" Height="550" Width="900" ResizeMode="NoResize" ShowInTaskbar="False"
 		xmlns:Behaviors="clr-namespace:Bau.Libraries.BauMvvm.Views.Converters;assembly=BauMvvm.Views"

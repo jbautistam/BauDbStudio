@@ -24,9 +24,9 @@ namespace Bau.Libraries.DbScripts.Manager
 		/// <summary>
 		///		Carga el esquema de una conexión
 		/// </summary>
-		public async Task LoadSchemaAsync(ConnectionModel connection, CancellationToken cancellationToken)
+		public async Task LoadSchemaAsync(ConnectionModel connection, bool includeSystemTables, CancellationToken cancellationToken)
 		{
-			await ConnectionManager.LoadSchemaAsync(connection, cancellationToken);
+			await ConnectionManager.LoadSchemaAsync(connection, includeSystemTables, cancellationToken);
 		}
 
 		/// <summary>
@@ -72,9 +72,9 @@ namespace Bau.Libraries.DbScripts.Manager
 		/// <summary>
 		///		Obtiene el esquema de una conexión
 		/// </summary>
-		public async Task<LibDbProviders.Base.Schema.SchemaDbModel> GetDbSchemaAsync(ConnectionModel connection, CancellationToken cancellationToken)
+		public async Task<LibDbProviders.Base.Schema.SchemaDbModel> GetDbSchemaAsync(ConnectionModel connection, bool includeSystemTables, CancellationToken cancellationToken)
 		{
-			return await ConnectionManager.GetSchemaAsync(connection, cancellationToken);
+			return await ConnectionManager.GetSchemaAsync(connection, includeSystemTables, cancellationToken);
 		}
 
 		/// <summary>

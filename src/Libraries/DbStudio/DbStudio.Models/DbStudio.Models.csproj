@@ -5,6 +5,8 @@
 	  <TargetFramework>net7.0</TargetFramework>
     <RootNamespace>Bau.Libraries.DbStudio.Models</RootNamespace>
     <AssemblyName>DbStudio.Models</AssemblyName>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bau.Libraries.PasswordManager.Plugin.Views"
 		x:Class="Bau.Libraries.PasswordManager.Plugin.Views.GeneratorView"
-		xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="Generación de contraseña" Height="350" Width="700" ResizeMode="NoResize" ShowInTaskbar="False"
 		xmlns:Behaviors="clr-namespace:Bau.Libraries.BauMvvm.Views.Converters;assembly=BauMvvm.Views"

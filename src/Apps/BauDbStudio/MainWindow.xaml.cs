@@ -453,7 +453,7 @@ public partial class MainWindow : Window
 	/// <summary>
 	///		Manager de vistas de PluginsStudio
 	/// </summary>
-	public static Controllers.DbStudioViewsManager DbStudioViewsManager { get; private set; }
+	public static Controllers.DbStudioViewsManager DbStudioViewsManager { get; private set; } = default!;
 
 	/// <summary>
 	///		ViewModel principal

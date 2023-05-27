@@ -2,11 +2,11 @@
 using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 using Bau.Libraries.DbStudio.Models;
 using Bau.Libraries.DbStudio.Models.Connections;
 using Bau.Libraries.DbScripts.Manager.Models;
-using Microsoft.Extensions.Logging;
 
 namespace Bau.Libraries.DbStudio.Application
 {
@@ -52,9 +52,9 @@ namespace Bau.Libraries.DbStudio.Application
 		/// <summary>
 		///		Carga el esquema de una conexión
 		/// </summary>
-		public async Task LoadSchemaAsync(ConnectionModel connection, CancellationToken cancellationToken)
+		public async Task LoadSchemaAsync(ConnectionModel connection, bool includeSystemTables, CancellationToken cancellationToken)
 		{
-			await DbScriptsManager.LoadSchemaAsync(connection, cancellationToken);
+			await DbScriptsManager.LoadSchemaAsync(connection, includeSystemTables, cancellationToken);
 		}
 
 		/// <summary>

@@ -38,8 +38,6 @@ public abstract class BaseTextFileViewModel : BaseFileViewModel
 			// Carga el archivo
 			Content = LibHelper.Files.HelperFiles.LoadTextFile(FileName);
 		}
-		// Añade el archivo a los últimos archivos abiertos
-		PluginsController.HostPluginsController.AddFileUsed(FileName);
 	}
 
 	/// <summary>

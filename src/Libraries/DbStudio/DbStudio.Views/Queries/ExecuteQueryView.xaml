@@ -4,8 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Bau.Libraries.DbStudio.Views.Queries"
-			 xmlns:CodeEditor="clr-namespace:Bau.Controls.CodeEditor;assembly=CodeEditor"
-			 xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
 			 x:Class="Bau.Libraries.DbStudio.Views.Queries.ExecuteQueryView"
              mc:Ignorable="d" Loaded="UserControl_Loaded"
              d:DesignHeight="450" d:DesignWidth="800">

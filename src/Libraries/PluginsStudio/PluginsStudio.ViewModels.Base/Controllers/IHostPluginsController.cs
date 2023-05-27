@@ -1,63 +1,64 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Bau.Libraries.PluginsStudio.ViewModels.Base.Models;
 
-using Bau.Libraries.PluginsStudio.ViewModels.Base.Models;
+namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Controllers;
 
-namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Controllers
+/// <summary>
+///		Controlador del host de plugins
+/// </summary>
+public interface IHostPluginsController
 {
 	/// <summary>
-	///		Controlador del host de plugins
+	///		Añade un archivo utilizado a la lista de archivos
 	/// </summary>
-	public interface IHostPluginsController
-	{
-		/// <summary>
-		///		Añade un archivo utilizado a la lista de archivos
-		/// </summary>
-		void AddFileUsed(string fileName);
+	void AddFileUsed(string fileName);
 
-		/// <summary>
-		///		Obtiene los archivos asignados que se pueden crear
-		/// </summary>
-		public List<FileAssignedModel> GetFilesAssigned();
+	/// <summary>
+	///		Obtiene los archivos asignados que se pueden crear
+	/// </summary>
+	List<FileAssignedModel> GetFilesAssigned(bool onlyCanCreate);
 
-		/// <summary>
-		///		Abre un archivo
-		/// </summary>
-		void OpenFile(string fileName);
+	/// <summary>
+	///		Obtiene el icono asociado a un archivo
+	/// </summary>
+	string GetIcon(string fileName);
 
-		/// <summary>
-		///		Abre la ventana de edición de un archivo
-		/// </summary>
-		void OpenEditor(Files.BaseTextFileViewModel viewModel);
+	/// <summary>
+	///		Abre un archivo
+	/// </summary>
+	void OpenFile(string fileName);
 
-		/// <summary>
-		///		Abre la ventana de edición de un archivo de texto
-		/// </summary>
-		void OpenTextEditor(string fileName);
+	/// <summary>
+	///		Abre la ventana de edición de un archivo
+	/// </summary>
+	void OpenEditor(Files.BaseTextFileViewModel viewModel);
 
-		/// <summary>
-		///		Abre un navegador Web
-		/// </summary>
-		void OpenWebBrowser(string url);
+	/// <summary>
+	///		Abre la ventana de edición de un archivo de texto
+	/// </summary>
+	void OpenTextEditor(string fileName);
 
-		/// <summary>
-		///		Actualiza el árbol de archivos
-		/// </summary>
-		void RefreshFiles();
+	/// <summary>
+	///		Abre un navegador Web
+	/// </summary>
+	void OpenWebBrowser(string url);
 
-		/// <summary>
-		///		Ejecuta un comando sobre un plugin
-		/// </summary>
-		void ExecutePluginCommand(string plugin, string viewModel, string command);
+	/// <summary>
+	///		Actualiza el árbol de archivos
+	/// </summary>
+	void RefreshFiles();
 
-		/// <summary>
-		///		Comprueba si se puede ejecutar un comando sobre un plugin
-		/// </summary>
-		bool CheckCanExecutePluginCommand(string plugin, string viewModel, string command);
+	/// <summary>
+	///		Ejecuta un comando sobre un plugin
+	/// </summary>
+	void ExecutePluginCommand(string plugin, string viewModel, string command);
 
-		/// <summary>
-		///		ViewModel del documento de detalles seleccionado
-		/// </summary>
-		Interfaces.IDetailViewModel SelectedDetailsViewModel { get; }
-	}
+	/// <summary>
+	///		Comprueba si se puede ejecutar un comando sobre un plugin
+	/// </summary>
+	bool CheckCanExecutePluginCommand(string plugin, string viewModel, string command);
+
+	/// <summary>
+	///		ViewModel del documento de detalles seleccionado
+	/// </summary>
+	Interfaces.IDetailViewModel SelectedDetailsViewModel { get; }
 }

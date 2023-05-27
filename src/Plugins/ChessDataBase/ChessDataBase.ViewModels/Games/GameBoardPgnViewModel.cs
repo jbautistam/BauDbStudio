@@ -23,8 +23,6 @@ namespace Bau.Libraries.ChessDataBase.ViewModels.Games
 																				   MainViewModel.ConfigurationViewModel.PathBoardImages,
 																				   MainViewModel.ConfigurationViewModel.PathPiecesImages,
 																				   mainViewModel.ConfigurationViewModel.ShowAnimations);
-			// Añade el archivo a los últimos archivos abiertos
-			MainViewModel.ViewsController.HostPluginsController.AddFileUsed(fileName);
 			// Asigna los comandos
 			OpenFileCommand = new BauMvvm.ViewModels.BaseCommand(_ => OpenFile());
 		}

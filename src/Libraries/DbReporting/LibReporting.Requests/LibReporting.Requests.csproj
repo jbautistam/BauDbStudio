@@ -2,8 +2,9 @@
 
   <PropertyGroup>
 	  <TargetFramework>net7.0</TargetFramework>
-    <RootNamespace>Bau.Libraries.LibReporting.Requests</RootNamespace>
+    <RootNamespace>Bau.Libraries.$(MSBuildProjectName)</RootNamespace>
 	  <Nullable>enable</Nullable>
+	  <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>

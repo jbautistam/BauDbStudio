@@ -43,10 +43,7 @@ namespace Bau.Libraries.BlogReader.Views
 		/// <summary>
 		///		Intenta abrir un archivo en un plugin
 		/// </summary>
-		public bool OpenFile(string fileName)
-		{
-			return false;
-		}
+		public bool OpenFile(string fileName) => false;
 
 		/// <summary>
 		///		Obtiene los paneles del plugin
@@ -88,10 +85,7 @@ namespace Bau.Libraries.BlogReader.Views
 		/// <summary>
 		///		Obtiene la vista de configuración del plugin
 		/// </summary>
-		public IPluginConfigurationView GetConfigurationView()
-		{
-			return new Views.Configuration.ctlConfigurationBlogReader(MainViewModel.ConfigurationViewModel);
-		}
+		public IPluginConfigurationView GetConfigurationView() => new Views.Configuration.ctlConfigurationBlogReader(MainViewModel.ConfigurationViewModel);
 
 		/// <summary>
 		///		Controlador de aplicación

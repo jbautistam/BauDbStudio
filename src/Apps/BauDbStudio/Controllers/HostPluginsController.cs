@@ -23,11 +23,26 @@ public class HostPluginsController : Libraries.PluginsStudio.ViewModels.Base.Con
 	}
 
 	/// <summary>
+	///		Obtiene el icono asociado al archivo
+	/// </summary>
+	public string GetIcon(string fileName)
+	{
+		// Obtiene el icono a partir de la lista de archivos asignados
+		if (!string.IsNullOrWhiteSpace(fileName))
+			foreach (FileAssignedModel file in GetFilesAssigned(false))
+				if (!string.IsNullOrWhiteSpace(file.Icon) && fileName.EndsWith(file.FileExtension, StringComparison.CurrentCultureIgnoreCase))
+					return file.Icon;
+		// Si ha llegado hasta aquí es porque no ha encontrado nada
+		return string.Empty;
+	}
+
+	/// <summary>
 	///		Abre el editor de un archivo
 	/// </summary>
 	public void OpenFile(string fileName)
 	{
 		DbStudioViewManager.OpenFile(fileName);
+		AddFileUsed(fileName);
 	}
 
 	/// <summary>
@@ -36,6 +51,7 @@ public class HostPluginsController : Libraries.PluginsStudio.ViewModels.Base.Con
 	public void OpenEditor(BaseTextFileViewModel viewModel)
 	{
 		DbStudioViewManager.PluginStudioController.OpenWindow(viewModel);
+		AddFileUsed(viewModel.FileName);
 	}
 
 	/// <summary>
@@ -44,6 +60,7 @@ public class HostPluginsController : Libraries.PluginsStudio.ViewModels.Base.Con
 	public void OpenTextEditor(string fileName)
 	{
 		DbStudioViewManager.PluginStudioController.DbStudioViewManager.PluginsStudioViewModel.OpenFile(fileName);
+		AddFileUsed(fileName);
 	}
 
 	/// <summary>
@@ -73,7 +90,7 @@ public class HostPluginsController : Libraries.PluginsStudio.ViewModels.Base.Con
 	/// <summary>
 	///		Obtiene los archivos asignados que se pueden crear
 	/// </summary>
-	public List<FileAssignedModel> GetFilesAssigned()
+	public List<FileAssignedModel> GetFilesAssigned(bool onlyCanCreate)
 	{
 		List<FileAssignedModel> files = new()
 											{
@@ -123,7 +140,8 @@ public class HostPluginsController : Libraries.PluginsStudio.ViewModels.Base.Con
 
 			// Añade los archivos de plugin
 			foreach (FileAssignedModel file in DbStudioViewManager.PluginsManager.GetFilesAssigned())
-				if (file.CanCreate && !files.Any(item => item.FileExtension.Equals(file.FileExtension, StringComparison.CurrentCultureIgnoreCase)))
+				if ((!onlyCanCreate || (onlyCanCreate && file.CanCreate)) && 
+						!files.Any(item => item.FileExtension.Equals(file.FileExtension, StringComparison.CurrentCultureIgnoreCase)))
 					files.Add(file);
 			// Ordena los archivos
 			files.Sort((first, second) => $"{first.Name}{first.FileExtension}".CompareTo($"{second.Name}{second.FileExtension}"));

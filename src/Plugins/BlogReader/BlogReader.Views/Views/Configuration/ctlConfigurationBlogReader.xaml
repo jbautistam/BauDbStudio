@@ -13,6 +13,7 @@
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="Auto"/>
@@ -31,5 +32,7 @@
 			MinWidth="50" Width="50" HorizontalAlignment="Left"/>
 		<CheckBox Content="Descarga automática de blogs" IsChecked="{Binding Path=DownloadEnabled}" 
 			Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" Margin = "5" VerticalAlignment="Center" />
+		<CheckBox Content="Mostrar las noticias de blogs inactivos" IsChecked="{Binding Path=ShowNewsDisabledBlogs}" 
+			Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" Margin = "5" VerticalAlignment="Center" />
 	</Grid>
 </UserControl>

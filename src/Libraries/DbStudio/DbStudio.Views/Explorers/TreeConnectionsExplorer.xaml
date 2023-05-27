@@ -28,13 +28,12 @@
 							 ToolTip="{Binding Path=ToolTipText}" />
 						<TextBlock Text="{Binding Text}" FontWeight="{Binding IsBold,Converter={StaticResource BoolToFontWeightConverter}}"
 								   Foreground="{Binding Path=Foreground,Converter={StaticResource MVVMColorConverter}}" 
-								   ToolTip="{Binding Path=ToolTipText }"
 								   VerticalAlignment="Center" />
 					</StackPanel>
 				</HierarchicalDataTemplate>
 				<!-- Menú -->
 				<ContextMenu x:Key="mnuExplorer">
-					<MenuItem Header="Nueva" Command="{Binding Path=NewConnectionCommand}">
+					<MenuItem Header="Nueva conexión" Command="{Binding Path=NewConnectionCommand}">
 						<MenuItem.Icon>
 							<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/Connection.png" />
 						</MenuItem.Icon>
@@ -70,6 +69,16 @@
 					<MenuItem Header="Generar XML de esquema ..." Command="{Binding Path=CreateSchemaXmlCommand}">
 						<MenuItem.Icon>
 							<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/File.png" />
+						</MenuItem.Icon>
+					</MenuItem>
+					<MenuItem Header="Exportar datos a archivo ..." Command="{Binding Path=ExportDataCommand}">
+						<MenuItem.Icon>
+							<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/Export.png" />
+						</MenuItem.Icon>
+					</MenuItem>
+					<MenuItem Header="Importar datos de archivo ..." Command="{Binding Path=ImportDataCommand}">
+						<MenuItem.Icon>
+							<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/Import.png" />
 						</MenuItem.Icon>
 					</MenuItem>
 				</ContextMenu>

@@ -3,8 +3,10 @@
   <PropertyGroup>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
 	  <TargetFramework>net7.0</TargetFramework>
-    <RootNamespace>Bau.Libraries.DbStudio.Application</RootNamespace>
-    <AssemblyName>DbStudio.Application</AssemblyName>
+    <RootNamespace>Bau.Libraries.$(MSBuildProjectName)</RootNamespace>
+    <AssemblyName>$(MSBuildProjectName)</AssemblyName>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -22,13 +24,6 @@
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibHelper\src\LibHelper.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibJsonConversor\src\LibJsonConversor.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibMarkup\src\LibMarkup.csproj" />
-    <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DataBaseProviders\LibDbProviders.Base\LibDbProviders.Base.csproj" />
-    <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DataBaseProviders\LibDbProviders.MySql\LibDbProviders.MySql.csproj" />
-    <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DataBaseProviders\LibDbProviders.Odbc\LibDbProviders.Odbc.csproj" />
-    <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DataBaseProviders\LibDbProviders.PostgreSql\LibDbProviders.PostgreSql.csproj" />
-    <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DataBaseProviders\LibDbProviders.Spark\LibDbProviders.Spark.csproj" />
-    <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DataBaseProviders\LibDbProviders.SqLite\LibDbProviders.SqLite.csproj" />
-    <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DataBaseProviders\LibDbProviders.SqlServer\LibDbProviders.SqlServer.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\Schema\LibDbSchema.Repository.Xml\LibDbSchema.Repository.Xml.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Formats\LibCsvFiles\src\LibCsvFiles.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Formats\LibParquetFiles\src\LibParquetFiles.csproj" />

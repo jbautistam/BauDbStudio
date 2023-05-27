@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-
+﻿using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.LibHelper.Extensors;
 
 namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.LastFiles;
@@ -7,15 +6,15 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.LastFiles;
 /// <summary>
 ///		Lista de últimos archivos abiertos
 /// </summary>
-public class LastFilesListViewModel : BauMvvm.ViewModels.BaseObservableObject
+public class LastFilesListViewModel : BaseObservableObject
 {
 	// Variables privadas
-	private ObservableCollection<LastFileViewModel> _files = default!;
+	private AsyncObservableCollection<LastFileViewModel> _files = default!;
 
 	public LastFilesListViewModel(PluginsStudioViewModel mainViewModel)
 	{
 		MainViewModel = mainViewModel;
-		Files = new ObservableCollection<LastFileViewModel>();
+		Files = new AsyncObservableCollection<LastFileViewModel>();
 	}
 
 	/// <summary>
@@ -25,46 +24,28 @@ public class LastFilesListViewModel : BauMvvm.ViewModels.BaseObservableObject
 	{
 		if (!string.IsNullOrWhiteSpace(fileName))
 		{
-			List<string> temporalFiles = SelectFiles();
-
-				// Añade los nombres de archivos al inicio
-				foreach (string part in fileName.Split(';'))
-					if (!string.IsNullOrWhiteSpace(part) && !Exists(part, temporalFiles))
-						temporalFiles.Insert(0, part.TrimIgnoreNull());
-				// Limpia la colección de archivos
-				Files.Clear();
-				// Añade los archivos
-				foreach (string file in temporalFiles)
-					if (temporalFiles.IndexOf(file) < 10 && System.IO.File.Exists(file))
-						Files.Add(new LastFileViewModel(MainViewModel, file, temporalFiles.IndexOf(file) + 1));
+			// Añade los nombres de archivos al inicio
+			foreach (string part in fileName.Split(';', StringSplitOptions.TrimEntries))
+				if (!string.IsNullOrWhiteSpace(part))
+				{
+					LastFileViewModel? existing = Files.FirstOrDefault(item => item.FileName.Equals(part, StringComparison.CurrentCultureIgnoreCase));
+						
+						// Quita el archivo existente
+						if (existing is not null)
+							Files.Remove(existing);
+						// Añade el archivo al principio
+						Files.Insert(0, new LastFileViewModel(MainViewModel, part, 
+															  MainViewModel.PluginsStudioController.HostPluginsController.GetIcon(part), 
+															  0)
+									);
+				}
+			// Elimina los archivos sobrantes (deja 10 como máximo)
+			while (Files.Count > 10)
+				Files.RemoveAt(Files.Count - 1);
+			// Asigna los índices
+			for (int index = 0; index < Files.Count; index++)
+				Files[index].Index = index + 1;
 		}
-	}
-
-	/// <summary>
-	///		Obtiene una lista de archivos seleccionados
-	/// </summary>
-	private List<string> SelectFiles()
-	{
-		List<string> temporalFiles = new List<string>();
-
-			// Obtiene los archivos de la colección
-			foreach (LastFileViewModel fileViewModel in Files)
-				temporalFiles.Add(fileViewModel.FileName);
-			// Devuelve la lista de archivos
-			return temporalFiles;
-	}
-
-	/// <summary>
-	///		Compureba si existe un archivo en la lista
-	/// </summary>
-	private bool Exists(string file, List<string> files)
-	{
-		// Busca el archivo en la colección
-		foreach (string fileName in files)
-			if (fileName.Equals(file, StringComparison.CurrentCultureIgnoreCase))
-				return true;
-		// Si ha llegado hasta aquí es porque no ha encontrado nada
-		return false;
 	}
 
 	/// <summary>
@@ -89,7 +70,7 @@ public class LastFilesListViewModel : BauMvvm.ViewModels.BaseObservableObject
 	/// <summary>
 	///		Archivos
 	/// </summary>
-	public ObservableCollection<LastFileViewModel> Files
+	public AsyncObservableCollection<LastFileViewModel> Files
 	{
 		get { return _files; }
 		set { CheckObject(ref _files, value); }

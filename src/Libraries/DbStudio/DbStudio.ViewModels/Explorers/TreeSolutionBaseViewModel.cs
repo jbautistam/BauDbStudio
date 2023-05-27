@@ -1,22 +1,19 @@
-﻿using System;
+﻿using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
 
-using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
+namespace Bau.Libraries.DbStudio.ViewModels.Explorers;
 
-namespace Bau.Libraries.DbStudio.ViewModels.Explorers
+/// <summary>
+///		ViewModel base para los árboles
+/// </summary>
+public abstract class TreeSolutionBaseViewModel : PluginTreeViewModel
 {
-	/// <summary>
-	///		ViewModel base para los árboles
-	/// </summary>
-	public abstract class TreeSolutionBaseViewModel : PluginTreeViewModel
+	public TreeSolutionBaseViewModel(DbStudioViewModel solutionViewModel)
 	{
-		public TreeSolutionBaseViewModel(DbStudioViewModel solutionViewModel)
-		{
-			SolutionViewModel = solutionViewModel;
-		}
-
-		/// <summary>
-		///		ViewModel de la solución
-		/// </summary>
-		public DbStudioViewModel SolutionViewModel { get; }
+		SolutionViewModel = solutionViewModel;
 	}
+
+	/// <summary>
+	///		ViewModel de la solución
+	/// </summary>
+	public DbStudioViewModel SolutionViewModel { get; }
 }

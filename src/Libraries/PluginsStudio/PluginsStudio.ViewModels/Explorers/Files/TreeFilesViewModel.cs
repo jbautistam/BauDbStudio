@@ -194,7 +194,7 @@ public class TreeFilesViewModel : PluginTreeViewModel
 			if (!string.IsNullOrWhiteSpace(path))
 			{
 				Tools.CreateFileViewModel createFileViewModel = new Tools.CreateFileViewModel(MainViewModel, path, 
-																							  MainViewModel.PluginsStudioController.PluginsController.HostPluginsController.GetFilesAssigned());
+																							  MainViewModel.PluginsStudioController.PluginsController.HostPluginsController.GetFilesAssigned(true));
 
 					if (MainViewModel.PluginsStudioController.OpenDialog(createFileViewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes &&
 						!string.IsNullOrWhiteSpace(createFileViewModel.FileName))
