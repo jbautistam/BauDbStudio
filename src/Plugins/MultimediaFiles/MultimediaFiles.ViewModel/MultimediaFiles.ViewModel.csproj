@@ -2,13 +2,22 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <RootNamespace>Bau.Libraries.MultimediaFiles.ViewModel</RootNamespace>
+    <RootNamespace>Bau.Libraries.$(MSBuildProjectName)</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="Controllers\Messengers\**" />
+    <Compile Remove="Reader\EventArguments\**" />
     <EmbeddedResource Remove="Controllers\Messengers\**" />
+    <EmbeddedResource Remove="Reader\EventArguments\**" />
     <None Remove="Controllers\Messengers\**" />
+    <None Remove="Reader\EventArguments\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Reader\MediaFileListViewModel.cs" />
   </ItemGroup>
 
   <ItemGroup>

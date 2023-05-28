@@ -40,7 +40,7 @@ namespace Bau.Libraries.DbScripts.Manager
 		/// <summary>
 		///		Obtiene un <see cref="DataTable"/> paginada con una consulta sobre una conexión
 		/// </summary>
-		public async Task<DataTable> GetDatatableAsync(QueryModel query, CancellationToken cancellationToken)
+		public async Task<DataTable?> GetDatatableAsync(QueryModel query, CancellationToken cancellationToken)
 		{
 			return await Task.Run(() => new SqlCommandController(this).GetDataTableAsync(query, cancellationToken));
 		}
@@ -48,7 +48,7 @@ namespace Bau.Libraries.DbScripts.Manager
 		/// <summary>
 		///		Obtiene el datareader de una consulta
 		/// </summary>
-		public async Task<System.Data.Common.DbDataReader> ExecuteReaderAsync(QueryModel query, CancellationToken cancellationToken)
+		public async Task<System.Data.Common.DbDataReader?> ExecuteReaderAsync(QueryModel query, CancellationToken cancellationToken)
 		{
 			return await Task.Run(() => new SqlCommandController(this).ExecuteReaderAsync(query, cancellationToken));
 		}
@@ -56,7 +56,7 @@ namespace Bau.Libraries.DbScripts.Manager
 		/// <summary>
 		///		Obtiene el plan de ejecución de una consulta
 		/// </summary>
-		public async Task<DataTable> GetExecutionPlanAsync(QueryModel query, CancellationToken cancellationToken)
+		public async Task<DataTable?> GetExecutionPlanAsync(QueryModel query, CancellationToken cancellationToken)
 		{
 			return await Task.Run(() => new SqlCommandController(this).GetExecutionPlanAsync(query, cancellationToken));
 		}
@@ -64,10 +64,7 @@ namespace Bau.Libraries.DbScripts.Manager
 		/// <summary>
 		///		Obtiene un proveedor de base de datos
 		/// </summary>
-		public LibDbProviders.Base.IDbProvider GetDbProvider(ConnectionModel connection)
-		{
-			return ConnectionManager.GetDbProvider(connection);
-		}
+		public LibDbProviders.Base.IDbProvider? GetDbProvider(ConnectionModel connection) => ConnectionManager.GetDbProvider(connection);
 
 		/// <summary>
 		///		Obtiene el esquema de una conexión

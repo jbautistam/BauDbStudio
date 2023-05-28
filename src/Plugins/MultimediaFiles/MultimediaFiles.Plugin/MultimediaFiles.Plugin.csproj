@@ -3,11 +3,14 @@
   <PropertyGroup>
     <TargetFramework>net7.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
-    <RootNamespace>Bau.Libraries.ComicsReader.Plugin</RootNamespace>
+    <RootNamespace>Bau.Libraries.$(MSBuildProjectName)</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="Controllers\AppController.cs" />
+    <Compile Remove="Views\MediaPlayerView.xaml.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -15,9 +18,14 @@
     <None Remove="Resources\Back.png" />
     <None Remove="Resources\Next.png" />
     <None Remove="Resources\Pause.png" />
+    <None Remove="Resources\Pin.png" />
     <None Remove="Resources\Play.png" />
     <None Remove="Resources\Stop.png" />
     <None Remove="Resources\VideoFile.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="Views\MediaPlayerView.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,9 +40,16 @@
     <Resource Include="Resources\Back.png" />
     <Resource Include="Resources\Next.png" />
     <Resource Include="Resources\Pause.png" />
+    <Resource Include="Resources\Pin.png" />
     <Resource Include="Resources\Play.png" />
     <Resource Include="Resources\Stop.png" />
     <Resource Include="Resources\VideoFile.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\MediaFileView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

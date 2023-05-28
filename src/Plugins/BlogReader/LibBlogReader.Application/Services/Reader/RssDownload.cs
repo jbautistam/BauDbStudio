@@ -72,6 +72,8 @@ namespace Bau.Libraries.LibBlogReader.Application.Services.Reader
 												entriesForDownload.AddRange(downloaded);
 											// Añade el número de elementos descargados
 											dowloadedItems += downloaded.Count;
+											// Obtiene la fecha de última entrada
+											blog.DateLastEntry = GetDateLastEntry(blog.DateLastEntry, downloaded);
 										}
 								}
 								// Modifica la fecha de última descarga y el número de entradas no leidas
@@ -93,6 +95,19 @@ namespace Bau.Libraries.LibBlogReader.Application.Services.Reader
 				_blogManager.Logger.LogInformation("End download blogs");
 				// Devuelve el número de elementos descargados
 				return dowloadedItems;
+		}
+
+		/// <summary>
+		///		Obtiene la fecha de última entrada
+		/// </summary>
+		private DateTime? GetDateLastEntry(DateTime? dateLastEntry, EntriesModelCollection entries)
+		{
+			// Obtiene la fecha máxima de entrada
+			foreach (EntryModel entry in entries)
+				if (dateLastEntry is null || entry.DatePublish > dateLastEntry)
+					dateLastEntry = entry.DatePublish;
+			// Devuelve la fecha
+			return dateLastEntry;
 		}
 
 		/// <summary>
