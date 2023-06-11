@@ -21,7 +21,9 @@ public class SolutionManager
 		/// <summary>Archivos CSV</summary>
 		Csv,
 		/// <summary>Archivos parquet</summary>
-		Parquet
+		Parquet,
+		/// <summary>Archivos SQL (INSERT INTO)</summary>
+		Sql
 	}
 
 	public SolutionManager(ILogger logger)
@@ -62,7 +64,7 @@ public class SolutionManager
 	/// <summary>
 	///		Obtiene un <see cref="DataTable"/> paginada con una consulta sobre una conexión sin interpretarla
 	/// </summary>
-	public async Task<DataTable> GetDatatableAsync(QueryModel query, CancellationToken cancellationToken)
+	public async Task<DataTable?> GetDatatableAsync(QueryModel query, CancellationToken cancellationToken)
 	{
 		return await DbScriptsManager.GetDatatableAsync(query, cancellationToken);
 	}
@@ -70,7 +72,7 @@ public class SolutionManager
 	/// <summary>
 	///		Obtiene el datareader de una consulta
 	/// </summary>
-	public async Task<System.Data.Common.DbDataReader> ExecuteReaderAsync(QueryModel query, CancellationToken cancellationToken)
+	public async Task<System.Data.Common.DbDataReader?> ExecuteReaderAsync(QueryModel query, CancellationToken cancellationToken)
 	{
 		return await DbScriptsManager.ExecuteReaderAsync(query, cancellationToken);
 	}
@@ -78,7 +80,7 @@ public class SolutionManager
 	/// <summary>
 	///		Obtiene el plan de ejecución de una consulta
 	/// </summary>
-	public async Task<DataTable> GetExecutionPlanAsync(QueryModel query, CancellationToken cancellationToken)
+	public async Task<DataTable?> GetExecutionPlanAsync(QueryModel query, CancellationToken cancellationToken)
 	{
 		return await DbScriptsManager.GetExecutionPlanAsync(query, cancellationToken);
 	}

@@ -15,22 +15,26 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Queries;
 /// </summary>
 public class QueryViewModel : BaseObservableObject
 {
+	// Constantes
+	private const string DefaultFileName = "New file.csv";
+	private const string MaskExportFiles = "Archivos CSV (*.csv)|*.csv|Archivos parquet (*.parquet)|*.parquet|Archivo SQL - INSERT (*.sql)|*.sql";
+	private const string DefaultExtension = ".csv";
 	// Eventos públicos
-	public event EventHandler ExecutionRequested;
-	public event EventHandler<PluginsStudio.ViewModels.Base.Controllers.EventArguments.EditorSelectedTextRequiredEventArgs> SelectedTextRequired;
+	public event EventHandler? ExecutionRequested;
+	public event EventHandler<PluginsStudio.ViewModels.Base.Controllers.EventArguments.EditorSelectedTextRequiredEventArgs>? SelectedTextRequired;
 	// Variables privadas
-	private string _fileName, _query, _lastQuery, _executionTime, _executionPlanText;
-	private ArgumentListModel _arguments;
+	private string _fileName = string.Empty, _query = string.Empty, _lastQuery = string.Empty, _executionTime = string.Empty, _executionPlanText = string.Empty;
+	private ArgumentListModel _arguments = default!;
 	private DataTable? _dataResults;
-	private ComboConnectionsViewModel _comboConnectionsViewModel;
+	private ComboConnectionsViewModel _comboConnectionsViewModel = default!;
 	private int _actualPage, _pageSize;
 	private bool _paginateQuery;
-	private BauMvvm.ViewModels.Media.MvvmColor _executionTimeColor;
+	private BauMvvm.ViewModels.Media.MvvmColor _executionTimeColor = BauMvvm.ViewModels.Media.MvvmColor.Black;
 	private bool _isExecuting;
-	private CancellationTokenSource _tokenSource;
+	private CancellationTokenSource _tokenSource = default!;
 	private CancellationToken _cancellationToken = CancellationToken.None;
-	private System.Timers.Timer _timer;
-	private System.Diagnostics.Stopwatch _stopwatch;
+	private System.Timers.Timer _timer = default!;
+	private System.Diagnostics.Stopwatch _stopwatch = default!;
 
 	public QueryViewModel(DbStudioViewModel solutionViewModel, string? selectedConnection, string query, bool executeQueryByParts, bool raisePrepareExecution) : base(false)
 	{
@@ -57,7 +61,7 @@ public class QueryViewModel : BaseObservableObject
 												.AddListener(this, nameof(IsExecuting));
 		ShowExecutionPlanCommand = new BaseCommand(async _ => await ShowExecutionPlanAsync(), _ => !IsExecuting)
 										.AddListener(this, nameof(IsExecuting));
-		ExportCommand = new BaseCommand(async _ => await ExportAsync(), _ => !IsExecuting)
+		ExportCommand = new BaseCommand(_ => Export(), _ => !IsExecuting)
 								.AddListener(this, nameof(IsExecuting));
 		FirstPageCommand = new BaseCommand(async _ => await GoPageAsync(1), _ => PaginateQuery && !IsExecuting)
 								.AddListener(this, nameof(IsExecuting))
@@ -202,7 +206,7 @@ public class QueryViewModel : BaseObservableObject
 							else
 								try
 								{
-									DataTable table = await SolutionViewModel.Manager.GetExecutionPlanAsync(query, _cancellationToken);
+									DataTable? table = await SolutionViewModel.Manager.GetExecutionPlanAsync(query, _cancellationToken);
 									string plan = string.Empty;
 
 										// Obtiene el plan de ejecución
@@ -325,7 +329,7 @@ public class QueryViewModel : BaseObservableObject
 		// Graba el archivo
 		if (string.IsNullOrWhiteSpace(FileName) || newName)
 		{
-			string newFileName = SolutionViewModel.MainController.DialogsController
+			string? newFileName = SolutionViewModel.MainController.DialogsController
 										.OpenDialogSave(string.Empty, "Script SQL (*.sql)|*.sql|Todos los archivos (*.*)|*.*", 
 														"New query.sql", ".sql");
 
@@ -361,7 +365,7 @@ public class QueryViewModel : BaseObservableObject
 	/// <summary>
 	///		Exporta la tabla de datos
 	/// </summary>
-	private async Task ExportAsync()
+	private void Export()
 	{
 		if (string.IsNullOrWhiteSpace(Query))
 			SolutionViewModel.MainController.HostController.SystemController.ShowMessage("Introduzca una consulta para ejecutar");
@@ -381,31 +385,15 @@ public class QueryViewModel : BaseObservableObject
 							SolutionViewModel.MainController.HostController.SystemController.ShowMessage("Enter the query");
 						else
 						{
-							string fileName = SolutionViewModel.MainController.DialogsController
-														.OpenDialogSave(string.Empty, ExportDataController.MaskExportFiles, ExportDataController.DefaultFileName, 
-																		ExportDataController.DefaultExtension);
+							string? fileName = SolutionViewModel.MainController.DialogsController
+														.OpenDialogSave(string.Empty, MaskExportFiles, DefaultFileName, DefaultExtension);
 
 								if (!string.IsNullOrEmpty(fileName))
 								{
-									// Arranca los temporizadores e inicializa el interface de usuario con el inicio de la consulta
-									StartQuery();
-									// Ejecuta la exportación
-									try
-									{
-										(bool exported, string exportError) = await ExportAsync(query, fileName, _cancellationToken);
+									ExportQueryProcessor processor = new(SolutionViewModel, query, fileName, GetFormatType(fileName), 200_000);
 
-											if (!exported)
-												SolutionViewModel.MainController.HostController.SystemController.ShowMessage(error);
-											else
-												SolutionViewModel.MainController.HostController.SystemController.ShowMessage("El archivo se ha grabado correctamente");
-									}
-									catch (Exception exception)
-									{
-										SolutionViewModel.MainController.Logger.LogError(exception, $"Error al grabar el archivo '{fileName}'");
-										SolutionViewModel.MainController.HostController.SystemController.ShowMessage($"Error al grabar el archivo '{fileName}'");
-									}
-									// Detiene la consulta
-									StopQuery();
+										// Encola el proceso
+										SolutionViewModel.MainController.MainWindowController.EnqueueProcess(processor);
 								}
 						}
 				}
@@ -413,16 +401,17 @@ public class QueryViewModel : BaseObservableObject
 	}
 
 	/// <summary>
-	///		Exporta el resultado de una consulta a un archivo 
+	///		Obtiene el tipo de formato a partir del nombre de archivo
 	/// </summary>
-	private async Task<(bool exported, string error)> ExportAsync(QueryModel query, string fileName, CancellationToken cancellationToken)
+	private Application.SolutionManager.FormatType GetFormatType(string fileName)
 	{
-		using (System.Data.Common.DbDataReader reader = await SolutionViewModel.Manager.ExecuteReaderAsync(query, cancellationToken))
-		{
-			return await new ExportDataController().ExportAsync(SolutionViewModel.MainController.Logger, fileName, reader, cancellationToken);
-		}
+		if (fileName.EndsWith(".parquet", StringComparison.CurrentCultureIgnoreCase))
+			return Application.SolutionManager.FormatType.Parquet;
+		else if (fileName.EndsWith(".sql", StringComparison.CurrentCultureIgnoreCase))
+			return Application.SolutionManager.FormatType.Sql;
+		else
+			return Application.SolutionManager.FormatType.Csv;
 	}
-
 
 	/// <summary>
 	///		Solución

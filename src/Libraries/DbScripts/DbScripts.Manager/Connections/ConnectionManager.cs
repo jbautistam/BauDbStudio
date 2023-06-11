@@ -112,7 +112,7 @@ internal class ConnectionManager
 	/// <summary>
 	///		Obtiene un proveedor de base de datos
 	/// </summary>
-	internal IDbProvider? GetDbProvider(ConnectionModel connection)
+	internal IDbProvider GetDbProvider(ConnectionModel connection)
 	{
 		IDbProvider? provider = CacheProviders.GetProvider(connection);
 
@@ -150,7 +150,10 @@ internal class ConnectionManager
 			if (provider != null)
 				provider.Open();
 			// Devuelve el proveedor
-			return provider;
+			if (provider is null)
+				throw new ArgumentOutOfRangeException($"Cant find provider for '{connection.Name}'");
+			else
+				return provider;
 	}
 
 	/// <summary>

@@ -3,6 +3,7 @@
 using Bau.Libraries.BauMvvm.Views.Wpf.Controllers;
 using Bau.Libraries.BauMvvm.ViewModels.Controllers;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Interfaces;
+using Bau.Libraries.PluginsStudio.ViewModels.Base.Models.Processes;
 
 namespace Bau.DbStudio.Controllers;
 
@@ -104,6 +105,14 @@ public class MainWindowController : Libraries.PluginsStudio.ViewModels.Base.Cont
 			}
 			// Devuelve el valor que indica si se ha grabado
 			return saved;
+	}
+
+	/// <summary>
+	///		Encola un proceso
+	/// </summary>
+	public void EnqueueProcess(ProcessModel process)
+	{
+		DbStudioViewsManager.PluginsStudioViewModel.TasksQueueListViewModel.EnqueueProcess(process);
 	}
 
 	/// <summary>

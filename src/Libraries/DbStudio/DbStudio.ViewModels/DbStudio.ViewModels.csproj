@@ -32,6 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\Exporter\ExportDataController.cs" />
     <Compile Remove="Details\Connections\ConnectionParametersExecutionViewModel.cs" />
     <Compile Remove="Details\EtlProjects\CreateSchemaXmlViewModel.cs" />
     <Compile Remove="Details\EtlProjects\ExecuteEtlConsoleViewModel.cs" />

@@ -51,7 +51,7 @@ namespace Bau.Libraries.StructuredFilesStudio.ViewModels.Details.Files
 		/// </summary>
 		protected override async Task OpenFilePropertiesAsync(CancellationToken cancellationToken)
 		{
-			await Task.Delay(1);
+			await Task.Delay(1, cancellationToken);
 			SolutionViewModel.MainController.OpenDialog(new ParquetFilePropertiesViewModel(SolutionViewModel, this));
 		}
 

@@ -34,24 +34,24 @@ public class ConnectionExecutionViewModel : BaseObservableObject
 	}
 
 	// Variables privadas
-	private ComboViewModel _connections;
-	private string _connectionParametersFileName, _connectionShortFileName;
-	private string _etlParametersFileName, _etlShortFileName;
-	private BauMvvm.ViewModels.Media.MvvmColor _executionTimeColor;
-	private string _executionTime;
+	private ComboViewModel _connections = default!;
+	private string _connectionParametersFileName = string.Empty, _connectionShortFileName = string.Empty;
+	private string _etlParametersFileName = string.Empty, _etlShortFileName = string.Empty;
+	private BauMvvm.ViewModels.Media.MvvmColor _executionTimeColor = BauMvvm.ViewModels.Media.MvvmColor.Black;
+	private string _executionTime = string.Empty;
 	private bool _isExecuting;
-	private CancellationTokenSource _tokenSource;
+	private CancellationTokenSource _tokenSource = default!;
 	private CancellationToken _cancellationToken = CancellationToken.None;
-	private System.Timers.Timer _timer;
-	private System.Diagnostics.Stopwatch _stopwatch;
-	private ControlGenericListViewModel<LastParameterFileViewModel> _lastParametersFileViewModel;
+	private System.Timers.Timer _timer = default!;
+	private System.Diagnostics.Stopwatch _stopwatch = default!;
+	private ControlGenericListViewModel<LastParameterFileViewModel> _lastParametersFileViewModel = default!;
 
 	public ConnectionExecutionViewModel(DbStudioViewModel solutionViewModel)
 	{
 		// Asigna la solución y el viewmodel de parámetros de ejecución
 		SolutionViewModel = solutionViewModel;
 		// Asigna los comandos
-		ExecuteFileCommand = new BaseCommand(parameter => ExecuteFolderFile(parameter));
+		ExecuteFileCommand = new BaseCommand(ExecuteFolderFile);
 		ExecuteScriptCommand = new BaseCommand(async _ => await ExecuteScriptAsync(), _ => !IsExecuting)
 												.AddListener(this, nameof(IsExecuting));
 		CancelScriptExecutionCommand = new BaseCommand(_ => CancelScriptExecution(), _ => IsExecuting)
@@ -178,26 +178,27 @@ public class ConnectionExecutionViewModel : BaseObservableObject
 			SolutionViewModel.MainController.HostController.SystemController.ShowMessage("Ya se está ejecutando una consulta");
 		else
 		{
-			IDetailViewModel selectedViewModel = SolutionViewModel.MainController.MainWindowController.GetActiveDetails();
+			IDetailViewModel? selectedViewModel = SolutionViewModel.MainController.MainWindowController.GetActiveDetails();
 
-				switch (GetExecutionMode(selectedViewModel))
-				{
-					case ExecutionMode.Unknown:
-							SolutionViewModel.MainController.HostController.SystemController.ShowMessage("No se puede ejecutar este archivo");
-						break;
-					case ExecutionMode.BatchSql:
-					case ExecutionMode.ScriptSql:
-					case ExecutionMode.ScriptSqlExtended:
-							await PrepareExecuteScriptSqlAsync(selectedViewModel);
-						break;
-				}
+				if (selectedViewModel is not null)
+					switch (GetExecutionMode(selectedViewModel))
+					{
+						case ExecutionMode.Unknown:
+								SolutionViewModel.MainController.HostController.SystemController.ShowMessage("No se puede ejecutar este archivo");
+							break;
+						case ExecutionMode.BatchSql:
+						case ExecutionMode.ScriptSql:
+						case ExecutionMode.ScriptSqlExtended:
+								await PrepareExecuteScriptSqlAsync(selectedViewModel);
+							break;
+					}
 		}
 	}
 
 	/// <summary>
 	///		Exporta las tablas de una base de datos a un directorio
 	/// </summary>
-	public async Task ExportDataBaseAsync(ConnectionModel? connection, ConnectionTableModel? table, CancellationToken cancellationToken)
+	public void ExportDataBase(ConnectionModel? connection, ConnectionTableModel? table)
 	{
 		if (IsExecuting)
 			SolutionViewModel.MainController.SystemController.ShowMessage("No se pueden exportar los datos en este momento. Espere que finalice la ejecución de los scripts");
@@ -214,33 +215,13 @@ public class ConnectionExecutionViewModel : BaseObservableObject
 						SolutionViewModel.MainController.SystemController.ShowMessage("Seleccione la conexión");
 					else
 					{
-						// Log
-						SolutionViewModel.MainController.Logger.LogInformation($"Exportando archivos de {connection.Name}");
-						// Arranca la ejecución
-						StartExecution();
-						// Ejecuta la exportación
-						try
-						{
-							Application.Controllers.Export.ExportDataBaseGenerator generator = new(SolutionViewModel.Manager);
+						Controllers.Exporter.ExportTablesProcessor processor = new(SolutionViewModel, connection, viewModel.TreeConnection.GetSelectedTables(),
+																					viewModel.OutputPath, viewModel.FormatType, viewModel.BlockSize);
 
-								if (await generator.ExportAsync(connection, viewModel.TreeConnection.GetSelectedTables(),
-																viewModel.OutputPath, viewModel.FormatType, viewModel.BlockSize, CancellationToken.None))
-								{
-									SolutionViewModel.MainController.Logger.LogInformation($"Fin de la exportación de la conexión {connection.Name}");
-									SolutionViewModel.MainController.MainWindowController
-											.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
-															  "Exportación de archivos",
-															  "Ha terminado correctamente la exportación de archivos");
-								}
-								else
-									SolutionViewModel.MainController.Logger.LogError($"Error en la exportación de datos. {generator.Errors.Concatenate()}");
-						}
-						catch (Exception exception)
-						{
-							SolutionViewModel.MainController.Logger.LogError(exception, "Exception when create files");
-						}
-						// Detiene la ejecución
-						StopExecuting();
+							// Encola el proceso
+							SolutionViewModel.MainController.MainWindowController.EnqueueProcess(processor);
+							// Log
+							SolutionViewModel.MainController.Logger.LogInformation($"Exportando tablas de {connection.Name}");
 					}
 				}
 		}

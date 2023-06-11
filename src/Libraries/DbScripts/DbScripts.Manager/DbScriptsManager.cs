@@ -64,7 +64,7 @@ namespace Bau.Libraries.DbScripts.Manager
 		/// <summary>
 		///		Obtiene un proveedor de base de datos
 		/// </summary>
-		public LibDbProviders.Base.IDbProvider? GetDbProvider(ConnectionModel connection) => ConnectionManager.GetDbProvider(connection);
+		public LibDbProviders.Base.IDbProvider GetDbProvider(ConnectionModel connection) => ConnectionManager.GetDbProvider(connection);
 
 		/// <summary>
 		///		Obtiene el esquema de una conexión

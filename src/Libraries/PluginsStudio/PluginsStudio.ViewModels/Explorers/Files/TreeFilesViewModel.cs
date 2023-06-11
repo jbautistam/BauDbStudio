@@ -1,4 +1,7 @@
-﻿using Bau.Libraries.LibHelper.Extensors;
+﻿using Microsoft.Extensions.Logging;
+
+using Bau.Libraries.LibHelper.Extensors;
+using Bau.Libraries.LibHelper.Files;
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Models;
@@ -25,6 +28,7 @@ public class TreeFilesViewModel : PluginTreeViewModel
 
 	// Variables privadas
 	private NodeFileViewModel? _nodeToCopy;
+	private bool _actionNodeToCopyMove;
 
 	public TreeFilesViewModel(PluginsStudioViewModel solutionViewModel)
 	{ 
@@ -39,7 +43,9 @@ public class TreeFilesViewModel : PluginTreeViewModel
 									.AddListener(this, nameof(SelectedNode));
 		RenameCommand = new BaseCommand(_ => Rename(), _ => CanRename())
 									.AddListener(this, nameof(SelectedNode));
-		CopyCommand = new BaseCommand(_ => CopyFile(), _ => CanExecuteAction(nameof(CopyCommand)))
+		CopyCommand = new BaseCommand(_ => CopyFile(false), _ => CanExecuteAction(nameof(CopyCommand)))
+									.AddListener(this, nameof(SelectedNode));
+		CutCommand = new BaseCommand(_ => CopyFile(true), _ => CanExecuteAction(nameof(CopyCommand)))
 									.AddListener(this, nameof(SelectedNode));
 		PasteCommand = new BaseCommand(_ => PasteFile(), _ => CanExecuteAction(nameof(PasteCommand)))
 									.AddListener(this, nameof(SelectedNode));
@@ -87,24 +93,75 @@ public class TreeFilesViewModel : PluginTreeViewModel
 	/// <summary>
 	///		Copia archivos desde el explorador
 	/// </summary>
-	public void CopyFromExplorer(string path, string[] files)
+	public void CopyFiles(string pathTarget, string[] filesSource, bool move)
 	{
-		if (string.IsNullOrWhiteSpace(path) || !Directory.Exists(path))
+		if (string.IsNullOrWhiteSpace(pathTarget) || !Directory.Exists(pathTarget))
 			MainViewModel.PluginsStudioController.MainWindowController.SystemController.ShowMessage("Seleccione la carpeta donde desea copiar los archivos");
 		else
 		{
-			// Copia los archivos y/o directorios
-			foreach (string file in files)
-				if (!string.IsNullOrWhiteSpace(file))
-				{
-					if (File.Exists(file))
-						LibHelper.Files.HelperFiles.CopyFile(file, Path.Combine(path, Path.GetFileName(file)));
-					else if (Directory.Exists(file))
-						LibHelper.Files.HelperFiles.CopyPath(file, Path.Combine(path, Path.GetFileName(file)));
-				}
-			// Actualiza el árbol
-			Load();
+			bool copied = false;
+
+				// Copia los archivos y/o directorios
+				foreach (string file in filesSource)
+					if (CopyFile(pathTarget, file, move))
+						copied = true;
+				// Actualiza el árbol si se ha copiado algo
+				if (copied)
+					Load();
 		}
+	}
+
+	/// <summary>
+	///		Copia / mueve un archivo / directorio a un directorio destino
+	/// </summary>
+	private bool CopyFile(string pathTarget, string fileSource, bool move)
+	{
+		bool copied = false;
+
+			// Copia el archivo
+			try
+			{
+				// Copia el archivo o el directorio
+				if (File.Exists(fileSource))
+				{
+					string fileNameTarget = string.Empty;
+
+						// Si está en el mismo directorio, crea una copia con el mismo nombre
+						if ((Path.GetDirectoryName(fileSource) ?? string.Empty).Equals(pathTarget, StringComparison.CurrentCultureIgnoreCase))
+							fileSource = HelperFiles.GetConsecutiveFileName(pathTarget, Path.GetFileName(fileSource));
+						// Obtiene el nombre del archivo destino
+						fileNameTarget = Path.Combine(pathTarget, Path.GetFileName(fileSource));
+						// Copia / mueve el archivo
+						if (move)
+							copied = HelperFiles.MoveFile(fileSource, fileNameTarget);
+						else
+							copied = HelperFiles.CopyFile(fileSource, fileNameTarget);
+				}
+				else if (Directory.Exists(fileSource) && !fileSource.Equals(pathTarget, StringComparison.CurrentCultureIgnoreCase))
+				{
+					// Obtiene el nombre del archivo
+					pathTarget = HelperFiles.GetConsecutiveFileName(pathTarget, Path.GetFileName(fileSource));
+					// Copia / mueve el directorio
+					if (move)
+						copied = HelperFiles.MovePath(fileSource, pathTarget);
+					else
+					{
+						HelperFiles.CopyPath(fileSource, pathTarget);
+						copied = true;
+					}
+				}
+				// Log
+				if (copied)
+					MainViewModel.PluginsStudioController.MainWindowController.Logger.LogInformation($"{(move ? "Moved" : "Copied")} {fileSource} to {pathTarget}");
+				else
+					MainViewModel.PluginsStudioController.MainWindowController.Logger.LogError($"Can't {(move ? "move" : "copy")} {fileSource} to {pathTarget}");
+			}
+			catch (Exception exception)
+			{
+				MainViewModel.PluginsStudioController.MainWindowController.Logger.LogError(exception, $"Error when {(move ? "move" : "copy")} {fileSource} to {pathTarget}");
+			}
+			// Devuelve el valor que indica si se ha copiado
+			return copied;
 	}
 
 	/// <summary>
@@ -177,8 +234,7 @@ public class TreeFilesViewModel : PluginTreeViewModel
 						// Quita los espacios
 						fileName = fileName.TrimIgnoreNull();
 						// Crea el directorio  y actualiza el árbol
-						if (!string.IsNullOrWhiteSpace(fileName) &&
-								LibHelper.Files.HelperFiles.MakePath(Path.Combine(path, fileName)))
+						if (!string.IsNullOrWhiteSpace(fileName) && HelperFiles.MakePath(Path.Combine(path, fileName)))
 							Load();
 					}
 			}
@@ -200,9 +256,9 @@ public class TreeFilesViewModel : PluginTreeViewModel
 						!string.IsNullOrWhiteSpace(createFileViewModel.FileName))
 					{
 						// Graba el archivo
-						LibHelper.Files.HelperFiles.SaveTextFile(createFileViewModel.FullFileName, 
-																 GetTemplate(createFileViewModel.FileName, createFileViewModel.FilesAssigned), 
-																 GetEncoder(createFileViewModel.GetSelectedEncoding()));
+						HelperFiles.SaveTextFile(createFileViewModel.FullFileName, 
+												 GetTemplate(createFileViewModel.FileName, createFileViewModel.FilesAssigned), 
+												 GetEncoder(createFileViewModel.GetSelectedEncoding()));
 						// Abre la ventana
 						MainViewModel.PluginsStudioController.HostPluginsController.OpenFile(createFileViewModel.FullFileName);
 						// Actualiza el árbol
@@ -267,10 +323,13 @@ public class TreeFilesViewModel : PluginTreeViewModel
 	/// <summary>
 	///		Copia un archivo
 	/// </summary>
-	private void CopyFile()
+	private void CopyFile(bool move)
 	{
 		if (SelectedNode is NodeFileViewModel node)
+		{
 			_nodeToCopy = node;
+			_actionNodeToCopyMove = move;
+		}
 		else
 			_nodeToCopy = null;
 	}
@@ -280,35 +339,18 @@ public class TreeFilesViewModel : PluginTreeViewModel
 	/// </summary>
 	private void PasteFile()
 	{
-		if (_nodeToCopy != null)
+		if (_nodeToCopy is not null)
 		{
-			string target = GetSelectedPath();
-			string source = _nodeToCopy.FileName;
+			string pathTarget = GetSelectedPath();
+			string fileSource = _nodeToCopy.FileName;
 
-				// Copia el directorio o el archivo
-				if (Directory.Exists(source))
+				if (CopyFile(pathTarget, fileSource, _actionNodeToCopyMove))
 				{
-					if (target.StartsWith(source, StringComparison.CurrentCultureIgnoreCase))
-						MainViewModel.PluginsStudioController.MainWindowController.SystemController.ShowMessage($"No se pude copiar {source} sobre {target}");
-					else
-					{
-						// Obtiene el nombre del directorio destino
-						target = LibHelper.Files.HelperFiles.GetConsecutivePath(target, Path.GetFileName(source));
-						// Copia el directorio
-						LibHelper.Files.HelperFiles.CopyPath(source, target);
-					}
+					// Actualiza el árbol
+					Load();
+					// ... y vacía el nodo de copia
+					_nodeToCopy = null;
 				}
-				else
-				{
-					// Obtiene el nombre del archivo
-					target = LibHelper.Files.HelperFiles.GetConsecutiveFileName(target, Path.GetFileName(source));
-					// Copia el archivo
-					LibHelper.Files.HelperFiles.CopyFile(source, target);
-				}
-				// Actualiza el árbol
-				Load();
-				// ... y vacía el nodo de copia
-				_nodeToCopy = null;
 		}
 	}
 
@@ -321,10 +363,11 @@ public class TreeFilesViewModel : PluginTreeViewModel
 			MainViewModel.PluginsStudioController.MainWindowController.SystemController.ShowMessage("No hay ninguna imagen en el portapapeles");
 		else
 		{
-			string fileName = MainViewModel.PluginsStudioController.MainWindowController.DialogsController
-									.OpenDialogSave(GetSelectedFolder(),
+			string folder = GetSelectedFolder();
+			string? fileName = MainViewModel.PluginsStudioController.MainWindowController.DialogsController
+									.OpenDialogSave(folder,
 													"Archivos PNG (*.png)|*.png|Archivos JPG (*.jpg)|*.jpg|Archivos BMP (*.bmp)|*.bmp|Archivos GIF (*.gif)|*.gif|Archivos TIFF (*.tiff)|*.tiff",
-													"NewImage.png");
+													GetDefaultNewFileName(folder));
 
 				if (!string.IsNullOrWhiteSpace(fileName))
 				{
@@ -333,6 +376,17 @@ public class TreeFilesViewModel : PluginTreeViewModel
 					else
 						Load();
 				}
+		}
+
+		// Obtiene el nombre por defecto para el nuevo archivo
+		string? GetDefaultNewFileName(string folder)
+		{
+			string fileName = Path.GetFileName(folder) + ".png";
+
+				// Obtiene un nombre consecutivo
+				fileName = HelperFiles.GetConsecutiveFileName(folder, fileName);
+				// Devuelve el nombre de archivo
+				return Path.GetFileName(fileName);
 		}
 	}
 
@@ -376,7 +430,7 @@ public class TreeFilesViewModel : PluginTreeViewModel
 			if (MainViewModel.PluginsStudioController.MainWindowController.SystemController.ShowQuestion($"¿Realmente desea eliminar el directorio {Path.GetFileName(fileName)}?"))
 			{
 				// Elimina el directorio
-				LibHelper.Files.HelperFiles.KillPath(fileName);
+				HelperFiles.KillPath(fileName);
 				// Cierra las ventanas abiertas en este directorio
 				CloseWindows(fileName, true);
 				// Actualiza el árbol
@@ -388,7 +442,7 @@ public class TreeFilesViewModel : PluginTreeViewModel
 			if (MainViewModel.PluginsStudioController.MainWindowController.SystemController.ShowQuestion($"¿Realmente desea eliminar el archivo {Path.GetFileName(fileName)}?"))
 			{
 				// Elimina el archivo
-				LibHelper.Files.HelperFiles.KillFile(fileName);
+				HelperFiles.KillFile(fileName);
 				// Cierra la ventana abierta de este archivo
 				CloseWindows(fileName, false);
 				// Actualiza el árbol
@@ -505,7 +559,7 @@ public class TreeFilesViewModel : PluginTreeViewModel
 						// Obtiene el nombre completo del archivo / carpeta
 						newFileName = Path.Combine(Path.GetDirectoryName(oldFileName) ?? string.Empty, newFileName);
 						// Cambia el nombre
-						if (LibHelper.Files.HelperFiles.Rename(oldFileName, newFileName))
+						if (HelperFiles.Rename(oldFileName, newFileName))
 						{
 							// Cambia los nombres de los viewModel de archivos abiertos
 							RenameOpenViewModels(oldFileName, isFolder, newFileName);
@@ -653,6 +707,11 @@ public class TreeFilesViewModel : PluginTreeViewModel
 	///		Comando para copiar un nodo
 	/// </summary>
 	public BaseCommand CopyCommand { get; }
+
+	/// <summary>
+	///		Comando para cortar un nodo
+	/// </summary>
+	public BaseCommand CutCommand { get; }
 
 	/// <summary>
 	///		Comando para pegar un nodo

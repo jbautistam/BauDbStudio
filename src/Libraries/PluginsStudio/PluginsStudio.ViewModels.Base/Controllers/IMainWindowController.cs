@@ -1,94 +1,98 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 
 using Bau.Libraries.BauMvvm.ViewModels.Controllers;
+using Bau.Libraries.PluginsStudio.ViewModels.Base.Models.Processes;
 
-namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Controllers
+namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Controllers;
+
+/// <summary>
+///		Interface para los controladores de plugin
+/// </summary>
+public interface IMainWindowController
 {
 	/// <summary>
-	///		Interface para los controladores de plugin
+	///		Abre el explorador sobre un directorio
 	/// </summary>
-	public interface IMainWindowController
-	{
-		/// <summary>
-		///		Abre el explorador sobre un directorio
-		/// </summary>
-		void OpenExplorer(string path);
+	void OpenExplorer(string path);
 
-		/// <summary>
-		///		Abre el browser predeterminado sobre una URL
-		/// </summary>
-		void OpenWindowsWebBrowser(Uri uri);
+	/// <summary>
+	///		Abre el browser predeterminado sobre una URL
+	/// </summary>
+	void OpenWindowsWebBrowser(Uri uri);
 
-		/// <summary>
-		///		Obtiene la ventana de detalles activa
-		/// </summary>
-		Interfaces.IDetailViewModel GetActiveDetails();
+	/// <summary>
+	///		Obtiene la ventana de detalles activa
+	/// </summary>
+	Interfaces.IDetailViewModel? GetActiveDetails();
 
-		/// <summary>
-		///		Obtiene la lista de ventanas de detalles abiertas
-		/// </summary>
-		List<Interfaces.IDetailViewModel> GetOpenedDetails();
+	/// <summary>
+	///		Obtiene la lista de ventanas de detalles abiertas
+	/// </summary>
+	List<Interfaces.IDetailViewModel> GetOpenedDetails();
 
-		/// <summary>
-		///		Indica a la ventana principal que cambie el Id de un documento
-		/// </summary>
-		void UpdateTabId(string oldTabId, string newTabId, string newHeader);
+	/// <summary>
+	///		Indica a la ventana principal que cambie el Id de un documento
+	/// </summary>
+	void UpdateTabId(string oldTabId, string newTabId, string newHeader);
 
-		/// <summary>
-		///		Indica a la ventana principal que cierre un documento
-		/// </summary>
-		void CloseWindow(string tabId);
+	/// <summary>
+	///		Indica a la ventana principal que cierre un documento
+	/// </summary>
+	void CloseWindow(string tabId);
 
-		/// <summary>
-		///		Muestra una notificación (sólo si la configuración lo permite)
-		/// </summary>
-		void ShowNotification(SystemControllerEnums.NotificationType type, string title, string message);
+	/// <summary>
+	///		Muestra una notificación (sólo si la configuración lo permite)
+	/// </summary>
+	void ShowNotification(SystemControllerEnums.NotificationType type, string title, string message);
 
-		/// <summary>
-		///		Copia un valor al portapapeles
-		/// </summary>
-		void CopyToClipboard(object value);
+	/// <summary>
+	///		Copia un valor al portapapeles
+	/// </summary>
+	void CopyToClipboard(object value);
 
-		/// <summary>
-		///		Comprueba si en el portapapeles hay una imagen
-		/// </summary>
-		bool ClipboardContainImage();
+	/// <summary>
+	///		Comprueba si en el portapapeles hay una imagen
+	/// </summary>
+	bool ClipboardContainImage();
 
-		/// <summary>
-		///		Graba la imagen del portapapeles
-		/// </summary>
-		bool SaveClipboardImage(string fileName);
+	/// <summary>
+	///		Graba la imagen del portapapeles
+	/// </summary>
+	bool SaveClipboardImage(string fileName);
 
-		/// <summary>
-		///		Controlador principal
-		/// </summary>
-		IHostController HostController { get; }
+	/// <summary>
+	///		Encola un proceso
+	/// </summary>
+	void EnqueueProcess(ProcessModel process);
 
-		/// <summary>
-		///		Controlador de diálogos de sistema
-		/// </summary>
-		IHostDialogsController DialogsController => HostController.DialogsController;
+	/// <summary>
+	///		Controlador principal
+	/// </summary>
+	//TODO: esto se debería poder eliminar
+	IHostController HostController { get; }
 
-        /// <summary>
-        ///     Controlador con funciones del sistema
-        /// </summary>
-        IHostSystemController SystemController => HostController.SystemController;
+	/// <summary>
+	///		Controlador de diálogos de sistema
+	/// </summary>
+	IHostDialogsController DialogsController => HostController.DialogsController;
 
-        /// <summary>
-        ///     Controlador con funciones del sistema asíncrono
-        /// </summary>
-        IHostSystemControllerAsync SystemControllerAsync => HostController.SystemControllerAsync;
+    /// <summary>
+    ///     Controlador con funciones del sistema
+    /// </summary>
+    IHostSystemController SystemController => HostController.SystemController;
 
-        /// <summary>
-        ///     Controlador de mensajes
-        /// </summary>
-        IHostMessengerController MessengerController => HostController.MessengerController;
+    /// <summary>
+    ///     Controlador con funciones del sistema asíncrono
+    /// </summary>
+    IHostSystemControllerAsync SystemControllerAsync => HostController.SystemControllerAsync;
 
-		/// <summary>
-		///		Controlador de log (Microsoft Logger)
-		/// </summary>
-		ILogger<IMainWindowController> Logger { get; }
-	}
+    /// <summary>
+    ///     Controlador de mensajes
+    /// </summary>
+    IHostMessengerController MessengerController => HostController.MessengerController;
+
+	/// <summary>
+	///		Controlador de log (Microsoft Logger)
+	/// </summary>
+	ILogger<IMainWindowController> Logger { get; }
 }

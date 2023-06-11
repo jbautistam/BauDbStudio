@@ -44,23 +44,23 @@ namespace Bau.Libraries.StructuredFilesStudio.ViewModels.Details.Files
 			Records = 0;
 			RecordsPerPage = 10_000;
 			// Asigna los comandos
-			NextPageCommand = new BaseCommand(_ => Task.Run(async () => await GoToPageAsync(ActualPage + 1, CancellationToken.None)), 
+			NextPageCommand = new BaseCommand(async _ => await GoToPageAsync(ActualPage + 1, CancellationToken.None), 
 											  _ => ActualPage < Pages)
 										.AddListener(this, nameof(Records))
 										.AddListener(this, nameof(RecordsPerPage));
-			PreviousPageCommand = new BaseCommand(_ => Task.Run(async () => await GoToPageAsync(ActualPage - 1, CancellationToken.None)), 
+			PreviousPageCommand = new BaseCommand(async _ => await GoToPageAsync(ActualPage - 1, CancellationToken.None), 
 												  _ => ActualPage > 1)
 										.AddListener(this, nameof(Records))
 										.AddListener(this, nameof(RecordsPerPage));
-			FirstPageCommand = new BaseCommand(_ => Task.Run(async () => await GoToPageAsync(1, CancellationToken.None)), 
+			FirstPageCommand = new BaseCommand(async _ => await GoToPageAsync(1, CancellationToken.None), 
 											   _ => ActualPage > 1)
 										.AddListener(this, nameof(Records))
 										.AddListener(this, nameof(RecordsPerPage));
-			LastPageCommand = new BaseCommand(_ => Task.Run(async () => await GoToPageAsync(Pages, CancellationToken.None)), 
+			LastPageCommand = new BaseCommand(async _ => await GoToPageAsync(Pages, CancellationToken.None), 
 											  _ => ActualPage < Pages)
 										.AddListener(this, nameof(Records))
 										.AddListener(this, nameof(RecordsPerPage));
-			FilePropertiesCommand = new BaseCommand(_ => Task.Run(async () => await OpenFilePropertiesAsync(CancellationToken.None)));
+			FilePropertiesCommand = new BaseCommand(async _ => await OpenFilePropertiesAsync(CancellationToken.None));
 		}
 
 		/// <summary>

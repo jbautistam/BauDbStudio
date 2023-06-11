@@ -24,27 +24,33 @@ public class LastFilesListViewModel : BaseObservableObject
 	{
 		if (!string.IsNullOrWhiteSpace(fileName))
 		{
-			// Añade los nombres de archivos al inicio
-			foreach (string part in fileName.Split(';', StringSplitOptions.TrimEntries))
-				if (!string.IsNullOrWhiteSpace(part))
-				{
-					LastFileViewModel? existing = Files.FirstOrDefault(item => item.FileName.Equals(part, StringComparison.CurrentCultureIgnoreCase));
+			string[] parts = fileName.Split(';', StringSplitOptions.TrimEntries);
+			List<string> files = new();
+
+				// Ordena los archivos al revés (porque queremos los más antiguos arriba porque se insertan siempre en la posición 0)
+				for (int index = parts.Length - 1; index >= 0; index--)
+					files.Add(parts[index]);
+				// Añade los nombres de archivos al inicio
+				foreach (string part in files)
+					if (!string.IsNullOrWhiteSpace(part) && File.Exists(part))
+					{
+						LastFileViewModel? existing = Files.FirstOrDefault(item => item.FileName.Equals(part, StringComparison.CurrentCultureIgnoreCase));
 						
-						// Quita el archivo existente
-						if (existing is not null)
-							Files.Remove(existing);
-						// Añade el archivo al principio
-						Files.Insert(0, new LastFileViewModel(MainViewModel, part, 
-															  MainViewModel.PluginsStudioController.HostPluginsController.GetIcon(part), 
-															  0)
-									);
-				}
-			// Elimina los archivos sobrantes (deja 10 como máximo)
-			while (Files.Count > 10)
-				Files.RemoveAt(Files.Count - 1);
-			// Asigna los índices
-			for (int index = 0; index < Files.Count; index++)
-				Files[index].Index = index + 1;
+							// Quita el archivo existente
+							if (existing is not null)
+								Files.Remove(existing);
+							// Añade el archivo al principio
+							Files.Insert(0, new LastFileViewModel(MainViewModel, part, 
+																  MainViewModel.PluginsStudioController.HostPluginsController.GetIcon(part), 
+																  0)
+										);
+					}
+				// Elimina los archivos sobrantes (deja 10 como máximo)
+				while (Files.Count > 10)
+					Files.RemoveAt(Files.Count - 1);
+				// Asigna los índices
+				for (int index = 0; index < Files.Count; index++)
+					Files[index].Index = index + 1;
 		}
 	}
 

@@ -1,9 +1,12 @@
 ﻿using System.Data;
 using Microsoft.Extensions.Logging;
+using System.Data.Common;
 
 using Bau.Libraries.LibHelper.Extensors;
+using DbBase = Bau.Libraries.LibDbProviders.Base.Models;
 using Bau.Libraries.DbStudio.Models.Connections;
 using Bau.Libraries.LibDbProviders.Base;
+using Bau.Libraries.DbScripts.Manager.Models;
 
 namespace Bau.Libraries.DbStudio.Application.Controllers.Export;
 
@@ -12,48 +15,20 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Export;
 /// </summary>
 public class ExportDataBaseGenerator
 {
+	// Eventos
+	public event EventHandler<EventArguments.ProgressEventArgs>? Progress;
+
 	public ExportDataBaseGenerator(SolutionManager manager)
 	{
 		Manager = manager;
 	}
 
 	/// <summary>
-	///		Exporta las tablas de una conexión a una serie de archivos
-	/// </summary>
-	public async Task<bool> ExportAsync(ConnectionModel connection, List<ConnectionTableModel> tables,
-										string path, SolutionManager.FormatType formatType, long blockSize, CancellationToken cancellationToken)
-	{
-		// Limpia los errores
-		Errors.Clear();
-		// Crea el directorio
-		LibHelper.Files.HelperFiles.MakePath(path);
-		// Genera los archivos
-		foreach (ConnectionTableModel table in tables)
-			if (!cancellationToken.IsCancellationRequested)
-				try
-				{
-					// Log
-					Manager.Logger.LogInformation($"Start export table {table.FullName}");
-					// Exporta la tabla
-					await ExportTableAsync(connection, table, path, formatType, blockSize, cancellationToken);
-					// Log
-					Manager.Logger.LogInformation($"End export table {table.FullName}");
-				}
-				catch (Exception exception)
-				{
-					Errors.Add($"Exception when export {table.FullName}. {exception.Message}");
-					Manager.Logger.LogError(exception, $"Error when export {table.FullName}");
-				}
-		// Devuelve el valor que indica si la exportación ha sido correcta
-		return Errors.Count == 0;
-	}
-
-	/// <summary>
 	///		Exporta una tabla particionando la consulta en varios <see cref="IDataReader"/> (porque por ejemplo spark carga todo el dataReader en memoria
 	///	y da un error de OutOfMemory)
 	/// </summary>
-	private async Task ExportTableAsync(ConnectionModel connection, ConnectionTableModel table, string path, 
-										SolutionManager.FormatType formatType, long blockSize, CancellationToken cancellationToken)
+	public async Task ExportTableAsync(ConnectionModel connection, ConnectionTableModel table, string path, 
+									   SolutionManager.FormatType formatType, long blockSize, CancellationToken cancellationToken)
 	{
 		IDbProvider provider = Manager.DbScriptsManager.GetDbProvider(connection);
 		long records = 0;
@@ -85,8 +60,20 @@ public class ExportDataBaseGenerator
 					//Log
 					Manager.Logger.LogInformation($"Reading page {actualPage + 1} / {records / blockSize + 1:#,##0} ({records:#,##0}) from table {table.Name}");
 					// Exporta la tabla
-					await ExportTableAsync(provider, sql, fileName, formatType, connection.TimeoutExecuteScript, cancellationToken);
+					await ExportQueryAsync(connection, 
+										   new DbBase.QueryModel(sql, DbBase.QueryModel.QueryType.Text, connection.TimeoutExecuteScript), 
+										   fileName, formatType, cancellationToken);
 			}
+	}
+
+	/// <summary>
+	///		Exporta el resultado de una consulta a un archivo
+	/// </summary>
+	public async Task ExportQueryAsync(QueryModel query, string fileName, SolutionManager.FormatType formatType, long blockSize, CancellationToken cancellationToken)
+	{
+		await ExportQueryAsync(query.Connection, 
+							   new DbBase.QueryModel(query.Sql, DbBase.QueryModel.QueryType.Text, query.Connection.TimeoutExecuteScript),
+							   fileName, formatType, cancellationToken);
 	}
 
 	/// <summary>
@@ -110,10 +97,10 @@ public class ExportDataBaseGenerator
 	/// <summary>
 	///		Exporta una tabla
 	/// </summary>
-	private async Task ExportTableAsync(IDbProvider provider, string sql, string fileName, 
-										SolutionManager.FormatType formatType, TimeSpan timeout, CancellationToken cancellationToken)
+	private async Task ExportQueryAsync(ConnectionModel connection, DbBase.QueryModel query, string fileName, 
+										SolutionManager.FormatType formatType, CancellationToken cancellationToken)
 	{
-		using (IDataReader reader = provider.ExecuteReader(sql, null, CommandType.Text, timeout))
+		using (DbDataReader reader = await Manager.DbScriptsManager.GetDbProvider(connection).ExecuteReaderAsync(query, cancellationToken))
 		{
 			switch (formatType)
 			{
@@ -179,6 +166,14 @@ public class ExportDataBaseGenerator
 			}
 			// Devuelve el nombre de archivo
 			return Path.Combine(path, name);
+	}
+
+	/// <summary>
+	///		Lanza el evento de progreso
+	/// </summary>
+	private void RaiseProgress(long actual)
+	{
+		Progress?.Invoke(this, new EventArguments.ProgressEventArgs(actual, actual + 1));
 	}
 
 	/// <summary>

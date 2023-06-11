@@ -59,7 +59,6 @@ public partial class MainWindow : Window
 		// Asigna los manejadores de eventos del docker de documentos
 		dckManager.Closing += (sender, args) => CloseWindow(args);
 		dckManager.Closed += (sender, args) => DestroyWindow(args);
-		//dckManager.Closed += (sender, args) => DestroyTab(args);
 		dckManager.ActiveDocumentChanged += (sender, args) => UpdateSelectedTab();
 		// Cambia el tema
 		SetTheme((Controls.DockLayout.DockLayoutManager.DockTheme) DbStudioViewsManager.ConfigurationController.LastThemeSelected);
@@ -67,6 +66,8 @@ public partial class MainWindow : Window
 		lblVersion.Text = GetAssemblyVersion();
 		// Carga los menús de espacios de trabajo
 		ShowMenuWorkspaces();
+		// Carga la configuración en los controladores
+		ViewModel.PluginsStudioController.MainWindowController.HostController.DialogsController.LastPathSelected = DbStudioViewsManager.ConfigurationController.LastPathSelected;
 	}
 
 	/// <summary>

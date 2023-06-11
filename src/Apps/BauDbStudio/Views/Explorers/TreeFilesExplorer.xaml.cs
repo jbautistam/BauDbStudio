@@ -176,8 +176,7 @@ public partial class TreeFilesExplorer : UserControl
 			Point pntMouse = e.GetPosition(null);
 			Vector vctDifference = _startDrag - pntMouse;
 
-				if (pntMouse.X < trvExplorer.ActualWidth - 50 &&
-					pntMouse.Y < trvExplorer.ActualHeight - 50 &&
+				if (pntMouse.X < trvExplorer.ActualWidth - 50 && pntMouse.Y < trvExplorer.ActualHeight - 50 &&
 						(Math.Abs(vctDifference.X) > SystemParameters.MinimumHorizontalDragDistance ||
 						 Math.Abs(vctDifference.Y) > SystemParameters.MinimumVerticalDragDistance))
 					_dragDropController.InitDragOperation(trvExplorer, trvExplorer.SelectedItem as ControlHierarchicalViewModel);
@@ -186,22 +185,51 @@ public partial class TreeFilesExplorer : UserControl
 
 	private void trvExplorer_Drop(object sender, DragEventArgs e)
 	{
-		string path = GetPathUnderElement(e.OriginalSource as UIElement);
+		string pathTarget = GetPathUnderElement(e.OriginalSource as UIElement);
 
-			if (e.Data.GetDataPresent(DataFormats.FileDrop) && !string.IsNullOrWhiteSpace(path) && System.IO.Directory.Exists(path))
-				try
-				{
-					string [] files = (string []) e.Data.GetData(DataFormats.FileDrop);
+			if (!string.IsNullOrWhiteSpace(pathTarget) && System.IO.Directory.Exists(pathTarget))
+			{
+				bool move = e.KeyStates.HasFlag(DragDropKeyStates.ShiftKey) || e.KeyStates.HasFlag(DragDropKeyStates.ControlKey);
 
-						// Copia los archivos
-						ViewModel.CopyFromExplorer(path, files);
-						// Indica que se ha tratao
-						e.Handled = true;
+					if (e.Data.GetDataPresent(DataFormats.FileDrop))
+					{	
+							// Indica que se ha manejado el evento
+							e.Handled = true;
+							// Copia los datos
+							try
+							{
+								string [] files = (string []) e.Data.GetData(DataFormats.FileDrop);
+
+									// Copia los archivos
+									ViewModel.CopyFiles(pathTarget, files, move);
+							}
+							catch (Exception exception)
+							{
+								ViewModel.MainViewModel.PluginsStudioController.MainWindowController.Logger.LogError(exception, "Error when drop files");
+							}
+					}
+					else
+					{
+						ControlHierarchicalViewModel? source = _dragDropController.GetDragDropFileNode(e.Data);
+						string fileSource = string.Empty;
+
+							// Indica que se ha manejado el evento
+							e.Handled = true;
+							// Dependiendo del tipo de nodo obtiene el nombre de archivo / directorio donde se deben copiar los datos
+							switch (source)
+							{
+								case NodeFileViewModel node:
+										fileSource = node.FileName;
+									break;
+								case NodeFolderRootViewModel node:
+										fileSource = node.FileName;
+									break;
+							}
+							// Si no está vacío
+							if (!string.IsNullOrWhiteSpace(fileSource))
+								ViewModel.CopyFiles(pathTarget, new string[] { fileSource }, move);
 				}
-				catch (Exception exception)
-				{
-					ViewModel.MainViewModel.PluginsStudioController.MainWindowController.Logger.LogError(exception, "Error when drop files");
-				}
+			}
 	}
 
 	private void trvExplorer_ContextMenuOpening(object sender, ContextMenuEventArgs e)

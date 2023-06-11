@@ -7,9 +7,9 @@
     <RootNamespace>Bau.DbStudio</RootNamespace>
     <Authors>Jose Antonio Bautista</Authors>
     <ApplicationIcon>Resources\BauDbStudio.ico</ApplicationIcon>
-    <AssemblyVersion>1.0.35.0</AssemblyVersion>
-    <FileVersion>1.0.35.0</FileVersion>
-    <Version>1.0.35</Version>
+    <AssemblyVersion>1.0.37.0</AssemblyVersion>
+    <FileVersion>1.0.37.0</FileVersion>
+    <Version>1.0.37</Version>
     <PackageProjectUrl>https://github.com/jbautistam/BauDbStudio</PackageProjectUrl>
     <RepositoryUrl>https://github.com/jbautistam/BauDbStudio</RepositoryUrl>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -43,6 +43,7 @@
     <None Remove="Resources\Images\ArrowLeft.png" />
     <None Remove="Resources\Images\ArrowRight.png" />
     <None Remove="Resources\Images\ArrowUp.png" />
+    <None Remove="Resources\Images\Cancel.png" />
     <None Remove="Resources\Images\CaseSensitive.png" />
     <None Remove="Resources\Images\Download.png" />
     <None Remove="Resources\Images\Export.png" />
@@ -68,6 +69,7 @@
     <None Remove="Resources\Images\SeeWindow.png" />
     <None Remove="Resources\Images\SplashScreenImage.png" />
     <None Remove="Resources\Images\Stop.png" />
+    <None Remove="Resources\Images\Trash.png" />
     <None Remove="Resources\Images\Upload.png" />
     <None Remove="Resources\Images\WholeWord.png" />
     <None Remove="Resources\Images\Wildcards.png" />
@@ -101,7 +103,6 @@
     <ProjectReference Include="..\..\..\..\..\Controls\WPF\DockLayout\src\DockLayout.csproj" />
     <ProjectReference Include="..\..\..\..\..\Controls\WPF\ZoomAndPanControl\ZoomAndPanControls.csproj" />
     <ProjectReference Include="..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.Views.Wpf\BauMvvm.Views.Wpf.csproj" />
-    <ProjectReference Include="..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.Views\BauMvvm.Views.csproj" />
     <ProjectReference Include="..\..\..\..\..\Libraries\Common\LibSystem.Windows\LibSystem.Windows.csproj" />
     <ProjectReference Include="..\..\Libraries\DbStudio\DbStudio.Views\DbStudio.Views.csproj" />
     <ProjectReference Include="..\..\Libraries\PluginsStudio\PluginsStudio.ViewModels\PluginsStudio.ViewModels.csproj" />
@@ -122,6 +123,7 @@
     <Resource Include="Resources\Images\ArrowRight.png" />
     <Resource Include="Resources\Images\ArrowUp.png" />
     <Resource Include="Resources\Images\DataError.png" />
+    <Resource Include="Resources\Images\Cancel.png" />
     <Resource Include="Resources\Images\Export.png" />
     <Resource Include="Resources\Images\FileCss.png" />
     <Resource Include="Resources\Images\FileHtml.png" />
@@ -134,6 +136,7 @@
     <Resource Include="Resources\Images\Project.png" />
     <Resource Include="Resources\Images\Refresh.png" />
     <Resource Include="Resources\Images\SeeWindow.png" />
+    <Resource Include="Resources\Images\Trash.png" />
     <Resource Include="Resources\Images\Upload.png" />
     <Resource Include="Resources\Images\Download.png" />
     <Resource Include="Resources\Images\File.png" />
@@ -200,6 +203,9 @@
     <Page Update="Views\Files\ImageView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\TasksQueue\TasksQueueView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
     <Page Update="Views\Tools\LogItems\LogView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>

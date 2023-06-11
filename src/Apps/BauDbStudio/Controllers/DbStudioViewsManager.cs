@@ -102,6 +102,13 @@ public class DbStudioViewsManager
 													Title = "Files explorer",
 													Position = PaneModel.PositionType.Left,
 													View = new Views.Explorers.TreeFilesExplorer(PluginsStudioViewModel.TreeFoldersViewModel)
+												},
+										new PaneModel
+												{
+													Id = "TasksQueueView",
+													Title = "Processes queue",
+													Position = PaneModel.PositionType.Bottom,
+													View = new Views.TasksQueue.TasksQueueView(PluginsStudioViewModel.TasksQueueListViewModel)
 												}
 							};
 			// Añade los paneles de los plugins

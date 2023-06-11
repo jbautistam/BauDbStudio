@@ -18,6 +18,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels
 		private Tools.Search.SearchFilesViewModel _searchFilesViewModel = default!;
 		private Base.Interfaces.IDetailViewModel? _selectedDetailsViewModel;
 		private Explorers.Files.TreeFilesViewModel _treeFoldersViewModel = default!;
+		private TasksQueue.TasksQueueListViewModel _tasksQueueListViewModel = default!;
 
 		public PluginsStudioViewModel(Controllers.IPluginsStudioController pluginsStudioController)
 		{
@@ -28,6 +29,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels
 			WorkspacesViewModel = new Tools.Workspaces.WorkspaceListViewModel(this);
 			LogViewModel = new Tools.LogItems.LogListViewModel(this);
 			SearchFilesViewModel = new Tools.Search.SearchFilesViewModel(this);
+			TasksQueueListViewModel = new TasksQueue.TasksQueueListViewModel(this);
 			TreeFoldersViewModel = new Explorers.Files.TreeFilesViewModel(this);
 			// Asigna los comandos
 			SaveCommand = new BaseCommand(_ => Save(false), _ => CanSave())
@@ -205,6 +207,15 @@ namespace Bau.Libraries.PluginsStudio.ViewModels
 		{
 			get { return _treeFoldersViewModel; }
 			set { CheckObject(ref _treeFoldersViewModel, value); }
+		}
+
+		/// <summary>
+		///		ViewModel de la lista de procesos
+		/// </summary>
+		public TasksQueue.TasksQueueListViewModel TasksQueueListViewModel
+		{
+			get { return _tasksQueueListViewModel; }
+			set { CheckObject(ref _tasksQueueListViewModel, value); }
 		}
 
 		/// <summary>
