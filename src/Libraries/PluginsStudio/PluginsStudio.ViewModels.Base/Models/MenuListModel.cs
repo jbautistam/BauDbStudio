@@ -53,6 +53,7 @@ public class MenuListModel
 						}
 				  );
 	}
+
 	/// <summary>
 	///		Sección a la que pertenece la lista de menús
 	/// </summary>

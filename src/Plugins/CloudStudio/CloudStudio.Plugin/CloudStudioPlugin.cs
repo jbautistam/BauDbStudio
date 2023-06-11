@@ -10,12 +10,12 @@ namespace Bau.Libraries.CloudStudio.Plugin
 	/// <summary>
 	///		Manager de vistas de CloudStudio
 	/// </summary>
-	public class CloudStudioPlugin : PluginsStudio.Views.Base.Interfaces.IPlugin
+	public class CloudStudioPlugin : IPlugin
 	{
 		/// <summary>
 		///		Inicializa el manager de vistas de CloudStudio
 		/// </summary>
-		public void Initialize(PluginsStudio.Views.Base.Interfaces.IAppViewsController appViewsController, 
+		public void Initialize(IAppViewsController appViewsController, 
 							   PluginsStudio.ViewModels.Base.Controllers.IPluginsController pluginController)
 		{
 			AppViewsController = appViewsController;
@@ -41,101 +41,60 @@ namespace Bau.Libraries.CloudStudio.Plugin
 		/// <summary>
 		///		Intenta abrir un archivo en un plugin
 		/// </summary>
-		public bool OpenFile(string fileName)
-		{
-			return MainViewModel.OpenFile(fileName);
-		}
+		public bool OpenFile(string fileName) => MainViewModel.OpenFile(fileName);
 
 		/// <summary>
 		///		Obtiene los paneles del plugin
 		/// </summary>
 		public List<PaneModel> GetPanes()
 		{
-			List<PaneModel> panes = new List<PaneModel>();
-
-				// Añade los paneles de la aplicación principal
-				panes.Add(new PaneModel
-								{
-									Id = "TreeStorageExplorer",
-									Title = "Storage",
-									Position = PaneModel.PositionType.Right,
-									View = new Explorers.TreeStoragesExplorer(MainViewModel.TreeStoragesViewModel)
-								}
-						 );
-				// Devuelve la lista de paneles
-				return panes;
+			return new List<PaneModel>
+							{ 
+								new PaneModel
+										{
+											Id = "TreeStorageExplorer",
+											Title = "Storage",
+											Position = PaneModel.PositionType.Right,
+											View = new Explorers.TreeStoragesExplorer(MainViewModel.TreeStoragesViewModel)
+										}
+							};
 		}
 
 		/// <summary>
 		///		Obtiene las barras de herramientas del plugin
 		/// </summary>
-		public List<ToolBarModel> GetToolBars()
-		{
-			return new();
-		}
+		public List<ToolBarModel> GetToolBars() => new();
 
 		/// <summary>
 		///		Obtiene los menús del plugin
 		/// </summary>
 		public List<MenuListModel> GetMenus()
 		{
-			List<MenuListModel> menus = new();
-
-				// Crea la lista de menús de "Nuevo elemento"
-				menus.Add(GetMenus(MenuListModel.SectionType.NewItem));
-				// Devuelve la lista de menús
-				return menus;
-		}
-
-		/// <summary>
-		///		Obtiene los menús
-		/// </summary>
-		private MenuListModel GetMenus(MenuListModel.SectionType section)
-		{
-			MenuListModel menuList = new(section);
-
-				// Obtiene los elementos del menú
-				switch (section)
-				{
-					case MenuListModel.SectionType.NewItem:
-							menuList.Add("_Storage", MainViewModel.TreeStoragesViewModel.NewStorageCommand, GetIcon("Search.png"));
-						break;
-				}
-				// Devuelve la lista de menús
-				return menuList;
+			return new PluginsStudio.ViewModels.Base.Models.Builders.MenuBuilder()
+							.WithMenu(MenuListModel.SectionType.NewItem)
+								.WithItem("Storage", MainViewModel.TreeStoragesViewModel.NewStorageCommand, GetIcon("Storage.png"))
+						.Build();
 		}
 
 		/// <summary>
 		///		Obtiene la URL completa de un icono
 		/// </summary>
-		private string GetIcon(string resource)
-		{
-			return $"pack://application:,,,/CloudStudio.Views;component/Resources/Images/{resource}";
-		}
+		private string GetIcon(string resource) => $"pack://application:,,,/CloudStudio.Plugin;component/Resources/Images/{resource}";
 
 		/// <summary>
 		///		Obtiene las opciones de menú asociadas a las extensiones de archivo y carpetas
 		/// </summary>
-		public List<FileOptionsModel> GetFilesOptions()
-		{
-			return new();
-		}
+		public List<FileOptionsModel> GetFilesOptions() => new();
 
 		/// <summary>
 		///		Obtiene las extensiones de archivo asociadas al plugin
 		/// </summary>
-		public List<PluginsStudio.ViewModels.Base.Models.FileAssignedModel> GetFilesAssigned()
-		{
-			return new();
-		}
+		public List<FileAssignedModel> GetFilesAssigned() => new();
 
 		/// <summary>
 		///		Obtiene la vista de configuración (en este caso, no devuelve nada)
 		/// </summary>
-		public IPluginConfigurationView GetConfigurationView()
-		{
-			return null;
-		}
+		public IPluginConfigurationView GetConfigurationView() => null;
 
 		/// <summary>
 		///		Controlador de aplicación

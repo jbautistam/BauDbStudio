@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net7.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
-    <RootNamespace>Bau.Libraries.CloudStudio.Views</RootNamespace>
+    <RootNamespace>Bau.Libraries.$(MSBuildProjectName)</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

@@ -39,6 +39,17 @@ public class MenuBuilder
 	}
 
 	/// <summary>
+	///		Añade un separador
+	/// </summary>
+	public MenuBuilder WithSeparator()
+	{
+		// Añade el separador
+		ActualMenu.AddSeparator();
+		// Devuelve el generador
+		return this;
+	}
+
+	/// <summary>
 	///		Genera la lista
 	/// </summary>
 	public List<MenuListModel> Build() => Menus;

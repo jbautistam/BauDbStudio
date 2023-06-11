@@ -459,7 +459,7 @@ public partial class MainWindow : Window
 	/// <summary>
 	///		ViewModel principal
 	/// </summary>
-	public Libraries.PluginsStudio.ViewModels.PluginsStudioViewModel ViewModel { get; private set; }
+	public Libraries.PluginsStudio.ViewModels.PluginsStudioViewModel ViewModel { get; private set; } = default!;
 
 	private void Window_Loaded(object sender, RoutedEventArgs e)
 	{

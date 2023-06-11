@@ -84,50 +84,25 @@ public class DbStudioViewManager : IPlugin
 	/// </summary>
 	public List<MenuListModel> GetMenus()
 	{
-		return new()
-				{
-					GetMenus(MenuListModel.SectionType.NewItem),
-					GetMenus(MenuListModel.SectionType.Tools)
-				};
-	}
-
-	/// <summary>
-	///		Obtiene los menús
-	/// </summary>
-	private MenuListModel GetMenus(MenuListModel.SectionType section)
-	{
-		MenuListModel menuList = new(section);
-
-			// Obtiene los elementos del menú
-			switch (section)
-			{
-				case MenuListModel.SectionType.NewItem:
-						menuList.Add("_Conexión", MainViewModel.TreeConnectionsViewModel.NewConnectionCommand, GetIcon("Connection.png"));
-						menuList.AddSeparator();
-						menuList.Add("_Consulta", MainViewModel.TreeConnectionsViewModel.NewQueryCommand, GetIcon("Script.png"));
-						menuList.AddSeparator();
-						menuList.Add("_Xml de pruebas", MainViewModel.CreateTestXmlCommand, GetIcon("FileXml.png"));
-					break;
-				case MenuListModel.SectionType.Tools:
-						//menuList.Add("_Exportar tablas de datos ... ", MainViewModel.ConnectionExecutionViewModel.ExportDataBaseCommand, GetIcon("Export.png"));
-						//menuList.AddSeparator();
-						menuList.Add("_Crear scripts validación ...", MainViewModel.CreateValidationScriptsCommand, GetIcon("FileSql.png"));
-						menuList.Add("Crear script de importación de archivos ...", MainViewModel.CreateImportFilesScriptsCommand, GetIcon("FileSql.png"));
-						menuList.AddSeparator();
-						menuList.Add("Generar scripts SQL de reporting ...", MainViewModel.CreateSchemaReportingSqlCommand, GetIcon("FileXml.png"));
-					break;
-			}
-			// Devuelve la lista de menús
-			return menuList;
+		return new PluginsStudio.ViewModels.Base.Models.Builders.MenuBuilder()
+						.WithMenu(MenuListModel.SectionType.NewItem)
+							.WithItem("_Conexión", MainViewModel.TreeConnectionsViewModel.NewConnectionCommand, GetIcon("Connection.png"))
+							.WithSeparator()
+							.WithItem("_Consulta", MainViewModel.TreeConnectionsViewModel.NewQueryCommand, GetIcon("Script.png"))
+							.WithSeparator()
+							.WithItem("_Xml de pruebas", MainViewModel.CreateTestXmlCommand, GetIcon("FileSql.png"))
+						.WithMenu(MenuListModel.SectionType.Tools)
+							.WithItem("_Crear scripts validación ...", MainViewModel.CreateValidationScriptsCommand, GetIcon("FileSql.png"))
+							.WithItem("Crear script de importación de archivos ...", MainViewModel.CreateImportFilesScriptsCommand, GetIcon("FileSql.png"))
+							.WithSeparator()
+							.WithItem("Generar scripts SQL de reporting ...", MainViewModel.CreateSchemaReportingSqlCommand, GetIcon("FileSql.png"))
+					.Build();
 	}
 
 	/// <summary>
 	///		Obtiene la URL completa de un icono
 	/// </summary>
-	private string GetIcon(string icon)
-	{
-		return $"pack://application:,,,/DbStudio.Views;component/Resources/Images/{icon}";
-	}
+	private string GetIcon(string icon) => $"pack://application:,,,/DbStudio.Views;component/Resources/Images/{icon}";
 
 	/// <summary>
 	///		Obtiene las opciones de menú asociadas a las extensiones de archivo y carpetas
@@ -153,21 +128,10 @@ public class DbStudioViewManager : IPlugin
 	/// </summary>
 	public List<FileAssignedModel> GetFilesAssigned()
 	{
-		return new()
-				{
-					new FileAssignedModel
-								{
-									Name = "Sql Script",
-									FileExtension = ".sql",
-									Icon = GetIcon("FileSql.png")
-								},
-					new FileAssignedModel
-								{
-									Name = "Sql Extended",
-									FileExtension = ".sqlx",
-									Icon = GetIcon("FileSqlExtended.png")
-								}
-				};
+		return new PluginsStudio.ViewModels.Base.Models.Builders.FileAssignedBuilder()
+						.WithFile("Sql Script", ".sql", GetIcon("FileSql.png"))
+						.WithFile("Sql Extended", ".sqlx", GetIcon("FileSqlExtended.png"))
+					.Build();
 	}
 
 	/// <summary>
@@ -178,10 +142,10 @@ public class DbStudioViewManager : IPlugin
 	/// <summary>
 	///		Controlador de aplicación
 	/// </summary>
-	internal IAppViewsController AppViewsController { get; private set; }
+	internal IAppViewsController AppViewsController { get; private set; } = default!;
 
 	/// <summary>
 	///		ViewModel principal
 	/// </summary>
-	public ViewModels.DbStudioViewModel MainViewModel { get; private set; }
+	public ViewModels.DbStudioViewModel MainViewModel { get; private set; } = default!;
 }

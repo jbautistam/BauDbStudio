@@ -39,5 +39,5 @@ public class FileOptionsModel
 	/// <summary>
 	///		Opción de menú
 	/// </summary>
-	public MenuModel Menu { get; set; }
+	public MenuModel? Menu { get; set; }
 }

@@ -62,6 +62,7 @@
     <None Remove="Resources\Images\FileXml.png" />
     <None Remove="Resources\Images\Filter.png" />
     <None Remove="Resources\Images\FolderNode.png" />
+    <None Remove="Resources\Images\LastFiles.png" />
     <None Remove="Resources\Images\Loading.png" />
     <None Remove="Resources\Images\Project.png" />
     <None Remove="Resources\Images\Refresh.png" />
@@ -132,6 +133,7 @@
     <Resource Include="Resources\Images\FilePdf.png" />
     <Resource Include="Resources\Images\FileTxt.png" />
     <Resource Include="Resources\Images\Filter.png" />
+    <Resource Include="Resources\Images\LastFiles.png" />
     <Resource Include="Resources\Images\Loading.png" />
     <Resource Include="Resources\Images\Project.png" />
     <Resource Include="Resources\Images\Refresh.png" />

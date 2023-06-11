@@ -130,10 +130,7 @@ public class DbStudioViewsManager
 	/// <summary>
 	///		Obtiene los controles de configuración de los plugins
 	/// </summary>
-	public List<Libraries.PluginsStudio.Views.Base.Interfaces.IPluginConfigurationView> GetConfigurationViews()
-	{
-		return PluginsManager.GetConfigurationViews();
-	}
+	public List<Libraries.PluginsStudio.Views.Base.Interfaces.IPluginConfigurationView> GetConfigurationViews() => PluginsManager.GetConfigurationViews();
 
 	/// <summary>
 	///		Nombre de la aplicación

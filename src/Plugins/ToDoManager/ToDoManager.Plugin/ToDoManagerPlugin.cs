@@ -99,8 +99,9 @@ public class ToDoManagerPlugin : IPlugin
 	public List<MenuListModel> GetMenus()
 	{
 		return new PluginsStudio.ViewModels.Base.Models.Builders.MenuBuilder()
+							.WithMenu(MenuListModel.SectionType.NewItem)
+								.WithItem("Note", MainViewModel.CreateNewNoteCommand, GetIcon("Pin.png"))
 							.WithMenu(MenuListModel.SectionType.Tools)
-								.WithItem("Create note", MainViewModel.CreateNewNoteCommand, GetIcon("Pin.png"))
 								.WithItem("Show notes", MainViewModel.ShowNotesCommand, GetIcon("Task.png"))
 						.Build();
 	}
@@ -135,25 +136,22 @@ public class ToDoManagerPlugin : IPlugin
 	/// <summary>
 	///		Obtiene la ruta de un icono
 	/// </summary>
-	private string GetIcon(string name) => $"/ToDoManager.Plugin;component/Resources/{name}";
+	private string GetIcon(string icon) => $"pack://application:,,,/ToDoManager.Plugin;component/Resources/{icon}";
 
 	/// <summary>
 	///		Obtiene la vista de configuración del plugin
 	/// </summary>
-	public IPluginConfigurationView GetConfigurationView()
-	{
-		return new Views.Configuration.ctlConfiguration(MainViewModel.ConfigurationViewModel);
-	}
+	public IPluginConfigurationView GetConfigurationView() => new Views.Configuration.ctlConfiguration(MainViewModel.ConfigurationViewModel);
 
 	/// <summary>
 	///		Controlador de aplicación
 	/// </summary>
-	internal IAppViewsController AppViewsController { get; private set; }
+	internal IAppViewsController AppViewsController { get; private set; } = default!;
 
 	/// <summary>
 	///		ViewModel principal
 	/// </summary>
-	public ToDoManagerViewModel MainViewModel { get; private set; }
+	public ToDoManagerViewModel MainViewModel { get; private set; } = default!;
 
 	/// <summary>
 	///		Manager del Hook de teclado

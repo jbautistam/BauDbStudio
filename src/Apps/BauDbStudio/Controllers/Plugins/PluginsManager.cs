@@ -158,10 +158,7 @@ namespace Bau.DbStudio.Controllers.Plugins
 		/// <summary>
 		///		Comprueba si se puede ejecutar un comando sobre un plugin
 		/// </summary>
-		internal bool CheckCanExecutePluginCommand(string plugin, string viewModel, string command)
-		{
-			return true;
-		}
+		internal bool CheckCanExecutePluginCommand(string plugin, string viewModel, string command) => true;
 
 		/// <summary>
 		///		Manager de plugins

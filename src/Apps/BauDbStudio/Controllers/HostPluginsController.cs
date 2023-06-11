@@ -92,51 +92,15 @@ public class HostPluginsController : Libraries.PluginsStudio.ViewModels.Base.Con
 	/// </summary>
 	public List<FileAssignedModel> GetFilesAssigned(bool onlyCanCreate)
 	{
-		List<FileAssignedModel> files = new()
-											{
-												new FileAssignedModel
-															{
-																Name = "Json",
-																FileExtension = ".json",
-																Icon = "/Resources/Images/FileJson.png"
-															},
-												new FileAssignedModel
-															{
-																Name = "Xml",
-																FileExtension = ".xml",
-																Icon = "/Resources/Images/FileXml.png"
-															},
-												new FileAssignedModel
-															{
-																Name = "Python",
-																FileExtension = ".py",
-																Icon = "/Resources/Images/FilePython.png"
-															},
-												new FileAssignedModel
-															{
-																Name = "Markdown",
-																FileExtension = ".md",
-																Icon = "/Resources/Images/FileMd.png"
-															},
-												new FileAssignedModel
-															{
-																Name = "Powershell",
-																FileExtension = ".ps",
-																Icon = "/Resources/Images/FilePowershell.png"
-															},
-												new FileAssignedModel
-															{
-																Name = "C Sharp",
-																FileExtension = ".cs",
-																Icon = "/Resources/Images/FileCsharp.png"
-															},
-												new FileAssignedModel
-															{
-																Name = "Text",
-																FileExtension = ".txt",
-																Icon = "/Resources/Images/FileTxt.png"
-															}
-											};
+		List<FileAssignedModel> files = new Libraries.PluginsStudio.ViewModels.Base.Models.Builders.FileAssignedBuilder()
+													.WithFile("Json", ".json", "/Resources/Images/FileJson.png")
+													.WithFile("Xml", ".xml", "/Resources/Images/FileXml.png")
+													.WithFile("Python", ".py", "/Resources/Images/FilePython.png")
+													.WithFile("Markdown", ".md", "/Resources/Images/FileMd.png")
+													.WithFile("Powershell", ".ps", "/Resources/Images/FilePowershell.png")
+													.WithFile("C Sharp", ".cs", "/Resources/Images/FileCsharp.png")
+													.WithFile("Text", ".txt", "/Resources/Images/FileTxt.png")
+												.Build();
 
 			// Añade los archivos de plugin
 			foreach (FileAssignedModel file in DbStudioViewManager.PluginsManager.GetFilesAssigned())
