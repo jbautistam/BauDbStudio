@@ -14,10 +14,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibHelper\src\LibHelper.csproj" />
-		<ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibMarkup\src\LibMarkup.csproj" />
-		<ProjectReference Include="..\LibReporting.Models\LibReporting.Models.csproj" />
-		<ProjectReference Include="..\LibReporting.Requests\LibReporting.Requests.csproj" />
+	  <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibHelper\src\LibHelper.csproj" />
+	  <ProjectReference Include="..\LibReporting.Models\LibReporting.Models.csproj" />
+	  <ProjectReference Include="..\LibReporting.Requests\LibReporting.Requests.csproj" />
 	</ItemGroup>
 
 </Project>

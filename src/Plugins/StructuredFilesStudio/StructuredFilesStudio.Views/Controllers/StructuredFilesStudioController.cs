@@ -57,6 +57,9 @@ namespace Bau.Libraries.StructuredFilesStudio.Views.Controllers
 					case ViewModels.Details.Files.ParquetFilePropertiesViewModel viewModel:
 							result = DbStudioViewManager.AppViewsController.OpenDialog(new Files.ParquetFilePropertiesView(viewModel));
 						break;
+					case ViewModels.Details.Filters.ListFileFilterViewModel viewModel:
+							result = DbStudioViewManager.AppViewsController.OpenDialog(new Files.ListFilterView(viewModel));
+						break;
 				}
 				// Devuelve el resultado
 				return result;

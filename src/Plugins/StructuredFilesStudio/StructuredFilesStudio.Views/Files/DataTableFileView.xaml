@@ -42,11 +42,17 @@
 					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Project.png" />
 				</Button.Content>
 			</Button>
+			<Separator/>
+			<Button Command="{Binding Path=FilterCommand}" ToolTip="Filtrar">
+				<Button.Content>
+					<Image Width="16" Height="16" Source="/StructuredFilesStudio.Views;component/Resources/Images/Filter.png" />
+				</Button.Content>
+			</Button>
 		</ToolBar>
 		<DataGrid Grid.Row="1" Grid.Column="0" Margin="5" CanUserResizeColumns="True" AutoGenerateColumns="True"		
-				LoadingRow="DataGrid_LoadingRow" VerticalContentAlignment="Center"
-				ItemsSource="{Binding Path=DataResults}" FontWeight="Normal" CanUserAddRows="False"
-				IsReadOnly="True" CanUserDeleteRows="False" ClipboardCopyMode="IncludeHeader" 
-				AutoGeneratingColumn="DataGrid_AutoGeneratingColumn"/>
+					LoadingRow="DataGrid_LoadingRow" VerticalContentAlignment="Center"
+					ItemsSource="{Binding Path=DataResults}" FontWeight="Normal" CanUserAddRows="False"
+					IsReadOnly="True" CanUserDeleteRows="False" ClipboardCopyMode="IncludeHeader" 
+					AutoGeneratingColumn="DataGrid_AutoGeneratingColumn"/>
 	</Grid>
 </UserControl>

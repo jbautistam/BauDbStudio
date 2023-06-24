@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\AppController.cs" />
+    <Compile Remove="Views\Calendar\CalendarPane.xaml.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +30,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Remove="Views\Calendar\CalendarPane.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Resources\Blue.png" />
     <Resource Include="Resources\Close.png" />
   </ItemGroup>
@@ -36,7 +41,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\Controls\WPF\BauControls\src\BauControls.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Controls\WPF\CodeEditor\src\CodeEditor.csproj" />
-    <ProjectReference Include="..\..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.Views\BauMvvm.Views.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.Views.Wpf\BauMvvm.Views.Wpf.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibSystem.Windows\LibSystem.Windows.csproj" />
     <ProjectReference Include="..\..\..\Libraries\PluginsStudio\PluginsStudio.Views.Base\PluginsStudio.Views.Base.csproj" />
     <ProjectReference Include="..\ToDoManager.ViewModel\ToDoManager.ViewModel.csproj" />
@@ -69,6 +74,10 @@
     <Page Update="Views\TodoFileView.xaml">
       <SubType>Designer</SubType>
     </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Calendar\" />
   </ItemGroup>
 
 </Project>

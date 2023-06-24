@@ -2,7 +2,7 @@
 
   <PropertyGroup>
 	  <TargetFramework>net7.0</TargetFramework>
-    <RootNamespace>Bau.Libraries.LibReporting.Solution</RootNamespace>
+    <RootNamespace>Bau.Libraries.$(MSBuildProjectName)</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
@@ -10,10 +10,11 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibHelper\src\LibHelper.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibMarkup\src\LibMarkup.csproj" />
-    <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\DataBaseProviders\LibDbProviders.Base\LibDbProviders.Base.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\DataBaseProviders\src\LibDbProviders.Base\LibDbProviders.Base.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\src\Schema\LibDbSchema.Repository.Xml\LibDbSchema.Repository.Xml.csproj" />
     <ProjectReference Include="..\LibReporting.Application\LibReporting.Application.csproj" />
     <ProjectReference Include="..\LibReporting.Models\LibReporting.Models.csproj" />
+    <ProjectReference Include="..\LibReporting.Requests\LibReporting.Requests.csproj" />
   </ItemGroup>
 
 </Project>

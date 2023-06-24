@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Data;
+using Microsoft.Extensions.Logging;
 
 using Bau.Libraries.LibCsvFiles;
+using Bau.Libraries.LibCsvFiles.Controllers;
 using Bau.Libraries.LibParquetFiles.Writers;
-using Microsoft.Extensions.Logging;
+using Bau.Libraries.StructuredFilesStudio.ViewModels.Details.Filters;
 
 namespace Bau.Libraries.StructuredFilesStudio.ViewModels.Details.Files
 {
@@ -23,13 +21,46 @@ namespace Bau.Libraries.StructuredFilesStudio.ViewModels.Details.Files
 		protected override async Task<(DataTable table, long totalRecords)> LoadFileAsync(bool countRecords, CancellationToken cancellationToken)
 		{
 			DataTable table = new LibCsvFiles.Controllers.CsvDataTableReader(FileParameters)
-										.Load(FileName, ActualPage, RecordsPerPage, countRecords, out long totalRecords);
+										.Load(FileName, ActualPage, RecordsPerPage, countRecords, GetFilters(), out long totalRecords);
 
 				// Evita las advertencias
 				await Task.Delay(1);
 				// Devuelve la tabla
 				return (table, totalRecords);
 		}
+
+		/// <summary>
+		///		Obtiene los filtros
+		/// </summary>
+		private CsvFiltersCollection GetFilters()
+		{
+			CsvFiltersCollection filters = new();
+
+				// Convierte los filtros
+				foreach (ListItemFileFilterViewModel filter in Filters.GetFilters())
+					filters.Add(filter.Column.Name, ConvertCondition(filter.GetSelectedCondition()), filter.Value1, filter.Value2);
+				// Devuelve los filtros
+				return filters;
+
+				// Convierte la condición
+				CsvFilter.ConditionType ConvertCondition(ListItemFileFilterViewModel.ConditionType conditionType)
+				{
+					return conditionType switch
+						{
+							ListItemFileFilterViewModel.ConditionType.Equals => CsvFilter.ConditionType.Equals,
+							ListItemFileFilterViewModel.ConditionType.Distinct => CsvFilter.ConditionType.Distinct,
+							ListItemFileFilterViewModel.ConditionType.Greater => CsvFilter.ConditionType.Greater,
+							ListItemFileFilterViewModel.ConditionType.GreaterOrEqual => CsvFilter.ConditionType.GreaterOrEqual,
+							ListItemFileFilterViewModel.ConditionType.Less => CsvFilter.ConditionType.Less,
+							ListItemFileFilterViewModel.ConditionType.LessOrEqual => CsvFilter.ConditionType.LessOrEqual,
+							ListItemFileFilterViewModel.ConditionType.In => CsvFilter.ConditionType.In,
+							ListItemFileFilterViewModel.ConditionType.Between => CsvFilter.ConditionType.Between,
+							ListItemFileFilterViewModel.ConditionType.Contains => CsvFilter.ConditionType.Contains,
+							_ => CsvFilter.ConditionType.NoCondition
+						};
+				}
+		}
+
 
 		/// <summary>
 		///		Graba el archivo

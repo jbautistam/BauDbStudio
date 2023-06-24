@@ -6,9 +6,7 @@
         xmlns:local="clr-namespace:Bau.Libraries.StructuredFilesStudio.Views.Files"
 		x:Class="Bau.Libraries.StructuredFilesStudio.Views.Files.CsvFilePropertiesView"
         mc:Ignorable="d"
-        Title="Datos del archivo" Height="550" Width="900" ResizeMode="NoResize" ShowInTaskbar="False"
-		xmlns:Behaviors="clr-namespace:Bau.Libraries.BauMvvm.Views.Converters;assembly=BauMvvm.Views"
-		Behaviors:FocusBehavior.FocusFirst="true">
+        Title="Datos del archivo" Height="550" Width="900" ResizeMode="NoResize" ShowInTaskbar="False">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*"/>

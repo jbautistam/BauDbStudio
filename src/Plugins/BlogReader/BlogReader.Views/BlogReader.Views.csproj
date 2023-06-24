@@ -7,18 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Controllers\AppController.cs" />
-    <Compile Remove="Converters\BoolToVisibilityConverter.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="Resources\attach.png" />
-    <None Remove="Resources\EntryInteresting.png" />
-    <None Remove="Resources\EntryNotRead.png" />
-    <None Remove="Resources\EntryRead.png" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\Controls\WPF\BauControls\src\BauControls.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.Views.Wpf\BauMvvm.Views.Wpf.csproj" />
     <ProjectReference Include="..\..\..\Libraries\PluginsStudio\PluginsStudio.Views.Base\PluginsStudio.Views.Base.csproj" />

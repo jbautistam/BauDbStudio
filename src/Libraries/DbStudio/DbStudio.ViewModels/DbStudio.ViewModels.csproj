@@ -46,12 +46,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\Controls\WPF\BauCharts\src\LibCharts\LibCharts.csproj" />
-    <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibSystem.Windows\LibSystem.Windows.csproj" />
-    <ProjectReference Include="..\..\..\..\..\..\Libraries\Formats\LibExcelFiles\src\LibExcelFiles.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibJsonConversor\src\LibJsonConversor.csproj" />
     <ProjectReference Include="..\..\DbReporting\LibReporting.Solution\LibReporting.Solution.csproj" />
-    <ProjectReference Include="..\..\PluginsStudio\PluginsStudio.ViewModels.Base\PluginsStudio.ViewModels.Base.csproj" />
+    <ProjectReference Include="..\..\PluginsStudio\PluginsStudio.ViewModels\PluginsStudio.ViewModels.csproj" />
     <ProjectReference Include="..\DbStudio.Application\DbStudio.Application.csproj" />
-    <ProjectReference Include="..\DbStudio.Models\DbStudio.Models.csproj" />
   </ItemGroup>
 
 </Project>

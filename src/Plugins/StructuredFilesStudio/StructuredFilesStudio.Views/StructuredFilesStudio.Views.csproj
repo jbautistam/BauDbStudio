@@ -4,6 +4,9 @@
     <TargetFramework>net7.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <RootNamespace>Bau.Libraries.StructuredFilesStudio.Views</RootNamespace>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,6 +18,8 @@
     <None Remove="Resources\Images\FileCsv.png" />
     <None Remove="Resources\Images\FileExcel.png" />
     <None Remove="Resources\Images\FileParquet.png" />
+    <None Remove="Resources\Images\Filter.png" />
+    <None Remove="Resources\Images\FilterClear.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,6 +36,8 @@
     <Resource Include="Resources\Images\FileCsv.png" />
     <Resource Include="Resources\Images\FileExcel.png" />
     <Resource Include="Resources\Images\FileParquet.png" />
+    <Resource Include="Resources\Images\Filter.png" />
+    <Resource Include="Resources\Images\FilterClear.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,6 +45,9 @@
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
     <Page Update="Files\DataTableFileView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="Files\ListFilterView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
     <Page Update="Files\ParquetFilePropertiesView.xaml">
