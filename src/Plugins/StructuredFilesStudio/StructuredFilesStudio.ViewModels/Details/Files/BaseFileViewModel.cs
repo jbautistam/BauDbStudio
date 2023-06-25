@@ -10,6 +10,8 @@ namespace Bau.Libraries.StructuredFilesStudio.ViewModels.Details.Files;
 /// </summary>
 public abstract class BaseFileViewModel : BaseObservableObject, PluginsStudio.ViewModels.Base.Interfaces.IDetailViewModel
 {
+	// Constantes públicas
+	protected const int RecordsPerBlock = 20_000;
 	// Enumerados públicos
 	/// <summary>
 	///		Tipo del campo
@@ -23,7 +25,6 @@ public abstract class BaseFileViewModel : BaseObservableObject, PluginsStudio.Vi
 		Decimal, 
 		Boolean
 	}
-
 	// Variables privadas
 	private string _header = string.Empty, _fileName = string.Empty, _formattedPage = string.Empty;
 	private int _actualPage, _pages, _recordsPerPage;
@@ -31,11 +32,10 @@ public abstract class BaseFileViewModel : BaseObservableObject, PluginsStudio.Vi
 	private DataTable? _dataResults;
 	private Filters.ListFileFilterViewModel _filters = default!;
 
-	protected BaseFileViewModel(StructuredFilesStudioViewModel solutionViewModel, string fileName, string exportFilesExtensions) : base(false)
+	protected BaseFileViewModel(StructuredFilesStudioViewModel solutionViewModel, string fileName) : base(false)
 	{
 		// Asigna las propiedades
 		SolutionViewModel = solutionViewModel;
-		ExportFilesExtensions =	exportFilesExtensions;
 		FileName = fileName;
 		ActualPage = 1;
 		Pages = 0;
@@ -61,7 +61,7 @@ public abstract class BaseFileViewModel : BaseObservableObject, PluginsStudio.Vi
 									.AddListener(this, nameof(Records))
 									.AddListener(this, nameof(RecordsPerPage));
 		FilePropertiesCommand = new BaseCommand(async _ => await OpenFilePropertiesAsync(CancellationToken.None));
-		FilterCommand = new BaseCommand(async _ => await FilterDataAsync(CancellationToken.None), _ => Records > 0)
+		FilterCommand = new BaseCommand(async _ => await FilterDataAsync(CancellationToken.None), _ => DataResults is not null)
 									.AddListener(this, nameof(DataResults));
 	}
 
@@ -72,6 +72,8 @@ public abstract class BaseFileViewModel : BaseObservableObject, PluginsStudio.Vi
 	{
 		long totalRecords = 0;
 
+			// Cambia el cursor
+			SolutionViewModel.MainController.MainWindowController.ShowWaitingCursor();
 			// Carga el archivo
 			try
 			{
@@ -85,6 +87,8 @@ public abstract class BaseFileViewModel : BaseObservableObject, PluginsStudio.Vi
 			{
 				SolutionViewModel.MainController.HostController.SystemController.ShowMessage($"Error when load {FileName}{Environment.NewLine}{exception.Message}");
 			}
+			// Cambia el cursor
+			SolutionViewModel.MainController.MainWindowController.HideWaitingCursor();
 			// Asigna el número de registros y páginas
 			if (Records == 0)
 				Records = totalRecords;
@@ -111,7 +115,12 @@ public abstract class BaseFileViewModel : BaseObservableObject, PluginsStudio.Vi
 		else
 		{
 			if (SolutionViewModel.MainController.OpenDialog(Filters) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+			{
+				// Indica que se deben volver a contar los registros
+				Records = 0;
+				// Carga la página
 				await GoToPageAsync(1, cancellationToken);
+			}
 		}
 	}
 
@@ -128,7 +137,9 @@ public abstract class BaseFileViewModel : BaseObservableObject, PluginsStudio.Vi
 	/// </summary>
 	private async Task GoToPageAsync(int newPage, CancellationToken cancellationToken)
 	{
+		// Cambia el número de página
 		ActualPage = newPage;
+		// Carga el archivo
 		await LoadFileAsync(cancellationToken);
 	}
 
@@ -137,30 +148,34 @@ public abstract class BaseFileViewModel : BaseObservableObject, PluginsStudio.Vi
 	/// </summary>
 	public void SaveDetails(bool newName)
 	{
-		if (DataResults == null || DataResults.Rows.Count == 0)
+		if (DataResults is null)
 			SolutionViewModel.MainController.HostController.SystemController.ShowMessage("No hay datos para exportar");
 		else
 		{
-			string fileName = SolutionViewModel.MainController.DialogsController
+			string? fileName = SolutionViewModel.MainController.DialogsController
 										.OpenDialogSave(string.Empty, 
-														$"Archivos {ExportFilesExtensions} (*.{ExportFilesExtensions})|*.{ExportFilesExtensions}" +
-																				"|Todos los archivos (*.*)|*.*",
-														$"New file.{ExportFilesExtensions}", 
-														$".{ExportFilesExtensions}");
+														$"Archivos CSV (*.csv)|*.csv|Archivos parquet (*.parquet)|*.parquet|Todos los archivos (*.*)|*.*",
+														$"New file.csv", 
+														$".csv");
 
 				if (!string.IsNullOrEmpty(fileName))
 				{
-					// Log
-					SolutionViewModel.MainController.Logger.LogInformation($"Comienzo de grabación del archivo {fileName}");
-					// Graba el archivo
-					try
+					if (fileName.Equals(FileName, StringComparison.CurrentCultureIgnoreCase))
+						SolutionViewModel.MainController.HostController.SystemController.ShowMessage("No se puede grabar el archivo con el mismo nombre");
+					else
 					{
-						Task.Run(async () => await SaveFileAsync(SolutionViewModel.MainController.Logger, fileName, CancellationToken.None));
-					}
-					catch (Exception exception)
-					{
-						SolutionViewModel.MainController.Logger.LogError(exception, $"Error al grabar el archivo {fileName}. {exception.Message}");
-						SolutionViewModel.MainController.HostController.SystemController.ShowMessage($"Error al grabar el archivo {fileName}. {exception.Message}");
+						// Log
+						SolutionViewModel.MainController.Logger.LogInformation($"Comienzo de grabación del archivo {fileName}");
+						// Graba el archivo
+						try
+						{
+							Task.Run(async () => await SaveFileAsync(SolutionViewModel.MainController.Logger, fileName, CancellationToken.None));
+						}
+						catch (Exception exception)
+						{
+							SolutionViewModel.MainController.Logger.LogError(exception, $"Error al grabar el archivo {fileName}. {exception.Message}");
+							SolutionViewModel.MainController.HostController.SystemController.ShowMessage($"Error al grabar el archivo {fileName}. {exception.Message}");
+						}
 					}
 				}
 		}
@@ -187,11 +202,6 @@ public abstract class BaseFileViewModel : BaseObservableObject, PluginsStudio.Vi
 	public StructuredFilesStudioViewModel SolutionViewModel { get; }
 
 	/// <summary>
-	///		Máscara de grabación de archivos
-	/// </summary>
-	public string ExportFilesExtensions { get; }
-
-	/// <summary>
 	///		Cabecera
 	/// </summary>
 	public string Header 
@@ -203,10 +213,7 @@ public abstract class BaseFileViewModel : BaseObservableObject, PluginsStudio.Vi
 	/// <summary>
 	///		Id de la ficha
 	/// </summary>
-	public string TabId 
-	{ 
-		get { return GetType().ToString() + "_" + FileName; } 
-	}
+	public string TabId => GetType().ToString() + "_" + FileName;
 
 	/// <summary>
 	///		Resultados de la ejecución de la consulta

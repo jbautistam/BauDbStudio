@@ -116,6 +116,22 @@ public class MainWindowController : Libraries.PluginsStudio.ViewModels.Base.Cont
 	}
 
 	/// <summary>
+	///		Muestra el cursor de espera
+	/// </summary>
+	public void ShowWaitingCursor()
+	{
+		DbStudioViewsManager.MainWindow.Cursor = System.Windows.Input.Cursors.Wait;
+	}
+
+	/// <summary>
+	///		Oculta el cursor de espera
+	/// </summary>
+	public void HideWaitingCursor()
+	{
+		DbStudioViewsManager.MainWindow.Cursor = null;
+	}
+
+	/// <summary>
 	///		Manager de vistas principal
 	/// </summary>
 	internal DbStudioViewsManager DbStudioViewsManager { get; }

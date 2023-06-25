@@ -74,7 +74,7 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.EtlProjects
 		/// </summary>
 		private async Task<string> GetSqlReadFileAsync(EtlFilesGenerator generator, string fileName, CancellationToken cancellationToken)
 		{
-			(DataTable table, long records) = await new LibParquetFiles.Readers.ParquetDataTableReader().ParquetReaderToDataTableAsync(fileName, 0, 50, cancellationToken);
+			(DataTable table, long records) = await new LibParquetFiles.Readers.ParquetDataTableReader().LoadAsync(fileName, 0, 50, false, null, cancellationToken);
 			string sql = string.Empty;
 				
 				// Si no hay filas para inferir el tipo, añade un comentario

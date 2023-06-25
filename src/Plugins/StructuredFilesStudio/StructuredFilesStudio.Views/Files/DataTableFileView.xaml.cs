@@ -1,13 +1,11 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 using Bau.Libraries.StructuredFilesStudio.ViewModels.Details.Files;
 
 namespace Bau.Libraries.StructuredFilesStudio.Views.Files;
 
 /// <summary>
-///		Ventana para mostrar el contenido de un archivo parquet
+///		Ventana para mostrar el contenido de un archivo
 /// </summary>
 public partial class DataTableFileView : UserControl
 {
@@ -45,7 +43,14 @@ public partial class DataTableFileView : UserControl
 	/// </summary>
 	private void DataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
 	{
-		if (!string.IsNullOrWhiteSpace(e.Column?.Header?.ToString()))
-			e.Column.Header = e.Column.Header.ToString().Replace("_", "__");
+		if (e.Column is not null)
+		{
+			string? header = e.Column.Header.ToString();
+
+				if (!string.IsNullOrWhiteSpace(header))
+					e.Column.Header = header.Replace("_", "__");
+				else
+					e.Column.Header = "No header";
+		}
 	}
 }

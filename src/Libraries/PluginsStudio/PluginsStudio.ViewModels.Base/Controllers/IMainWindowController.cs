@@ -56,6 +56,16 @@ public interface IMainWindowController
 	bool ClipboardContainImage();
 
 	/// <summary>
+	///		Muestra el cursor de espera
+	/// </summary>
+	void ShowWaitingCursor();
+
+	/// <summary>
+	///		Oculta el cursor de espera
+	/// </summary>
+	void HideWaitingCursor();
+
+	/// <summary>
 	///		Graba la imagen del portapapeles
 	/// </summary>
 	bool SaveClipboardImage(string fileName);
