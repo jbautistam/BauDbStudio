@@ -61,7 +61,7 @@ public class QueryViewModel : BaseObservableObject
 												.AddListener(this, nameof(IsExecuting));
 		ShowExecutionPlanCommand = new BaseCommand(async _ => await ShowExecutionPlanAsync(), _ => !IsExecuting)
 										.AddListener(this, nameof(IsExecuting));
-		ExportCommand = new BaseCommand(_ => Export(), _ => !IsExecuting)
+		ExportCommand = new BaseCommand(async _ => await ExportAsync(CancellationToken.None), _ => !IsExecuting)
 								.AddListener(this, nameof(IsExecuting));
 		FirstPageCommand = new BaseCommand(async _ => await GoPageAsync(1), _ => PaginateQuery && !IsExecuting)
 								.AddListener(this, nameof(IsExecuting))
@@ -365,7 +365,7 @@ public class QueryViewModel : BaseObservableObject
 	/// <summary>
 	///		Exporta la tabla de datos
 	/// </summary>
-	private void Export()
+	private async Task ExportAsync(CancellationToken cancellationToken)
 	{
 		if (string.IsNullOrWhiteSpace(Query))
 			SolutionViewModel.MainController.HostController.SystemController.ShowMessage("Introduzca una consulta para ejecutar");
@@ -393,7 +393,7 @@ public class QueryViewModel : BaseObservableObject
 									ExportQueryProcessor processor = new(SolutionViewModel, query, fileName, GetFormatType(fileName), 200_000);
 
 										// Encola el proceso
-										SolutionViewModel.MainController.MainWindowController.EnqueueProcess(processor);
+										await SolutionViewModel.MainController.MainWindowController.EnqueueProcessAsync(processor, cancellationToken);
 								}
 						}
 				}

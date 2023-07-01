@@ -29,6 +29,7 @@ public class TasksQueueItemViewModel : BauMvvm.ViewModels.Forms.ControlItems.Con
 	private string _statusText = string.Empty, _executionTime = string.Empty, _message = string.Empty;
 	private long _actual, _total;
 	private bool _isExecuting;
+	private System.Timers.Timer _timer;
 	private DateTime? _start;
 	private Status _status;
 
@@ -41,13 +42,18 @@ public class TasksQueueItemViewModel : BauMvvm.ViewModels.Forms.ControlItems.Con
 		ViewModel = viewModel;
 		Text = $"{process.Group} - {process.Name}";
 		State = Status.Enqueued;
-		// Actualiza las propiedades
-		Update();
+		Actual = 0;
+		Total = 200_000; // ... para que muestre la barra de progreso vacía
 		// Inicializa los comandos
 		CancelCommand = new BauMvvm.ViewModels.BaseCommand(_ => Cancel(), _ => IsExecuting)
 									.AddListener(this, nameof(IsExecuting));
 		DeleteCommand = new BauMvvm.ViewModels.BaseCommand(_ => Delete(), _ => !IsExecuting)
 									.AddListener(this, nameof(IsExecuting));
+		// Inicializa el temporizador
+		_timer = new System.Timers.Timer(TimeSpan.FromSeconds(5));
+		_timer.Elapsed += (sender, args) => Update();
+		// Actualiza las propiedades
+		Update();
 	}
 
 	/// <summary>
@@ -60,20 +66,21 @@ public class TasksQueueItemViewModel : BauMvvm.ViewModels.Forms.ControlItems.Con
 		switch (State)
 		{	
 			case Status.Canceled:
-					StatusText = "Cancelado";
+					StatusText = "Canceled";
 					Foreground = MvvmColor.Gray;
 					IsBold = false;
 				break;
 			case Status.Enqueued:
-					StatusText = "Pendiente";
+					StatusText = "Pending";
 					IsBold = false;
 				break;
 			case Status.Processing:
-					StatusText = "En ejecución";
+					StatusText = "In progress";
 					IsBold = true;
+					_timer.Start();
 				break;
 			case Status.End:
-					StatusText = "Finalizado";
+					StatusText = "Success";
 					Foreground = MvvmColor.Navy;
 					IsBold = false;
 				break;
@@ -85,29 +92,38 @@ public class TasksQueueItemViewModel : BauMvvm.ViewModels.Forms.ControlItems.Con
 		}
 		// Cambia el tiempo de ejecución y el mensaje
 		if (_start is null)
-			ExecutionTime = string.Empty;
-		else if (State == Status.Processing)
 		{
-			IsExecuting = true;
-			ExecutionTime = $"{(DateTime.Now - _start).ToString()}";
+			_start = DateTime.Now;
+			ExecutionTime = string.Empty;
 		}
+		// Cambia el valor que indica si se está ejecutando
+		if (State == Status.Processing)
+			IsExecuting = true;
 		else if (State == Status.End || State == Status.Canceled)
 			IsExecuting = false;
+		// Cierra el temporizador
+		if (State == Status.End || State == Status.Error || State == Status.Canceled)
+		{
+			_timer.Stop();
+			_timer.Dispose();
+		}
+		// Muestra el tiempo de ejecución
+		ExecutionTime = $"{(DateTime.Now - _start).ToString()}";
 	}
 
 	/// <summary>
 	///		Ejecuta el proceso
 	/// </summary>
-	internal void Execute()
+	internal async Task ExecuteAsync(CancellationToken cancellationToken)
 	{
 		// Asigna los manejadores de eventos
 		Process.Progress += (sender, args) => UpdateProgress(args);
 		Process.Log += (sender, args) => UpdateLog(args);
-		// Ejecuta el proceso en un hilo
-		Task.Run(async () => await Process.ExecuteAsync(CancellationTokenSource.Token));
 		// Indica que el proceso está en ejecución
 		State = Status.Processing;
 		_start = DateTime.Now;
+		// Ejecuta el proceso en un hilo
+		await Task.Run(async () => await Process.ExecuteAsync(CancellationTokenSource.Token), cancellationToken).ConfigureAwait(false);
 	}
 
 	/// <summary>
@@ -115,6 +131,7 @@ public class TasksQueueItemViewModel : BauMvvm.ViewModels.Forms.ControlItems.Con
 	/// </summary>
 	private void UpdateLog(LogEventArgs args)
 	{
+		// Cambia los estados
 		switch (args.State)
 		{
 			case LogEventArgs.Status.Error:
@@ -122,8 +139,11 @@ public class TasksQueueItemViewModel : BauMvvm.ViewModels.Forms.ControlItems.Con
 					Message = args.Message;
 				break;
 			case LogEventArgs.Status.Success:
-					State = Status.End;
-					Message = args.Message;
+					if (State != Status.Canceled && State !=  Status.Error)
+					{
+						State = Status.End;
+						Message = args.Message;
+					}
 				break;
 			case LogEventArgs.Status.Warning:
 			case LogEventArgs.Status.Info:
@@ -131,6 +151,8 @@ public class TasksQueueItemViewModel : BauMvvm.ViewModels.Forms.ControlItems.Con
 					Message = args.Message;
 				break;
 		}
+		// Actualiza la pantalla
+		Update();
 	}
 
 	/// <summary>

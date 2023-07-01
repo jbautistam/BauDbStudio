@@ -10,13 +10,14 @@ public class TasksQueueListViewModel : BaseObservableObject, Base.Interfaces.IDe
 {
 	// Variables privadas
 	private string _header = string.Empty;
-	private BauMvvm.ViewModels.Forms.ControlItems.ControlItemCollectionViewModel<TasksQueueItemViewModel> _tasks = new();
+	private BauMvvm.ViewModels.Forms.ControlItems.ControlItemCollectionViewModel<TasksQueueItemViewModel> _tasks = default!;
 
 	public TasksQueueListViewModel(PluginsStudioViewModel mainViewModel) : base(false)
 	{
 		// Asigna las propiedades
 		MainViewModel = mainViewModel;
 		Header = "Processes queue";
+		Tasks = new BauMvvm.ViewModels.Forms.ControlItems.ControlItemCollectionViewModel<TasksQueueItemViewModel>(); 
 		// Crea el temporizador que mantiene el estado de los elementos de la lista
 		new Timer(UpdateStatus, null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(15));
 	}
@@ -24,14 +25,14 @@ public class TasksQueueListViewModel : BaseObservableObject, Base.Interfaces.IDe
 	/// <summary>
 	///		Encola un proceso
 	/// </summary>
-	public void EnqueueProcess(ProcessModel process)
+	public async Task EnqueueProcessAsync(ProcessModel process, CancellationToken cancellationToken)
 	{
 		TasksQueueItemViewModel viewModel = new(this, process);
 
 			// Añade el proceso a la lista
 			Tasks.Add(viewModel);
 			// Ejecuta el proceso
-			viewModel.Execute();
+			await viewModel.ExecuteAsync(cancellationToken);
 	}
 
 	/// <summary>

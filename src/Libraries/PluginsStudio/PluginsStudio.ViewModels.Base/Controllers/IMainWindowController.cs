@@ -73,7 +73,7 @@ public interface IMainWindowController
 	/// <summary>
 	///		Encola un proceso
 	/// </summary>
-	void EnqueueProcess(ProcessModel process);
+	Task EnqueueProcessAsync(ProcessModel process, CancellationToken cancellationToken);
 
 	/// <summary>
 	///		Controlador principal

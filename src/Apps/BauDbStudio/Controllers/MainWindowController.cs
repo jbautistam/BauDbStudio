@@ -4,6 +4,7 @@ using Bau.Libraries.BauMvvm.Views.Wpf.Controllers;
 using Bau.Libraries.BauMvvm.ViewModels.Controllers;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Interfaces;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Models.Processes;
+using System.Windows.Threading;
 
 namespace Bau.DbStudio.Controllers;
 
@@ -110,9 +111,12 @@ public class MainWindowController : Libraries.PluginsStudio.ViewModels.Base.Cont
 	/// <summary>
 	///		Encola un proceso
 	/// </summary>
-	public void EnqueueProcess(ProcessModel process)
+	public async Task EnqueueProcessAsync(ProcessModel process, CancellationToken cancellationToken)
 	{
-		DbStudioViewsManager.PluginsStudioViewModel.TasksQueueListViewModel.EnqueueProcess(process);
+		 await DbStudioViewsManager.MainWindow.Dispatcher.InvokeAsync
+				(async () => await DbStudioViewsManager.PluginsStudioViewModel.TasksQueueListViewModel.EnqueueProcessAsync(process, cancellationToken), 
+				 DispatcherPriority.Normal, 
+				 cancellationToken);
 	}
 
 	/// <summary>

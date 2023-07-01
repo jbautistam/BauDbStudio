@@ -3,8 +3,6 @@ using Microsoft.Extensions.Logging;
 
 using Bau.Libraries.LibParquetFiles.Readers;
 using Bau.Libraries.StructuredFilesStudio.ViewModels.Details.Filters;
-using Bau.Libraries.LibCsvFiles.Controllers;
-using Bau.Libraries.LibParquetFiles.Writers;
 
 namespace Bau.Libraries.StructuredFilesStudio.ViewModels.Details.Files;
 
@@ -58,84 +56,17 @@ public class ParquetFileViewModel : BaseFileViewModel
 	/// <summary>
 	///		Graba el archivo
 	/// </summary>
-	protected override async Task SaveFileAsync(ILogger logger, string fileName, CancellationToken cancellationToken)
+	protected override async Task SaveFileAsync(ILogger logger, string target, CancellationToken cancellationToken)
 	{
-		if (fileName.EndsWith(".csv", StringComparison.CurrentCultureIgnoreCase))
-			await SaveFileToCsvAsync(logger, fileName, cancellationToken);
-		else if (fileName.EndsWith(".parquet", StringComparison.CurrentCultureIgnoreCase))
-			await SaveFileToParquetAsync(logger, fileName, cancellationToken);
+		if (!target.EndsWith(".csv", StringComparison.CurrentCultureIgnoreCase) && !target.EndsWith(".parquet", StringComparison.CurrentCultureIgnoreCase))
+			SolutionViewModel.MainController.SystemController.ShowMessage($"Can't convert parquet to {target}");
 		else
-			SolutionViewModel.MainController.SystemController.ShowMessage($"Can't convert CSV to {fileName}");
-	}
-
-	/// <summary>
-	///		Graba el archivo a CSV
-	/// </summary>
-	private async Task SaveFileToCsvAsync(ILogger logger, string target, CancellationToken cancellationToken)
-	{
-		// Escribe el archivo
-		using (CsvDataTableWriter writer = new CsvDataTableWriter())
 		{
-			ParquetDataTableReader reader = new ParquetDataTableReader();
-			int actualPage = 1;
-			(DataTable table, long totalRecords) = await reader.LoadAsync(FileName, actualPage, RecordsPerBlock, true, GetFilters(), cancellationToken);
-			long records = 0;
+			Exporters.ParquetFileExporter exporter = new(logger, FileName, target, RecordsPerBlock, GetFilters());
 
-				// Abre el archivo
-				writer.Open(target);
-				// Escribe los registros
-				do
-				{
-					// Graba el archivo
-					writer.Save(table);
-					// Añade el número de registros
-					records += table.Rows.Count;
-					// Lee la siguiente página
-					if (records < totalRecords)
-						(table, _) = await reader.LoadAsync(FileName, ++actualPage, RecordsPerBlock, false, GetFilters(), cancellationToken);
-					// Log
-					logger.LogInformation($"Save '{Path.GetFileName(target)}' {records:0,##0} / {totalRecords + 1:#,##0}");
-				}
-				while (records < totalRecords && !cancellationToken.IsCancellationRequested);
+				// Encola el proceso
+				await SolutionViewModel.MainController.MainWindowController.EnqueueProcessAsync(exporter, cancellationToken);
 		}
-		// Log
-		logger.LogInformation($"Fin de la grabación del archivo '{target}'");
-	}
-
-	/// <summary>
-	///		Graba el archivo a Parquet
-	/// </summary>
-	private async Task SaveFileToParquetAsync(ILogger logger, string target, CancellationToken cancellationToken)
-	{
-		// Escribe el archivo
-		await using (ParquetDataTableWriter writer = new ParquetDataTableWriter(RecordsPerBlock))
-		{
-			ParquetDataTableReader reader = new ParquetDataTableReader();
-			int actualPage = 1;
-			(DataTable table, long totalRecords) = await reader.LoadAsync(FileName, actualPage, RecordsPerBlock, true, GetFilters(), cancellationToken);
-			long records = 0;
-
-				// Abre el archivo
-				writer.Open(target);
-				// Escribe los registros
-				do
-				{
-					// Graba el archivo
-					await writer.WriteAsync(table, cancellationToken);
-					// Añade el número de registros
-					records += table.Rows.Count;
-					// Lee la siguiente página
-					if (records < totalRecords)
-						(table, _) = await reader.LoadAsync(FileName, ++actualPage, RecordsPerBlock, false, GetFilters(), cancellationToken);
-					// Log
-					logger.LogInformation($"Save '{Path.GetFileName(target)}' {records:0,##0} / {totalRecords + 1:#,##0}");
-				}
-				while (records < totalRecords && !cancellationToken.IsCancellationRequested);
-				// Escribe los registros finales
-				await writer.FlushAsync(cancellationToken);
-		}
-		// Log
-		logger.LogInformation($"Fin de la grabación del archivo '{target}'");
 	}
 
 	/// <summary>

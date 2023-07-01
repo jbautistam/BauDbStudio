@@ -73,7 +73,7 @@ public class TreeConnectionsViewModel : TreeSolutionBaseViewModel
 									.AddListener(this, nameof(SelectedNode));
 		CreateSchemaXmlCommand = new BaseCommand(async _ => await CreateSchemaXmlAsync(CancellationToken.None), _ => CanExecuteAction(nameof(CreateSchemaXmlCommand)))
 									.AddListener(this, nameof(SelectedNode));
-		ExportDataCommand = new BaseCommand(_ => ExportData(), _ => CanExecuteAction(nameof(ExportDataCommand)))
+		ExportDataCommand = new BaseCommand(async _ => await ExportDataAsync(CancellationToken.None), _ => CanExecuteAction(nameof(ExportDataCommand)))
 									.AddListener(this, nameof(SelectedNode));
 		ImportDataCommand = new BaseCommand(async _ => await ImportDataAsync(CancellationToken.None), _ => CanExecuteAction(nameof(ImportDataCommand)))
 									.AddListener(this, nameof(SelectedNode));
@@ -311,7 +311,7 @@ public class TreeConnectionsViewModel : TreeSolutionBaseViewModel
 	{
 		if (SelectedNode is NodeConnectionViewModel node)
 		{
-			string fileName = SolutionViewModel.MainController.DialogsController.OpenDialogSave(null, 
+			string? fileName = SolutionViewModel.MainController.DialogsController.OpenDialogSave(null, 
 																								"Archivos XML (*.xml)|*.xml|Todos los archivos (*.*)|*.*", 
 																								$"{node.Connection.Name}.xml", 
 																								".xml");
@@ -341,7 +341,7 @@ public class TreeConnectionsViewModel : TreeSolutionBaseViewModel
 	/// <summary>
 	///		Exporta a archivos las tablas del esqumea
 	/// </summary>
-	private void ExportData()
+	private async Task ExportDataAsync(CancellationToken cancellationToken)
 	{
 		ConnectionModel? connection = null;
 		ConnectionTableModel? table = null;
@@ -355,7 +355,7 @@ public class TreeConnectionsViewModel : TreeSolutionBaseViewModel
 				table = nodeTable.Table;
 			}
 			// Abre el formulario de exportación
-			SolutionViewModel.ConnectionExecutionViewModel.ExportDataBase(connection, table);
+			await SolutionViewModel.ConnectionExecutionViewModel.ExportDataBaseAsync(connection, table, cancellationToken);
 	}
 
 	/// <summary>

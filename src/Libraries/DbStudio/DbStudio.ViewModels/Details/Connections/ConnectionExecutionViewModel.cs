@@ -198,7 +198,7 @@ public class ConnectionExecutionViewModel : BaseObservableObject
 	/// <summary>
 	///		Exporta las tablas de una base de datos a un directorio
 	/// </summary>
-	public void ExportDataBase(ConnectionModel? connection, ConnectionTableModel? table)
+	public async Task ExportDataBaseAsync(ConnectionModel? connection, ConnectionTableModel? table, CancellationToken cancellationToken)
 	{
 		if (IsExecuting)
 			SolutionViewModel.MainController.SystemController.ShowMessage("No se pueden exportar los datos en este momento. Espere que finalice la ejecución de los scripts");
@@ -219,7 +219,7 @@ public class ConnectionExecutionViewModel : BaseObservableObject
 																					viewModel.OutputPath, viewModel.FormatType, viewModel.BlockSize);
 
 							// Encola el proceso
-							SolutionViewModel.MainController.MainWindowController.EnqueueProcess(processor);
+							await SolutionViewModel.MainController.MainWindowController.EnqueueProcessAsync(processor, cancellationToken);
 							// Log
 							SolutionViewModel.MainController.Logger.LogInformation($"Exportando tablas de {connection.Name}");
 					}
