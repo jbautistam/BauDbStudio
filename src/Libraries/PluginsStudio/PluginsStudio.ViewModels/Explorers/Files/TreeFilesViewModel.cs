@@ -128,9 +128,9 @@ public class TreeFilesViewModel : PluginTreeViewModel
 
 						// Si está en el mismo directorio, crea una copia con el mismo nombre
 						if ((Path.GetDirectoryName(fileSource) ?? string.Empty).Equals(pathTarget, StringComparison.CurrentCultureIgnoreCase))
-							fileSource = HelperFiles.GetConsecutiveFileName(pathTarget, Path.GetFileName(fileSource));
-						// Obtiene el nombre del archivo destino
-						fileNameTarget = Path.Combine(pathTarget, Path.GetFileName(fileSource));
+							fileNameTarget = HelperFiles.GetConsecutiveFileName(pathTarget, Path.GetFileName(fileSource));
+						else
+							fileNameTarget = Path.Combine(pathTarget, Path.GetFileName(fileSource));
 						// Copia / mueve el archivo
 						if (move)
 							copied = HelperFiles.MoveFile(fileSource, fileNameTarget);
