@@ -6,6 +6,11 @@
 public interface IDetailViewModel
 {
 	/// <summary>
+	///		Inicia una búsqueda (por ejemplo, abre la ventana de búsqueda)
+	/// </summary>
+	public void StartSearch() {}
+
+	/// <summary>
 	///		Obtiene el mensaje que se debe mostrar al cerrar la ventana
 	/// </summary>
 	string GetSaveAndCloseMessage();

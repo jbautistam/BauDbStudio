@@ -15,6 +15,7 @@ public class ToDoManagerViewModel : BauMvvm.ViewModels.BaseObservableObject
 		ViewsController = mainController;
 		// Inicializa los ViewModel hijos
 		ConfigurationViewModel = new Configuration.ConfigurationViewModel(this);
+		CalendarViewModel = new Appointments.CalendarViewModel(this);
 		// Inicializa los comandos
 		CreateNewNoteCommand = new BauMvvm.ViewModels.BaseCommand(_ => CreateNewNote());
 		ShowNotesCommand = new BauMvvm.ViewModels.BaseCommand(_ => ShowNotes());
@@ -33,7 +34,7 @@ public class ToDoManagerViewModel : BauMvvm.ViewModels.BaseObservableObject
 	/// </summary>
 	public void Load(string path)
 	{
-		ToDoManager.NotesManager.Load(path);
+		ToDoManager.Load(path);
 	}
 
 	/// <summary>
@@ -77,7 +78,7 @@ public class ToDoManagerViewModel : BauMvvm.ViewModels.BaseObservableObject
 		if (NotesVisible)
 			ViewsController.HideNotes();
 		else
-			foreach (Application.Models.Notes.NoteModel note in ToDoManager.NotesManager.Notes.Notes)
+			foreach (Application.Notes.Models.NoteModel note in ToDoManager.NotesManager.Notes.Notes)
 				ViewsController.OpenDialog(new Notes.NoteViewModel(this, note, false));
 		// Cambia el valor que indica si las notas están visibles
 		NotesVisible = !NotesVisible;
@@ -88,7 +89,7 @@ public class ToDoManagerViewModel : BauMvvm.ViewModels.BaseObservableObject
 	/// </summary>
 	public void CreateNewNote()
 	{
-		ViewsController.OpenDialog(new Notes.NoteViewModel(this, new Application.Models.Notes.NoteModel(), true));
+		ViewsController.OpenDialog(new Notes.NoteViewModel(this, new Application.Notes.Models.NoteModel(), true));
 	}
 
 	/// <summary>
@@ -100,6 +101,11 @@ public class ToDoManagerViewModel : BauMvvm.ViewModels.BaseObservableObject
 	///		ViewModel de la configuración
 	/// </summary>
 	public Configuration.ConfigurationViewModel ConfigurationViewModel { get; }
+
+	/// <summary>
+	///		ViewModel del calendario
+	/// </summary>
+	public Appointments.CalendarViewModel CalendarViewModel { get; }
 
 	/// <summary>
 	///		Manager de la aplicación ToDo

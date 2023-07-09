@@ -1,4 +1,4 @@
-﻿namespace Bau.Libraries.ToDoManager.Application;
+﻿namespace Bau.Libraries.ToDoManager.Application.ToDo;
 
 /// <summary>
 ///		Clase principal del manager de tareas

@@ -1,7 +1,7 @@
-﻿namespace Bau.Libraries.ToDoManager.Application.Models; 
+﻿namespace Bau.Libraries.ToDoManager.Application.ToDo.Models; 
 
 /// <summary>
-///		Groupo de elementos de una lista Todo
+///		Groupo de elementos de una lista ToDo
 /// </summary>
 public class GroupModel : LibDataStructures.Base.BaseExtendedModel
 {

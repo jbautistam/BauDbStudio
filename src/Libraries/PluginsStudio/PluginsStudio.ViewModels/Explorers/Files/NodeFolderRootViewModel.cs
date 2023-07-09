@@ -12,9 +12,10 @@ public class NodeFolderRootViewModel : PluginNodeViewModel
 	// Variables privadas
 	private string _fileName = string.Empty;
 
-	public NodeFolderRootViewModel(TreeFilesViewModel? trvTree, ControlHierarchicalViewModel? parent, string path) 
+	public NodeFolderRootViewModel(TreeFilesViewModel trvTree, ControlHierarchicalViewModel? parent, string path) 
 				: base(trvTree, parent, path, TreeFilesViewModel.NodeType.FilesRoot.ToString(), string.Empty, path, true, true, MvvmColor.Red)
 	{
+		ViewModel = trvTree;
 		FileName = path;
 	}
 
@@ -52,7 +53,7 @@ public class NodeFolderRootViewModel : PluginNodeViewModel
 	/// </summary>
 	private void AddNode(string fileName, bool isFolder)
 	{
-		Children.Add(new NodeFileViewModel(TreeViewModel as TreeFilesViewModel, this, fileName, isFolder));
+		Children.Add(new NodeFileViewModel(ViewModel, this, fileName, isFolder));
 	}
 
 	/// <summary>
@@ -78,4 +79,9 @@ public class NodeFolderRootViewModel : PluginNodeViewModel
 			}
 		}
 	}
+
+	/// <summary>
+	///		ViewModel
+	/// </summary>
+	public TreeFilesViewModel ViewModel { get; }
 }

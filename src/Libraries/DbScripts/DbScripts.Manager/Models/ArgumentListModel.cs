@@ -13,5 +13,5 @@ public class ArgumentListModel
 	/// <summary>
 	///		Parámetros: identificados en SQL como $name
 	/// </summary>
-	public LibDataStructures.Collections.NormalizedDictionary<object> Parameters { get; } = new();
+	public LibDataStructures.Collections.NormalizedDictionary<object?> Parameters { get; } = new();
 }

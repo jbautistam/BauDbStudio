@@ -86,7 +86,19 @@ public class ToDoManagerPlugin : IPlugin
 	/// <summary>
 	///		Obtiene los paneles del plugin
 	/// </summary>
-	public List<PaneModel> GetPanes() => new();
+	public List<PaneModel> GetPanes()
+	{
+		return new List<PaneModel>
+						{
+							new PaneModel
+									{
+										Id = "CalendarPane",
+										Title = "Calendar",
+										Position = PaneModel.PositionType.Right,
+										View = new Views.Appointments.AppointmentsPane(MainViewModel.CalendarViewModel)
+									}
+						};
+	}
 
 	/// <summary>
 	///		Obtiene las barras de herramientas del plugin

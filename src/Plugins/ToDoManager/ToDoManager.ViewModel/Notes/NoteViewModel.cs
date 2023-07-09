@@ -1,4 +1,4 @@
-﻿using Bau.Libraries.ToDoManager.Application.Models.Notes;
+﻿using Bau.Libraries.ToDoManager.Application.Notes.Models;
 
 namespace Bau.Libraries.ToDoManager.ViewModel.Notes;
 

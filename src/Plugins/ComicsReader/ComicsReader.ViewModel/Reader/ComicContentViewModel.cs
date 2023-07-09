@@ -181,10 +181,7 @@ namespace Bau.Libraries.ComicsReader.ViewModel.Reader
 		/// <summary>
 		///		Obtiene el mensaje para grabar y cerrar
 		/// </summary>
-		public string GetSaveAndCloseMessage()
-		{
-			return string.Empty;
-		}
+		public string GetSaveAndCloseMessage() => string.Empty;
 
 		/// <summary>
 		///		Graba el archivo

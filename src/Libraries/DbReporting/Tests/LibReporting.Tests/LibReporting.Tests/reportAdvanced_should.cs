@@ -14,14 +14,14 @@ public class reportAdvanced_should
 	/// </summary>
 	[Theory]
 	[InlineData("ReportingSales/Test-Reporting-Schema.xml", 
-				"ReportingSales/Requests/Request_1.xml")]
-	public void convert_to_sql(string fileName, string fileRequest)
+				"ReportingSales/Test_01/NoDimensions.request.xml")]
+	public void convert_to_sql(string schema, string fileRequest)
 	{
 		ReportingSolutionManager manager = new();
 		ReportRequestModel request = manager.LoadRequest(Tools.FileHelper.GetFullFileName(fileRequest));
 
 			// Agrega el dataWarehouse
-			manager.AddDataWarehouse(Tools.FileHelper.GetFullFileName(fileName));
+			manager.AddDataWarehouse(Tools.FileHelper.GetFullFileName(schema));
 			// Comprueba que realmente se haya cargado una solicitud
 			request.Should().NotBeNull();
 			// Obtiene la SQL del informe
@@ -79,9 +79,9 @@ public class reportAdvanced_should
 	/// <summary>
 	///		Compara la SQL de respuesta con el contenido de un archivo
 	/// </summary>
-	private void AssertSqlWithFile(string sql, string fileResponse)
+	private void AssertSqlWithFile(string sqlGenerated, string fileResponse)
 	{
-		AssertSql(sql, File.ReadAllText(Tools.FileHelper.GetFullFileName(fileResponse)));
+		AssertSql(sqlGenerated, File.ReadAllText(Tools.FileHelper.GetFullFileName(fileResponse)));
 	}
 
 	/// <summary>

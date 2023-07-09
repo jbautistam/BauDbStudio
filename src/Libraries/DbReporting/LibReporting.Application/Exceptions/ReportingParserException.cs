@@ -1,27 +1,25 @@
-﻿using System;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
-namespace Bau.Libraries.LibReporting.Application.Exceptions
+namespace Bau.Libraries.LibReporting.Application.Exceptions;
+
+/// <summary>
+///		Excepción de interpretación de un informe
+/// </summary>
+public class ReportingParserException : Exception
 {
-	/// <summary>
-	///		Excepción de interpretación de un informe
-	/// </summary>
-	public class ReportingParserException : Exception
+	public ReportingParserException()
 	{
-		public ReportingParserException()
-		{
-		}
+	}
 
-		public ReportingParserException(string message) : base(message)
-		{
-		}
+	public ReportingParserException(string message) : base(message)
+	{
+	}
 
-		public ReportingParserException(string message, Exception innerException) : base(message, innerException)
-		{
-		}
+	public ReportingParserException(string message, Exception innerException) : base(message, innerException)
+	{
+	}
 
-		protected ReportingParserException(SerializationInfo info, StreamingContext context) : base(info, context)
-		{
-		}
+	protected ReportingParserException(SerializationInfo info, StreamingContext context) : base(info, context)
+	{
 	}
 }

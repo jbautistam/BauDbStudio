@@ -8,7 +8,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Files;
 public abstract class BaseFileViewModel : BaseObservableObject, Interfaces.IDetailViewModel
 {
 	// Variables privadas
-	private string _header, _fileName;
+	private string _header = string.Empty, _fileName = string.Empty;
 
 	public BaseFileViewModel(string fileName)
 	{

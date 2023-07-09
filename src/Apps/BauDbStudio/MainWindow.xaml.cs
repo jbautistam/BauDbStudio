@@ -311,6 +311,13 @@ public partial class MainWindow : Window
 	{
 		if (dckManager.ActiveDocument?.UserControl is Views.Files.FileTextView fileView)
 			fileView.OpenSearch(true);
+		else
+		{
+			IDetailViewModel? viewModel = GetActiveDetails();
+
+				if (viewModel is not null)
+					viewModel.StartSearch();
+		}
 	}
 
 	/// <summary>

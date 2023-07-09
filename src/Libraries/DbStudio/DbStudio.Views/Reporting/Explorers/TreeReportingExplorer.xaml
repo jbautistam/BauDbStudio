@@ -88,11 +88,6 @@
 						</MenuItem.Icon>
 					</MenuItem>
 					<Separator/>
-					<MenuItem Header="Generar JSON" Command="{Binding Path=SaveJsonCommand}">
-						<MenuItem.Icon>
-							<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/Upload.png" />
-						</MenuItem.Icon>
-					</MenuItem>
 					<MenuItem Header="Actualizar esquema físico ..." Command="{Binding Path=MergeSchemaCommand}">
 						<MenuItem.Icon>
 							<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/Step.png" />

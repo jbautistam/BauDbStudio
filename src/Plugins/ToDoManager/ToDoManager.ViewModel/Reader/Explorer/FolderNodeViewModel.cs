@@ -1,4 +1,4 @@
-﻿using Bau.Libraries.ToDoManager.Application.Models;
+﻿using Bau.Libraries.ToDoManager.Application.ToDo.Models;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
 
 namespace Bau.Libraries.ToDoManager.ViewModel.Reader.Explorer;

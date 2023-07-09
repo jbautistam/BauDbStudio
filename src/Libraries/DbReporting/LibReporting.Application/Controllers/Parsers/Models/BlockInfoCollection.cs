@@ -77,28 +77,46 @@ internal class BlockInfoCollection
 			if (lines is not null)
 				foreach (string line in lines)
 					if (!string.IsNullOrWhiteSpace(line))
-						linesInfo.Add(new BlockInfo(null, CountTabs(line), line.Trim()));
+					{
+						string linePart = line.Trim();
+						int dashes = CountDashes(linePart);
+
+							// Añade la información del bloque
+							linesInfo.Add(new BlockInfo(null, dashes, RemoveDashes(dashes, linePart)));
+					}
 			// Devuelve las líneas
 			return linesInfo;
 
-		// Cuenta las tabulaciones o espacios que encabezan una línea
-		int CountTabs(string line)
+		// Cuenta los guiones que encabezan una línea
+		int CountDashes(string line)
 		{
-			int index = 0, tabs = 0, spaces = 0;
+			int index = 0, dashes = 0;
 
 				// Cuenta los tabuladores / espacios iniciales
-				while (index < line.Length && (line[index] == '\t' || line[index] == ' '))
+				while (index < line.Length && line[index] == '-')
 				{
-					// Incrementa el número de espacios 
-					if (line[index] == '\t')
-						tabs ++;
-					else
-						spaces ++;
+					// Incrementa el número de guiones
+					dashes++;
 					// Incrementa el índice
 					index++;
 				}
-				// Devuelve el número de espacios
-				return tabs + spaces / 2;
+				// Devuelve el número de guiones
+				return dashes;
+		}
+
+		// Elimina los guiones iniciales
+		string RemoveDashes(int dashes, string line)
+		{
+			// Quita los guiones
+			if (dashes > 0)
+			{
+				if (line.Length < dashes)
+					line = string.Empty;
+				else
+					line = line[dashes..];
+			}
+			// Devuelve la línea
+			return line;
 		}
 	}
 

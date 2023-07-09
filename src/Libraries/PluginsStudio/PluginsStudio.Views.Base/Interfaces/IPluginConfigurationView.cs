@@ -1,30 +1,27 @@
-﻿using System;
+﻿namespace Bau.Libraries.PluginsStudio.Views.Base.Interfaces;
 
-namespace Bau.Libraries.PluginsStudio.Views.Base.Interfaces
+/// <summary>
+///		Interface para el control de configuración de un plugin
+/// </summary>
+public interface IPluginConfigurationView
 {
 	/// <summary>
-	///		Interface para el control de configuración de un plugin
+	///		Obtiene el control de usuario de configuración
 	/// </summary>
-	public interface IPluginConfigurationView
-	{
-		/// <summary>
-		///		Obtiene el control de usuario de configuración
-		/// </summary>
-		System.Windows.Controls.UserControl GetUserControl();
+	System.Windows.Controls.UserControl GetUserControl();
 
-		/// <summary>
-		///		Comprueba los datos introducidos
-		/// </summary>
-		bool ValidateData(out string error);
+	/// <summary>
+	///		Comprueba los datos introducidos
+	/// </summary>
+	bool ValidateData(out string error);
 
-		/// <summary>
-		///		Graba los datos introducidos
-		/// </summary>
-		void Save();
+	/// <summary>
+	///		Graba los datos introducidos
+	/// </summary>
+	void Save();
 
-		/// <summary>
-		///		Cabecera
-		/// </summary>
-		string Header { get; }
-	}
+	/// <summary>
+	///		Cabecera
+	/// </summary>
+	string Header { get; }
 }

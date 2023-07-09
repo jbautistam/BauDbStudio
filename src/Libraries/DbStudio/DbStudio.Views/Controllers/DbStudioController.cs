@@ -53,7 +53,7 @@ namespace Bau.Libraries.DbStudio.Views.Controllers
 				case ViewModels.Details.Reporting.Reports.ReportViewModel viewModel:
 						DbStudioViewManager.AppViewsController.OpenDocument(new Reporting.Details.Reports.ReportView(viewModel), viewModel);
 					break;
-				case ViewModels.Details.Reporting.Queries.ReportViewModel viewModel:
+				case ViewModels.Details.Reporting.Queries.ReportQueryViewModel viewModel:
 						DbStudioViewManager.AppViewsController.OpenDocument(new Reporting.Queries.ReportView(viewModel), viewModel);
 					break;
 			}

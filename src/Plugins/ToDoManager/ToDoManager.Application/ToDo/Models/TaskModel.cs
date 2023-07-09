@@ -1,4 +1,4 @@
-﻿namespace Bau.Libraries.ToDoManager.Application.Models;
+﻿namespace Bau.Libraries.ToDoManager.Application.ToDo.Models;
 
 /// <summary>
 ///		Clase con los datos de una tarea

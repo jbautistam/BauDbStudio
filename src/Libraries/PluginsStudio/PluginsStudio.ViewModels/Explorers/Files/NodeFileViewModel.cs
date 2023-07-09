@@ -14,11 +14,12 @@ public class NodeFileViewModel : PluginNodeAsyncViewModel
 	private string _fileName = string.Empty;
 	private bool _isFolder;
 
-	public NodeFileViewModel(TreeFilesViewModel? trvTree, ControlHierarchicalViewModel? parent, string fileName, bool isFolder) 
+	public NodeFileViewModel(TreeFilesViewModel trvTree, ControlHierarchicalViewModel? parent, string fileName, bool isFolder) 
 				: base(trvTree, parent, string.Empty, TreeFilesViewModel.NodeType.File.ToString(), 
 					   string.Empty, fileName, isFolder, isFolder,
 					   isFolder ? MvvmColor.Navy : MvvmColor.Black)
 	{
+		ViewModel = trvTree;
 		FileName = fileName;
 		IsFolder = isFolder;
 		if (!string.IsNullOrWhiteSpace(FileName))
@@ -53,6 +54,7 @@ public class NodeFileViewModel : PluginNodeAsyncViewModel
 			return nodes;
 	}
 
+
 	/// <summary>
 	///		Comprueba si dos nodos son iguales
 	/// </summary>
@@ -72,10 +74,7 @@ public class NodeFileViewModel : PluginNodeAsyncViewModel
 	/// <summary>
 	///		Obtiene un nodo
 	/// </summary>
-	private NodeFileViewModel GetNode(string fileName, bool isFolder)
-	{
-		return new NodeFileViewModel(TreeViewModel as TreeFilesViewModel, this, fileName, isFolder);
-	}
+	private NodeFileViewModel GetNode(string fileName, bool isFolder) => new NodeFileViewModel(ViewModel, this, fileName, isFolder);
 
 	/// <summary>
 	///		Nombre de archivo
@@ -99,4 +98,9 @@ public class NodeFileViewModel : PluginNodeAsyncViewModel
 	///		Tipo de nodo
 	/// </summary>
 	public TreeFilesViewModel.NodeType NodeType => Type.GetEnum(TreeFilesViewModel.NodeType.Unknown);
+
+	/// <summary>
+	///		ViewModel
+	/// </summary>
+	public TreeFilesViewModel ViewModel { get; }
 }

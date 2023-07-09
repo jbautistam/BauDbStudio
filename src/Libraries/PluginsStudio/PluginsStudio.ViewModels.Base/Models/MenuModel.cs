@@ -13,17 +13,17 @@ public class MenuModel
 	/// <summary>
 	///		Cabecera del menú
 	/// </summary>
-	public string Header { get; set; }
+	public string Header { get; set; } = string.Empty;
 
 	/// <summary>
 	///		Tecla
 	/// </summary>
-	public string InputGestureText { get; set; }
+	public string? InputGestureText { get; set; }
 
 	/// <summary>
 	///		Icono (nombre del recurso)
 	/// </summary>
-	public string Icon { get; set; }
+	public string Icon { get; set; } = string.Empty;
 
 	/// <summary>
 	///		Ancho del icono
@@ -48,10 +48,10 @@ public class MenuModel
 	/// <summary>
 	///		Comando
 	/// </summary>
-	public BauMvvm.ViewModels.BaseCommand Command { get; set; }
+	public BauMvvm.ViewModels.BaseCommand? Command { get; set; }
 
 	/// <summary>
 	///		Objeto asociado
 	/// </summary>
-	public object Tag { get; set; }
+	public object? Tag { get; set; }
 }

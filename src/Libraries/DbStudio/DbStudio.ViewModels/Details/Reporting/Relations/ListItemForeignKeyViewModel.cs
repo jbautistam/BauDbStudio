@@ -62,10 +62,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Relations
 		/// <summary>
 		///		Obtiene la columna en el combo
 		/// </summary>
-		internal DataSourceColumnModel GetRelatedColumn()
-		{
-			return ComboTargetColumns.SelectedItem.Tag as DataSourceColumnModel;
-		}
+		internal DataSourceColumnModel? GetRelatedColumn() => ComboTargetColumns.SelectedItem?.Tag as DataSourceColumnModel;
 
 		/// <summary>
 		///		Columna origen

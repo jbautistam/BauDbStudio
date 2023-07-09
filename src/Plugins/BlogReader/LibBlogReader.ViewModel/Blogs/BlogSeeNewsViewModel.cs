@@ -664,10 +664,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs
 		/// <summary>
 		///		Obtiene el mensaje de grabación
 		/// </summary>
-		public string GetSaveAndCloseMessage()
-		{
-			return "¿Desea grabar las noticias?";
-		}
+		public string GetSaveAndCloseMessage() => "¿Desea grabar las noticias?";
 
 		/// <summary>
 		///		Graba los detalles

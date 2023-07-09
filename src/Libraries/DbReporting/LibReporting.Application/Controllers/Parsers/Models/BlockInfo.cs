@@ -19,29 +19,20 @@ internal class BlockInfo
 	/// </summary>
 	internal void Split()
 	{ 
-		// Separa la cabecera
-		if (!Line.StartsWith("-"))
-			Content = Line;
-		else
-		{ 
-			int separatorIndex = Line.IndexOf(':');
+		int separatorIndex = Line.IndexOf(':');
 
-				// Si se ha encontrado el separador, se convierte cabecera y contenido
-				if (separatorIndex >= 0)
-				{ 
-					Header = Line.Substring(0, separatorIndex);
-					if (Line.Length >= separatorIndex + 1)
-						Content = Line.Substring(separatorIndex + 1).TrimIgnoreNull();
-				}
-				else
-					Header = Line;
-		}
-		// Quita el guión de la cabecera
-		if (!string.IsNullOrWhiteSpace(Header))
-			Header = Header.Substring(1).TrimIgnoreNull();
-		// Separa los datos de los hijos
-		foreach (BlockInfo block in Blocks)
-			block.Split();
+			// Si se ha encontrado el separador, se convierte cabecera y contenido
+			if (separatorIndex >= 0)
+			{ 
+				Header = Line[..separatorIndex];
+				if (Line.Length >= separatorIndex + 1)
+					Content = Line[(separatorIndex + 1)..].TrimIgnoreNull();
+			}
+			else
+				Header = Line;
+			// Separa los datos de los hijos
+			foreach (BlockInfo block in Blocks)
+				block.Split();
 	}
 
 	/// <summary>
@@ -72,10 +63,7 @@ internal class BlockInfo
 	/// <summary>
 	///		Comprueba si el bloque tiene una cabecera en concreto
 	/// </summary>
-	internal bool HasHeader(string key)
-	{
-		return !string.IsNullOrWhiteSpace(Header) && Header.Equals(key, StringComparison.CurrentCultureIgnoreCase);
-	}
+	internal bool HasHeader(string key) => !string.IsNullOrWhiteSpace(Header) && Header.Equals(key, StringComparison.CurrentCultureIgnoreCase);
 
 	/// <summary>
 	///		Comprueba si existe una clave
@@ -122,12 +110,12 @@ internal class BlockInfo
 	/// <summary>
 	///		Cabecera de la línea
 	/// </summary>
-	internal string Header { get; private set; } = default!;
+	internal string Header { get; private set; } = string.Empty;
 
 	/// <summary>
 	///		Contenido de la línea (sin cabecera)
 	/// </summary>
-	internal string Content { get; private set; } = default!;
+	internal string Content { get; private set; } = string.Empty;
 
 	/// <summary>
 	///		Bloques hijo

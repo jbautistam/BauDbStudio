@@ -2,16 +2,16 @@
 <Report>
 	<DataWarehouse Name = "Test reporting schema"/>
 	<Name>Test 01</Name>
-	
+
 	<Parameter Name = "StartDate" Type = "Date" />
 	<Parameter Name = "EndDate" Type = "Date" />
-	
+
 	<Dimension Name = "PointsOfSale" />
 	<Dimension Name = "Products" />
 	<Dimension Name = "Users" />
 	<Dimension Name = "UsersPointOfSale" />
 	<Dimension Name = "Calendar" />
-		
+
 	<Requests>
 		<Dimension Name = "PointsOfSale">
 			<Field Name = "Name;ErpCode;ImageUrl" />
@@ -26,12 +26,12 @@
 			<Field Name = "Date;YearMonth" />
 		</Dimension>
 	</Requests>
-	
+
 	<Expression Name = "SalesTaxesIncluded;SalesTaxesIncludedAccumulated;SalesTaxesExcluded;Sales;SalesTargetTaxesIncluded;SalesTargetTaxesIncludedAccumulated" />
 	<Expression Name = "SalesAchievementPercentage;SalesAchievementPercentageAccumulated;MonthlyTargetAchievement;MonthlySalesProjection;SalesPerCalendarHour" />
 	<Expression Name = "WeeklyEvolutionPercentage;Transactions;TransactionsPerCalendarHour;AverageBasket;AverageBasketAccumulated" />
 	<Expression Name = "AveragePrice;AveragePriceAccumulated;UPT;UptAccumulated;ExternalCustomerFlow;InternalCustomerFlow;ExternalConversionRate;InternalConversionRate" />
-	
+
 	<Blocks>
 		<Execute>
 			<![CDATA[
@@ -39,97 +39,97 @@
 				DECLARE @EndInterval date = EoMonth(@EndDate);
 			]]>
 		</Execute>
-		
+
 		<With Name = "Main">
 			<IfRequest Dimension = "Products">
 				<Cte Name = "ProductsCte" Dimension = "Products" />
 			</IfRequest>
-			
+
 			<IfRequest Dimension = "PointsOfSale">
 				<Cte Name = "PointsOfSaleCte" Dimension = "PointsOfSale" />
-	 		</IfRequest>
-	 		
+			</IfRequest>
+
 			<IfRequest Dimension = "Users">
 				<Cte Name = "UsersCte" Dimension = "Users" />
-	 		</IfRequest>
-	 		
-	 		<IfRequest Dimension = "UsersPointOfSale;Users;PointsOfSale">
-	 			<Cte Name = "UsersPointOfSaleCte" Dimension = "UsersPointOfSale">
-	 				<Field Name = "UserId" />
-	 				<Field Name = "PointOfSaleId" />
-	 				<Join Dimension = "Users" Table = "UsersCte">
-	 					<Relation FromDimension = "UserId" RelatedTo = "UserId" />
-	 				</Join>
-	 				<Join Dimension = "PointsOfSale" Table = "PointsOfSaleCte">
-	 					<Relation FromDimension = "PointOfSaleId" RelatedTo = "PointOfSaleId" />
-	 				</Join>
-	 			</Cte>
-	 		</IfRequest>
+			</IfRequest>
 
-	 		<Cte Name = "CalendarCte" Dimension = "Calendar">
-	 			<Filter>
+			<IfRequest Dimension = "UsersPointOfSale;Users;PointsOfSale">
+				<Cte Name = "UsersPointOfSaleCte" Dimension = "UsersPointOfSale">
+					<Field Name = "UserId" />
+					<Field Name = "PointOfSaleId" />
+					<Join Dimension = "Users" Table = "UsersCte">
+						<Relation FromDimension = "UserId" RelatedTo = "UserId" />
+					</Join>
+					<Join Dimension = "PointsOfSale" Table = "PointsOfSaleCte">
+						<Relation FromDimension = "PointOfSaleId" RelatedTo = "PointOfSaleId" />
+					</Join>
+				</Cte>
+			</IfRequest>
+
+			<Cte Name = "CalendarCte" Dimension = "Calendar">
+				<Filter>
 					<![CDATA[
 	 					Date BETWEEN @StartInterval AND @EndInterval
 	 				]]>
-	 			</Filter>
-	 		</Cte>
-	 		
+				</Filter>
+			</Cte>
+
 			<Query>
 				<![CDATA[
 					SELECT {{
-								-Fields 
+								Fields
 									-Dimension: Users 
-										-Table: UsersCte
+										--Table: UsersCte
 									-Dimension: UsersPointOfSale 
-										-Table: UsersPointOfSaleCte
+										--Table: UsersPointOfSaleCte
 									-Dimension: PointsOfSale 
-										-Table: PointsOfSaleCte
+										--Table: PointsOfSaleCte
 									-Dimension: Products 
-										-Table: ProductsCte
+										--Table: ProductsCte
 									-Dimension:
-										-Name:Calendar 
-										-Table:CalendarCte 
-										-WithPrimaryKey
+										--Name:Calendar 
+										--Table:CalendarCte 
+										--WithPrimaryKey
 									-WithComma
 	                		}}
 	                		SalesAnalysis.SalesQuantity, SalesAnalysis.SalesAmountTaxesIncluded, SalesAnalysis.SalesAmountTaxesExcluded,
 	                		SalesAnalysis.Refund
 	                	FROM Fact.SalesAnalysis
 	                	{{
-	                		-InnerJoin 
+	                		InnerJoin 
 	                			-Dimension: UsersPointOfSale 
-	                    			-IfRequest: Users
-	                    			-IfRequest: PointsOfSale 
-	                    			-Table: UsersPointOfSaleCte 
+	                    			--IfRequest: Users
+	                    			--IfRequest: PointsOfSale 
+	                    			--Table: UsersPointOfSaleCte 
 	                			-Table: SalesAnalysis 
 	                			-On: UserPointOfSaleId-UserPointOfSaleId
 	                	}}
 	                	{{
-	                		-InnerJoin 
+	                		InnerJoin 
 	                			-Dimension: Users 
-	                				-Table: UsersCte
+	                				--Table: UsersCte
 								-Table: UsersPointOfSaleCte
 								-On:UserId-UserId
 	                	}}
 	                	{{
-	                		-InnerJoin 
+	                		InnerJoin 
 	                			-Dimension: PointsOfSale 
-	                				-Table:PointsOfSaleCte
+	                				--Table:PointsOfSaleCte
 								-Table:UsersPointOfSaleCte
 								-On:PointOfSaleId-PointOfSaleId
 	                	}}
 	                	{{
-	                		-InnerJoin 
+	                		InnerJoin 
 	                			-Dimension: Products 
-	                				-Table: ProductsCte
+	                				--Table: ProductsCte
 								-Table: SalesAnalysis
 								-On: ProductId-ProductId
 	                	}}
 	                	{{
-	                		-InnerJoin 
+	                		InnerJoin 
 	                			-Dimension: Calendar 
-	                				-Required
-	                				-Table: CalendarCte
+	                				--Required
+	                				--Table: CalendarCte
 								-Table:SalesAnalysis
 								-On:Date-Date
 	                	}}

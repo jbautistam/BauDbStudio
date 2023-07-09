@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<Dashboard Id = "478d6008-a4a0-4056-ba1c-0f6cca6d6dd6" >
+<Dashboard>
 	<Name>Test reporting schema</Name>
 	<Description/>
 	<DataSourceTable Id = "[Sync].[AchievementLevels]"  Schema = "Sync"  Table = "AchievementLevels"  IsView = "no" >

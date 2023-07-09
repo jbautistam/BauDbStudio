@@ -7,6 +7,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Queries;
 /// </summary>
 public class ExecuteQueryViewModel : BaseObservableObject, PluginsStudio.ViewModels.Base.Interfaces.IDetailViewModel
 {
+	// Eventos públicos
+	public EventHandler? StartSearchRequired;
 	// Variables privadas
 	private string _header = string.Empty;
 
@@ -35,6 +37,14 @@ public class ExecuteQueryViewModel : BaseObservableObject, PluginsStudio.ViewMod
 	///		Obtiene el mensaje que se debe mostrar al cerrar la ventana
 	/// </summary>
 	public string GetSaveAndCloseMessage() => "¿Desea grabar la consulta antes de continuar?";
+
+	/// <summary>
+	///		Inicia una búsqueda (por ejemplo, abre la ventana de búsqueda)
+	/// </summary>
+	public void StartSearch() 
+	{
+		StartSearchRequired?.Invoke(this, EventArgs.Empty);
+	}
 
 	/// <summary>
 	///		Cierra el viewmodel

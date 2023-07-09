@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\AppController.cs" />
-    <Compile Remove="Views\Calendar\CalendarPane.xaml.cs" />
+    <Compile Remove="Views\Appointments\CalendarPane.xaml.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Page Remove="Views\Calendar\CalendarPane.xaml" />
+    <Page Remove="Views\Appointments\CalendarPane.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -74,10 +74,6 @@
     <Page Update="Views\TodoFileView.xaml">
       <SubType>Designer</SubType>
     </Page>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Views\Calendar\" />
   </ItemGroup>
 
 </Project>

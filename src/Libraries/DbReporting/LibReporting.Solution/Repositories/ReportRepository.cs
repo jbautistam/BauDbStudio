@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Bau.Libraries.LibHelper.Extensors;
+﻿using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.LibMarkupLanguage;
 using Bau.Libraries.LibReporting.Models.DataWarehouses;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.Reports;
@@ -16,7 +13,6 @@ internal class ReportRepository
 {
 	// Constantes privadas
 	private const string TagRoot = "Report";
-	private const string TagDataWarehouse = "DataWarehouse";
 	private const string TagName = "Name";
 	private const string TagDescription = "Description";
 	private const string TagParameter = "Parameter";
@@ -46,56 +42,39 @@ internal class ReportRepository
 	/// <summary>
 	///		Carga el informe de un archivo sobre un <see cref="DataWarehouseModel"/>
 	/// </summary>
-	internal void Load(DataWarehouseModel dataWarehouse, string fileName)
-	{
-		ReportAdvancedModel report = LoadReport(dataWarehouse, fileName);
-
-			// Si el informe cargado se corresponde con el DataWarehouse solicitado, se añade
-			if (report is not null && !string.IsNullOrWhiteSpace(report.DataWarehouseKey) && 
-					dataWarehouse.Name.Equals(report.DataWarehouseKey, StringComparison.CurrentCultureIgnoreCase))
-				dataWarehouse.Reports.Add(report);
-	}
-
-	/// <summary>
-	///		Carga el informe de un archivo sobre un <see cref="DataWarehouseModel"/>
-	/// </summary>
 	internal ReportAdvancedModel LoadReport(DataWarehouseModel dataWarehouse, string fileName)
 	{
 		ReportAdvancedModel report = new(dataWarehouse, fileName);
-		MLFile fileML = Load(fileName);
+		MLFile fileML = new LibMarkupLanguage.Services.XML.XMLParser().Load(fileName);
 
 			// Carga los datos del informe
-			if (fileML is not null)
-				foreach (MLNode rootML in fileML.Nodes)
-					if (rootML.Name == TagRoot)
-						foreach (MLNode nodeML in rootML.Nodes)
-							switch (nodeML.Name)
-							{
-								case TagDataWarehouse:
-										report.DataWarehouseKey = nodeML.Attributes[TagName].Value.TrimIgnoreNull();
-									break;
-								case TagName:
-										report.Id = nodeML.Value.TrimIgnoreNull();
-									break;
-								case TagDescription:
-										report.Description = nodeML.Value.TrimIgnoreNull();
-									break;
-								case TagParameter:
-										report.Parameters.Add(LoadParameter(nodeML));
-									break;
-								case TagBlocks:
-										report.Blocks.AddRange(LoadBlocks(nodeML.Nodes));
-									break;
-								case TagDimension:
-										report.DimensionKeys.Add(nodeML.Attributes[TagName].Value.TrimIgnoreNull());
-									break;
-								case TagRequests:
-										report.RequestDimensions.AddRange(LoadRequests(nodeML));
-									break;
-								case TagExpression:
-										report.Expressions.AddRange(LoadExpressions(nodeML));
-									break;
-							}
+			foreach (MLNode rootML in fileML.Nodes)
+				if (rootML.Name == TagRoot)
+					foreach (MLNode nodeML in rootML.Nodes)
+						switch (nodeML.Name)
+						{
+							case TagName:
+									report.Id = nodeML.Value.TrimIgnoreNull();
+								break;
+							case TagDescription:
+									report.Description = nodeML.Value.TrimIgnoreNull();
+								break;
+							case TagParameter:
+									report.Parameters.Add(LoadParameter(nodeML));
+								break;
+							case TagBlocks:
+									report.Blocks.AddRange(LoadBlocks(nodeML.Nodes));
+								break;
+							case TagDimension:
+									report.DimensionKeys.Add(nodeML.Attributes[TagName].Value.TrimIgnoreNull());
+								break;
+							case TagRequests:
+									report.RequestDimensions.AddRange(LoadRequests(nodeML));
+								break;
+							case TagExpression:
+									report.Expressions.AddRange(LoadExpressions(nodeML));
+								break;
+						}
 			// Devuelve el informe
 			return report;
 	}
@@ -355,21 +334,5 @@ internal class ReportRepository
 						expressions.Add(field.TrimIgnoreNull());
 			// Devuelve la lista de expresiones
 			return expressions;
-	}
-
-	/// <summary>
-	///		Carga un archivo controlando las excepciones
-	/// </summary>
-	private MLFile Load(string fileName)
-	{
-		try
-		{
-			return new LibMarkupLanguage.Services.XML.XMLParser().Load(fileName);
-		}
-		catch (Exception exception)
-		{
-			System.Diagnostics.Debug.WriteLine($"Error when load {fileName}. {exception.Message}");
-			return null;
-		}
 	}
 }

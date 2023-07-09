@@ -1,4 +1,4 @@
-﻿namespace Bau.Libraries.ToDoManager.Application.Models.Notes;
+﻿namespace Bau.Libraries.ToDoManager.Application.Notes.Models;
 
 /// <summary>
 ///		Raíz de las notas

@@ -1,7 +1,5 @@
-﻿using System;
-
-using Bau.Libraries.BauMvvm.ViewModels;
-using Bau.Libraries.ToDoManager.Application.Models;
+﻿using Bau.Libraries.BauMvvm.ViewModels;
+using Bau.Libraries.ToDoManager.Application.ToDo.Models;
 using Microsoft.Extensions.Logging;
 
 namespace Bau.Libraries.ToDoManager.ViewModel.Reader;
@@ -12,9 +10,9 @@ namespace Bau.Libraries.ToDoManager.ViewModel.Reader;
 public class ToDoFileViewModel : BaseObservableObject, PluginsStudio.ViewModels.Base.Interfaces.IDetailViewModel
 {
 	// Variables privadas
-	private string _fileName;
+	private string _fileName = string.Empty;
 	private bool _isSelectedGroup;
-	private GroupViewModel _selectedGroup;
+	private GroupViewModel? _selectedGroup;
 
 	public ToDoFileViewModel(ToDoManagerViewModel mainViewModel, string fileName) : base(false)
 	{ 
@@ -70,7 +68,7 @@ public class ToDoFileViewModel : BaseObservableObject, PluginsStudio.ViewModels.
 		// Graba el archivo
 		if (string.IsNullOrWhiteSpace(FileName) || newName)
 		{
-			string newFileName = MainViewModel.ViewsController.DialogsController.OpenDialogSave
+			string? newFileName = MainViewModel.ViewsController.DialogsController.OpenDialogSave
 									(string.Empty, 
 									 $"Archivo tareas (*{ToDoManagerViewModel.ToDoFileExtension})|*{ToDoManagerViewModel.ToDoFileExtension}|Todos los archivos (*.*)|*.*",
 									 FileName, ToDoManagerViewModel.ToDoFileExtension);
@@ -136,7 +134,7 @@ public class ToDoFileViewModel : BaseObservableObject, PluginsStudio.ViewModels.
 	/// <summary>
 	///		Manager de la aplicación de lista de tareas
 	/// </summary>
-	public Application.ToDoFileManager ToDoManager { get; } = new();
+	public Application.ToDo.ToDoFileManager ToDoManager { get; } = new();
 
 	/// <summary>
 	///		Cabecera
@@ -146,10 +144,7 @@ public class ToDoFileViewModel : BaseObservableObject, PluginsStudio.ViewModels.
 	/// <summary>
 	///		Id de la ficha en pantalla
 	/// </summary>
-	public string TabId 
-	{ 
-		get { return GetType().ToString() + "_" + FileName; }
-	}
+	public string TabId  => GetType().ToString() + "_" + FileName;
 
 	/// <summary>
 	///		Nombre de archivo

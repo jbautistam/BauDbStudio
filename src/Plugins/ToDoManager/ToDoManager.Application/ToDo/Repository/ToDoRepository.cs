@@ -1,8 +1,8 @@
 ﻿using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.LibMarkupLanguage;
-using Bau.Libraries.ToDoManager.Application.Models;
+using Bau.Libraries.ToDoManager.Application.ToDo.Models;
 
-namespace Bau.Libraries.ToDoManager.Application.Repository;
+namespace Bau.Libraries.ToDoManager.Application.ToDo.Repository;
 
 /// <summary>
 ///		Repositorio para un archivo de ToDo
@@ -10,7 +10,7 @@ namespace Bau.Libraries.ToDoManager.Application.Repository;
 internal class ToDoRepository
 {
 	// Constantes privadas
-	private const string TagRoot = "BauTodo";
+	private const string TagRoot = "BauToDo";
 	private const string TagFolder = "Folder";
 	private const string TagName = "Name";
 	private const string TagDescription = "Description";
@@ -223,16 +223,16 @@ internal class ToDoRepository
 	/// <summary>
 	///		Obtiene los datos del nodo de una tarea
 	/// </summary>
-	private MLNode GetXmlTask(TaskModel toDo)
+	private MLNode GetXmlTask(TaskModel ToDo)
 	{
 		MLNode rootML = new(TagTask);
 
 			// Añade las propiedades
-			rootML.Attributes.Add(TagId, toDo.GlobalId);
-			rootML.Nodes.Add(TagName, toDo.Name);
-			rootML.Nodes.Add(TagDescription, toDo.Description);
-			rootML.Nodes.Add(TagNotes, toDo.Notes);
-			rootML.Attributes.Add(TagCreatedAt, toDo.CreatedAt);
+			rootML.Attributes.Add(TagId, ToDo.GlobalId);
+			rootML.Nodes.Add(TagName, ToDo.Name);
+			rootML.Nodes.Add(TagDescription, ToDo.Description);
+			rootML.Nodes.Add(TagNotes, ToDo.Notes);
+			rootML.Attributes.Add(TagCreatedAt, ToDo.CreatedAt);
 			// Devuelve el nodo
 			return rootML;
 	}

@@ -6,11 +6,11 @@
 public abstract class BaseTextFileViewModel : BaseFileViewModel
 {
 	// Eventos públicos
-	public event EventHandler<Controllers.EventArguments.EditorGoToLineEventArgs> GoToLineRequired;
-	public event EventHandler<Controllers.EventArguments.EditorSelectedTextRequiredEventArgs> SelectedTextRequired;
+	public event EventHandler<Controllers.EventArguments.EditorGoToLineEventArgs>? GoToLineRequired;
+	public event EventHandler<Controllers.EventArguments.EditorSelectedTextRequiredEventArgs>? SelectedTextRequired;
 	// Variables privadas
-	private string _content;
-	private System.Text.Encoding _fileEncoding;
+	private string _content = string.Empty;
+	private System.Text.Encoding _fileEncoding = default!;
 	private bool _fileWithBom;
 
 	public BaseTextFileViewModel(Controllers.IPluginsController pluginsController, string fileName) : base(fileName) 
@@ -48,8 +48,8 @@ public abstract class BaseTextFileViewModel : BaseFileViewModel
 		// Graba el archivo
 		if (string.IsNullOrWhiteSpace(FileName) || newName)
 		{
-			string newFileName = PluginsController.MainWindowController.DialogsController.OpenDialogSave(string.Empty, "Script SQL (*.sql)|*.sql|Todos los archivos (*.*)|*.*",
-																										 FileName, ".sql");
+			string? newFileName = PluginsController.MainWindowController.DialogsController.OpenDialogSave(string.Empty, "Script SQL (*.sql)|*.sql|Todos los archivos (*.*)|*.*",
+																										  FileName, ".sql");
 
 				// Cambia el nombre de archivo si es necesario
 				if (!string.IsNullOrWhiteSpace(newFileName))
@@ -77,7 +77,7 @@ public abstract class BaseTextFileViewModel : BaseFileViewModel
 	/// </summary>
 	protected string GetEditorSelectedText()
 	{
-		Controllers.EventArguments.EditorSelectedTextRequiredEventArgs eventArgs = new Controllers.EventArguments.EditorSelectedTextRequiredEventArgs();
+		Controllers.EventArguments.EditorSelectedTextRequiredEventArgs eventArgs = new Controllers.EventArguments.EditorSelectedTextRequiredEventArgs(string.Empty);
 
 			// Lanza el evento
 			SelectedTextRequired?.Invoke(this, eventArgs);

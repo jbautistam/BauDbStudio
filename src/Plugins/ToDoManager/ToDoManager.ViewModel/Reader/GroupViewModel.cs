@@ -1,6 +1,6 @@
 ﻿using System;
 
-using Bau.Libraries.ToDoManager.Application.Models;
+using Bau.Libraries.ToDoManager.Application.ToDo.Models;
 using Bau.Libraries.BauMvvm.ViewModels;
 
 namespace Bau.Libraries.ToDoManager.ViewModel.Reader;

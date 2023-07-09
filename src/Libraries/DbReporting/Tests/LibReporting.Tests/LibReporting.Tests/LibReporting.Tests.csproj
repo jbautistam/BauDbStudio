@@ -29,16 +29,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Data\ReportingSales\Requests\Response_1.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="Data\ReportingSales\Test_01.report.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Data\ReportingSales\Test-Reporting-Schema.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Data\ReportingSales\Requests\Request_1.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

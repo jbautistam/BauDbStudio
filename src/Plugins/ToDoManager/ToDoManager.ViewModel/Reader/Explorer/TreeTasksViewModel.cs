@@ -1,4 +1,4 @@
-﻿using Bau.Libraries.ToDoManager.Application.Models;
+﻿using Bau.Libraries.ToDoManager.Application.ToDo.Models;
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.BauMvvm.ViewModels.Controllers;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;

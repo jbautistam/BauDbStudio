@@ -26,7 +26,7 @@ public class MenuListModel
 	/// <summary>
 	///		Crea un menú
 	/// </summary>
-	public MenuModel Add(string header, BauMvvm.ViewModels.BaseCommand command, string icon, string gestureText = null)
+	public MenuModel Add(string header, BauMvvm.ViewModels.BaseCommand command, string icon, string? gestureText = null)
 	{
 		MenuModel menu = new() {
 									Header = header,
@@ -49,7 +49,7 @@ public class MenuListModel
 		Items.Add(new MenuModel
 						{
 							Id = Guid.NewGuid().ToString(),
-							Header = null
+							Header = string.Empty
 						}
 				  );
 	}
