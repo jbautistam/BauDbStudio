@@ -421,7 +421,6 @@ internal class ReportQueryAdvancedGenerator : ReportBaseQueryGenerator
 
 					if (dimensionJoin is not null)
 					{
-						//DimensionRequestModel? request = Request.GetDimensionRequest(dimensionJoin.Id);
 						List<(string table, string field)> fields = GetFieldsRequest(dimension, dimension.WithPrimaryKeys);
 
 							// Añade los campos solicitados a la SQL

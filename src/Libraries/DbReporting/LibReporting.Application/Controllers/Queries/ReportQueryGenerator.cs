@@ -69,7 +69,7 @@ internal class ReportQueryGenerator : ReportBaseQueryGenerator
 	/// </summary>
 	private string GetSqlWithBlock(QueryModel query)
 	{
-		return $"{query.Alias} AS {Environment.NewLine}({query.Build()})";
+		return $"{GetFieldName(query.Alias)} AS {Environment.NewLine}({query.Build()})";
 	}
 
 	/// <summary>
