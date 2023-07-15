@@ -1,20 +1,17 @@
-﻿using System;
+﻿namespace Bau.Libraries.LibReporting.Models.Base;
 
-namespace Bau.Libraries.LibReporting.Models.Base
+/// <summary>
+///		Base para los modelos de reporting
+/// </summary>
+public abstract class BaseReportingModel
 {
 	/// <summary>
-	///		Base para los modelos de reporting
+	///		Comparación entre elementos
 	/// </summary>
-	public abstract class BaseReportingModel
-	{
-		/// <summary>
-		///		Comparación entre elementos
-		/// </summary>
-		public abstract int CompareTo(BaseReportingModel item);
+	public abstract int CompareTo(BaseReportingModel item);
 
-		/// <summary>
-		///		Id global del elemento
-		/// </summary>
-		public string Id { get; set; } = Guid.NewGuid().ToString();
-	}
+	/// <summary>
+	///		Id global del elemento
+	/// </summary>
+	public string Id { get; set; } = Guid.NewGuid().ToString();
 }

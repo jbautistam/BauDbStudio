@@ -32,7 +32,7 @@ public class ReportingSolutionModel
 	/// <summary>
 	///		Nombres de archivos
 	/// </summary>
-	public List<string> Files { get; } = new List<string>();
+	public List<string> Files { get; } = new();
 
 	/// <summary>
 	///		Dicionario de relación entre almacenes de datos y archivos

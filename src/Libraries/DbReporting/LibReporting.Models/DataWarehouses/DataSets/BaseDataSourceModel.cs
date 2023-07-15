@@ -1,54 +1,48 @@
-﻿using System;
+﻿namespace Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets;
 
-namespace Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets
+/// <summary>
+///		Clase base para los orígenes de datos
+/// </summary>
+public abstract class BaseDataSourceModel : Base.BaseReportingModel
 {
-	/// <summary>
-	///		Clase base para los orígenes de datos
-	/// </summary>
-	public abstract class BaseDataSourceModel : Base.BaseReportingModel
+	protected BaseDataSourceModel(DataWarehouseModel dataWarehouse)
 	{
-		protected BaseDataSourceModel(DataWarehouseModel dataWarehouse)
-		{
-			DataWarehouse = dataWarehouse;
-		}
-
-		/// <summary>
-		///		Obtiene el nombre de tabla
-		/// </summary>
-		public abstract string GetTableAlias();
-
-		/// <summary>
-		///		Comprueba si este origen de datos tiene alguna columna con el Id solicitado
-		/// </summary>
-		public bool HasColumn(string columnId)
-		{
-			return Columns[columnId] is not null;
-		}
-
-		/// <summary>
-		///		Obtiene la columna por su nombre o por su alias si es necesario
-		/// </summary>
-		public DataSourceColumnModel GetColumn(string columnId, bool compareWithAlias)
-		{
-			DataSourceColumnModel column = Columns[columnId];
-
-				// Si no se ha obtenido por el nombre, busca por el alias
-				if (column is null && compareWithAlias)
-					foreach (DataSourceColumnModel columnSearch in Columns.EnumerateValues())
-						if (column is null && columnSearch.Alias.Equals(columnId, StringComparison.CurrentCultureIgnoreCase))
-							column = columnSearch;
-				// Devuelve la columna localizada
-				return column;
-		}
-
-		/// <summary>
-		///		Almacén de datos
-		/// </summary>
-		public DataWarehouseModel DataWarehouse { get; }
-
-		/// <summary>
-		///		Columnas visibles de la tabla
-		/// </summary>
-		public Base.BaseReportingDictionaryModel<DataSourceColumnModel> Columns { get; } = new Base.BaseReportingDictionaryModel<DataSourceColumnModel>();
+		DataWarehouse = dataWarehouse;
 	}
+
+	/// <summary>
+	///		Obtiene el nombre de tabla
+	/// </summary>
+	public abstract string GetTableAlias();
+
+	/// <summary>
+	///		Comprueba si este origen de datos tiene alguna columna con el Id solicitado
+	/// </summary>
+	public bool HasColumn(string columnId) => Columns[columnId] is not null;
+
+	/// <summary>
+	///		Obtiene la columna por su nombre o por su alias si es necesario
+	/// </summary>
+	public DataSourceColumnModel? GetColumn(string columnId, bool compareWithAlias)
+	{
+		DataSourceColumnModel? column = Columns[columnId];
+
+			// Si no se ha obtenido por el nombre, busca por el alias
+			if (column is null && compareWithAlias)
+				foreach (DataSourceColumnModel columnSearch in Columns.EnumerateValues())
+					if (column is null && columnSearch.Alias.Equals(columnId, StringComparison.CurrentCultureIgnoreCase))
+						column = columnSearch;
+			// Devuelve la columna localizada
+			return column;
+	}
+
+	/// <summary>
+	///		Almacén de datos
+	/// </summary>
+	public DataWarehouseModel DataWarehouse { get; }
+
+	/// <summary>
+	///		Columnas visibles de la tabla
+	/// </summary>
+	public Base.BaseReportingDictionaryModel<DataSourceColumnModel> Columns { get; } = new();
 }

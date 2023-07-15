@@ -35,7 +35,7 @@ internal class ReportController
 		// Busca el informe entre los diferentes almacenes del esquema
 		foreach (DataWarehouseModel dataWarehouse in Manager.Schema.DataWarehouses.EnumerateValues())
 		{
-			ReportBaseModel report = dataWarehouse.Reports[reportId];
+			ReportBaseModel? report = dataWarehouse.Reports[reportId];
 
 				if (report is not null)
 					return report;

@@ -106,10 +106,7 @@ public class ReportingSolutionManager
 	/// <summary>
 	///		Carga un <see cref="DataWarehouseModel"/> a partir de un archivo de esquema de base de datos
 	/// </summary>
-	public DataWarehouseModel ConvertSchemaDbToDataWarehouse(string name, string fileName)
-	{
-		return new Converters.SchemaConverter().Convert(Manager.Schema, name, fileName);
-	}
+	public DataWarehouseModel ConvertSchemaDbToDataWarehouse(string name, string fileName) => new Converters.SchemaConverter().Convert(Manager.Schema, name, fileName);
 
 	/// <summary>
 	///		Combina un <see cref="DataWarehouseModel"/> con un archivo de esquema de base de datos

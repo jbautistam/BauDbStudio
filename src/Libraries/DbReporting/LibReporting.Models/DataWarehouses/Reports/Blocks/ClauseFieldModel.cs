@@ -1,33 +1,30 @@
-﻿using System;
+﻿namespace Bau.Libraries.LibReporting.Models.DataWarehouses.Reports.Blocks;
 
-namespace Bau.Libraries.LibReporting.Models.DataWarehouses.Reports.Blocks
+/// <summary>
+///		Claúsula con los datos de un campo
+/// </summary>
+public class ClauseFieldModel
 {
+	// Variables privadas
+	private string _alias = string.Empty;
+
 	/// <summary>
-	///		Claúsula con los datos de un campo
+	///		Nombre del campo
 	/// </summary>
-	public class ClauseFieldModel
+	public string Field { get; set; } = string.Empty;
+
+	/// <summary>
+	///		Alias del campo
+	/// </summary>
+	public string Alias
 	{
-		// Variables privadas
-		private string _alias;
-
-		/// <summary>
-		///		Nombre del campo
-		/// </summary>
-		public string Field { get; set; }
-
-		/// <summary>
-		///		Alias del campo
-		/// </summary>
-		public string Alias
+		get 
 		{
-			get 
-			{
-				if (string.IsNullOrWhiteSpace(_alias))
-					return Field;
-				else
-					return _alias; 
-			}
-			set { _alias = value; }
+			if (string.IsNullOrWhiteSpace(_alias))
+				return Field;
+			else
+				return _alias; 
 		}
+		set { _alias = value; }
 	}
 }

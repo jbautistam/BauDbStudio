@@ -66,5 +66,5 @@ internal class ParserJoinRelationSectionModel : ParserBaseSectionModel
     /// <summary>
     ///		Sql adicional para un JOIN
     /// </summary>
-    internal string AdditionalJoinSql { get; set; } = default!;
+    internal string AdditionalJoinSql { get; set; } = string.Empty;
 }

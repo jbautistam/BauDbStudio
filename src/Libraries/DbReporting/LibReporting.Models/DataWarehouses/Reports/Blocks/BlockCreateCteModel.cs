@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace Bau.Libraries.LibReporting.Models.DataWarehouses.Reports.Blocks;
 
-namespace Bau.Libraries.LibReporting.Models.DataWarehouses.Reports.Blocks
+/// <summary>
+///		Bloque de creación de una CTE
+/// </summary>
+public class BlockCreateCteModel : BaseBlockModel
 {
-    /// <summary>
-    ///		Bloque de creación de una CTE
-    /// </summary>
-    public class BlockCreateCteModel : BaseBlockModel
-    {
-        public BlockCreateCteModel(string key) : base(key) {}
+    public BlockCreateCteModel(string key) : base(key) {}
 
-        /// <summary>
-        ///     Bloques para la creación de la CTE
-        /// </summary>
-        public List<BaseBlockModel> Blocks { get; } = new();
-    }
+    /// <summary>
+    ///     Bloques para la creación de la CTE
+    /// </summary>
+    public List<BaseBlockModel> Blocks { get; } = new();
 }

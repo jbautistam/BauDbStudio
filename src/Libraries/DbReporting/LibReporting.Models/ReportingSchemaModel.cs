@@ -17,4 +17,9 @@ public class ReportingSchemaModel
 	///		Almacenes de datos
 	/// </summary>
 	public Base.BaseReportingDictionaryModel<DataWarehouses.DataWarehouseModel> DataWarehouses { get; } = new();
+
+	/// <summary>
+	///		Configuración
+	/// </summary>
+	public Configuration.ProviderConfigurationModel Configuration { get; } = new();
 }

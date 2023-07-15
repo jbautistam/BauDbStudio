@@ -21,7 +21,7 @@ public class SchemaConverter
 				throw new Exception($"There is not tables defined at file {fileName}");
 			else
 			{
-				DataWarehouseModel dataWarehouse = new DataWarehouseModel(schema);
+				DataWarehouseModel dataWarehouse = new(schema);
 
 					// Asigna las propiedades
 					dataWarehouse.Name = name;
@@ -57,7 +57,7 @@ public class SchemaConverter
 		foreach (BaseDataSourceModel dataSource in source.DataSources.EnumerateValues())
 			if (dataSource is DataSourceTableModel sourceTable)
 			{
-				DataSourceTableModel targetTable = target.GetDataTableByFullName(sourceTable.FullName);
+				DataSourceTableModel? targetTable = target.GetDataTableByFullName(sourceTable.FullName);
 
 					if (targetTable is null)
 						target.DataSources.Add(sourceTable.Clone(target));
@@ -78,7 +78,7 @@ public class SchemaConverter
 	/// </summary>
 	private void DropDataSources(DataWarehouseModel source, DataWarehouseModel target)
 	{
-		List<DataSourceTableModel> tablesToDelete = new List<DataSourceTableModel>();
+		List<DataSourceTableModel> tablesToDelete = new();
 
 			// Busca las tablas a eliminar
 			foreach (BaseDataSourceModel dataSource in target.DataSources.EnumerateValues())
@@ -96,7 +96,7 @@ public class SchemaConverter
 	{
 		foreach (DataSourceColumnModel sourceColumn in source.Columns.EnumerateValues())
 		{
-			DataSourceColumnModel targetColumn = GetColumn(target, sourceColumn.Id);
+			DataSourceColumnModel? targetColumn = GetColumn(target, sourceColumn.Id);
 
 				if (targetColumn is null)
 					target.Columns.Add(sourceColumn.Clone(target));
@@ -114,7 +114,7 @@ public class SchemaConverter
 	/// </summary>
 	private void DropColumns(DataSourceTableModel source, DataSourceTableModel target)
 	{
-		List<DataSourceColumnModel> columnsToDelete = new List<DataSourceColumnModel>();
+		List<DataSourceColumnModel> columnsToDelete = new();
 
 			// Busca las columnas en el destino a eliminar
 			foreach (DataSourceColumnModel targetColumn in target.Columns.EnumerateValues())
@@ -143,11 +143,11 @@ public class SchemaConverter
 	/// </summary>
 	private DataSourceTableModel ConvertDataSource(DataWarehouseModel dataWarehouse, BaseTableDbModel table, bool isView)
 	{
-		DataSourceTableModel dataSource = new DataSourceTableModel(dataWarehouse);
+		DataSourceTableModel dataSource = new(dataWarehouse);
 
 			// Asigna los datos
-			dataSource.Schema = table.Schema;
-			dataSource.Table = table.Name;
+			dataSource.Schema = table.Schema ?? string.Empty;
+			dataSource.Table = table.Name ?? string.Empty;
 			dataSource.IsView = isView;
 			// Asigna las columnas
 			foreach (FieldDbModel field in table.Fields)
@@ -161,10 +161,10 @@ public class SchemaConverter
 	/// </summary>
 	private DataSourceColumnModel Convert(DataSourceTableModel dataSource, FieldDbModel field)
 	{
-		DataSourceColumnModel column = new DataSourceColumnModel(dataSource);
+		DataSourceColumnModel column = new(dataSource);
 
 			// Asigna las propiedades
-			column.Id = field.Name;
+			column.Id = field.Name ?? string.Empty;
 			column.IsPrimaryKey = field.IsKey;
 			column.Type = Convert(field.Type);
 			column.Required = field.IsRequired;
@@ -178,14 +178,14 @@ public class SchemaConverter
 	private DataSourceColumnModel.FieldType Convert(FieldDbModel.Fieldtype type)
 	{
 		return type switch
-					{
-						FieldDbModel.Fieldtype.Binary => DataSourceColumnModel.FieldType.Binary,
-						FieldDbModel.Fieldtype.Boolean => DataSourceColumnModel.FieldType.Boolean,
-						FieldDbModel.Fieldtype.Date => DataSourceColumnModel.FieldType.Date,
-						FieldDbModel.Fieldtype.Decimal => DataSourceColumnModel.FieldType.Decimal,
-						FieldDbModel.Fieldtype.Integer => DataSourceColumnModel.FieldType.Integer,
-						FieldDbModel.Fieldtype.String => DataSourceColumnModel.FieldType.String,
-						_ => DataSourceColumnModel.FieldType.Unknown,
-					};
+				{
+					FieldDbModel.Fieldtype.Binary => DataSourceColumnModel.FieldType.Binary,
+					FieldDbModel.Fieldtype.Boolean => DataSourceColumnModel.FieldType.Boolean,
+					FieldDbModel.Fieldtype.Date => DataSourceColumnModel.FieldType.Date,
+					FieldDbModel.Fieldtype.Decimal => DataSourceColumnModel.FieldType.Decimal,
+					FieldDbModel.Fieldtype.Integer => DataSourceColumnModel.FieldType.Integer,
+					FieldDbModel.Fieldtype.String => DataSourceColumnModel.FieldType.String,
+					_ => DataSourceColumnModel.FieldType.Unknown,
+				};
 	}
 }

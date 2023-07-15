@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace Bau.Libraries.LibReporting.Models.DataWarehouses.Reports;
 
-namespace Bau.Libraries.LibReporting.Models.DataWarehouses.Reports
+/// <summary>
+///		Campo que se deben incluir en las consultas de una dimensión
+/// </summary>
+public class ReportAdvancedRequestDimensionField
 {
 	/// <summary>
-	///		Campo que se deben incluir en las consultas de una dimensión
+	///		Campo que se debe solicitar
 	/// </summary>
-	public class ReportAdvancedRequestDimensionField
-	{
-		/// <summary>
-		///		Campo que se debe solicitar
-		/// </summary>
-		public string Field { get; set; }
-	}
+	public string Field { get; set; } = string.Empty;
 }

@@ -1,31 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace Bau.Libraries.LibReporting.Models.DataWarehouses.Reports;
 
-namespace Bau.Libraries.LibReporting.Models.DataWarehouses.Reports
+/// <summary>
+///		Origen de datos asociado a un informe
+/// </summary>
+public class ReportDataSourceModel
 {
-	/// <summary>
-	///		Origen de datos asociado a un informe
-	/// </summary>
-	public class ReportDataSourceModel
+	public ReportDataSourceModel(ReportModel report, DataSets.BaseDataSourceModel dataSource)
 	{
-		public ReportDataSourceModel(ReportModel report)
-		{
-			Report = report;
-		}
-
-		/// <summary>
-		///		Informe al que se asocia el origen de datos
-		/// </summary>
-		public ReportModel Report { get; }
-
-		/// <summary>
-		///		Origen de datos
-		/// </summary>
-		public DataSets.BaseDataSourceModel DataSource { get; set; }
-
-		/// <summary>
-		///		Relaciones del origen de datos con las dimensiones
-		/// </summary>
-		public List<Relations.DimensionRelationModel> Relations { get; } = new List<Relations.DimensionRelationModel>();
+		Report = report;
+		DataSource = dataSource;
 	}
+
+	/// <summary>
+	///		Informe al que se asocia el origen de datos
+	/// </summary>
+	public ReportModel Report { get; }
+
+	/// <summary>
+	///		Origen de datos
+	/// </summary>
+	public DataSets.BaseDataSourceModel DataSource { get; }
+
+	/// <summary>
+	///		Relaciones del origen de datos con las dimensiones
+	/// </summary>
+	public List<Relations.DimensionRelationModel> Relations { get; } = new();
 }

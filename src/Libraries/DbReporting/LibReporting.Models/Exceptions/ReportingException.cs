@@ -1,22 +1,19 @@
-﻿using System;
+﻿namespace Bau.Libraries.LibReporting.Models.Exceptions;
 
-namespace Bau.Libraries.LibReporting.Models.Exceptions
+/// <summary>
+///		Excepción interna
+/// </summary>
+public class ReportingException : Exception
 {
-	/// <summary>
-	///		Excepción interna
-	/// </summary>
-	public class ReportingException : Exception
+	public ReportingException() : base()
 	{
-		public ReportingException() : base()
-		{
-		}
+	}
 
-		public ReportingException(string message) : base(message)
-		{
-		}
+	public ReportingException(string message) : base(message)
+	{
+	}
 
-		public ReportingException(string message, Exception innerException) : base(message, innerException)
-		{
-		}
+	public ReportingException(string message, Exception innerException) : base(message, innerException)
+	{
 	}
 }

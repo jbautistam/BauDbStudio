@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Bau.Libraries.LibReporting.Requests.Models;
+﻿namespace Bau.Libraries.LibReporting.Requests.Models;
 
 /// <summary>
 ///		Colunma solicitada de una dimensión
@@ -11,7 +8,7 @@ public class DimensionRequestModel
 	/// <summary>
 	///		Clona los datos
 	/// </summary>
-	internal DimensionRequestModel Clone()
+	public DimensionRequestModel Clone()
 	{
 		DimensionRequestModel cloned = new()
 										{
@@ -44,7 +41,7 @@ public class DimensionRequestModel
 	/// <summary>
 	///		Código de dimensión
 	/// </summary>
-	public string DimensionId { get; set; } = default!;
+	public string DimensionId { get; set; } = string.Empty;
 
 	/// <summary>
 	///		Columnas

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Bau.Libraries.LibHelper.Extensors;
+﻿using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.LibMarkupLanguage;
 using Bau.Libraries.LibReporting.Requests.Models;
 
@@ -197,7 +194,7 @@ internal class RequestRepository
 	/// <summary>
 	///		Carga los datos de un parámetro
 	/// </summary>
-	private void LoadParameter(MLNode rootML, Dictionary<string, object> parameters)
+	private void LoadParameter(MLNode rootML, Dictionary<string, object?> parameters)
 	{
 		parameters.Add(rootML.Attributes[TagKey].Value.TrimIgnoreNull(), 
 					   ConvertParameter(rootML.Attributes[TagType].Value.TrimIgnoreNull(),
@@ -208,7 +205,7 @@ internal class RequestRepository
 	/// <summary>
 	///		Convierte el parámetro
 	/// </summary>
-	private object ConvertParameter(string type, string value)
+	private object? ConvertParameter(string type, string value)
 	{
 		if (type.Equals(TagTypeDate, StringComparison.CurrentCultureIgnoreCase))
 			return value.GetDateTime();
@@ -241,12 +238,12 @@ internal class RequestRepository
 	/// <summary>
 	///		Obtiene los nodos XML de parámetros
 	/// </summary>
-	private MLNodesCollection GetNodesParameters(Dictionary<string, object> parameters)
+	private MLNodesCollection GetNodesParameters(Dictionary<string, object?> parameters)
 	{
 		MLNodesCollection nodesML = new();
 
 			// Añade los parámetros
-			foreach (KeyValuePair<string, object> parameter in parameters)
+			foreach (KeyValuePair<string, object?> parameter in parameters)
 				nodesML.Add(GetNodeParameter(parameter.Key, parameter.Value));
 			// Devuelve la colección de nodos
 			return nodesML;
@@ -255,7 +252,7 @@ internal class RequestRepository
 	/// <summary>
 	///		Obtiene el nodo de un parámetro
 	/// </summary>
-	private MLNode GetNodeParameter(string key, object value)
+	private MLNode GetNodeParameter(string key, object? value)
 	{
 		MLNode nodeML = new(TagParameter);
 
@@ -399,7 +396,7 @@ internal class RequestRepository
 					// Añade los atributos
 					nodeML.Attributes.Add(TagCondition, filter.Condition.ToString());
 					// Añade los valores del filtro
-					foreach (object value in filter.Values)
+					foreach (object? value in filter.Values)
 						nodeML.Nodes.Add(GetNodeParameter("Value", value));
 					// Añade el nodo a la colección
 					nodesML.Add(nodeML);

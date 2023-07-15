@@ -28,5 +28,5 @@ internal class ParserIfRequestExpressionSectionModel : ParserBaseSectionModel
     /// <summary>
     ///		Consulta SQL a añadir cuando se solicita la expresión
     /// </summary>
-    internal string Sql { get; set; } = default!;
+    internal string Sql { get; set; } = string.Empty;
 }

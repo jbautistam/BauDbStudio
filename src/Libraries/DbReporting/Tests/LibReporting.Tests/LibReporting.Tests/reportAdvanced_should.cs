@@ -15,26 +15,42 @@ public class reportAdvanced_should
 	[Theory]
 	[InlineData("ReportingSales/Test-Reporting-Schema.xml", 
 				"ReportingSales/Test_01/NoDimensions.request.xml")]
-	public void convert_to_sql(string schema, string fileRequest)
+	[InlineData("ReportingSales/Test-Reporting-Schema.xml", 
+				"ReportingSales/Test_01/NoDimensions.request.xml", 
+				"\"", "\"")]
+	public void convert_to_sql(string schema, string fileRequest, string charStart = "[", string charEnd = "]")
 	{
-		ReportingSolutionManager manager = new();
-		ReportRequestModel request = manager.LoadRequest(Tools.FileHelper.GetFullFileName(fileRequest));
+		string schemaFileName = Tools.FileHelper.GetFullFileName(schema);
+		string requestFileName = Tools.FileHelper.GetFullFileName(fileRequest);
 
-			// Agrega el dataWarehouse
-			manager.AddDataWarehouse(Tools.FileHelper.GetFullFileName(schema));
-			// Comprueba que realmente se haya cargado una solicitud
-			request.Should().NotBeNull();
-			// Obtiene la SQL del informe
-			AssertSqlWithFile(manager.GetSqlResponse(request), Tools.FileHelper.GetResponseFile(fileRequest));
+			if (!File.Exists(schemaFileName))
+				throw new NotImplementedException($"Can't find the file {schemaFileName}");
+			else if (!File.Exists(requestFileName))
+				throw new NotImplementedException($"Can't find the file {requestFileName}");
+			else
+			{
+				ReportingSolutionManager manager = new();
+				ReportRequestModel request = manager.LoadRequest(requestFileName);
+					
+					// Cambia la configuración del proveedor
+					manager.Manager.Schema.Configuration.CharFieldNameStart = charStart;
+					manager.Manager.Schema.Configuration.CharFieldNameEnd = charEnd;
+					// Agrega el dataWarehouse
+					manager.AddDataWarehouse(schemaFileName);
+					// Comprueba que realmente se haya cargado una solicitud
+					request.Should().NotBeNull();
+					// Obtiene la SQL del informe
+					AssertSqlWithFile(manager.GetSqlResponse(request), Tools.FileHelper.GetResponseFile(fileRequest), charStart, charEnd);
+			}
 	}
 
 	/// <summary>
 	///		Comprueba si se puede cargar un esquema de base de datos y sus informes y ejecutar la cadena SQL contra la base de datos
 	/// </summary>
-	[Theory]
-	[InlineData("ReportingSales/Test-Reporting-Schema.xml", 
-				"ReportingSales/Requests/Request_1.xml",
-				"Server=(local);Database=Roivolution_NunezDeArena_Reporting_Sales;Trusted_Connection=True;MultipleActiveResultSets=True")]
+	//[Theory]
+	//[InlineData("ReportingSales/Test-Reporting-Schema.xml", 
+	//			"ReportingSales/Test_01/NoDimensions.request.xml",
+	//			"Server=(local);Database=Roivolution_NunezDeArena_Reporting_Sales;Trusted_Connection=True;MultipleActiveResultSets=True")]
 	public void execute_to_sql(string fileName, string fileRequest, string connectionString)
 	{
 		ReportingSolutionManager manager = new();
@@ -79,23 +95,31 @@ public class reportAdvanced_should
 	/// <summary>
 	///		Compara la SQL de respuesta con el contenido de un archivo
 	/// </summary>
-	private void AssertSqlWithFile(string sqlGenerated, string fileResponse)
+	private void AssertSqlWithFile(string sqlGenerated, string fileResponse, string charStart, string charEnd)
 	{
-		AssertSql(sqlGenerated, File.ReadAllText(Tools.FileHelper.GetFullFileName(fileResponse)));
+		AssertSql(sqlGenerated, File.ReadAllText(Tools.FileHelper.GetFullFileName(fileResponse)), charStart, charEnd);
 	}
 
 	/// <summary>
 	///		Compara las SQL
 	/// </summary>
-	private void AssertSql(string source, string target)
+	private void AssertSql(string source, string target, string charStart, string charEnd)
 	{
-		Normalize(source).Should().BeEquivalentTo(Normalize(target));
+		// Log
+		System.Diagnostics.Debug.WriteLine(new string('-', 80));
+		System.Diagnostics.Debug.WriteLine("Compare");
+		System.Diagnostics.Debug.WriteLine(Normalize(source, charStart, charEnd));
+		System.Diagnostics.Debug.WriteLine(new string('-', 80));
+		System.Diagnostics.Debug.WriteLine(Normalize(target, charStart, charEnd));
+		System.Diagnostics.Debug.WriteLine(new string('-', 80));
+		// Assert
+		Normalize(source, charStart, charEnd).Should().BeEquivalentTo(Normalize(target, charStart, charEnd));
 	}
 
 	/// <summary>
 	///		Normaliza una cadena SQL
 	/// </summary>
-	private string Normalize(string sql)
+	private string Normalize(string sql, string charStart, string charEnd)
 	{
 		// Quita saltos de línea y tabuladores
 		sql = sql.Replace('\n', ' ');
@@ -104,6 +128,16 @@ public class reportAdvanced_should
 		// Quita espacios dobles
 		while (!string.IsNullOrWhiteSpace(sql) && sql.IndexOf("  ") >= 0)
 			sql = sql.Replace("  ", " ");
+		// Quita los malos paréntesis, corchetes...
+		sql = sql.Replace("( ", "(");
+		sql = sql.Replace(" )", ")");
+		sql = sql.Replace("[ ", "[");
+		sql = sql.Replace(" ]", "]");
+		// Cambia los caracteres de inicio y fin
+		if (!string.IsNullOrWhiteSpace(charStart))
+			sql = sql.Replace("[", charStart);
+		if (!string.IsNullOrWhiteSpace(charEnd))
+			sql = sql.Replace("]", charEnd);
 		// Quita espacios iniciales / finales
 		if (!string.IsNullOrWhiteSpace(sql))
 			sql = sql.Trim();

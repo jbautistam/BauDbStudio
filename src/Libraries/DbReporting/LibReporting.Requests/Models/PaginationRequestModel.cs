@@ -1,35 +1,32 @@
-﻿using System;
+﻿namespace Bau.Libraries.LibReporting.Requests.Models;
 
-namespace Bau.Libraries.LibReporting.Requests.Models
+/// <summary>
+///		Definición de la paginación
+/// </summary>
+public class PaginationRequestModel
 {
 	/// <summary>
-	///		Definición de la paginación
+	///		Clona la definición de paginación
 	/// </summary>
-	public class PaginationRequestModel
+	public void Clone(PaginationRequestModel pagination)
 	{
-		/// <summary>
-		///		Clona la definición de paginación
-		/// </summary>
-		internal void Clone(PaginationRequestModel basePagination)
-		{
-			MustPaginate = basePagination.MustPaginate;
-			Page = basePagination.Page;
-			RecordsPerPage = basePagination.RecordsPerPage;
-		}
-
-		/// <summary>
-		///		Indica si se debe paginar
-		/// </summary>
-		public bool MustPaginate { get; set; }
-
-		/// <summary>
-		///		Página a consultar
-		/// </summary>
-		public int Page { get; set; }
-
-		/// <summary>
-		///		Registros por página
-		/// </summary>
-		public long RecordsPerPage { get; set; }
+		MustPaginate = pagination.MustPaginate;
+		Page = pagination.Page;
+		RecordsPerPage = pagination.RecordsPerPage;
 	}
+
+	/// <summary>
+	///		Indica si se debe paginar
+	/// </summary>
+	public bool MustPaginate { get; set; }
+
+	/// <summary>
+	///		Página a consultar
+	/// </summary>
+	public int Page { get; set; }
+
+	/// <summary>
+	///		Registros por página
+	/// </summary>
+	public long RecordsPerPage { get; set; }
 }

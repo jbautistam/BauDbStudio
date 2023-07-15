@@ -333,10 +333,8 @@ public class TreeReportingViewModel : PluginTreeViewModel
 				dimension = node.Dimension;
 			else if (SelectedNode is NodeDataSourceViewModel nodeDataSource)
 			{
-				dimension = new LibReporting.Models.DataWarehouses.Dimensions.DimensionModel(GetSelectedDataWarehouse(nodeDataSource))
-									{
-										DataSource = nodeDataSource.DataSource
-									};
+				dimension = new LibReporting.Models.DataWarehouses.Dimensions.DimensionModel(GetSelectedDataWarehouse(nodeDataSource),
+																							 nodeDataSource.DataSource);
 				isNew = true;
 			}
 			// Abre el formulario

@@ -62,12 +62,12 @@ internal class ParserJoinSectionModel : ParserBaseSectionModel
     /// <summary>
     ///     Nombre de tabla
     /// </summary>
-    internal string Table { get; set; } = default!;
+    internal string Table { get; set; } = string.Empty;
 
     /// <summary>
     ///     Alias de la tabla
     /// </summary>
-    internal string TableAlias { get; set; } = default!;
+    internal string TableAlias { get; set; } = string.Empty;
 
     /// <summary>
     ///     Tabla con la que se hace el join

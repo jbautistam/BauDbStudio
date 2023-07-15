@@ -42,13 +42,13 @@ internal static class FileHelper
 	/// </summary>
 	internal static string GetResponseFile(string requestFile)
 	{
-		string responseFile = Path.GetFileNameWithoutExtension(requestFile);
+		string responseFile = Path.GetFileName(requestFile);
 
 			// Obtiene el nombre del archivo de respuesta
-			if (responseFile.Contains(".request.", StringComparison.CurrentCultureIgnoreCase))
+			if (responseFile.EndsWith(".request.xml", StringComparison.CurrentCultureIgnoreCase))
 			{
-				// Cambia "Request_" por "Response_"
-				responseFile = responseFile.Replace(".request.", ".response.") + "sql";
+				// Cambia ".request.xml" por ".response.sql"
+				responseFile = responseFile.Replace(".request.xml", ".response.sql");
 				// Devuelve el nombre completo del archivo
 				return Path.Combine(Path.GetDirectoryName(requestFile) ?? string.Empty, responseFile);
 			}

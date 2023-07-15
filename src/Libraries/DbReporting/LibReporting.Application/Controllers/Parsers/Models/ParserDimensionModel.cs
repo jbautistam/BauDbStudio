@@ -19,17 +19,17 @@ internal class ParserDimensionModel : ParserBaseSectionModel
 	/// <summary>
 	///		Clave de la dimensión
 	/// </summary>
-	internal string DimensionKey { get; set; } = default!;
+	internal string DimensionKey { get; set; } = string.Empty;
 
     /// <summary>
     ///		Tabla de la dimensión
     /// </summary>
-    internal string Table { get; set; } = default!;
+    internal string Table { get; set; } = string.Empty;
 
     /// <summary>
     ///		Tabla adicional de la dimensión
     /// </summary>
-    internal string AdditionalTable { get; set; } = default!;
+    internal string AdditionalTable { get; set; } = string.Empty;
 
     /// <summary>
     ///     Indica si se debe comprobar si es nulo con respecto a la tabla adicional
@@ -39,10 +39,7 @@ internal class ParserDimensionModel : ParserBaseSectionModel
     /// <summary>
     ///     Indica si se debe añadir un alias a la dimensión
     /// </summary>
-	internal bool MustUseAlias 
-    { 
-        get { return !string.IsNullOrWhiteSpace(_tableDimensionAlias); }
-    }
+	internal bool MustUseAlias => !string.IsNullOrWhiteSpace(_tableDimensionAlias);
 
     /// <summary>
     ///		Alias de la tabla de dimensión (para los casos en que es un JOIN contra la misma tabla)

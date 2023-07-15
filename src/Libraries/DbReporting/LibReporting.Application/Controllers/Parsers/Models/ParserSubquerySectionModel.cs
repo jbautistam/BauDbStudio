@@ -8,5 +8,5 @@ internal class ParserSubquerySectionModel : ParserBaseSectionModel
     /// <summary>
     ///     Nombre de la subconsulta asociada
     /// </summary>
-    internal string Name { get; set; } = default!;
+    internal string Name { get; set; } = string.Empty;
 }

@@ -1,20 +1,17 @@
-﻿using System;
+﻿namespace Bau.Libraries.LibReporting.Models.DataWarehouses.Relations;
 
-namespace Bau.Libraries.LibReporting.Models.DataWarehouses.Relations
+/// <summary>
+///		Clave foránea de una relación
+/// </summary>
+public class RelationForeignKey
 {
 	/// <summary>
-	///		Clave foránea de una relación
+	///		Columna a relacionar
 	/// </summary>
-	public class RelationForeignKey
-	{
-		/// <summary>
-		///		Columna a relacionar
-		/// </summary>
-		public string ColumnId { get; set; }
+	public string ColumnId { get; set; } = string.Empty;
 
-		/// <summary>
-		///		Columna relacionada
-		/// </summary>
-		public string TargetColumnId { get; set; }
-	}
+	/// <summary>
+	///		Columna relacionada
+	/// </summary>
+	public string TargetColumnId { get; set; } = string.Empty;
 }

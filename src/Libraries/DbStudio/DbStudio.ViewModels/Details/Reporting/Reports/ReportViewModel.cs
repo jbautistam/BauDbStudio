@@ -66,7 +66,8 @@ public class ReportViewModel : BaseObservableObject, PluginsStudio.ViewModels.Ba
 	/// </summary>
 	private void CreateDataSource()
 	{
-		DataSources.Add(new ReportDataSourceViewModel(ReportingSolutionViewModel, Report, new ReportDataSourceModel(Report)));
+		throw new NotImplementedException("¿De dónde debería recoge el datasource?");
+		DataSources.Add(new ReportDataSourceViewModel(ReportingSolutionViewModel, Report, null));
 	}
 
 	/// <summary>

@@ -130,10 +130,7 @@ public class ReportDataSourceViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDi
 	/// </summary>
 	internal ReportDataSourceModel GetReportDataSource()
 	{
-		ReportDataSourceModel dataSource = new ReportDataSourceModel(Report)
-													{ 
-														DataSource = GetDataSource()
-													};
+		ReportDataSourceModel dataSource = new ReportDataSourceModel(Report, GetDataSource());
 
 			// Añade las relaciones
 			dataSource.Relations.AddRange(ListRelationsViewModel.GetRelations());

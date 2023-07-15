@@ -1,20 +1,17 @@
-﻿using System;
+﻿namespace Bau.Libraries.LibReporting.Models.DataWarehouses.Reports.Blocks;
 
-namespace Bau.Libraries.LibReporting.Models.DataWarehouses.Reports.Blocks
+/// <summary>
+///		Clase base para los bloques de informe
+/// </summary>
+public abstract class BaseBlockModel
 {
-	/// <summary>
-	///		Clase base para los bloques de informe
-	/// </summary>
-	public abstract class BaseBlockModel
+	protected BaseBlockModel(string key)
 	{
-		protected BaseBlockModel(string key)
-		{
-			Key = key;
-		}
-
-        /// <summary>
-        ///		Clave del bloque
-        /// </summary>
-        public string Key { get; }
+		Key = key;
 	}
+
+    /// <summary>
+    ///		Clave del bloque
+    /// </summary>
+    public string Key { get; }
 }

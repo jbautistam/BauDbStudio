@@ -18,5 +18,5 @@ internal class ParserGroupBySectionModel : ParserBaseSectionModel
     /// <summary>
     ///		Sql adicional
     /// </summary>
-    internal string AdditionalSql { get; set; } = default!;
+    internal string AdditionalSql { get; set; } = string.Empty;
 }

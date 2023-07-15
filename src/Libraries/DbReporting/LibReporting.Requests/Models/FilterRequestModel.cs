@@ -33,7 +33,7 @@ public class FilterRequestModel
 	/// <summary>
 	///		Clona un filtro
 	/// </summary>
-	internal FilterRequestModel Clone()
+	public FilterRequestModel Clone()
 	{
 		FilterRequestModel cloned =	new()
 										{

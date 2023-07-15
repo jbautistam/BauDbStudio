@@ -25,16 +25,17 @@ internal class SolutionRepository
 		MLFile fileML = new LibMarkupLanguage.Services.XML.XMLParser().Load(fileName);
 
 			// Carga los archivos
-			foreach (MLNode rootML in fileML.Nodes)
-				if (rootML.Name == TagRoot)
-					foreach (MLNode nodeML in rootML.Nodes)
-						if (nodeML.Name == TagFile)
-						{
-							string file = nodeML.Value.TrimIgnoreNull();
+			if (fileML is not null)
+				foreach (MLNode rootML in fileML.Nodes)
+					if (rootML.Name == TagRoot)
+						foreach (MLNode nodeML in rootML.Nodes)
+							if (nodeML.Name == TagFile)
+							{
+								string file = nodeML.Value.TrimIgnoreNull();
 
-								if (!string.IsNullOrWhiteSpace(fileName) && File.Exists(file))
-									Manager.ReportingSolution.Files.Add(file);
-						}
+									if (File.Exists(file))
+										Manager.ReportingSolution.Files.Add(file);
+							}
 	}
 
 	/// <summary>

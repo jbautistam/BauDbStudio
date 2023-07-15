@@ -1,17 +1,14 @@
-﻿using System;
+﻿namespace Bau.Libraries.LibReporting.Models.DataWarehouses.Reports.Blocks;
 
-namespace Bau.Libraries.LibReporting.Models.DataWarehouses.Reports.Blocks
+/// <summary>
+///		Bloque de ejecución de SQL
+/// </summary>
+public class BlockExecutionModel : BaseBlockModel
 {
-    /// <summary>
-    ///		Bloque de ejecución de SQL
-    /// </summary>
-    public class BlockExecutionModel : BaseBlockModel
-    {
-        public BlockExecutionModel(string key) : base(key) {}
+    public BlockExecutionModel(string key) : base(key) {}
 
-        /// <summary>
-        ///		Sql que se debe ejecutar
-        /// </summary>
-        public string Sql { get; set; }
-    }
+    /// <summary>
+    ///		Sql que se debe ejecutar
+    /// </summary>
+    public string Sql { get; set; } = string.Empty;
 }

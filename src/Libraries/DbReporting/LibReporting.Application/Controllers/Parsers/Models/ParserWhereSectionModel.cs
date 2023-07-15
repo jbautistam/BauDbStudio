@@ -21,5 +21,5 @@ internal class ParserWhereSectionModel : ParserBaseSectionModel
     /// <summary>
     ///     Sql adicional a la condición
     /// </summary>
-    internal string AdditionalSql { get; set; } = default!;
+    internal string AdditionalSql { get; set; } = string.Empty;
 }

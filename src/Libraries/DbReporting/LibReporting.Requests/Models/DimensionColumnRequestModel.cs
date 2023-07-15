@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Bau.Libraries.LibReporting.Requests.Models;
+﻿namespace Bau.Libraries.LibReporting.Requests.Models;
 
 /// <summary>
 ///		Colunma solicitada de una dimensión
@@ -11,7 +8,7 @@ public class DimensionColumnRequestModel : BaseColumnRequestModel
 	/// <summary>
 	///		Clona los datos de una columna
 	/// </summary>
-	internal DimensionColumnRequestModel Clone()
+	public DimensionColumnRequestModel Clone()
 	{
 		DimensionColumnRequestModel cloned = new()
 												{
@@ -30,10 +27,10 @@ public class DimensionColumnRequestModel : BaseColumnRequestModel
 	/// <summary>
 	///		Código de columna
 	/// </summary>
-	public string ColumnId { get; set; } = default!;
+	public string ColumnId { get; set; } = string.Empty;
 
 	/// <summary>
 	///		Solicitudes de dimensiones hija
 	/// </summary>
-	public List<DimensionColumnRequestModel> Childs { get; } = new List<DimensionColumnRequestModel>();
+	public List<DimensionColumnRequestModel> Childs { get; } = new();
 }
