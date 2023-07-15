@@ -87,7 +87,7 @@ internal class ReportQueryGenerator : ReportBaseQueryGenerator
 			// Indenta para FROM y JOINS
 			prettifier.Indent();
 			// Añade el from
-			prettifier.Append($"FROM [{expressionQuery.Alias}]");
+			prettifier.Append($"FROM {GetFieldName(expressionQuery.Alias)}");
 			// Añade el ORDER BY
 			prettifier.NewLine();
 			prettifier.Append(GetSqlOrderBy(dimensionQueries, expressionQuery), 100, ",");
@@ -114,7 +114,7 @@ internal class ReportQueryGenerator : ReportBaseQueryGenerator
 					if (!string.IsNullOrWhiteSpace(sql))
 						sql += "AND ";
 					// Añade la relación de tablas
-					sql += $"[{expressionQuery.Alias}].[{foreignKey.ColumnRelated}] = [{dimensionQuery.Alias}].[{foreignKey.ColumnDimension}]";
+					sql += $"{GetFieldName(expressionQuery.Alias, foreignKey.ColumnRelated)} = {GetFieldName(dimensionQuery.Alias,foreignKey.ColumnDimension)}";
 				}
 			// Devuelve la cadena
 			return sql;
@@ -130,7 +130,7 @@ internal class ReportQueryGenerator : ReportBaseQueryGenerator
 			// Obtiene los campos de las expresiones
 			foreach (QueryFieldModel field in expressionQuery.Fields)
 				if (!field.IsPrimaryKey && field.Visible)
-					sqlFields = sqlFields.AddWithSeparator($"[{expressionQuery.Alias}].[{field.Alias}] AS [{GetSqlFinalFieldName(expressionQuery.Alias, field.Alias)}]", ",");
+					sqlFields = sqlFields.AddWithSeparator($"{GetFieldName(expressionQuery.Alias, field.Alias)} AS {GetSqlFinalFieldName(expressionQuery.Alias, field.Alias)}", ",");
 			// Devuelve la cadena SQL
 			return sqlFields;
 	}
@@ -146,7 +146,7 @@ internal class ReportQueryGenerator : ReportBaseQueryGenerator
 			// estarán en la consulta únicamente por los filtros)
 			foreach (QueryFieldModel field in query.Fields)
 				if (field.Visible)
-					sqlFields = sqlFields.AddWithSeparator($"[{tableAliasAtWith}].[{field.Alias}] AS [{GetSqlFinalFieldName(tableAliasAtWith, field.Alias)}]", ",");
+					sqlFields = sqlFields.AddWithSeparator($"{GetFieldName(tableAliasAtWith, field.Alias)} AS {GetSqlFinalFieldName(tableAliasAtWith, field.Alias)}", ",");
 			// Devuelve la cadena con los campos
 			return sqlFields;
 	}
@@ -161,7 +161,7 @@ internal class ReportQueryGenerator : ReportBaseQueryGenerator
 			// Quita los espacios
 			result = result.Replace(' ', '_');
 			// Devuelve el nombre final del campo
-			return result;
+			return GetFieldName(result);
 	}
 
 	/// <summary>

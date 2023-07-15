@@ -103,17 +103,16 @@ public class reportAdvanced_should
 	/// <summary>
 	///		Compara las SQL
 	/// </summary>
-	private void AssertSql(string source, string target, string charStart, string charEnd)
+	private void AssertSql(string generated, string sqlFile, string charStart, string charEnd)
 	{
 		// Log
-		System.Diagnostics.Debug.WriteLine(new string('-', 80));
-		System.Diagnostics.Debug.WriteLine("Compare");
-		System.Diagnostics.Debug.WriteLine(Normalize(source, charStart, charEnd));
-		System.Diagnostics.Debug.WriteLine(new string('-', 80));
-		System.Diagnostics.Debug.WriteLine(Normalize(target, charStart, charEnd));
+		System.Diagnostics.Debug.WriteLine("Compare generated " + new string('-', 80));
+		System.Diagnostics.Debug.WriteLine(Normalize(generated, charStart, charEnd));
+		System.Diagnostics.Debug.WriteLine("Compare source " + new string('-', 80));
+		System.Diagnostics.Debug.WriteLine(Normalize(sqlFile, charStart, charEnd));
 		System.Diagnostics.Debug.WriteLine(new string('-', 80));
 		// Assert
-		Normalize(source, charStart, charEnd).Should().BeEquivalentTo(Normalize(target, charStart, charEnd));
+		Normalize(generated, charStart, charEnd).Should().BeEquivalentTo(Normalize(sqlFile, charStart, charEnd));
 	}
 
 	/// <summary>

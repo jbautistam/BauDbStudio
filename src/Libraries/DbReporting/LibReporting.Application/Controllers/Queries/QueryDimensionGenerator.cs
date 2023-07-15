@@ -18,7 +18,7 @@ internal class QueryDimensionGenerator : QueryBaseGenerator
 	/// </summary>
 	internal QueryModel GetQuery(DimensionModel dimension)
 	{
-		QueryModel query = new QueryModel(dimension.Id, QueryModel.QueryType.Dimension, dimension.Id);
+		QueryModel query = new QueryModel(Generator, dimension.Id, QueryModel.QueryType.Dimension, dimension.Id);
 
 			// Prepara la consulta
 			query.Prepare(dimension.DataSource);
@@ -74,7 +74,7 @@ internal class QueryDimensionGenerator : QueryBaseGenerator
 	private QueryModel GetChildQuery(DimensionRequestModel dimensionRequest)
 	{
 		DimensionModel dimension = GetDimension(dimensionRequest);
-		QueryModel query = new QueryModel(dimensionRequest.DimensionId, QueryModel.QueryType.Dimension, dimension.Id);
+		QueryModel query = new QueryModel(Generator, dimensionRequest.DimensionId, QueryModel.QueryType.Dimension, dimension.Id);
 
 			// Prepara la consulta
 			query.Prepare(dimension.DataSource);

@@ -34,7 +34,7 @@ internal class QueryExpressionsGenerator : QueryBaseGenerator
 		//TODO escogidas en la solicitud, para las primeras pruebas, cogemos directamente la primera solicitud
 		ReportDataSourceModel reportDataSource = report.ReportDataSources[0];
 		BaseDataSourceModel baseDataSource = reportDataSource.DataSource;
-		QueryModel query = new QueryModel(baseDataSource.Id, QueryModel.QueryType.Expressions, GetDataSourceAlias(baseDataSource));
+		QueryModel query = new QueryModel(Generator, baseDataSource.Id, QueryModel.QueryType.Expressions, GetDataSourceAlias(baseDataSource));
 
 			// Prepara la consulta
 			query.Prepare(baseDataSource);
@@ -110,7 +110,7 @@ internal class QueryExpressionsGenerator : QueryBaseGenerator
 	/// </summary>
 	private QueryJoinModel CreateJoin(DimensionModel dimension, DimensionRelationModel relation, List<QueryModel> dimensionQueries)
 	{
-		QueryModel query = new QueryModel(dimension.Id, QueryModel.QueryType.Dimension, dimension.Id);
+		QueryModel query = new QueryModel(Generator, dimension.Id, QueryModel.QueryType.Dimension, dimension.Id);
 		QueryJoinModel join = new QueryJoinModel(QueryJoinModel.JoinType.Inner, query, dimension.Id);
 		QueryModel? relatedQuery = dimensionQueries.FirstOrDefault(item => item.SourceId.Equals(dimension.Id, StringComparison.CurrentCultureIgnoreCase));
 

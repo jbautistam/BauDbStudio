@@ -25,7 +25,7 @@ internal abstract class QueryBaseGenerator
 
 			// Crea la cadena SQL con los campos de dimensión
 			foreach (string field in fields)
-				sql = sql.AddWithSeparator($"[{field}]", ",");
+				sql = sql.AddWithSeparator(Generator.GetFieldName(field), ",");
 			// Devuelve la cadena
 			return sql;
 	}

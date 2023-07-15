@@ -41,6 +41,11 @@ public class ReportRequestModel
 	}
 
 	/// <summary>
+	///		Comprueba si se ha solicitado una dimensión
+	/// </summary>
+	public bool IsRequestedDimension(string dimensionKey) => IsRequestedDimension(new List<string> { dimensionKey });
+
+	/// <summary>
 	///		Comprueba si se ha solicitado alguna dimensión
 	/// </summary>
 	public bool IsRequestedDimension(List<string>? dimensionsKey)
@@ -56,9 +61,9 @@ public class ReportRequestModel
 	}
 
 	/// <summary>
-	///		Comprueba si se ha solicitado una dimensión
+	///		Comprueba si se ha solicitado una expresión
 	/// </summary>
-	public bool IsRequestedDimension(string dimensionKey) => IsRequestedDimension(new List<string> { dimensionKey });
+	public bool IsRequestedExpression(string expressionKey) => IsRequestedExpression(new List<string> { expressionKey });
 
 	/// <summary>
 	///		Comprueba si se ha solicitado alguna expresión
@@ -72,14 +77,9 @@ public class ReportRequestModel
 					foreach (ExpressionColumnRequestModel column in request.Columns)
 						if (column.ColumnId.Equals(key, StringComparison.CurrentCultureIgnoreCase))
 							return true;
-		// Si se ha llegado hasta aquí es porque no se ha encontrado ninguna de las dimensiones
+		// Si se ha llegado hasta aquí es porque no se ha encontrado ninguna de las expresiones
 		return false;
 	}
-
-	/// <summary>
-	///		Comprueba si se ha solicitado una expresión
-	/// </summary>
-	public bool IsRequestedExpression(string expressionKey) => IsRequestedExpression(new List<string> { expressionKey });
 
 	/// <summary>
 	///		Añade una dimensión y un campo a una solicitud

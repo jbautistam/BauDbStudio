@@ -764,15 +764,4 @@ internal class ReportQueryAdvancedGenerator : ReportBaseQueryGenerator
 			else
 				return GetQueries(block.Else);
 	}
-
-	/// <summary>
-	///		Obtiene un nombre de tabla.campo
-	/// </summary>
-	private string GetFieldName(string table, string field)
-	{
-		if (string.IsNullOrWhiteSpace(table))
-			return field;
-		else
-			return $"{table}.{field}";
-	}
 }

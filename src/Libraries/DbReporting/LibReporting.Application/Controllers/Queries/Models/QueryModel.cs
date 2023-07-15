@@ -20,8 +20,9 @@ internal class QueryModel
 		Expressions
 	}
 
-	internal QueryModel(string sourceId, QueryType type, string alias)
+	internal QueryModel(ReportBaseQueryGenerator generator, string sourceId, QueryType type, string alias)
 	{
+		Generator = generator;
 		SourceId = sourceId;
 		Type = type;
 		Alias = alias;
@@ -116,7 +117,7 @@ internal class QueryModel
 
 			// Convierte los filtros
 			foreach (FilterRequestModel filter in filters)
-				converted.Add(new QueryFilterModel(filter.Condition, filter.Values));
+				converted.Add(new QueryFilterModel(this, filter.Condition, filter.Values));
 			// Devuelve los filtros convertidos
 			return converted;
 	}
@@ -147,7 +148,7 @@ internal class QueryModel
 			// Añade la cláusula FROM
 			prettifier.NewLine();
 			prettifier.Indent();
-			prettifier.Append($"FROM {FromTable} AS [{FromAlias}]");
+			prettifier.Append($"FROM {FromTable} AS {Generator.GetFieldName(FromAlias)}");
 			// Añade los JOIN
 			if (Joins.Count > 0)
 			{
@@ -199,7 +200,7 @@ internal class QueryModel
 			// Añade los campos agrupados
 			foreach (QueryFieldModel field in Fields)
 				if (field.Aggregation != ExpressionColumnRequestModel.AggregationType.NoAggregated)
-					sqlFields = sqlFields.AddWithSeparator($"{field.GetAggregation(FromAlias)} AS [{field.Alias}]", ",");
+					sqlFields = sqlFields.AddWithSeparator($"{field.GetAggregation(FromAlias)} AS {Generator.GetFieldName(field.Alias)}", ",");
 			// Devuelve los campos
 			return sqlFields;
 	}
@@ -209,11 +210,11 @@ internal class QueryModel
 	/// </summary>
 	private string GetSqlField(QueryFieldModel field)
 	{
-		string fieldName = $"[{field.Table}].[{field.Field}]";
+		string fieldName = Generator.GetFieldName(field.Table, field.Field);
 
 			// Añade el alias
 			if (!string.IsNullOrWhiteSpace(field.Alias))
-				fieldName += $" AS [{field.Alias}]";
+				fieldName += $" AS {Generator.GetFieldName(field.Alias)}";
 			// Devuelve el nombre del campo
 			return fieldName;
 	}
@@ -278,7 +279,7 @@ internal class QueryModel
 					// Añade el tipo de JOIN
 					sql = sql.AddWithSeparator(GetJoin(join.Type), Environment.NewLine);
 					// Añade el nombre de tabla y el alias
-					sql += $" {join.Query.FromTable} AS [{join.Query.FromAlias}]" + Environment.NewLine;
+					sql += $" {join.Query.FromTable} AS {Generator.GetFieldName(join.Query.FromAlias)}" + Environment.NewLine;
 					// Añade las relaciones
 					sql += " ON ";
 					foreach (QueryRelationModel relation in join.Relations)
@@ -289,7 +290,7 @@ internal class QueryModel
 						else
 							needAnd = true;
 						// Añade la condición entre campos
-						sql += $"[{FromAlias}].[{relation.Column}] = [{relation.RelatedTable}].[{relation.RelatedColumn}]" + Environment.NewLine;
+						sql += Generator.GetFieldName(FromAlias, relation.Column) + " = " + Generator.GetFieldName(relation.RelatedTable, relation.RelatedColumn) + Environment.NewLine;
 					}
 			}
 			// Devuelve la consulta
@@ -301,17 +302,13 @@ internal class QueryModel
 	/// </summary>
 	private string GetJoin(QueryJoinModel.JoinType type)
 	{
-		switch (type)
-		{
-			case QueryJoinModel.JoinType.Left:
-				return "LEFT JOIN";
-			case QueryJoinModel.JoinType.Right:
-				return "RIGHT JOIN";
-			case QueryJoinModel.JoinType.Full:
-				return "FULL OUTER JOIN";
-			default:
-				return "INNER JOIN";
-		}
+		return type switch
+				{
+					QueryJoinModel.JoinType.Left => "LEFT JOIN",
+					QueryJoinModel.JoinType.Right => "RIGHT JOIN",
+					QueryJoinModel.JoinType.Full => "FULL OUTER JOIN",
+					_ => "INNER JOIN"
+				};
 	}
 
 	/// <summary>
@@ -327,7 +324,7 @@ internal class QueryModel
 				// Añade los campos de agrupación
 				foreach (QueryFieldModel field in Fields)
 					if (field.Aggregation == ExpressionColumnRequestModel.AggregationType.NoAggregated && field.Visible)
-						sqlFields = sqlFields.AddWithSeparator($"[{field.Table}].[{field.Field}]", ",");
+						sqlFields = sqlFields.AddWithSeparator(Generator.GetFieldName(field.Table, field.Field), ",");
 				// Si hay algún campo de agrupación, le añade la cláusula
 				if (!string.IsNullOrWhiteSpace(sqlFields))
 					sqlFields = $"GROUP BY {sqlFields}" + Environment.NewLine;
@@ -362,7 +359,7 @@ internal class QueryModel
 			// Añade los campos a ordenar
 			foreach (QueryFieldModel field in Fields)
 				if (field.Visible && field.OrderBy != BaseColumnRequestModel.SortOrder.Undefined)
-					sql = sql.AddWithSeparator($"[{tableAliasAtWith}].[{field.Alias}] {GetSortClause(field.OrderBy)}", ",");
+					sql = sql.AddWithSeparator(Generator.GetFieldName(tableAliasAtWith, field.Alias) + " " + GetSortClause(field.OrderBy), ",");
 			// Añade los campos a ordenar de las consultas hijo
 			foreach (QueryJoinModel join in Joins)
 				sql = sql.AddWithSeparator(join.Query.GetOrderByFields(tableAliasAtWith), ",");
@@ -380,6 +377,11 @@ internal class QueryModel
 		else
 			return "DESC";
 	}
+
+	/// <summary>
+	///		Generador de informes
+	/// </summary>
+	internal ReportBaseQueryGenerator Generator { get; }
 
 	/// <summary>
 	///		Id del origen de la consulta (código de expresión, código de informe)

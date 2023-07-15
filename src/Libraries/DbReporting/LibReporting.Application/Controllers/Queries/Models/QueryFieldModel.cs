@@ -30,23 +30,17 @@ internal class QueryFieldModel
 	/// </summary>
 	internal string GetAggregation(string table)
 	{
-		string computed = $"[{table}].[{Field}]";
+		string computed = Query.Generator.GetFieldName(table, Field);
 
-			switch (Aggregation)
-			{
-				case ExpressionColumnRequestModel.AggregationType.Average:
-					return $"AVG({computed})";
-				case ExpressionColumnRequestModel.AggregationType.Max:
-					return $"MAX({computed})";
-				case ExpressionColumnRequestModel.AggregationType.Min:
-					return $"MIN({computed})";
-				case ExpressionColumnRequestModel.AggregationType.StandardDeviation:
-					return $"STDDEV({computed})";
-				case ExpressionColumnRequestModel.AggregationType.Sum:
-					return $"SUM({computed})";
-				default:
-					return computed;
-			}
+			return Aggregation switch
+						{
+							ExpressionColumnRequestModel.AggregationType.Average => $"AVG({computed})",
+							ExpressionColumnRequestModel.AggregationType.Max => $"MAX({computed})",
+							ExpressionColumnRequestModel.AggregationType.Min => $"MIN({computed})",
+							ExpressionColumnRequestModel.AggregationType.StandardDeviation => $"STDDEV({computed})",
+							ExpressionColumnRequestModel.AggregationType.Sum => $"SUM({computed})",
+							_ => computed
+						};
 	}
 
 	/// <summary>

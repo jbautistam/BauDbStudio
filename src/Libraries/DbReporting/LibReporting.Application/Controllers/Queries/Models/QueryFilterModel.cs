@@ -8,8 +8,9 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models;
 /// </summary>
 internal class QueryFilterModel
 {
-	internal QueryFilterModel(FilterRequestModel.ConditionType condition, List<object?> values)
+	internal QueryFilterModel(QueryModel query, FilterRequestModel.ConditionType condition, List<object?> values)
 	{
+		Query = query;
 		Condition = condition;
 		Values = values;
 	}
@@ -17,10 +18,7 @@ internal class QueryFilterModel
 	/// <summary>
 	///		Obtiene el SQL de la condición
 	/// </summary>
-	internal string GetSql(string tableAlias, string field)
-	{
-		return $"[{tableAlias}].[{field}] {GetCondition()} {GetValues()}";
-	}
+	internal string GetSql(string tableAlias, string field) => $"{Query.Generator.GetFieldName(tableAlias,field)} {GetCondition()} {GetValues()}";
 
 	/// <summary>
 	///		Obtiene el SQL de la condición
@@ -32,27 +30,18 @@ internal class QueryFilterModel
 	/// </summary>
 	private string GetCondition()
 	{
-		switch (Condition)
-		{
-			case FilterRequestModel.ConditionType.Equals:
-				return "=";
-			case FilterRequestModel.ConditionType.Less:
-				return "<";
-			case FilterRequestModel.ConditionType.Greater:
-				return ">";
-			case FilterRequestModel.ConditionType.LessOrEqual:
-				return "<=";
-			case FilterRequestModel.ConditionType.GreaterOrEqual:
-				return ">=";
-			case FilterRequestModel.ConditionType.Contains:
-				return "LIKE";
-			case FilterRequestModel.ConditionType.In:
-				return "IN";
-			case FilterRequestModel.ConditionType.Between:
-				return "BETWEEN";
-			default:
-				throw new LibReporting.Models.Exceptions.ReportingException($"Condition unknown: {Condition.ToString()}");
-		}
+		return Condition switch
+					{
+						FilterRequestModel.ConditionType.Equals => "=",
+						FilterRequestModel.ConditionType.Less => "<",
+						FilterRequestModel.ConditionType.Greater => ">",
+						FilterRequestModel.ConditionType.LessOrEqual => "<=",
+						FilterRequestModel.ConditionType.GreaterOrEqual => ">=",
+						FilterRequestModel.ConditionType.Contains => "LIKE",
+						FilterRequestModel.ConditionType.In => "IN",
+						FilterRequestModel.ConditionType.Between => "BETWEEN",
+						_ => throw new LibReporting.Models.Exceptions.ReportingException($"Condition unknown: {Condition.ToString()}")
+					};
 	}
 
 	/// <summary>
@@ -63,17 +52,13 @@ internal class QueryFilterModel
 		if (Values.Count < 1)
 			throw new LibReporting.Models.Exceptions.ReportingException("Not defined values for filter");
 		else
-			switch (Condition)
-			{
-				case FilterRequestModel.ConditionType.Between:
-						return GetValuesBetween();
-				case FilterRequestModel.ConditionType.In:
-					return GetValuesIn();
-				case FilterRequestModel.ConditionType.Contains:
-					return GetValueLike();
-				default:
-					return GetValue(Values[0]);
-			}
+			return Condition switch
+						{
+							FilterRequestModel.ConditionType.Between => GetValuesBetween(),
+							FilterRequestModel.ConditionType.In => GetValuesIn(),
+							FilterRequestModel.ConditionType.Contains => GetValueLike(),
+							_ => GetValue(Values[0])
+						};
 	}
 
 	/// <summary>
@@ -95,7 +80,7 @@ internal class QueryFilterModel
 		string sql = string.Empty;
 
 			// Concatena los valores
-			foreach (object value in Values)
+			foreach (object? value in Values)
 				sql = sql.AddWithSeparator(GetValue(value), ",");
 			// Devuelve la cadena
 			return sql;
@@ -109,33 +94,22 @@ internal class QueryFilterModel
 	/// <summary>
 	///		Obtiene la cadena SQL para un valor
 	/// </summary>
-	private string GetValue(object value, bool withApostrophe = true)
+	private string GetValue(object? value, bool withApostrophe = true)
 	{
-		switch (value)
-		{
-			case null:
-				return "NULL";
-			case int valueInteger:
-				return ConvertIntToSql(valueInteger);
-			case short valueInteger:
-				return ConvertIntToSql(valueInteger);
-			case long valueInteger:
-				return ConvertIntToSql(valueInteger);
-			case double valueDecimal:
-				return ConvertDecimalToSql(valueDecimal);
-			case float valueDecimal:
-				return ConvertDecimalToSql(valueDecimal);
-			case decimal valueDecimal:
-				return ConvertDecimalToSql((double) valueDecimal);
-			case string valueString:
-				return ConvertStringToSql(valueString, withApostrophe);
-			case DateTime valueDate:
-				return ConvertDateToSql(valueDate);
-			case bool valueBool:
-				return ConvertBooleanToSql(valueBool);
-			default:
-				return ConvertStringToSql(value?.ToString() ?? string.Empty, withApostrophe);
-		}
+		return value switch
+				{
+					null => "NULL",
+					int valueInteger => ConvertIntToSql(valueInteger),
+					short valueInteger => ConvertIntToSql(valueInteger),
+					long valueInteger => ConvertIntToSql(valueInteger),
+					double valueDecimal => ConvertDecimalToSql(valueDecimal),
+					float valueDecimal => ConvertDecimalToSql(valueDecimal),
+					decimal valueDecimal => ConvertDecimalToSql((double) valueDecimal),
+					string valueString => ConvertStringToSql(valueString, withApostrophe),
+					DateTime valueDate => ConvertDateToSql(valueDate),
+					bool valueBool => ConvertBooleanToSql(valueBool),
+					_ => ConvertStringToSql(value?.ToString() ?? string.Empty, withApostrophe)
+				};
 	}
 
 	/// <summary>
@@ -174,6 +148,11 @@ internal class QueryFilterModel
 		else
 			return value.Replace("'", "''");
 	}
+
+	/// <summary>
+	///		Consulta
+	/// </summary>
+	internal QueryModel Query { get; }
 
 	/// <summary>
 	///		Condición
