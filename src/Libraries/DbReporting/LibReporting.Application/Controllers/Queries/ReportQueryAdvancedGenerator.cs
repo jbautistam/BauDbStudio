@@ -327,7 +327,7 @@ internal class ReportQueryAdvancedGenerator : ReportBaseQueryGenerator
 							{
 								// Crea las condiciones de las relaciones
 								if (relation.RelatedByFieldRequest)
-									foreach ((string tableDimension, string fieldDimension) in GetFieldsRequest(relation.Dimension, false))
+									foreach ((string tableDimension, string fieldDimension) in GetFieldsRequest(relation.Dimension, false, false))
 										sqlDimension = sqlDimension.AddWithSeparator
 														($"{ComposeField(section.TableJoin, fieldDimension, true)} = {ComposeField(tableDimension, fieldDimension, true)}",
 														 Environment.NewLine + " AND ");
@@ -421,7 +421,7 @@ internal class ReportQueryAdvancedGenerator : ReportBaseQueryGenerator
 
 					if (dimensionJoin is not null)
 					{
-						List<(string table, string field)> fields = GetFieldsRequest(dimension, dimension.WithPrimaryKeys);
+						List<(string table, string field)> fields = GetFieldsRequest(dimension, dimension.WithRequestedFields, dimension.WithPrimaryKeys);
 
 							// Añade los campos solicitados a la SQL
 							foreach ((string table, string field) in fields)
@@ -560,28 +560,6 @@ internal class ReportQueryAdvancedGenerator : ReportBaseQueryGenerator
 			return fields;
 	}
 
-	///// <summary>
-	/////		Obtiene los campos asociados a una consulta
-	///// </summary>
-	//private string GetSqlFields(QueryModel query, string tableAlias, bool includePrimaryKey)
-	//{
-	//	return GetSqlFields(GetListFields(query, tableAlias, includePrimaryKey));
-	//}
-
-	///// <summary>
-	/////		Obtiene los campos asociados a una consulta
-	///// </summary>
-	//private string GetSqlFields(List<(string table, string field)> fields)
-	//{
-	//	string sql = string.Empty;
-
-	//		// Crea la cadena SQL con el nombre de los campos
-	//		foreach ((string table, string field) in fields)
-	//			sql = sql.AddWithSeparator(GetFieldName(table, field), ",");
-	//		// Devuelve la cadena SQL
-	//		return sql;
-	//}
-
 	/// <summary>
 	///		Obtiene la cláusula ORDER BY
 	/// </summary>
@@ -593,7 +571,8 @@ internal class ReportQueryAdvancedGenerator : ReportBaseQueryGenerator
 			// Obtiene los campos para ORDER BY
 			foreach (ParserDimensionModel parserDimension in section.Dimensions)
 			{
-				List<(string tableDimension, string fieldDimension)> fields = GetFieldsRequest(parserDimension, parserDimension.WithPrimaryKeys);
+				List<(string tableDimension, string fieldDimension)> fields = GetFieldsRequest(parserDimension, parserDimension.WithRequestedFields, 
+																							   parserDimension.WithPrimaryKeys);
 				DimensionRequestModel? requestDimension = Request.GetDimensionRequest(parserDimension.DimensionKey);
 
 					// Obtiene las columnas ordenables
@@ -655,7 +634,7 @@ internal class ReportQueryAdvancedGenerator : ReportBaseQueryGenerator
 	/// <summary>
 	///		Obtiene los campos solicitados de una dimensión
 	/// </summary>
-	private List<(string tableDimension, string fieldDimension)> GetFieldsRequest(ParserDimensionModel parserDimension, bool includePrimaryKey)
+	private List<(string tableDimension, string fieldDimension)> GetFieldsRequest(ParserDimensionModel parserDimension, bool includeRequestFields, bool includePrimaryKey)
 	{
 		List<(string tableDimension, string fieldDimension)> fields = new();
 		DimensionModel? dimensionJoin = GetDimensionIfRequest(parserDimension);
@@ -667,7 +646,7 @@ internal class ReportQueryAdvancedGenerator : ReportBaseQueryGenerator
 
 					// Añade los campos solicitados a la SQL
 					if (request is not null)
-						foreach (string field in GetListFields(new QueryDimensionGenerator(this).GetQuery(request), includePrimaryKey))
+						foreach (string field in GetListFields(new QueryDimensionGenerator(this).GetQuery(request), includeRequestFields, includePrimaryKey))
 							fields.Add((parserDimension.TableAlias, field));
 			}
 			// Devuelve la lista de campos
@@ -677,17 +656,17 @@ internal class ReportQueryAdvancedGenerator : ReportBaseQueryGenerator
 	/// <summary>
 	///		Obtiene los campos asociados a una consulta
 	/// </summary>
-	private List<string> GetListFields(QueryModel query, bool includePrimaryKey)
+	private List<string> GetListFields(QueryModel query, bool includeRequestFields, bool includePrimaryKey)
 	{
 		List<string> fields = new();
 
 			// Añade los campos de la consulta
 			foreach (QueryFieldModel field in query.Fields)
-				if (!field.IsPrimaryKey || includePrimaryKey)
+				if (!field.IsPrimaryKey || includePrimaryKey || includeRequestFields)
 					fields.Add(field.Alias);
 			// Añade los campos hijo
 			foreach (QueryJoinModel child in query.Joins)
-				fields.AddRange(GetListFields(child.Query, includePrimaryKey));
+				fields.AddRange(GetListFields(child.Query, false, includePrimaryKey));
 			// Devuelve los campos
 			return fields;
 	}

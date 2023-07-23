@@ -9,6 +9,7 @@ using Bau.Libraries.LibReporting.Requests.Models;
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.Trees;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
+using Bau.Libraries.BauMvvm.ViewModels;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries;
 
@@ -341,7 +342,7 @@ public class TreeQueryReportViewModel : PluginTreeViewModel
 												foreach (ControlHierarchicalViewModel baseExpression in nodeNameExpression.Children)
 													if (baseExpression is NodeColumnViewModel nodeExpression && MustIncludeAtQuery(nodeExpression))
 													{
-														ExpressionColumnRequestModel column = new ExpressionColumnRequestModel
+														ExpressionColumnRequestModel column = new()
 																								{
 																									ColumnId = nodeExpression.Column.Id,
 																									AggregatedBy = nodeExpression.GeSelectedAggregation()
@@ -456,7 +457,63 @@ public class TreeQueryReportViewModel : PluginTreeViewModel
 		if (!request.ReportId.Equals(ReportViewModel.Report.Id, StringComparison.CurrentCultureIgnoreCase))
 			ReportViewModel.ViewModel.SolutionViewModel.MainController.HostController.SystemController.ShowMessage($"La consulta pertenece al informe {request.ReportId}");
 		else
-			ReportViewModel.ViewModel.SolutionViewModel.MainController.HostController.SystemController.ShowMessage("Aún no se pueden cargar consultas");
+			foreach (ControlHierarchicalViewModel nodeRoot in Children)
+				if (nodeRoot is NodeColumnViewModel node)
+					switch (node.ColumnNodeType)
+					{
+						case NodeColumnViewModel.NodeColumnType.DimensionsRoot:
+								LoadRequestDimensions(request.Dimensions, node.Children);
+							break;
+						case NodeColumnViewModel.NodeColumnType.ExpressionsRoot:
+								LoadRequestExpressions(request, node.Children);
+							break;
+					}
+	}
+
+	/// <summary>
+	///		Carga las solicitudes de dimensiones
+	/// </summary>
+	private void LoadRequestDimensions(List<DimensionRequestModel> dimensions, AsyncObservableCollection<ControlHierarchicalViewModel> children)
+	{
+		foreach (ControlHierarchicalViewModel baseNode in children)
+			if (baseNode is NodeColumnViewModel node && node.ColumnNodeType == NodeColumnViewModel.NodeColumnType.Dimension)
+				foreach (DimensionRequestModel dimension in dimensions)
+					if (node.Text.Equals(dimension.DimensionId, StringComparison.CurrentCultureIgnoreCase))
+					{
+						// Selecciona las columnas
+						foreach (ControlHierarchicalViewModel childNode in baseNode.Children)
+							if (childNode is NodeColumnViewModel nodeColumn && nodeColumn.ColumnNodeType == NodeColumnViewModel.NodeColumnType.DimensionColumn)
+							{
+								// Limpia el nodo
+								nodeColumn.IsChecked = false;
+								// Asigna los datos de la solicitud
+								foreach (DimensionColumnRequestModel column in dimension.Columns)
+									if (nodeColumn.Column.Id.Equals(column.ColumnId, StringComparison.CurrentCultureIgnoreCase))
+									{
+										nodeColumn.IsChecked = true;
+									}
+							}
+						// Selecciona las dimensiones hija
+						LoadRequestDimensions(dimension.Childs, node.Children);
+					}
+	}
+
+	/// <summary>
+	///		Carga las expresiones seleccionadas en la solicitud
+	/// </summary>
+	private void LoadRequestExpressions(ReportRequestModel request, AsyncObservableCollection<ControlHierarchicalViewModel> children)
+	{
+		foreach (ControlHierarchicalViewModel baseNode in children)
+			if (baseNode is NodeColumnViewModel node && node.ColumnNodeType == NodeColumnViewModel.NodeColumnType.ExpressionField)
+			{
+				// Deselecciona el nodo
+				node.IsChecked = false;
+				// Selecciona el nodo si es alguna de las expressiones seleccionadas
+				foreach (ExpressionRequestModel expression in request.Expressions)
+					foreach (ExpressionColumnRequestModel column in expression.Columns)
+						if (node.Text.Equals(column.ColumnId, StringComparison.CurrentCultureIgnoreCase))
+							node.IsChecked = true;
+			}
 	}
 
 	/// <summary>

@@ -411,15 +411,15 @@ internal class QueryModel
 	/// <summary>
 	///		Campos de la consulta
 	/// </summary>
-	internal List<QueryFieldModel> Fields { get; } = new();
+	internal QueryFieldsCollection Fields { get; } = new();
 
 	/// <summary>
 	///		Subconsultas combinadas
 	/// </summary>
-	internal List<QueryJoinModel> Joins { get; } = new();
+	internal QueryJoinsCollection Joins { get; } = new();
 
 	/// <summary>
 	///		Claves foráneas de esta consulta
 	/// </summary>
-	internal List<QueryForeignKeyFieldModel> ForeignKeys { get; } = new();
+	internal QueryForeignKeyCollection ForeignKeys { get; } = new();
 }

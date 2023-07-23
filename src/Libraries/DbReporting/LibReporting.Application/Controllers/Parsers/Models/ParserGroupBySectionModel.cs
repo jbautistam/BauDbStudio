@@ -4,9 +4,9 @@
 ///		Sección con datos de un GROUP BY
 /// </summary>
 /// <example>
-/// -GroupBy 
+/// GroupBy 
 ///     -Dimension:Users 
-///         -Table:UsersCte
+///         --Table:UsersCte
 /// </example>
 internal class ParserGroupBySectionModel : ParserBaseSectionModel
 {

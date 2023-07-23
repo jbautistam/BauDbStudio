@@ -26,7 +26,7 @@ public class schemaLoad_should
 			// Comprueba los datos de un almacén
 			foreach (DataWarehouseModel dataWarehouse in manager.Manager.Schema.DataWarehouses.EnumerateValues())
 				if (dataWarehouse.Name.Equals(dataWarehouseName, StringComparison.CurrentCultureIgnoreCase))
-					dataWarehouse.Reports.Count.Should().Be(2);
+					dataWarehouse.Reports.Count.Should().Be(4);
 	}
 
 	/// <summary>

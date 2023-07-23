@@ -41,6 +41,30 @@
     <None Update="Data\ReportingSales\Test_01\NoDimensions.response.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Data\ReportingSales\Test_Sales_02.report.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\ReportingSales\Test_02\Calendar_Products_PointsOfSale.request.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\ReportingSales\Test_02\Calendar_Products_PointsOfSale.response.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\ReportingSales\Test_Sales_Grouped\Calendar_Date.request.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\ReportingSales\Test_Sales_Grouped\Calendar_Date.response.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\ReportingSales\Test_Sales_Grouped\NoDimensions.request.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\ReportingSales\Test_Sales_Grouped\NoDimensions.response.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\ReportingSales\Test_Sales_Grouped_01.report.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

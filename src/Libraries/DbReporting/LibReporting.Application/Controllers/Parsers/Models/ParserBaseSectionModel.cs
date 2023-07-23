@@ -16,7 +16,7 @@ internal abstract class ParserBaseSectionModel
 			if (!string.IsNullOrWhiteSpace(content))
 			{
 				// Normaliza el separador
-				if (separator is null)
+				if (string.IsNullOrWhiteSpace(separator))
 					separator = "-";
 				// Separa el contenido
 				foreach (string part in content.Split(separator))

@@ -35,7 +35,7 @@ internal abstract class ReportBaseQueryGenerator
 			if (string.IsNullOrWhiteSpace(value))
 				return string.Empty;
 			else
-				return $"{Schema.Configuration.CharFieldNameStart}{value.Trim()}{Schema.Configuration.CharFieldNameEnd}";
+				return $"[{value.Trim()}]";
 		}
 	}
 

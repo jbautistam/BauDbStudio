@@ -16,8 +16,11 @@ public class reportAdvanced_should
 	[InlineData("ReportingSales/Test-Reporting-Schema.xml", 
 				"ReportingSales/Test_01/NoDimensions.request.xml")]
 	[InlineData("ReportingSales/Test-Reporting-Schema.xml", 
-				"ReportingSales/Test_01/NoDimensions.request.xml", 
-				"\"", "\"")]
+				"ReportingSales/Test_02/Calendar_Products_PointsOfSale.request.xml")]
+	[InlineData("ReportingSales/Test-Reporting-Schema.xml", 
+				"ReportingSales/Test_Sales_Grouped/NoDimensions.request.xml")]
+	[InlineData("ReportingSales/Test-Reporting-Schema.xml", 
+				"ReportingSales/Test_Sales_Grouped/Calendar_Date.request.xml")]
 	public void convert_to_sql(string schema, string fileRequest, string charStart = "[", string charEnd = "]")
 	{
 		string schemaFileName = Tools.FileHelper.GetFullFileName(schema);
@@ -47,10 +50,10 @@ public class reportAdvanced_should
 	/// <summary>
 	///		Comprueba si se puede cargar un esquema de base de datos y sus informes y ejecutar la cadena SQL contra la base de datos
 	/// </summary>
-	//[Theory]
-	//[InlineData("ReportingSales/Test-Reporting-Schema.xml", 
-	//			"ReportingSales/Test_01/NoDimensions.request.xml",
-	//			"Server=(local);Database=Roivolution_NunezDeArena_Reporting_Sales;Trusted_Connection=True;MultipleActiveResultSets=True")]
+	[Theory]
+	[InlineData("ReportingSales/Test-Reporting-Schema.xml", 
+				"ReportingSales/Test_01/NoDimensions.request.xml",
+				"Server=(local);Database=Roivolution_NunezDeArena_Reporting_Sales;Trusted_Connection=True;MultipleActiveResultSets=True")]
 	public void execute_to_sql(string fileName, string fileRequest, string connectionString)
 	{
 		ReportingSolutionManager manager = new();
@@ -132,11 +135,11 @@ public class reportAdvanced_should
 		sql = sql.Replace(" )", ")");
 		sql = sql.Replace("[ ", "[");
 		sql = sql.Replace(" ]", "]");
-		// Cambia los caracteres de inicio y fin
-		if (!string.IsNullOrWhiteSpace(charStart))
-			sql = sql.Replace("[", charStart);
-		if (!string.IsNullOrWhiteSpace(charEnd))
-			sql = sql.Replace("]", charEnd);
+		//// Cambia los caracteres de inicio y fin
+		//if (!string.IsNullOrWhiteSpace(charStart))
+		//	sql = sql.Replace("[", charStart);
+		//if (!string.IsNullOrWhiteSpace(charEnd))
+		//	sql = sql.Replace("]", charEnd);
 		// Quita espacios iniciales / finales
 		if (!string.IsNullOrWhiteSpace(sql))
 			sql = sql.Trim();

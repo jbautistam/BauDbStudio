@@ -86,10 +86,8 @@
 										--Table: PointsOfSaleCte
 									-Dimension: Products 
 										--Table: ProductsCte
-									-Dimension:
-										--Name:Calendar 
-										--Table:CalendarCte 
-										--WithPrimaryKey
+									-Dimension: Calendar 
+										--Table:CalendarCte
 									-WithComma
 	                		}}
 	                		SalesAnalysis.SalesQuantity, SalesAnalysis.SalesAmountTaxesIncluded, SalesAnalysis.SalesAmountTaxesExcluded,

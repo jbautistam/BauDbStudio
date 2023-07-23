@@ -19,12 +19,26 @@ internal class ParserJoinRelationSectionModel : ParserBaseSectionModel
 
                 // Si sólo hay un campo, se utiliza el mismo nombre de campo
                 if (parts.Length == 1)
-                    Fields.Add((parts[0].TrimIgnoreNull(), parts[0].TrimIgnoreNull()));
+                    AddField(parts[0], parts[0]);
                 else
-                    Fields.Add((parts[0].TrimIgnoreNull(), parts[1].TrimIgnoreNull()));
+                    AddField(parts[0], parts[1]);
         }
         else
             throw new Exceptions.ReportingParserException("Undefined field in clause ON");
+    }
+
+    /// <summary>
+    ///     Añade el campo
+    /// </summary>
+    private void AddField(string fieldDimension, string fieldTable)
+    {
+        // Quita los espacios
+        fieldDimension = fieldDimension.TrimIgnoreNull();
+        fieldTable = fieldTable.TrimIgnoreNull();
+        // Añade los campos si no estaban ya
+        if (!Fields.Any(item => item.fieldDimension.Equals(fieldDimension, StringComparison.CurrentCultureIgnoreCase) && 
+                                item.fieldTable.Equals(fieldTable, StringComparison.CurrentCultureIgnoreCase)))
+            Fields.Add((fieldDimension, fieldTable));
     }
 
     /// <summary>
@@ -33,10 +47,12 @@ internal class ParserJoinRelationSectionModel : ParserBaseSectionModel
 	internal void Convert(ClauseJoinModel join) 
     {
         // Crea los datos de la dimensión
-        Dimension = new();
+        Dimension = new()
+                        {
+                            DimensionKey = join.DimensionKey,
+                            Required = join.Required
+                        };
         // Asigna las propiedades
-        Dimension.DimensionKey = join.DimensionKey;
-        Dimension.Required = join.Required;
         Dimension.RelatedDimensions.AddRange(join.RelatedRequestedDimensionKeys);
         // Asigna la tabla de dimensión
         Dimension.Table = join.TableRelated;

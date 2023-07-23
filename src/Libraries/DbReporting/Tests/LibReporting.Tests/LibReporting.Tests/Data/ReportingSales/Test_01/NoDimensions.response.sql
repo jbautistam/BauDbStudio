@@ -7,4 +7,4 @@ WITH CalendarCte AS
 	SELECT [CalendarCte].[YearMonth], SalesAnalysis.SalesQuantity, SalesAnalysis.SalesAmountTaxesIncluded, 
 			SalesAnalysis.SalesAmountTaxesExcluded, SalesAnalysis.Refund 
 		FROM Fact.SalesAnalysis INNER JOIN CalendarCte 
-			ON [SalesAnalysis].[Date] = [CalendarCte].[Date] AND [SalesAnalysis].[Date] = [CalendarCte].[Date]
+			ON [SalesAnalysis].[Date] = [CalendarCte].[Date]

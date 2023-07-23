@@ -62,6 +62,11 @@ internal class ParserDimensionModel : ParserBaseSectionModel
     internal bool WithPrimaryKeys { get; set; }
 
     /// <summary>
+    ///     Indica si se deben incluir los campos solicidatos (sean o no claves primarias)
+    /// </summary>
+    internal bool WithRequestedFields { get; set; }
+
+    /// <summary>
     ///		Indica si es obligatorio aunque no se haya solicitado
     /// </summary>
     internal bool Required { get; set; }

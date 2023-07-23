@@ -9,6 +9,38 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Parsers;
 /// </summary>
 internal class ParserSection
 {
+	// Constantes privadas
+	private const string HeaderName = "Name";
+	private const string HeaderDimension = "Dimension";
+	private const string HeaderOrderBy = "OrderBy";
+	private const string HeaderExpression = "Expression";
+	private const string HeaderSql = "Sql";
+	private const string HeaderFields = "Fields";
+	private const string HeaderInnerJoin = "InnerJoin";
+	private const string HeaderLeftJoin = "LeftJoin";
+	private const string HeaderRightJoin = "RightJoin";
+	private const string HeaderFullJoin = "FullJoin";
+	private const string HeaderCrossJoin = "CrossJoin";
+	private const string HeaderWhere = "Where";
+	private const string HeaderSubquery = "Subquery";
+	private const string HeaderGroupBy = "GroupBy";
+	private const string HeaderPagination = "Pagination";
+	private const string HeaderIfRequest = "IfRequest";
+	private const string HeaderPartitionBy = "PartitionBy";
+	private const string HeaderWithComma = "WithComma";
+	private const string HeaderRelation = "Relation";
+	private const string HeaderTable = "Table";
+	private const string HeaderAlias = "Alias";
+	private const string HeaderOnRequestFields = "OnRequestFields";
+	private const string HeaderOn = "On";
+	private const string HeaderAdditionalTable = "AdditionalTable";
+	private const string HeaderWithPrimaryKeys = "WithPrimaryKeys";
+	private const string HeaderWithRequestedFields = "WithRequestedFields";
+	private const string HeaderRequired = "Required";
+	private const string HeaderCheckIfNull = "CheckIfNull";
+	private const string HeaderEqual = "Equal";
+	private const string HeaderTemplate = "Template";
+
 	internal ParserSection(string sql)
 	{	
 		Sql = sql;
@@ -58,31 +90,31 @@ internal class ParserSection
 				System.Diagnostics.Debug.WriteLine(blocks.GetDebugString());
 				// Interpreta las líneas correspondientes
 				foreach (BlockInfo block in blocks.Blocks)
-					if (block.HasHeader("Fields"))
+					if (block.HasHeader(HeaderFields))
 						sections.Add(ParseFields(block));
-					else if (block.HasHeader("InnerJoin"))
+					else if (block.HasHeader(HeaderInnerJoin))
 						sections.Add(ParseJoin(block, ClauseJoinModel.JoinType.InnerJoin));
-					else if (block.HasHeader("LeftJoin"))
+					else if (block.HasHeader(HeaderLeftJoin))
 						sections.Add(ParseJoin(block, ClauseJoinModel.JoinType.LeftJoin));
-					else if (block.HasHeader("RightJoin"))
+					else if (block.HasHeader(HeaderRightJoin))
 						sections.Add(ParseJoin(block, ClauseJoinModel.JoinType.RightJoin));
-					else if (block.HasHeader("FullJoin"))
+					else if (block.HasHeader(HeaderFullJoin))
 						sections.Add(ParseJoin(block, ClauseJoinModel.JoinType.FullJoin));
-					else if (block.HasHeader("CrossJoin"))
+					else if (block.HasHeader(HeaderCrossJoin))
 						sections.Add(ParseJoin(block, ClauseJoinModel.JoinType.CrossJoin));
-					else if (block.HasHeader("Where"))
+					else if (block.HasHeader(HeaderWhere))
 						sections.Add(ParseWhere(block));
-					else if (block.HasHeader("Subquery"))
+					else if (block.HasHeader(HeaderSubquery))
 						sections.Add(ParseSubquery(block));
-					else if (block.HasHeader("GroupBy"))
+					else if (block.HasHeader(HeaderGroupBy))
 						sections.Add(ParseGroupBy(block));
-					else if (block.HasHeader("OrderBy"))
+					else if (block.HasHeader(HeaderOrderBy))
 						sections.Add(ParseOrderBy(block));
-					else if (block.HasHeader("Pagination"))
+					else if (block.HasHeader(HeaderPagination))
 						sections.Add(new ParserPaginationSectionModel());
-					else if (block.HasHeader("IfRequest"))
+					else if (block.HasHeader(HeaderIfRequest))
 						sections.Add(ParseIfRequestExpression(block));
-					else if (block.HasHeader("PartitionBy"))
+					else if (block.HasHeader(HeaderPartitionBy))
 						sections.Add(ParsePartition(block));
 					else
 						throw new Exceptions.ReportingParserException($"Section type unknown when parse: {blocks.Blocks[0].Line}");
@@ -101,7 +133,7 @@ internal class ParserSection
 			// Carga las dimensiones
 			fields.ParserDimensions.AddRange(ParseDimensions(block));
 			// Interpreta las propiedades
-			fields.WithComma = block.ExistsChildHeader("WithComma");
+			fields.WithComma = block.ExistsChildHeader(HeaderWithComma);
 			// Devuelve los datos del campo
 			return fields;
 	}
@@ -117,19 +149,19 @@ internal class ParserSection
 			join.Join = type;
 			// Añade los parámetros
 			foreach (BlockInfo child in block.Blocks)
-				if (child.HasHeader("Dimension"))
+				if (child.HasHeader(HeaderDimension))
 					join.Relations.Add(ParseJoinRelation(block));
-				else if (child.HasHeader("Relation"))
+				else if (child.HasHeader(HeaderRelation))
 					join.Relations.Add(ParseJoinRelation(child));
-				else if (child.HasHeader("Table"))
+				else if (child.HasHeader(HeaderTable))
 					join.Table = child.Content;
-				else if (child.HasHeader("Alias"))
+				else if (child.HasHeader(HeaderAlias))
 					join.TableAlias = child.Content;
-				else if (child.HasHeader("AdditionalSql") && join.Relations.Count > 0)
+				else if (child.HasHeader(HeaderSql) && join.Relations.Count > 0)
 					join.Relations[0].AdditionalJoinSql = child.GetChildsContent();
-				else if (child.HasHeader("OnRequestFields") && join.Relations.Count > 0)
+				else if (child.HasHeader(HeaderOnRequestFields) && join.Relations.Count > 0)
 					join.Relations[0].RelatedByFieldRequest = true;
-				else if (child.HasHeader("On") && join.Relations.Count > 0)
+				else if (child.HasHeader(HeaderOn) && join.Relations.Count > 0)
 					ParseJoinRelationFields(child, join.Relations[0]);
 			// Devuelve la cláusula
 			return join;
@@ -144,13 +176,13 @@ internal class ParserSection
 
 			// Crea los datos de la relación
 			foreach (BlockInfo child in block.Blocks)
-				if (child.HasHeader("Dimension"))
+				if (child.HasHeader(HeaderDimension))
 					relation.Dimension = ParseDimension(child);
-				else if (child.HasHeader("OnRequestFields"))
+				else if (child.HasHeader(HeaderOnRequestFields))
 					relation.RelatedByFieldRequest = true;
-				else if (child.HasHeader("On"))
+				else if (child.HasHeader(HeaderOn))
 					ParseJoinRelationFields(child, relation);
-				else if (child.HasHeader("AdditionalSql"))
+				else if (child.HasHeader(HeaderSql))
 					relation.AdditionalJoinSql = child.GetChildsContent();
 			// Devuelve la relación
 			return relation;
@@ -161,7 +193,7 @@ internal class ParserSection
 	/// </summary>
 	private void ParseJoinRelationFields(BlockInfo child, ParserJoinRelationSectionModel relation)
 	{
-		if (child.Content.Equals("RequestFields", StringComparison.CurrentCultureIgnoreCase))
+		if (child.Content.Equals(HeaderOnRequestFields, StringComparison.CurrentCultureIgnoreCase))
 			relation.RelatedByFieldRequest = true;
 		else
 			relation.AddFieldsJoin(child.Content);
@@ -176,7 +208,7 @@ internal class ParserSection
 
 			// Interpreta las dimensiones
 			foreach (BlockInfo child in block.Blocks)
-				if (child.HasHeader("Dimension"))
+				if (child.HasHeader(HeaderDimension))
 					dimensions.Add(ParseDimension(child));
 			// Devuelve las dimensiones
 			return dimensions;
@@ -187,27 +219,30 @@ internal class ParserSection
 	/// </summary>
 	private ParserDimensionModel ParseDimension(BlockInfo block)
 	{ 
-		ParserDimensionModel dimension = new();
+		ParserDimensionModel dimension = new()
+											{
+												DimensionKey = block.Content ?? string.Empty
+											};
 
-			// Obtiene los datos de la dimensión
-			dimension.DimensionKey = block.Content ?? string.Empty;
 			// Obtiene los datos
 			foreach (BlockInfo child in block.Blocks)
-				if (child.HasHeader("Name"))
+				if (child.HasHeader(HeaderName))
 					dimension.DimensionKey = child.Content;
-				else if (child.HasHeader("Table"))
+				else if (child.HasHeader(HeaderTable))
 					dimension.Table = child.Content;
-				else if (child.HasHeader("AdditionalTable"))
+				else if (child.HasHeader(HeaderAdditionalTable))
 					dimension.AdditionalTable = child.Content;
-				else if (child.HasHeader("Alias"))
+				else if (child.HasHeader(HeaderAlias))
 					dimension.TableAlias = child.Content;
-				else if (child.HasHeader("PrimaryKeys"))
+				else if (child.HasHeader(HeaderWithPrimaryKeys))
 					dimension.WithPrimaryKeys = true;
-				else if (child.HasHeader("Required"))
+				else if (child.HasHeader(HeaderWithRequestedFields))
+					dimension.WithRequestedFields = true;
+				else if (child.HasHeader(HeaderRequired))
 					dimension.Required = true;
-				else if (child.HasHeader("IfRequest"))
+				else if (child.HasHeader(HeaderIfRequest))
 					dimension.AddRelatedDimensions(child.Content);
-				else if (child.HasHeader("CheckIfNull"))
+				else if (child.HasHeader(HeaderCheckIfNull))
 					dimension.CheckIfNull = true;
 			// Devuelve los datos de la dimensión
 			return dimension;
@@ -235,9 +270,9 @@ internal class ParserSection
 
 			// Asigna las propiedades
 			foreach (BlockInfo child in block.Blocks)
-				if (child.HasHeader("Equal"))
+				if (child.HasHeader(HeaderEqual))
 					section.Conditions.Add(ParserCondition(child));
-				else if (child.HasHeader("Additional"))
+				else if (child.HasHeader(HeaderSql))
 					section.AdditionalSql = child.GetChildsContent();
 			// Devuelve la cláusula
 			return section;
@@ -252,11 +287,11 @@ internal class ParserSection
 
 			// Asigna las propiedades
 			foreach (BlockInfo child in block.Blocks)
-				if (child.HasHeader("Dimension"))
+				if (child.HasHeader(HeaderDimension))
 					condition.Dimension = ParseDimension(child);
-				else if (child.HasHeader("Template"))
+				else if (child.HasHeader(HeaderTemplate))
 					condition.Template = child.GetChildsContent();
-				else if (child.HasHeader("Table"))
+				else if (child.HasHeader(HeaderTable))
 					condition.Table = child.Content;
 			// Devuelve la condición
 			return condition;
@@ -271,9 +306,9 @@ internal class ParserSection
 
 			// Asigna las propiedades
 			foreach (BlockInfo child in block.Blocks)
-				if (child.HasHeader("Dimension"))
+				if (child.HasHeader(HeaderDimension))
 					section.Dimensions.Add(ParseDimension(child));
-				else if (child.HasHeader("Additional"))
+				else if (child.HasHeader(HeaderSql))
 					section.AdditionalSql = child.GetChildsContent();
 			// Devuelve la cláusula
 			return section;
@@ -288,11 +323,11 @@ internal class ParserSection
 
 			// Asigna las propiedades
 			foreach (BlockInfo child in block.Blocks)
-				if (child.HasHeader("Dimension"))
+				if (child.HasHeader(HeaderDimension))
 					section.Dimensions.Add(ParseDimension(child));
-				else if (child.HasHeader("Additional"))
+				else if (child.HasHeader(HeaderSql))
 					section.AdditionalSql = child.GetChildsContent();
-				else if (child.HasHeader("Required"))
+				else if (child.HasHeader(HeaderRequired))
 					section.Required = true;
 			// Devuelve la cláusula
 			return section;
@@ -307,9 +342,9 @@ internal class ParserSection
 
 			// Asigna las propiedades
 			foreach (BlockInfo child in block.Blocks)
-				if (child.HasHeader("Expression"))
+				if (child.HasHeader(HeaderExpression))
 					section.AddExpressions(child.Content);
-				else if (child.HasHeader("Sql"))
+				else if (child.HasHeader(HeaderSql))
 					section.Sql = child.GetChildsContent();
 			// Devuelve la cláusula
 			return section;
@@ -324,11 +359,11 @@ internal class ParserSection
 
 			// Asigna las propiedades
 			foreach (BlockInfo child in block.Blocks)
-				if (child.HasHeader("Dimension"))
+				if (child.HasHeader(HeaderDimension))
 					section.Dimensions.Add(ParseDimension(child));
-				else if (child.HasHeader("Additional"))
+				else if (child.HasHeader(HeaderSql))
 					section.Additional = child.GetChildsContent();
-				else if (child.HasHeader("OrderBy"))
+				else if (child.HasHeader(HeaderOrderBy))
 					section.OrderBy = child.GetChildsContent();
 			// Devuelve la cláusula
 			return section;

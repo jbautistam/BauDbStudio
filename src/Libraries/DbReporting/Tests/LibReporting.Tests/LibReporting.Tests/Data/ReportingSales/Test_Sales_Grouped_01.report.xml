@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report>
+<DataWarehouse Name = "Test reporting schema"/>
+<Name>Test_Sales_Grouped_01.report.xml</Name>
+<Description>
+</Description>
+	<Parameter Name = "StartDate" Type = "Date" />
+	<Parameter Name = "EndDate" Type = "Date" />
+
+	<Dimension Name = "PointsOfSale" />
+	<Dimension Name = "Products" />
+	<Dimension Name = "Calendar" />
+
+	<Requests>
+		<Dimension Name = "PointsOfSale">
+			<Field Name = "Name;ErpCode;ImageUrl" />
+		</Dimension>
+		<Dimension Name = "Products">
+			<Field Name = "ProductCode;Description;UrlImage" />
+		</Dimension>
+		<Dimension Name = "Calendar"/>
+	</Requests>
+
+	<Expression Name = "Quantity;AmountTaxesIncluded;AmountTaxesExcluded" />
+
+	<Blocks>
+		<Execute>
+			<![CDATA[
+				DECLARE @StartInterval date = DateFromParts(YEAR(@StartDate), MONTH(@StartDate), 1);
+				DECLARE @EndInterval date = EoMonth(@EndDate);
+			]]>
+		</Execute>
+
+		<With Name = "Main">
+			<IfRequest Dimension = "Products">
+				<Cte Name = "ProductsCte" Dimension = "Products" />
+			</IfRequest>
+
+			<IfRequest Dimension = "PointsOfSale">
+				<Cte Name = "PointsOfSaleCte" Dimension = "PointsOfSale" />
+			</IfRequest>
+
+			<Cte Name = "CalendarCte" Dimension = "Calendar">
+				<Filter>
+					<![CDATA[
+	 					[Date] BETWEEN @StartInterval AND @EndInterval
+	 				]]>
+				</Filter>
+			</Cte>
+
+			<Cte Name = "SalesCte">
+				<![CDATA[
+					SELECT {{
+								Fields
+									-Dimension: PointsOfSale 
+										--Table: PointsOfSaleCte
+									-Dimension: Products 
+										--Table: ProductsCte
+									-Dimension: Calendar 
+										--Table: CalendarCte
+										--WithRequestedFields
+									-WithComma
+	                		}}
+	                		[SalesAnalysis].[SalesQuantity], [SalesAnalysis].[SalesAmountTaxesIncluded], [SalesAnalysis].[SalesAmountTaxesExcluded]
+	                	FROM [Fact].[SalesAnalysis]
+	                	{{
+	                		InnerJoin 
+	                			-Dimension: PointsOfSale 
+	                				--Table: PointsOfSaleCte
+								-Table: SalesAnalysis
+								-On:PointOfSaleId-PointOfSaleId
+	                	}}
+	                	{{
+	                		InnerJoin 
+	                			-Dimension: Products 
+	                				--Table: ProductsCte
+								-Table: SalesAnalysis
+								-On: ProductId-ProductId
+	                	}}
+	                	{{
+	                		InnerJoin 
+	                			-Dimension: Calendar 
+	                				--Required
+	                				--Table: CalendarCte
+								-Table: SalesAnalysis
+								-On: Date-Date
+	                	}}
+	                	WHERE [SalesAnalysis].[Refund] = 0
+				]]>
+			</Cte>
+			<Query>
+				<![CDATA[
+					SELECT {{
+								Fields
+									-Dimension: PointsOfSale
+									-Dimension: Products
+									-Dimension: Calendar
+										--WithRequestedFields
+									-WithComma
+	                		}}
+	                		SUM(SalesQuantity) AS Quantity, SUM(SalesAmountTaxesIncluded) AS AmountTaxesIncluded, 
+	                		SUM(SalesAmountTaxesExcluded) AS AmountTaxesExcluded
+	                	FROM SalesCte
+	                	{{
+							GroupBy
+								-Dimension: PointsOfSale 
+								-Dimension: Products
+								-Dimension: Calendar
+									--WithRequestedFields
+	                	}}
+				]]>
+			</Query>
+		</With>
+	</Blocks>
+</Report>
