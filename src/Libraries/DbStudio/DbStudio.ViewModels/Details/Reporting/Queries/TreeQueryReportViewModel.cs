@@ -306,7 +306,7 @@ public class TreeQueryReportViewModel : PluginTreeViewModel
 
 							// Asigna las propiedades adicionales a la columna: filtros, ordenación ....
 							AssignProperties(column, node, !string.IsNullOrWhiteSpace(root.DataSourceId));
-							// Añade la columna a las dimensiones
+							// Añade la columna a la solicitud
 							request.Columns.Add(column);
 					}
 			}
