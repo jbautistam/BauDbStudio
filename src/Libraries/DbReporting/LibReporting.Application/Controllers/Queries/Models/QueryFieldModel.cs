@@ -30,7 +30,7 @@ internal class QueryFieldModel
 	/// </summary>
 	internal string GetAggregation(string table)
 	{
-		string computed = Query.Generator.GetFieldName(table, Field);
+		string computed = Query.Generator.SqlTools.GetFieldName(table, Field);
 
 			return Aggregation switch
 						{

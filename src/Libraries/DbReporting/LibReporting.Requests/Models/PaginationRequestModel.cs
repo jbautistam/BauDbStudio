@@ -26,6 +26,11 @@ public class PaginationRequestModel
 	public int Page { get; set; }
 
 	/// <summary>
+	///		Indica si es una solicitud de la primera página
+	/// </summary>
+	public bool IsFirstPage => !MustPaginate || (MustPaginate && Page == 1);
+
+	/// <summary>
 	///		Registros por página
 	/// </summary>
 	public long RecordsPerPage { get; set; }

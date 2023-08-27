@@ -1,0 +1,27 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<ReportRequest Id = "Sales aceleration" >
+	<Dimension Id = "PointsOfSale" >
+		<Column Id = "Name"  Visible = "yes"  OrderIndex = "-1"  OrderBy = "Undefined" />
+</Dimension>
+	<Expression Id = "" >
+		<Column Id = "RootProductSellThrough"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+	</Expression>
+	<Expression Id = "" >
+		<Column Id = "DaysInStore"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+	</Expression>
+	<Expression Id = "" >
+		<Column Id = "InitialStock"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+	</Expression>
+	<Expression Id = "" >
+		<Column Id = "ActualStock"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+	</Expression>
+	<Expression Id = "" >
+		<Column Id = "PendingReceptions"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+	</Expression>
+	<Expression Id = "" >
+		<Column Id = "Sales"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+	</Expression>
+	<Expression Id = "" >
+		<Column Id = "WarehouseStock"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+	</Expression>
+</ReportRequest>

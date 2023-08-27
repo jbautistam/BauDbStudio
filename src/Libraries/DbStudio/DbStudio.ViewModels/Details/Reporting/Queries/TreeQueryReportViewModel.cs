@@ -31,20 +31,11 @@ public class TreeQueryReportViewModel : PluginTreeViewModel
 	/// </summary>
 	protected override void AddRootNodes()
 	{
-		// Añade los nodos de parámetros
+		// Añade los nodos necesarios al árbol de filtros
 		AddParameterNodes(ReportViewModel.Report);
-		// Añade los nodos de dimensiones
 		AddDimensionNodes(ReportViewModel.Report);
-		// Añade los nodos de expresiones
-		switch (ReportViewModel.Report)
-		{
-			case ReportModel report:
-					AddExpressionNodes(report);
-				break;
-			case ReportAdvancedModel report:
-					AddExpressionNodes(report);
-				break;
-		}
+		AddDataSourcesNodes(ReportViewModel.Report);
+		AddExpressionNodes(ReportViewModel.Report);
 		// Expande los nodos
 		ExpandAll();
 	}
@@ -52,9 +43,9 @@ public class TreeQueryReportViewModel : PluginTreeViewModel
 	/// <summary>
 	///		Añade los nodos de parámetros
 	/// </summary>
-	private void AddParameterNodes(ReportBaseModel report)
+	private void AddParameterNodes(ReportModel report)
 	{
-		NodeColumnViewModel root = new(this, null, NodeColumnViewModel.NodeColumnType.ParametersRoot, "Parámetros", null);
+		NodeColumnViewModel root = new(this, null, NodeColumnViewModel.NodeColumnType.ParametersRoot, "Parameters", null);
 
 			// Carga los parámetros
 			foreach (ReportParameterModel parameter in report.Parameters)
@@ -82,115 +73,62 @@ public class TreeQueryReportViewModel : PluginTreeViewModel
 	/// <summary>
 	///		Añade los nodos de dimensiones
 	/// </summary>
-	private void AddDimensionNodes(ReportBaseModel report)
+	private void AddDimensionNodes(ReportModel report)
 	{
-		BaseReportingDictionaryModel<DimensionModel> dimensions = GetDimensions(report);
+		if (report.Dimensions is not null)
+		{
+			NodeColumnViewModel root = new NodeColumnViewModel(this, null, NodeColumnViewModel.NodeColumnType.DimensionsRoot, "Dimensiones", null);
 
-			// Añade las dimensiones
-			if (dimensions is not null)
-			{
-				NodeColumnViewModel root = new NodeColumnViewModel(this, null, NodeColumnViewModel.NodeColumnType.DimensionsRoot, "Dimensiones", null);
-
-					// Añade los nodos de dimensión
-					foreach (DimensionModel dimension in dimensions.EnumerateValuesSorted())
-						AddDimensionNodes(root, dimension);
-					// Añade el nodo raíz al árbol
-					Children.Add(root);
-			}
+				// Ordena las dimensiones
+				report.Dimensions.Sort((first, second) => first.Id.CompareTo(second.Id));
+				// Añade los nodos de dimensión
+				foreach (BaseDimensionModel dimension in report.Dimensions)
+					AddDimensionNodes(root, dimension);
+				// Añade el nodo raíz al árbol
+				Children.Add(root);
+		}
 	}
 
 	/// <summary>
 	///		Añade un nodo de dimensión (y sus hijos)
 	/// </summary>
-	private void AddDimensionNodes(NodeColumnViewModel root, DimensionModel dimension)
+	private void AddDimensionNodes(NodeColumnViewModel root, BaseDimensionModel dimension)
 	{
 		NodeColumnViewModel node = new NodeColumnViewModel(this, root, NodeColumnViewModel.NodeColumnType.Dimension, 
 														   dimension.Id, null);
-		BaseReportingDictionaryModel<DimensionModel> childs = new();
+		BaseReportingDictionaryModel<BaseDimensionModel> childs = new();
 
 			// Asigna el código de dimensión
 			node.DimensionId = dimension.Id;
 			// Añade los campos de la dimensión
-			AddColumnNodes(node, dimension.DataSource.Columns, NodeColumnViewModel.NodeColumnType.DimensionColumn, dimension.Id, string.Empty);
+			AddColumnNodes(node, dimension.GetColumns(), NodeColumnViewModel.NodeColumnType.DimensionColumn, dimension.Id, string.Empty);
 			// Crea la colección de dimensiones hija a partir de las relaciones
-			foreach (DimensionRelationModel relation in dimension.Relations)
-				if (relation.Dimension != null)
+			foreach (DimensionRelationModel relation in dimension.GetRelations())
+				if (relation.Dimension is not null)
 					childs.Add(relation.Dimension);
 			// Añade los nodos de dimensión hija
-			foreach (DimensionModel child in childs.EnumerateValuesSorted())
+			foreach (BaseDimensionModel child in childs.EnumerateValuesSorted())
 				AddDimensionNodes(node, child);
 			// Añade el nodo a la raíz
 			root.Children.Add(node);
 	}
 
 	/// <summary>
-	///		Obtiene las dimensiones de un informe
+	///		Añade los nodos de orígenes de datos (tablas de hechos)
 	/// </summary>
-	private BaseReportingDictionaryModel<DimensionModel> GetDimensions(ReportBaseModel reportBase)
+	private void AddDataSourcesNodes(ReportModel report)
 	{
-		switch (reportBase)
-		{
-			case ReportModel report:
-				return GetDimensionsColumns(report);
-			case ReportAdvancedModel report:
-				return GetDimensionsColumns(report);
-			default:
-				ReportViewModel.ViewModel.SolutionViewModel.MainController.SystemController.ShowMessage($"Report type unknown: {reportBase.GetType().ToString()}");
-				return null;
-		}
-	}
-
-	/// <summary>
-	///		Obtiene las dimensiones de un informe
-	/// </summary>
-	private BaseReportingDictionaryModel<DimensionModel> GetDimensionsColumns(ReportModel report)
-	{
-		BaseReportingDictionaryModel<DimensionModel> dimensions = new BaseReportingDictionaryModel<DimensionModel>();
-
-			// Añade las dimensiones
-			foreach (ReportDataSourceModel dataSource in report.ReportDataSources)
-				foreach (DimensionRelationModel relation in dataSource.Relations)
-					if (dimensions[relation.Dimension.Id] == null)
-						dimensions.Add(relation.Dimension);
-			// Devuelve las dimensiones
-			return dimensions;
-	}
-
-	/// <summary>
-	///		Obtiene las dimensiones de un informe avancado
-	/// </summary>
-	private BaseReportingDictionaryModel<DimensionModel> GetDimensionsColumns(ReportAdvancedModel report)
-	{
-		BaseReportingDictionaryModel<DimensionModel> dimensions = new BaseReportingDictionaryModel<DimensionModel>();
-
-			// Añade las dimensiones
-			foreach (string key in report.DimensionKeys)
-			{
-				DimensionModel dimension = report.DataWarehouse.Dimensions[key];
-
-					if (dimension is not null)
-						dimensions.Add(dimension);
-			}
-			// Devuelve las dimensiones
-			return dimensions;
-	}
-
-	/// <summary>
-	///		Añade los nodos de expresiones
-	/// </summary>
-	private void AddExpressionNodes(ReportModel report)
-	{
-		NodeColumnViewModel root = new NodeColumnViewModel(this, null, NodeColumnViewModel.NodeColumnType.ExpressionsRoot, "Expresiones", null);
+		NodeColumnViewModel root = new NodeColumnViewModel(this, null, NodeColumnViewModel.NodeColumnType.DataSourcesRoot, "Orígenes de datos", null);
 
 			// Añade los orígenes de datos
-			foreach (ReportDataSourceModel dataSource in report.ReportDataSources)
+			foreach (ReportDataSourceModel dataSource in report.DataSources)
 			{
-				NodeColumnViewModel node = new NodeColumnViewModel(this, root, NodeColumnViewModel.NodeColumnType.Expression, dataSource.DataSource.Id, null);
+				NodeColumnViewModel node = new NodeColumnViewModel(this, root, NodeColumnViewModel.NodeColumnType.DataSource, dataSource.DataSource.Id, null);
 
 					// Asigna el Id del origen de datos
 					node.DataSourceId = dataSource.DataSource.Id;
 					// Añade las columnas
-					AddColumnNodes(node, dataSource.DataSource.Columns, NodeColumnViewModel.NodeColumnType.Expression, 
+					AddColumnNodes(node, dataSource.DataSource.Columns, NodeColumnViewModel.NodeColumnType.DataSourceColumn, 
 								   string.Empty, dataSource.DataSource.Id);
 					// Añade el nodo a la raíz
 					root.Children.Add(node);
@@ -200,9 +138,9 @@ public class TreeQueryReportViewModel : PluginTreeViewModel
 	}
 
 	/// <summary>
-	///		Añade los nodos de expresiones de un <see cref="ReportAdvancedModel"/>
+	///		Añade los nodos de expresiones de un <see cref="ReportModel"/>
 	/// </summary>
-	private void AddExpressionNodes(ReportAdvancedModel report)
+	private void AddExpressionNodes(ReportModel report)
 	{
 		NodeColumnViewModel root = new NodeColumnViewModel(this, null, NodeColumnViewModel.NodeColumnType.ExpressionsRoot, "Expresiones", null);
 
@@ -245,6 +183,7 @@ public class TreeQueryReportViewModel : PluginTreeViewModel
 			// Obtiene las columnas de dimensión y de expresión
 			request.Dimensions.AddRange(GetRequestDimensions(Children));
 			request.Expressions.AddRange(GetRequestExpressions(Children));
+			request.DataSources.AddRange(GetRequestDataSources(Children));
 			AddRequestParameters(Children, request.Parameters);
 			// Devuelve la solicitud
 			return request;
@@ -290,31 +229,89 @@ public class TreeQueryReportViewModel : PluginTreeViewModel
 										};
 				// Añade las columnas y dimensiones hija
 				foreach (ControlHierarchicalViewModel baseChild in root.Children)
-					if (baseChild is NodeColumnViewModel node && MustIncludeAtQuery(node))
-							switch (node.ColumnNodeType)
-							{
-								case NodeColumnViewModel.NodeColumnType.DimensionColumn:
-										DimensionColumnRequestModel column = new DimensionColumnRequestModel
-																					{
-																						ColumnId = node.Column.Id,
-																						Visible = node.IsChecked
-																					};
+					if (baseChild is NodeColumnViewModel node && node.Column is not null && MustIncludeAtQuery(node))
+						switch (node.ColumnNodeType)
+						{
+							case NodeColumnViewModel.NodeColumnType.DimensionColumn:
+									DimensionColumnRequestModel column = new DimensionColumnRequestModel
+																				{
+																					ColumnId = node.Column.Id,
+																					Visible = node.IsChecked
+																				};
 
-											// Asigna las propiedades adicionales a la columna: filtros, ordenación ....
-											AssignProperties(column, node, !string.IsNullOrWhiteSpace(root.DataSourceId));
-											// Añade la columna a las dimensiones
-											dimension.Columns.Add(column);
-									break;
-								case NodeColumnViewModel.NodeColumnType.Dimension:
-										DimensionRequestModel? child = GetRequestDimension(node);
+										// Asigna las propiedades adicionales a la columna: filtros, ordenación ....
+										AssignProperties(column, node, !string.IsNullOrWhiteSpace(root.DataSourceId));
+										// Añade la columna a las dimensiones
+										dimension.Columns.Add(column);
+								break;
+							case NodeColumnViewModel.NodeColumnType.Dimension:
+									DimensionRequestModel? child = GetRequestDimension(node);
 
-											if (child is not null)
-												dimension.Childs.Add(child);
-									break;
-							}
+										if (child is not null)
+											dimension.Childs.Add(child);
+								break;
+						}
 			}
 			// Devuelve la dimensión
 			return dimension;
+	}
+
+	/// <summary>
+	///		Obtiene las columnas seleccionadas para los orígenes de datos
+	/// </summary>
+	private List<DataSourceRequestModel> GetRequestDataSources(AsyncObservableCollection<ControlHierarchicalViewModel> nodes)
+	{
+		List<DataSourceRequestModel> requests = new();
+
+			// Obtiene las columnas seleccionadas de los nodos
+			foreach (ControlHierarchicalViewModel baseNodeRoot in nodes)
+				if (baseNodeRoot is NodeColumnViewModel root && root.ColumnNodeType == NodeColumnViewModel.NodeColumnType.DataSourcesRoot)
+					foreach (ControlHierarchicalViewModel baseNodeDataSources in root.Children)
+						if (baseNodeDataSources is NodeColumnViewModel nodeDataSource &&
+							nodeDataSource.ColumnNodeType == NodeColumnViewModel.NodeColumnType.DataSource)
+						{
+							DataSourceRequestModel? dataSourceRequest = GetRequestDataSource(nodeDataSource);
+
+								if (dataSourceRequest is not null)
+									requests.Add(dataSourceRequest);
+						}
+			// Devuelve las solicitudes
+			return requests;
+	}
+
+	/// <summary>
+	///		Obtiene la solicitud de un origen de datos
+	/// </summary>
+	private DataSourceRequestModel? GetRequestDataSource(NodeColumnViewModel root)
+	{
+		DataSourceRequestModel? request = null;
+
+			// Obtiene los datos de la consulta del origen de datos
+			if (MustIncludeAtQuery(root))
+			{
+				// Crea la solicitud
+				request = new DataSourceRequestModel
+										{
+											ReportDataSourceId = root.DataSourceId,
+										};
+				// Añade las columnas hija
+				foreach (ControlHierarchicalViewModel baseChild in root.Children)
+					if (baseChild is NodeColumnViewModel node && node.Column is not null && MustIncludeAtQuery(node) && 
+						node.ColumnNodeType == NodeColumnViewModel.NodeColumnType.DataSourceColumn)
+					{
+						DataSourceColumnRequestModel column = new()
+																	{
+																		ColumnId = node.Column.Id
+																	};
+
+							// Asigna las propiedades adicionales a la columna: filtros, ordenación ....
+							AssignProperties(column, node, !string.IsNullOrWhiteSpace(root.DataSourceId));
+							// Añade la columna a las dimensiones
+							request.Columns.Add(column);
+					}
+			}
+			// Devuelve la solicitud
+			return request;
 	}
 
 	/// <summary>

@@ -38,21 +38,81 @@ internal static class FileHelper
 	}
 
 	/// <summary>
+	///		Obtiene la lista de esquemas e informes del directorio Data
+	/// </summary>
+	public static Dictionary<string, List<string>> GetReports()
+	{
+		Dictionary<string, List<string>> reports = new();
+
+			// Busca los directorios del directorio Data
+			foreach (string path in Directory.GetDirectories(GetDataPath()))
+			{
+				string schema = string.Empty;
+				List<string> reportFiles = new();
+
+					// Obtiene el esquema y los informes
+					foreach (string file in Directory.GetFiles(path))
+						if (file.EndsWith(".reporting.xml", StringComparison.CurrentCultureIgnoreCase))
+							schema = file;
+						else if (file.EndsWith(".report.xml", StringComparison.CurrentCultureIgnoreCase))
+							reportFiles.Add(file);
+					// Crea el diccionario
+					if (!string.IsNullOrWhiteSpace(schema))
+						reports.Add(schema, reportFiles);
+			}
+			// Devuelve los informes
+			return reports;
+	}
+
+	/// <summary>
 	///		Obtiene el nombre del archivo de respuesta
 	/// </summary>
-	internal static string GetResponseFile(string requestFile)
+	internal static string GetResponseFile(string requestFile, int page = 0) 
 	{
-		string responseFile = Path.GetFileName(requestFile);
+		string extension;
+
+			// Añade el número de página de la solicitud
+			if (page > 0)
+				extension = $".response.{page.ToString()}.sql";
+			else
+				extension = ".response.sql";
+			// Cambia la extensión del archivo
+			return ChangeFileExtension(requestFile, ".request.xml", extension);
+	}
+
+	/// <summary>
+	///		Obtiene el nombre de archivo de plantilla a partir del archivo de solicitud
+	/// </summary>
+	internal static string GetOutputTemplateFileName(string reportFile)
+	{
+		// Cambia el directorio añadiéndole la carpeta _OutputTemplates
+		reportFile = Path.Combine(Path.GetDirectoryName(reportFile) ?? string.Empty, 
+								  "_OutputTemplates", Path.GetFileName(reportFile));
+		// Cambia la extensión del archivo
+		return ChangeFileExtension(reportFile, ".report.xml", ".template.output.xml");
+	}
+
+	/// <summary>
+	///		Obtiene el nombre de archivo JSON de salida a partir del archivo de solicitud
+	/// </summary>
+	internal static string GetOutputResponseFileName(string requestFile) => ChangeFileExtension(requestFile, ".request.xml", ".output.json");
+
+	/// <summary>
+	///		Obtiene el nombre de archivo JSON de salida a partir del archivo de solicitud
+	/// </summary>
+	private static string ChangeFileExtension(string sourceFile, string extension, string targetExtensions)
+	{
+		string file = Path.GetFileName(sourceFile);
 
 			// Obtiene el nombre del archivo de respuesta
-			if (responseFile.EndsWith(".request.xml", StringComparison.CurrentCultureIgnoreCase))
+			if (file.EndsWith(extension, StringComparison.CurrentCultureIgnoreCase))
 			{
-				// Cambia ".request.xml" por ".response.sql"
-				responseFile = responseFile.Replace(".request.xml", ".response.sql");
+				// Cambia la extensión por la extensión final
+				file = file.Replace(extension, targetExtensions, StringComparison.CurrentCultureIgnoreCase);
 				// Devuelve el nombre completo del archivo
-				return Path.Combine(Path.GetDirectoryName(requestFile) ?? string.Empty, responseFile);
+				return Path.Combine(Path.GetDirectoryName(sourceFile) ?? string.Empty, file);
 			}
 			else
-				throw new NotImplementedException($"Error request file name {requestFile}");
+				return string.Empty;
 	}
 }

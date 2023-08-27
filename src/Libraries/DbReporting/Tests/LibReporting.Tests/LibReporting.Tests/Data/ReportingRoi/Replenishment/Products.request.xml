@@ -1,0 +1,139 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<ReportRequest Id = "Replenishment" >
+	<Dimension Id = "Products" >
+		<Column Id = "EanCode"  Visible = "yes"  OrderIndex = "-1"  OrderBy = "Undefined" />
+		<Column Id = "ProductCode"  Visible = "yes"  OrderIndex = "-1"  OrderBy = "Undefined" />
+		<Dimension Id = "ProductClassifications" >
+			<Column Id = "ClassificationLevelValue4"  Visible = "yes"  OrderIndex = "-1"  OrderBy = "Undefined" />
+</Dimension>
+</Dimension>
+	<Expression Id = "" >
+		<Column Id = "MinimumMultiple"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "ProductiveBlock"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "OriginalOrder"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "OriginalOrderCost"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "Orders"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "OrderCost"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "ImminentRupture"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "StockOutDay"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "RuptureDays"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "DaysInStore"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "SalesTwoMonths"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "SalesSixMonths"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "SalesProjection"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "ActualStock"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "WarehouseStock"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "PendingReceptions"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "IdealWindow"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "RealWindow"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "AvailableStock"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "StockCost"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "Overstock"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "MissingStock"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "TransferIn"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "TransferOut"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "Returns"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "Coverage"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "PromotionValue"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "ForcedWindows"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "ForcedProductive"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "LastDayOfSale"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "LastMonthSales"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "SalesTwoMonthsOutlier"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "SalesSixMonthsOutlier"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "PurchaseOrder"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "RuptureTwoMonths"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "RuptureSixMonths"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "StoreBlocks"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "GlobalBlocks"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "SalesIndirect2Months"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "SalesIndirect6Months"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "OmnichannelIdealStock"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "IdealCoverage"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "Assortment"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+</ReportRequest>

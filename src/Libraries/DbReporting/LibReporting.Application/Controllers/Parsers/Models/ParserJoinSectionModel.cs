@@ -1,63 +1,47 @@
-﻿using Bau.Libraries.LibReporting.Models.DataWarehouses.Reports.Blocks;
-
-namespace Bau.Libraries.LibReporting.Application.Controllers.Parsers.Models;
+﻿namespace Bau.Libraries.LibReporting.Application.Controllers.Parsers.Models;
 
 /// <summary>
 ///		Sección con datos de un JOIN
 /// </summary>
 internal class ParserJoinSectionModel : ParserBaseSectionModel
 {
+	/// <summary>
+	///		Tipo de join
+	/// </summary>
+	public enum JoinType
+	{
+		/// <summary>INNER JOIN</summary>
+		InnerJoin,
+		/// <summary>LEFT JOIN</summary>
+		LeftJoin,
+		/// <summary>RIGHT JOIN</summary>
+		RightJoin,
+		/// <summary>FULL OUTER JOIN</summary>
+		FullJoin,
+		/// <summary>CROSS JOIN</summary>
+		CrossJoin
+	}
+
     /// <summary>
     ///		Obtiene la cadena adecuada para un tipo de JOIN
     /// </summary>
     internal string GetJoin()
     {
-        switch (Join)
-        {
-            case ClauseJoinModel.JoinType.InnerJoin:
-                return " INNER JOIN ";
-            case ClauseJoinModel.JoinType.CrossJoin:
-                return " CROSS JOIN ";
-            case ClauseJoinModel.JoinType.FullJoin:
-                return " FULL OUTER JOIN ";
-            case ClauseJoinModel.JoinType.LeftJoin:
-                return " LEFT JOIN ";
-            case ClauseJoinModel.JoinType.RightJoin:
-                return " RIGHT JOIN ";
-            default:
-                throw new Exceptions.ReportingParserException($"Join type unknown: {Join.ToString()}");
-        }
-    }
-
-    /// <summary>
-    ///     Convierte los datos de <see cref="ClauseJoinModel"/> en este <see cref="ParserJoinSectionModel"/>
-    /// </summary>
-	internal void Convert(ClauseJoinModel join, string tableDimension) 
-    {
-        // Asigna los valores básicos
-        Join = join.Type;
-        Table = tableDimension;
-        // Asigna las relaciones
-        Relations.Add(CreateRelation(join));
-    }
-
-    /// <summary>
-    ///     Crea una relación a partir de la cláusula
-    /// </summary>
-    private ParserJoinRelationSectionModel CreateRelation(ClauseJoinModel join)
-    {
-        ParserJoinRelationSectionModel relation = new();
-
-            // Interpreta la relación
-            relation.Convert(join);
-            // Devuelve la relación
-            return relation;
-    }
+	        return Join switch
+	                    {
+		                    JoinType.InnerJoin => " INNER JOIN ",
+		                    JoinType.CrossJoin => " CROSS JOIN ",
+		                    JoinType.FullJoin => " FULL OUTER JOIN ",
+		                    JoinType.LeftJoin => " LEFT JOIN ",
+		                    JoinType.RightJoin => " RIGHT JOIN ",
+		                    _ => throw new Exceptions.ReportingParserException($"Join type unknown: {Join.ToString()}"),
+	                    };
+	}
 
 	/// <summary>
 	///		Tipo de unión
 	/// </summary>
-	internal ClauseJoinModel.JoinType Join { get; set; }
+	internal JoinType Join { get; set; }
 
     /// <summary>
     ///     Nombre de tabla
@@ -86,9 +70,19 @@ internal class ParserJoinSectionModel : ParserBaseSectionModel
     }
 
     /// <summary>
-    ///		Indica si es obligatorio
+    ///     Sql adicional
     /// </summary>
-    internal bool Required { get; set; }
+    internal string Sql { get; set; } = string.Empty;
+
+    /// <summary>
+    ///     Sql que se debe añadir cuando no hay nada en el Join
+    /// </summary>
+    internal string SqlNoDimension { get; set; } = string.Empty;
+
+    ///// <summary>
+    /////		Indica si es obligatorio
+    ///// </summary>
+    //internal bool Required { get; set; }
 
     /// <summary>
     ///     Relaciones asociadas al JOIN

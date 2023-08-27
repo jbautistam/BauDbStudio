@@ -1,0 +1,239 @@
+﻿{
+	"Totals": {
+		"totalCount": 1,
+		"product": {
+			"id": 0,
+			"productCode": null,
+			"rootProductCode": null,
+			"eanCode": null,
+			"description": null,
+			"imageUrl": null,
+			"size": null,
+			"typology": null,
+			"classificationLevelValues": [],
+			"historicClassificationLevelValues": []
+		},
+		"pointOfSale": {
+			"id": 0,
+			"imageUrl": null,
+			"erpCode": null,
+			"pointOfSale": null,
+			"city": null,
+			"state": null,
+			"country": null,
+			"channel": null,
+			"classificationLevelValues": []
+		},
+		"expressions": {
+			"minimumMultiple": "1/1",
+			"productiveBlock": null,
+			"originalOrder": 80594,
+			"originalOrderCost": 245907.12,
+			"orders": 7142,
+			"orderCost": 23340.16,
+			"imminentRupture": -2346,
+			"stockOutDay": null,
+			"ruptureDays": null,
+			"daysInStore": null,
+			"lastMonthSales": 29340,
+			"salesTwoMonths": 58758,
+			"salesTwoMonthsOutlier": 527,
+			"salesSixMonths": 165724,
+			"salesSixMonthsOutlier": 1433,
+			"salesProjection": 139987,
+			"actualStock": 107213,
+			"warehouseStock": 0,
+			"pendingReceptions": 11405,
+			"idealWindow": 0,
+			"realWindow": 0,
+			"availableStock": 107213,
+			"stockCost": 1056574.93,
+			"overstock": 51677,
+			"missingStock": -88558,
+			"transferIn": 6609,
+			"transferOut": 6609,
+			"returns": 45099,
+			"coverage": null,
+			"promotionValue": 0,
+			"forcedWindows": 0,
+			"forcedProductive": 82373,
+			"lastDayOfSale": "2023-07-27T00:00:00",
+			"ruptureTwoMonths": 3150,
+			"ruptureSixMonths": 9660,
+			"storeBlocks": null,
+			"globalBlocks": 1,
+			"purchaseOrder": null,
+			"salesIndirect2Months": 0,
+			"salesIndirect6Months": 0,
+			"omnichannelIdealStock": 0,
+			"idealCoverage": null,
+			"assortment": null
+		}
+
+	},
+	"PaginatedResult": {
+		"TotalResults": 1,
+		"First": 1,
+		"Size": 20,
+		"CurrentResults": 1,
+		"CurrentResultsSelectables": 1,
+		"AnyRow": true,
+		"NextPageFirst": 21,
+		"Rows": [
+			{
+				"totalCount": 1,
+				"Product": {
+					"Id": null,
+					"ProductCode": null,
+					"RootProductCode": null,
+					"EanCode": null,
+					"Description": null,
+					"ImageUrl": null,
+					"Size": null,
+					"Typology": null,
+					"classificationLevelValues": [
+						{
+							"value": null,
+							"position": 1
+						},
+						{
+							"value": null,
+							"position": 2
+						},
+						{
+							"value": null,
+							"position": 3
+						},
+						{
+							"value": null,
+							"position": 4
+						},
+						{
+							"value": null,
+							"position": 5
+						},
+						{
+							"value": null,
+							"position": 6
+						},
+						{
+							"value": null,
+							"position": 7
+						},
+						{
+							"value": null,
+							"position": 8
+						},
+						{
+							"value": null,
+							"position": 9
+						},
+						{
+							"value": null,
+							"position": 10
+						}
+					],
+					"historicClassificationLevelValues": []
+				},
+				"PointOfSale": {
+					"Id": null,
+					"ImageUrl": "null",
+					"ErpCode": "null",
+					"PointOfSale": null,
+					"City": "null",
+					"State": "null",
+					"Country": "null",
+					"Channel": "null",
+					"ClassificationLevelValues": [
+						{
+							"value": null,
+							"position": 1
+						},
+						{
+							"value": null,
+							"position": 2
+						},
+						{
+							"value": null,
+							"position": 3
+						},
+						{
+							"value": null,
+							"position": 4
+						},
+						{
+							"value": null,
+							"position": 5
+						},
+						{
+							"value": null,
+							"position": 6
+						},
+						{
+							"value": null,
+							"position": 7
+						},
+						{
+							"value": null,
+							"position": 8
+						},
+						{
+							"value": null,
+							"position": 9
+						},
+						{
+							"value": null,
+							"position": 10
+						}
+					]
+				},
+				"expressions": {
+					"minimumMultiple": "1/1",
+					"productiveBlock": null,
+					"originalOrder": 80594,
+					"originalOrderCost": 245907.12,
+					"orders": 7142,
+					"orderCost": 23340.16,
+					"imminentRupture": -2346,
+					"stockOutDay": null,
+					"ruptureDays": null,
+					"daysInStore": null,
+					"lastMonthSales": 29340,
+					"salesTwoMonths": 58758,
+					"salesTwoMonthsOutlier": 527,
+					"salesSixMonths": 165724,
+					"salesSixMonthsOutlier": 1433,
+					"salesProjection": 139987,
+					"actualStock": 107213,
+					"warehouseStock": 0,
+					"pendingReceptions": 11405,
+					"idealWindow": 0,
+					"realWindow": 0,
+					"availableStock": 107213,
+					"stockCost": 1056574.93,
+					"overstock": 51677,
+					"missingStock": -88558,
+					"transferIn": 6609,
+					"transferOut": 6609,
+					"returns": 45099,
+					"coverage": null,
+					"promotionValue": 0,
+					"forcedWindows": 0,
+					"forcedProductive": 82373,
+					"lastDayOfSale": "2023-07-27T00:00:00",
+					"ruptureTwoMonths": 3150,
+					"ruptureSixMonths": 9660,
+					"storeBlocks": null,
+					"globalBlocks": 1,
+					"purchaseOrder": null,
+					"salesIndirect2Months": 0,
+					"salesIndirect6Months": 0,
+					"omnichannelIdealStock": 0,
+					"idealCoverage": null,
+					"assortment": null
+				}
+			}
+
+		]
+	}
+}

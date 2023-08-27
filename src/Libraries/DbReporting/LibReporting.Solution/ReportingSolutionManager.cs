@@ -52,7 +52,7 @@ public class ReportingSolutionManager
 	/// </summary>
 	public void RefreshAdvancedReport(DataWarehouseModel dataWarehouse, string fileName)
 	{
-		ReportAdvancedModel report = new Repositories.ReportRepository().LoadReport(dataWarehouse, fileName);
+		ReportModel report = new Repositories.ReportRepository().LoadReport(dataWarehouse, fileName);
 
 			if (report is not null)
 				dataWarehouse.Reports.Add(report);
@@ -114,19 +114,6 @@ public class ReportingSolutionManager
 	public void Merge(DataWarehouseModel source, string schemaFile)
 	{
 		new Converters.SchemaConverter().Merge(source, schemaFile);
-	}
-
-	/// <summary>
-	///		Convierte un esquema en scripts de generación de la base de datos
-	/// </summary>
-	public void ConvertSchemaReportingToSql(string schemaFileName, string outputFileName)
-	{
-		DataWarehouseModel dataWarehouse = new Repositories.DataWarehouseRepository().Load(Manager.Schema, schemaFileName);
-
-			if (dataWarehouse != null)
-				new Converters.SchemaScriptsConverter().Convert(dataWarehouse, outputFileName);
-			else
-				throw new Exception($"Can't load datawarehouse from {schemaFileName}");
 	}
 
 	/// <summary>

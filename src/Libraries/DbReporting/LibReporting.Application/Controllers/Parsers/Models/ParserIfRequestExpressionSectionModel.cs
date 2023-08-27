@@ -11,19 +11,27 @@ internal class ParserIfRequestExpressionSectionModel : ParserBaseSectionModel
     internal void AddExpressions(string expression)
     { 
         if (!string.IsNullOrWhiteSpace(expression))
-        { 
-            string [] parts = expression.Split('-');
-
-                foreach (string part in parts)
-                    if (!string.IsNullOrWhiteSpace(part))
-                        ExpressionKeys.Add(part.Trim());
-        }
+            foreach (string part in expression.Split(';'))
+                if (!string.IsNullOrWhiteSpace(part))
+                    ExpressionKeys.Add(part.Trim());
     }
+
+    /// <summary>
+    ///     Indica si se debe añadir sin comprobar la lista de expresiones (porque la queremos siempre se haya
+    /// solicitado lo que se haya solicitado. Por ejemplo resulta útil cuando lo que tenemos es el conteo de
+    /// número de registros)
+    /// </summary>
+    internal bool IsDefault { get; set; }
 
 	/// <summary>
 	///		Clave de las expresiones solicitadas
 	/// </summary>
 	internal List<string> ExpressionKeys { get; } = new();
+
+    /// <summary>
+    ///     Indica si no se debe añadir coma a la SQL
+    /// </summary>
+    internal bool WithoutComma { get; set; }
 
     /// <summary>
     ///		Consulta SQL a añadir cuando se solicita la expresión

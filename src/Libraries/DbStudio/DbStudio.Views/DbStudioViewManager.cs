@@ -94,8 +94,6 @@ public class DbStudioViewManager : IPlugin
 						.WithMenu(MenuListModel.SectionType.Tools)
 							.WithItem("_Crear scripts validación ...", MainViewModel.CreateValidationScriptsCommand, GetIcon("FileSql.png"))
 							.WithItem("Crear script de importación de archivos ...", MainViewModel.CreateImportFilesScriptsCommand, GetIcon("FileSql.png"))
-							.WithSeparator()
-							.WithItem("Generar scripts SQL de reporting ...", MainViewModel.CreateSchemaReportingSqlCommand, GetIcon("FileSql.png"))
 					.Build();
 	}
 

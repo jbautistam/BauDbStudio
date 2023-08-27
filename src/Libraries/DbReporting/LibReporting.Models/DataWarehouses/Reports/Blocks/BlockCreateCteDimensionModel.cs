@@ -18,11 +18,6 @@ public class BlockCreateCteDimensionModel : BaseBlockModel
     public List<ClauseFieldModel> Fields { get; } = new();
 
     /// <summary>
-    ///     Relaciones de la consulta
-    /// </summary>
-    public List<ClauseJoinModel> Joins { get; } = new();
-
-    /// <summary>
     ///     Filtros adicionales
     /// </summary>
     public List<ClauseFilterModel> Filters { get; } = new();

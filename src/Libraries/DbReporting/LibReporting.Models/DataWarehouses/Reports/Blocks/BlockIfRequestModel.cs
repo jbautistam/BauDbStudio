@@ -40,6 +40,23 @@ public class BlockIfRequest : BaseBlockModel
     public List<string> ExpressionKeys { get; } = new();
 
     /// <summary>
+    ///     Indica si se tiene en cuenta si se han pedido totales
+    /// </summary>
+    public bool WhenTotals { get; set; }
+
+    /// <summary>
+    ///     Indica si se tienen que tener en cuenta todas las dimensiones (si es false, con una dimensión
+    /// solicitada, sería correcto)
+    /// </summary>
+    public bool AllDimensions { get; set; }
+
+    /// <summary>
+    ///     Indica si se tienen que tener en cuenta todas las expresiones (si es false, con una expresión
+    /// solicitada, sería correcto)
+    /// </summary>
+    public bool AllExpressions { get; set; }
+
+    /// <summary>
     ///     Bloques a generar cuando se cumple la condición
     /// </summary>
     public List<BaseBlockModel> Then { get; } = new();

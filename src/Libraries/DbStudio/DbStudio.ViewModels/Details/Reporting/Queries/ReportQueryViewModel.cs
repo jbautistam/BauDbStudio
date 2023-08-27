@@ -18,7 +18,7 @@ public class ReportQueryViewModel : BaseObservableObject, PluginsStudio.ViewMode
 	private string _header = string.Empty, _sqlFileName = string.Empty;
 	private TreeQueryReportViewModel _treeColumns = default!;
 
-	public ReportQueryViewModel(ReportingSolutionViewModel viewModel, ReportBaseModel report) : base(false)
+	public ReportQueryViewModel(ReportingSolutionViewModel viewModel, ReportModel report) : base(false)
 	{
 		// Asigna las propiedades
 		ViewModel = viewModel;
@@ -57,8 +57,7 @@ public class ReportQueryViewModel : BaseObservableObject, PluginsStudio.ViewMode
 				reportRequest.Pagination.RecordsPerPage = QueryViewModel.PageSize;
 			}
 			// Actualiza el informe recargando el archivo
-			if (Report is ReportAdvancedModel report)
-				ViewModel.ReportingSolutionManager.RefreshAdvancedReport(Report.DataWarehouse, report.FileName);
+			ViewModel.ReportingSolutionManager.RefreshAdvancedReport(Report.DataWarehouse, Report.FileName);
 			// Obtiene la consulta
 			QueryViewModel.Query = ViewModel.ReportingSolutionManager.GetSqlResponse(reportRequest);
 			// Añade los parámetros
@@ -157,7 +156,7 @@ public class ReportQueryViewModel : BaseObservableObject, PluginsStudio.ViewMode
 	/// <summary>
 	///		Informe
 	/// </summary>
-	public ReportBaseModel Report { get; }
+	public ReportModel Report { get; }
 
 	/// <summary>
 	///		Cabecera

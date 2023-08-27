@@ -15,15 +15,12 @@ public class BaseReportingDictionaryModel<TypeData> where TypeData : BaseReporti
 	/// </summary>
 	public void Add(TypeData value)
 	{
-		string key = Normalize(value.Id);
-
-			// Añade / modifica la clave
-			if (!InternalDictionary.ContainsKey(key))
-				InternalDictionary.Add(key, value);
-			else if (ReplaceDuplicates)
-				this[key] = value;
-			else
-				throw new KeyNotFoundException();
+		if (!InternalDictionary.ContainsKey(value.Id))
+			InternalDictionary.Add(value.Id, value);
+		else if (ReplaceDuplicates)
+			this[value.Id] = value;
+		else
+			throw new KeyNotFoundException();
 	}
 
 	/// <summary>
@@ -40,7 +37,7 @@ public class BaseReportingDictionaryModel<TypeData> where TypeData : BaseReporti
 	/// </summary>
 	public BaseReportingDictionaryModel<TypeData> Clone()
 	{
-		BaseReportingDictionaryModel<TypeData> target = new BaseReportingDictionaryModel<TypeData>();
+		BaseReportingDictionaryModel<TypeData> target = new();
 
 			// Clona los registros
 			foreach ((string _, TypeData value) in Enumerate())
@@ -52,7 +49,7 @@ public class BaseReportingDictionaryModel<TypeData> where TypeData : BaseReporti
 	/// <summary>
 	///		Comprueba si contiene un elemento
 	/// </summary>
-	public bool ContainsKey(string key) => InternalDictionary.ContainsKey(Normalize(key));
+	public bool ContainsKey(string key) => InternalDictionary.ContainsKey(key);
 
 	/// <summary>
 	///		Intenta obtener un valor si existe la clave
@@ -64,11 +61,7 @@ public class BaseReportingDictionaryModel<TypeData> where TypeData : BaseReporti
 	/// </summary>
 	public void Remove(string key)
 	{
-		// Normaliza la clave
-		key = Normalize(key);
-		// Elimina el elemento
-		if (InternalDictionary.ContainsKey(key))
-			InternalDictionary.Remove(key);
+		InternalDictionary.Remove(key);
 	}
 
 	/// <summary>
@@ -80,16 +73,11 @@ public class BaseReportingDictionaryModel<TypeData> where TypeData : BaseReporti
 	}
 
 	/// <summary>
-	///		Normaliza una clave
-	/// </summary>
-	private string Normalize(string key) => key.ToUpperInvariant();
-
-	/// <summary>
 	///		Elimina un elemento
 	/// </summary>
 	public void Remove(TypeData item)
 	{
-		InternalDictionary.Remove(Normalize(item.Id));
+		InternalDictionary.Remove(item.Id);
 	}
 
 	/// <summary>
@@ -134,18 +122,12 @@ public class BaseReportingDictionaryModel<TypeData> where TypeData : BaseReporti
 	{
 		get
 		{
-			// Normaliza la clave
-			key = Normalize(key);
-			// Devuelve el valor
 			return InternalDictionary.ContainsKey(key) ? InternalDictionary[key] : null;
 		}
 		set
 		{
-			// Normaliza la clave
-			key = Normalize(key);
 			// Elimina el valor antiguo
-			if (InternalDictionary.ContainsKey(key))
-				InternalDictionary.Remove(key);
+			InternalDictionary.Remove(key);
 			// Añade el valor modificado
 			if (value is not null)
 				InternalDictionary.Add(key, value);
@@ -157,7 +139,7 @@ public class BaseReportingDictionaryModel<TypeData> where TypeData : BaseReporti
 	/// </summary>
 	public Dictionary<string, TypeData> ToDictionary()
 	{
-		Dictionary<string, TypeData> converted = new();
+		Dictionary<string, TypeData> converted = new(StringComparer.InvariantCultureIgnoreCase);
 
 			// Convierte los valores
 			foreach ((string key, TypeData value) in Enumerate())
@@ -174,7 +156,7 @@ public class BaseReportingDictionaryModel<TypeData> where TypeData : BaseReporti
 	/// <summary>
 	///		Diccionario interno
 	/// </summary>
-	private Dictionary<string, TypeData> InternalDictionary { get; } = new();
+	private Dictionary<string, TypeData> InternalDictionary { get; } = new(StringComparer.InvariantCultureIgnoreCase);
 
 	/// <summary>
 	///		Reemplaza los duplicados

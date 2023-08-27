@@ -7,7 +7,7 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models;
 /// </summary>
 internal class QueryForeignKeyFieldModel
 {
-	internal QueryForeignKeyFieldModel(DimensionModel dimension, string columnDimension, string columnRelated)
+	internal QueryForeignKeyFieldModel(BaseDimensionModel dimension, string columnDimension, string columnRelated)
 	{
 		Dimension = dimension;
 		ColumnDimension = columnDimension;
@@ -15,9 +15,9 @@ internal class QueryForeignKeyFieldModel
 	}
 
 	/// <summary>
-	///		Clave de la dimensión
+	///		Datos de la dimensión
 	/// </summary>
-	internal DimensionModel Dimension { get; }
+	internal BaseDimensionModel Dimension { get; }
 
 	/// <summary>
 	///		Nombre del campo en la dimensión

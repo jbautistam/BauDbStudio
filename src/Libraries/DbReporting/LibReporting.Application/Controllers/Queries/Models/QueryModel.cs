@@ -1,5 +1,6 @@
 ﻿using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets;
+using Bau.Libraries.LibReporting.Models.DataWarehouses.Dimensions;
 using Bau.Libraries.LibReporting.Requests.Models;
 
 namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models;
@@ -9,41 +10,29 @@ namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models;
 /// </summary>
 internal class QueryModel
 {
-	/// <summary>
-	///		Tipo de consulta
-	/// </summary>
-	internal enum QueryType
-	{
-		/// <summary>Consulta de datos de una dimensión</summary>
-		Dimension,
-		/// <summary>Consulta de expresiones</summary>
-		Expressions
-	}
-
-	internal QueryModel(ReportBaseQueryGenerator generator, string sourceId, QueryType type, string alias)
+	internal QueryModel(ReportQueryGenerator generator, string sourceId, string alias)
 	{
 		Generator = generator;
 		SourceId = sourceId;
-		Type = type;
 		Alias = alias;
 	}
 
 	/// <summary>
-	///		Obtiene el nombre de tabla (o la claúsula FROM) y las columnas de un origen de datos
+	///		Obtiene el nombre de tabla (o la claúsula FROM) y el alias de la tabla para una dimensión
+	/// </summary>
+	internal void Prepare(BaseDimensionModel baseDimension)
+	{
+		FromTable = baseDimension.GetTableFullName();
+		FromAlias = baseDimension.GetTableAlias();
+	}
+
+	/// <summary>
+	///		Obtiene el nombre de tabla (o la claúsula FROM) y el alias de la tabla de un origen de datos
 	/// </summary>
 	internal void Prepare(BaseDataSourceModel baseDataSource)
 	{
-		switch (baseDataSource)
-		{
-			case DataSourceTableModel dataSource:
-					FromTable = dataSource.FullName;
-					FromAlias = dataSource.Table;
-				break;
-			case DataSourceSqlModel dataSource:
-					FromTable = $"({dataSource.Sql})"; 
-					FromAlias = dataSource.Id;
-				break;
-		}
+		FromTable = baseDataSource.GetTableFullNameOrContent();
+		FromAlias = baseDataSource.GetTableAlias();
 	}
 
 	/// <summary>
@@ -60,8 +49,8 @@ internal class QueryModel
 	/// </summary>
 	internal void AddPrimaryKey(BaseColumnRequestModel? requestColumn, string columnId, string columnAlias, bool visible)
 	{
-		QueryFieldModel field = new QueryFieldModel(this, true, FromAlias, columnId, columnAlias, BaseColumnRequestModel.SortOrder.Undefined, 
-													ExpressionColumnRequestModel.AggregationType.NoAggregated, visible);
+		QueryFieldModel field = new(this, true, FromAlias, columnId, columnAlias, BaseColumnRequestModel.SortOrder.Undefined, 
+									ExpressionColumnRequestModel.AggregationType.NoAggregated, visible);
 
 			// Añade los filtros
 			if (requestColumn is not null)
@@ -141,14 +130,14 @@ internal class QueryModel
 	/// </summary>
 	internal string Build()
 	{
-		Prettifier.StringPrettifier prettifier = new Prettifier.StringPrettifier();
+		Prettifier.StringPrettifier prettifier = new();
 
 			// Añade la cláusula SELECT con los campos (los de ésta y los de mis JOIN hija)
 			prettifier.Append("SELECT " + GetSqlFields(), 100, ",");
 			// Añade la cláusula FROM
 			prettifier.NewLine();
 			prettifier.Indent();
-			prettifier.Append($"FROM {FromTable} AS {Generator.GetFieldName(FromAlias)}");
+			prettifier.Append($"FROM {FromTable} AS {Generator.SqlTools.GetFieldName(FromAlias)}");
 			// Añade los JOIN
 			if (Joins.Count > 0)
 			{
@@ -200,7 +189,7 @@ internal class QueryModel
 			// Añade los campos agrupados
 			foreach (QueryFieldModel field in Fields)
 				if (field.Aggregation != ExpressionColumnRequestModel.AggregationType.NoAggregated)
-					sqlFields = sqlFields.AddWithSeparator($"{field.GetAggregation(FromAlias)} AS {Generator.GetFieldName(field.Alias)}", ",");
+					sqlFields = sqlFields.AddWithSeparator($"{field.GetAggregation(FromAlias)} AS {Generator.SqlTools.GetFieldName(field.Alias)}", ",");
 			// Devuelve los campos
 			return sqlFields;
 	}
@@ -210,11 +199,11 @@ internal class QueryModel
 	/// </summary>
 	private string GetSqlField(QueryFieldModel field)
 	{
-		string fieldName = Generator.GetFieldName(field.Table, field.Field);
+		string fieldName = Generator.SqlTools.GetFieldName(field.Table, field.Field);
 
 			// Añade el alias
 			if (!string.IsNullOrWhiteSpace(field.Alias))
-				fieldName += $" AS {Generator.GetFieldName(field.Alias)}";
+				fieldName += $" AS {Generator.SqlTools.GetFieldName(field.Alias)}";
 			// Devuelve el nombre del campo
 			return fieldName;
 	}
@@ -279,7 +268,7 @@ internal class QueryModel
 					// Añade el tipo de JOIN
 					sql = sql.AddWithSeparator(GetJoin(join.Type), Environment.NewLine);
 					// Añade el nombre de tabla y el alias
-					sql += $" {join.Query.FromTable} AS {Generator.GetFieldName(join.Query.FromAlias)}" + Environment.NewLine;
+					sql += $" {join.Query.FromTable} AS {Generator.SqlTools.GetFieldName(join.Query.FromAlias)}" + Environment.NewLine;
 					// Añade las relaciones
 					sql += " ON ";
 					foreach (QueryRelationModel relation in join.Relations)
@@ -290,7 +279,7 @@ internal class QueryModel
 						else
 							needAnd = true;
 						// Añade la condición entre campos
-						sql += Generator.GetFieldName(FromAlias, relation.Column) + " = " + Generator.GetFieldName(relation.RelatedTable, relation.RelatedColumn) + Environment.NewLine;
+						sql += Generator.SqlTools.GetFieldName(FromAlias, relation.Column) + " = " + Generator.SqlTools.GetFieldName(relation.RelatedTable, relation.RelatedColumn) + Environment.NewLine;
 					}
 			}
 			// Devuelve la consulta
@@ -324,7 +313,7 @@ internal class QueryModel
 				// Añade los campos de agrupación
 				foreach (QueryFieldModel field in Fields)
 					if (field.Aggregation == ExpressionColumnRequestModel.AggregationType.NoAggregated && field.Visible)
-						sqlFields = sqlFields.AddWithSeparator(Generator.GetFieldName(field.Table, field.Field), ",");
+						sqlFields = sqlFields.AddWithSeparator(Generator.SqlTools.GetFieldName(field.Table, field.Field), ",");
 				// Si hay algún campo de agrupación, le añade la cláusula
 				if (!string.IsNullOrWhiteSpace(sqlFields))
 					sqlFields = $"GROUP BY {sqlFields}" + Environment.NewLine;
@@ -359,7 +348,7 @@ internal class QueryModel
 			// Añade los campos a ordenar
 			foreach (QueryFieldModel field in Fields)
 				if (field.Visible && field.OrderBy != BaseColumnRequestModel.SortOrder.Undefined)
-					sql = sql.AddWithSeparator(Generator.GetFieldName(tableAliasAtWith, field.Alias) + " " + GetSortClause(field.OrderBy), ",");
+					sql = sql.AddWithSeparator(Generator.SqlTools.GetFieldName(tableAliasAtWith, field.Alias) + " " + GetSortClause(field.OrderBy), ",");
 			// Añade los campos a ordenar de las consultas hijo
 			foreach (QueryJoinModel join in Joins)
 				sql = sql.AddWithSeparator(join.Query.GetOrderByFields(tableAliasAtWith), ",");
@@ -381,17 +370,12 @@ internal class QueryModel
 	/// <summary>
 	///		Generador de informes
 	/// </summary>
-	internal ReportBaseQueryGenerator Generator { get; }
+	internal ReportQueryGenerator Generator { get; }
 
 	/// <summary>
 	///		Id del origen de la consulta (código de expresión, código de informe)
 	/// </summary>
 	internal string SourceId { get; }
-
-	/// <summary>
-	///		Tipo de consulta
-	/// </summary>
-	internal QueryType Type { get; }
 
 	/// <summary>
 	///		Tabla de la consulta

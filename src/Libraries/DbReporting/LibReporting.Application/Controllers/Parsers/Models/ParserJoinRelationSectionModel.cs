@@ -1,5 +1,4 @@
 ﻿using Bau.Libraries.LibHelper.Extensors;
-using Bau.Libraries.LibReporting.Models.DataWarehouses.Reports.Blocks;
 
 namespace Bau.Libraries.LibReporting.Application.Controllers.Parsers.Models;
 
@@ -39,29 +38,6 @@ internal class ParserJoinRelationSectionModel : ParserBaseSectionModel
         if (!Fields.Any(item => item.fieldDimension.Equals(fieldDimension, StringComparison.CurrentCultureIgnoreCase) && 
                                 item.fieldTable.Equals(fieldTable, StringComparison.CurrentCultureIgnoreCase)))
             Fields.Add((fieldDimension, fieldTable));
-    }
-
-    /// <summary>
-    ///     Convierte los datos de <see cref="ClauseJoinModel"/> en este <see cref="ParserJoinRelationSectionModel"/>
-    /// </summary>
-	internal void Convert(ClauseJoinModel join) 
-    {
-        // Crea los datos de la dimensión
-        Dimension = new()
-                        {
-                            DimensionKey = join.DimensionKey,
-                            Required = join.Required
-                        };
-        // Asigna las propiedades
-        Dimension.RelatedDimensions.AddRange(join.RelatedRequestedDimensionKeys);
-        // Asigna la tabla de dimensión
-        Dimension.Table = join.TableRelated;
-        // Asigna los campos relacionados
-        foreach ((string fieldDimension, string fieldTable) in join.Relations)
-            if (string.IsNullOrWhiteSpace(fieldTable))
-                Fields.Add((fieldDimension, fieldDimension));
-            else
-                Fields.Add((fieldDimension, fieldTable));
     }
 
     /// <summary>

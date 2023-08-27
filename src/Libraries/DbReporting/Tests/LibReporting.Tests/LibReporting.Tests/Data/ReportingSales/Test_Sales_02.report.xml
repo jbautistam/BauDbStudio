@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Report>
-<DataWarehouse Name = "Test reporting schema"/>
 <Name>Test_Sales_02</Name>
 <Description>
 </Description>

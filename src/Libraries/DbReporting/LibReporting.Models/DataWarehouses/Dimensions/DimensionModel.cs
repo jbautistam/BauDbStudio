@@ -1,33 +1,23 @@
-﻿using Bau.Libraries.LibReporting.Models.DataWarehouses.Relations;
+﻿using Bau.Libraries.LibReporting.Models.Base;
+using Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets;
+using Bau.Libraries.LibReporting.Models.DataWarehouses.Relations;
 
 namespace Bau.Libraries.LibReporting.Models.DataWarehouses.Dimensions;
 
 /// <summary>
 ///		Clase con los datos de una dimensión
 /// </summary>
-public class DimensionModel : Base.BaseReportingModel
+public class DimensionModel : BaseDimensionModel
 {
-	public DimensionModel(DataWarehouseModel dataWarehouse, DataSets.BaseDataSourceModel dataSource)
+	public DimensionModel(DataWarehouseModel dataWarehouse, BaseDataSourceModel dataSource) : base(dataWarehouse)
 	{
-		DataWarehouse = dataWarehouse;
 		DataSource = dataSource;
-	}
-
-	/// <summary>
-	///		Compara el valor de dos elementos para ordenarlo
-	/// </summary>
-	public override int CompareTo(Base.BaseReportingModel item)
-	{
-		if (item is DimensionModel dimension)
-			return Id.CompareTo(dimension.Id);
-		else
-			return -1;
 	}
 
 	/// <summary>
 	///		Comprueba si una columna está en esta dimensión o en alguna de sus hijas
 	/// </summary>
-	public bool HasColumn(string dimensionId, string columnId)
+	public override bool HasColumn(string dimensionId, string columnId)
 	{
 		// Si la columna está en esta dimensión ...
 		if (Id.Equals(dimensionId, StringComparison.CurrentCultureIgnoreCase) && DataSource.HasColumn(columnId))
@@ -43,9 +33,9 @@ public class DimensionModel : Base.BaseReportingModel
 	/// <summary>
 	///		Obtiene una columna por su Id o por su alias
 	/// </summary>
-	public DataSets.DataSourceColumnModel? GetColumn(string columnId, bool compareWithAlias)
+	public override DataSourceColumnModel? GetColumn(string columnId, bool compareWithAlias)
 	{
-		DataSets.DataSourceColumnModel? column = DataSource.GetColumn(columnId, compareWithAlias);
+		DataSourceColumnModel? column = DataSource.GetColumn(columnId, compareWithAlias);
 
 			// Si no ha encontrado la columna, busca en las dimensiones hija
 			if (column is null)
@@ -57,19 +47,34 @@ public class DimensionModel : Base.BaseReportingModel
 	}
 
 	/// <summary>
-	///		Descripción de la <see cref="DimensionModel"/>
+	///		Obtiene el nombre de la tabla origen
 	/// </summary>
-	public string Description { get; set; } = string.Empty;
+	public override string GetTableFullName() => DataSource.GetTableFullNameOrContent();
 
 	/// <summary>
-	///		Datawarehouse al que se asocia la dimensión
+	///		Obtiene el nombre del alias de la tabla origen
 	/// </summary>
-	public DataWarehouseModel DataWarehouse { get; }
+	public override string GetTableAlias() => DataSource.GetTableAlias();
+
+	/// <summary>
+	///		Obtiene el Id del origen de datos
+	/// </summary>
+	public override string GetDataSourceId() => DataSource.Id;
+
+	/// <summary>
+	///		Obtiene las columnas de la dimensión
+	/// </summary>
+	public override BaseReportingDictionaryModel<DataSourceColumnModel> GetColumns() => DataSource.Columns;
+
+	/// <summary>
+	///		Obtiene las relaciones asociadas a la dimensión
+	/// </summary>
+	public override List<DimensionRelationModel> GetRelations() => Relations;
 
 	/// <summary>
 	///		Origen de datos al que se asocia esta dimensión
 	/// </summary>
-	public DataSets.BaseDataSourceModel DataSource { get; }
+	public BaseDataSourceModel DataSource { get; }
 
 	/// <summary>
 	///		Relaciones de esta dimensión con su dimensión hijo

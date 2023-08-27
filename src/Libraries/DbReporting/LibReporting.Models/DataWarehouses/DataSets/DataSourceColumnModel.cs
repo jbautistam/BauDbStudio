@@ -37,6 +37,7 @@ public class DataSourceColumnModel : Base.BaseReportingModel
 	{
 		return new DataSourceColumnModel(targetDataSource)
 						{
+							Id = Id,
 							IsPrimaryKey = IsPrimaryKey,
 							Alias = Alias,
 							Type = Type,

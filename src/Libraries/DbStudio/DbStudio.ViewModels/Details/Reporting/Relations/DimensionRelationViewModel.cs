@@ -57,7 +57,7 @@ public class DimensionRelationViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseD
 		ComboDimensions = new ComboViewModel(this);
 		// Añade los elementos
 		ComboDimensions.AddItem(-1, "<Seleccione una dimensión>");
-		foreach (DimensionModel dimension in DataSource.DataWarehouse.Dimensions.EnumerateValuesSorted())
+		foreach (BaseDimensionModel dimension in DataSource.DataWarehouse.Dimensions.EnumerateValuesSorted())
 		{
 			// Añade el elemento
 			ComboDimensions.AddItem(ComboDimensions.Items.Count + 1, dimension.Id, dimension);

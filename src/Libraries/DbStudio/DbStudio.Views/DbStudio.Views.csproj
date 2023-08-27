@@ -29,6 +29,7 @@
     <None Remove="Resources\Images\Chart.png" />
     <None Remove="Resources\Images\Connection.png" />
     <None Remove="Resources\Images\DataError.png" />
+    <None Remove="Resources\Images\DimensionChild.png" />
     <None Remove="Resources\Images\Download.png" />
     <None Remove="Resources\Images\ExecutionPlan.png" />
     <None Remove="Resources\Images\Export.png" />
@@ -84,6 +85,7 @@
     <Resource Include="Resources\Images\Chart.png" />
     <Resource Include="Resources\Images\Connection.png" />
     <Resource Include="Resources\Images\DataError.png" />
+    <Resource Include="Resources\Images\DimensionChild.png" />
     <Resource Include="Resources\Images\Download.png" />
     <Resource Include="Resources\Images\ExecutionPlan.png" />
     <Resource Include="Resources\Images\Export.png" />
@@ -168,6 +170,9 @@
     <Page Update="Reporting\Details\DataSources\ListDataSourceParametersView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Reporting\Details\Dimensions\DimensionChildView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
     <Page Update="Reporting\Details\Dimensions\DimensionView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>

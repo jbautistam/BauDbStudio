@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report>
+	<Name>Replenishment</Name>
+	<Description>
+		Informe de reposición
+	</Description>	
+
+	<Dimension Name = "PointsOfSale" />
+	<Dimension Name = "Products" />
+
+	<Requests>
+		<Dimension Name = "PointsOfSale">
+			<Field Name = "Name;ErpCode;ImageUrl" />
+		</Dimension>
+		<Dimension Name = "Products">
+			<Field Name = "ProductCode;Description;UrlImage" />
+		</Dimension>
+	</Requests>
+	
+	<Expression Name = "MinimumMultiple;ProductiveBlock;OriginalOrder;OriginalOrderCost;Orders" />
+	<Expression Name = "OrderCost;ImminentRupture;StockOutDay;RuptureDays;DaysInStore;SalesTwoMonths" />
+	<Expression Name = "SalesSixMonths;SalesProjection;ActualStock;WarehouseStock;PendingReceptions" />
+	<Expression Name = "IdealWindow;RealWindow;AvailableStock;StockCost;Overstock;MissingStock" />
+	<Expression Name = "TransferIn;TransferOut;Returns;Coverage;PromotionValue;ForcedWindows" />
+	<Expression Name = "ForcedProductive;LastDayOfSale;LastMonthSales;SalesTwoMonthsOutlier" />
+	<Expression Name = "SalesSixMonthsOutlier;PurchaseOrder;RuptureTwoMonths;RuptureSixMonths" />
+	<Expression Name = "StoreBlocks;GlobalBlocks;SalesIndirect2Months;SalesIndirect6Months" />
+	<Expression Name = "OmnichannelIdealStock;IdealCoverage;Assortment" />
+	
+	<Blocks>
+		<With Name = "Main">
+			<IfRequest Dimension = "Products">
+				<Cte Name = "ProductsCte" Dimension = "Products" />
+			</IfRequest>
+
+			<IfRequest Dimension = "PointsOfSale">
+				<Cte Name = "PointsOfSaleCte" Dimension = "PointsOfSale" />
+			</IfRequest>
+			
+			<Cte Name = "GroupedCte">
+				<![CDATA[
+					SELECT {{
+								Fields
+									-Dimension: PointsOfSale 
+										--Table: PointsOfSaleCte
+									-Dimension: Products 
+										--Table: ProductsCte
+									-WithComma
+	                	   }}
+						   {{
+								IfRequest
+									-Expression: MinimumMultiple
+										--MIN(ReplenishmentReport.MinimumMultiple) AS MinimumMultiple
+									-Expression: OriginalOrder
+										--SUM(ReplenishmentReport.OriginalOrder) AS OriginalOrder
+									-Expression: OriginalOrderCost
+										--SUM(ReplenishmentReport.OriginalOrderCost) AS OriginalOrderCost
+									-Expression: Orders
+										--SUM(ReplenishmentReport.Orders) AS Orders
+									-Expression: OrderCost
+										--SUM(ReplenishmentReport.OrderCost) AS OrderCost
+									-Expression: ImminentRupture
+										--SUM(ReplenishmentReport.ImminentRupture) AS ImminentRupture
+									-Expression: SalesTwoMonths
+										--SUM(ReplenishmentReport.SalesTwoMonths) AS SalesTwoMonths
+									-Expression: SalesSixMonths
+										--SUM(ReplenishmentReport.SalesSixMonths) AS SalesSixMonths
+									-Expression: SalesProjection
+										--SUM(ReplenishmentReport.SalesProjection) AS SalesProjection
+									-Expression: ActualStock
+										--SUM(ReplenishmentReport.ActualStock) AS ActualStock
+									-Expression: WarehouseStock
+										--/*
+										--SUM(CASE WHEN ROW_NUMBER() OVER (PARTITION BY ReplenishmentReport.ProductId ORDER BY ReplenishmentReport.ProductId) = 1
+										--			THEN ReplenishmentReport.WarehouseStock
+										--			ELSE 0
+										--		END) AS WarehouseStock
+										--*/
+										--0 AS WarehouseStock
+									-Expression: PendingReceptions
+										--SUM(ReplenishmentReport.PendingReceptions) AS PendingReceptions
+									-Expression: IdealWindow
+										--SUM(ReplenishmentReport.IdealWindow) AS IdealWindow
+									-Expression: RealWindow
+										--SUM(ReplenishmentReport.RealWindow) AS RealWindow
+									-Expression: AvailableStock
+										--SUM(ReplenishmentReport.AvailableStock) AS AvailableStock
+									-Expression: StockCost
+										--SUM(ReplenishmentReport.StockCost)  AS StockCost
+									-Expression: Overstock
+										--SUM(ReplenishmentReport.Overstock) AS Overstock
+									-Expression: MissingStock
+										--SUM(ReplenishmentReport.MissingStock) AS MissingStock
+									-Expression: TransferIn
+										--SUM(ReplenishmentReport.TransferIn) AS TransferIn
+									-Expression: TransferOut
+										--SUM(ReplenishmentReport.TransferOut) AS TransferOut
+									-Expression: Returns
+										--SUM(ReplenishmentReport.Returns) AS Returns
+									-Expression: PromotionValue
+										--MIN(ReplenishmentReport.PromotionValue) AS PromotionValue
+									-Expression: ForcedWindows
+										--SUM(CAST(ReplenishmentReport.ForcedWindows AS bigint)) AS ForcedWindows
+									-Expression: ForcedProductive
+										--SUM(ReplenishmentReport.ForcedProductive) AS ForcedProductive
+									-Expression: LastDayOfSale
+										--MAX(ReplenishmentReport.LastDayOfSale) AS LastDayOfSale 
+									-Expression: LastMonthSales
+										--SUM(ReplenishmentReport.LastMonthSales) AS LastMonthSales
+									-Expression: SalesTwoMonthsOutlier
+										--SUM(ReplenishmentReport.SalesTwoMonthsOutlier) AS SalesTwoMonthsOutlier
+									-Expression: SalesSixMonthsOutlier
+										--SUM(ReplenishmentReport.SalesSixMonthsOutlier) AS SalesSixMonthsOutlier
+									-Expression: RuptureTwoMonths
+										--SUM(ReplenishmentReport.RuptureTwoMonths) AS RuptureTwoMonths
+									-Expression: RuptureSixMonths
+										--SUM(ReplenishmentReport.RuptureSixMonths) AS RuptureSixMonths
+									-Expression: GlobalBlocks
+										--MAX(CASE WHEN ReplenishmentReport.GlobalBlocks = 1 THEN 1 ELSE 0 END) AS GlobalBlocks
+									-Expression: SalesIndirect2Months
+										--SUM(ReplenishmentReport.SalesIndirect2Months) AS SalesIndirect2Months
+									-Expression: SalesIndirect6Months
+										--SUM(ReplenishmentReport.SalesIndirect6Months) AS SalesIndirect6Months
+									-Expression: OmnichannelIdealStock
+										--SUM(ReplenishmentReport.OmnichannelIdealStock) AS OmnichannelIdealStock
+							}}
+                    FROM Fact.ReplenishmentReport
+						{{
+	                		InnerJoin 
+	                			-Dimension: PointsOfSale 
+	                				--Table: PointsOfSaleCte
+								-Table: ReplenishmentReport
+								-On:PointOfSaleId-PointOfSaleId
+						}}
+		            	{{
+		            		InnerJoin 
+		            			-Dimension: Products 
+		            				--Table: ProductsCte
+								-Table: ReplenishmentReport
+								-On: ProductId-ProductId
+		            	}}
+						{{
+	                		GroupBy
+	                			-Dimension: PointsOfSale 
+	                				--Table: PointsOfSaleCte
+		            			-Dimension: Products 
+		            				--Table: ProductsCte
+		            	}}		
+				]]>
+			</Cte>
+
+			<Query>
+				<![CDATA[
+					SELECT {{
+								Fields
+									-Dimension: PointsOfSale
+									-Dimension: Products
+									-WithComma
+	                	   }}
+						   {{
+								IfRequest
+									-Expression: MinimumMultiple
+										--MinimumMultiple
+									-Expression: OriginalOrder
+										--OriginalOrder
+									-Expression: OriginalOrderCost
+										--OriginalOrderCost
+									-Expression: Orders
+										--Orders
+									-Expression: OrderCost
+										--OrderCost
+									-Expression: ImminentRupture
+										--ImminentRupture
+									-Expression: SalesTwoMonths
+										--SalesTwoMonths
+									-Expression: SalesSixMonths
+										--SalesSixMonths
+									-Expression: SalesProjection
+										--SalesProjection
+									-Expression: ActualStock
+										--ActualStock
+									-Expression: WarehouseStock
+										--WarehouseStock
+									-Expression: PendingReceptions
+										--PendingReceptions
+									-Expression: IdealWindow
+										--IdealWindow
+									-Expression: RealWindow
+										--RealWindow
+									-Expression: AvailableStock
+										--AvailableStock
+									-Expression: StockCost
+										--StockCost
+									-Expression: Overstock
+										--Overstock
+									-Expression: MissingStock
+										--MissingStock
+									-Expression: TransferIn
+										--TransferIn
+									-Expression: TransferOut
+										--TransferOut
+									-Expression: Returns
+										--Returns
+									-Expression: PromotionValue
+										--PromotionValue
+									-Expression: ForcedWindows
+										--ForcedWindows
+									-Expression: ForcedProductive
+										--ForcedProductive
+									-Expression: LastDayOfSale
+										--LastDayOfSale 
+									-Expression: LastMonthSales
+										--LastMonthSales
+									-Expression: SalesTwoMonthsOutlier
+										--SalesTwoMonthsOutlier
+									-Expression: SalesSixMonthsOutlier
+										--SalesSixMonthsOutlier
+									-Expression: RuptureTwoMonths
+										--RuptureTwoMonths
+									-Expression: RuptureSixMonths
+										--RuptureSixMonths
+									-Expression: GlobalBlocks
+										--GlobalBlocks
+									-Expression: SalesIndirect2Months
+										--SalesIndirect2Months
+									-Expression: SalesIndirect6Months
+										--SalesIndirect6Months
+									-Expression: OmnichannelIdealStock
+										--OmnichannelIdealStock
+									-WhenRequestTotals
+										--Default
+											---COUNT(*) OVER () AS TotalCount
+										--Expression: MinimumMultiple
+											---MIN(MinimumMultiple) OVER() AS TotalMinimumMultiple
+										--Expression: OriginalOrder
+											---SUM(OriginalOrder) OVER() AS TotalOriginalOrder
+										--Expression: OriginalOrderCost
+											---SUM(OriginalOrderCost) OVER() AS TotalOriginalOrderCost
+										--Expression: Orders
+											---SUM(Orders) OVER() AS TotalOrders
+										--Expression: OrderCost
+											---SUM(OrderCost) OVER() AS TotalOrderCost
+										--Expression: ImminentRupture
+											---SUM(ImminentRupture) OVER() AS TotalImminentRupture
+										--Expression: SalesTwoMonths
+											---SUM(SalesTwoMonths) OVER() AS TotalSalesTwoMonths
+										--Expression: SalesSixMonths
+											---SUM(SalesSixMonths) OVER() AS TotalSalesSixMonths
+										--Expression: SalesProjection
+											---SUM(SalesProjection) OVER() AS TotalSalesProjection
+										--Expression: ActualStock
+											---SUM(ActualStock) OVER() AS TotalActualStock
+										--Expression: WarehouseStock
+											---SUM(WarehouseStock) OVER() AS TotalWarehouseStock
+										--Expression: PendingReceptions
+											---SUM(PendingReceptions) OVER() AS TotalPendingReceptions
+										--Expression: IdealWindow
+											---SUM(IdealWindow) OVER() AS TotalIdealWindow
+										--Expression: RealWindow
+											---SUM(RealWindow) OVER() AS TotalRealWindow
+										--Expression: AvailableStock
+											---SUM(AvailableStock) OVER() AS TotalAvailableStock
+										--Expression: StockCost
+											---SUM(StockCost) OVER() AS TotalStockCost
+										--Expression: Overstock
+											---SUM(Overstock) OVER() AS TotalOverstock
+										--Expression: MissingStock
+											---SUM(MissingStock) OVER() AS TotalMissingStock
+										--Expression: TransferIn
+											---SUM(TransferIn) OVER() AS TotalTransferIn
+										--Expression: TransferOut
+											---SUM(TransferOut) OVER() AS TotalTransferOut
+										--Expression: Returns
+											---SUM(Returns) OVER() AS TotalReturns
+										--Expression: PromotionValue
+											---SUM(PromotionValue) OVER() AS TotalPromotionValue
+										--Expression: ForcedWindows
+											---SUM(ForcedWindows) OVER() AS TotalForcedWindows
+										--Expression: ForcedProductive
+											---SUM(ForcedProductive) OVER() AS TotalForcedProductive
+										--Expression: LastDayOfSale
+											---MAX(LastDayOfSale) OVER() AS TotalLastDayOfSale
+										--Expression: LastMonthSales
+											---SUM(LastMonthSales) OVER() AS TotalLastMonthSales
+										--Expression: SalesTwoMonthsOutlier
+											---SUM(SalesTwoMonthsOutlier) OVER() AS TotalSalesTwoMonthsOutlier
+										--Expression: SalesSixMonthsOutlier
+											---SUM(SalesSixMonthsOutlier) OVER() AS TotalSalesSixMonthsOutlier
+										--Expression: RuptureTwoMonths
+											---SUM(RuptureTwoMonths) OVER() AS TotalRuptureTwoMonths
+										--Expression: RuptureSixMonths
+											---SUM(RuptureSixMonths) OVER() AS TotalRuptureSixMonths
+										--Expression: GlobalBlocks
+											---SUM(GlobalBlocks) OVER() AS TotalGlobalBlocks
+										--Expression: SalesIndirect2Months
+											---SUM(SalesIndirect2Months) OVER() AS TotalSalesIndirect2Months
+										--Expression: SalesIndirect6Months
+											---SUM(SalesIndirect6Months) OVER() AS TotalSalesIndirect6Months
+										--Expression: OmnichannelIdealStock
+											---SUM(OmnichannelIdealStock) OVER() AS TotalOmnichannelIdealStock
+							}}
+                    FROM GroupedCte
+					{{
+                		OrderBy
+                			-Dimension: PointsOfSale
+	            			-Dimension: Products
+	            	}}
+					{{Pagination}}
+				]]>
+			</Query>
+		</With>
+	</Blocks>
+</Report>

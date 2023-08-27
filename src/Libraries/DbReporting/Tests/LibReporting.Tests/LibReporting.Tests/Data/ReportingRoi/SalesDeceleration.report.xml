@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report>
+	<Name>Sales deceleration</Name>
+	<Description>
+		Informe de deceleración de ventas
+	</Description>
+	<Dimension Name = "PointsOfSale" />
+	<Dimension Name = "Products" />
+
+	<Requests>
+		<Dimension Name = "PointsOfSale">
+			<Field Name = "Name;ErpCode;ImageUrl" />
+		</Dimension>
+		<Dimension Name = "Products">
+			<Field Name = "ProductCode;Description;UrlImage" />
+		</Dimension>
+	</Requests>
+	
+	<Expression Name = "SellingFrequency;Limit;ActualStock;LastSaleDays;SellThrough;PotentiallyLostSales" />
+	
+	<Blocks>
+		<With Name = "Main">
+			<IfRequest Dimension = "Products">
+				<Cte Name = "ProductsCte" Dimension = "Products" />
+			</IfRequest>
+
+			<IfRequest Dimension = "PointsOfSale">
+				<Cte Name = "PointsOfSaleCte" Dimension = "PointsOfSale" />
+			</IfRequest>
+			
+			<Cte Name = "GroupedCte">
+				<![CDATA[
+					SELECT {{
+								Fields
+									-Dimension: PointsOfSale 
+										--Table: PointsOfSaleCte
+									-Dimension: Products 
+										--Table: ProductsCte
+									-WithComma
+	                	   }}			   
+						   {{
+								IfRequest
+									-Expression: SellingFrequency
+										--MAX(SalesDecelerations.SellingFrequency) AS SellingFrequency									
+									-Expression: Limit
+										--MAX(SalesDecelerations.Limit) AS Limit									
+									-Expression: ActualStock
+										--SUM(SalesDecelerations.ActualStock) AS ActualStock									
+									-Expression: LastSaleDays
+										--MAX(SalesDecelerations.LastSaleDays) AS LastSaleDays									
+									-Expression: SellThrough
+										--SUM(SalesDecelerations.SellThrough) AS SellThrough									
+									-Expression: PotentiallyLostSales
+										--SUM(SalesDecelerations.PotentiallyLostSales) AS PotentiallyLostSales
+							}}						   
+						FROM Fact.SalesDecelerations
+						{{
+	                		InnerJoin 
+	                			-Dimension: PointsOfSale 
+	                				--Table: PointsOfSaleCte
+								-Table: SalesDecelerations
+								-On:PointOfSaleId-PointOfSaleId
+						}}
+		            	{{
+		            		InnerJoin 
+		            			-Dimension: Products 
+		            				--Table: ProductsCte
+								-Table: SalesDecelerations
+								-On: ProductId-ProductId
+		            	}}
+						{{
+	                		GroupBy
+	                			-Dimension: PointsOfSale 
+	                				--Table: PointsOfSaleCte
+		            			-Dimension: Products 
+		            				--Table: ProductsCte
+		            	}}				
+				]]>
+			</Cte>
+
+			<Query>
+				<![CDATA[
+					SELECT 
+							{{
+								Fields
+									-Dimension: PointsOfSale
+									-Dimension: Products
+									-WithComma
+	                		}}
+							{{
+								IfRequest
+									-Expression: SellingFrequency
+										--SellingFrequency
+									-Expression: Limit
+										--Limit
+									-Expression: ActualStock
+										--ActualStock
+									-Expression: LastSaleDays
+										--LastSaleDays
+									-Expression: SellThrough
+										--SellThrough
+									-Expression: PotentiallyLostSales
+										--PotentiallyLostSales
+									-WhenRequestTotals
+										--Default
+											---COUNT(*) OVER () AS TotalCount
+										--Expression: SellingFrequency
+											---MAX(SellingFrequency) OVER() AS TotalSellingFrequency
+										--Expression: Limit
+											---MAX(Limit) OVER() AS TotalLimit
+										--Expression: ActualStock
+											---SUM(ActualStock) OVER() AS TotalActualStock
+										--Expression: LastSaleDays
+											---MAX(LastSaleDays) OVER() AS TotalLastSaleDays
+										--Expression: SellThrough
+											---SUM(SellThrough) OVER() AS TotalSellThrough
+										--Expression: PotentiallyLostSales
+											---SUM(PotentiallyLostSales) OVER() AS TotalPotentiallyLostSales
+								}}
+						FROM GroupedCte
+						{{
+	                		OrderBy
+	                			-Dimension: PointsOfSale
+		            			-Dimension: Products
+		            	}}
+						{{Pagination}}
+				]]>
+			</Query>
+		</With>
+	</Blocks>
+</Report>

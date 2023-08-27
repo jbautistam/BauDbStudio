@@ -6,6 +6,18 @@
 public class RelationForeignKey
 {
 	/// <summary>
+	///		Clona una clave foránea
+	/// </summary>
+	public RelationForeignKey Clone()
+	{
+		return new RelationForeignKey
+						{
+							ColumnId = ColumnId,
+							TargetColumnId = TargetColumnId
+						};
+	}
+
+	/// <summary>
 	///		Columna a relacionar
 	/// </summary>
 	public string ColumnId { get; set; } = string.Empty;

@@ -30,6 +30,7 @@ internal class RequestRepository
 	private const string TagHaving = "Having";
 	private const string TagCondition = "Condition";
 	private const string TagDimension = "Dimension";
+	private const string TagDataSource = "DataSource";
 
 	/// <summary>
 	///		Carga la solicitud de un archivo
@@ -55,6 +56,9 @@ internal class RequestRepository
 									break;
 								case TagDimension:
 										request.Dimensions.Add(LoadDimension(nodeML));
+									break;
+								case TagDataSource:
+										request.DataSources.Add(LoadDataSource(nodeML));
 									break;
 								case TagExpression:
 										request.Expressions.Add(LoadExpressions(nodeML));
@@ -107,6 +111,45 @@ internal class RequestRepository
 						columns.Add(column);
 				}
 			// Devuelve la lista
+			return columns;
+	}
+
+	/// <summary>
+	///		Carga los datos de un origen de datos
+	/// </summary>
+	private DataSourceRequestModel LoadDataSource(MLNode rootML)
+	{
+		DataSourceRequestModel dataSource = new();
+
+			// Asigna los datos de la expresión
+			dataSource.ReportDataSourceId = rootML.Attributes[TagId].Value.TrimIgnoreNull();
+			// Añade las columnas
+			dataSource.Columns.AddRange(LoadDataSourceColumns(rootML));
+			// Devuelve los datos
+			return dataSource;
+	}
+
+	/// <summary>
+	///		Carga las columnas de un origen de datos
+	/// </summary>
+	private List<DataSourceColumnRequestModel> LoadDataSourceColumns(MLNode rootML)
+	{
+		List<DataSourceColumnRequestModel> columns = new();
+
+			// Carga las columnas
+			foreach (MLNode nodeML in rootML.Nodes)
+				if (nodeML.Name == TagColumn)
+				{
+					DataSourceColumnRequestModel column = new();
+
+						// Carga las propiedades
+						column.ColumnId = nodeML.Attributes[TagId].Value.TrimIgnoreNull();
+						// Carga los datos básicos
+						LoadBaseColumnData(column, nodeML);
+						// Añade la columna a la colección
+						columns.Add(column);
+				}
+			// Devuelve las columnas
 			return columns;
 	}
 
@@ -230,6 +273,7 @@ internal class RequestRepository
 			// Añade los datos de la solicitud
 			rootML.Nodes.AddRange(GetNodesParameters(request.Parameters));
 			rootML.Nodes.AddRange(GetNodesDimensions(request.Dimensions));
+			rootML.Nodes.AddRange(GetNodesDataSources(request.DataSources));
 			rootML.Nodes.AddRange(GetNodesExpressions(request.Expressions));
 			// Graba el archivo
 			new LibMarkupLanguage.Services.XML.XMLWriter().Save(fileName, fileML);
@@ -332,6 +376,37 @@ internal class RequestRepository
 					nodesML.Add(nodeML);
 			}
 			// Devuelve la colección de nodos
+			return nodesML;
+	}
+	
+	/// <summary>
+	///		Obtiene los nodos de los orígenes de datos
+	/// </summary>
+	private MLNodesCollection GetNodesDataSources(List<DataSourceRequestModel> dataSources)
+	{
+		MLNodesCollection nodesML = new();
+
+			// Añade los nodos de origen de datos
+			foreach (DataSourceRequestModel dataSource in dataSources)
+			{
+				MLNode nodeML = new(TagDataSource);
+
+					// Añade los atributos
+					nodeML.Attributes.Add(TagId, dataSource.ReportDataSourceId);
+					// Añade las columnas
+					foreach (DataSourceColumnRequestModel column in dataSource.Columns)
+					{
+						MLNode columnML = nodeML.Nodes.Add(TagColumn);
+
+							// Añade los valores
+							columnML.Attributes.Add(TagId, column.ColumnId);
+							// Añade los atributos base de la columna
+							GetBaseColumnAttributes(column, columnML);
+					}
+					// Añade los datos del nodo a la colección
+					nodesML.Add(nodeML);
+			}
+			// Devuelve los nodos
 			return nodesML;
 	}
 

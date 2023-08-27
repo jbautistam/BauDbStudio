@@ -1,4 +1,5 @@
-﻿using Bau.Libraries.LibReporting.Models.DataWarehouses.Reports;
+﻿using Bau.Libraries.LibReporting.Models.DataWarehouses.Dimensions;
+using Bau.Libraries.LibReporting.Models.DataWarehouses.Reports;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.Relations;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
 
@@ -21,16 +22,34 @@ public class NodeReportViewModel : PluginNodeViewModel
 	/// </summary>
 	protected override void LoadNodes()
 	{
-		foreach (ReportDataSourceModel expression in Report.ReportDataSources)
+		LoadNodesDimensions();
+		LoadNodesDataSources();
+	}
+
+	/// <summary>
+	///		Carga los nodos de dimensiones
+	/// </summary>
+	private void LoadNodesDimensions()
+	{
+		foreach (BaseDimensionModel dimension in Report.Dimensions)
+			Children.Add(new NodeDimensionViewModel(TreeViewModel, this, dimension));
+	}
+
+	/// <summary>
+	///		Carga los nodos de orígenes de datos
+	/// </summary>
+	private void LoadNodesDataSources()
+	{
+		foreach (ReportDataSourceModel datasource in Report.DataSources)
 		{
-			NodeRootViewModel parentDataSource = new NodeRootViewModel(TreeViewModel, this, TreeReportingViewModel.NodeType.Table, expression.DataSource.Id, false);
+			NodeRootViewModel parentDataSource = new NodeRootViewModel(TreeViewModel, this, TreeReportingViewModel.NodeType.Table, datasource.DataSource.Id, false);
 
 				// Añade el nodo raíz
 				Children.Add(parentDataSource);
 				// Añade el origen de datos
-				parentDataSource.Children.Add(new NodeDataSourceViewModel(TreeViewModel, parentDataSource, expression.DataSource));
+				parentDataSource.Children.Add(new NodeDataSourceViewModel(TreeViewModel, parentDataSource, datasource.DataSource));
 				// Añade las relaciones
-				LoadNodesRelations(parentDataSource, expression);
+				LoadNodesRelations(parentDataSource, datasource);
 		}
 	}
 

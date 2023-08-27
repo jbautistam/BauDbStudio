@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report>
+	<Name>Transfers</Name>
+	<Description>	
+		Informe de traspasos
+	</Description>
+	
+	<Dimension Name = "PointsOfSaleSource" />
+	<Dimension Name = "PointsOfSaleTarget" />
+	<Dimension Name = "Products" />
+
+	<DataSource Name = "[Fact].[TransferReports]" />
+
+	<Requests>
+		<Dimension Name = "PointsOfSaleSource">
+			<Field Name = "Name;ErpCode;ImageUrl" />
+		</Dimension>
+		<Dimension Name = "PointsOfSaleTarget">
+			<Field Name = "Name;ErpCode;ImageUrl" />
+		</Dimension>
+		<Dimension Name = "Products">
+			<Field Name = "ProductCode;Description;UrlImage" />
+		</Dimension>
+	</Requests>
+	
+	<Expression Name = "TransferReports;TransferType;ActualStockOriginStore;IdealStockOriginStore" />
+	<Expression Name = "ActualStockDestinationStore;IdealStockDestinationStore;CostPVM;TotalTransfersOut" />
+	<Expression Name = "DaysInStore;Sales;Margin;MarginPercentage" />
+	
+	<Blocks>
+		<With Name = "Main">
+			<IfRequest Dimension = "Products">
+				<Cte Name = "ProductsCte" Dimension = "Products" />
+			</IfRequest>
+
+			<IfRequest Dimension = "PointsOfSaleSource">
+				<Cte Name = "PointsOfSaleSourceCte" Dimension = "PointsOfSaleSource" />
+			</IfRequest>			
+
+			<IfRequest Dimension = "PointsOfSaleTarget">
+				<Cte Name = "PointsOfSaleTargetCte" Dimension = "PointsOfSaleTarget" />
+			</IfRequest>
+			
+			<Cte Name = "GroupedCte">
+				<![CDATA[
+					SELECT {{
+								Fields
+									-Dimension: PointsOfSaleSource
+										--Table: PointsOfSaleSourceCte
+									-Dimension: PointsOfSaleTarget
+										--Table: PointsOfSaleTargetCte
+									-Dimension: Products 
+										--Table: ProductsCte
+									-WithComma
+	                	   }}
+						   {{
+								IfRequest
+									-Expression: TransferType
+										--MIN(TransferReports.TransferType) AS TransferType									
+									-Expression: ActualStockOriginStore
+										--SUM(TransferReports.ActualStockOriginStore) AS ActualStockOriginStore									
+									-Expression: IdealStockOriginStore
+										--SUM(TransferReports.IdealStockOriginStore) AS IdealStockOriginStore									
+									-Expression: ActualStockDestinationStore
+										--SUM(TransferReports.ActualStockDestinationStore) AS ActualStockDestinationStore									
+									-Expression: IdealStockDestinationStore
+										--SUM(TransferReports.IdealStockDestinationStore) AS IdealStockDestinationStore									
+									-Expression: CostPVM
+										--SUM(TransferReports.CostPVM) AS CostPVM									
+									-Expression: TotalTransfersOut
+										--SUM(TransferReports.TotalTransfersOut) AS TotalTransfersOut									
+									-Expression: DaysInStore
+										--SUM(TransferReports.DaysInStore) AS DaysInStore									
+									-Expression: Sales
+										--SUM(TransferReports.Sales) AS Sales									
+									-Expression: Margin
+										--SUM(TransferReports.Margin) AS Margin									
+									-Expression: MarginPercentage
+										--SUM(TransferReports.MarginPercentage) AS MarginPercentage
+							}}
+                    FROM Fact.TransferReports
+						{{
+	                		InnerJoin 
+	                			-Dimension: PointsOfSaleSource
+	                				--Table: PointsOfSaleSourceCte
+								-Table: TransferReports
+								-On:PointOfSaleSourcePointOfSaleId-OriginPointOfSaleId
+						}}
+						{{
+	                		InnerJoin 
+	                			-Dimension: PointsOfSaleTarget
+	                				--Table: PointsOfSaleTargetCte
+								-Table: TransferReports
+								-On:PointOfSaleTargetPointOfSaleId-DestinationPointOfSaleId
+						}}
+		            	{{
+		            		InnerJoin 
+		            			-Dimension: Products 
+		            				--Table: ProductsCte
+								-Table: TransferReports
+								-On: ProductId-ProductId
+		            	}}
+						{{
+							Where
+								-DataSource: [Fact].[TransferReports]
+									--Table: TransferReports
+						}}
+						{{
+	                		GroupBy
+								-Dimension: PointsOfSaleSource
+									--Table: PointsOfSaleSourceCte
+								-Dimension: PointsOfSaleTarget
+									--Table: PointsOfSaleTargetCte
+		            			-Dimension: Products 
+		            				--Table: ProductsCte
+		            	}}
+						{{
+							Having
+								-Expression: TransferType
+									--Aggregation: MIN
+									--Table: TransferReports
+								-Expression: ActualStockDestinationStore
+									--Aggregation: SUM
+									--Table: TransferReports
+						}}
+				]]>
+			</Cte>
+
+			<Query>
+				<![CDATA[
+					SELECT {{
+								Fields
+									-Dimension: PointsOfSaleSource
+									-Dimension: PointsOfSaleTarget
+									-Dimension: Products
+									-WithComma
+	                	   }}
+						   {{
+								IfRequest
+									-Expression: TransferType
+										--TransferType									
+									-Expression: ActualStockOriginStore
+										--ActualStockOriginStore									
+									-Expression: IdealStockOriginStore
+										--IdealStockOriginStore									
+									-Expression: ActualStockDestinationStore
+										--ActualStockDestinationStore									
+									-Expression: IdealStockDestinationStore
+										--IdealStockDestinationStore									
+									-Expression: CostPVM
+										--CostPVM									
+									-Expression: TotalTransfersOut
+										--TotalTransfersOut									
+									-Expression: DaysInStore
+										--DaysInStore									
+									-Expression: Sales
+										--Sales									
+									-Expression: Margin
+										--Margin									
+									-Expression: MarginPercentage
+										--MarginPercentage
+									-WhenRequestTotals
+										--Default
+											---COUNT(*) OVER () AS TotalCount
+										--Expression: TransferType
+											---MIN(TransferType) OVER() AS TotalTransferType										
+										--Expression: ActualStockOriginStore
+											---SUM(ActualStockOriginStore) OVER() AS TotalActualStockOriginStore										
+										--Expression: IdealStockOriginStore
+											---SUM(IdealStockOriginStore) OVER() AS TotalIdealStockOriginStore										
+										--Expression: ActualStockDestinationStore
+											---SUM(ActualStockDestinationStore) OVER() AS TotalActualStockDestinationStore										
+										--Expression: IdealStockDestinationStore
+											---SUM(IdealStockDestinationStore) OVER() AS TotalIdealStockDestinationStore										
+										--Expression: CostPVM
+											---SUM(CostPVM) OVER() AS TotalCostPVM										
+										--Expression: TotalTransfersOut
+											---SUM(TotalTransfersOut) OTransferReportsTransfersOut										
+										--Expression: DaysInStore
+											---SUM(DaysInStore) OVER() AS TotalDaysInStore										
+										--Expression: Sales
+											---SUM(Sales) OVER() AS TotalSales										
+										--Expression: Margin
+											---SUM(Margin) OVER() AS TotalMargin										
+										--Expression: MarginPercentage
+											---SUM(MarginPercentage) OVER() AS TotalMarginPercentage
+							}}
+                    FROM GroupedCte
+					{{
+                		OrderBy
+                			-Dimension: PointsOfSaleSource
+							-Dimension: PointsOfSaleTarget
+	            			-Dimension: Products
+							-Required
+	            	}}
+					{{Pagination}}
+				]]>
+			</Query>
+		</With>
+	</Blocks>
+</Report>

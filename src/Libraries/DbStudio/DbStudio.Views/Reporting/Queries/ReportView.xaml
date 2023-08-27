@@ -18,7 +18,7 @@
 			<ColumnDefinition Width="*"/>
 			<ColumnDefinition Width="3*"/>
 		</Grid.ColumnDefinitions>
-		<ToolBarTray x:Name="tbMain" Grid.Column="0" Grid.Row="0" >
+		<ToolBarTray x:Name="tbMain" Grid.Column="0" Grid.Row="0"  Margin="0,2,15,2">
 			<ToolBar BandIndex="1">
 				<Button ToolTip="Abrir solicitud" Command="{Binding Path=OpenRequestCommand}" Margin="2">
 					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Folder.png" />
@@ -31,7 +31,7 @@
 		</ToolBarTray>
 		<local:TreeReportColumnsControl x:Name="trvFields" Grid.Row="1" Grid.Column="0" Margin="0,2,15,2"/>
 		<GridSplitter Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" HorizontalAlignment="Right" VerticalAlignment="Stretch"
-				Margin="15,2,5,2" Background="AliceBlue" Width="7" />
+				Margin="5,2,5,2" Background="AliceBlue" Width="7"  />
 		<Queries:QueryViewControl Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" x:Name="udtQuery"/>
 	</Grid>
 </UserControl>

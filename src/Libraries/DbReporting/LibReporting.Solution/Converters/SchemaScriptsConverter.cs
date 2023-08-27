@@ -206,36 +206,37 @@ public class SchemaScriptsConverter
 		int dimensionId = 1, relationId = 1;
 
 			// Crea los registros
-			foreach (DimensionModel dimension in dataWarehouse.Dimensions.EnumerateValues())
+			foreach (BaseDimensionModel dimension in dataWarehouse.Dimensions.EnumerateValues())
 			{
 				// Guarda el Id
 				DataBaseIds.Add(("Dimension", dimension.Id, dimensionId, null));
 				// Inserta el registro
 				Builder.AppendLine($@"INSERT INTO Dimensions (DimensionId, Name, DataSourceId)
-											VALUES ({dimensionId}, {Convert(dimension.Id)}, {GetDataBaseId("DataSource", dimension.DataSource.Id)});");
+											VALUES ({dimensionId}, {Convert(dimension.Id)}, {GetDataBaseId("DataSource", dimension.GetDataSourceId())});");
 				// Incrementa el Id
 				dimensionId++;
 			}
 			// Inserta las relaciones
-			foreach (DimensionModel dimension in dataWarehouse.Dimensions.EnumerateValues())
+			foreach (BaseDimensionModel dimension in dataWarehouse.Dimensions.EnumerateValues())
 			{
 				int sourceDimensionId = GetDataBaseId("Dimension", dimension.Id);
 
-					foreach (DimensionRelationModel relation in dimension.Relations)
-					{
-						int targetDimensionId = GetDataBaseId("Dimension", relation.Dimension.Id);
+					foreach (DimensionRelationModel relation in dimension.GetRelations())
+						if (relation.Dimension is not null)
+						{
+							int targetDimensionId = GetDataBaseId("Dimension", relation.Dimension.Id);
 
-							// Graba las tablas foráneas
-							foreach (RelationForeignKey foreignKey in relation.ForeignKeys)
-							{
-								// Inserta el registro
-								Builder.AppendLine($@"INSERT INTO DimensionRelations (RelationId, SourceDimensionId, SourceColumnId, TargetDimensionId, TargetColumnId)
-															VALUES ({relationId}, {sourceDimensionId}, {GetDataBaseId("Column", foreignKey.ColumnId, dimension.DataSource.Id)}, 
-																	{targetDimensionId}, {GetDataBaseId("Column", foreignKey.TargetColumnId, relation.Dimension.DataSource.Id)});");
-								// Incrementa el Id
-								relationId++;
-							}
-					}
+								// Graba las tablas foráneas
+								foreach (RelationForeignKey foreignKey in relation.ForeignKeys)
+								{
+									// Inserta el registro
+									Builder.AppendLine($@"INSERT INTO DimensionRelations (RelationId, SourceDimensionId, SourceColumnId, TargetDimensionId, TargetColumnId)
+																VALUES ({relationId}, {sourceDimensionId}, {GetDataBaseId("Column", foreignKey.ColumnId, dimension.GetDataSourceId())}, 
+																		{targetDimensionId}, {GetDataBaseId("Column", foreignKey.TargetColumnId, relation.Dimension.GetDataSourceId())});");
+									// Incrementa el Id
+									relationId++;
+								}
+						}
 			}
 	}
 
@@ -279,7 +280,7 @@ public class SchemaScriptsConverter
 																VALUES ({relationId}, {reportId}, {dataSourceId}, 
 																		{GetDataBaseId("Column", foreignKey.ColumnId, reportDataSource.DataSource.Id)}, 
 																		{targetDimensionId}, 
-																		{GetDataBaseId("Column", foreignKey.TargetColumnId, dimensionRelation.Dimension.DataSource.Id)});");
+																		{GetDataBaseId("Column", foreignKey.TargetColumnId, dimensionRelation.Dimension.GetDataSourceId())});");
 									// Incrementa el Id
 									relationId++;
 								}
@@ -294,7 +295,7 @@ public class SchemaScriptsConverter
 	private int GetDataBaseId(string type, string name)
 	{
 		// Busca el Id de la base de datos
-		foreach ((string type, string name, int id, string parentId) dataBaseId in DataBaseIds)
+		foreach ((string type, string name, int id, string? parentId) dataBaseId in DataBaseIds)
 			if (dataBaseId.type.Equals(type, StringComparison.CurrentCultureIgnoreCase) && dataBaseId.name.Equals(name, StringComparison.CurrentCultureIgnoreCase))
 				return dataBaseId.id;
 		// Si ha llegado hasta aquí es porque no ha encontrado nada
@@ -340,10 +341,10 @@ public class SchemaScriptsConverter
 	/// <summary>
 	///		Generador de SQL
 	/// </summary>
-	private System.Text.StringBuilder Builder { get; } = new System.Text.StringBuilder();
+	private System.Text.StringBuilder Builder { get; } = new();
 
 	/// <summary>
 	///		Lista de Ids en la base de datos
 	/// </summary>
-	private List<(string type, string name, int dataBaseId, string parentId)> DataBaseIds { get; } = new List<(string type, string name, int dataBaseId, string parentId)>();
+	private List<(string type, string name, int dataBaseId, string? parentId)> DataBaseIds { get; } = new();
 }

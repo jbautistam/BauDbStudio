@@ -57,10 +57,10 @@ public class DataWarehouseModel : Base.BaseReportingModel
 	/// <summary>
 	///		Dimensiones del esquema
 	/// </summary>
-	public Base.BaseReportingDictionaryModel<Dimensions.DimensionModel> Dimensions { get; } = new();
+	public Base.BaseReportingDictionaryModel<Dimensions.BaseDimensionModel> Dimensions { get; } = new();
 
 	/// <summary>
 	///		Informes
 	/// </summary>
-	public Base.BaseReportingDictionaryModel<Reports.ReportBaseModel> Reports { get; } = new();
+	public Base.BaseReportingDictionaryModel<Reports.ReportModel> Reports { get; } = new();
 }

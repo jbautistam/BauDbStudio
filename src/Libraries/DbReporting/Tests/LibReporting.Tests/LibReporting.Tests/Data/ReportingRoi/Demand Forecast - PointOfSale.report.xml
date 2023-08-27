@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report>
+	<Name>Demand Forecast - PointOfSale</Name>
+	<Description>
+		Demand forecast por punto de venta
+	</Description>
+	
+	<Dimension Name = "PointsOfSale" />
+	<Dimension Name = "Products" />
+
+	<Requests>
+		<Dimension Name = "PointsOfSale">
+			<Field Name = "Name;ErpCode;ImageUrl" />
+		</Dimension>
+		<Dimension Name = "Products">
+			<Field Name = "ProductCode;Description;UrlImage" />
+		</Dimension>
+	</Requests>
+	
+	<Expression Name = "TotalStock;Stock;AccumulatedReceptions;Receptions;Sales;Breakage;PurchaseOrder;OrdersMatchedToMinimunAndMultiple" />
+	<Expression Name = "AccumulatedSales;AccumulatedOrders;AccumulatedOrdersMatchedToMinimunAndMultiple:SimulatedReceptions" />
+	<Expression Name = "PurchaseOrderMatchedToMinimunAndMultiple;AccumulatedPurchaseOrder;AccumulatedPurchaseOrderMatchedToMinimunAndMultiple" />
+	
+	<Blocks>
+		<With Name = "Main">
+			<IfRequest Dimension = "Products">
+				<Cte Name = "ProductsCte" Dimension = "Products" />
+			</IfRequest>
+
+			<IfRequest Dimension = "PointsOfSale">
+				<Cte Name = "PointsOfSaleCte" Dimension = "PointsOfSale" />
+			</IfRequest>
+			
+			<Cte Name = "GroupedCte">
+				<![CDATA[
+					SELECT PointOfSaleDemandForecast.[Week] AS [Week],
+						   {{
+								Fields
+									-Dimension: PointsOfSale 
+										--Table: PointsOfSaleCte
+									-Dimension: Products 
+										--Table: ProductsCte
+									-WithComma
+	                	   }}			   
+						   {{
+								IfRequest
+									-Expression: TotalStock
+										--SUM(PointOfSaleDemandForecast.AccumulatedReceptions + PointOfSaleDemandForecast.Receptions + 
+										--PointOfSaleDemandForecast.SimulatedReceptions + PointOfSaleDemandForecast.Stock) AS TotalStock
+									-Expression: Stock
+										--SUM(PointOfSaleDemandForecast.Stock) AS Stock
+									-Expression: AccumulatedReceptions
+										--SUM(PointOfSaleDemandForecast.AccumulatedReceptions) AS AccumulatedReceptions
+									-Expression: Receptions
+										--SUM(PointOfSaleDemandForecast.Receptions) AS Receptions
+									-Expression: Sales
+										--SUM(PointOfSaleDemandForecast.Sales) AS Sales
+									-Expression: Breakage
+										--SUM(PointOfSaleDemandForecast.Breakage) AS Breakage
+									-Expression: Order
+										--SUM(PointOfSaleDemandForecast.[Order]) AS [Order]
+									-Expression: PurchaseOrder
+										--SUM(PointOfSaleDemandForecast.PurchaseOrder) AS PurchaseOrder
+									-Expression: OrdersMatchedToMinimunAndMultiple
+										--SUM(PointOfSaleDemandForecast.OrdersMatchedToMinimunAndMultiple) AS OrdersMatchedToMinimunAndMultiple
+									-Expression: AccumulatedSales
+										--SUM(PointOfSaleDemandForecast.AccumulatedSales) AS AccumulatedSales
+									-Expression: AccumulatedOrders
+										--SUM(PointOfSaleDemandForecast.AccumulatedOrders) AS AccumulatedOrders
+									-Expression: AccumulatedOrdersMatchedToMinimunAndMultiple
+										--SUM(PointOfSaleDemandForecast.AccumulatedOrdersMatchedToMinimunAndMultiple) AS AccumulatedOrdersMatchedToMinimunAndMultiple
+									-Expression: SimulatedReceptions
+										--SUM(PointOfSaleDemandForecast.SimulatedReceptions) AS SimulatedReceptions
+									-Expression: PurchaseOrderMatchedToMinimunAndMultiple
+										--SUM(PointOfSaleDemandForecast.PurchaseOrderMatchedToMinimunAndMultiple) AS PurchaseOrderMatchedToMinimunAndMultiple
+									-Expression: AccumulatedPurchaseOrder
+										--SUM(PointOfSaleDemandForecast.AccumulatedPurchaseOrder) AS AccumulatedPurchaseOrder
+									-Expression: AccumulatedPurchaseOrderMatchedToMinimunAndMultiple
+										--SUM(PointOfSaleDemandForecast.AccumulatedPurchaseOrderMatchedToMinimunAndMultiple) AS AccumulatedPurchaseOrderMatchedToMinimunAndMultiple
+							}}						   
+						FROM Fact.PointOfSaleDemandForecast
+						{{
+	                		InnerJoin 
+	                			-Dimension: PointsOfSale 
+	                				--Table: PointsOfSaleCte
+								-Table: PointOfSaleDemandForecast
+								-On:PointOfSaleId-PointOfSaleId
+						}}
+		            	{{
+		            		InnerJoin 
+		            			-Dimension: Products 
+		            				--Table: ProductsCte
+								-Table: PointOfSaleDemandForecast
+								-On: ProductId-ProductId
+		            	}}
+						{{
+	                		GroupBy
+	                			-Dimension: PointsOfSale 
+	                				--Table: PointsOfSaleCte
+		            			-Dimension: Products 
+		            				--Table: ProductsCte
+		            			-Sql
+		            				--PointOfSaleDemandForecast.[Week]
+		            	}}				
+				]]>
+			</Cte>
+
+			<Query>
+				<![CDATA[
+					SELECT [Week], 
+							{{
+								Fields
+									-Dimension: PointsOfSale
+									-Dimension: Products
+									-WithComma
+	                		}}
+							{{
+								IfRequest
+									-Expression: TotalStock
+										--TotalStock
+									-Expression: Stock
+										--Stock
+									-Expression: AccumulatedReceptions
+										--AccumulatedReceptions
+									-Expression: Receptions
+										--Receptions
+									-Expression: Sales
+										--Sales
+									-Expression: Breakage
+										--Breakage
+									-Expression: Order
+										--[Order]
+									-Expression: PurchaseOrder
+										--PurchaseOrder
+									-Expression: OrdersMatchedToMinimunAndMultiple
+										--OrdersMatchedToMinimunAndMultiple
+									-Expression: AccumulatedSales
+										--AccumulatedSales
+									-Expression: AccumulatedOrders
+										--AccumulatedOrders
+									-Expression: AccumulatedOrdersMatchedToMinimunAndMultiple
+										--AccumulatedOrdersMatchedToMinimunAndMultiple
+									-Expression: SimulatedReceptions
+										--SimulatedReceptions
+									-Expression: PurchaseOrderMatchedToMinimunAndMultiple
+										--PurchaseOrderMatchedToMinimunAndMultiple
+									-Expression: AccumulatedPurchaseOrder
+										--AccumulatedPurchaseOrder
+									-Expression: AccumulatedPurchaseOrderMatchedToMinimunAndMultiple
+										--AccumulatedPurchaseOrderMatchedToMinimunAndMultiple
+									-WhenRequestTotals
+										--Default
+											---COUNT(*) OVER () AS TotalCount
+										--Expression: TotalStock
+											---SUM(TotalStock) OVER() AS TotalTotalStock
+										--Expression: Stock
+											---SUM(Stock) OVER() AS TotalStocks
+										--Expression: AccumulatedReceptions
+											---SUM(AccumulatedReceptions) OVER() AS TotalAccumulatedReceptions
+										--Expression: Receptions
+											---SUM(Receptions) OVER() AS TotalReceptions
+										--Expression: Sales
+											---SUM(Sales) OVER() AS TotalSales
+										--Expression: Breakage
+											---SUM(Breakage) OVER() AS TotalBreakage
+										--Expression: Order
+											---SUM([Order]) OVER() AS TotalOrder
+										--Expression: PurchaseOrder
+											---SUM(PurchaseOrder) OVER() AS TotalPurchaseOrder
+										--Expression: OrdersMatchedToMinimunAndMultiple
+											---SUM(OrdersMatchedToMinimunAndMultiple) OVER() AS TotalOrdersMatchedToMinimunAndMultiple
+										--Expression: AccumulatedSales
+											---SUM(AccumulatedSales) OVER() AS TotalAccumulatedSales
+										--Expression: AccumulatedOrders
+											---SUM(AccumulatedOrders) OVER() AS TotalAccumulatedOrders
+										--Expression: AccumulatedOrdersMatchedToMinimunAndMultiple
+											---SUM(AccumulatedOrdersMatchedToMinimunAndMultiple) OVER() AS TotalAccumulatedOrdersMatchedToMinimunAndMultiple
+										--Expression: SimulatedReceptions
+											---SUM(SimulatedReceptions) OVER() AS TotalSimulatedReceptions
+										--Expression: PurchaseOrderMatchedToMinimunAndMultiple
+											---SUM(PurchaseOrderMatchedToMinimunAndMultiple) OVER() AS TotalPurchaseOrderMatchedToMinimunAndMultiple
+										--Expression: AccumulatedPurchaseOrder
+											---SUM(AccumulatedPurchaseOrder) OVER() AS TotalAccumulatedPurchaseOrder
+										--Expression: AccumulatedPurchaseOrderMatchedToMinimunAndMultiple
+											---SUM(AccumulatedPurchaseOrderMatchedToMinimunAndMultiple) OVER() AS TotalAccumulatedPurchaseOrderMatchedToMinimunAndMultiple
+								}}
+						FROM GroupedCte
+						{{
+	                		OrderBy
+	                			-Dimension: PointsOfSale
+		            			-Dimension: Products
+		            			-Sql: 
+		            				--[Week]
+		            	}}
+						{{Pagination}}
+				]]>
+			</Query>
+		</With>
+	</Blocks>
+	
+<!--
+WITH P AS
+	(SELECT P.Id ProductId, P.ProductCode ProductCode, P.UrlImage ProductImageUrl, P.Description Description
+		FROM Dim.Products P
+	),
+	PS AS
+		(SELECT PS.Id PointOfSaleId, PS.Name PointOfSale, PS.ErpCode ErpCode, PS.ImageUrl PointOfSaleImageUrl
+			FROM Dim.PointsOfSale PS
+		), 
+	GroupedCte AS
+		(SELECT SUM(PointOfSaleDemandForecast.AccumulatedReceptions + PointOfSaleDemandForecast.Receptions + 
+					PointOfSaleDemandForecast.SimulatedReceptions + PointOfSaleDemandForecast.Stock) AS TotalStock,
+				SUM(PointOfSaleDemandForecast.Stock) AS Stock,
+				SUM(PointOfSaleDemandForecast.AccumulatedReceptions) AS AccumulatedReceptions,
+				SUM(PointOfSaleDemandForecast.Receptions) AS Receptions,
+				SUM(PointOfSaleDemandForecast.Sales) AS Sales,
+				SUM(PointOfSaleDemandForecast.Breakage) AS Breakage,
+				SUM(PointOfSaleDemandForecast.[Order]) AS [Order],
+				SUM(PointOfSaleDemandForecast.PurchaseOrder) AS PurchaseOrder,
+				SUM(PointOfSaleDemandForecast.OrdersMatchedToMinimunAndMultiple) AS OrdersMatchedToMinimunAndMultiple,
+				SUM(PointOfSaleDemandForecast.AccumulatedSales) AS AccumulatedSales,
+				SUM(PointOfSaleDemandForecast.AccumulatedOrders) AS AccumulatedOrders,
+				SUM(PointOfSaleDemandForecast.AccumulatedOrdersMatchedToMinimunAndMultiple) AS AccumulatedOrdersMatchedToMinimunAndMultiple,
+				SUM(PointOfSaleDemandForecast.SimulatedReceptions) AS SimulatedReceptions,
+				SUM(PointOfSaleDemandForecast.PurchaseOrderMatchedToMinimunAndMultiple) AS PurchaseOrderMatchedToMinimunAndMultiple,
+				SUM(PointOfSaleDemandForecast.AccumulatedPurchaseOrder) AS AccumulatedPurchaseOrder,
+				SUM(PointOfSaleDemandForecast.AccumulatedPurchaseOrderMatchedToMinimunAndMultiple) AS AccumulatedPurchaseOrderMatchedToMinimunAndMultiple,
+				PointOfSaleDemandForecast.[Week] AS [Week],
+				P.ProductCode AS ProductCode,
+				P.ProductImageUrl AS ProductImageUrl,
+				P.Description AS Description, 
+				PS.PointOfSale AS PointOfSale, 
+				PS.ErpCode AS ERPCode, 
+				PS.PointOfSaleImageUrl AS PointOfSaleImageUrl
+			FROM Fact.PointOfSaleDemandForecast
+			INNER JOIN PS 
+				ON PointOfSaleDemandForecast.PointOfSaleId = PS.PointOfSaleId
+			INNER JOIN P 
+				ON PointOfSaleDemandForecast.ProductId = P.ProductId
+			GROUP BY PointOfSaleDemandForecast.Week, P.ProductCode,
+				P.ProductImageUrl,
+				P.Description, 
+				PS.PointOfSale, 
+				PS.ErpCode, 
+				PS.PointOfSaleImageUrl
+		)
+	SELECT COUNT(*) OVER () AS TotalCount,
+			[Week], ProductCode, ProductImageUrl, Description, PointOfSale, ERPCode, PointOfSaleImageUrl,
+			SUM(TotalStock) OVER() AS TotalTotalStock,
+			SUM(Stock) OVER() AS TotalStocks, 
+			SUM(AccumulatedReceptions) OVER() AS TotalAccumulatedReceptions, 
+			SUM(Receptions) OVER() AS TotalReceptions, 
+			SUM(Sales) OVER() AS TotalSales,
+			SUM(Breakage) OVER() AS TotalBreakage, 
+			SUM([Order]) OVER() AS TotalOrder, 
+			SUM(PurchaseOrder) OVER() AS TotalPurchaseOrder, 
+			SUM(OrdersMatchedToMinimunAndMultiple) OVER() AS TotalOrdersMatchedToMinimunAndMultiple, 
+			SUM(AccumulatedSales) OVER() AS TotalAccumulatedSales,
+			SUM(AccumulatedOrders) OVER() AS TotalAccumulatedOrders, 
+			SUM(AccumulatedOrdersMatchedToMinimunAndMultiple) OVER() AS TotalAccumulatedOrdersMatchedToMinimunAndMultiple, 
+			SUM(SimulatedReceptions) OVER() AS TotalSimulatedReceptions,
+			SUM(PurchaseOrderMatchedToMinimunAndMultiple) OVER() AS TotalPurchaseOrderMatchedToMinimunAndMultiple, 
+			SUM(AccumulatedPurchaseOrder) OVER() AS TotalAccumulatedPurchaseOrder, 
+			SUM(AccumulatedPurchaseOrderMatchedToMinimunAndMultiple) OVER() AS TotalAccumulatedPurchaseOrderMatchedToMinimunAndMultiple,
+			TotalStock, Stock, AccumulatedReceptions, Receptions, Sales,
+			Breakage, [Order], PurchaseOrder, OrdersMatchedToMinimunAndMultiple, AccumulatedSales,
+			AccumulatedOrders, AccumulatedOrdersMatchedToMinimunAndMultiple, SimulatedReceptions,
+			PurchaseOrderMatchedToMinimunAndMultiple, AccumulatedPurchaseOrder, AccumulatedPurchaseOrderMatchedToMinimunAndMultiple
+			
+		FROM GroupedCte
+    ORDER BY ProductCode, PointOfSale, [Week]
+    OFFSET 0 ROWS FETCH NEXT 44 ROWS ONLY
+-->
+</Report>

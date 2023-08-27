@@ -1,7 +1,7 @@
 ﻿namespace Bau.Libraries.LibReporting.Models.DataWarehouses.Reports;
 
 /// <summary>
-///		Definición de un parámetro para un <see cref="ReportAdvancedModel"/>
+///		Definición de un parámetro para un <see cref="ReportModel"/>
 /// </summary>
 public class ReportParameterModel
 {

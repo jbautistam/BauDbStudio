@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Template Id ="Product">
+	<FirstRow>
+		<![CDATA[
+        "product": {
+            "id": 0,
+            "productCode": null,
+            "rootProductCode": null,
+            "eanCode": null,
+            "description": null,
+            "imageUrl": null,
+            "size": null,
+            "typology": null,
+            "classificationLevelValues": [],
+            "historicClassificationLevelValues": []
+        }
+	]]>
+	</FirstRow>
+	<Rows>
+		<![CDATA[
+        "Product": {
+			"Id": {{ProductId,int}},
+			"ProductCode": {{ProductCode}},
+			"RootProductCode": {{RootProductCode}},
+			"EanCode": {{EanCode}},
+			"Description": {{ProductDescription}},
+			"ImageUrl": {{UrlImage}},
+			"Size": {{Size}},
+			"Typology": {{Typology}},
+			"classificationLevelValues": [
+            {
+              "value": {{ClassificationLevelValue1}},
+              "position": 1
+            },
+            {
+              "value": {{ClassificationLevelValue2}},
+              "position": 2
+            },
+            {
+              "value": {{ClassificationLevelValue3}},
+              "position": 3
+            },
+            {
+              "value": {{ClassificationLevelValue4}},
+              "position": 4
+            },
+            {
+              "value": {{ClassificationLevelValue5}},
+              "position": 5
+            },
+            {
+              "value": {{ClassificationLevelValue6}},
+              "position": 6
+            },
+            {
+              "value": {{ClassificationLevelValue7}},
+              "position": 7
+            },
+            {
+              "value": {{ClassificationLevelValue8}},
+              "position": 8
+            },
+            {
+              "value": {{ClassificationLevelValue9}},
+              "position": 9
+            },
+            {
+              "value": {{ClassificationLevelValue10}},
+              "position": 10
+            }
+			],
+            "historicClassificationLevelValues": []
+		}
+	]]>
+	</Rows>
+	<Result>
+		<![CDATA[
+{
+	"Totals": {
+		{{FirstRow}}
+	},
+	"PaginatedResult": {
+		"TotalResults": {{PaginatedTotalRows}},
+		"First": {{PaginatedFirstRow}},
+		"Size": {{PaginatedSize}},
+		"CurrentResults": {{PaginatedCountRows}},
+		"CurrentResultsSelectables": {{PaginatedCountRows}},
+		"AnyRow": {{PaginatedAnyRows}},
+		"NextPageFirst": {{PaginatedNewFirstRow}},
+		"Rows": [
+		{{Rows}}
+		]
+	}
+}
+		]]>
+	</Result>
+</Template>

@@ -21,13 +21,11 @@
 				<HierarchicalDataTemplate DataType="{x:Type ViewModel:NodeColumnViewModel}" ItemsSource="{Binding Children}">
 					<StackPanel Orientation="Horizontal">
 						<Image Width="20" Height="20" Margin="3,0" Source="{Binding Path=Icon,Converter={StaticResource TreeIconConverter}}"
-							Visibility="{Binding Path=CanSelect,Converter={StaticResource InverseBoolToVisibilityConverter}}"
-							 ToolTip="{Binding Path=ToolTipText}" />
+							Visibility="{Binding Path=CanSelect,Converter={StaticResource InverseBoolToVisibilityConverter}}" />
 						<CheckBox Visibility="{Binding Path=CanSelect,Converter={StaticResource BoolToVisibilityConverter}}"
 								  IsChecked="{Binding Path=IsChecked,UpdateSourceTrigger=PropertyChanged}"/>
 						<TextBlock Text="{Binding Text}" FontWeight="{Binding IsBold,Converter={StaticResource BoolToFontWeightConverter}}"
 								   Foreground="{Binding Path=Foreground,Converter={StaticResource MVVMColorConverter}}" 
-								   ToolTip="{Binding Path=ToolTipText }"
 								   VerticalAlignment="Center" />
 						<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
 							<Button BorderBrush="Transparent" Background="Transparent"

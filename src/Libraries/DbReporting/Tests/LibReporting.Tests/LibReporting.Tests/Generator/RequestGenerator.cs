@@ -1,5 +1,4 @@
-﻿using Bau.Libraries.LibReporting.Requests.Models;
-using Bau.Libraries.LibReporting.Solution;
+﻿using FluentAssertions;
 
 namespace LibReporting.Tests.Generator;
 
@@ -9,36 +8,44 @@ namespace LibReporting.Tests.Generator;
 public class RequestGenerator
 {
 	#if DEBUG
-	[Theory(Skip = "Request by user")]
-	[InlineData("ReportingSales/Test-Reporting-Schema.xml")]
-	public void GenerateResponseFiles(string schemaFile)
+	[Fact(Skip = "Sólo cuando sea necesario regenerar las respuestas")]
+	public void GenerateResponseFiles()
 	{
-		string pathData = Tools.FileHelper.GetDevelopmentDataPath();
+		Dictionary<string, List<string>> reports = Tools.FileHelper.GetReports();
+		string error = string.Empty;
 
-			if (string.IsNullOrWhiteSpace(pathData) || !Directory.Exists(pathData))
-				throw new ArgumentException("Can't find project path");
-			else
-			{
-				string folder = Path.Combine(pathData, Path.GetDirectoryName(schemaFile) ?? string.Empty, "Requests");
+			// Recorre los esquemas e informes procesando las solicitudes / respuestas
+			foreach (KeyValuePair<string, List<string>> report in reports)
+				foreach (string reportFile in report.Value)
+				{
+					string pathRequest = Path.Combine(Path.GetDirectoryName(reportFile) ?? string.Empty, 
+													  reportFile[..^".report.xml".Length]);
 
-					// Obtiene todos los archivos de solicitud
-					foreach (string fileName in Directory.GetFiles(Tools.FileHelper.GetFullFileName(folder), "*.xml"))
-						GenerateResponse(schemaFile, fileName);
-			}
+						if (!Directory.Exists(pathRequest))
+							error += $"Can't find request for report '{Path.GetFileName(reportFile)}'";
+						else
+							foreach (string requestFile in Directory.GetFiles(pathRequest, "*.request.xml"))
+								try
+								{
+									GenerateResponse(report.Key, requestFile);
+								}
+								catch (Exception exception)
+								{
+									error += $"Error when process {requestFile}. {exception.Message}" + Environment.NewLine;
+								}
+				}
+			// Comprueba los errores
+			error.Should().BeNullOrWhiteSpace();
 	}
 
 	/// <summary>
-	///		Genera el archivo de respuesta
+	///		Genera los archivo de respuesta de una solicitud
 	/// </summary>
 	private void GenerateResponse(string schemaFile, string requestFile)
 	{
-		ReportingSolutionManager manager = new();
-		ReportRequestModel request = manager.LoadRequest(requestFile);
-
-			// Agrega el dataWarehouse
-			manager.AddDataWarehouse(Tools.FileHelper.GetFullFileName(schemaFile));
-			// Obtiene la SQL del informe y la guarda en el archivo de respuesta
-			SaveFile(Tools.FileHelper.GetResponseFile(requestFile), manager.GetSqlResponse(request));
+		for (int page = 0; page < 3; page++)
+			SaveFile(Tools.FileHelper.GetResponseFile(requestFile, page), 
+					 Tools.ReportHelper.GetSqlResponse(schemaFile, requestFile, page));
 	}
 
 	/// <summary>
@@ -46,6 +53,10 @@ public class RequestGenerator
 	/// </summary>
 	private void SaveFile(string fileName, string sql)
 	{
+		// Quita el directorio de depuración para que se graben en el archivo de proyectos
+		fileName = fileName.Replace("\\bin\\Debug\\net7.0", string.Empty);
+		fileName = fileName.Replace("/bin/Debug/net7.0", string.Empty);
+		// Escribe el archivo
 		File.WriteAllText(fileName, sql);
 	}
 	#endif

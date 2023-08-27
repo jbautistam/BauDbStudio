@@ -23,11 +23,11 @@ public class DataSourceTableModel : BaseDataSourceModel
 	/// </summary>
 	public DataSourceTableModel Clone(DataWarehouseModel target)
 	{
-		DataSourceTableModel dataSource = new DataSourceTableModel(target)
-													{
-														Schema = Schema,
-														Table = Table
-													};
+		DataSourceTableModel dataSource = new(target)
+												{
+													Schema = Schema,
+													Table = Table
+												};
 
 			// Clona las columnas
 			foreach (DataSourceColumnModel column in Columns.EnumerateValues())
@@ -75,6 +75,11 @@ public class DataSourceTableModel : BaseDataSourceModel
 					return $"{charStart}{value.Trim()}{charEnd}";
 			}
 	}
+
+	/// <summary>
+	///		Obtiene el nombre completo de la tabla o la SQL del contenido si es una vista
+	/// </summary>
+	public override string GetTableFullNameOrContent() => FullName;
 
 	/// <summary>
 	///		Obtiene el nombre de tabla (sin el esquema)

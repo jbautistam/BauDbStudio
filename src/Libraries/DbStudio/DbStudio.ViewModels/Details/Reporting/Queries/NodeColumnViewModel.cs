@@ -30,6 +30,12 @@ public class NodeColumnViewModel : PluginNodeViewModel
 		ExpressionColumn,
 		/// <summary>Campo de expresión de un informe avanzado</summary>
 		ExpressionField,
+		/// <summary>Raíz de los orígenes de datos</summary>
+		DataSourcesRoot,
+		/// <summary>Nombre del origen de datos</summary>
+		DataSource,
+		/// <summary>Columnas del origen de datos</summary>
+		DataSourceColumn,
 		/// <summary>Raíz de parámetros</summary>
 		ParametersRoot,
 		/// <summary>Campo de parámetro</summary>
@@ -42,7 +48,8 @@ public class NodeColumnViewModel : PluginNodeViewModel
 	private ComboViewModel _comboAggregationTypes = default!;
 	private ListReportColumnFilterViewModel _filterWhere = default!, _filterHaving = default!;
 
-	public NodeColumnViewModel(PluginTreeViewModel trvTree, ControlHierarchicalViewModel? parent, NodeColumnType columnNodeType, string text, DataSourceColumnModel? column) :
+	public NodeColumnViewModel(PluginTreeViewModel trvTree, ControlHierarchicalViewModel? parent, NodeColumnType columnNodeType, 
+							   string text, DataSourceColumnModel? column) :
 				base(trvTree, parent, text, Explorers.TreeReportingViewModel.NodeType.Field.ToString(), 
 					 Explorers.TreeReportingViewModel.IconType.DataWarehouse.ToString(), column, false, false, MvvmColor.Black)
 	{
@@ -86,7 +93,7 @@ public class NodeColumnViewModel : PluginNodeViewModel
 											{ 
 												if ((args.PropertyName ?? string.Empty).Equals(nameof(ComboViewModel.SelectedItem)) && Column != null)
 													NormalizeProperties();
-											 };
+											};
 		// Asigna los comandos
 		SortOrderCommand = new BaseCommand(_ => UpdateSortOrder(), _ => CanSort)
 									.AddListener(this, nameof(CanSort));
@@ -114,6 +121,7 @@ public class NodeColumnViewModel : PluginNodeViewModel
 					Icon = Explorers.TreeReportingViewModel.IconType.Dimension.ToString();
 				break;
 			case NodeColumnType.ParameterField:
+			case NodeColumnType.DataSourceColumn:
 					IsBold = false;
 					CanSelect = false;
 					CanFilterHaving = false;
@@ -218,7 +226,7 @@ public class NodeColumnViewModel : PluginNodeViewModel
 	/// <summary>
 	///		Columna
 	/// </summary>
-	public DataSourceColumnModel Column { get; }
+	public DataSourceColumnModel? Column { get; }
 
 	/// <summary>
 	///		Tipo de nodo de la columna

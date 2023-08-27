@@ -1,0 +1,1100 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<Schema>
+	<Table Schema = "Sync"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "ActiveClassificationLevels" >
+		<Field Name = "TypologyId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "IsClassificationLevel1Selected"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "IsClassificationLevel2Selected"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "3"  Identity = "no" />
+		<Field Name = "IsClassificationLevel3Selected"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "4"  Identity = "no" />
+		<Field Name = "IsClassificationLevel4Selected"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "5"  Identity = "no" />
+		<Field Name = "IsClassificationLevel5Selected"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "6"  Identity = "no" />
+		<Field Name = "IsClassificationLevel6Selected"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "7"  Identity = "no" />
+		<Field Name = "IsClassificationLevel7Selected"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "8"  Identity = "no" />
+		<Field Name = "IsClassificationLevel8Selected"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "9"  Identity = "no" />
+		<Field Name = "IsClassificationLevel9Selected"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "10"  Identity = "no" />
+		<Field Name = "IsClassificationLevel10Selected"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "11"  Identity = "no" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "Analysis" >
+		<Field Name = "PointOfSaleId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "ProductId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "Date"  Type = "Date"  DbType = "date"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "3"  Identity = "no" />
+		<Field Name = "StockBreakage"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "4"  Identity = "no" />
+		<Field Name = "StockBreakageAmount"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "5"  Identity = "no" />
+		<Field Name = "Sales"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "6"  Identity = "no" />
+		<Field Name = "SalesTaxesIncluded"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "7"  Identity = "no" />
+		<Field Name = "SalesTaxesExcluded"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "8"  Identity = "no" />
+		<Field Name = "SalesOutlier"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "9"  Identity = "no" />
+		<Field Name = "SalesOutlierTaxesIncluded"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "10"  Identity = "no" />
+		<Field Name = "SalesOutlierTaxesExcluded"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "11"  Identity = "no" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_Analysis_PointOfSale_PointOfSaleId"  Table = "Analysis"  Field = "PointOfSaleId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_Analysis_Products_TypologyId"  Table = "Analysis"  Field = "ProductId"  Type = "ForeignKey"  Position = "1" />
+</Table>
+	<Table Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "Calendar" >
+		<Field Name = "Date"  Type = "Date"  DbType = "date"  IsKey = "yes"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "WeekDay"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "YearNatural"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "3"  Identity = "no" />
+		<Field Name = "MonthNatural"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "4"  Identity = "no" />
+		<Field Name = "WeekNatural"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "5"  Identity = "no" />
+		<Field Name = "DayNumberNatural"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "6"  Identity = "no" />
+		<Field Name = "Year445"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "7"  Identity = "no" />
+		<Field Name = "Month445"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "8"  Identity = "no" />
+		<Field Name = "Week445"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "9"  Identity = "no" />
+		<Field Name = "DayNumber445"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "10"  Identity = "no" />
+		<Field Name = "Year454"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "11"  Identity = "no" />
+		<Field Name = "Month454"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "12"  Identity = "no" />
+		<Field Name = "Week454"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "13"  Identity = "no" />
+		<Field Name = "DayNumber454"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "14"  Identity = "no" />
+		<Field Name = "Year544"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "15"  Identity = "no" />
+		<Field Name = "Month544"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "16"  Identity = "no" />
+		<Field Name = "Week544"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "17"  Identity = "no" />
+		<Field Name = "DayNumber544"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "18"  Identity = "no" />
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "PK_Calendar"  Table = "Calendar"  Field = "Date"  Type = "PrimaryKey"  Position = "1" />
+</Table>
+	<Table Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "CalendarIso" >
+		<Field Name = "Date"  Type = "Date"  DbType = "date"  IsKey = "yes"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "Year"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "Month"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "3"  Identity = "no" />
+		<Field Name = "Day"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "4"  Identity = "no" />
+		<Field Name = "Week"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "5"  Identity = "no" />
+		<Field Name = "YearWeek"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "6"  Identity = "no" />
+		<Field Name = "YearMonth"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "7"  Identity = "no" />
+		<Field Name = "WeekDay"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "8"  Identity = "no" />
+		<Field Name = "NaturalYear"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "9"  Identity = "no" />
+		<Field Name = "NaturalWeek"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "10"  Identity = "no" />
+		<Field Name = "LastWeekDay"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "11"  Identity = "no" >
+			<Default>((0))</Default>
+</Field>
+		<Field Name = "LastMonthDay"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "12"  Identity = "no" >
+			<Default>((0))</Default>
+</Field>
+		<Field Name = "YearWeekIndex"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "13"  Identity = "no" />
+		<Field Name = "YearMonthIndex"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "14"  Identity = "no" />
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "PK_CalendarIso"  Table = "CalendarIso"  Field = "Date"  Type = "PrimaryKey"  Position = "1" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "Capacities" >
+		<Field Name = "TypologyId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "ClassificationLevels"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "450"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "PointOfSaleId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "3"  Identity = "no" />
+		<Field Name = "MinimumStock"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "4"  Identity = "no" />
+		<Field Name = "MaximumStock"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "5"  Identity = "no" />
+		<Field Name = "MinimumVolumetry"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "6"  Identity = "no" />
+		<Field Name = "MaximumVolumetry"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "7"  Identity = "no" />
+		<Field Name = "IdealStock"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "8"  Identity = "no" />
+		<Field Name = "ExpectedStock"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "9"  Identity = "no" />
+		<Field Name = "AlertMessageId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "10"  Identity = "no" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_Capacities_PointOfSale_PointOfSaleId"  Table = "Capacities"  Field = "PointOfSaleId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_Capacities_Typologies_TypologyId"  Table = "Capacities"  Field = "TypologyId"  Type = "ForeignKey"  Position = "1" />
+</Table>
+	<Table Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "Channels" >
+		<Field Name = "CreateDate"  Type = "Date"  DbType = "datetime2"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "CreateUser"  Type = "String"  DbType = "uniqueidentifier"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "UpdateDate"  Type = "Date"  DbType = "datetime2"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "3"  Identity = "no" />
+		<Field Name = "UpdateUser"  Type = "String"  DbType = "uniqueidentifier"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "4"  Identity = "no" />
+		<Field Name = "Id"  Type = "Integer"  DbType = "int"  IsKey = "yes"  Length = "0"  Required = "yes"  Position = "5"  Identity = "no" />
+		<Field Name = "CompanyId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "6"  Identity = "no" />
+		<Field Name = "Name"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "200"  Required = "yes"  Position = "7"  Identity = "no" />
+		<Field Name = "Description"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "400"  Required = "yes"  Position = "8"  Identity = "no" />
+		<Field Name = "DeleteDate"  Type = "Date"  DbType = "datetime2"  IsKey = "no"  Length = "0"  Required = "no"  Position = "9"  Identity = "no" />
+		<Field Name = "DeleteUser"  Type = "String"  DbType = "uniqueidentifier"  IsKey = "no"  Length = "0"  Required = "no"  Position = "10"  Identity = "no" />
+		<Field Name = "Deleted"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "11"  Identity = "no" >
+			<Default>((0))</Default>
+</Field>
+		<Field Name = "IsWholesaleChannel"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "12"  Identity = "no" >
+			<Default>((0))</Default>
+</Field>
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_Channels_Companies_CompanyId"  Table = "Channels"  Field = "CompanyId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "PK_Channels"  Table = "Channels"  Field = "Id"  Type = "PrimaryKey"  Position = "1" />
+</Table>
+	<Table Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "ClassificationLevelValues" >
+		<Field Name = "Id"  Type = "Integer"  DbType = "int"  IsKey = "yes"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "TypologyClassificationLevelId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "Value"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "100"  Required = "yes"  Position = "3"  Identity = "no" />
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_ClassificationLevelValues_TypologiesClassificationLevels_TypologyClassificationLevelId"  Table = "ClassificationLevelValues"  Field = "TypologyClassificationLevelId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "PK_ClassificationLevelValues"  Table = "ClassificationLevelValues"  Field = "Id"  Type = "PrimaryKey"  Position = "1" />
+</Table>
+	<Table Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "ClusterInSeasonAssignments" >
+		<Field Name = "CreateDate"  Type = "Date"  DbType = "datetime2"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "CreateUser"  Type = "String"  DbType = "uniqueidentifier"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "UpdateDate"  Type = "Date"  DbType = "datetime2"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "3"  Identity = "no" />
+		<Field Name = "UpdateUser"  Type = "String"  DbType = "uniqueidentifier"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "4"  Identity = "no" />
+		<Field Name = "Id"  Type = "Integer"  DbType = "int"  IsKey = "yes"  Length = "0"  Required = "yes"  Position = "5"  Identity = "no" />
+		<Field Name = "ClusterInSeasonId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "6"  Identity = "no" />
+		<Field Name = "PointOfSaleId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "7"  Identity = "no" />
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_ClusterInSeasonAssignments_ClustersInSeason_ClusterInSeasonId"  Table = "ClusterInSeasonAssignments"  Field = "ClusterInSeasonId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_ClusterInSeasonAssignments_PointsOfSale_PointOfSaleId"  Table = "ClusterInSeasonAssignments"  Field = "PointOfSaleId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "PK_ClusterInSeasonAssignments"  Table = "ClusterInSeasonAssignments"  Field = "Id"  Type = "PrimaryKey"  Position = "1" />
+</Table>
+	<Table Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "ClustersInSeason" >
+		<Field Name = "CreateDate"  Type = "Date"  DbType = "datetime2"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "CreateUser"  Type = "String"  DbType = "uniqueidentifier"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "UpdateDate"  Type = "Date"  DbType = "datetime2"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "3"  Identity = "no" />
+		<Field Name = "UpdateUser"  Type = "String"  DbType = "uniqueidentifier"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "4"  Identity = "no" />
+		<Field Name = "Id"  Type = "Integer"  DbType = "int"  IsKey = "yes"  Length = "0"  Required = "yes"  Position = "5"  Identity = "no" />
+		<Field Name = "Name"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "yes"  Position = "6"  Identity = "no" />
+		<Field Name = "Type"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "7"  Identity = "no" >
+			<Default>((0))</Default>
+</Field>
+		<Field Name = "Position"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "8"  Identity = "no" >
+			<Default>((0))</Default>
+</Field>
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "PK_ClustersInSeason"  Table = "ClustersInSeason"  Field = "Id"  Type = "PrimaryKey"  Position = "1" />
+</Table>
+	<Table Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "Companies" >
+		<Field Name = "Name"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "256"  Required = "no"  Position = "1"  Identity = "no" />
+		<Field Name = "EMail"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "256"  Required = "no"  Position = "2"  Identity = "no" />
+		<Field Name = "Location"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "512"  Required = "yes"  Position = "3"  Identity = "no" />
+		<Field Name = "CurrencyId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "4"  Identity = "no" />
+		<Field Name = "TimezoneId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "5"  Identity = "no" />
+		<Field Name = "ImageUrl"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "256"  Required = "no"  Position = "6"  Identity = "no" />
+		<Field Name = "ContactPersonFirstName"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "7"  Identity = "no" />
+		<Field Name = "ContactPersonLastName"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "256"  Required = "no"  Position = "8"  Identity = "no" />
+		<Field Name = "ContactPhone"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "9"  Identity = "no" />
+		<Field Name = "ContactEMail"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "256"  Required = "no"  Position = "10"  Identity = "no" />
+		<Field Name = "ContactImageUrl"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "256"  Required = "no"  Position = "11"  Identity = "no" />
+		<Field Name = "CreateDate"  Type = "Date"  DbType = "datetime2"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "12"  Identity = "no" />
+		<Field Name = "CreateUser"  Type = "String"  DbType = "uniqueidentifier"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "13"  Identity = "no" />
+		<Field Name = "UpdateDate"  Type = "Date"  DbType = "datetime2"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "14"  Identity = "no" />
+		<Field Name = "UpdateUser"  Type = "String"  DbType = "uniqueidentifier"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "15"  Identity = "no" />
+		<Field Name = "IsDeleted"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "16"  Identity = "no" />
+		<Field Name = "Id"  Type = "Integer"  DbType = "int"  IsKey = "yes"  Length = "0"  Required = "yes"  Position = "17"  Identity = "no" >
+			<Default>((0))</Default>
+</Field>
+		<Field Name = "Enabled"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "18"  Identity = "no" >
+			<Default>((1))</Default>
+</Field>
+		<Field Name = "Code"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "256"  Required = "no"  Position = "19"  Identity = "no" >
+			<Default>(N'')</Default>
+</Field>
+		<Field Name = "Provisioned"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "20"  Identity = "no" >
+			<Default>((0))</Default>
+</Field>
+		<Field Name = "SyncEnabled"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "21"  Identity = "no" >
+			<Default>((1))</Default>
+</Field>
+		<Field Name = "TimeZoneId2"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "255"  Required = "no"  Position = "22"  Identity = "no" />
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "PK_Companies"  Table = "Companies"  Field = "Id"  Type = "PrimaryKey"  Position = "1" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "CompanyDemandForecast" >
+		<Field Name = "WarehouseId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "1"  Identity = "no" />
+		<Field Name = "ProductId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "Week"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "3"  Identity = "no" />
+		<Field Name = "Stock"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "4"  Identity = "no" />
+		<Field Name = "AccumulatedReceptions"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "5"  Identity = "no" />
+		<Field Name = "Receptions"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "6"  Identity = "no" />
+		<Field Name = "SimulatedReceptions"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "7"  Identity = "no" />
+		<Field Name = "PointOfSaleDeliveries"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "8"  Identity = "no" />
+		<Field Name = "Sales"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "9"  Identity = "no" />
+		<Field Name = "Orders"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "10"  Identity = "no" />
+		<Field Name = "OrdersAdjustedToMinimumAndMultiple"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "11"  Identity = "no" />
+		<Field Name = "Breakage"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "12"  Identity = "no" />
+		<Field Name = "Capacity"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "13"  Identity = "no" />
+		<Field Name = "AccumulatedSales"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "14"  Identity = "no" />
+		<Field Name = "AccumulatedPointOfSalesDeliveries"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "15"  Identity = "no" />
+		<Field Name = "AccumulatedOrders"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "16"  Identity = "no" />
+		<Field Name = "AccumulatedReceptionsToCapacity"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "17"  Identity = "no" />
+		<Field Name = "AccumulatedReceptionsToCapacityAdvance"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "18"  Identity = "no" />
+		<Field Name = "SimulatedReceptionsToCapacity"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "19"  Identity = "no" />
+		<Field Name = "SimulatedReceptionsToCapacityAdvance"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "20"  Identity = "no" />
+		<Field Name = "OrdersAdjustedToCapacity"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "21"  Identity = "no" />
+		<Field Name = "OrdersAdjustedToCapacityAdvance"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "22"  Identity = "no" />
+		<Field Name = "AccumulatedOrdersAdjustedToMinimunAndMultiple"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "23"  Identity = "no" />
+		<Field Name = "AccumulatedOrdersAdjustedToCapacity"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "24"  Identity = "no" />
+		<Field Name = "AccumulatedOrdersAdjustedToCapacityAdvance"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "25"  Identity = "no" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_CompanyDemandForecast_Products_ProductId"  Table = "CompanyDemandForecast"  Field = "ProductId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_CompanyDemandForecast_Warehouse_WarehouseId"  Table = "CompanyDemandForecast"  Field = "WarehouseId"  Type = "ForeignKey"  Position = "1" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "Curves" >
+		<Field Name = "Week"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "Value"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "CurveId"  Type = "Integer"  DbType = "bigint"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "3"  Identity = "no" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "CurvesByPointOfSaleAndProduct" >
+		<Field Name = "ProductId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "PointOfSaleId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "CurveId"  Type = "Integer"  DbType = "bigint"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "3"  Identity = "no" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_CurvesByPointOfSaleAndProduct_PointsOfSale_PointOfSaleId"  Table = "CurvesByPointOfSaleAndProduct"  Field = "PointOfSaleId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_CurvesByPointOfSaleAndProduct_Products_ProductId"  Table = "CurvesByPointOfSaleAndProduct"  Field = "ProductId"  Type = "ForeignKey"  Position = "1" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "DailyStocksIntervals" >
+		<Field Name = "ProductId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "PointOfSaleId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "StartDate"  Type = "Date"  DbType = "date"  IsKey = "no"  Length = "0"  Required = "no"  Position = "3"  Identity = "no" />
+		<Field Name = "EndDate"  Type = "Date"  DbType = "date"  IsKey = "no"  Length = "0"  Required = "no"  Position = "4"  Identity = "no" />
+		<Field Name = "Quantity"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "5"  Identity = "no" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_FactDailyStocksIntervals_PointsOfSale_PointOfSaleId"  Table = "DailyStocksIntervals"  Field = "PointOfSaleId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_FactDailyStocksIntervals_Products_ProductId"  Table = "DailyStocksIntervals"  Field = "ProductId"  Type = "ForeignKey"  Position = "1" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "DataBasePointOfSales" >
+		<Field Name = "PointOfSaleId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "ProductId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "NegativeStock"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "3"  Identity = "no" />
+		<Field Name = "NegativePendingReceptions"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "4"  Identity = "no" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_DataBasePointOfSales_PointOfSale_PointOfSaleId"  Table = "DataBasePointOfSales"  Field = "PointOfSaleId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_DataBasePointOfSales_Products_ProductId"  Table = "DataBasePointOfSales"  Field = "ProductId"  Type = "ForeignKey"  Position = "1" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "DataBaseWarehouses" >
+		<Field Name = "WarehouseId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "ProductId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "NegativeStock"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "3"  Identity = "no" />
+		<Field Name = "NegativePendingReceptions"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "4"  Identity = "no" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_DataBaseWarehouses_Products_ProductId"  Table = "DataBaseWarehouses"  Field = "ProductId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_DataBaseWarehouses_Warehouse_WarehouseId"  Table = "DataBaseWarehouses"  Field = "WarehouseId"  Type = "ForeignKey"  Position = "1" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "DaysInPointsOfSale" >
+		<Field Name = "PointOfSaleId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "ProductId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "DaysInPointOfSale"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "3"  Identity = "no" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_DaysInPointsOfSale_PointsOfSale_PointOfSaleId"  Table = "DaysInPointsOfSale"  Field = "PointOfSaleId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_DaysInPointsOfSale_Products_ProductId"  Table = "DaysInPointsOfSale"  Field = "ProductId"  Type = "ForeignKey"  Position = "1" />
+</Table>
+	<Table Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "DeepClusterConfigurations" >
+		<Field Name = "CreateDate"  Type = "Date"  DbType = "datetime2"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "CreateUser"  Type = "String"  DbType = "uniqueidentifier"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "UpdateDate"  Type = "Date"  DbType = "datetime2"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "3"  Identity = "no" />
+		<Field Name = "UpdateUser"  Type = "String"  DbType = "uniqueidentifier"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "4"  Identity = "no" />
+		<Field Name = "Id"  Type = "Integer"  DbType = "int"  IsKey = "yes"  Length = "0"  Required = "yes"  Position = "5"  Identity = "no" />
+		<Field Name = "Type"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "6"  Identity = "no" />
+		<Field Name = "CompanyId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "7"  Identity = "no" />
+		<Field Name = "Discriminator"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "8"  Identity = "no" >
+			<Default>((0))</Default>
+</Field>
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_DeepClusterConfigurations_Companies_CompanyId"  Table = "DeepClusterConfigurations"  Field = "CompanyId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "PK_DeepClusterConfigurations"  Table = "DeepClusterConfigurations"  Field = "Id"  Type = "PrimaryKey"  Position = "1" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "DesignVariationsWithSalesDatasourceByYearV2" >
+		<Field Name = "Year"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "ProductRootCode"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "2"  Identity = "no" />
+		<Field Name = "Typology"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "3"  Identity = "no" />
+		<Field Name = "Channel"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "4"  Identity = "no" />
+		<Field Name = "PointOfSale"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "5"  Identity = "no" />
+		<Field Name = "City"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "6"  Identity = "no" />
+		<Field Name = "State"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "7"  Identity = "no" />
+		<Field Name = "Country"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "8"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel1"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "9"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel2"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "10"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel3"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "11"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel4"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "12"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel5"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "13"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel6"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "14"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel7"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "15"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel8"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "16"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel9"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "17"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel10"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "18"  Identity = "no" />
+		<Field Name = "ClassificationLevel1"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "19"  Identity = "no" />
+		<Field Name = "ClassificationLevel2"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "20"  Identity = "no" />
+		<Field Name = "ClassificationLevel3"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "21"  Identity = "no" />
+		<Field Name = "ClassificationLevel4"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "22"  Identity = "no" />
+		<Field Name = "ClassificationLevel5"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "23"  Identity = "no" />
+		<Field Name = "ClassificationLevel6"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "24"  Identity = "no" />
+		<Field Name = "ClassificationLevel7"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "25"  Identity = "no" />
+		<Field Name = "ClassificationLevel8"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "26"  Identity = "no" />
+		<Field Name = "ClassificationLevel9"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "27"  Identity = "no" />
+		<Field Name = "ClassificationLevel10"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "28"  Identity = "no" />
+		<Field Name = "ErpCode"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "29"  Identity = "no" />
+		<Field Name = "Quantity"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "30"  Identity = "no" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "DesignVariationsWithSalesDatasourceV2" >
+		<Field Name = "YearPeriod"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "ProductRootCode"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "2"  Identity = "no" />
+		<Field Name = "Typology"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "3"  Identity = "no" />
+		<Field Name = "Channel"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "4"  Identity = "no" />
+		<Field Name = "PointOfSale"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "5"  Identity = "no" />
+		<Field Name = "City"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "6"  Identity = "no" />
+		<Field Name = "State"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "7"  Identity = "no" />
+		<Field Name = "Country"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "8"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel1"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "9"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel2"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "10"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel3"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "11"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel4"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "12"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel5"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "13"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel6"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "14"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel7"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "15"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel8"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "16"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel9"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "17"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel10"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "18"  Identity = "no" />
+		<Field Name = "ClassificationLevel1"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "19"  Identity = "no" />
+		<Field Name = "ClassificationLevel2"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "20"  Identity = "no" />
+		<Field Name = "ClassificationLevel3"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "21"  Identity = "no" />
+		<Field Name = "ClassificationLevel4"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "22"  Identity = "no" />
+		<Field Name = "ClassificationLevel5"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "23"  Identity = "no" />
+		<Field Name = "ClassificationLevel6"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "24"  Identity = "no" />
+		<Field Name = "ClassificationLevel7"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "25"  Identity = "no" />
+		<Field Name = "ClassificationLevel8"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "26"  Identity = "no" />
+		<Field Name = "ClassificationLevel9"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "27"  Identity = "no" />
+		<Field Name = "ClassificationLevel10"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "28"  Identity = "no" />
+		<Field Name = "ErpCode"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "29"  Identity = "no" />
+		<Field Name = "Quantity"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "30"  Identity = "no" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "DesignVariationsWithStocksDatasource" >
+		<Field Name = "YearPeriod"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "ProductRootCode"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "2"  Identity = "no" />
+		<Field Name = "Typology"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "3"  Identity = "no" />
+		<Field Name = "Channel"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "4"  Identity = "no" />
+		<Field Name = "PointOfSale"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "5"  Identity = "no" />
+		<Field Name = "City"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "6"  Identity = "no" />
+		<Field Name = "State"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "7"  Identity = "no" />
+		<Field Name = "Country"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "8"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel1"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "9"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel2"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "10"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel3"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "11"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel4"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "12"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel5"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "13"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel6"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "14"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel7"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "15"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel8"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "16"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel9"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "17"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel10"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "18"  Identity = "no" />
+		<Field Name = "ClassificationLevel1"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "19"  Identity = "no" />
+		<Field Name = "ClassificationLevel2"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "20"  Identity = "no" />
+		<Field Name = "ClassificationLevel3"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "21"  Identity = "no" />
+		<Field Name = "ClassificationLevel4"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "22"  Identity = "no" />
+		<Field Name = "ClassificationLevel5"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "23"  Identity = "no" />
+		<Field Name = "ClassificationLevel6"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "24"  Identity = "no" />
+		<Field Name = "ClassificationLevel7"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "25"  Identity = "no" />
+		<Field Name = "ClassificationLevel8"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "26"  Identity = "no" />
+		<Field Name = "ClassificationLevel9"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "27"  Identity = "no" />
+		<Field Name = "ClassificationLevel10"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "28"  Identity = "no" />
+		<Field Name = "ErpCode"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "29"  Identity = "no" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "DesignVariationsWithStocksDatasourceByYear" >
+		<Field Name = "Year"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "ProductRootCode"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "2"  Identity = "no" />
+		<Field Name = "Typology"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "3"  Identity = "no" />
+		<Field Name = "Channel"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "4"  Identity = "no" />
+		<Field Name = "PointOfSale"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "5"  Identity = "no" />
+		<Field Name = "City"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "6"  Identity = "no" />
+		<Field Name = "State"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "7"  Identity = "no" />
+		<Field Name = "Country"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "8"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel1"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "9"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel2"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "10"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel3"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "11"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel4"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "12"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel5"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "13"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel6"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "14"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel7"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "15"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel8"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "16"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel9"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "17"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel10"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "18"  Identity = "no" />
+		<Field Name = "ClassificationLevel1"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "19"  Identity = "no" />
+		<Field Name = "ClassificationLevel2"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "20"  Identity = "no" />
+		<Field Name = "ClassificationLevel3"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "21"  Identity = "no" />
+		<Field Name = "ClassificationLevel4"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "22"  Identity = "no" />
+		<Field Name = "ClassificationLevel5"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "23"  Identity = "no" />
+		<Field Name = "ClassificationLevel6"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "24"  Identity = "no" />
+		<Field Name = "ClassificationLevel7"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "25"  Identity = "no" />
+		<Field Name = "ClassificationLevel8"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "26"  Identity = "no" />
+		<Field Name = "ClassificationLevel9"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "27"  Identity = "no" />
+		<Field Name = "ClassificationLevel10"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "28"  Identity = "no" />
+		<Field Name = "ErpCode"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "29"  Identity = "no" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "DvDiagnosisDispersion" >
+		<Field Name = "RootProductCode"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "256"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "ClusterDv"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "256"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "Frequency"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "3"  Identity = "no" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "DvDiagnosisDispersionPointOfSale" >
+		<Field Name = "RootProductCode"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "256"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "PointOfSaleId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "SalesQuantity2Months"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "3"  Identity = "no" />
+		<Field Name = "ClusterLevelDescription"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "256"  Required = "yes"  Position = "4"  Identity = "no" />
+		<Field Name = "ClusterDv"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "256"  Required = "yes"  Position = "5"  Identity = "no" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_DvDiagnosisDispersionPointOfSale_PointsOfSale_PointOfSaleId"  Table = "DvDiagnosisDispersionPointOfSale"  Field = "PointOfSaleId"  Type = "ForeignKey"  Position = "1" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "DvDiagnosisDispersionStock" >
+		<Field Name = "RootProductCode"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "256"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "PointOfSaleId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "Stock"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "3"  Identity = "no" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_DvDiagnosisDispersionStock_PointsOfSale_PointOfSaleId"  Table = "DvDiagnosisDispersionStock"  Field = "PointOfSaleId"  Type = "ForeignKey"  Position = "1" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "LastSalePointOfSalePrices" >
+		<Field Name = "ProductId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "PointOfSaleId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "LastSalePriceSkuPointOfSale"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "3"  Identity = "no" />
+		<Field Name = "LastSalePriceRootCodePointOfSale"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "4"  Identity = "no" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_LastSalePointOfSalePrices_PointOfSale_PointOfSaleId"  Table = "LastSalePointOfSalePrices"  Field = "PointOfSaleId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_LastSalePointOfSalePrices_Products_ProductId"  Table = "LastSalePointOfSalePrices"  Field = "ProductId"  Type = "ForeignKey"  Position = "1" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "LastSalePrices" >
+		<Field Name = "ProductId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "LastSalePriceSKU"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "2"  Identity = "no" />
+		<Field Name = "LastSalePriceRootCode"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "3"  Identity = "no" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_LastSalePrices_Products_ProductId"  Table = "LastSalePrices"  Field = "ProductId"  Type = "ForeignKey"  Position = "1" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "LostSales" >
+		<Field Name = "PointOfSaleId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "ProductId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "Date"  Type = "Date"  DbType = "datetime2"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "3"  Identity = "no" />
+		<Field Name = "Units"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "4"  Identity = "no" />
+		<Field Name = "Amount"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "5"  Identity = "no" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_LostSales_PointsOfSale_PointOfSaleId"  Table = "LostSales"  Field = "PointOfSaleId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_LostSales_Products_ProductId"  Table = "LostSales"  Field = "ProductId"  Type = "ForeignKey"  Position = "1" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "OpeningDisplays" >
+		<Field Name = "PointOfSaleId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "ProductId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "IdealExposition"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "3"  Identity = "no" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_OpeningDisplays_PointOfSale_PointOfSaleId"  Table = "OpeningDisplays"  Field = "PointOfSaleId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_OpeningDisplays_Products_ProductId"  Table = "OpeningDisplays"  Field = "ProductId"  Type = "ForeignKey"  Position = "1" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "OpeningsWeekYearProjections" >
+		<Field Name = "PointOfSaleId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "ProductId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "Year"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "3"  Identity = "no" />
+		<Field Name = "ActualWeek"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "4"  Identity = "no" />
+		<Field Name = "Projection"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "5"  Identity = "no" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_OpeningsWeekYearProjections_PointOfSale_PointOfSaleId"  Table = "OpeningsWeekYearProjections"  Field = "PointOfSaleId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_OpeningsWeekYearProjections_Products_ProductId"  Table = "OpeningsWeekYearProjections"  Field = "ProductId"  Type = "ForeignKey"  Position = "1" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "Overstock" >
+		<Field Name = "ProductId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "WarehouseId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "2"  Identity = "no" />
+		<Field Name = "ProjectionVariationPercentage"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "3"  Identity = "no" />
+		<Field Name = "ActualStock"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "4"  Identity = "no" />
+		<Field Name = "WarehouseStock"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "5"  Identity = "no" />
+		<Field Name = "Overstock12"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "6"  Identity = "no" />
+		<Field Name = "OverstockCost12"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "7"  Identity = "no" />
+		<Field Name = "Overstock28"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "8"  Identity = "no" />
+		<Field Name = "OverstockCost28"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "9"  Identity = "no" />
+		<Field Name = "Overstock53"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "10"  Identity = "no" />
+		<Field Name = "OverstockCost53"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "11"  Identity = "no" />
+		<Field Name = "PointOfSaleImminentPendingReceptions"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "12"  Identity = "no" />
+		<Field Name = "PointOfSalePendingReceptions"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "13"  Identity = "no" />
+		<Field Name = "WarehouseImminentPendingReceptions"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "14"  Identity = "no" />
+		<Field Name = "WarehousePendingReceptions"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "15"  Identity = "no" />
+		<Field Name = "PointsOfSaleWithStock"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "16"  Identity = "no" />
+		<Field Name = "PointsOfSaleInAssortment"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "17"  Identity = "no" />
+		<Field Name = "PointsOfSaleBlocked"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "18"  Identity = "no" />
+		<Field Name = "OriginalOrder"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "19"  Identity = "no" />
+		<Field Name = "Sales4WeeksAgo"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "20"  Identity = "no" />
+		<Field Name = "Sales3WeeksAgo"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "21"  Identity = "no" />
+		<Field Name = "Sales2WeeksAgo"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "22"  Identity = "no" />
+		<Field Name = "Sales1WeekAgo"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "23"  Identity = "no" />
+		<Field Name = "Stock4WeeksAgo"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "24"  Identity = "no" />
+		<Field Name = "Stock3WeeksAgo"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "25"  Identity = "no" />
+		<Field Name = "Stock2WeeksAgo"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "26"  Identity = "no" />
+		<Field Name = "Stock1WeekAgo"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "27"  Identity = "no" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_Overstock_Products_ProductId"  Table = "Overstock"  Field = "ProductId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_Overstock_Warehouses_WarehouseId"  Table = "Overstock"  Field = "WarehouseId"  Type = "ForeignKey"  Position = "1" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "OverstockDataSourceV2" >
+		<Field Name = "Typology"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "1"  Identity = "no" />
+		<Field Name = "PointOfSaleId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "2"  Identity = "no" />
+		<Field Name = "PointOfSale"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "3"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel1"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "4"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel2"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "5"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel3"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "6"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel4"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "7"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel5"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "8"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel6"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "9"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel7"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "10"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel8"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "11"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel9"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "12"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel10"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "13"  Identity = "no" />
+		<Field Name = "IdealStock"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "14"  Identity = "no" />
+		<Field Name = "Overstock"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "15"  Identity = "no" />
+		<Field Name = "ActualStock"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "16"  Identity = "no" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_OverstockDataSourceV2_PointsOfSale_PointOfSaleId"  Table = "OverstockDataSourceV2"  Field = "PointOfSaleId"  Type = "ForeignKey"  Position = "1" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "Overstocks" >
+		<Field Name = "ProductId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "ActualStock"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "2"  Identity = "no" />
+		<Field Name = "WarehouseStock"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "3"  Identity = "no" />
+		<Field Name = "Overstock28Weeks"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "4"  Identity = "no" />
+		<Field Name = "OverstockCost28Weeks"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "5"  Identity = "no" />
+		<Field Name = "Overstock53Weeks"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "6"  Identity = "no" />
+		<Field Name = "OverstockCost53Weeks"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "7"  Identity = "no" />
+		<Field Name = "PendingReceptions"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "8"  Identity = "no" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_Overstocks_Products_ProductId"  Table = "Overstocks"  Field = "ProductId"  Type = "ForeignKey"  Position = "1" />
+</Table>
+	<Table Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "PointOfSaleClassificationLevels" >
+		<Field Name = "CreateDate"  Type = "Date"  DbType = "datetime2"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "CreateUser"  Type = "String"  DbType = "uniqueidentifier"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "UpdateDate"  Type = "Date"  DbType = "datetime2"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "3"  Identity = "no" />
+		<Field Name = "UpdateUser"  Type = "String"  DbType = "uniqueidentifier"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "4"  Identity = "no" />
+		<Field Name = "Id"  Type = "Integer"  DbType = "int"  IsKey = "yes"  Length = "0"  Required = "yes"  Position = "5"  Identity = "no" />
+		<Field Name = "CompanyId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "6"  Identity = "no" />
+		<Field Name = "Position"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "7"  Identity = "no" />
+		<Field Name = "Name"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "200"  Required = "yes"  Position = "8"  Identity = "no" />
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_PointOfSaleClassificationLevels_Companies_CompanyId"  Table = "PointOfSaleClassificationLevels"  Field = "CompanyId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "PK_PointOfSaleClassificationLevels"  Table = "PointOfSaleClassificationLevels"  Field = "Id"  Type = "PrimaryKey"  Position = "1" />
+</Table>
+	<Table Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "PointOfSaleClassificationLevelValues" >
+		<Field Name = "Id"  Type = "Integer"  DbType = "int"  IsKey = "yes"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "PointOfSaleId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "PointOfSaleClassificationLevelId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "3"  Identity = "no" />
+		<Field Name = "Value"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "100"  Required = "yes"  Position = "4"  Identity = "no" />
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_PointOfSaleClassificationLevelValues_PointOfSaleClassificationLevels_PointOfSaleClassificationLevelId"  Table = "PointOfSaleClassificationLevelValues"  Field = "PointOfSaleClassificationLevelId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_PointOfSaleClassificationLevelValues_PointsOfSale_PointOfSaleId"  Table = "PointOfSaleClassificationLevelValues"  Field = "PointOfSaleId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "PK_PointOfSaleClassificationLevelValues"  Table = "PointOfSaleClassificationLevelValues"  Field = "Id"  Type = "PrimaryKey"  Position = "1" />
+</Table>
+	<Table Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "PointOfSaleClassificationLevelValuesReadingModel" >
+		<Field Name = "Id"  Type = "Integer"  DbType = "int"  IsKey = "yes"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "ClassificationLevelValue1"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "2"  Identity = "no" />
+		<Field Name = "ClassificationLevelValue2"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "3"  Identity = "no" />
+		<Field Name = "ClassificationLevelValue3"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "4"  Identity = "no" />
+		<Field Name = "ClassificationLevelValue4"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "5"  Identity = "no" />
+		<Field Name = "ClassificationLevelValue5"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "6"  Identity = "no" />
+		<Field Name = "ClassificationLevelValue6"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "7"  Identity = "no" />
+		<Field Name = "ClassificationLevelValue7"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "8"  Identity = "no" />
+		<Field Name = "ClassificationLevelValue8"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "9"  Identity = "no" />
+		<Field Name = "ClassificationLevelValue9"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "10"  Identity = "no" />
+		<Field Name = "ClassificationLevelValue10"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "11"  Identity = "no" />
+		<Field Name = "StoredProcedureId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "12"  Identity = "no" >
+			<Default>((0))</Default>
+</Field>
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "PK_PointOfSaleClassificationLevelValuesReadingModel"  Table = "PointOfSaleClassificationLevelValuesReadingModel"  Field = "Id"  Type = "PrimaryKey"  Position = "1" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "PointOfSaleDemandForecast" >
+		<Field Name = "PointOfSaleId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "ProductId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "Week"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "3"  Identity = "no" />
+		<Field Name = "Stock"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "4"  Identity = "no" />
+		<Field Name = "AccumulatedReceptions"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "5"  Identity = "no" />
+		<Field Name = "Receptions"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "6"  Identity = "no" />
+		<Field Name = "Sales"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "7"  Identity = "no" />
+		<Field Name = "Breakage"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "8"  Identity = "no" />
+		<Field Name = "Order"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "9"  Identity = "no" />
+		<Field Name = "PurchaseOrder"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "10"  Identity = "no" />
+		<Field Name = "OrdersMatchedToMinimunAndMultiple"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "11"  Identity = "no" />
+		<Field Name = "AccumulatedSales"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "12"  Identity = "no" />
+		<Field Name = "AccumulatedOrders"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "13"  Identity = "no" />
+		<Field Name = "AccumulatedOrdersMatchedToMinimunAndMultiple"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "14"  Identity = "no" />
+		<Field Name = "SimulatedReceptions"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "15"  Identity = "no" />
+		<Field Name = "PurchaseOrderMatchedToMinimunAndMultiple"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "16"  Identity = "no" />
+		<Field Name = "AccumulatedPurchaseOrder"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "17"  Identity = "no" />
+		<Field Name = "AccumulatedPurchaseOrderMatchedToMinimunAndMultiple"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "18"  Identity = "no" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_PointOfSaleDemandForecast_PointOfSale_PointOfSaleId"  Table = "PointOfSaleDemandForecast"  Field = "PointOfSaleId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_PointOfSaleDemandForecast_Products_ProductId"  Table = "PointOfSaleDemandForecast"  Field = "ProductId"  Type = "ForeignKey"  Position = "1" />
+</Table>
+	<Table Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "PointsOfSale" >
+		<Field Name = "Deleted"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "Id"  Type = "Integer"  DbType = "int"  IsKey = "yes"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "Name"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "yes"  Position = "3"  Identity = "no" />
+		<Field Name = "ChannelId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "4"  Identity = "no" />
+		<Field Name = "ImageUrl"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "256"  Required = "no"  Position = "5"  Identity = "no" />
+		<Field Name = "ErpCode"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "64"  Required = "no"  Position = "6"  Identity = "no" />
+		<Field Name = "City"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "64"  Required = "no"  Position = "7"  Identity = "no" />
+		<Field Name = "State"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "64"  Required = "no"  Position = "8"  Identity = "no" />
+		<Field Name = "Country"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "64"  Required = "no"  Position = "9"  Identity = "no" />
+		<Field Name = "OpeningDate"  Type = "Date"  DbType = "datetime2"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "10"  Identity = "no" />
+		<Field Name = "ClosingDate"  Type = "Date"  DbType = "datetime2"  IsKey = "no"  Length = "0"  Required = "no"  Position = "11"  Identity = "no" />
+		<Field Name = "ExpositionSurface"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "12"  Identity = "no" />
+		<Field Name = "StorageSurface"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "13"  Identity = "no" />
+		<Field Name = "TotalSurface"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "14"  Identity = "no" />
+		<Field Name = "PointOfSaleClassificationLevelValuesReadingModelId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "15"  Identity = "no" />
+		<Field Name = "IsOnline"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "16"  Identity = "no" >
+			<Default>((0))</Default>
+</Field>
+		<Field Name = "CoachRoi"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "17"  Identity = "no" >
+			<Default>((1))</Default>
+</Field>
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_PointsOfSale_Channels_ChannelId"  Table = "PointsOfSale"  Field = "ChannelId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_PointsOfSale_PointOfSaleClassificationLevelValuesReadingModel_PointOfSaleClassificationLevelValuesReadingModelId"  Table = "PointsOfSale"  Field = "PointOfSaleClassificationLevelValuesReadingModelId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "PK_PointsOfSale"  Table = "PointsOfSale"  Field = "Id"  Type = "PrimaryKey"  Position = "1" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "PointsOfSaleLFL" >
+		<Field Name = "PointOfSaleId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "Date"  Type = "Date"  DbType = "date"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "PreviousYearLFL"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "3"  Identity = "no" />
+		<Field Name = "NextYearLFL"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "4"  Identity = "no" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_PointsOfSaleLFL_PointsOfSale_PointOfSaleId"  Table = "PointsOfSaleLFL"  Field = "PointOfSaleId"  Type = "ForeignKey"  Position = "1" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "PrePackReport" >
+		<Field Name = "PrePackCode"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "200"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "ProductId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "UnitsInPack"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "3"  Identity = "no" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_PrePackReport_Product_ProductId"  Table = "PrePackReport"  Field = "ProductId"  Type = "ForeignKey"  Position = "1" />
+</Table>
+	<Table Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "ProductClassificationLevelValues" >
+		<Field Name = "Id"  Type = "Integer"  DbType = "int"  IsKey = "yes"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "ProductId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "ClassificationLevelValueId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "3"  Identity = "no" />
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_ProductClassificationLevelValues_ClassificationLevelValues_ClassificationLevelValueId"  Table = "ProductClassificationLevelValues"  Field = "ClassificationLevelValueId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_ProductClassificationLevelValues_Products_ProductId"  Table = "ProductClassificationLevelValues"  Field = "ProductId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "PK_ProductClassificationLevelValues"  Table = "ProductClassificationLevelValues"  Field = "Id"  Type = "PrimaryKey"  Position = "1" />
+</Table>
+	<Table Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "ProductClassificationLevelValuesReadingModel" >
+		<Field Name = "Id"  Type = "Integer"  DbType = "int"  IsKey = "yes"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "TypologyId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "ClassificationLevelValue1"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "3"  Identity = "no" />
+		<Field Name = "ClassificationLevelValue2"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "4"  Identity = "no" />
+		<Field Name = "ClassificationLevelValue3"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "5"  Identity = "no" />
+		<Field Name = "ClassificationLevelValue4"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "6"  Identity = "no" />
+		<Field Name = "ClassificationLevelValue5"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "7"  Identity = "no" />
+		<Field Name = "ClassificationLevelValue6"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "8"  Identity = "no" />
+		<Field Name = "ClassificationLevelValue7"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "9"  Identity = "no" />
+		<Field Name = "ClassificationLevelValue8"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "10"  Identity = "no" />
+		<Field Name = "ClassificationLevelValue9"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "11"  Identity = "no" />
+		<Field Name = "ClassificationLevelValue10"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "12"  Identity = "no" />
+		<Field Name = "StoredProcedureId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "13"  Identity = "no" >
+			<Default>((0))</Default>
+</Field>
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_ProductClassificationLevelValuesReadingModel_Typologies_TypologyId"  Table = "ProductClassificationLevelValuesReadingModel"  Field = "TypologyId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "PK_ProductClassificationLevelValuesReadingModel"  Table = "ProductClassificationLevelValuesReadingModel"  Field = "Id"  Type = "PrimaryKey"  Position = "1" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "ProductCostAndPriceByPointOfSaleIntervals" >
+		<Field Name = "ProductId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "PointOfSaleId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "StartDate"  Type = "Date"  DbType = "datetime2"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "3"  Identity = "no" />
+		<Field Name = "EndDate"  Type = "Date"  DbType = "datetime2"  IsKey = "no"  Length = "0"  Required = "no"  Position = "4"  Identity = "no" />
+		<Field Name = "Price"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "5"  Identity = "no" />
+		<Field Name = "Cost"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "6"  Identity = "no" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_ProductCostAndPriceByPointOfSaleIntervals_PointsOfSale_PointOfSaleId"  Table = "ProductCostAndPriceByPointOfSaleIntervals"  Field = "PointOfSaleId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_ProductCostAndPriceByPointOfSaleIntervals_Products_ProductId"  Table = "ProductCostAndPriceByPointOfSaleIntervals"  Field = "ProductId"  Type = "ForeignKey"  Position = "1" />
+</Table>
+	<Table Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "ProductJourneyActions" >
+		<Field Name = "Id"  Type = "Integer"  DbType = "int"  IsKey = "yes"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "Color"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "32"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "Coverage"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "3"  Identity = "no" />
+		<Field Name = "ProductJourneyId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "4"  Identity = "no" />
+		<Field Name = "ProductJourneyCatalogueActionId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "5"  Identity = "no" />
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_ProductJourneyActions_ProductJourneyCatalogueActions_ProductJourneyCatalogueActionId"  Table = "ProductJourneyActions"  Field = "ProductJourneyCatalogueActionId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_ProductJourneyActions_ProductJourneys_ProductJourneyId"  Table = "ProductJourneyActions"  Field = "ProductJourneyId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "PK_ProductJourneyActions"  Table = "ProductJourneyActions"  Field = "Id"  Type = "PrimaryKey"  Position = "1" />
+</Table>
+	<Table Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "ProductJourneyCatalogueActions" >
+		<Field Name = "Id"  Type = "Integer"  DbType = "int"  IsKey = "yes"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "Name"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "512"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "Deleted"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "3"  Identity = "no" >
+			<Default>((0))</Default>
+</Field>
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "PK_ProductJourneyCatalogueActions"  Table = "ProductJourneyCatalogueActions"  Field = "Id"  Type = "PrimaryKey"  Position = "1" />
+</Table>
+	<Table Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "ProductJourneys" >
+		<Field Name = "Id"  Type = "Integer"  DbType = "int"  IsKey = "yes"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "Name"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "256"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "ProductJourneyCatalogueActionId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "3"  Identity = "no" />
+		<Field Name = "ProductJourneyCatalogueActionName"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "256"  Required = "no"  Position = "4"  Identity = "no" />
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "PK_ProductJourneys"  Table = "ProductJourneys"  Field = "Id"  Type = "PrimaryKey"  Position = "1" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "ProductJourneys" >
+		<Field Name = "PointOfSaleId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "RootProductCode"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "450"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "AffectedSkus"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "3"  Identity = "no" />
+		<Field Name = "ExistingSkus"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "4"  Identity = "no" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_ProductJourneys_PointOfSale_PointOfSaleId"  Table = "ProductJourneys"  Field = "PointOfSaleId"  Type = "ForeignKey"  Position = "1" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "ProductJourneysDetails" >
+		<Field Name = "PointOfSaleId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "ProductId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "Weeks"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "3"  Identity = "no" />
+		<Field Name = "ActualStock"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "4"  Identity = "no" />
+		<Field Name = "PendingReceptions"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "5"  Identity = "no" />
+		<Field Name = "TransferOut"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "6"  Identity = "no" />
+		<Field Name = "TotalSales"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "7"  Identity = "no" />
+		<Field Name = "Coverage"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "8"  Identity = "no" />
+		<Field Name = "Blocked"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "9"  Identity = "no" />
+		<Field Name = "CompleteDate"  Type = "Date"  DbType = "datetime2"  IsKey = "no"  Length = "0"  Required = "no"  Position = "10"  Identity = "no" />
+		<Field Name = "ProductJourneyActionId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "11"  Identity = "no" />
+		<Field Name = "ProductJourneyId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "12"  Identity = "no" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_ProductJourneysDetails_PointOfSale_PointOfSaleId"  Table = "ProductJourneysDetails"  Field = "PointOfSaleId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_ProductJourneysDetails_Products_ProductId"  Table = "ProductJourneysDetails"  Field = "ProductId"  Type = "ForeignKey"  Position = "1" />
+</Table>
+	<Table Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "Products" >
+		<Field Name = "CreateDate"  Type = "Date"  DbType = "datetime2"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "CreateUser"  Type = "String"  DbType = "uniqueidentifier"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "UpdateDate"  Type = "Date"  DbType = "datetime2"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "3"  Identity = "no" />
+		<Field Name = "UpdateUser"  Type = "String"  DbType = "uniqueidentifier"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "4"  Identity = "no" />
+		<Field Name = "Deleted"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "5"  Identity = "no" />
+		<Field Name = "DeleteDate"  Type = "Date"  DbType = "datetime2"  IsKey = "no"  Length = "0"  Required = "no"  Position = "6"  Identity = "no" />
+		<Field Name = "DeleteUser"  Type = "String"  DbType = "uniqueidentifier"  IsKey = "no"  Length = "0"  Required = "no"  Position = "7"  Identity = "no" />
+		<Field Name = "Id"  Type = "Integer"  DbType = "int"  IsKey = "yes"  Length = "0"  Required = "yes"  Position = "8"  Identity = "no" />
+		<Field Name = "TypologyId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "9"  Identity = "no" />
+		<Field Name = "ProductCode"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "200"  Required = "yes"  Position = "10"  Identity = "no" />
+		<Field Name = "RootProductCode"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "200"  Required = "yes"  Position = "11"  Identity = "no" />
+		<Field Name = "EanCode"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "-1"  Required = "no"  Position = "12"  Identity = "no" />
+		<Field Name = "Description"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "400"  Required = "yes"  Position = "13"  Identity = "no" />
+		<Field Name = "UrlThumbnail"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "400"  Required = "no"  Position = "14"  Identity = "no" />
+		<Field Name = "UrlImage"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "400"  Required = "no"  Position = "15"  Identity = "no" />
+		<Field Name = "Size"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "200"  Required = "yes"  Position = "16"  Identity = "no" />
+		<Field Name = "BuyingPrice"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "17"  Identity = "no" />
+		<Field Name = "SellingPrice"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "18"  Identity = "no" />
+		<Field Name = "ProductClassificationLevelValuesReadingModelId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "19"  Identity = "no" />
+		<Field Name = "DiscontinuedProduct"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "20"  Identity = "no" >
+			<Default>((0))</Default>
+</Field>
+		<Field Name = "Volumetry"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "21"  Identity = "no" />
+		<Field Name = "Drop"  Type = "Date"  DbType = "date"  IsKey = "no"  Length = "0"  Required = "no"  Position = "22"  Identity = "no" />
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_Products_ProductClassificationLevelValuesReadingModel_ProductClassificationLevelValuesReadingModelId"  Table = "Products"  Field = "ProductClassificationLevelValuesReadingModelId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_Products_Typologies_TypologyId"  Table = "Products"  Field = "TypologyId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "PK_Products"  Table = "Products"  Field = "Id"  Type = "PrimaryKey"  Position = "1" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "ProductsHistoricClassificationLevels" >
+		<Field Name = "Position"  Type = "Integer"  DbType = "smallint"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "HistoricClassificationLevel"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "100"  Required = "yes"  Position = "2"  Identity = "no" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "ProductsHistoricClassificationLevelsReadingModel" >
+		<Field Name = "ProductId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "StartDate"  Type = "Date"  DbType = "date"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "EndDate"  Type = "Date"  DbType = "date"  IsKey = "no"  Length = "0"  Required = "no"  Position = "3"  Identity = "no" />
+		<Field Name = "HistoricClassificationLevel1"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "100"  Required = "no"  Position = "4"  Identity = "no" />
+		<Field Name = "HistoricClassificationLevel2"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "100"  Required = "no"  Position = "5"  Identity = "no" />
+		<Field Name = "HistoricClassificationLevel3"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "100"  Required = "no"  Position = "6"  Identity = "no" />
+		<Field Name = "HistoricClassificationLevel4"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "100"  Required = "no"  Position = "7"  Identity = "no" />
+		<Field Name = "HistoricClassificationLevel5"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "100"  Required = "no"  Position = "8"  Identity = "no" />
+		<Field Name = "HistoricClassificationLevel6"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "100"  Required = "no"  Position = "9"  Identity = "no" />
+		<Field Name = "HistoricClassificationLevel7"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "100"  Required = "no"  Position = "10"  Identity = "no" />
+		<Field Name = "HistoricClassificationLevel8"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "100"  Required = "no"  Position = "11"  Identity = "no" />
+		<Field Name = "HistoricClassificationLevel9"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "100"  Required = "no"  Position = "12"  Identity = "no" />
+		<Field Name = "HistoricClassificationLevel10"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "100"  Required = "no"  Position = "13"  Identity = "no" />
+		<Field Name = "HistoricClassificationLevel11"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "100"  Required = "no"  Position = "14"  Identity = "no" />
+		<Field Name = "HistoricClassificationLevel12"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "100"  Required = "no"  Position = "15"  Identity = "no" />
+		<Field Name = "HistoricClassificationLevel13"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "100"  Required = "no"  Position = "16"  Identity = "no" />
+		<Field Name = "HistoricClassificationLevel14"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "100"  Required = "no"  Position = "17"  Identity = "no" />
+		<Field Name = "HistoricClassificationLevel15"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "100"  Required = "no"  Position = "18"  Identity = "no" />
+		<Field Name = "HistoricClassificationLevel16"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "100"  Required = "no"  Position = "19"  Identity = "no" />
+		<Field Name = "HistoricClassificationLevel17"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "100"  Required = "no"  Position = "20"  Identity = "no" />
+		<Field Name = "HistoricClassificationLevel18"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "100"  Required = "no"  Position = "21"  Identity = "no" />
+		<Field Name = "HistoricClassificationLevel19"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "100"  Required = "no"  Position = "22"  Identity = "no" />
+		<Field Name = "HistoricClassificationLevel20"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "100"  Required = "no"  Position = "23"  Identity = "no" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_ProductsHistoricClassificationLevelsReadingModel_Products_ProductId"  Table = "ProductsHistoricClassificationLevelsReadingModel"  Field = "ProductId"  Type = "ForeignKey"  Position = "1" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "PurchaseReports" >
+		<Field Name = "ProductId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "MinimumMultiple"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "OrdersAdjustedToMinimumAndMultiple"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "3"  Identity = "no" />
+		<Field Name = "ReceptionWarehouseToReception"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "4"  Identity = "no" />
+		<Field Name = "WarehouseCoverage"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "5"  Identity = "no" />
+		<Field Name = "ActualStockWarehouse"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "6"  Identity = "no" />
+		<Field Name = "Orders"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "7"  Identity = "no" />
+		<Field Name = "ActualPlannedWarehouse"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "8"  Identity = "no" />
+		<Field Name = "AdjustedOrderCost"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "9"  Identity = "no" />
+		<Field Name = "SupplierLeadTime"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "10"  Identity = "no" />
+		<Field Name = "PendingReceptionsStores"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "11"  Identity = "no" />
+		<Field Name = "ActualStockStores"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "12"  Identity = "no" />
+		<Field Name = "IdealWindow"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "13"  Identity = "no" />
+		<Field Name = "SalesTwoMonths"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "14"  Identity = "no" />
+		<Field Name = "ReceptionStoreToReception"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "15"  Identity = "no" />
+		<Field Name = "SalesSixMonths"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "16"  Identity = "no" />
+		<Field Name = "PendingReceptionsWarehouse"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "17"  Identity = "no" />
+		<Field Name = "PlannedSalesToReception"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "18"  Identity = "no" />
+		<Field Name = "ShippingToStoresToReception"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "19"  Identity = "no" />
+		<Field Name = "Periodicity"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "20"  Identity = "no" />
+		<Field Name = "RupturesWarehouse"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "21"  Identity = "no" />
+		<Field Name = "RupturesStores"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "22"  Identity = "no" />
+		<Field Name = "ExpectedReplenishment"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "23"  Identity = "no" />
+		<Field Name = "PointOfSaleId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "24"  Identity = "no" />
+		<Field Name = "WarehouseId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "25"  Identity = "no" />
+		<Field Name = "AdjustedOrderCapacity"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "26"  Identity = "no" />
+		<Field Name = "AdjustedOrderCapacityAdvanced"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "27"  Identity = "no" />
+		<Field Name = "AdvancedOrder"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "28"  Identity = "no" />
+		<Field Name = "ReductionDueToCapacity"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "29"  Identity = "no" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_PurchaseReports_PointsOfSale_PointOfSaleId"  Table = "PurchaseReports"  Field = "PointOfSaleId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_PurchaseReports_Products_ProductId"  Table = "PurchaseReports"  Field = "ProductId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_PurchaseReports_Warehouses_WarehouseId"  Table = "PurchaseReports"  Field = "WarehouseId"  Type = "ForeignKey"  Position = "1" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "ReplenishmentPacksReport" >
+		<Field Name = "PointOfSaleId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "PrePackCode"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "200"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "ProductiveBlock"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "no"  Position = "3"  Identity = "no" />
+		<Field Name = "OriginalOrder"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "4"  Identity = "no" />
+		<Field Name = "OriginalOrderCost"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "5"  Identity = "no" />
+		<Field Name = "Orders"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "6"  Identity = "no" />
+		<Field Name = "OrderCost"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "7"  Identity = "no" />
+		<Field Name = "DaysInStore"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "8"  Identity = "no" />
+		<Field Name = "SalesTwoMonths"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "9"  Identity = "no" />
+		<Field Name = "SalesSixMonths"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "10"  Identity = "no" />
+		<Field Name = "SalesProjection"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "11"  Identity = "no" />
+		<Field Name = "ActualStock"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "12"  Identity = "no" />
+		<Field Name = "WarehouseStock"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "13"  Identity = "no" />
+		<Field Name = "PendingReceptions"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "14"  Identity = "no" />
+		<Field Name = "AvailableStock"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "15"  Identity = "no" />
+		<Field Name = "StockCost"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "16"  Identity = "no" />
+		<Field Name = "LastDayOfSale"  Type = "Date"  DbType = "datetime2"  IsKey = "no"  Length = "0"  Required = "no"  Position = "17"  Identity = "no" />
+		<Field Name = "LastMonthSales"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "18"  Identity = "no" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_ReplenishmentPacksReport_PointsOfSale_PointOfSaleId"  Table = "ReplenishmentPacksReport"  Field = "PointOfSaleId"  Type = "ForeignKey"  Position = "1" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "ReplenishmentReport" >
+		<Field Name = "PointOfSaleId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "ProductId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "MinimumMultiple"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "3"  Identity = "no" />
+		<Field Name = "ProductiveBlock"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "no"  Position = "4"  Identity = "no" />
+		<Field Name = "OriginalOrder"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "5"  Identity = "no" />
+		<Field Name = "OriginalOrderCost"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "6"  Identity = "no" />
+		<Field Name = "Orders"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "7"  Identity = "no" />
+		<Field Name = "OrderCost"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "8"  Identity = "no" />
+		<Field Name = "ImminentRupture"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "9"  Identity = "no" />
+		<Field Name = "StockOutDay"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "10"  Identity = "no" />
+		<Field Name = "RuptureDays"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "11"  Identity = "no" />
+		<Field Name = "DaysInStore"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "12"  Identity = "no" />
+		<Field Name = "SalesTwoMonths"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "13"  Identity = "no" />
+		<Field Name = "SalesSixMonths"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "14"  Identity = "no" />
+		<Field Name = "SalesProjection"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "15"  Identity = "no" />
+		<Field Name = "WeekProjection"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "16"  Identity = "no" />
+		<Field Name = "ActualStock"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "17"  Identity = "no" />
+		<Field Name = "WarehouseStock"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "18"  Identity = "no" />
+		<Field Name = "PendingReceptions"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "19"  Identity = "no" />
+		<Field Name = "IdealWindow"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "20"  Identity = "no" />
+		<Field Name = "RealWindow"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "21"  Identity = "no" />
+		<Field Name = "AvailableStock"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "22"  Identity = "no" />
+		<Field Name = "StockCost"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "23"  Identity = "no" />
+		<Field Name = "Overstock"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "24"  Identity = "no" />
+		<Field Name = "MissingStock"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "25"  Identity = "no" />
+		<Field Name = "TransferIn"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "26"  Identity = "no" />
+		<Field Name = "TransferOut"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "27"  Identity = "no" />
+		<Field Name = "Returns"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "28"  Identity = "no" />
+		<Field Name = "Coverage"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "29"  Identity = "no" />
+		<Field Name = "PromotionValue"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "30"  Identity = "no" />
+		<Field Name = "ForcedWindows"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "31"  Identity = "no" />
+		<Field Name = "ForcedProductive"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "32"  Identity = "no" />
+		<Field Name = "LastDayOfSale"  Type = "Date"  DbType = "datetime2"  IsKey = "no"  Length = "0"  Required = "no"  Position = "33"  Identity = "no" />
+		<Field Name = "GlobalBlocks"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "no"  Position = "34"  Identity = "no" />
+		<Field Name = "LastMonthSales"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "35"  Identity = "no" />
+		<Field Name = "PurchaseOrder"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "36"  Identity = "no" />
+		<Field Name = "RuptureSixMonths"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "37"  Identity = "no" />
+		<Field Name = "RuptureTwoMonths"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "38"  Identity = "no" />
+		<Field Name = "SalesSixMonthsOutlier"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "39"  Identity = "no" />
+		<Field Name = "SalesTwoMonthsOutlier"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "40"  Identity = "no" />
+		<Field Name = "StoreBlocks"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "no"  Position = "41"  Identity = "no" />
+		<Field Name = "SalesIndirect2Months"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "42"  Identity = "no" />
+		<Field Name = "SalesIndirect6Months"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "43"  Identity = "no" />
+		<Field Name = "OmnichannelIdealStock"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "44"  Identity = "no" />
+		<Field Name = "IdealCoverage"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "45"  Identity = "no" />
+		<Field Name = "Assortment"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "no"  Position = "46"  Identity = "no" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_ReplenishmentReport_PointsOfSale_PointOfSaleId"  Table = "ReplenishmentReport"  Field = "PointOfSaleId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_ReplenishmentReport_Products_ProductId"  Table = "ReplenishmentReport"  Field = "ProductId"  Type = "ForeignKey"  Position = "1" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "Sales3" >
+		<Field Name = "Date"  Type = "Date"  DbType = "date"  IsKey = "no"  Length = "0"  Required = "no"  Position = "1"  Identity = "no" />
+		<Field Name = "SalesQuantity"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "2"  Identity = "no" />
+		<Field Name = "SalesTurnover"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "3"  Identity = "no" />
+		<Field Name = "AmountTaxesExcluded"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "4"  Identity = "no" />
+		<Field Name = "TicketNumber"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "256"  Required = "no"  Position = "5"  Identity = "no" />
+		<Field Name = "ProductId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "6"  Identity = "no" />
+		<Field Name = "PointOfSaleId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "7"  Identity = "no" />
+		<Field Name = "Refund"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "8"  Identity = "no" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_Sales3_PointsOfSale_PointOfSaleId"  Table = "Sales3"  Field = "PointOfSaleId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_Sales3_Products_ProductId"  Table = "Sales3"  Field = "ProductId"  Type = "ForeignKey"  Position = "1" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "SalesAccelerations" >
+		<Field Name = "PointOfSaleId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "ProductId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "RootProductSellThrough"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "3"  Identity = "no" />
+		<Field Name = "ProductSellThrough"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "4"  Identity = "no" />
+		<Field Name = "DaysInStore"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "5"  Identity = "no" />
+		<Field Name = "InitialStock"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "6"  Identity = "no" />
+		<Field Name = "ActualStock"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "7"  Identity = "no" />
+		<Field Name = "PendingReceptions"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "8"  Identity = "no" />
+		<Field Name = "Sales"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "9"  Identity = "no" />
+		<Field Name = "WarehouseStock"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "10"  Identity = "no" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_SalesAccelerations_PointOfSale_PointOfSaleId"  Table = "SalesAccelerations"  Field = "PointOfSaleId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_SalesAccelerations_Products_ProductId"  Table = "SalesAccelerations"  Field = "ProductId"  Type = "ForeignKey"  Position = "1" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "SalesDatasource" >
+		<Field Name = "YearPeriod"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "Channel"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "2"  Identity = "no" />
+		<Field Name = "City"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "3"  Identity = "no" />
+		<Field Name = "Country"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "4"  Identity = "no" />
+		<Field Name = "State"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "5"  Identity = "no" />
+		<Field Name = "PointOfSale"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "6"  Identity = "no" />
+		<Field Name = "ClassificationLevel1"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "7"  Identity = "no" />
+		<Field Name = "ClassificationLevel2"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "8"  Identity = "no" />
+		<Field Name = "ClassificationLevel3"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "9"  Identity = "no" />
+		<Field Name = "ClassificationLevel4"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "10"  Identity = "no" />
+		<Field Name = "ClassificationLevel5"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "11"  Identity = "no" />
+		<Field Name = "ClassificationLevel6"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "12"  Identity = "no" />
+		<Field Name = "ClassificationLevel7"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "13"  Identity = "no" />
+		<Field Name = "ClassificationLevel8"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "14"  Identity = "no" />
+		<Field Name = "ClassificationLevel9"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "15"  Identity = "no" />
+		<Field Name = "ClassificationLevel10"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "16"  Identity = "no" />
+		<Field Name = "Typology"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "17"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel1"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "18"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel2"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "19"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel3"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "20"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel4"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "21"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel5"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "22"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel6"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "23"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel7"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "24"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel8"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "25"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel9"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "26"  Identity = "no" />
+		<Field Name = "ProductClassificationLevel10"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "27"  Identity = "no" />
+		<Field Name = "Turnover"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "28"  Identity = "no" />
+		<Field Name = "TotalCost"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "29"  Identity = "no" />
+		<Field Name = "Quantity"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "30"  Identity = "no" />
+		<Field Name = "ErpCode"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "31"  Identity = "no" />
+		<Field Name = "AmountTaxesExcluded"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "32"  Identity = "no" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "SalesDatasourceByYearPeriod" >
+		<Field Name = "YearPeriod"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "Turnover"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "2"  Identity = "no" />
+		<Field Name = "TotalCost"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "3"  Identity = "no" />
+		<Field Name = "Quantity"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "4"  Identity = "no" />
+		<Field Name = "AmountTaxesExcluded"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "5"  Identity = "no" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "SalesDecelerations" >
+		<Field Name = "PointOfSaleId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "ProductId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "SellingFrequency"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "3"  Identity = "no" />
+		<Field Name = "Limit"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "4"  Identity = "no" />
+		<Field Name = "ActualStock"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "5"  Identity = "no" />
+		<Field Name = "LastSaleDays"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "6"  Identity = "no" />
+		<Field Name = "SellThrough"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "7"  Identity = "no" />
+		<Field Name = "PotentiallyLostSales"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "8"  Identity = "no" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_SalesDecelerations_PointOfSale_PointOfSaleId"  Table = "SalesDecelerations"  Field = "PointOfSaleId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_SalesDecelerations_Products_ProductId"  Table = "SalesDecelerations"  Field = "ProductId"  Type = "ForeignKey"  Position = "1" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "SalesIntervals" >
+		<Field Name = "ProductId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "PointOfSaleId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "StartDate"  Type = "Date"  DbType = "date"  IsKey = "no"  Length = "0"  Required = "no"  Position = "3"  Identity = "no" />
+		<Field Name = "EndDate"  Type = "Date"  DbType = "date"  IsKey = "no"  Length = "0"  Required = "no"  Position = "4"  Identity = "no" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_FactSalesIntervals_PointsOfSale_PointOfSaleId"  Table = "SalesIntervals"  Field = "PointOfSaleId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_FactSalesIntervals_Products_ProductId"  Table = "SalesIntervals"  Field = "ProductId"  Type = "ForeignKey"  Position = "1" />
+</Table>
+	<Table Schema = "dbo"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "SchemaVersions" >
+		<Field Name = "Id"  Type = "Integer"  DbType = "int"  IsKey = "yes"  Length = "0"  Required = "yes"  Position = "1"  Identity = "yes" />
+		<Field Name = "ScriptName"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "255"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "Applied"  Type = "Date"  DbType = "datetime"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "3"  Identity = "no" />
+		<Constraint Schema = "dbo"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "PK_SchemaVersions_Id"  Table = "SchemaVersions"  Field = "Id"  Type = "PrimaryKey"  Position = "1" />
+</Table>
+	<Table Schema = "dbo"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "Scripts" >
+		<Field Name = "Id"  Type = "Integer"  DbType = "int"  IsKey = "yes"  Length = "0"  Required = "yes"  Position = "1"  Identity = "yes" />
+		<Field Name = "Schema"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "Table"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "yes"  Position = "3"  Identity = "no" />
+		<Field Name = "Weight"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "4"  Identity = "no" />
+		<Field Name = "Script"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "-1"  Required = "yes"  Position = "5"  Identity = "no" />
+		<Constraint Schema = "dbo"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "PK_Scripts"  Table = "Scripts"  Field = "Id"  Type = "PrimaryKey"  Position = "1" />
+</Table>
+	<Table Schema = "dbo"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "Settings" >
+		<Field Name = "Id"  Type = "Integer"  DbType = "int"  IsKey = "yes"  Length = "0"  Required = "yes"  Position = "1"  Identity = "yes" />
+		<Field Name = "Key"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "Value"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "yes"  Position = "3"  Identity = "no" />
+		<Constraint Schema = "dbo"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "PK__Settings__3214EC07D8822445"  Table = "Settings"  Field = "Id"  Type = "PrimaryKey"  Position = "1" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "StockDatasource" >
+		<Field Name = "Year"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "1"  Identity = "no" />
+		<Field Name = "YearPeriod"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "10"  Required = "no"  Position = "2"  Identity = "no" />
+		<Field Name = "ProductId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "3"  Identity = "no" />
+		<Field Name = "PointOfSaleId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "4"  Identity = "no" />
+		<Field Name = "AverageStock"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "5"  Identity = "no" />
+		<Field Name = "AverageStockCost"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "6"  Identity = "no" />
+		<Field Name = "BuyingPrice"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "7"  Identity = "no" />
+		<Field Name = "SalesQuantity"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "8"  Identity = "no" />
+		<Field Name = "SalesTotalCost"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "9"  Identity = "no" />
+		<Field Name = "InventoryTurnover"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "10"  Identity = "no" />
+		<Field Name = "AggregatedByYear"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "no"  Position = "11"  Identity = "no" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_StockDatasource_PointsOfSale_PointOfSaleId"  Table = "StockDatasource"  Field = "PointOfSaleId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_StockDatasource_ProductId_ProductId"  Table = "StockDatasource"  Field = "ProductId"  Type = "ForeignKey"  Position = "1" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "SubstituteReport" >
+		<Field Name = "PointOfSaleId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "ProductId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "RelatedProductId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "3"  Identity = "no" />
+		<Field Name = "Quantity"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "4"  Identity = "no" />
+		<Field Name = "Type"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "5"  Identity = "no" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_SubstituteReport_PointOfSale_PointOfSaleId"  Table = "SubstituteReport"  Field = "PointOfSaleId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_SubstituteReport_Products_ProductId"  Table = "SubstituteReport"  Field = "ProductId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_SubstituteReport_Products_RelatedProductId"  Table = "SubstituteReport"  Field = "ProductId"  Type = "ForeignKey"  Position = "1" />
+</Table>
+	<Table Schema = "dbo"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "SynchronizationLog" >
+		<Field Name = "Id"  Type = "Integer"  DbType = "int"  IsKey = "yes"  Length = "0"  Required = "yes"  Position = "1"  Identity = "yes" />
+		<Field Name = "CreatedDate"  Type = "Date"  DbType = "datetime2"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "Schema"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "3"  Identity = "no" />
+		<Field Name = "Table"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "4"  Identity = "no" />
+		<Field Name = "File"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "-1"  Required = "no"  Position = "5"  Identity = "no" />
+		<Field Name = "StartDate"  Type = "Date"  DbType = "datetime2"  IsKey = "no"  Length = "0"  Required = "no"  Position = "6"  Identity = "no" />
+		<Field Name = "EndDate"  Type = "Date"  DbType = "datetime2"  IsKey = "no"  Length = "0"  Required = "no"  Position = "7"  Identity = "no" />
+		<Field Name = "ElapsedTime"  Type = "Date"  DbType = "time"  IsKey = "no"  Length = "0"  Required = "no"  Position = "8"  Identity = "no" />
+		<Field Name = "ContentLength"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "9"  Identity = "no" />
+		<Field Name = "Thread"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "10"  Identity = "no" />
+		<Field Name = "Status"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "50"  Required = "yes"  Position = "11"  Identity = "no" />
+		<Field Name = "StatusReason"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "-1"  Required = "no"  Position = "12"  Identity = "no" />
+		<Constraint Schema = "dbo"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "PK__Synchron__3214EC07E8287348"  Table = "SynchronizationLog"  Field = "Id"  Type = "PrimaryKey"  Position = "1" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "TransferReports" >
+		<Field Name = "OriginPointOfSaleId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "DestinationPointOfSaleId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "ProductId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "3"  Identity = "no" />
+		<Field Name = "TransferType"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "32"  Required = "yes"  Position = "4"  Identity = "no" />
+		<Field Name = "ActualStockOriginStore"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "5"  Identity = "no" />
+		<Field Name = "IdealStockOriginStore"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "6"  Identity = "no" />
+		<Field Name = "ActualStockDestinationStore"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "7"  Identity = "no" />
+		<Field Name = "IdealStockDestinationStore"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "8"  Identity = "no" />
+		<Field Name = "TotalTransfersOut"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "9"  Identity = "no" />
+		<Field Name = "CostPVM"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "10"  Identity = "no" />
+		<Field Name = "DaysInStore"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "11"  Identity = "no" />
+		<Field Name = "Sales"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "12"  Identity = "no" />
+		<Field Name = "Margin"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "13"  Identity = "no" />
+		<Field Name = "MarginPercentage"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "14"  Identity = "no" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_TransferReports_PointsOfSale_DestinationPointOfSaleId"  Table = "TransferReports"  Field = "DestinationPointOfSaleId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_TransferReports_PointsOfSale_OriginPointOfSaleId"  Table = "TransferReports"  Field = "OriginPointOfSaleId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_TransferReports_Products_ProductId"  Table = "TransferReports"  Field = "ProductId"  Type = "ForeignKey"  Position = "1" />
+</Table>
+	<Table Schema = "dbo"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "Truncates" >
+		<Field Name = "Id"  Type = "Integer"  DbType = "int"  IsKey = "yes"  Length = "0"  Required = "yes"  Position = "1"  Identity = "yes" />
+		<Field Name = "Schema"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "Table"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "yes"  Position = "3"  Identity = "no" />
+		<Field Name = "Script"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "-1"  Required = "yes"  Position = "4"  Identity = "no" />
+		<Constraint Schema = "dbo"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "PK_Truncates"  Table = "Truncates"  Field = "Id"  Type = "PrimaryKey"  Position = "1" />
+</Table>
+	<Table Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "Typologies" >
+		<Field Name = "CreateDate"  Type = "Date"  DbType = "datetime2"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "CreateUser"  Type = "String"  DbType = "uniqueidentifier"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "UpdateDate"  Type = "Date"  DbType = "datetime2"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "3"  Identity = "no" />
+		<Field Name = "UpdateUser"  Type = "String"  DbType = "uniqueidentifier"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "4"  Identity = "no" />
+		<Field Name = "Id"  Type = "Integer"  DbType = "int"  IsKey = "yes"  Length = "0"  Required = "yes"  Position = "5"  Identity = "no" />
+		<Field Name = "CompanyId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "6"  Identity = "no" />
+		<Field Name = "Name"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "200"  Required = "yes"  Position = "7"  Identity = "no" />
+		<Field Name = "DeleteDate"  Type = "Date"  DbType = "datetime2"  IsKey = "no"  Length = "0"  Required = "no"  Position = "8"  Identity = "no" />
+		<Field Name = "DeleteUser"  Type = "String"  DbType = "uniqueidentifier"  IsKey = "no"  Length = "0"  Required = "no"  Position = "9"  Identity = "no" />
+		<Field Name = "Deleted"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "10"  Identity = "no" >
+			<Default>((0))</Default>
+</Field>
+		<Field Name = "DeepClusterConfigurationId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "11"  Identity = "no" />
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_Typologies_Companies_CompanyId"  Table = "Typologies"  Field = "CompanyId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_Typologies_DeepClusterConfigurations_DeepClusterConfigurationId"  Table = "Typologies"  Field = "DeepClusterConfigurationId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "PK_Typologies"  Table = "Typologies"  Field = "Id"  Type = "PrimaryKey"  Position = "1" />
+</Table>
+	<Table Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "TypologiesClassificationLevels" >
+		<Field Name = "CreateDate"  Type = "Date"  DbType = "datetime2"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "CreateUser"  Type = "String"  DbType = "uniqueidentifier"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "UpdateDate"  Type = "Date"  DbType = "datetime2"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "3"  Identity = "no" />
+		<Field Name = "UpdateUser"  Type = "String"  DbType = "uniqueidentifier"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "4"  Identity = "no" />
+		<Field Name = "Id"  Type = "Integer"  DbType = "int"  IsKey = "yes"  Length = "0"  Required = "yes"  Position = "5"  Identity = "no" />
+		<Field Name = "TypologyId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "6"  Identity = "no" />
+		<Field Name = "Name"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "200"  Required = "yes"  Position = "7"  Identity = "no" />
+		<Field Name = "EnabledForDeepClustering"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "8"  Identity = "no" >
+			<Default>((0))</Default>
+</Field>
+		<Field Name = "EnabledForDvs"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "9"  Identity = "no" >
+			<Default>((0))</Default>
+</Field>
+		<Field Name = "EnabledForProjections"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "10"  Identity = "no" >
+			<Default>((0))</Default>
+</Field>
+		<Field Name = "Position"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "11"  Identity = "no" >
+			<Default>((0))</Default>
+</Field>
+		<Field Name = "EnabledForSpecificCoverage"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "12"  Identity = "no" >
+			<Default>((0))</Default>
+</Field>
+		<Field Name = "EnabledForCapacity"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "13"  Identity = "no" >
+			<Default>((0))</Default>
+</Field>
+		<Field Name = "EnabledForNovelty"  Type = "Boolean"  DbType = "bit"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "14"  Identity = "no" >
+			<Default>((0))</Default>
+</Field>
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_TypologiesClassificationLevels_Typologies_TypologyId"  Table = "TypologiesClassificationLevels"  Field = "TypologyId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "PK_TypologiesClassificationLevels"  Table = "TypologiesClassificationLevels"  Field = "Id"  Type = "PrimaryKey"  Position = "1" />
+</Table>
+	<Table Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "WarehousePointsOfSale" >
+		<Field Name = "Id"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "PointOfSaleId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "WarehouseId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "3"  Identity = "no" />
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_WarehousePointsOfSale_PointOfSale_PointOfSaleId"  Table = "WarehousePointsOfSale"  Field = "PointOfSaleId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_WarehousePointsOfSale_Warehouse_WarehouseId"  Table = "WarehousePointsOfSale"  Field = "WarehouseId"  Type = "ForeignKey"  Position = "1" />
+</Table>
+	<Table Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "Warehouses" >
+		<Field Name = "Id"  Type = "Integer"  DbType = "int"  IsKey = "yes"  Length = "0"  Required = "yes"  Position = "1"  Identity = "no" />
+		<Field Name = "Position"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "Name"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "-1"  Required = "no"  Position = "3"  Identity = "no" />
+		<Field Name = "ErpCode"  Type = "String"  DbType = "nvarchar"  IsKey = "no"  Length = "128"  Required = "no"  Position = "4"  Identity = "no" />
+		<Constraint Schema = "Dim"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "PK_Warehouses"  Table = "Warehouses"  Field = "Id"  Type = "PrimaryKey"  Position = "1" />
+</Table>
+	<Table Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "WarehouseStocks" >
+		<Field Name = "WarehouseId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "no"  Position = "1"  Identity = "no" />
+		<Field Name = "ProductId"  Type = "Integer"  DbType = "int"  IsKey = "no"  Length = "0"  Required = "yes"  Position = "2"  Identity = "no" />
+		<Field Name = "WarehouseStock"  Type = "Decimal"  DbType = "decimal"  IsKey = "no"  Length = "0"  Required = "no"  Position = "3"  Identity = "no" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_WarehouseStocks_Product_ProductId"  Table = "WarehouseStocks"  Field = "ProductId"  Type = "ForeignKey"  Position = "1" />
+		<Constraint Schema = "Fact"  Catalog = "Roivolution_NunezDeArena_Reporting"  Name = "FK_WarehouseStocks_Warehouse_WarehouseId"  Table = "WarehouseStocks"  Field = "WarehouseId"  Type = "ForeignKey"  Position = "1" />
+</Table>
+</Schema>

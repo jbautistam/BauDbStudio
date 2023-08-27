@@ -11,6 +11,23 @@ public class DimensionRelationModel
 	}
 
 	/// <summary>
+	///		Clona los datos del objeto
+	/// </summary>
+	public DimensionRelationModel Clone()
+	{
+		DimensionRelationModel target = new(DataWarehouse)
+											{
+												DimensionId = DimensionId
+											};
+
+			// Clona las claves foráneas
+			foreach (RelationForeignKey foreignKey in ForeignKeys)
+				target.ForeignKeys.Add(foreignKey.Clone());
+			// Devuelve el objeto clonado
+			return target;
+	}
+
+	/// <summary>
 	///		Datawarehouse al que pertenece la dimensión
 	/// </summary>
 	public DataWarehouseModel DataWarehouse { get; }
@@ -23,7 +40,7 @@ public class DimensionRelationModel
 	/// <summary>
 	///		Dimensión con la que se establece esta relación
 	/// </summary>
-	public Dimensions.DimensionModel? Dimension  => DataWarehouse.Dimensions[DimensionId];
+	public Dimensions.BaseDimensionModel? Dimension => DataWarehouse.Dimensions[DimensionId];
 
 	/// <summary>
 	///		Campos de la relación

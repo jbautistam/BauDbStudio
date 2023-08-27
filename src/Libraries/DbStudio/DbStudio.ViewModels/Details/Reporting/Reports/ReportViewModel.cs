@@ -27,7 +27,7 @@ public class ReportViewModel : BaseObservableObject, PluginsStudio.ViewModels.Ba
 		InitViewModel();
 		// Asigna los comandos
 		NewDataSourceCommand = new BaseCommand(_ => CreateDataSource());
-		DeleteDataSourceCommand = new BaseCommand(_ => DeleteDataSource(), _ => SelectedDataSource != null)
+		DeleteDataSourceCommand = new BaseCommand(_ => DeleteDataSource(), _ => SelectedDataSource is not null)
 											.AddListener(this, nameof(SelectedDataSource));
 	}
 
@@ -57,7 +57,7 @@ public class ReportViewModel : BaseObservableObject, PluginsStudio.ViewModels.Ba
 		// Inicializa la lista
 		DataSources = new ObservableCollection<ReportDataSourceViewModel>();
 		// Carga los orígenes de datos
-		foreach (ReportDataSourceModel dataSource in Report.ReportDataSources)
+		foreach (ReportDataSourceModel dataSource in Report.DataSources)
 			DataSources.Add(new ReportDataSourceViewModel(ReportingSolutionViewModel, Report, dataSource));
 	}
 
@@ -143,8 +143,8 @@ public class ReportViewModel : BaseObservableObject, PluginsStudio.ViewModels.Ba
 				_isNew = false;
 			}
 			// Añade los orígenes de datos
-			Report.ReportDataSources.Clear();
-			Report.ReportDataSources.AddRange(GetDataSources());
+			Report.DataSources.Clear();
+			Report.DataSources.AddRange(GetDataSources());
 			// Graba la solución
 			ReportingSolutionViewModel.SaveDataWarehouse(Report.DataWarehouse);
 			// Indica que no ha habido modificaciones

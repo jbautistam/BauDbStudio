@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report>
+<Name>Demand Forecast - Company - Chart</Name>
+<Description>
+	Gráfico de Demand Forecast por empresa
+</Description>
+	<Dimension Name = "Products" />
+
+	<Requests>
+		<Dimension Name = "Products">
+			<Field Name = "ProductCode;Description;UrlImage" />
+		</Dimension>
+	</Requests>
+	
+	<Expression Name = "TotalStock;Stock;AccumulatedReceptions;Receptions;Sales;Breakage" />
+	<Expression Name = "SimulatedReceptions;PointOfSaleDeliveries;Orders;OrdersAdjustedToMinimumAndMultiple" />
+	<Expression Name = "OrdersAdjustedToCapacity;OrdersAdjustedToCapacityAdvance;Capacity;AccumulatedSales" />
+	<Expression Name = "AccumulatedPointOfSalesDeliveries;AccumulatedOrders;AccumulatedOrdersAdjustedToMinimunAndMultiple" />
+	<Expression Name = "AccumulatedOrdersAdjustedToCapacity;AccumulatedOrdersAdjustedToCapacityAdvance" />
+	
+	<Blocks>
+		<With Name = "Main">
+			<IfRequest Dimension = "Products">
+				<Cte Name = "ProductsCte" Dimension = "Products" />
+			</IfRequest>
+			
+			<Query>
+				<![CDATA[
+					SELECT CompanyDemandForecast.[Week] AS [Week],   
+						   {{
+								IfRequest
+									-Expression: TotalStock
+										--SUM(CompanyDemandForecast.AccumulatedReceptions + CompanyDemandForecast.Receptions + 
+										--CompanyDemandForecast.SimulatedReceptions + CompanyDemandForecast.Stock) AS TotalStock
+									-Expression: Stock
+										--SUM(CompanyDemandForecast.Stock) AS Stock
+									-Expression: AccumulatedReceptions
+										--SUM(CompanyDemandForecast.AccumulatedReceptions) AS AccumulatedReceptions
+									-Expression: Receptions
+										--SUM(CompanyDemandForecast.Receptions) AS Receptions
+									-Expression: Sales
+										--SUM(CompanyDemandForecast.Sales) AS Sales
+									-Expression: Breakage
+										--SUM(CompanyDemandForecast.Breakage) AS Breakage
+									-Expression: SimulatedReceptions
+										--SUM(CompanyDemandForecast.SimulatedReceptions) AS SimulatedReceptions
+									-Expression: PointOfSaleDeliveries
+										--SUM(CompanyDemandForecast.PointOfSaleDeliveries) AS PointOfSaleDeliveries
+									-Expression: Orders
+										--SUM(CompanyDemandForecast.Orders) AS Orders
+									-Expression: OrdersAdjustedToMinimumAndMultiple
+										--SUM(CompanyDemandForecast.OrdersAdjustedToMinimumAndMultiple) AS OrdersAdjustedToMinimumAndMultiple
+									-Expression: OrdersAdjustedToCapacity
+										--SUM(CompanyDemandForecast.OrdersAdjustedToCapacity) AS OrdersAdjustedToCapacity
+									-Expression: OrdersAdjustedToCapacityAdvance	
+										--SUM(CompanyDemandForecast.OrdersAdjustedToCapacityAdvance) AS OrdersAdjustedToCapacityAdvance
+									-Expression: Capacity
+										--SUM(CompanyDemandForecast.Capacity) AS Capacity
+									-Expression: AccumulatedSales
+										--SUM(CompanyDemandForecast.AccumulatedSales) AS AccumulatedSales
+									-Expression: AccumulatedPointOfSalesDeliveries
+										--SUM(CompanyDemandForecast.AccumulatedPointOfSalesDeliveries) AS AccumulatedPointOfSalesDeliveries
+									-Expression: AccumulatedOrders
+										--SUM(CompanyDemandForecast.AccumulatedOrders) AS AccumulatedOrders
+									-Expression: AccumulatedOrdersAdjustedToMinimunAndMultiple
+										--SUM(CompanyDemandForecast.AccumulatedOrdersAdjustedToMinimunAndMultiple) AS AccumulatedOrdersAdjustedToMinimunAndMultiple
+									-Expression: AccumulatedOrdersAdjustedToCapacity
+										--SUM(CompanyDemandForecast.AccumulatedOrdersAdjustedToCapacity) AS AccumulatedOrdersAdjustedToCapacity
+									-Expression: AccumulatedOrdersAdjustedToCapacityAdvance
+										--SUM(CompanyDemandForecast.AccumulatedOrdersAdjustedToCapacityAdvance) AS AccumulatedOrdersAdjustedToCapacityAdvance
+							}}						   
+						FROM Fact.CompanyDemandForecast
+		            	{{
+		            		InnerJoin 
+		            			-Dimension: Products 
+		            				--Table: ProductsCte
+								-Table: CompanyDemandForecast
+								-On: ProductId-ProductId
+		            	}}
+		            	GROUP BY CompanyDemandForecast.[Week]
+		            	ORDER BY CompanyDemandForecast.[Week]
+				]]>
+			</Query>
+		</With>
+	</Blocks>
+	
+<!--
+SELECT SUM(Stock) AS Stock
+         ,SUM(AccumulatedReceptions)+SUM(Receptions)+SUM(SimulatedReceptions)+SUM(Stock) AS TotalStock 
+        ,SUM(DFCR.AccumulatedReceptions) AS AccumulatedReceptions
+        ,SUM(Receptions) AS Receptions
+        ,SUM(DFCR.SimulatedReceptions) AS SimulatedReceptions
+        ,SUM(PointOfSaleDeliveries) AS PointOfSaleDeliveries
+        ,SUM(Sales) AS Sales
+        ,SUM(Orders) AS Orders
+        ,SUM(OrdersAdjustedToMinimumAndMultiple) AS OrdersAdjustedToMinimumAndMultiple
+        ,SUM(Breakage) AS Breakage
+        ,SUM(OrdersAdjustedToCapacity) AS OrdersAdjustedToCapacity
+        ,SUM(OrdersAdjustedToCapacityAdvance) AS OrdersAdjustedToCapacityAdvance
+        ,MAX(Capacity) AS Capacity
+        ,SUM(AccumulatedSales) AS AccumulatedSales
+        ,SUM(AccumulatedPointOfSalesDeliveries) AS AccumulatedPointOfSalesDeliveries
+        ,SUM(AccumulatedOrders) AS AccumulatedOrders
+        ,SUM(AccumulatedOrdersAdjustedToMinimunAndMultiple) AS AccumulatedOrdersAdjustedToMinimunAndMultiple
+        ,SUM(AccumulatedOrdersAdjustedToCapacity) AS AccumulatedOrdersAdjustedToCapacity
+        ,SUM(AccumulatedOrdersAdjustedToCapacityAdvance) AS AccumulatedOrdersAdjustedToCapacityAdvance
+        ,DFCR.[Week] AS [Week]
+    FROM Fact.CompanyDemandForecast DFCR
+    
+                                
+    GROUP BY DFCR.[Week] 
+    
+    ORDER BY DFCR.[Week]
+-->
+</Report>

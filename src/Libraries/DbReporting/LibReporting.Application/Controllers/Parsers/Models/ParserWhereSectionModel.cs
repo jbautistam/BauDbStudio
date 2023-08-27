@@ -4,22 +4,20 @@
 ///		Sección con datos de una sección WHERE
 /// </summary>
 /// <example>
-/// -Where 
-///		-Equal
-///		    ... <see cref="ParserWhereConditionSectionModel"/>
-///		-Additional
-///		    SalesAnalysisAccumulated.Date BETWEEN @StartDate AND SalesAnalysis.Date
-///		        AND SalesAnalysisAccumulated.Refund = 0
+/// Where 
+///		-DataSource: Name
+///		    --Table: TableAlias
+///		-Operator: AND | OR | ...
 /// </example>
 internal class ParserWhereSectionModel : ParserBaseSectionModel
 {
     /// <summary>
-    ///     Condiciones
+    ///     Bloques con los orígenes de datos
     /// </summary>
-    internal List<ParserWhereConditionSectionModel> Conditions { get; } = new();
+    internal List<ParserDataSourceModel> DataSources { get; } = new();
 
     /// <summary>
-    ///     Sql adicional a la condición
+    ///     Operador inicial de la condición
     /// </summary>
-    internal string AdditionalSql { get; set; } = string.Empty;
+    internal string Operator { get; set; } = string.Empty;
 }

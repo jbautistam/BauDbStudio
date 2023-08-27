@@ -19,6 +19,11 @@ public class DataSourceSqlModel : BaseDataSourceModel
 	}
 
 	/// <summary>
+	///		Obtiene el nombre completo de la tabla o la SQL del contenido si es una vista
+	/// </summary>
+	public override string GetTableFullNameOrContent() => $"({Sql})";
+
+	/// <summary>
 	///		Obtiene el nombre de tabla
 	/// </summary>
 	public override string GetTableAlias() => Id;

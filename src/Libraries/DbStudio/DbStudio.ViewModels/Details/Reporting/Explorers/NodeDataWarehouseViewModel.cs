@@ -25,7 +25,6 @@ public class NodeDataWarehouseViewModel : PluginNodeViewModel
 		Children.Add(new NodeRootViewModel(TreeViewModel, this, TreeReportingViewModel.NodeType.DataSourcesRoot, "Orígenes de datos", true));
 		Children.Add(new NodeRootViewModel(TreeViewModel, this, TreeReportingViewModel.NodeType.DimensionsRoot, "Dimensiones", true));
 		Children.Add(new NodeRootViewModel(TreeViewModel, this, TreeReportingViewModel.NodeType.ReportsRoot, "Informes", true));
-		Children.Add(new NodeRootViewModel(TreeViewModel, this, TreeReportingViewModel.NodeType.ReportsAdvancedRoot, "Informes avanzados", true));
 	}
 
 	/// <summary>

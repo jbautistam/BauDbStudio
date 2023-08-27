@@ -1,4 +1,6 @@
-﻿namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models;
+﻿using System.Linq;
+
+namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Models;
 
 /// <summary>
 ///		Datos de una consulta SQL
@@ -47,6 +49,11 @@ internal class QuerySqlModel
 		// Si ha llegado hasta aquí es porque no ha encontrado nada
 		return null;
 	}
+
+	/// <summary>
+	///		Indica si hay alguna consulta de CTE en la lista
+	/// </summary>
+	internal bool ExistsCte() => Queries.Any(item => item.Type == QueryType.Cte);
 
 	/// <summary>
 	///		Tipo de consulta

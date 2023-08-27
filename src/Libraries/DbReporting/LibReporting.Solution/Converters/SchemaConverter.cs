@@ -10,6 +10,19 @@ namespace Bau.Libraries.LibReporting.Solution.Converters;
 /// </summary>
 public class SchemaConverter
 {
+	///// <summary>
+	/////		Convierte un esquema en scripts de generación de la base de datos
+	///// </summary>
+	//public void ConvertSchemaReportingToSql(string schemaFileName, string outputFileName)
+	//{
+	//	DataWarehouseModel dataWarehouse = Convert(new Repositories.DataWarehouseRepository().Load(Manager.Schema, schemaFileName);
+
+	//		if (dataWarehouse != null)
+	//			new Converters.SchemaScriptsConverter().Convert(dataWarehouse, outputFileName);
+	//		else
+	//			throw new Exception($"Can't load datawarehouse from {schemaFileName}");
+	//}
+
 	/// <summary>
 	///		Convierte un archivo de esquema de base de datos en un <see cref="DataWarehouseModel"/>
 	/// </summary>

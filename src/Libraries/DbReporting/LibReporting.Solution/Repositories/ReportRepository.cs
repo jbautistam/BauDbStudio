@@ -1,6 +1,9 @@
 ﻿using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.LibMarkupLanguage;
 using Bau.Libraries.LibReporting.Models.DataWarehouses;
+using Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets;
+using Bau.Libraries.LibReporting.Models.DataWarehouses.Dimensions;
+using Bau.Libraries.LibReporting.Models.DataWarehouses.Relations;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.Reports;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.Reports.Blocks;
 
@@ -27,24 +30,30 @@ internal class ReportRepository
 	private const string TagIfRequest = "IfRequest";
 	private const string TagThen = "Then";
 	private const string TagElse = "Else";
-	private const string TagJoin = "Join";
+	private const string TagAllDimensions = "AllDimensions";
+	private const string TagAllExpressions = "AllExpressions";
+	private const string TagWhenTotals = "WhenTotals";
 	private const string TagRelation = "Relation";
-	private const string TagFromDimension = "FromDimension";
-	private const string TagRelatedTo = "RelatedTo";
 	private const string TagTable = "Table";
 	private const string TagField = "Field";
 	private const string TagAlias = "Alias";
 	private const string TagRequired = "Required";
 	private const string TagFilter = "Filter";
 	private const string TagRequests = "Requests";
+	private const string TagDataSource = "DataSource";
+	private const string TagSourceId = "SourceId";
+	private const string TagSchema = "Schema";
 	private const string TagExpression = "Expression";
+	private const string TagForeignKey = "ForeignKey";
+	private const string TagColumn = "Column";
+	private const string TagDimensionColumn = "DimensionColumn";
 
 	/// <summary>
 	///		Carga el informe de un archivo sobre un <see cref="DataWarehouseModel"/>
 	/// </summary>
-	internal ReportAdvancedModel LoadReport(DataWarehouseModel dataWarehouse, string fileName)
+	internal ReportModel LoadReport(DataWarehouseModel dataWarehouse, string fileName)
 	{
-		ReportAdvancedModel report = new(dataWarehouse, fileName);
+		ReportModel report = new(dataWarehouse, fileName);
 		MLFile fileML = new LibMarkupLanguage.Services.XML.XMLParser().Load(fileName);
 
 			// Carga los datos del informe
@@ -66,7 +75,10 @@ internal class ReportRepository
 									report.Blocks.AddRange(LoadBlocks(nodeML.Nodes));
 								break;
 							case TagDimension:
-									report.DimensionKeys.Add(nodeML.Attributes[TagName].Value.TrimIgnoreNull());
+									LoadDimension(report, nodeML);
+								break;
+							case TagDataSource:
+									LoadDataSource(report, nodeML);
 								break;
 							case TagRequests:
 									report.RequestDimensions.AddRange(LoadRequests(nodeML));
@@ -77,6 +89,18 @@ internal class ReportRepository
 						}
 			// Devuelve el informe
 			return report;
+	}
+
+	/// <summary>
+	///		Carga una dimensión
+	/// </summary>
+	private void LoadDimension(ReportModel report, MLNode rootML)
+	{
+		string key = rootML.Attributes[TagName].Value.TrimIgnoreNull();
+		BaseDimensionModel? dimension = report.DataWarehouse.Dimensions[key];
+
+			if (dimension is not null)
+				report.Dimensions.Add(dimension);
 	}
 
 	/// <summary>
@@ -195,9 +219,6 @@ internal class ReportRepository
 			foreach (MLNode nodeML in rootML.Nodes)
 				switch (nodeML.Name)
 				{
-					case TagJoin:
-							block.Joins.Add(LoadJoins(nodeML));
-						break;
 					case TagField:
 							block.Fields.Add(LoadField(nodeML));
 						break;
@@ -233,36 +254,16 @@ internal class ReportRepository
 	}
 
 	/// <summary>
-	///		Carga los datos de una cláusula JOIN
-	/// </summary>
-	private ClauseJoinModel LoadJoins(MLNode rootML)
-	{
-		ClauseJoinModel join = new()
-								{
-									Type = rootML.Attributes[TagType].Value.GetEnum(ClauseJoinModel.JoinType.InnerJoin),
-									DimensionKey = rootML.Attributes[TagDimension].Value.TrimIgnoreNull(),
-									TableRelated = rootML.Attributes[TagTable].Value.TrimIgnoreNull(),
-									Required = rootML.Attributes[TagRequired].Value.GetBool()
-								};
-
-			// Añade las dimensiones asociadas
-			join.AddRelatedRequestDimensionKeys(rootML.Attributes[TagIfRequest].Value.TrimIgnoreNull());
-			// Asigna las relaciones
-			foreach (MLNode nodeML in rootML.Nodes)
-				if (nodeML.Name == TagRelation)
-					join.Relations.Add((nodeML.Attributes[TagFromDimension].Value.TrimIgnoreNull(),
-										nodeML.Attributes[TagRelatedTo].Value.TrimIgnoreNull()
-										));
-			// Devuelve la cláusula
-			return join;
-	}
-
-	/// <summary>
 	///		Carga un bloque que comprueba si se ha solicitado una (o varias) dimensiones
 	/// </summary>
 	private BlockIfRequest LoadBlockIfRequest(MLNode rootML)
 	{
-		BlockIfRequest block = new BlockIfRequest(string.Empty);
+		BlockIfRequest block = new(string.Empty)
+									{
+										AllDimensions = rootML.Attributes[TagAllDimensions].Value.GetBool(),
+										AllExpressions = rootML.Attributes[TagAllExpressions].Value.GetBool(),
+										WhenTotals = rootML.Attributes[TagWhenTotals].Value.GetBool()
+									};
 
 			// Añade las dimensiones y las expresiones que se comprueban
 			block.AddDimensions(rootML.Attributes[TagDimension].Value.TrimIgnoreNull());
@@ -288,15 +289,15 @@ internal class ReportRepository
 	/// <summary>
 	///		Carga la información adicional sobre solicitudes para el informe
 	/// </summary>
-	private List<ReportAdvancedRequestDimension> LoadRequests(MLNode rootML)
+	private List<ReportRequestDimension> LoadRequests(MLNode rootML)
 	{
-		List<ReportAdvancedRequestDimension> requests = new();
+		List<ReportRequestDimension> requests = new();
 
 			// Carga las dimensiones solicitadas
 			foreach (MLNode nodeML in rootML.Nodes)
 				if (nodeML.Name == TagDimension)
 				{
-					ReportAdvancedRequestDimension dimension = new()
+					ReportRequestDimension dimension = new()
 																	{
 																		DimensionKey = nodeML.Attributes[TagName].Value.TrimIgnoreNull(),
 																		Required = nodeML.Attributes[TagRequired].Value.TrimIgnoreNull().GetBool()
@@ -307,7 +308,7 @@ internal class ReportRepository
 							if (childML.Name == TagField && !string.IsNullOrWhiteSpace(childML.Attributes[TagName].Value.TrimIgnoreNull()))
 								foreach (string field in childML.Attributes[TagName].Value.TrimIgnoreNull().Split(';'))
 									if (!string.IsNullOrWhiteSpace(field))
-										dimension.Fields.Add(new ReportAdvancedRequestDimensionField
+										dimension.Fields.Add(new ReportRequestDimensionField
 																			{
 																				Field = field.TrimIgnoreNull()
 																			}
@@ -317,6 +318,71 @@ internal class ReportRepository
 				}
 			// Devuelve los datos de la solicitud
 			return requests;
+	}
+
+	/// <summary>
+	///		Carga un origen de datos de un informe
+	/// </summary>
+	private void LoadDataSource(ReportModel report, MLNode rootML)
+	{
+		BaseDataSourceModel? dataSource = report.DataWarehouse.DataSources[GetDataSourceId(rootML)];
+
+			if (dataSource is not null)
+			{
+				ReportDataSourceModel reportDataSource = new(report, dataSource);
+
+					// Carga las expresiones
+					foreach (MLNode childML in rootML.Nodes)
+						switch (childML.Name)
+						{
+							case TagRelation:
+									reportDataSource.Relations.Add(LoadRelatedDimension(childML, report.DataWarehouse));
+								break;
+						}
+					// Añade el origen de datos
+					report.DataSources.Add(reportDataSource);
+			}
+	}
+
+	/// <summary>
+	///		Obtiene el Id de un origen de datos
+	/// </summary>
+	private string GetDataSourceId(MLNode rootML)
+	{
+		if (!string.IsNullOrWhiteSpace(rootML.Attributes[TagSourceId].Value))
+			return rootML.Attributes[TagSourceId].Value.TrimIgnoreNull();
+		else
+		{
+			string schema = rootML.Attributes[TagSchema].Value.TrimIgnoreNull();
+			string table = rootML.Attributes[TagTable].Value.TrimIgnoreNull();
+
+				if (string.IsNullOrWhiteSpace(schema))
+					return $"[{table}]";
+				else
+					return $"[{schema}].[{table}]";
+		}
+	}
+
+	/// <summary>
+	///		Carga los datos de una dimension relacionada
+	/// </summary>
+	private DimensionRelationModel LoadRelatedDimension(MLNode rootML, DataWarehouseModel dataWarehouse)
+	{
+		DimensionRelationModel relation = new(dataWarehouse);
+
+			// Carga los datos de la dimensión
+			relation.DimensionId = rootML.Attributes[TagSourceId].Value.TrimIgnoreNull();
+			// Carga las columnas
+			foreach (MLNode nodeML in rootML.Nodes)
+				if (nodeML.Name == TagForeignKey)
+					relation.ForeignKeys.Add(new RelationForeignKey
+														{
+															ColumnId = nodeML.Attributes[TagColumn].Value.TrimIgnoreNull(),
+															TargetColumnId = nodeML.Attributes[TagDimensionColumn].Value.TrimIgnoreNull()
+														}
+											);
+			// Devuelve la relación
+			return relation;
 	}
 
 	/// <summary>

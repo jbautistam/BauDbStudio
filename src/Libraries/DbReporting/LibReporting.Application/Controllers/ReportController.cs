@@ -19,23 +19,23 @@ internal class ReportController
 	/// </summary>
 	internal string GetResponse(ReportRequestModel request)
 	{
-		return SearchReport(request.ReportId) switch
-					{ 
-						ReportModel report => new Queries.ReportQueryGenerator(Manager.Schema, report, request.Clone()).GetSql(),
-						ReportAdvancedModel report => new Queries.ReportQueryAdvancedGenerator(Manager.Schema, report, request.Clone()).GetSql(),
-						_ => throw new Models.Exceptions.ReportingException($"Can't find the report {request.ReportId}")
-					};
+		ReportModel? report = SearchReport(request.ReportId);
+
+			if (report is null)
+				throw new Models.Exceptions.ReportingException($"Can't find the report {request.ReportId}");
+			else
+				return new Queries.ReportQueryGenerator(Manager.Schema, report, request.Clone()).GetSql();
 	}
 
 	/// <summary>
 	///		Obtiene el informe solicitado
 	/// </summary>
-	private ReportBaseModel? SearchReport(string reportId)
+	private ReportModel? SearchReport(string reportId)
 	{
 		// Busca el informe entre los diferentes almacenes del esquema
 		foreach (DataWarehouseModel dataWarehouse in Manager.Schema.DataWarehouses.EnumerateValues())
 		{
-			ReportBaseModel? report = dataWarehouse.Reports[reportId];
+			ReportModel? report = dataWarehouse.Reports[reportId];
 
 				if (report is not null)
 					return report;

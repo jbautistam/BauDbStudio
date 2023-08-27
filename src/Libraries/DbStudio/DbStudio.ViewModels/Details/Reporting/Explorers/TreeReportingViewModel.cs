@@ -38,10 +38,6 @@ public class TreeReportingViewModel : PluginTreeViewModel
 		ReportsRoot,
 		/// <summary>Informe</summary>
 		Report,
-		/// <summary>Raíz de informes avanzados</summary>
-		ReportsAdvancedRoot,
-		/// <summary>Informe avanzado</summary>
-		ReportAdvanced,
 		/// <summary>Nodo con error</summary>
 		Error
 	}
@@ -61,6 +57,7 @@ public class TreeReportingViewModel : PluginTreeViewModel
 		Report,
 		DataSourceSql,
 		Dimension,
+		DimensionChild,
 		Folder
 	}
 
@@ -77,7 +74,7 @@ public class TreeReportingViewModel : PluginTreeViewModel
 									.AddListener(this, nameof(SelectedNode));
 		NewReportCommand = new BaseCommand(_ => OpenReport(null), _ => CanExecuteAction(nameof(NewReportCommand)))
 									.AddListener(this, nameof(SelectedNode));
-		NewReportAdvancedCommand = new BaseCommand(_ => OpenReportAdvanced(null), _ => CanExecuteAction(nameof(NewReportAdvancedCommand)))
+		NewReportAdvancedCommand = new BaseCommand(_ => OpenReport(null), _ => CanExecuteAction(nameof(NewReportAdvancedCommand)))
 									.AddListener(this, nameof(SelectedNode));
 		QueryCommand = new BaseCommand(_ => OpenQuery(), _ => CanExecuteAction(nameof(QueryCommand)))
 									.AddListener(this, nameof(SelectedNode));
@@ -118,7 +115,7 @@ public class TreeReportingViewModel : PluginTreeViewModel
 				case NodeDataWarehouseViewModel node:
 						fileName = ReportingSolutionViewModel.ReportingSolutionManager.ReportingSolution.GetFileName(node.DataWarehouse);
 					break;
-				case NodeReportAdvancedViewModel node:
+				case NodeReportViewModel node:
 						fileName = node.Report.FileName;
 					break;
 			}
@@ -151,13 +148,12 @@ public class TreeReportingViewModel : PluginTreeViewModel
 				nameof(NewDataWarehouseCommand) or nameof(NewDataWarehouseFromFileCommand) => true,
 				nameof(NewDataSourceCommand) or nameof(NewReportCommand) or nameof(NewReportAdvancedCommand) 
 						=> ReportingSolutionViewModel.ReportingSolutionManager.Manager.Schema.DataWarehouses.Count > 0,
-				nameof(NewDimensionCommand) => SelectedNode is NodeDataSourceViewModel,
+				nameof(NewDimensionCommand) => SelectedNode is NodeDataSourceViewModel || SelectedNode is NodeDimensionViewModel,
 				nameof(OpenCommand) => SelectedNode is NodeDimensionViewModel || SelectedNode is NodeDataSourceViewModel || SelectedNode is NodeReportViewModel,
-				nameof(QueryCommand) => SelectedNode is NodeReportViewModel || SelectedNode is NodeDataSourceViewModel || SelectedNode is NodeReportAdvancedViewModel,
+				nameof(QueryCommand) => SelectedNode is NodeDataSourceViewModel || SelectedNode is NodeReportViewModel,
 				nameof(DeleteCommand) => SelectedNode is NodeDataWarehouseViewModel || SelectedNode is NodeReportViewModel || SelectedNode is NodeDimensionViewModel ||
-										   (SelectedNode is NodeDataSourceViewModel nodeDataSource && nodeDataSource.DataSource is DataSourceSqlModel) ||
-											SelectedNode is NodeReportAdvancedViewModel,
-				nameof(OpenXmlCommand) => SelectedNode is NodeDataWarehouseViewModel || SelectedNode is NodeReportAdvancedViewModel,
+										   (SelectedNode is NodeDataSourceViewModel nodeDataSource && nodeDataSource.DataSource is DataSourceSqlModel),
+				nameof(OpenXmlCommand) => SelectedNode is NodeDataWarehouseViewModel || SelectedNode is NodeReportViewModel,
 				nameof(OpenExplorerCommand) or nameof(MergeSchemaCommand) => SelectedNode is NodeDataWarehouseViewModel,
 				_ => false,
 			};
@@ -178,9 +174,6 @@ public class TreeReportingViewModel : PluginTreeViewModel
 				break;
 			case NodeReportViewModel node:
 					OpenReport(node);
-				break;
-			case NodeReportAdvancedViewModel node:
-					OpenReportAdvanced(node);
 				break;
 		}
 	}
@@ -326,51 +319,56 @@ public class TreeReportingViewModel : PluginTreeViewModel
 	private void OpenDimension(NodeDimensionViewModel? node)
 	{
 		bool isNew = false;
-		LibReporting.Models.DataWarehouses.Dimensions.DimensionModel? dimension = null;
+		LibReporting.Models.DataWarehouses.Dimensions.BaseDimensionModel? baseDimension = null;
 
 			// Si no se le ha pasado un nodo, si estamos en un nodo de origen de datos, creamos una dimensión a partir del nodo
 			if (node is not null)
-				dimension = node.Dimension;
-			else if (SelectedNode is NodeDataSourceViewModel nodeDataSource)
+				baseDimension = node.Dimension;
+			else 
 			{
-				dimension = new LibReporting.Models.DataWarehouses.Dimensions.DimensionModel(GetSelectedDataWarehouse(nodeDataSource),
-																							 nodeDataSource.DataSource);
-				isNew = true;
+				if (SelectedNode is NodeDataSourceViewModel nodeDataSource)
+				{
+					DataWarehouseModel? dataWarehouse = GetSelectedDataWarehouse(nodeDataSource);
+
+						if (dataWarehouse is not null)
+						{
+							baseDimension = new LibReporting.Models.DataWarehouses.Dimensions.DimensionModel(dataWarehouse, nodeDataSource.DataSource);
+							isNew = true;
+						}
+				}
+				else if (SelectedNode is NodeDimensionViewModel nodeDimension)
+				{
+					DataWarehouseModel? dataWarehouse = GetSelectedDataWarehouse(nodeDimension);
+
+						if (dataWarehouse is not null)
+						{
+							baseDimension = new LibReporting.Models.DataWarehouses.Dimensions.DimensionChildModel(dataWarehouse, string.Empty, 
+																												  nodeDimension.Id, string.Empty);
+							isNew = true;
+						}				
+				}
 			}
 			// Abre el formulario
-			if (dimension is not null)
-				ReportingSolutionViewModel.SolutionViewModel.MainController.OpenWindow(new Dimension.DimensionViewModel(ReportingSolutionViewModel, dimension, isNew));
+			switch (baseDimension)
+			{
+				case null:
+						ReportingSolutionViewModel.SolutionViewModel.MainController.SystemController.ShowMessage("Can't find dimension");
+					break;
+				case LibReporting.Models.DataWarehouses.Dimensions.DimensionModel dimension:
+						ReportingSolutionViewModel.SolutionViewModel.MainController.OpenWindow(new Dimension.DimensionViewModel(ReportingSolutionViewModel, dimension, isNew));
+					break;
+				case LibReporting.Models.DataWarehouses.Dimensions.DimensionChildModel dimension:
+						if (ReportingSolutionViewModel.SolutionViewModel.MainController.OpenDialog(new Dimension.DimensionChildViewModel(ReportingSolutionViewModel, dimension, isNew))
+								== BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+							Load();
+					break;
+			}
 	}
 
 	/// <summary>
-	///		Abre el formulario de detalles de un informe
+	///		Abre un informe
 	/// </summary>
 	private void OpenReport(NodeReportViewModel? node)
-	{
-		bool isNew = false;
-		LibReporting.Models.DataWarehouses.Reports.ReportModel report;
-
-			// Si no se le ha pasado un nodo, si estamos en un nodo de origen de datos, creamos una dimensión a partir del nodo
-			if (node is null)
-			{
-				// Crea el informe
-				report = new LibReporting.Models.DataWarehouses.Reports.ReportModel(GetSelectedDataWarehouse(SelectedNode))
-											{
-												Id = "RptNewReport"
-											};
-				// Indica que es nuevo
-				isNew = true;
-			}
-			else
-				report = node.Report;
-			// Abre el formulario
-			ReportingSolutionViewModel.SolutionViewModel.MainController.OpenWindow(new Reports.ReportViewModel(ReportingSolutionViewModel, report, isNew));
-	}
-
-	/// <summary>
-	///		Abre un informe avanzado
-	/// </summary>
-	private void OpenReportAdvanced(NodeReportAdvancedViewModel? node)
 	{
 		if (node is not null)
 			ReportingSolutionViewModel.SolutionViewModel.MainController.HostPluginsController.OpenFile(node.Report.FileName);
@@ -424,9 +422,6 @@ public class TreeReportingViewModel : PluginTreeViewModel
 			case NodeReportViewModel node:
 					ReportingSolutionViewModel.SolutionViewModel.MainController.OpenWindow(new Queries.ReportQueryViewModel(ReportingSolutionViewModel, node.Report));
 				break;
-			case NodeReportAdvancedViewModel node:
-					ReportingSolutionViewModel.SolutionViewModel.MainController.OpenWindow(new Queries.ReportQueryViewModel(ReportingSolutionViewModel, node.Report));
-				break;
 			case NodeDataSourceViewModel node:
 					OpenQueryDataSource(node.DataSource);
 				break;
@@ -462,7 +457,7 @@ public class TreeReportingViewModel : PluginTreeViewModel
 			case DataWarehouseModel item:
 					DeleteDataWarehouse(item);
 				break;
-			case LibReporting.Models.DataWarehouses.Dimensions.DimensionModel item:
+			case LibReporting.Models.DataWarehouses.Dimensions.BaseDimensionModel item:
 					DeleteDimension(item);
 				break;
 			case DataSourceSqlModel item:
@@ -470,9 +465,6 @@ public class TreeReportingViewModel : PluginTreeViewModel
 				break;
 			case LibReporting.Models.DataWarehouses.Reports.ReportModel item:
 					DeleteReport(item);
-				break;
-			case LibReporting.Models.DataWarehouses.Reports.ReportAdvancedModel item:
-					DeleteAdvancedReport(item);
 				break;
 		}
 	}
@@ -508,7 +500,7 @@ public class TreeReportingViewModel : PluginTreeViewModel
 	/// <summary>
 	///		Borra los datos de una dimensión
 	/// </summary>
-	private void DeleteDimension(LibReporting.Models.DataWarehouses.Dimensions.DimensionModel dimension)
+	private void DeleteDimension(LibReporting.Models.DataWarehouses.Dimensions.BaseDimensionModel dimension)
 	{
 		if (ReportingSolutionViewModel.SolutionViewModel.MainController.SystemController.ShowQuestion($"¿Realmente desea borrar los datos de la dimensión {dimension.Id}?"))
 		{
@@ -520,23 +512,9 @@ public class TreeReportingViewModel : PluginTreeViewModel
 	}
 
 	/// <summary>
-	///		Borra los datos de un informe
-	/// </summary>
-	private void DeleteReport(LibReporting.Models.DataWarehouses.Reports.ReportModel report)
-	{
-		if (ReportingSolutionViewModel.SolutionViewModel.MainController.SystemController.ShowQuestion($"¿Realmente desea borrar los datos del informe {report.Id}?"))
-		{
-			// Borra el informe
-			report.DataWarehouse.Reports.Remove(report);
-			// Graba la solución y actualiza el árbol
-			SaveDataWarehouse(report.DataWarehouse);
-		}
-	}
-
-	/// <summary>
 	///		Elimina un informe avanzado
 	/// </summary>
-	private void DeleteAdvancedReport(LibReporting.Models.DataWarehouses.Reports.ReportAdvancedModel report)
+	private void DeleteReport(LibReporting.Models.DataWarehouses.Reports.ReportModel report)
 	{
 		if (ReportingSolutionViewModel.SolutionViewModel.MainController.SystemController.ShowQuestion($"¿Realmente desea borrar los datos del informe {report.Id}?"))
 		{

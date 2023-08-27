@@ -18,6 +18,9 @@ public class ReportRequestModel
 			// Clona las solicitudes de dimensions
 			foreach (DimensionRequestModel dimensionRequest in Dimensions)
 				cloned.Dimensions.Add(dimensionRequest.Clone());
+			// Clona las solicitudes de orígenes de datos
+			foreach (DataSourceRequestModel dataSourceRequest in DataSources)
+				cloned.DataSources.Add(dataSourceRequest.Clone());
 			// Clona las solicitudes de expresiones
 			foreach (ExpressionRequestModel expressionRequest in Expressions)
 				cloned.Expressions.Add(expressionRequest.Clone());
@@ -84,7 +87,7 @@ public class ReportRequestModel
 	/// <summary>
 	///		Añade una dimensión y un campo a una solicitud
 	/// </summary>
-	public void Add(string dimensionId, string columnId)
+	public void Add(string dimensionId, string columnId, bool requestedByUser)
 	{
 		DimensionRequestModel? dimension = GetDimensionRequest(dimensionId);
 
@@ -103,11 +106,38 @@ public class ReportRequestModel
 			if (dimension.GetRequestColumn(columnId) is null)
 				dimension.Columns.Add(new()
 										{
-											//DimensionId = dimensionId,
-											ColumnId = columnId
+											ColumnId = columnId,
+											RequestedByUser = requestedByUser
 										}
 									 );
 	}
+
+	/// <summary>
+	///		Obtiene la solicitud asociada a un origen de datos
+	/// </summary>
+	public DataSourceRequestModel? GetDataSourceRequest(string id)
+	{
+		return DataSources.FirstOrDefault(item => item.ReportDataSourceId.Equals(id, StringComparison.CurrentCultureIgnoreCase));
+	}
+
+	/// <summary>
+	///		Obtiene la solicitud asociada a una expresión
+	/// </summary>
+	public ExpressionColumnRequestModel? GetExpressionRequest(string expression)
+	{
+		// Busca la expresión entre las solicitudes
+		foreach (ExpressionRequestModel expressionRequest in Expressions)
+			foreach (ExpressionColumnRequestModel columnRequest in expressionRequest.Columns)
+				if (columnRequest.ColumnId.Equals(expression, StringComparison.CurrentCultureIgnoreCase))
+					return columnRequest;
+		// Si ha llegado hasta aquí es porque no ha encontrado nada
+		return null;
+	}
+
+	/// <summary>
+	///		Indica si se han solicitado totales (estamos en la primera página)
+	/// </summary>
+	public bool IsRequestedTotals() => Pagination.IsFirstPage;
 
 	/// <summary>
 	///		Código de informe solicitado
@@ -125,8 +155,14 @@ public class ReportRequestModel
 	public List<DimensionRequestModel> Dimensions { get; } = new();
 
 	/// <summary>
+	///		Solicitudes de orígenes de datos
+	/// </summary>
+	public List<DataSourceRequestModel> DataSources { get; } = new();
+
+	/// <summary>
 	///		Expresiones solicitadas
 	/// </summary>
+	//TODO: esto podría ser directamente las columnas
 	public List<ExpressionRequestModel> Expressions { get; } = new();
 
 	/// <summary>

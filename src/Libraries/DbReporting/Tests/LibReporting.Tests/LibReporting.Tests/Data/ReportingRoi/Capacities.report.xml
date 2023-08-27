@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report>
+	<Name>Capacities</Name>
+	<Description>
+		Informe de capacidades por tipología y punto de venta
+	</Description>	
+
+	<Dimension Name = "PointsOfSale" />
+	<Dimension Name = "Typologies" />
+
+	<DataSource Name="Capacities" Schema="Fact" Table="Capacities" />
+
+	<Requests>
+		<Dimension Name = "PointsOfSale">
+			<Field Name = "Name;ErpCode;ImageUrl" />
+		</Dimension>
+		<Dimension Name = "Typologies" />
+	</Requests>
+	
+	<Expression Name = "MinimumStock;MaximumStock;MinimumVolumetry;MaximumVolumetry;IdealStock;ExpectedStock;AlertMessageId" />
+	
+	<Blocks>
+		<With Name = "Main">
+			<IfRequest Dimension = "PointsOfSale">
+				<Cte Name = "PointsOfSaleCte" Dimension = "PointsOfSale" />
+			</IfRequest>
+			
+			<IfRequest Dimension = "Typologies">
+				<Cte Name = "TypologiesCte" Dimension = "Typologies" />
+			</IfRequest>
+
+			<!--
+				TODO
+				En realidad, debería tener la dimensión de tipologías siempre y que siempre apareciera el campo
+				Name, por supuesto con su alias Typology pero no funciona
+			<Cte Name = "TypologiesCte" Dimension = "Typologies" Required = "true" >
+				<Field Name = "Name" />
+			</Cte>
+			-->
+			
+			<Query>
+				<![CDATA[
+					SELECT Capacities.ClassificationLevels,
+							{{
+								Fields
+									-Dimension: PointsOfSale 
+										--Table: PointsOfSaleCte
+									-Dimension: Typologies 
+										--Table: TypologiesCte
+									-WithComma
+	                	   }}			   
+						   {{
+								IfRequest
+									-Expression: MinimumStock
+										--SUM(Capacities.MinimumStock) AS MinimumStock									
+									-Expression: MaximumStock
+										--SUM(Capacities.MaximumStock) AS MaximumStock									
+									-Expression: MinimumVolumetry
+										--SUM(Capacities.MinimumVolumetry) AS MinimumVolumetry									
+									-Expression: MaximumVolumetry
+										--SUM(Capacities.MaximumVolumetry) AS MaximumVolumetry									
+									-Expression: IdealStock
+										--SUM(Capacities.IdealStock) AS IdealStock									
+									-Expression: ExpectedStock
+										--SUM(Capacities.ExpectedStock) AS ExpectedStock									
+									-Expression: AlertMessageId
+										--MAX(Capacities.AlertMessageId) AS AlertMessageId
+									-WhenRequestTotals
+										--Default
+											---COUNT(*) OVER () AS TotalCount
+							}}						   
+						FROM Fact.Capacities
+						{{
+	                		InnerJoin 
+	                			-Dimension: PointsOfSale 
+	                				--Table: PointsOfSaleCte
+								-Table: Capacities
+								-On:PointOfSaleId-PointOfSaleId
+						}}
+		            	{{
+		            		InnerJoin 
+		            			-Dimension: Typologies 
+		            				--Table: TypologiesCte
+								-Table: Capacities
+								-On: TypologyId-TypologyId
+		            	}}
+						{{
+	                		GroupBy
+	                			-Dimension: PointsOfSale 
+	                				--Table: PointsOfSaleCte
+		            			-Dimension: Typologies 
+		            				--Table: TypologiesCte
+		            			-Sql
+		            				--Capacities.ClassificationLevels
+		            	}}
+						{{
+	                		OrderBy
+	                			-Dimension: PointsOfSale
+		            			-Dimension: Typologies
+		            			-Sql
+		            				--Capacities.ClassificationLevels
+		            	}}
+						{{Pagination}}
+				]]>
+			</Query>
+		</With>
+	</Blocks>
+</Report>

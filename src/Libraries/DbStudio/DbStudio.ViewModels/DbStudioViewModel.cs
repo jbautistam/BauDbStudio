@@ -39,7 +39,6 @@ public class DbStudioViewModel : BaseObservableObject
 		CreateTestXmlCommand = new BaseCommand(async _ => await CreateTestXmlAsync());
 		CreateValidationScriptsCommand = new BaseCommand(async _ => await CreateValidationScriptsAsync());
 		CreateImportFilesScriptsCommand = new BaseCommand(async _ => await CreateImportFilesScriptsAsync());
-		CreateSchemaReportingSqlCommand = new BaseCommand(_ => CreateSchemaReportingSql());
 	}
 
 	/// <summary>
@@ -232,38 +231,6 @@ public class DbStudioViewModel : BaseObservableObject
 	}
 
 	/// <summary>
-	///		Crea los archivos SQL de creación de un esquema para reporting sobre una base de datos
-	/// </summary>
-	private void CreateSchemaReportingSql()
-	{
-		Details.Reporting.Tools.CreateScriptsSqlReportingViewModel viewModel = new Details.Reporting.Tools.CreateScriptsSqlReportingViewModel(this);
-
-			if (MainController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
-			{
-				// Crea los archivos de esquema
-				try
-				{
-					LibReporting.Solution.ReportingSolutionManager manager = new LibReporting.Solution.ReportingSolutionManager();
-
-						// Log
-						MainController.Logger.LogInformation("Comienzo de la creación de scripts SQL de reporting");
-						// Graba el archivo
-						manager.ConvertSchemaReportingToSql(viewModel.SchemaFileName, viewModel.OutputFileName);
-						// Log
-						MainController.Logger.LogInformation("Fin de la creación de archivos de scripts SQL para informes");
-						MainController.MainWindowController
-								.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Information,
-													"Generación de archivos SQL para informes",
-													"Ha terminado correctamente la generación de los archivos SQL de esquema para informes");
-				}
-				catch (Exception exception)
-				{
-					MainController.Logger.LogError(exception, $"Error en la generación de archivos de esquema. {exception.Message}");
-				}
-			}
-	}
-
-	/// <summary>
 	///		Abre un archivo (si reconoce la extensión)
 	/// </summary>
 	public bool OpenFile(string fileName)
@@ -371,9 +338,4 @@ public class DbStudioViewModel : BaseObservableObject
 	///		Crea los archivos SQL de importación de archivos a una base de datos
 	/// </summary>
 	public BaseCommand CreateImportFilesScriptsCommand { get; }
-
-	/// <summary>
-	///		Crea los scripts SQL de una base de datos de reporting a partir de un esquema XML de reporting
-	/// </summary>
-	public BaseCommand CreateSchemaReportingSqlCommand { get; }
 }

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report>
+	<Name>Demand Forecast - PointOfSale - Chart</Name>
+	<Description>
+		Consulta para el gráfico de Demand Forecast por punto de venta
+	</Description>	
+
+	<Dimension Name = "PointsOfSale" />
+	<Dimension Name = "Products" />
+
+	<Requests>
+		<Dimension Name = "PointsOfSale">
+			<Field Name = "Name;ErpCode;ImageUrl" />
+		</Dimension>
+		<Dimension Name = "Products">
+			<Field Name = "ProductCode;Description;UrlImage" />
+		</Dimension>
+	</Requests>
+	
+	<Expression Name = "TotalStock;Stock;AccumulatedReceptions;Receptions;Sales;Breakage;PurchaseOrder;OrdersMatchedToMinimunAndMultiple" />
+	<Expression Name = "AccumulatedSales;AccumulatedOrders;AccumulatedOrdersMatchedToMinimunAndMultiple:SimulatedReceptions" />
+	<Expression Name = "PurchaseOrderMatchedToMinimunAndMultiple;AccumulatedPurchaseOrder;AccumulatedPurchaseOrderMatchedToMinimunAndMultiple" />
+	
+	<Blocks>
+		<With Name = "Main">
+			<IfRequest Dimension = "Products">
+				<Cte Name = "ProductsCte" Dimension = "Products" />
+			</IfRequest>
+
+			<IfRequest Dimension = "PointsOfSale">
+				<Cte Name = "PointsOfSaleCte" Dimension = "PointsOfSale" />
+			</IfRequest>
+			
+			<Query>
+				<![CDATA[
+					SELECT PointOfSaleDemandForecast.[Week] AS [Week],
+						   {{
+								IfRequest
+									-Expression: TotalStock
+										--SUM(PointOfSaleDemandForecast.AccumulatedReceptions + PointOfSaleDemandForecast.Receptions + 
+										--PointOfSaleDemandForecast.SimulatedReceptions + PointOfSaleDemandForecast.Stock) AS TotalStock
+									-Expression: Stock
+										--SUM(PointOfSaleDemandForecast.Stock) AS Stock
+									-Expression: AccumulatedReceptions
+										--SUM(PointOfSaleDemandForecast.AccumulatedReceptions) AS AccumulatedReceptions
+									-Expression: Receptions
+										--SUM(PointOfSaleDemandForecast.Receptions) AS Receptions
+									-Expression: Sales
+										--SUM(PointOfSaleDemandForecast.Sales) AS Sales
+									-Expression: Breakage
+										--SUM(PointOfSaleDemandForecast.Breakage) AS Breakage
+									-Expression: Order
+										--SUM(PointOfSaleDemandForecast.[Order]) AS [Order]
+									-Expression: PurchaseOrder
+										--SUM(PointOfSaleDemandForecast.PurchaseOrder) AS PurchaseOrder
+									-Expression: OrdersMatchedToMinimunAndMultiple
+										--SUM(PointOfSaleDemandForecast.OrdersMatchedToMinimunAndMultiple) AS OrdersMatchedToMinimunAndMultiple
+									-Expression: AccumulatedSales
+										--SUM(PointOfSaleDemandForecast.AccumulatedSales) AS AccumulatedSales
+									-Expression: AccumulatedOrders
+										--SUM(PointOfSaleDemandForecast.AccumulatedOrders) AS AccumulatedOrders
+									-Expression: AccumulatedOrdersMatchedToMinimunAndMultiple
+										--SUM(PointOfSaleDemandForecast.AccumulatedOrdersMatchedToMinimunAndMultiple) AS AccumulatedOrdersMatchedToMinimunAndMultiple
+									-Expression: SimulatedReceptions
+										--SUM(PointOfSaleDemandForecast.SimulatedReceptions) AS SimulatedReceptions
+									-Expression: PurchaseOrderMatchedToMinimunAndMultiple
+										--SUM(PointOfSaleDemandForecast.PurchaseOrderMatchedToMinimunAndMultiple) AS PurchaseOrderMatchedToMinimunAndMultiple
+									-Expression: AccumulatedPurchaseOrder
+										--SUM(PointOfSaleDemandForecast.AccumulatedPurchaseOrder) AS AccumulatedPurchaseOrder
+									-Expression: AccumulatedPurchaseOrderMatchedToMinimunAndMultiple
+										--SUM(PointOfSaleDemandForecast.AccumulatedPurchaseOrderMatchedToMinimunAndMultiple) AS AccumulatedPurchaseOrderMatchedToMinimunAndMultiple
+							}}						   
+						FROM Fact.PointOfSaleDemandForecast
+						{{
+	                		InnerJoin 
+	                			-Dimension: PointsOfSale 
+	                				--Table: PointsOfSaleCte
+								-Table: PointOfSaleDemandForecast
+								-On:PointOfSaleId-PointOfSaleId
+						}}
+		            	{{
+		            		InnerJoin 
+		            			-Dimension: Products 
+		            				--Table: ProductsCte
+								-Table: PointOfSaleDemandForecast
+								-On: ProductId-ProductId
+		            	}}
+		            	GROUP BY PointOfSaleDemandForecast.[Week]
+		            	ORDER BY PointOfSaleDemandForecast.[Week]
+				]]>
+			</Query>
+		</With>
+	</Blocks>
+	
+<!--
+   SELECT
+         SUM(Stock) AS Stock
+        ,SUM(AccumulatedReceptions)+SUM(Receptions)+SUM(SimulatedReceptions)+SUM(Stock) AS TotalStock 
+        ,SUM(AccumulatedReceptions) AS AccumulatedReceptions
+        ,SUM(Receptions) AS Receptions
+	    ,SUM(Sales) AS Sales
+	    ,SUM(Breakage) AS Breakage
+	    ,SUM([Order]) AS [Order]
+	    ,SUM(PurchaseOrder) AS PurchaseOrder
+	    ,SUM(OrdersMatchedToMinimunAndMultiple) AS OrdersMatchedToMinimunAndMultiple
+	    ,SUM(AccumulatedSales) AS AccumulatedSales
+	    ,SUM(AccumulatedOrders) AS AccumulatedOrders
+	    ,SUM(AccumulatedOrdersMatchedToMinimunAndMultiple) AS AccumulatedOrdersMatchedToMinimunAndMultiple
+	    ,SUM(SimulatedReceptions) AS SimulatedReceptions
+	    ,SUM(PurchaseOrderMatchedToMinimunAndMultiple) AS PurchaseOrderMatchedToMinimunAndMultiple
+	    ,SUM(AccumulatedPurchaseOrder) AS AccumulatedPurchaseOrder
+	    ,SUM(AccumulatedPurchaseOrderMatchedToMinimunAndMultiple) AS AccumulatedPurchaseOrderMatchedToMinimunAndMultiple
+        ,DFPOSR.[Week] AS [Week]
+    FROM Fact.PointOfSaleDemandForecast DFPOSR
+    GROUP BY DFPOSR.[Week]
+    ORDER BY DFPOSR.[Week]
+-->
+</Report>

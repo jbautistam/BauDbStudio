@@ -11,7 +11,12 @@ public abstract class BaseDataSourceModel : Base.BaseReportingModel
 	}
 
 	/// <summary>
-	///		Obtiene el nombre de tabla
+	///		Obtiene el nombre completo de la tabla o la SQL del contenido si es una vista
+	/// </summary>
+	public abstract string GetTableFullNameOrContent();
+
+	/// <summary>
+	///		Obtiene el alias de tabla
 	/// </summary>
 	public abstract string GetTableAlias();
 

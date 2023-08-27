@@ -1,0 +1,27 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<ReportRequest Id = "Capacities" >
+	<Dimension Id = "Typologies" >
+		<Column Id = "Name"  Visible = "yes"  OrderIndex = "-1"  OrderBy = "Undefined" />
+</Dimension>
+	<Expression Id = "" >
+		<Column Id = "MinimumStock"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "MaximumStock"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "MinimumVolumetry"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "MaximumVolumetry"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "IdealStock"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "ExpectedStock"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+	<Expression Id = "" >
+		<Column Id = "AlertMessageId"  AggregatedBy = "NoAggregated"  Visible = "yes"  OrderIndex = "0"  OrderBy = "Undefined" />
+</Expression>
+</ReportRequest>

@@ -80,7 +80,7 @@ public class ReportDataSourceViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDi
 				List<DimensionRelationModel> relations = new();
 
 					// Busca las relaciones
-					foreach (ReportDataSourceModel reportDataSource in Report.ReportDataSources)
+					foreach (ReportDataSourceModel reportDataSource in Report.DataSources)
 						if (reportDataSource.DataSource.Id.Equals(dataSource.Id))
 							relations.AddRange(reportDataSource.Relations);
 					// Asocia la lista de relaciones

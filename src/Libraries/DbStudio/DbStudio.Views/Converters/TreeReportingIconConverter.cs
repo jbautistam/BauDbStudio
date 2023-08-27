@@ -14,7 +14,7 @@ namespace Bau.Libraries.DbStudio.Views.Converters
 		/// <summary>
 		///		Convierte un tipo en un icono
 		/// </summary>
-		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		public object? Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
 		{ 
 			if (value is string iconName)
 				return GetIcon(iconName.GetEnum(TreeReportingViewModel.IconType.Unknown));
@@ -25,35 +25,24 @@ namespace Bau.Libraries.DbStudio.Views.Converters
 		/// <summary>
 		///		Obtiene la imagen asociada a un icono
 		/// </summary>
-		private object GetIcon(TreeReportingViewModel.IconType icon)
+		private object? GetIcon(TreeReportingViewModel.IconType icon)
 		{
-			switch (icon)
-			{ 
-				case TreeReportingViewModel.IconType.DataWarehouse:
-					return "/DbStudio.Views;component/Resources/Images/Connection.png";
-				case TreeReportingViewModel.IconType.DataSourceRoot:
-					return "/DbStudio.Views;component/Resources/Images/Schema.png";
-				case TreeReportingViewModel.IconType.DataSourceTable:
-					return "/DbStudio.Views;component/Resources/Images/Table.png";
-				case TreeReportingViewModel.IconType.DataSourceView:
-					return "/DbStudio.Views;component/Resources/Images/View.png";
-				case TreeReportingViewModel.IconType.Key:
-					return "/DbStudio.Views;component/Resources/Images/Key.png";
-				case TreeReportingViewModel.IconType.Field:
-					return "/DbStudio.Views;component/Resources/Images/Field.png";
-				case TreeReportingViewModel.IconType.Error:
-					return "/DbStudio.Views;component/Resources/Images/DataError.png";
-				case TreeReportingViewModel.IconType.DataSourceSql:
-					return "/DbStudio.Views;component/Resources/Images/FileSql.png";
-				case TreeReportingViewModel.IconType.Report:
-					return "/DbStudio.Views;component/Resources/Images/Report.png";
-				case TreeReportingViewModel.IconType.Dimension:
-					return "/DbStudio.Views;component/Resources/Images/ReportDimension.png";
-				case TreeReportingViewModel.IconType.Folder:
-					return "/DbStudio.Views;component/Resources/Images/FolderNode.png";
-				default:
-					return null;
-			}
+			return icon switch
+					{
+						TreeReportingViewModel.IconType.DataWarehouse => "/DbStudio.Views;component/Resources/Images/Connection.png",
+						TreeReportingViewModel.IconType.DataSourceRoot => "/DbStudio.Views;component/Resources/Images/Schema.png",
+						TreeReportingViewModel.IconType.DataSourceTable => "/DbStudio.Views;component/Resources/Images/Table.png",
+						TreeReportingViewModel.IconType.DataSourceView => "/DbStudio.Views;component/Resources/Images/View.png",
+						TreeReportingViewModel.IconType.Key => "/DbStudio.Views;component/Resources/Images/Key.png",
+						TreeReportingViewModel.IconType.Field => "/DbStudio.Views;component/Resources/Images/Field.png",
+						TreeReportingViewModel.IconType.Error => "/DbStudio.Views;component/Resources/Images/DataError.png",
+						TreeReportingViewModel.IconType.DataSourceSql => "/DbStudio.Views;component/Resources/Images/FileSql.png",
+						TreeReportingViewModel.IconType.Report => "/DbStudio.Views;component/Resources/Images/Report.png",
+						TreeReportingViewModel.IconType.Dimension => "/DbStudio.Views;component/Resources/Images/ReportDimension.png",
+						TreeReportingViewModel.IconType.DimensionChild => "/DbStudio.Views;component/Resources/Images/DimensionChild.png",
+						TreeReportingViewModel.IconType.Folder => "/DbStudio.Views;component/Resources/Images/FolderNode.png",
+						_ => null,
+					};
 		}
 
 		/// <summary>

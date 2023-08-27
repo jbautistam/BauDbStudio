@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report>
+	<Name>Database warehouse alert</Name>
+	<Description>
+		Informe de datos base por almacén
+	</Description>
+	
+	<Dimension Name = "Warehouses" />
+	<Dimension Name = "Products" />
+
+	<Requests>
+		<Dimension Name = "Warehouses">
+			<Field Name = "Name;ErpCode" />
+		</Dimension>
+		<Dimension Name = "Products">
+			<Field Name = "ProductCode;Description;UrlImage" />
+		</Dimension>
+	</Requests>
+	
+	<Expression Name = "NegativeStock;NegativePendingReceptions" />
+	
+	<Blocks>
+		<With Name = "Main">
+			<IfRequest Dimension = "Products">
+				<Cte Name = "ProductsCte" Dimension = "Products" />
+			</IfRequest>
+
+			<IfRequest Dimension = "Warehouses">
+				<Cte Name = "WarehousesCte" Dimension = "Warehouses" />
+			</IfRequest>
+			
+			<Cte Name = "GroupedCte">
+				<![CDATA[
+					SELECT {{
+								Fields
+									-Dimension: Warehouses 
+										--Table: WarehousesCte
+									-Dimension: Products 
+										--Table: ProductsCte
+									-WithComma
+	                	   }}			   
+						   {{
+								IfRequest
+									-Expression: NegativeStock
+										--SUM(DataBaseWarehouses.NegativeStock) AS NegativeStock
+									-Expression: NegativePendingReceptions
+										--SUM(DataBaseWarehouses.NegativePendingReceptions) AS NegativePendingReceptions
+							}}						   
+						FROM Fact.DataBaseWarehouses
+						{{
+	                		InnerJoin 
+	                			-Dimension: Warehouses 
+	                				--Table: WarehousesCte
+								-Table: DataBaseWarehouses
+								-On: WarehouseId-WarehouseId
+						}}
+		            	{{
+		            		InnerJoin 
+		            			-Dimension: Products 
+		            				--Table: ProductsCte
+								-Table: DataBaseWarehouses
+								-On: ProductId-ProductId
+		            	}}
+						{{
+	                		GroupBy
+	                			-Dimension: Warehouses 
+	                				--Table: WarehousesCte
+		            			-Dimension: Products 
+		            				--Table: ProductsCte
+		            	}}				
+				]]>
+			</Cte>
+
+			<Query>
+				<![CDATA[
+					SELECT 
+							{{
+								Fields
+									-Dimension: Warehouses
+									-Dimension: Products
+									-WithComma
+	                		}}
+							{{
+								IfRequest
+									-Expression: NegativeStock
+										--NegativeStock
+									-Expression: NegativePendingReceptions
+										--NegativePendingReceptions
+									-WhenRequestTotals
+										--Default
+											---COUNT(*) OVER () AS TotalCount
+										--Expression: NegativeStock
+											---SUM(NegativeStock) OVER() AS TotalNegativeStock
+										--Expression: NegativePendingReceptions
+											---SUM(NegativePendingReceptions) OVER() AS TotalNegativePendingReceptions
+								}}
+						FROM GroupedCte
+						{{
+	                		OrderBy
+	                			-Dimension: Warehouses
+		            			-Dimension: Products
+		            	}}
+						{{Pagination}}
+				]]>
+			</Query>
+		</With>
+	</Blocks>
+</Report>

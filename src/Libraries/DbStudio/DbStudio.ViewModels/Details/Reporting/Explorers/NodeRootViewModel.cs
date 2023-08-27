@@ -42,9 +42,6 @@ public class NodeRootViewModel : PluginNodeViewModel
 			case TreeReportingViewModel.NodeType.Table:
 					Icon = TreeReportingViewModel.IconType.DataSourceTable.ToString();
 				break;
-			case TreeReportingViewModel.NodeType.ReportsAdvancedRoot:
-					Icon = TreeReportingViewModel.IconType.Report.ToString();
-				break;
 			case TreeReportingViewModel.NodeType.Error:
 					Icon = TreeReportingViewModel.IconType.Error.ToString();
 				break;
@@ -69,9 +66,6 @@ public class NodeRootViewModel : PluginNodeViewModel
 				break;
 			case TreeReportingViewModel.NodeType.ReportsRoot:
 					LoadReports();
-				break;
-			case TreeReportingViewModel.NodeType.ReportsAdvancedRoot:
-					LoadReportsAdvanced();
 				break;
 		}
 	}
@@ -138,7 +132,7 @@ public class NodeRootViewModel : PluginNodeViewModel
 		DataWarehouseModel? dataWarehouse = GetDataWarehouse();
 
 			if (dataWarehouse is not null)
-				foreach (DimensionModel dimension in dataWarehouse.Dimensions.EnumerateValuesSorted())
+				foreach (BaseDimensionModel dimension in dataWarehouse.Dimensions.EnumerateValuesSorted())
 					Children.Add(new NodeDimensionViewModel(TreeViewModel, this, dimension));
 	}
 
@@ -150,22 +144,8 @@ public class NodeRootViewModel : PluginNodeViewModel
 		DataWarehouseModel? dataWarehouse = GetDataWarehouse();
 
 			if (dataWarehouse is not null)
-				foreach (ReportBaseModel reportBase in dataWarehouse.Reports.EnumerateValuesSorted())
-					if (reportBase is ReportModel report)
-						Children.Add(new NodeReportViewModel(TreeViewModel, this, report));
-	}
-
-	/// <summary>
-	///		Carga los informes avanzados
-	/// </summary>
-	private void LoadReportsAdvanced()
-	{
-		DataWarehouseModel? dataWarehouse = GetDataWarehouse();
-
-			if (dataWarehouse is not null)
-				foreach (ReportBaseModel reportBase in dataWarehouse.Reports.EnumerateValuesSorted())
-					if (reportBase is ReportAdvancedModel report)
-						Children.Add(new NodeReportAdvancedViewModel(TreeViewModel, this, report));
+				foreach (ReportModel report in dataWarehouse.Reports.EnumerateValuesSorted())
+					Children.Add(new NodeReportViewModel(TreeViewModel, this, report));
 	}
 
 	/// <summary>

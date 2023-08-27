@@ -8,9 +8,16 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<Compile Remove="Controllers\Parsers\Models\ParserWhereConditionSectionModel.cs" />
 		<Compile Remove="Controllers\Parsers\ParserParametersSection.cs" />
 		<Compile Remove="Controllers\Queries\Models\QueryGroupFieldModel.cs" />
+		<Compile Remove="Controllers\Queries\QueryBaseGenerator.cs" />
+		<Compile Remove="Controllers\Queries\QueryDimensionGenerator.cs" />
 		<Compile Remove="Controllers\Queries\QueryDimensionGeneratorOld.cs" />
+		<Compile Remove="Controllers\Queries\QueryExpressionsGenerator.cs" />
+		<Compile Remove="Controllers\Queries\ReportBaseQueryGenerator.cs" />
+		<Compile Remove="Controllers\Queries\ReportQueryAdvancedGenerator.cs" />
+		<Compile Remove="Controllers\Queries\ReportQueryGenerator_Old.cs" />
 	</ItemGroup>
 
 	<ItemGroup>

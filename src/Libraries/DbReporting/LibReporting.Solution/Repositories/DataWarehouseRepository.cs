@@ -27,12 +27,12 @@ internal class DataWarehouseRepository
 	private const string TagSql = "Sql";
 	private const string TagIsView = "IsView";
 	private const string TagDimension = "Dimension";
-	private const string TagReport = "Report";
-	private const string TagDataSource = "DataSource";
+	private const string TagDimensionSourceId = "DimensionSourceId";
 	private const string TagPrimaryKey = "IsPrimaryKey";
 	private const string TagRelation = "Relation";
 	private const string TagForeignKey = "ForeignKey";
 	private const string TagDimensionColumn = "DimensionColumn";
+	private const string TagColumnsPrefix = "ColumnsPrefix";
 	private const string TagSchema = "Schema";
 	private const string TagTable = "Table";
 	private const string TagType = "Type";
@@ -70,11 +70,11 @@ internal class DataWarehouseRepository
 										dataWarehouse.DataSources.Add(LoadDataSourceSql(dataWarehouse, nodeML));
 									break;
 								case TagDimension:
-										dataWarehouse.Dimensions.Add(LoadDimension(nodeML, dataWarehouse));
+										dataWarehouse.Dimensions.Add(LoadBaseDimension(nodeML, dataWarehouse));
 									break;
-								case TagReport:
-										dataWarehouse.Reports.Add(LoadReport(nodeML, dataWarehouse));
-									break;
+								//case TagReport:
+								//		dataWarehouse.Reports.Add(LoadReport(nodeML, dataWarehouse));
+								//	break;
 							}
 						// Carga los informes avanzados
 						AddAdvancedReports(dataWarehouse, Path.GetDirectoryName(fileName));
@@ -91,7 +91,7 @@ internal class DataWarehouseRepository
 		if (!string.IsNullOrWhiteSpace(path) && Directory.Exists(path))
 			foreach (string fileName in Directory.GetFiles(path, "*.report.xml"))
 			{
-				ReportAdvancedModel report = new ReportRepository().LoadReport(dataWarehouse, fileName);
+				ReportModel report = new ReportRepository().LoadReport(dataWarehouse, fileName);
 
 					if (report is not null)
 						dataWarehouse.Reports.Add(report);
@@ -103,12 +103,13 @@ internal class DataWarehouseRepository
 	/// </summary>
 	private DataSourceTableModel LoadDataSourceTable(DataWarehouseModel dataWarehouse, MLNode rootML)
 	{
-		DataSourceTableModel dataSource = new(dataWarehouse);
+		DataSourceTableModel dataSource = new(dataWarehouse)
+											{
+												Schema = rootML.Attributes[TagSchema].Value.TrimIgnoreNull(),
+												Table = rootML.Attributes[TagTable].Value.TrimIgnoreNull(),
+												IsView = rootML.Attributes[TagIsView].Value.GetBool()
+											};
 
-			// Asigna el esquema y la tabla
-			dataSource.Schema = rootML.Attributes[TagSchema].Value.TrimIgnoreNull();
-			dataSource.Table = rootML.Attributes[TagTable].Value.TrimIgnoreNull();
-			dataSource.IsView = rootML.Attributes[TagIsView].Value.GetBool();
 			// El Id del origen de datos es el nombre completo de la tabla normalizado
 			//? Sin tener en cuenta la configuración del proveedor para que no dé problemas en los diccionarios, es decir: [schema].[table]
 			dataSource.Id = dataSource.NormalizedFullName;
@@ -125,12 +126,12 @@ internal class DataWarehouseRepository
 	/// </summary>
 	private DataSourceSqlModel LoadDataSourceSql(DataWarehouseModel dataWarehouse, MLNode rootML)
 	{
-		DataSourceSqlModel dataSource = new(dataWarehouse);
+		DataSourceSqlModel dataSource = new(dataWarehouse)
+											{
+												Id = rootML.Attributes[TagId].Value.TrimIgnoreNull(),
+												Sql = rootML.Nodes[TagSql].Value.TrimIgnoreNull()
+											};
 
-			// Carga las propiedades
-			dataSource.Id = rootML.Attributes[TagId].Value.TrimIgnoreNull();
-			// Asigna la base de datos y la cadena SQL
-			dataSource.Sql = rootML.Nodes[TagSql].Value.TrimIgnoreNull();
 			// Carga las columnas
 			foreach (MLNode nodeML in rootML.Nodes)
 				if (nodeML.Name == TagColumn)
@@ -148,18 +149,16 @@ internal class DataWarehouseRepository
 	/// </summary>
 	private DataSourceColumnModel LoadColumn(BaseDataSourceModel dataSource, MLNode rootML)
 	{
-		DataSourceColumnModel column = new(dataSource);
-
-			// Carga las propiedades
-			column.Id = rootML.Attributes[TagSourceId].Value.TrimIgnoreNull();
-			column.Alias = rootML.Attributes[TagAlias].Value.TrimIgnoreNull();
-			column.Type = rootML.Attributes[TagType].Value.GetEnum(DataSourceColumnModel.FieldType.Unknown);
-			column.Required = rootML.Attributes[TagRequired].Value.GetBool();
-			column.IsPrimaryKey = rootML.Attributes[TagPrimaryKey].Value.GetBool();
-			column.Visible = rootML.Attributes[TagVisible].Value.GetBool(true);
-			column.FormulaSql = rootML.Nodes[TagFormula].Value.TrimIgnoreNull();
-			// Devuelve el objeto
-			return column;
+		return new DataSourceColumnModel(dataSource)
+				{
+					Id = rootML.Attributes[TagSourceId].Value.TrimIgnoreNull(),
+					Alias = rootML.Attributes[TagAlias].Value.TrimIgnoreNull(),
+					Type = rootML.Attributes[TagType].Value.GetEnum(DataSourceColumnModel.FieldType.Unknown),
+					Required = rootML.Attributes[TagRequired].Value.GetBool(),
+					IsPrimaryKey = rootML.Attributes[TagPrimaryKey].Value.GetBool(),
+					Visible = rootML.Attributes[TagVisible].Value.GetBool(true),
+					FormulaSql = rootML.Nodes[TagFormula].Value.TrimIgnoreNull()
+				};
 	}
 
 	/// <summary>
@@ -178,6 +177,17 @@ internal class DataWarehouseRepository
 	/// <summary>
 	///		Carga los datos de una dimension
 	/// </summary>
+	private BaseDimensionModel LoadBaseDimension(MLNode rootML, DataWarehouseModel dataWarehouse)
+	{
+		if (string.IsNullOrWhiteSpace(rootML.Attributes[TagDimensionSourceId].Value))
+			return LoadDimension(rootML, dataWarehouse);
+		else
+			return LoadDimensionChild(rootML, dataWarehouse);
+	}
+
+	/// <summary>
+	///		Carga los datos de una dimensión
+	/// </summary>
 	private DimensionModel LoadDimension(MLNode rootML, DataWarehouseModel dataWarehouse)
 	{
 		BaseDataSourceModel? dataSource = dataWarehouse.DataSources[rootML.Attributes[TagSourceId].Value.TrimIgnoreNull()];
@@ -186,11 +196,12 @@ internal class DataWarehouseRepository
 				throw new ArgumentException($"Can't find the datasource {rootML.Attributes[TagSourceId].Value.TrimIgnoreNull()} at datawarehouse {dataWarehouse.Name}");
 			else
 			{
-				DimensionModel dimension = new DimensionModel(dataWarehouse, dataSource);
+				DimensionModel dimension = new(dataWarehouse, dataSource)
+												{
+													Id = rootML.Attributes[TagId].Value.TrimIgnoreNull(),
+													Description = rootML.Nodes[TagDescription].Value.TrimIgnoreNull()
+												};
 
-					// Carga las propiedades básicas
-					dimension.Id = rootML.Attributes[TagId].Value.TrimIgnoreNull();
-					dimension.Description = rootML.Nodes[TagDescription].Value.TrimIgnoreNull();
 					// Carga las dimensiones hija
 					foreach (MLNode nodeML in rootML.Nodes)
 						if (nodeML.Name == TagRelation)
@@ -201,14 +212,30 @@ internal class DataWarehouseRepository
 	}
 
 	/// <summary>
+	///		Carga los datos de una dimensión
+	/// </summary>
+	private DimensionChildModel LoadDimensionChild(MLNode rootML, DataWarehouseModel dataWarehouse)
+	{
+		return new DimensionChildModel(dataWarehouse,
+									   rootML.Attributes[TagId].Value.TrimIgnoreNull(),
+									   rootML.Attributes[TagDimensionSourceId].Value.TrimIgnoreNull(),
+									   rootML.Attributes[TagColumnsPrefix].Value.TrimIgnoreNull()
+									  )
+						{
+							Description = rootML.Nodes[TagDescription].Value.TrimIgnoreNull()
+						};
+	}
+
+	/// <summary>
 	///		Carga los datos de una dimension relacionada
 	/// </summary>
 	private DimensionRelationModel LoadRelatedDimension(MLNode rootML, DataWarehouseModel dataWarehouse)
 	{
-		DimensionRelationModel relation = new(dataWarehouse);
+		DimensionRelationModel relation = new(dataWarehouse)
+												{
+													DimensionId = rootML.Attributes[TagSourceId].Value.TrimIgnoreNull()
+												};
 
-			// Carga los datos de la dimensión
-			relation.DimensionId = rootML.Attributes[TagSourceId].Value.TrimIgnoreNull();
 			// Carga las columnas
 			foreach (MLNode nodeML in rootML.Nodes)
 				if (nodeML.Name == TagForeignKey)
@@ -222,53 +249,53 @@ internal class DataWarehouseRepository
 			return relation;
 	}
 
-	/// <summary>
-	///		Carga los datos de un <see cref="ReportModel"/>
-	/// </summary>
-	private ReportModel LoadReport(MLNode rootML, DataWarehouseModel dataWarehouse)
-	{
-		ReportModel report = new(dataWarehouse);
+	///// <summary>
+	/////		Carga los datos de un <see cref="ReportModel"/>
+	///// </summary>
+	//private ReportModel LoadReport(MLNode rootML, DataWarehouseModel dataWarehouse)
+	//{
+	//	ReportModel report = new(dataWarehouse);
 
-			// Carga el informe
-			report.Id = rootML.Attributes[TagId].Value.TrimIgnoreNull();
-			report.Description = rootML.Nodes[TagDescription].Value.TrimIgnoreNull();
-			// Carga los datos
-			foreach (MLNode nodeML in rootML.Nodes)
-				switch (nodeML.Name)
-				{
-					case TagDataSource:
-							report.ReportDataSources.Add(LoadReportDataSource(nodeML, report));
-						break;
-				}
-			// Devuelve el objeto
-			return report;
-	}
+	//		// Carga el informe
+	//		report.Id = rootML.Attributes[TagId].Value.TrimIgnoreNull();
+	//		report.Description = rootML.Nodes[TagDescription].Value.TrimIgnoreNull();
+	//		// Carga los datos
+	//		foreach (MLNode nodeML in rootML.Nodes)
+	//			switch (nodeML.Name)
+	//			{
+	//				case TagDataSource:
+	//						report.ReportDataSources.Add(LoadReportDataSource(nodeML, report));
+	//					break;
+	//			}
+	//		// Devuelve el objeto
+	//		return report;
+	//}
 
-	/// <summary>
-	///		Carga un origen de datos de un informe
-	/// </summary>
-	private ReportDataSourceModel LoadReportDataSource(MLNode rootML, ReportModel report)
-	{
-		BaseDataSourceModel? dataSource = report.DataWarehouse.DataSources[rootML.Attributes[TagSourceId].Value.TrimIgnoreNull()];
+	///// <summary>
+	/////		Carga un origen de datos de un informe
+	///// </summary>
+	//private ReportDataSourceModel LoadReportDataSource(MLNode rootML, ReportModel report)
+	//{
+	//	BaseDataSourceModel? dataSource = report.DataWarehouse.DataSources[rootML.Attributes[TagSourceId].Value.TrimIgnoreNull()];
 
-			if (dataSource is null)
-				throw new ArgumentException($"Can't find the datasource {report.DataWarehouse.DataSources[rootML.Attributes[TagSourceId].Value.TrimIgnoreNull()]} for report {report.Id}");
-			else
-			{
-				ReportDataSourceModel reportDataSource = new ReportDataSourceModel(report, dataSource);
+	//		if (dataSource is null)
+	//			throw new ArgumentException($"Can't find the datasource {report.DataWarehouse.DataSources[rootML.Attributes[TagSourceId].Value.TrimIgnoreNull()]} for report {report.Id}");
+	//		else
+	//		{
+	//			ReportDataSourceModel reportDataSource = new ReportDataSourceModel(report, dataSource);
 
-					// Carga las expresiones
-					foreach (MLNode childML in rootML.Nodes)
-						switch (childML.Name)
-						{
-							case TagRelation:
-									reportDataSource.Relations.Add(LoadRelatedDimension(childML, report.DataWarehouse));
-								break;
-						}
-					// Devuelve el origen de datos
-					return reportDataSource;
-			}
-	}
+	//				// Carga las expresiones
+	//				foreach (MLNode childML in rootML.Nodes)
+	//					switch (childML.Name)
+	//					{
+	//						case TagRelation:
+	//								reportDataSource.Relations.Add(LoadRelatedDimension(childML, report.DataWarehouse));
+	//							break;
+	//					}
+	//				// Devuelve el origen de datos
+	//				return reportDataSource;
+	//		}
+	//}
 
 	/// <summary>
 	///		Graba los datos de un <see cref="DataWarehouseModel"/>
@@ -293,12 +320,20 @@ internal class DataWarehouseRepository
 						break;
 				}
 			// Añade los nodos de dimensión
-			foreach (DimensionModel dimension in dataWarehouse.Dimensions.EnumerateValues())
-				rootML.Nodes.Add(GetNodeDimension(dimension));
-			// Añade los informes (sólo los normales, los avanzados se guardan en XML aparte
-			foreach (ReportBaseModel reportBase in dataWarehouse.Reports.EnumerateValues())
-				if (reportBase is ReportModel report)
-					rootML.Nodes.Add(GetNodeReport(report));
+			foreach (BaseDimensionModel baseDimension in dataWarehouse.Dimensions.EnumerateValues())
+				switch (baseDimension)
+				{
+					case DimensionModel dimension:
+							rootML.Nodes.Add(GetNodeDimension(dimension));
+						break;
+					case DimensionChildModel dimension:
+							rootML.Nodes.Add(GetNodeDimensionChild(dimension));
+						break;
+				}
+			//// Añade los informes (sólo los normales, los avanzados se guardan en XML aparte
+			//foreach (ReportBaseModel reportBase in dataWarehouse.Reports.EnumerateValues())
+			//	if (reportBase is ReportModel report)
+			//		rootML.Nodes.Add(GetNodeReport(report));
 			// Graba el archivo
 			new LibMarkupLanguage.Services.XML.XMLWriter().Save(fileName, fileML);
 	}
@@ -404,6 +439,21 @@ internal class DataWarehouseRepository
 	}
 
 	/// <summary>
+	///		Obtiene el nodo de una dimensión
+	/// </summary>
+	private MLNode GetNodeDimensionChild(DimensionChildModel dimension)
+	{
+		MLNode nodeML = new(TagDimension);
+
+			// Asigna las propiedades
+			nodeML.Attributes.Add(TagId, dimension.Id);
+			nodeML.Attributes.Add(TagDimensionSourceId, dimension.SourceDimensionId);
+			nodeML.Attributes.Add(TagColumnsPrefix, dimension.ColumnsPrefix);
+			// Devuelve el nodo
+			return nodeML;
+	}
+
+	/// <summary>
 	///		Obtiene un nodo de relación
 	/// </summary>
 	private MLNode GetNodeRelation(DimensionRelationModel relation)
@@ -411,7 +461,8 @@ internal class DataWarehouseRepository
 		MLNode rootML = new(TagRelation);
 
 			// Añade los atributos
-			rootML.Attributes.Add(TagSourceId, relation.Dimension.Id);
+			if (relation.Dimension is not null)
+				rootML.Attributes.Add(TagSourceId, relation.Dimension.Id);
 			// Añade las claves foráneas
 			foreach (RelationForeignKey foreignKey in relation.ForeignKeys)
 			{
@@ -424,28 +475,28 @@ internal class DataWarehouseRepository
 			return rootML;
 	}
 
-	/// <summary>
-	///		Obtiene el nodo de un <see cref="ReportModel"/>
-	/// </summary>
-	private MLNode GetNodeReport(ReportModel report)
-	{
-		MLNode rootML = new(TagReport);
+	///// <summary>
+	/////		Obtiene el nodo de un <see cref="ReportModel"/>
+	///// </summary>
+	//private MLNode GetNodeReport(ReportModel report)
+	//{
+	//	MLNode rootML = new(TagReport);
 
-			// Asigna las propiedades
-			rootML.Attributes.Add(TagId, report.Id);
-			rootML.Nodes.Add(TagDescription, report.Description);
-			// Añade las expresiones
-			foreach (ReportDataSourceModel dataSource in report.ReportDataSources)
-			{
-				MLNode nodeML = rootML.Nodes.Add(TagDataSource);
+	//		// Asigna las propiedades
+	//		rootML.Attributes.Add(TagId, report.Id);
+	//		rootML.Nodes.Add(TagDescription, report.Description);
+	//		// Añade las expresiones
+	//		foreach (ReportDataSourceModel dataSource in report.ReportDataSources)
+	//		{
+	//			MLNode nodeML = rootML.Nodes.Add(TagDataSource);
 
-					// Asigna las propiedades
-					nodeML.Attributes.Add(TagSourceId, dataSource.DataSource.Id);
-					// Añade las relaciones
-					foreach (DimensionRelationModel relation in dataSource.Relations)
-						nodeML.Nodes.Add(GetNodeRelation(relation));
-			}
-			// Devuelve los datos del nodo
-			return rootML;
-	}
+	//				// Asigna las propiedades
+	//				nodeML.Attributes.Add(TagSourceId, dataSource.DataSource.Id);
+	//				// Añade las relaciones
+	//				foreach (DimensionRelationModel relation in dataSource.Relations)
+	//					nodeML.Nodes.Add(GetNodeRelation(relation));
+	//		}
+	//		// Devuelve los datos del nodo
+	//		return rootML;
+	//}
 }

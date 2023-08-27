@@ -92,6 +92,9 @@ namespace Bau.Libraries.DbStudio.Views.Controllers
 					case ViewModels.Details.Reporting.Tools.CreateScriptsSqlReportingViewModel viewModel:
 							result = DbStudioViewManager.AppViewsController.OpenDialog(new Reporting.Tools.CreateReportingSqlView(viewModel));
 						break;
+					case ViewModels.Details.Reporting.Dimension.DimensionChildViewModel viewModel:
+							result = DbStudioViewManager.AppViewsController.OpenDialog(new Reporting.Details.Dimensions.DimensionChildView(viewModel));
+						break;
 					case ViewModels.Details.Reporting.Queries.ListReportColumnFilterViewModel viewModel:
 							result = DbStudioViewManager.AppViewsController.OpenDialog(new Reporting.Queries.ListFilterColumnView(viewModel));
 						break;
