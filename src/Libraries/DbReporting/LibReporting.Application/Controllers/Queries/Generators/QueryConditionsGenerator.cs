@@ -6,22 +6,21 @@ using Bau.Libraries.LibReporting.Requests.Models;
 namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Generators;
 
 /// <summary>
-///		Clase con los datos para mostrar condiciones
+///		Clase con los datos para generar la SQL de <see cref="ParserCondiciontSectionModel"/>
 /// </summary>
-internal class QueryConditionsGenerator
+internal class QueryConditionsGenerator : QueryBaseGenerator
 {
-	internal QueryConditionsGenerator(ReportQueryGenerator manager, ParserCondiciontSectionModel section)
+	internal QueryConditionsGenerator(ReportQueryGenerator manager, ParserCondiciontSectionModel section) : base(manager)
 	{
-		Manager = manager;
 		Section = section;
 	}
 
 	/// <summary>
 	///		Obtiene la SQL
 	/// </summary>
-	internal string GetSql()
+	internal override string GetSql()
 	{
-		string sql;
+		string sql = string.Empty;
 
 			// Añade los filtros de los orígenes de datos y expresiones
 			switch (Section)
@@ -117,11 +116,6 @@ internal class QueryConditionsGenerator
 			// Devuelve la cadena SQL
 			return sql;
 	}
-
-	/// <summary>
-	///		Manager
-	/// </summary>
-	internal ReportQueryGenerator Manager { get; }
 	
 	/// <summary>
 	///		Sección que se está generando

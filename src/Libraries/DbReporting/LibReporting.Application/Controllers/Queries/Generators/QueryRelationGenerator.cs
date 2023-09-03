@@ -6,20 +6,19 @@ using Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets;
 namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Generators;
 
 /// <summary>
-///		Clase con los datos para una relación entre tablas
+///		Clase para generar la SQL de <see cref="ParserJoinSectionModel"/>
 /// </summary>
-internal class QueryRelationGenerator
+internal class QueryRelationGenerator : QueryBaseGenerator
 {
-	internal QueryRelationGenerator(ReportQueryGenerator manager, ParserJoinSectionModel section)
+	internal QueryRelationGenerator(ReportQueryGenerator manager, ParserJoinSectionModel section) : base(manager)
 	{
-		Manager = manager;
 		Section = section;
 	}
 
 	/// <summary>
 	///		Obtiene la SQL
 	/// </summary>
-	internal string GetSql()
+	internal override string GetSql()
 	{
 		if (Section.JoinDimensions.Count == 0)
 			throw new Exceptions.ReportingParserException($"Can't find relations at join {Section.Join.ToString()} with table {Section.Table}");
@@ -147,11 +146,6 @@ internal class QueryRelationGenerator
 			// Devuelve la tabla origen y la lista de campos
 			return (tableSource, tableDimension);
 	}
-
-	/// <summary>
-	///		Manager
-	/// </summary>
-	internal ReportQueryGenerator Manager { get; }
 	
 	/// <summary>
 	///		Sección que se está generando

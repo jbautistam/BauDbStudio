@@ -21,6 +21,7 @@ SELECT Capacities.ClassificationLevels,
 		            	 INNER JOIN  TypologiesCte
 															ON 
  [Capacities].[TypologyId] = [TypologiesCte].[TypologyId]
+						
 						 GROUP BY [TypologiesCte].[Typology], Capacities.ClassificationLevels
 						ORDER BY Capacities.ClassificationLevels
 						

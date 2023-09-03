@@ -37,8 +37,9 @@ public class RequestGenerator
 	///		Genera los archivos de respuesta de un informe en concreto (todas las solicitudes de un directorio)
 	/// </summary>
 	[Theory(Skip = "Sólo cuando sea necesario regenerar las respuestas de un archivo")]
-	[InlineData("ReportingRoi/Test-Reporting-Roi.Reporting.xml", "ReportingRoi/Substitute")]
-	[InlineData("ReportingSales/Test-Reporting-Sales.Reporting.xml", "ReportingSales/Test_Sales_Grouped")]
+	//[InlineData("ReportingRoi/Test-Reporting-Roi.Reporting.xml", "ReportingRoi/Substitute")]
+	//[InlineData("ReportingSales/Test-Reporting-Sales.Reporting.xml", "ReportingSales/Test_Sales_Grouped")]
+	[InlineData("ReportingRoi/Test-Reporting-Roi.Reporting.xml", "ReportingRoi/Capacities")]
 	public void generate_response_files(string schemaFile, string pathRequest)
 	{
 		string error;

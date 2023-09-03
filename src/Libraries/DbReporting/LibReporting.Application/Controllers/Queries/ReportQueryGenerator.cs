@@ -188,16 +188,16 @@ internal class ReportQueryGenerator
 							parser.Replace(marker, GetSqlForPartitionBy(item));
 						break;
 					case ParserIfRequestSectionModel item:
-							parser.Replace(marker, GetSqlForRequestExpression(item));
+							parser.Replace(marker, new Generators.QueryIfRequestGenerator(this, item).GetSql());
 						break;
 					case ParserCondiciontSectionModel item:
 							parser.Replace(marker, new Generators.QueryConditionsGenerator(this, item).GetSql());
 						break;
 					case ParserSubquerySectionModel item:
-							parser.Replace(marker, GetSqlForSubqueries(item, queriesBlock));
+							parser.Replace(marker, new Generators.QuerySubqueryGenerator(this, item, queriesBlock).GetSql());
 						break;
 					case ParserPaginationSectionModel item:
-							parser.Replace(marker, GetSqlForPagination());
+							parser.Replace(marker, new Generators.QueryPaginationGenerator(this, item).GetSql());
 						break;
 					default:
 						throw new ReportingParserException($"Unknown section: {section.GetType().ToString()}");
@@ -299,11 +299,6 @@ internal class ReportQueryGenerator
 	}
 
 	/// <summary>
-	///		Obtiene la SQL necesaria para la consulta de una expresión
-	/// </summary>
-	private string GetSqlForRequestExpression(ParserIfRequestSectionModel section) => section.GetSql(Request);
-
-	/// <summary>
 	///		Obtiene la cadena SQL necesaria para un GROUP BY
 	/// </summary>
 	private string GetSqlForGroupBy(ParserGroupBySectionModel section)
@@ -320,7 +315,7 @@ internal class ReportQueryGenerator
 	}
 
 	/// <summary>
-	///		Obtiene la cadena SQL necesaria para un GROUP BY
+	///		Obtiene la cadena SQL necesaria para un PARTITION BY
 	/// </summary>
 	private string GetSqlForPartitionBy(ParserPartitionBySectionModel section)
 	{
@@ -420,17 +415,6 @@ internal class ReportQueryGenerator
 	}
 
 	/// <summary>
-	///		Obtiene la cadena SQL de paginación
-	/// </summary>
-	private string GetSqlForPagination()
-	{
-		if (Request.Pagination.MustPaginate)
-			return $"OFFSET {(Request.Pagination.Page - 1) * Request.Pagination.RecordsPerPage} ROWS FETCH FIRST {Request.Pagination.RecordsPerPage} ROWS ONLY";
-		else
-			return string.Empty;
-	}
-
-	/// <summary>
 	///		Obtiene los campos solicitados de una dimensión
 	/// </summary>
 	private List<(string tableDimension, string fieldDimension)> GetFieldsRequest(ParserDimensionModel parserDimension, bool includeRequestFields, bool includePrimaryKey)
@@ -451,30 +435,6 @@ internal class ReportQueryGenerator
 			// Devuelve la lista de campos
 			return fields;
 	}
-
-/*
-	/// <summary>
-	///		Obtiene los campos solicitados de una dimensión
-	/// </summary>
-	private List<(string tableDimension, string fieldDimension)> GetFieldsRequest(ParserJoinDimensionSectionModel joinDimension)
-	{
-		List<(string tableDimension, string fieldDimension)> fields = new();
-		BaseDimensionModel? dimension = RequestController.GetDimensionIfRequest(joinDimension.DimensionKey, false, null, null);
-
-			// Si se ha solicitado algo de esta dimensión, se obtienen los datos
-			if (dimension is not null)
-			{
-				DimensionRequestModel? request = Request.GetDimensionRequest(dimension.Id);
-
-					// Añade los campos solicitados a la SQL
-					if (request is not null)
-						foreach (string field in GetListFields(GetQueryFromRequest(request), joinDimension.WithRequestedFields, false))
-							fields.Add((joinDimension.Table, field));
-			}
-			// Devuelve la lista de campos
-			return fields;
-	}
-*/
 
 	/// <summary>
 	///		Obtiene los campos asociados a una consulta
@@ -616,29 +576,6 @@ internal class ReportQueryGenerator
 				return true;
 		// Si llega hasta aquí es porque no lo ha encontrado
 		return false;
-	}
-
-	/// <summary>
-	///		Obtiene la SQL de una serie de subconsultas
-	/// </summary>
-	private string GetSqlForSubqueries(ParserSubquerySectionModel section, List<QuerySqlModel> queriesBlock)
-	{
-		if (string.IsNullOrWhiteSpace(section.Name))
-			throw new NotImplementedException("Can't find name for clause 'Subquery'");
-		else
-		{
-			// Busca la consulta en el bloque de consultas hermanas
-			foreach (QuerySqlModel query in queriesBlock)
-				if (query.Key.Equals(section.Name))
-				{
-					// Indica que la consulta se utiliza como subconsulta
-					query.IsSubquery = true;
-					// Devuelve la consulta
-					return query.Sql;
-				}
-			// Lanza una excepción si no ha encontrado ninguna consulta con el nombre de la subconsulta
-			throw new NotImplementedException($"Can't find the query '{section.Name}' for clause 'Subquery'");
-		}
 	}
 
 	/// <summary>

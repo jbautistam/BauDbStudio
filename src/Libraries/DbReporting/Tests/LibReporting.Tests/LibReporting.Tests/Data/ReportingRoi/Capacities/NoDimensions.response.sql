@@ -11,6 +11,7 @@ SELECT Capacities.ClassificationLevels,
 						FROM Fact.Capacities
 						
 		            	
+						
 						 GROUP BY Capacities.ClassificationLevels
 						ORDER BY Capacities.ClassificationLevels
 						

@@ -1,5 +1,21 @@
+WITH
+PointsOfSaleCte AS 
+(
+SELECT [PointsOfSale].[Id] AS [PointOfSaleId], [PointsOfSale].[ErpCode] AS [ErpCode], [PointsOfSale].[Name] AS [PointOfSale], 
+		[PointsOfSale].[ImageUrl] AS [ImageUrl]
+	FROM [Dim].[PointsOfSale] AS [PointsOfSale]
+
+
+),
+TypologiesCte AS 
+(
+SELECT [Typologies].[Id] AS [TypologyId], [Typologies].[Name] AS [Typology]
+	FROM [Dim].[Typologies] AS [Typologies]
+
+
+)
 SELECT Capacities.ClassificationLevels,
-										   
+							[PointsOfSaleCte].[ErpCode], [PointsOfSaleCte].[PointOfSale], [PointsOfSaleCte].[ImageUrl], [TypologiesCte].[Typology], 			   
 						   SUM(Capacities.MinimumStock) AS MinimumStock, 
  SUM(Capacities.MaximumStock) AS MaximumStock, 
  SUM(Capacities.MinimumVolumetry) AS MinimumVolumetry, 
@@ -9,8 +25,13 @@ SELECT Capacities.ClassificationLevels,
  MAX(Capacities.AlertMessageId) AS AlertMessageId,
  COUNT(*) OVER () AS TotalCount						   
 						FROM Fact.Capacities
-						
-		            	
-						 GROUP BY Capacities.ClassificationLevels
+						 INNER JOIN  PointsOfSaleCte
+															ON 
+ [Capacities].[PointOfSaleId] = [PointsOfSaleCte].[PointOfSaleId]
+		            	 INNER JOIN  TypologiesCte
+															ON 
+ [Capacities].[TypologyId] = [TypologiesCte].[TypologyId]
+						 WHERE [Capacities].[ExpectedStock] > '3' AND  [Capacities].[IdealStock] < '2'
+						 GROUP BY [PointsOfSaleCte].[ErpCode], [PointsOfSaleCte].[PointOfSale], [PointsOfSaleCte].[ImageUrl], [TypologiesCte].[Typology], Capacities.ClassificationLevels
 						ORDER BY Capacities.ClassificationLevels
 						OFFSET 0 ROWS FETCH FIRST 100 ROWS ONLY

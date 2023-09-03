@@ -22,6 +22,7 @@ SELECT Capacities.ClassificationLevels,
 															ON 
  [Capacities].[PointOfSaleId] = [PointsOfSaleCte].[PointOfSaleId]
 		            	
+						
 						 GROUP BY [PointsOfSaleCte].[PointOfSale], [PointsOfSaleCte].[ErpCode], [PointsOfSaleCte].[ImageUrl], Capacities.ClassificationLevels
 						ORDER BY Capacities.ClassificationLevels
 						OFFSET 0 ROWS FETCH FIRST 100 ROWS ONLY

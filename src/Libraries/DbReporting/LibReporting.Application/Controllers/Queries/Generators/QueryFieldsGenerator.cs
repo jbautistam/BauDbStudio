@@ -1,25 +1,23 @@
 ﻿using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.LibReporting.Application.Controllers.Parsers.Models;
 using Bau.Libraries.LibReporting.Application.Controllers.Queries.Models;
-using Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets;
 
 namespace Bau.Libraries.LibReporting.Application.Controllers.Queries.Generators;
 
 /// <summary>
-///		Clase con los datos para una relación entre tablas
+///		Clase para generar la SQL de <see cref="ParserFieldsSectionModel"/>
 /// </summary>
-internal class QueryFieldsGenerator
+internal class QueryFieldsGenerator : QueryBaseGenerator
 {
-	internal QueryFieldsGenerator(ReportQueryGenerator manager, ParserFieldsSectionModel section)
+	internal QueryFieldsGenerator(ReportQueryGenerator manager, ParserFieldsSectionModel section) : base(manager)
 	{
-		Manager = manager;
 		Section = section;
 	}
 
 	/// <summary>
 	///		Obtiene la SQL
 	/// </summary>
-	internal string GetSql() 
+	internal override string GetSql() 
 	{
 		string sql = GetSqlFieldsForDimensions(Section.ParserDimensions);
 
@@ -67,11 +65,6 @@ internal class QueryFieldsGenerator
 			// Devuelve la SQL
 			return sql;
 	}
-
-	/// <summary>
-	///		Manager
-	/// </summary>
-	internal ReportQueryGenerator Manager { get; }
 	
 	/// <summary>
 	///		Sección que se está generando

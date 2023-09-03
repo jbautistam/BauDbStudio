@@ -31,6 +31,7 @@ SELECT Capacities.ClassificationLevels,
 		            	 INNER JOIN  TypologiesCte
 															ON 
  [Capacities].[TypologyId] = [TypologiesCte].[TypologyId]
+						
 						 GROUP BY [PointsOfSaleCte].[PointOfSale], [PointsOfSaleCte].[ErpCode], [PointsOfSaleCte].[ImageUrl], [TypologiesCte].[Typology], Capacities.ClassificationLevels
 						ORDER BY Capacities.ClassificationLevels
 						OFFSET 0 ROWS FETCH FIRST 100 ROWS ONLY

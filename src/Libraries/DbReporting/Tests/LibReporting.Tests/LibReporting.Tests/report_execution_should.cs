@@ -45,8 +45,8 @@ public class report_execution_should
 	///	(el método execute_files_to_sql lo hace para todos los archivos, este es sólo por si queremos ejecutar uno en concreto)
 	/// </summary>
 	[Theory]
-	[InlineData("Generic/Test-Generic-Reporting.Reporting.xml", 
-				"Generic/Transfers/NoDimensions - Filtered.request.xml")]
+	[InlineData("ReportingRoi/Test-Reporting-Roi.Reporting.xml", 
+				"ReportingRoi/Capacities/PointsOfSale - Typologies - Fact Filter.request.xml")]
 	public void execute_to_sql(string fileName, string fileRequest)
 	{
 		ExecuteSql(Tools.FileHelper.GetFullFileName(fileName), Tools.FileHelper.GetFullFileName(fileRequest)).Should().BeNullOrWhiteSpace();
