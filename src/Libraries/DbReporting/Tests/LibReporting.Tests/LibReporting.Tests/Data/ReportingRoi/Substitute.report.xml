@@ -76,7 +76,7 @@
 	                			-Dimension: ProductsSubstitute
 	                				--Table: ProductsSubstituteCte
 								-Table: SubstituteReport
-								-On:ProductSubstituteProductId-RelatedProductId
+								-On:RelatedProductId-ProductSubstituteProductId
 						}}
 						{{
 	                		GroupBy

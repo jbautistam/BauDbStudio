@@ -55,11 +55,9 @@
 										--Table: PointsOfSaleCte
 									-Dimension: Products 
 										--Table: ProductsCte
-									-Dimension: Calendar 
-										--Table: CalendarCte
-										--WithRequestedFields
 									-WithComma
 	                		}}
+							[SalesAnalysis].[Date],
 	                		[SalesAnalysis].[SalesQuantity], [SalesAnalysis].[SalesAmountTaxesIncluded], [SalesAnalysis].[SalesAmountTaxesExcluded]
 	                	FROM [Fact].[SalesAnalysis]
 	                	{{
@@ -93,10 +91,9 @@
 								Fields
 									-Dimension: PointsOfSale
 									-Dimension: Products
-									-Dimension: Calendar
-										--WithRequestedFields
 									-WithComma
 	                		}}
+							[Date],
 	                		SUM(SalesQuantity) AS Quantity, SUM(SalesAmountTaxesIncluded) AS AmountTaxesIncluded, 
 	                		SUM(SalesAmountTaxesExcluded) AS AmountTaxesExcluded
 	                	FROM SalesCte
@@ -104,8 +101,8 @@
 							GroupBy
 								-Dimension: PointsOfSale 
 								-Dimension: Products
-								-Dimension: Calendar
-									--WithRequestedFields
+								-Sql
+									--[Date]
 	                	}}
 				]]>
 			</Query>

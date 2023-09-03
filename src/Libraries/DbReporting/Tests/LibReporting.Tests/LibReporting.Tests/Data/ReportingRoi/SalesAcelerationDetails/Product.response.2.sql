@@ -21,7 +21,7 @@ SELECT [ProductsCte].[ProductCode], [ProductsCte].[ProductDescription], [Product
 						FROM Fact.SalesAccelerations
 						
 		            	 INNER JOIN  ProductsCte
-																		ON 
+															ON 
  [SalesAccelerations].[ProductId] = [ProductsCte].[ProductId]
 						 GROUP BY [ProductsCte].[ProductCode], [ProductsCte].[ProductDescription], [ProductsCte].[UrlImage]
 )

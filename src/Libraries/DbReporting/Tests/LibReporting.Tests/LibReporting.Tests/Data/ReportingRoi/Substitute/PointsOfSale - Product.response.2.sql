@@ -22,10 +22,10 @@ SELECT [PointsOfSaleCte].[PointOfSale], [PointsOfSaleCte].[ErpCode], [PointsOfSa
  MIN(SubstituteReport.Quantity) AS Quantity
                     FROM Fact.SubstituteReport
 						 INNER JOIN  PointsOfSaleCte
-																		ON 
+															ON 
  [SubstituteReport].[PointOfSaleId] = [PointsOfSaleCte].[PointOfSaleId]
 		            	 INNER JOIN  ProductsCte
-																		ON 
+															ON 
  [SubstituteReport].[ProductId] = [ProductsCte].[ProductId]
 						
 						 GROUP BY [PointsOfSaleCte].[PointOfSale], [PointsOfSaleCte].[ErpCode], [PointsOfSaleCte].[ImageUrl], [ProductsCte].[ProductCode], [ProductsCte].[ProductDescription], [ProductsCte].[UrlImage]

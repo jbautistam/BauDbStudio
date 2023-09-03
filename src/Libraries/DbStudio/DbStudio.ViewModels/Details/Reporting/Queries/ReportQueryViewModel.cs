@@ -61,7 +61,7 @@ public class ReportQueryViewModel : BaseObservableObject, PluginsStudio.ViewMode
 			// Obtiene la consulta
 			QueryViewModel.Query = ViewModel.ReportingSolutionManager.GetSqlResponse(reportRequest);
 			// Añade los parámetros
-			foreach (KeyValuePair<string, object?> parameter in reportRequest.Parameters)
+			foreach (ParameterRequestModel parameter in reportRequest.Parameters)
 				QueryViewModel.Arguments.Parameters.Add(parameter.Key, parameter.Value);
 			// y la ejecuta
 			await QueryViewModel.ExecuteQueryAsync();

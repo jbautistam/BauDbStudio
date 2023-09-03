@@ -58,10 +58,10 @@ SELECT [PointsOfSaleCte].[PointOfSale], [PointsOfSaleCte].[ErpCode], [PointsOfSa
  SUM(ReplenishmentReport.OmnichannelIdealStock) AS OmnichannelIdealStock
                     FROM Fact.ReplenishmentReport
 						 INNER JOIN  PointsOfSaleCte
-																		ON 
+															ON 
  [ReplenishmentReport].[PointOfSaleId] = [PointsOfSaleCte].[PointOfSaleId]
 		            	 INNER JOIN  ProductsCte
-																		ON 
+															ON 
  [ReplenishmentReport].[ProductId] = [ProductsCte].[ProductId]
 						 GROUP BY [PointsOfSaleCte].[PointOfSale], [PointsOfSaleCte].[ErpCode], [PointsOfSaleCte].[ImageUrl], [PointsOfSaleCte].[ChannelName], [ProductsCte].[EanCode], [ProductsCte].[ProductCode], [ProductsCte].[ProductDescription], [ProductsCte].[UrlImage], [ProductsCte].[ClassificationLevelValue4]
 )

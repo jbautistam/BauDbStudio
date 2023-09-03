@@ -23,10 +23,10 @@ SELECT DailyStocksIntervals.ProductId, DailyStocksIntervals.PointOfSaleId,
 						INNER JOIN Dim.Products
 							ON DailyStocksIntervals.ProductId = Products.Id
 						 INNER JOIN  PointsOfSaleCte
-																		ON 
+															ON 
  [DailyStocksIntervals].[PointOfSaleId] = [PointsOfSaleCte].[PointOfSaleId]
 		            	 INNER JOIN  ProductsCte
-																		ON 
+															ON 
  [DailyStocksIntervals].[ProductId] = [ProductsCte].[ProductId]
 					  WHERE @EndPeriod BETWEEN DailyStocksIntervals.StartDate AND DailyStocksIntervals.EndDate
 ),
@@ -38,10 +38,10 @@ SELECT SalesIntervals.PointOfSaleId, SalesIntervals.ProductId,
 						INNER JOIN Dim.Products
 							ON SalesIntervals.ProductId = Products.Id
 						 INNER JOIN  PointsOfSaleCte
-																		ON 
+															ON 
  [SalesIntervals].[PointOfSaleId] = [PointsOfSaleCte].[PointOfSaleId]
 		            	 INNER JOIN  ProductsCte
-																		ON 
+															ON 
  [SalesIntervals].[ProductId] = [ProductsCte].[ProductId]
 						WHERE SalesIntervals.StartDate <= @EndPeriod AND SalesIntervals.Enddate >= @StartPeriod
 ),
@@ -78,10 +78,10 @@ SELECT
  CAST(100.0 * SUM(StockWithoutSalesCte.StockQuantity) / 		NULLIF(SUM(TotalStocksCte.LevelStockTotal), 0) AS decimal(10, 2) 	) AS ParticipationPercentage
 					FROM StockWithoutSalesCte
 		             INNER JOIN  ProductsCte
-																		ON 
+															ON 
  [StockWithoutSalesCte].[ProductId] = [ProductsCte].[ProductId]
 		             INNER JOIN  PointsOfSaleCte
-																		ON 
+															ON 
  [StockWithoutSalesCte].[PointOfSaleId] = [PointsOfSaleCte].[PointOfSaleId]
 					LEFT JOIN Fact.DaysInPointsOfSale 
 						ON StockWithoutSalesCte.ProductId = DaysInPointsOfSale.ProductId 

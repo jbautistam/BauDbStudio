@@ -42,7 +42,7 @@ SELECT [ProductsCte].[ProductCode], [ProductsCte].[ProductDescription], [Product
  SUM(Overstock.Stock1WeekAgo) AS Stock1WeekAgo						   
 						FROM Fact.Overstock
 		            	 INNER JOIN  ProductsCte
-																		ON 
+															ON 
  [Overstock].[ProductId] = [ProductsCte].[ProductId]
 						 GROUP BY [ProductsCte].[ProductCode], [ProductsCte].[ProductDescription], [ProductsCte].[UrlImage], [ProductsCte].[ClassificationLevelValue1], [ProductsCte].[Typology]
 )

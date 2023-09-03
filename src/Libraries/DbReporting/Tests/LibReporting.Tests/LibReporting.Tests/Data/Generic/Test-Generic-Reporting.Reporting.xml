@@ -1,6 +1,6 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
 <Dashboard>
-	<Name>Test Generic Reporting</Name>
+	<Name>Test Reporting Roi Schema</Name>
 	<Description/>
 	<DataSourceTable Id = "[Sync].[ActiveClassificationLevels]"  Schema = "Sync"  Table = "ActiveClassificationLevels"  IsView = "no" >
 		<Column Alias = "TypologyId"  SourceId = "TypologyId"  IsPrimaryKey = "no"  Visible = "yes"  Type = "Integer"  Required = "yes" />

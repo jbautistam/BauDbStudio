@@ -14,17 +14,17 @@ SELECT [CalendarIso].[Date] AS [Date]
 SalesCte AS 
 (
 SELECT 
+							[SalesAnalysis].[Date],
 	                		[SalesAnalysis].[SalesQuantity], [SalesAnalysis].[SalesAmountTaxesIncluded], [SalesAnalysis].[SalesAmountTaxesExcluded]
 	                	FROM [Fact].[SalesAnalysis]
 	                	
 	                	
-	                	 INNER JOIN  CalendarCte
-																		ON 
- [SalesAnalysis].[Date] = [CalendarCte].[Date]
+	                	
 	                	WHERE [SalesAnalysis].[Refund] = 0
 )
 SELECT 
+							[Date],
 	                		SUM(SalesQuantity) AS Quantity, SUM(SalesAmountTaxesIncluded) AS AmountTaxesIncluded, 
 	                		SUM(SalesAmountTaxesExcluded) AS AmountTaxesExcluded
 	                	FROM SalesCte
-	                	
+	                	 GROUP BY [Date]

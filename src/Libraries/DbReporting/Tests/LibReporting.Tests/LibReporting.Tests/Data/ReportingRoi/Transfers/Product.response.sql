@@ -21,7 +21,7 @@ SELECT TransferReports.OriginPointOfSaleId, TransferReports.DestinationPointOfSa
 					
 					
 		             INNER JOIN  ProductsCte
-																		ON 
+															ON 
  [TransferReports].[ProductId] = [ProductsCte].[ProductId]
 ),
 StockOriginCte AS 

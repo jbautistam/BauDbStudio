@@ -14,7 +14,7 @@ SELECT [PointsOfSaleCte].[PointOfSale], [PointsOfSaleCte].[ErpCode], [PointsOfSa
  MIN(SubstituteReport.Quantity) AS Quantity
                     FROM Fact.SubstituteReport
 						 INNER JOIN  PointsOfSaleCte
-																		ON 
+															ON 
  [SubstituteReport].[PointOfSaleId] = [PointsOfSaleCte].[PointOfSaleId]
 		            	
 						

@@ -46,22 +46,22 @@
 									-WithComma
 	                	   }}
 						   DailyStocksIntervals.ProductId, DailyStocksIntervals.PointOfSaleId,
-						   Products.RootProductCode, DailyStocksIntervals.StartDate, DailyStocksIntervals.EndDate, 
+						   DailyStocksIntervals.StartDate, DailyStocksIntervals.EndDate, 
 						   DailyStocksIntervals.Quantity
 						FROM Fact.DailyStocksIntervals
 						{{
 	                		InnerJoin 
 	                			-Dimension: PointsOfSale 
 	                				--Table: PointsOfSaleCte
+									--On: PointOfSaleId-PointOfSaleId
 								-Table: DailyStocksIntervals
-								-On: PointOfSaleId-PointOfSaleId
 						}}
 		            	{{
 		            		InnerJoin 
 		            			-Dimension: Products 
 		            				--Table: ProductsCte
+									--On: ProductId-ProductId
 								-Table: DailyStocksIntervals
-								-On: ProductId-ProductId
 		            	}}
 						INNER JOIN Dim.Products
 							ON DailyStocksIntervals.ProductId = Products.Id
@@ -75,8 +75,9 @@
 				<Cte Name = "DvStockCountCte">
 					<![CDATA[
 						SELECT COUNT(RootProductCode) AS DvStock
-							FROM (SELECT DISTINCT RootProductCode
-									FROM StockIntervalsCte
+							FROM (SELECT DISTINCT Products.RootProductCode
+									FROM StockIntervalsCte INNER JOIN Dim.Products
+										ON StockIntervalsCte.ProductId = Products.Id
 								) AS ProductsRoot
 					]]>
 				</Cte>
@@ -84,7 +85,7 @@
 
 			<Cte Name = "StockCte">
 				<![CDATA[
-					SELECT CalendarIso.[Date], StockIntervalsCte.RootProductCode AS StockRootProductCode,
+					SELECT CalendarIso.[Date], 
 						   {{
 								Fields
 									-Dimension: PointsOfSale 
@@ -125,7 +126,7 @@
 		            			-Dimension: Products 
 		            				--Table: ProductsCte
 								-Sql
-									--CalendarIso.[Date], StockIntervalsCte.RootProductCode
+									--CalendarIso.[Date]
 		            	}}	
 				]]>
 			</Cte>
@@ -134,22 +135,44 @@
 			<IfRequest Expressions="DesignVariationsWithStock" >
 				<Cte Name = "StockDvCte">
 					<![CDATA[
-						SELECT Date,
+						SELECT CalendarIso.Date,
 								{{
 									Fields
-										-Dimension: PointsOfSale
 										-Dimension: Products
+											--Table: ProductsCte
+										-Dimension: PointsOfSale
+											--Table: PointsOfSaleCte
 										-WithComma
 	                		   }}
-							   COUNT(DISTINCT StockRootProductCode) AS DesignVariationsWithStock				
-							FROM StockCte
-							{{
-	                			GroupBy
-	                				-Dimension: PointsOfSale
-		            				-Dimension: Products
-									-Sql
-										--Date
-		            		}}
+							   COUNT(DISTINCT Products.RootProductCode) AS DesignVariationsWithStock				
+						  FROM StockIntervalsCte INNER JOIN Dim.Products
+							ON StockIntervalsCte.ProductId = Products.Id
+						  INNER JOIN Dim.CalendarIso
+							ON CalendarIso.[Date] BETWEEN StockIntervalsCte.StartDate AND StockIntervalsCte.EndDate
+								AND CalendarIso.Date BETWEEN @StartDate AND @EndDate
+						{{
+							InnerJoin
+								-Dimension: Products
+									--Table: ProductsCte
+									--On: ProductId
+								-Table: StockIntervalsCte
+						}}
+						{{
+							InnerJoin
+								-Dimension: PointsOfSale
+									--Table: PointsOfSaleCte
+									--On: PointOfSaleId
+								-Table: StockIntervalsCte
+						}}
+						{{
+	                		GroupBy
+								-Dimension: Products
+									--Table: ProductsCte
+								-Dimension: PointsOfSale
+									--Table: PointsOfSaleCte
+								-Sql
+									--CalendarIso.Date
+		            	}}
 					]]>
 				</Cte>
 			</IfRequest>
@@ -175,15 +198,15 @@
 	                		InnerJoin 
 	                			-Dimension: PointsOfSale 
 	                				--Table: PointsOfSaleCte
+									--On: PointOfSaleId-PointOfSaleId
 								-Table: Analysis
-								-On: PointOfSaleId-PointOfSaleId
 						}}
 		            	{{
 		            		InnerJoin 
 		            			-Dimension: Products 
 		            				--Table: ProductsCte
+									--On: ProductId-ProductId
 								-Table: Analysis
-								-On: ProductId-ProductId
 		            	}}
 						INNER JOIN Dim.Products
 							ON Analysis.ProductId = Products.Id
@@ -297,16 +320,18 @@
 							AND AnalysisFilteredCte.Date BETWEEN ProductCostAndPriceByPointOfSaleIntervals.[StartDate] 
 															AND ProductCostAndPriceByPointOfSaleIntervals.[EndDate]
 		            {{
-		            	LeftJoin 
+		            	LeftJoin
 		            		-Dimension: Products 
-		            			--Table: AnalysisFilteredCte
+		            			--Table: AnalysisDvSalesCte
 								--OnRequestFields
 		            		-Dimension: PointsOfSale 
-		            			--Table: AnalysisFilteredCte
+		            			--Table: AnalysisDvSalesCte
 								--OnRequestFields
-							-Table: AnalysisDvSalesCte
+							-Table: AnalysisFilteredCte
 							-Sql
 								-- AnalysisFilteredCte.Date = AnalysisDvSalesCte.Date
+							-SqlNoDimension
+								-- AnalysisDvSalesCte ON AnalysisFilteredCte.Date = AnalysisDvSalesCte.Date
 		            }}
 					{{
 	                	GroupBy
@@ -317,7 +342,7 @@
 							-Sql
 								--AnalysisFilteredCte.Date
 		            }}	
-					]]>
+				]]>
 			</Cte>
 
 			<!-- Ojo con las plantillas: Template: tiene los datos de dos tablas diferentes -->
@@ -326,11 +351,11 @@
 					SELECT {{
 								Fields
 									-Dimension: PointsOfSale 
-										--Table: AnalysisCte;StockCte
-										--Template: IsNull(Field1, Field2) AS Alias1
+										--Table: AnalysisCte
+										--AdditionalTable: StockCte
 									-Dimension: Products 
-										--Table: AnalysisCte;StockCte
-										--Template: IsNull(Field1, Field2) AS Alias1
+										--Table: AnalysisCte
+										--AdditionalTable: StockCte
 									-WithComma
 	                	   }}
 						   IsNull(AnalysisCte.[Date], StockCte.[Date]) AS [Date],
@@ -382,36 +407,39 @@
 										--StockCte.StockCost
 							}}						
 						FROM StockCte
-		            {{
-		            	FullJoin 
-		            		-Dimension: Products 
-		            			--Table: StockDvCte
-								--OnRequestFields
-								--Template: IsNull(Field1, Default) = IsNull(Field2, Default)
-		            		-Dimension: PointsOfSale
-		            			--Table: StockDvCte
-								--OnRequestFields
-								--Template: IsNull(Field1, Default) = IsNull(Field2, Default)
-							-Table: StockCte
-							-NoDimensionTable: StockDvCte
-							-Sql
-								--StockCte.[Date] = StockDvCte.[Date]
-		            }}
-		            {{
-		            	FullJoin 
-		            		-Dimension: Products 
-		            			--Table: AnalysisCte
-								--OnRequestFields
-								--Template: IsNull(Field1, Default) = IsNull(Field2, Default)
-		            		-Dimension: PointsOfSale
-		            			--Table: AnalysisCte
-								--OnRequestFields
-								--Template: IsNull(Field1, Default) = IsNull(Field2, Default)
-							-Table: StockCte
-							-NoDimensionTable: StockDvCte
-							-Sql
-								--StockCte.[Date] = AnalysisCte.[Date]
-		            }}
+						{{
+		            		FullJoin
+		            			-Dimension: Products 
+		            				--Table: StockDvCte
+									--OnRequestFields
+									--CheckIfNull
+		            			-Dimension: PointsOfSale
+		            				--Table: StockDvCte
+									--OnRequestFields
+									--CheckIfNull
+								-Table: StockCte
+								-Sql
+									--StockCte.[Date] = StockDvCte.[Date]
+								-SqlNoDimension
+									--StockDvcte ON StockCte.[Date] = StockDvCte.[Date]
+						}}
+						{{
+		            		FullJoin 
+		            			-Dimension: Products 
+		            				--Table: AnalysisCte
+									--OnRequestFields
+									--CheckIfNull
+		            			-Dimension: PointsOfSale
+		            				--Table: AnalysisCte
+									--OnRequestFields
+									--CheckIfNull
+								-Table: StockCte
+								-NoDimensionTable: StockDvCte
+								-Sql
+									--StockCte.[Date] = AnalysisCte.[Date]
+								-SqlNoDimension
+									--AnalysisCte ON StockCte.[Date] = AnalysisCte.[Date]
+						}}
 				]]>
 			</Cte>
 
@@ -563,7 +591,9 @@
 								--Table: ReportCte
 							-Sql
 								--ReportCte.Date
+							-Required
 					}}
+					{{Pagination}}
 				]]>
 			</Query>
 		</With>
@@ -586,7 +616,7 @@ WITH
 			FROM Dim.PointsOfSale PS
 		),
 	StockIntervalsCte AS 
-		(SELECT ProductsCte.ProductId, Products.RootProductCode, PointsOfSaleCte.PointOfSaleId,
+		(SELECT ProductsCte.ProductId, PointsOfSaleCte.PointOfSaleId,
 				DailyStocksIntervals.StartDate, DailyStocksIntervals.EndDate, DailyStocksIntervals.Quantity
 			FROM Fact.DailyStocksIntervals
 			INNER JOIN ProductsCte
@@ -600,12 +630,13 @@ WITH
 		),
 	DvStockCountCte AS 
 		(SELECT COUNT(RootProductCode) AS DvStock
-			FROM (SELECT DISTINCT RootProductCode
-					FROM StockIntervalsCte
+			FROM (SELECT DISTINCT Products.RootProductCode
+					FROM StockIntervalsCte INNER JOIN Dim.Products
+						ON StockIntervalsCte.ProductId = Products.Id
 				 ) AS ProductsRoot
 		),
 	StockCte AS
-		(SELECT CalendarIso.[Date], StockIntervalsCte.RootProductCode AS StockRootProductCode,
+		(SELECT CalendarIso.[Date], 
 				ProductsCte.Typology, ProductsCte.ProductCode, 
 				ProductsCte.ProductImageUrl, ProductsCte.Description,
 				PointsOfSaleCte.PointOfSale, PointsOfSaleCte.PointOfSaleImageUrl, PointsOfSaleCte.ErpCode,
@@ -624,20 +655,28 @@ WITH
 					AND StockIntervalsCte.PointOfSaleId = ProductCostAndPriceByPointOfSaleIntervals.PointOfSaleId
 					AND CalendarIso.[Date] BETWEEN ProductCostAndPriceByPointOfSaleIntervals.[StartDate] 
 											AND ProductCostAndPriceByPointOfSaleIntervals.[EndDate]
-			GROUP BY CalendarIso.[Date], StockIntervalsCte.RootProductCode,
+			GROUP BY CalendarIso.[Date], 
 					 ProductsCte.Typology, ProductsCte.ProductCode, 
 					 ProductsCte.ProductImageUrl, ProductsCte.Description,
 					 PointsOfSaleCte.PointOfSale, PointsOfSaleCte.PointOfSaleImageUrl, PointsOfSaleCte.ErpCode										 								
 		),
 	StockDvCte AS
-		(SELECT Date,
-				Typology, ProductCode, ProductImageUrl, Description, 
-				PointOfSale, PointOfSaleImageUrl, ErpCode, 
-                COUNT(DISTINCT StockRootProductCode) AS DesignVariationsWithStock				
-			FROM StockCte
-			GROUP BY Date, 
-					 Typology, ProductCode, ProductImageUrl, Description,
-					 PointOfSale, PointOfSaleImageUrl, ErpCode
+		(SELECT CalendarIso.Date, ProductsCte.Typology, ProductsCte.ProductCode, 
+				ProductsCte.ProductImageUrl, ProductsCte.Description, 
+				PointsOfSaleCte.PointOfSale, PointsOfSaleCte.PointOfSaleImageUrl, PointsOfSaleCte.ErpCode, 
+                COUNT(DISTINCT Products.RootProductCode) AS DesignVariationsWithStock
+			FROM StockIntervalsCte INNER JOIN Dim.Products
+				ON StockIntervalsCte.ProductId = Products.Id
+			INNER JOIN ProductsCte
+				ON StockIntervalsCte.ProductId = ProductsCte.ProductId
+			INNER JOIN PointsOfSaleCte
+				ON StockIntervalsCte.PointOfSaleId = PointsOfSaleCte.PointOfSaleId
+            INNER JOIN Dim.CalendarIso
+                ON CalendarIso.[Date] BETWEEN StockIntervalsCte.StartDate AND StockIntervalsCte.EndDate
+					AND CalendarIso.Date BETWEEN @StartDate AND @EndDate
+			GROUP BY CalendarIso.Date, ProductsCte.Typology, ProductsCte.ProductCode, ProductsCte.ProductImageUrl, 
+					 ProductsCte.Description, PointsOfSaleCte.PointOfSale, 
+					 PointsOfSaleCte.PointOfSaleImageUrl, PointsOfSaleCte.ErpCode
 		),
 	AnalysisFilteredCte AS
 		(SELECT ProductsCte.ProductId, PointsOfSaleCte.PointOfSaleId,

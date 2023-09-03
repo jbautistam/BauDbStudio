@@ -30,14 +30,13 @@ internal class ParserSection
 	private const string HeaderPartitionBy = "PartitionBy";
 	private const string HeaderWithComma = "WithComma";
 	private const string HeaderWithoutComma = "WithoutComma";
-	private const string HeaderRelation = "Relation";
 	private const string HeaderTable = "Table";
 	private const string HeaderAlias = "Alias";
 	private const string HeaderOnRequestFields = "OnRequestFields";
+	private const string HeaderWithRequestedFields = "WithRequestedFields";
 	private const string HeaderOn = "On";
 	private const string HeaderAdditionalTable = "AdditionalTable";
 	private const string HeaderWithPrimaryKeys = "WithPrimaryKeys";
-	private const string HeaderWithRequestedFields = "WithRequestedFields";
 	private const string HeaderRequired = "Required";
 	private const string HeaderCheckIfNull = "CheckIfNull";
 	private const string HeaderEqual = "Equal";
@@ -135,12 +134,41 @@ internal class ParserSection
 	{ 
 		ParserFieldsSectionModel fields = new();
 
-			// Carga las dimensiones
-			fields.ParserDimensions.AddRange(ParseDimensions(block));
-			// Interpreta las propiedades
-			fields.WithComma = block.ExistsChildHeader(HeaderWithComma);
+			// Carga los datos
+			foreach (BlockInfo child in block.Blocks)
+				if (child.HasHeader(HeaderDimension))
+					fields.ParserDimensions.Add(ParseFieldDimension(child.Content, child));
+				else if (child.HasHeader(HeaderWithComma))
+					fields.WithComma = true;
 			// Devuelve los datos del campo
 			return fields;
+	}
+
+	/// <summary>
+	///		Interpreta los datos de los campos de una dimensión
+	/// </summary>
+	private ParserFieldsDimensionSectionModel ParseFieldDimension(string dimensionKey, BlockInfo block)
+	{
+		ParserFieldsDimensionSectionModel dimension = new()
+														{
+															DimensionKey = dimensionKey
+														};
+
+			// Crea los datos de la relación
+			foreach (BlockInfo child in block.Blocks)
+				if (child.HasHeader(HeaderTable))
+					dimension.Table = child.Content;
+				else if (child.HasHeader(HeaderAdditionalTable))
+					dimension.AdditionalTable = child.Content;
+				else if (child.HasHeader(HeaderOnRequestFields))
+					dimension.WithRequestedFields = true;
+				else if (child.HasHeader(HeaderWithPrimaryKeys))
+					dimension.WithPrimaryKeys = true;
+			// Si no se ha seleccionado el tipo de campos, se recogen los solicitados
+			if (!dimension.WithRequestedFields && !dimension.WithPrimaryKeys)
+				dimension.WithRequestedFields = true;
+			// Devuelve la relación
+			return dimension;
 	}
 
 	/// <summary>
@@ -155,9 +183,7 @@ internal class ParserSection
 			// Añade los parámetros
 			foreach (BlockInfo child in block.Blocks)
 				if (child.HasHeader(HeaderDimension))
-					join.Relations.Add(ParseJoinRelation(block));
-				else if (child.HasHeader(HeaderRelation))
-					join.Relations.Add(ParseJoinRelation(child));
+					join.JoinDimensions.Add(ParseJoinDimension(child.Content, child));
 				else if (child.HasHeader(HeaderTable))
 					join.Table = child.Content;
 				else if (child.HasHeader(HeaderAlias))
@@ -166,40 +192,41 @@ internal class ParserSection
 					join.Sql = child.GetChildsContent();
 				else if (child.HasHeader(HeaderNoDimensionSql))
 					join.SqlNoDimension = child.GetChildsContent();
+				else if (child.HasHeader(HeaderOn))
+				{
+					if (join.JoinDimensions.Count > 0)
+						foreach (ParserJoinDimensionSectionModel dimension in join.JoinDimensions)
+							if (!dimension.WithRequestedFields && dimension.Fields.Count == 0)
+								dimension.AddFieldsJoin(child.Content);
+				}
 			// Devuelve la cláusula
 			return join;
 	}
 
 	/// <summary>
-	///		Interpreta una relación para un JOIN
+	///		Interpreta una dimensión para relacionarla con una tabla en un JOIN
 	/// </summary>
-	private ParserJoinRelationSectionModel ParseJoinRelation(BlockInfo block)
+	private ParserJoinDimensionSectionModel ParseJoinDimension(string dimensionKey, BlockInfo block)
 	{
-		ParserJoinRelationSectionModel relation = new();
+		ParserJoinDimensionSectionModel dimension = new()
+														{
+															DimensionKey = dimensionKey
+														};
 
 			// Crea los datos de la relación
 			foreach (BlockInfo child in block.Blocks)
-				if (child.HasHeader(HeaderDimension))
-					relation.Dimension = ParseDimension(child);
+				if (child.HasHeader(HeaderTable))
+					dimension.Table = child.Content;
+				else if (child.HasHeader(HeaderAlias))
+					dimension.TableAlias = child.Content;
 				else if (child.HasHeader(HeaderOnRequestFields))
-					relation.RelatedByFieldRequest = true;
+					dimension.WithRequestedFields = true;
+				else if (child.HasHeader(HeaderCheckIfNull))
+					dimension.CheckIfNull = true;
 				else if (child.HasHeader(HeaderOn))
-					ParseJoinRelationFields(child, relation);
-				else if (child.HasHeader(HeaderSql))
-					relation.AdditionalJoinSql = child.GetChildsContent();
+					dimension.AddFieldsJoin(child.Content);
 			// Devuelve la relación
-			return relation;
-	}
-
-	/// <summary>
-	///		Interpreta los campos de una relación para un JOIN
-	/// </summary>
-	private void ParseJoinRelationFields(BlockInfo child, ParserJoinRelationSectionModel relation)
-	{
-		if (child.Content.Equals(HeaderOnRequestFields, StringComparison.CurrentCultureIgnoreCase))
-			relation.RelatedByFieldRequest = true;
-		else
-			relation.AddFieldsJoin(child.Content);
+			return dimension;
 	}
 
 	/// <summary>
@@ -239,7 +266,7 @@ internal class ParserSection
 					dimension.TableAlias = child.Content;
 				else if (child.HasHeader(HeaderWithPrimaryKeys))
 					dimension.WithPrimaryKeys = true;
-				else if (child.HasHeader(HeaderWithRequestedFields))
+				else if (child.HasHeader(HeaderWithRequestedFields) || child.HasHeader(HeaderOnRequestFields))
 					dimension.WithRequestedFields = true;
 				else if (child.HasHeader(HeaderRequired))
 					dimension.Required = true;
@@ -277,6 +304,8 @@ internal class ParserSection
 					section.DataSources.Add(ParseDataSource(child));
 				else if (child.HasHeader(HeaderOperator))
 					section.Operator = child.Content.TrimIgnoreNull();
+				else if (child.HasHeader(HeaderSql))
+					section.Sql = child.Content;
 			// Devuelve la cláusula
 			return section;
 	}
@@ -294,6 +323,8 @@ internal class ParserSection
 					section.Expressions.Add(ParseExpression(child));
 				else if (child.HasHeader(HeaderOperator))
 					section.Operator = child.Content.TrimIgnoreNull();
+				else if (child.HasHeader(HeaderSql))
+					section.Sql = child.Content;
 			// Devuelve la cláusula
 			return section;
 	}

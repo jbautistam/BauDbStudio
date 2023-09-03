@@ -31,7 +31,7 @@ SELECT CompanyDemandForecast.[Week] AS [Week],
  SUM(CompanyDemandForecast.AccumulatedOrdersAdjustedToCapacityAdvance) AS AccumulatedOrdersAdjustedToCapacityAdvance						   
 						FROM Fact.CompanyDemandForecast
 		            	 INNER JOIN  ProductsCte
-																		ON 
+															ON 
  [CompanyDemandForecast].[ProductId] = [ProductsCte].[ProductId]
 		            	GROUP BY CompanyDemandForecast.[Week]
 		            	ORDER BY CompanyDemandForecast.[Week]

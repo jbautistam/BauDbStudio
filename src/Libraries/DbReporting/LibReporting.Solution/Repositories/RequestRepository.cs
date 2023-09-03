@@ -225,10 +225,11 @@ internal class RequestRepository
 						// Asigna los valores
 						foreach (MLNode childML in nodeML.Nodes)
 							if (childML.Name == TagParameter)
-								filter.Values.Add(ConvertParameter(childML.Attributes[TagType].Value.TrimIgnoreNull(),
+								filter.Values.Add(ConvertParameter(childML.Attributes[TagType].Value.GetEnum(ParameterRequestModel.ParameterType.String),
 																   childML.Attributes[TagValue].Value.TrimIgnoreNull()));																  
 						// Añade el filtro a la colección
-						filters.Add(filter);
+						if (filter.Condition != FilterRequestModel.ConditionType.Undefined)
+							filters.Add(filter);
 				}
 			// Devuelve la colección de filtros
 			return filters;
@@ -237,27 +238,32 @@ internal class RequestRepository
 	/// <summary>
 	///		Carga los datos de un parámetro
 	/// </summary>
-	private void LoadParameter(MLNode rootML, Dictionary<string, object?> parameters)
+	private void LoadParameter(MLNode rootML, List<ParameterRequestModel> parameters)
 	{
-		parameters.Add(rootML.Attributes[TagKey].Value.TrimIgnoreNull(), 
-					   ConvertParameter(rootML.Attributes[TagType].Value.TrimIgnoreNull(),
-										rootML.Attributes[TagValue].Value.TrimIgnoreNull())
-					  );
+		ParameterRequestModel parameter = new()
+												{
+													Key = rootML.Attributes[TagKey].Value.TrimIgnoreNull(), 
+													Type = rootML.Attributes[TagType].Value.GetEnum(ParameterRequestModel.ParameterType.String)
+												};
+
+			// Obtiene el valor
+			parameter.Value = ConvertParameter(parameter.Type, rootML.Attributes[TagValue].Value.TrimIgnoreNull());
+			// Añade el parámetro a la lista
+			parameters.Add(parameter);
 	}
 
 	/// <summary>
 	///		Convierte el parámetro
 	/// </summary>
-	private object? ConvertParameter(string type, string value)
+	private object? ConvertParameter(ParameterRequestModel.ParameterType type, string value)
 	{
-		if (type.Equals(TagTypeDate, StringComparison.CurrentCultureIgnoreCase))
-			return value.GetDateTime();
-		else if (type.Equals(TagTypeNumeric, StringComparison.CurrentCultureIgnoreCase))
-			return value.GetDouble();
-		if (type.Equals(TagTypeBoolean, StringComparison.CurrentCultureIgnoreCase))
-			return value.GetBool();
-		else
-			return value;
+		return type switch
+				{
+					ParameterRequestModel.ParameterType.Date => value.GetDateTime(),
+					ParameterRequestModel.ParameterType.Integer or ParameterRequestModel.ParameterType.Decimal => value.GetDouble(),
+					ParameterRequestModel.ParameterType.Boolean => value.GetBool(),
+					_ => value
+				};
 	}
 
 	/// <summary>
@@ -282,13 +288,13 @@ internal class RequestRepository
 	/// <summary>
 	///		Obtiene los nodos XML de parámetros
 	/// </summary>
-	private MLNodesCollection GetNodesParameters(Dictionary<string, object?> parameters)
+	private MLNodesCollection GetNodesParameters(List<ParameterRequestModel> parameters)
 	{
 		MLNodesCollection nodesML = new();
 
 			// Añade los parámetros
-			foreach (KeyValuePair<string, object?> parameter in parameters)
-				nodesML.Add(GetNodeParameter(parameter.Key, parameter.Value));
+			foreach (ParameterRequestModel parameter in parameters)
+				nodesML.Add(GetNodeParameter(parameter.Key, parameter.Type, parameter.Value));
 			// Devuelve la colección de nodos
 			return nodesML;
 	}
@@ -296,12 +302,13 @@ internal class RequestRepository
 	/// <summary>
 	///		Obtiene el nodo de un parámetro
 	/// </summary>
-	private MLNode GetNodeParameter(string key, object? value)
+	private MLNode GetNodeParameter(string key, ParameterRequestModel.ParameterType type, object? value)
 	{
 		MLNode nodeML = new(TagParameter);
 
 			// Asigna los datos
 			nodeML.Attributes.Add(TagKey, key);
+			nodeML.Attributes.Add(TagType, type.ToString());
 			// Asigna el tipo y el valor
 			switch (value)
 			{
@@ -309,19 +316,15 @@ internal class RequestRepository
 						nodeML.Attributes.Add(TagValue, string.Empty);
 					break;
 				case string valueString:
-						nodeML.Attributes.Add(TagType, TagTypeString);
 						nodeML.Attributes.Add(TagValue, valueString);
 					break;
 				case DateTime valueDate:
-						nodeML.Attributes.Add(TagType, TagTypeDate);
 						nodeML.Attributes.Add(TagValue, $"{valueDate:yyyy-MM-dd HH:mm:ss}");
 					break;
 				case bool valueBool:
-						nodeML.Attributes.Add(TagType, TagTypeBoolean);
 						nodeML.Attributes.Add(TagValue, valueBool.ToString());
 					break;
 				default:
-						nodeML.Attributes.Add(TagType, TagTypeNumeric);
 						nodeML.Attributes.Add(TagValue, (value as double?)?.ToString(System.Globalization.CultureInfo.InvariantCulture));
 					break;
 			}
@@ -472,7 +475,7 @@ internal class RequestRepository
 					nodeML.Attributes.Add(TagCondition, filter.Condition.ToString());
 					// Añade los valores del filtro
 					foreach (object? value in filter.Values)
-						nodeML.Nodes.Add(GetNodeParameter("Value", value));
+						nodeML.Nodes.Add(GetNodeParameter("Value", ParameterRequestModel.ParameterType.String, value));
 					// Añade el nodo a la colección
 					nodesML.Add(nodeML);
 			}

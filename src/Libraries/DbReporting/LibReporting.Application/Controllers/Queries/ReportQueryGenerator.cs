@@ -24,6 +24,7 @@ internal class ReportQueryGenerator
 		Schema = schema;
 		Report = report;
 		Request = request;
+		RequestController = new ReportRequestController(this, request);
 	}
 
 	/// <summary>
@@ -172,10 +173,10 @@ internal class ReportQueryGenerator
 				switch (section)
 				{ 
 					case ParserFieldsSectionModel item:
-							parser.Replace(marker, GetSqlForFields(item));
+							parser.Replace(marker, new Generators.QueryFieldsGenerator(this, item).GetSql());
 						break;
 					case ParserJoinSectionModel item:
-							parser.Replace(marker, GetSqlForJoin(item));
+							parser.Replace(marker, new Generators.QueryRelationGenerator(this, item).GetSql());
 						break;
 					case ParserGroupBySectionModel item:
 							parser.Replace(marker, GetSqlForGroupBy(item));
@@ -189,11 +190,8 @@ internal class ReportQueryGenerator
 					case ParserIfRequestSectionModel item:
 							parser.Replace(marker, GetSqlForRequestExpression(item));
 						break;
-					case ParserWhereSectionModel item:
-							parser.Replace(marker, GetSqlForWhere(item));
-						break;
-					case ParserHavingSectionModel item:
-							parser.Replace(marker, GetSqlForHaving(item));
+					case ParserCondiciontSectionModel item:
+							parser.Replace(marker, new Generators.QueryConditionsGenerator(this, item).GetSql());
 						break;
 					case ParserSubquerySectionModel item:
 							parser.Replace(marker, GetSqlForSubqueries(item, queriesBlock));
@@ -250,32 +248,6 @@ internal class ReportQueryGenerator
 	}
 
 	/// <summary>
-	///		Obtiene los datos de una dimensión si se ha solicitado
-	/// </summary>
-	private BaseDimensionModel? GetDimensionIfRequest(ParserDimensionModel parserDimension)
-	{
-		return GetDimensionIfRequest(parserDimension.DimensionKey, parserDimension.Required, parserDimension.RelatedDimensions, 
-									 parserDimension.IfNotRequestDimensions);
-	}
-
-	/// <summary>
-	///		Obtiene los datos de una dimensión si se ha solicitado
-	/// </summary>
-	private BaseDimensionModel? GetDimensionIfRequest(string dimensionKey, bool required, List<string> relatedDimensions, List<string>? notRequestedDimensions)
-	{
-		BaseDimensionModel? dimensionJoin = Report.DataWarehouse.Dimensions[dimensionKey];
-
-			if (dimensionJoin is null)
-				throw new ReportingParserException($"Can't find the dimension {dimensionKey}");
-			else if (required || 
-					 ((Request.IsRequestedDimension(dimensionJoin.Id) || Request.IsRequestedDimension(relatedDimensions)) && 
-						!Request.IsRequestedDimension(notRequestedDimensions)))
-				return dimensionJoin;
-			else
-				return null;
-	}
-
-	/// <summary>
 	///		Obtiene la cadena SQL adicional para los filtros
 	/// </summary>
 	private string GetSqlForFilters(List<ClauseFilterModel> filters)
@@ -293,120 +265,6 @@ internal class ReportQueryGenerator
 	}
 
 	/// <summary>
-	///		Obtiene la SQL adecuada para el JOIN con una dimensión
-	/// </summary>
-	private string GetSqlForJoin(ParserJoinSectionModel section)
-	{
-		if (section.Relations.Count == 0)
-			throw new ReportingParserException($"Can't find relations at join {section.Join.ToString()}");
-		else
-		{
-			string sql = string.Empty;
-			List<(string dimensionTable, string dimensionAlias, string join)> sqlJoins = new();
-
-				// Añade los campos JOINS de las relaciones
-				foreach (ParserJoinRelationSectionModel relation in section.Relations)
-					if (relation.Dimension is null)
-						throw new ReportingParserException($"Can't find dimension at relation join {section.Join.ToString()}");
-					else
-					{
-						BaseDimensionModel? dimensionJoin = GetDimensionIfRequest(relation.Dimension);
-						string sqlDimension = string.Empty;
-
-							// Si se ha solicitado algo en la dimensión
-							if (dimensionJoin is not null)
-							{
-								// Crea las condiciones de las relaciones
-								if (relation.RelatedByFieldRequest)
-									foreach ((string tableDimension, string fieldDimension) in GetFieldsRequest(relation.Dimension, false, false))
-										sqlDimension = sqlDimension.AddWithSeparator
-														($"{ComposeField(section.TableJoin, fieldDimension, true)} = {ComposeField(tableDimension, fieldDimension, true)}",
-														 Environment.NewLine + " AND ");
-								else
-									foreach ((string fieldDimension, string fieldTable) in relation.Fields)
-										sqlDimension = sqlDimension.AddWithSeparator
-														($"{ComposeField(section.TableJoin, fieldTable, false)} = {ComposeField(relation.Dimension.TableAlias, fieldDimension, false)}",
-														 Environment.NewLine + " AND ");
-								// Añade la SQL adicional si es necesario
-								if (!string.IsNullOrWhiteSpace(relation.AdditionalJoinSql))
-									sqlDimension = sqlDimension.AddWithSeparator(relation.AdditionalJoinSql, Environment.NewLine + " AND ");
-								// Si hay algo que añadir, lo añade a la lista de relaciones
-								if (!string.IsNullOrWhiteSpace(sqlDimension))
-									sqlJoins.Add((relation.Dimension.Table, relation.Dimension.TableAlias, sqlDimension));
-							}
-						}
-				// Crea la cadena del JOIN final
-				if (sqlJoins.Count > 0)
-				{
-					string lastTable = string.Empty;
-
-						// Genera la cadena SQL
-						foreach ((string dimensionTable, string dimensionAlias, string join) in sqlJoins)
-						{
-							string table = string.Empty;
-
-								// Añade la tabla
-								if (string.IsNullOrWhiteSpace(lastTable) || !lastTable.Equals(dimensionAlias, StringComparison.CurrentCultureIgnoreCase))
-								{
-									// Asigna el nombre de tabla
-									if (!dimensionTable.Equals(dimensionAlias, StringComparison.CurrentCultureIgnoreCase))
-										table = $"{dimensionTable} AS {dimensionAlias}";
-									else
-										table = dimensionTable;
-									// Guarda la última tabla añadida
-									lastTable = dimensionAlias;
-								}
-								// Si tiene que añadir un nombre de tabla, lo añade, si no, añade una cláusula AND
-								if (!string.IsNullOrWhiteSpace(table))
-									sql = sql.AddWithSeparator(@$"{section.GetJoin()} {table}
-																		ON ", 
-																Environment.NewLine);
-								else
-									sql += " AND ";
-								// Añade la relación
-								sql = sql.AddWithSeparator(join, Environment.NewLine);
-						}
-				}
-				// Añade el SQL adicional
-				if (!string.IsNullOrWhiteSpace(section.Sql))
-				{
-					if (string.IsNullOrWhiteSpace(sql))
-						sql = $" {section.GetJoin()} {section.Table} ON {section.Sql}";
-					else
-						sql = sql.AddWithSeparator(section.Sql, " AND ");
-				}
-				// Devuelve la cadena SQL generada
-				return sql;
-		}
-
-		// Rutina para componer el nombre del campo
-		string ComposeField(string table, string field, bool useIsNull)
-		{
-			string sql = SqlTools.GetFieldName(table, field);
-
-				// Añade la función IsNull si es necesario
-				if (useIsNull)
-					return $"IsNull({sql}, '')";
-				else
-					return sql;
-		}
-	}
-
-	/// <summary>
-	///		Obtiene la SQL para una <see cref="ParserFieldsSectionModel"/>
-	/// </summary>
-	private string GetSqlForFields(ParserFieldsSectionModel section) 
-	{
-		string sql = GetSqlFieldsForDimensions(section.ParserDimensions);
-
-			// Añade una coma si es obligatoria
-			if (!string.IsNullOrWhiteSpace(sql) && section.WithComma)
-				sql += ", ";
-			// Devuelve la cadena SQL
-			return sql;
-	}
-
-	/// <summary>
 	///		Obtiene la cadena SQL para los campos solicitados de las dimensiones
 	/// </summary>
 	private string GetSqlFieldsForDimensions(List<ParserDimensionModel> dimensions)
@@ -416,7 +274,7 @@ internal class ReportQueryGenerator
 			// Obtiene los campos
 			foreach (ParserDimensionModel dimension in dimensions)
 			{
-				BaseDimensionModel? dimensionJoin = GetDimensionIfRequest(dimension);
+				BaseDimensionModel? dimensionJoin = RequestController.GetDimensionIfRequest(dimension);
 
 					if (dimensionJoin is not null)
 					{
@@ -435,68 +293,6 @@ internal class ReportQueryGenerator
 									sql = sql.AddWithSeparator(sqlField, ",");
 							}
 					}
-			}
-			// Devuelve la cadena SQL
-			return sql;
-	}
-
-	/// <summary>
-	///		Obtiene la cadena SQL para una condición WHERE de un <see cref="ParserWhereSectionModel"/>
-	/// </summary>
-	private string GetSqlForWhere(ParserWhereSectionModel section)
-	{
-		string sql = string.Empty;
-
-			// Añade los filtros de los orígenes de datos
-			foreach (ParserDataSourceModel parserDataSource in section.DataSources)
-			{
-				BaseDataSourceModel? dataSource = Report.DataWarehouse.DataSources[parserDataSource.DataSourceKey];
-
-					if (dataSource is not null)
-					{
-						DataSourceRequestModel? request = Request.GetDataSourceRequest(dataSource.Id);
-
-							if (request is not null)
-								foreach (DataSourceColumnRequestModel column in request.Columns)
-									if (column.FiltersWhere.Count > 0)
-										sql = sql.AddWithSeparator(SqlTools.SqlFilterGenerator.GetSql(parserDataSource.Table, column.ColumnId, column.FiltersWhere), " AND ");
-					}
-			}
-			// Añade la cláusula WHERE o el operador si es necesario
-			if (!string.IsNullOrWhiteSpace(sql))
-			{
-				if (!string.IsNullOrWhiteSpace(section.Operator))
-					sql = $" {section.Operator} ({sql})";
-				else
-					sql = " WHERE " + sql;
-			}
-			// Devuelve la cadena SQL
-			return sql;
-	}
-
-	/// <summary>
-	///		Obtiene la cadena SQL para una condición HAVING de un <see cref="ParserHavingSectionModel"/>
-	/// </summary>
-	private string GetSqlForHaving(ParserHavingSectionModel section)
-	{
-		string sql = string.Empty;
-
-			// Obtiene las comparaciones de los campos
-			foreach (ParserExpressionModel parserExpression in section.Expressions)
-			{
-				ExpressionColumnRequestModel? column = Request.GetExpressionRequest(parserExpression.Expression);
-
-					// Añade las condiciones del HAVING
-					if (column is not null && column.FiltersHaving.Count > 0)
-						sql = sql.AddWithSeparator(SqlTools.SqlFilterGenerator.GetSql(parserExpression.Table, column.ColumnId, parserExpression.Aggregation, column.FiltersHaving), " AND ");
-			}
-			// Añade la cláusula HAVING o el operador si es necesario
-			if (!string.IsNullOrWhiteSpace(sql))
-			{
-				if (!string.IsNullOrWhiteSpace(section.Operator))
-					sql = $" {section.Operator} ({sql})";
-				else
-					sql = $" HAVING {sql}";
 			}
 			// Devuelve la cadena SQL
 			return sql;
@@ -640,12 +436,12 @@ internal class ReportQueryGenerator
 	private List<(string tableDimension, string fieldDimension)> GetFieldsRequest(ParserDimensionModel parserDimension, bool includeRequestFields, bool includePrimaryKey)
 	{
 		List<(string tableDimension, string fieldDimension)> fields = new();
-		BaseDimensionModel? dimensionJoin = GetDimensionIfRequest(parserDimension);
+		BaseDimensionModel? dimension = RequestController.GetDimensionIfRequest(parserDimension);
 
 			// Si se ha solicitado algo de esta dimensión, se obtienen los datos
-			if (dimensionJoin is not null)
+			if (dimension is not null)
 			{
-				DimensionRequestModel? request = Request.GetDimensionRequest(dimensionJoin.Id);
+				DimensionRequestModel? request = Request.GetDimensionRequest(dimension.Id);
 
 					// Añade los campos solicitados a la SQL
 					if (request is not null)
@@ -655,6 +451,30 @@ internal class ReportQueryGenerator
 			// Devuelve la lista de campos
 			return fields;
 	}
+
+/*
+	/// <summary>
+	///		Obtiene los campos solicitados de una dimensión
+	/// </summary>
+	private List<(string tableDimension, string fieldDimension)> GetFieldsRequest(ParserJoinDimensionSectionModel joinDimension)
+	{
+		List<(string tableDimension, string fieldDimension)> fields = new();
+		BaseDimensionModel? dimension = RequestController.GetDimensionIfRequest(joinDimension.DimensionKey, false, null, null);
+
+			// Si se ha solicitado algo de esta dimensión, se obtienen los datos
+			if (dimension is not null)
+			{
+				DimensionRequestModel? request = Request.GetDimensionRequest(dimension.Id);
+
+					// Añade los campos solicitados a la SQL
+					if (request is not null)
+						foreach (string field in GetListFields(GetQueryFromRequest(request), joinDimension.WithRequestedFields, false))
+							fields.Add((joinDimension.Table, field));
+			}
+			// Devuelve la lista de campos
+			return fields;
+	}
+*/
 
 	/// <summary>
 	///		Obtiene los campos asociados a una consulta
@@ -870,6 +690,11 @@ internal class ReportQueryGenerator
 	///		Datos de la solicitud
 	/// </summary>
 	internal ReportRequestModel Request { get; }
+	
+	/// <summary>
+	///		Controlador para manejo de las funciones de solicitud
+	/// </summary>
+	internal ReportRequestController RequestController { get; }
 
 	/// <summary>
 	///		Herramientas para generación de SQL

@@ -22,7 +22,7 @@ SELECT DailyStocksIntervals.ProductId, DailyStocksIntervals.PointOfSaleId,
 						INNER JOIN Dim.Products
 							ON DailyStocksIntervals.ProductId = Products.Id
 						 INNER JOIN  PointsOfSaleCte
-																		ON 
+															ON 
  [DailyStocksIntervals].[PointOfSaleId] = [PointsOfSaleCte].[PointOfSaleId]
 		            	
 					  WHERE @EndPeriod BETWEEN DailyStocksIntervals.StartDate AND DailyStocksIntervals.EndDate
@@ -35,7 +35,7 @@ SELECT SalesIntervals.PointOfSaleId, SalesIntervals.ProductId,
 						INNER JOIN Dim.Products
 							ON SalesIntervals.ProductId = Products.Id
 						 INNER JOIN  PointsOfSaleCte
-																		ON 
+															ON 
  [SalesIntervals].[PointOfSaleId] = [PointsOfSaleCte].[PointOfSaleId]
 		            	
 						WHERE SalesIntervals.StartDate <= @EndPeriod AND SalesIntervals.Enddate >= @StartPeriod
@@ -74,7 +74,7 @@ SELECT
 					FROM StockWithoutSalesCte
 		            
 		             INNER JOIN  PointsOfSaleCte
-																		ON 
+															ON 
  [StockWithoutSalesCte].[PointOfSaleId] = [PointsOfSaleCte].[PointOfSaleId]
 					LEFT JOIN Fact.DaysInPointsOfSale 
 						ON StockWithoutSalesCte.ProductId = DaysInPointsOfSale.ProductId 

@@ -20,7 +20,7 @@ SELECT TransferReports.OriginPointOfSaleId, TransferReports.DestinationPointOfSa
 					FROM Fact.TransferReports
 					
 					 INNER JOIN  PointsOfSaleTargetCte
-																		ON 
+															ON 
  [TransferReports].[DestinationPointOfSaleId] = [PointsOfSaleTargetCte].[PointOfSaleTargetPointOfSaleId]
 		            
 ),

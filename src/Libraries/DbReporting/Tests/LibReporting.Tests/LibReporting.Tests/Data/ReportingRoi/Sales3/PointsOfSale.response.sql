@@ -22,15 +22,15 @@ SELECT [CalendarIso].[Date] AS [Date]
  WHERE [Date] BETWEEN @StartDate AND @EndDate
 
 )
-SELECT [PointsOfSaleCte].[City], [PointsOfSaleCte].[ErpCode], [PointsOfSaleCte].[PointOfSale], [PointsOfSaleCte].[ImageUrl], [PointsOfSaleCte].[ChannelName], [PointsOfSaleCte].[PointOfSaleClassificationLevel1], [PointsOfSaleCte].[PointOfSaleClassificationLevel2], [CalendarCte].[Date], 
+SELECT [PointsOfSaleCte].[City], [PointsOfSaleCte].[ErpCode], [PointsOfSaleCte].[PointOfSale], [PointsOfSaleCte].[ImageUrl], [PointsOfSaleCte].[ChannelName], [PointsOfSaleCte].[PointOfSaleClassificationLevel1], [PointsOfSaleCte].[PointOfSaleClassificationLevel2], 
 	                		Sales3.SalesQuantity, Sales3.AmountTaxesExcluded, Sales3.SalesTurnover, Sales3.Refund
 	                	FROM Fact.Sales3
 	                	 INNER JOIN  PointsOfSaleCte
-																		ON 
+															ON 
  [Sales3].[PointOfSaleId] = [PointsOfSaleCte].[PointOfSaleId]
 	                	
 	                	 INNER JOIN  CalendarCte
-																		ON 
+															ON 
  [Sales3].[Date] = [CalendarCte].[Date]
 						ORDER BY 1
 						

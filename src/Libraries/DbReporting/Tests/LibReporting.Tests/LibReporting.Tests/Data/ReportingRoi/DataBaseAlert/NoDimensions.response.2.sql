@@ -1,7 +1,7 @@
 WITH
 GroupedCte AS 
 (
-SELECT 			   
+SELECT 
 						   SUM(DataBasePointOfSales.NegativeStock) AS NegativeStock, 
  SUM(DataBasePointOfSales.NegativePendingReceptions) AS NegativePendingReceptions						   
 						FROM Fact.DataBasePointOfSales

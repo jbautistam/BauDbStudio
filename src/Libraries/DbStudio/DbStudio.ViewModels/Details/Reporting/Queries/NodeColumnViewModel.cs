@@ -216,6 +216,21 @@ public class NodeColumnViewModel : PluginNodeViewModel
 	}
 
 	/// <summary>
+	///		Añade los filtros
+	/// </summary>
+	public void AddFilters(List<FilterRequestModel> filtersWhere, List<FilterRequestModel> filtersHaving)
+	{
+		// Añade los filtros WHERE
+		FilterWhere.Clear();
+		FilterWhere.AddRange(filtersWhere);
+		HasFiltersColumn = filtersWhere.Count > 0;
+		// Añade los filtros HAVING
+		FilterHaving.Clear();
+		FilterHaving.AddRange(filtersHaving);
+		HasFiltersHaving = filtersHaving.Count > 0;
+	}
+
+	/// <summary>
 	///		Carga los nodos del tipo
 	/// </summary>
 	protected override void LoadNodes()

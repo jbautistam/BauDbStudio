@@ -1,7 +1,6 @@
 using FluentAssertions;
 using Bau.Libraries.LibReporting.Solution;
 using Bau.Libraries.LibReporting.Models.DataWarehouses;
-using Bau.Libraries.LibReporting.Models.DataWarehouses.Reports;
 
 namespace LibReporting.Tests;
 

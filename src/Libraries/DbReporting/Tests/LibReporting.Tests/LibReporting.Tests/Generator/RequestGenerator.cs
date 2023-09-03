@@ -8,8 +8,11 @@ namespace LibReporting.Tests.Generator;
 public class RequestGenerator
 {
 	#if DEBUG
+	/// <summary>
+	///		Genera los archivos de respuesta de todos los archivos de solicitud
+	/// </summary>
 	[Fact(Skip = "Sólo cuando sea necesario regenerar las respuestas")]
-	public void GenerateResponseFiles()
+	public void generate_all_response_files()
 	{
 		Dictionary<string, List<string>> reports = Tools.FileHelper.GetReports();
 		string error = string.Empty;
@@ -24,18 +27,48 @@ public class RequestGenerator
 						if (!Directory.Exists(pathRequest))
 							error += $"Can't find request for report '{Path.GetFileName(reportFile)}'";
 						else
-							foreach (string requestFile in Directory.GetFiles(pathRequest, "*.request.xml"))
-								try
-								{
-									GenerateResponse(report.Key, requestFile);
-								}
-								catch (Exception exception)
-								{
-									error += $"Error when process {requestFile}. {exception.Message}" + Environment.NewLine;
-								}
+							error += GenerateFilesFromRequest(report.Key, pathRequest);
 				}
 			// Comprueba los errores
 			error.Should().BeNullOrWhiteSpace();
+	}
+
+	/// <summary>
+	///		Genera los archivos de respuesta de un informe en concreto (todas las solicitudes de un directorio)
+	/// </summary>
+	[Theory(Skip = "Sólo cuando sea necesario regenerar las respuestas de un archivo")]
+	[InlineData("ReportingRoi/Test-Reporting-Roi.Reporting.xml", "ReportingRoi/Substitute")]
+	[InlineData("ReportingSales/Test-Reporting-Sales.Reporting.xml", "ReportingSales/Test_Sales_Grouped")]
+	public void generate_response_files(string schemaFile, string pathRequest)
+	{
+		string error;
+
+			// Genera los datos de informe
+			error = GenerateFilesFromRequest(Tools.FileHelper.GetFullFileName(schemaFile), 
+											 Tools.FileHelper.GetFullFileName(pathRequest));
+			// Comprueba los errores
+			error.Should().BeNullOrWhiteSpace();
+	}
+
+	/// <summary>
+	///		Genera el archivo de respuesta
+	/// </summary>
+	private string GenerateFilesFromRequest(string schemaFile, string pathRequest)
+	{
+		string error = string.Empty;
+
+			// Genera las respuestas de los archivos de solicitud
+			foreach (string requestFile in Directory.GetFiles(pathRequest, "*.request.xml"))
+				try
+				{
+					GenerateResponse(schemaFile, requestFile);
+				}
+				catch (Exception exception)
+				{
+					error += $"Error when process {requestFile}. {exception.Message}" + Environment.NewLine;
+				}
+			// Devuelve la cadena de error
+			return error;
 	}
 
 	/// <summary>

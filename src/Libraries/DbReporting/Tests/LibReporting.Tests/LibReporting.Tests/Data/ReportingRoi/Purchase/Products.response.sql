@@ -38,7 +38,7 @@ SELECT [ProductsCte].[EanCode], [ProductsCte].[ProductCode], [ProductsCte].[Prod
  SUM(PurchaseReports.ReductionDueToCapacity) AS ReductionDueToCapacity						   
 						FROM Fact.PurchaseReports
 		            	 INNER JOIN  ProductsCte
-																		ON 
+															ON 
  [PurchaseReports].[ProductId] = [ProductsCte].[ProductId]
 						 GROUP BY [ProductsCte].[EanCode], [ProductsCte].[ProductCode], [ProductsCte].[ProductDescription], [ProductsCte].[UrlImage]
 )

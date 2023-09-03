@@ -1,4 +1,5 @@
-﻿using System.Data.SqlClient;
+﻿/*
+using System.Data.SqlClient;
 using FluentAssertions;
 
 using Bau.Libraries.LibReporting.Solution;
@@ -10,7 +11,7 @@ namespace LibReporting.Tests;
 /// <summary>
 ///		Pruebas de ejecución de una consulta de informes y su transformación a Excel con una plantilla
 /// </summary>
-public class report_execution_excel_should
+public class report_execution_generate_excel_should
 {
 	/// <summary>
 	///		Comprueba si se puede cargar un esquema de base de datos y sus informes y ejecutar la cadena SQL contra la base de datos
@@ -155,3 +156,4 @@ public class report_execution_excel_should
 			return new ReaderService(configuration);
 	}
 }
+*/

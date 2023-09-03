@@ -18,7 +18,7 @@ SELECT [PointsOfSaleCte].[PointOfSale], [PointsOfSaleCte].[ErpCode], [PointsOfSa
  SUM(SalesDecelerations.PotentiallyLostSales) AS PotentiallyLostSales						   
 						FROM Fact.SalesDecelerations
 						 INNER JOIN  PointsOfSaleCte
-																		ON 
+															ON 
  [SalesDecelerations].[PointOfSaleId] = [PointsOfSaleCte].[PointOfSaleId]
 		            	
 						 GROUP BY [PointsOfSaleCte].[PointOfSale], [PointsOfSaleCte].[ErpCode], [PointsOfSaleCte].[ImageUrl]

@@ -20,7 +20,7 @@ SELECT [PointsOfSaleCte].[PointOfSale], [PointsOfSaleCte].[ErpCode], [PointsOfSa
  SUM(SalesAccelerations.WarehouseStock) AS WarehouseStock						   
 						FROM Fact.SalesAccelerations
 						 INNER JOIN  PointsOfSaleCte
-																		ON 
+															ON 
  [SalesAccelerations].[PointOfSaleId] = [PointsOfSaleCte].[PointOfSaleId]
 		            	
 						 GROUP BY [PointsOfSaleCte].[PointOfSale], [PointsOfSaleCte].[ErpCode], [PointsOfSaleCte].[ImageUrl]

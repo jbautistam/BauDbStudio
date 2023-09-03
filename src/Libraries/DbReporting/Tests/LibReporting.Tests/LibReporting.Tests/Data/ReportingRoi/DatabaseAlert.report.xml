@@ -51,15 +51,15 @@
 	                		InnerJoin 
 	                			-Dimension: PointsOfSale 
 	                				--Table: PointsOfSaleCte
+									--On: PointOfSaleId-PointOfSaleId
 								-Table: DataBasePointOfSales
-								-On: PointOfSaleId-PointOfSaleId
 						}}
 		            	{{
 		            		InnerJoin 
 		            			-Dimension: Products 
 		            				--Table: ProductsCte
+									--On: ProductId-ProductId
 								-Table: DataBasePointOfSales
-								-On: ProductId-ProductId
 		            	}}
 						{{
 	                		GroupBy

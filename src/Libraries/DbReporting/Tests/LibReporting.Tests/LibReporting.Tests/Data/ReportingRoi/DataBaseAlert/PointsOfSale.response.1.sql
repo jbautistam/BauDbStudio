@@ -9,12 +9,12 @@ SELECT [PointsOfSale].[Id] AS [PointOfSaleId], [PointsOfSale].[Name] AS [PointOf
 ),
 GroupedCte AS 
 (
-SELECT [PointsOfSaleCte].[PointOfSale], [PointsOfSaleCte].[ErpCode], [PointsOfSaleCte].[ImageUrl], 			   
+SELECT [PointsOfSaleCte].[PointOfSale], [PointsOfSaleCte].[ErpCode], [PointsOfSaleCte].[ImageUrl], 
 						   SUM(DataBasePointOfSales.NegativeStock) AS NegativeStock, 
  SUM(DataBasePointOfSales.NegativePendingReceptions) AS NegativePendingReceptions						   
 						FROM Fact.DataBasePointOfSales
 						 INNER JOIN  PointsOfSaleCte
-																		ON 
+															ON 
  [DataBasePointOfSales].[PointOfSaleId] = [PointsOfSaleCte].[PointOfSaleId]
 		            	
 						 GROUP BY [PointsOfSaleCte].[PointOfSale], [PointsOfSaleCte].[ErpCode], [PointsOfSaleCte].[ImageUrl]

@@ -8,6 +8,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<Compile Remove="Controllers\Parsers\Models\ParserJoinRelationSectionModel.cs" />
 		<Compile Remove="Controllers\Parsers\Models\ParserWhereConditionSectionModel.cs" />
 		<Compile Remove="Controllers\Parsers\ParserParametersSection.cs" />
 		<Compile Remove="Controllers\Queries\Models\QueryGroupFieldModel.cs" />

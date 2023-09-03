@@ -18,7 +18,7 @@ SELECT Capacities.ClassificationLevels,
  MAX(Capacities.AlertMessageId) AS AlertMessageId						   
 						FROM Fact.Capacities
 						 INNER JOIN  PointsOfSaleCte
-																		ON 
+															ON 
  [Capacities].[PointOfSaleId] = [PointsOfSaleCte].[PointOfSaleId]
 		            	
 						 GROUP BY [PointsOfSaleCte].[PointOfSale], [PointsOfSaleCte].[ErpCode], [PointsOfSaleCte].[ImageUrl], Capacities.ClassificationLevels

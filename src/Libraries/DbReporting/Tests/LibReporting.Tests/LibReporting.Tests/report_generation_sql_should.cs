@@ -5,15 +5,17 @@ namespace LibReporting.Tests;
 /// <summary>
 ///		Pruebas de generación de SQL de informes avanzados
 /// </summary>
-public class report_generation_should
+public class report_generation_sql_should
 {
 	/// <summary>
 	///		Comprueba si se puede cargar un esquema de base de datos y sus informes (para hacer uno en concreto, el método
 	///		convert_to_sql_files, recoge y comprueba todos los archivos de datos)
 	/// </summary>
 	[Theory]
+	//[InlineData("ReportingRoi/Test-Reporting-Roi.Reporting.xml", 
+	//			"ReportingRoi/AnalysisByDate/PointsOfSale.request.xml")]
 	[InlineData("ReportingRoi/Test-Reporting-Roi.Reporting.xml", 
-				"ReportingRoi/AnalysisByDate/NoDimensions.request.xml")]
+				"ReportingRoi/Capacities/PointsOfSale - Typologies - Fact Filter.request.xml")]
 	public void convert_to_sql(string schema, string fileRequest)
 	{
 		string schemaFileName = Tools.FileHelper.GetFullFileName(schema);
@@ -83,13 +85,18 @@ public class report_generation_should
 					if (!File.Exists(responseFile))
 						error += $"Can't find the response for {requestFile} page {page.ToString()}" + Environment.NewLine;
 					else
-					{
-						string sql = Tools.ReportHelper.GetSqlResponse(schemaFile, requestFile, page);
+						try
+						{
+							string sql = Tools.ReportHelper.GetSqlResponse(schemaFile, requestFile, page);
 
-							// Compara la SQL de salida con el archivo
-							if (!CompareSql(sql, File.ReadAllText(responseFile)))
-								error = $"The response for {requestFile} page {page.ToString()} has error";
-					}
+								// Compara la SQL de salida con el archivo
+								if (!CompareSql(sql, File.ReadAllText(responseFile)))
+									error = $"The response for {requestFile} page {page.ToString()} has error";
+						}
+						catch (Exception exception)
+						{
+							error = $"Error when generate file {requestFile}. {exception.Message}";
+						}
 			}
 			// Devuelve el error
 			return error;

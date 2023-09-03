@@ -3,10 +3,13 @@
 namespace Bau.Libraries.LibReporting.Application.Controllers.Parsers.Models;
 
 /// <summary>
-///		Sección con datos de una relación para un <see cref="ParserJoinSectionModel"/>
+///		Modelo de interpretación de una dimensión
 /// </summary>
-internal class ParserJoinRelationSectionModel : ParserBaseSectionModel
+internal class ParserJoinDimensionSectionModel : ParserBaseSectionModel
 {
+    // Variables privadas
+    private string _tableAlias = string.Empty;
+
     /// <summary>
     ///     Añade los campos por los que se va a hacer el join
     /// </summary>
@@ -40,23 +43,43 @@ internal class ParserJoinRelationSectionModel : ParserBaseSectionModel
             Fields.Add((fieldDimension, fieldTable));
     }
 
-    /// <summary>
-    ///		Dimensión sobre la que se hace el join
-    /// </summary>
-    internal ParserDimensionModel? Dimension { get; set; }
+	/// <summary>
+	///		Clave de la dimensión
+	/// </summary>
+	internal string DimensionKey { get; set; } = string.Empty;
 
     /// <summary>
-    ///		Indica si se debe relacionar por los campos solicitados en la dimensión
+    ///		Tabla de la dimensión
     /// </summary>
-    internal bool RelatedByFieldRequest { get; set; }
+    internal string Table { get; set; } = string.Empty;
+
+    /// <summary>
+    ///     Alias que se debe utilizar para tabla de dimensión
+    /// </summary>
+    internal string TableAlias
+    {
+        get
+        {
+            if (string.IsNullOrWhiteSpace(_tableAlias))
+                return Table;
+            else
+                return _tableAlias;
+        }
+        set { _tableAlias = value; }
+    }
+
+    /// <summary>
+    ///     Indica si se debe comprobar si es nulo
+    /// </summary>
+    internal bool CheckIfNull { get; set; }
+
+    /// <summary>
+    ///     Indica si se debe unir por los campos solicitados
+    /// </summary>
+    internal bool WithRequestedFields { get; set; }
 
     /// <summary>
     ///		Campos por los que se hace la unión
     /// </summary>
     internal List<(string fieldDimension, string fieldTable)> Fields { get; } = new();
-
-    /// <summary>
-    ///		Sql adicional para un JOIN
-    /// </summary>
-    internal string AdditionalJoinSql { get; set; } = string.Empty;
 }

@@ -25,7 +25,7 @@ SELECT PointOfSaleDemandForecast.[Week] AS [Week],
  SUM(PointOfSaleDemandForecast.AccumulatedPurchaseOrderMatchedToMinimunAndMultiple) AS AccumulatedPurchaseOrderMatchedToMinimunAndMultiple						   
 						FROM Fact.PointOfSaleDemandForecast
 						 INNER JOIN  PointsOfSaleCte
-																		ON 
+															ON 
  [PointOfSaleDemandForecast].[PointOfSaleId] = [PointsOfSaleCte].[PointOfSaleId]
 		            	
 		            	GROUP BY PointOfSaleDemandForecast.[Week]

@@ -20,5 +20,5 @@ SELECT [CalendarCte].[YearMonth],
 	                	
 	                	
 	                	 INNER JOIN  CalendarCte
-																		ON 
+															ON 
  [SalesAnalysis].[Date] = [CalendarCte].[Date]

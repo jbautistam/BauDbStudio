@@ -22,10 +22,10 @@ SELECT Curves.[Week] AS [Week],
                      FROM Fact.CurvesByPointOfSaleAndProduct INNER JOIN Fact.Curves
 	                    ON CurvesByPointOfSaleAndProduct.CurveId = Curves.CurveId                                   
 						 INNER JOIN  PointsOfSaleCte
-																		ON 
+															ON 
  [CurvesByPointOfSaleAndProduct].[PointOfSaleId] = [PointsOfSaleCte].[PointOfSaleId]
 		            	 INNER JOIN  ProductsCte
-																		ON 
+															ON 
  [CurvesByPointOfSaleAndProduct].[ProductId] = [ProductsCte].[ProductId]
 		            GROUP BY Curves.[Week]
 		            ORDER BY Curves.[Week] ASC

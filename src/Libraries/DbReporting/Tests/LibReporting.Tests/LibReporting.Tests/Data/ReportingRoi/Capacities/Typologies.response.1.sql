@@ -19,7 +19,7 @@ SELECT Capacities.ClassificationLevels,
 						FROM Fact.Capacities
 						
 		            	 INNER JOIN  TypologiesCte
-																		ON 
+															ON 
  [Capacities].[TypologyId] = [TypologiesCte].[TypologyId]
 						 GROUP BY [TypologiesCte].[Typology], Capacities.ClassificationLevels
 						ORDER BY Capacities.ClassificationLevels

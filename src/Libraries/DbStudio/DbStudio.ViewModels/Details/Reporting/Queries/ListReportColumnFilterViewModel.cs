@@ -1,5 +1,5 @@
 ﻿using Bau.Libraries.BauMvvm.ViewModels;
-using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems; 
+using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
 using Bau.Libraries.LibReporting.Requests.Models;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries;
@@ -34,8 +34,11 @@ public class ListReportColumnFilterViewModel : BauMvvm.ViewModels.Forms.Dialogs.
 		// Limpia la lista
 		FiltersViewModel = new ControlItemCollectionViewModel<ListItemReportColumnFilterViewModel>();
 		// Asigna las propiedades
-		Name = NodeColumnViewModel.Column.Id;
-		Type = NodeColumnViewModel.Column.Type.ToString();
+		if (NodeColumnViewModel.Column is not null)
+		{
+			Name = NodeColumnViewModel.Column.Id;
+			Type = NodeColumnViewModel.Column.Type.ToString();
+		}
 		// Indica que no ha habido modificaciones
 		IsUpdated = false;
 	}
@@ -49,19 +52,28 @@ public class ListReportColumnFilterViewModel : BauMvvm.ViewModels.Forms.Dialogs.
 	}
 
 	/// <summary>
+	///		Limpia los filtros
+	/// </summary>
+	public void Clear()
+	{
+		FiltersViewModel.Clear();
+	}
+
+	/// <summary>
+	///		Añade una serie de filtros
+	/// </summary>
+	public void AddRange(List<FilterRequestModel> filters)
+	{
+		foreach (FilterRequestModel filter in filters)
+			FiltersViewModel.Add(new ListItemReportColumnFilterViewModel(this, filter));
+	}
+
+	/// <summary>
 	///		Añade un filtro a la lista
 	/// </summary>
-	public void Add(FilterRequestModel.ConditionType condition, LibReporting.Models.DataWarehouses.DataSets.DataSourceColumnModel.FieldType type, string value)
+	public void Add(FilterRequestModel filter)
 	{
-		FilterRequestModel filter = new()
-										{
-											Condition = condition
-										};
-
-			// Añade los valores al filtro
-			filter.Values.Add(value);
-			// Añade el filtro a la lista
-			FiltersViewModel.Add(new ListItemReportColumnFilterViewModel(this, filter));
+		FiltersViewModel.Add(new ListItemReportColumnFilterViewModel(this, filter));
 	}
 
 	/// <summary>

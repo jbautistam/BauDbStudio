@@ -15,7 +15,7 @@ SELECT [ProductsCte].[ProductCode], [ProductsCte].[RootProductCode], [ProductsCt
 						FROM Fact.DataBaseWarehouses
 						
 		            	 INNER JOIN  ProductsCte
-																		ON 
+															ON 
  [DataBaseWarehouses].[ProductId] = [ProductsCte].[ProductId]
 						 GROUP BY [ProductsCte].[ProductCode], [ProductsCte].[RootProductCode], [ProductsCte].[ProductDescription], [ProductsCte].[UrlImage]
 )

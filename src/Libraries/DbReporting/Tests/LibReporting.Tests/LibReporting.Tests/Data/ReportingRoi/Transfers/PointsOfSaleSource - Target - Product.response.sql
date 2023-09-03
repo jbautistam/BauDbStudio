@@ -35,13 +35,13 @@ SELECT TransferReports.OriginPointOfSaleId, TransferReports.DestinationPointOfSa
 						   TransferReports.Sales, TransferReports.Margin
 					FROM Fact.TransferReports
 					 INNER JOIN  PointsOfSaleSourceCte
-																		ON 
+															ON 
  [TransferReports].[OriginPointOfSaleId] = [PointsOfSaleSourceCte].[PointOfSaleSourcePointOfSaleId]
 					 INNER JOIN  PointsOfSaleTargetCte
-																		ON 
+															ON 
  [TransferReports].[DestinationPointOfSaleId] = [PointsOfSaleTargetCte].[PointOfSaleTargetPointOfSaleId]
 		             INNER JOIN  ProductsCte
-																		ON 
+															ON 
  [TransferReports].[ProductId] = [ProductsCte].[ProductId]
 ),
 StockOriginCte AS 

@@ -33,7 +33,7 @@ SELECT PointOfSaleDemandForecast.[Week] AS [Week],
 						FROM Fact.PointOfSaleDemandForecast
 						
 		            	 INNER JOIN  ProductsCte
-																		ON 
+															ON 
  [PointOfSaleDemandForecast].[ProductId] = [ProductsCte].[ProductId]
 						 GROUP BY [ProductsCte].[EanCode], [ProductsCte].[ProductCode], [ProductsCte].[ProductDescription], [ProductsCte].[UrlImage], [ProductsCte].[ClassificationLevelValue1], [ProductsCte].[ClassificationLevelValue10], [ProductsCte].[Typology], PointOfSaleDemandForecast.[Week]
 )

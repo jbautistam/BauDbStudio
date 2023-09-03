@@ -15,7 +15,7 @@ SELECT [ProductsCte].[ProductCode], [ProductsCte].[ProductDescription], [Product
                     FROM Fact.SubstituteReport
 						
 		            	 INNER JOIN  ProductsCte
-																		ON 
+															ON 
  [SubstituteReport].[ProductId] = [ProductsCte].[ProductId]
 						
 						 GROUP BY [ProductsCte].[ProductCode], [ProductsCte].[ProductDescription], [ProductsCte].[UrlImage]

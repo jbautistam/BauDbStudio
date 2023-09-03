@@ -147,7 +147,7 @@ public class ReportRequestModel
 	/// <summary>
 	///		Parámetros
 	/// </summary>
-	public Dictionary<string, object?> Parameters { get; } = new();
+	public List<ParameterRequestModel> Parameters { get; } = new();
 
 	/// <summary>
 	///		Dimensiones solicitadas
@@ -162,7 +162,6 @@ public class ReportRequestModel
 	/// <summary>
 	///		Expresiones solicitadas
 	/// </summary>
-	//TODO: esto podría ser directamente las columnas
 	public List<ExpressionRequestModel> Expressions { get; } = new();
 
 	/// <summary>

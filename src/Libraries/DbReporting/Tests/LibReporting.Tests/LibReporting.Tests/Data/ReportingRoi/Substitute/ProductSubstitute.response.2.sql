@@ -16,7 +16,7 @@ SELECT [ProductsSubstituteCte].[ProductSubstituteProductCode], [ProductsSubstitu
 						
 		            	
 						 INNER JOIN  ProductsSubstituteCte
-																		ON 
+															ON 
  [SubstituteReport].[RelatedProductId] = [ProductsSubstituteCte].[ProductSubstituteProductId]
 						 GROUP BY [ProductsSubstituteCte].[ProductSubstituteProductCode], [ProductsSubstituteCte].[ProductSubstituteProductDescription], [ProductsSubstituteCte].[ProductSubstituteUrlImage]
 )

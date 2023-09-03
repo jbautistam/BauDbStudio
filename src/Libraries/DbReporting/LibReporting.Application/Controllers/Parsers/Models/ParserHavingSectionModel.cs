@@ -9,16 +9,12 @@
 ///		    --Aggregation: SUM | MAX | AVG
 ///		    --Table: Table
 ///		-Operator: AND | OR | ...
+///		-Sql: A = B
 /// </example>
-internal class ParserHavingSectionModel : ParserBaseSectionModel
+internal class ParserHavingSectionModel : ParserCondiciontSectionModel
 {
     /// <summary>
     ///     Bloques con las expresiones a filtrar
     /// </summary>
     internal List<ParserExpressionModel> Expressions { get; } = new();
-
-    /// <summary>
-    ///     Operador de relación
-    /// </summary>
-    internal string Operator { get; set; } = string.Empty;
 }

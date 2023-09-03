@@ -74,16 +74,21 @@
 	                		InnerJoin 
 	                			-Dimension: PointsOfSale 
 	                				--Table: PointsOfSaleCte
+									--On:PointOfSaleId-PointOfSaleId
 								-Table: Capacities
-								-On:PointOfSaleId-PointOfSaleId
 						}}
 		            	{{
 		            		InnerJoin 
 		            			-Dimension: Typologies 
 		            				--Table: TypologiesCte
+									--On: TypologyId-TypologyId
 								-Table: Capacities
-								-On: TypologyId-TypologyId
 		            	}}
+						{{
+							Where
+								-DataSource: [Fact].[Capacities]
+									--Table: Capacities
+						}}
 						{{
 	                		GroupBy
 	                			-Dimension: PointsOfSale 

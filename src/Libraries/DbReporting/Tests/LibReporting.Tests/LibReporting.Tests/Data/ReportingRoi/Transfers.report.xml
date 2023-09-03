@@ -9,6 +9,8 @@
 	<Dimension Name = "PointsOfSaleTarget" />
 	<Dimension Name = "Products" />
 
+	<DataSource Name = "[Fact].[TransferReports]" />
+
 	<Requests>
 		<Dimension Name = "PointsOfSaleSource">
 			<Field Name = "Name;ErpCode;ImageUrl" />
@@ -64,14 +66,14 @@
 	                		-Dimension: PointsOfSaleSource
 	                			--Table: PointsOfSaleSourceCte
 							-Table: TransferReports
-							-On:PointOfSaleSourcePointOfSaleId-OriginPointOfSaleId
+							-On: OriginPointOfSaleId-PointOfSaleSourcePointOfSaleId
 					}}
 					{{
 	                	InnerJoin 
 	                		-Dimension: PointsOfSaleTarget
 	                			--Table: PointsOfSaleTargetCte
 							-Table: TransferReports
-							-On:PointOfSaleTargetPointOfSaleId-DestinationPointOfSaleId
+							-On: DestinationPointOfSaleId-PointOfSaleTargetPointOfSaleId
 					}}
 		            {{
 		            	InnerJoin 
@@ -253,7 +255,7 @@ WITH FilteredTransferDataCte AS
             , P.UrlImage ProductImageUrl
             , P.Description Description
             ,P.Id ProductId
-            ,OPS.Id OriginPointOfSaleId
+            ,OPS.Id PointOfSaleSourcePointOfSaleId
             ,DPS.Id DestinationPointOfSaleId 
 	        ,TransferReports.TransferType
 			,TransferReports.ActualStockOriginStore
@@ -273,7 +275,7 @@ WITH FilteredTransferDataCte AS
         INNER JOIN Dim.ProductClassificationLevelValuesReadingModel PRM 
 	        ON PRM.Id = P.ProductClassificationLevelValuesReadingModelId
         INNER JOIN Dim.PointsOfSale OPS 
-            ON TransferReports.OriginPointOfSaleId = OPS.Id
+            ON TransferReports.PointOfSaleSourcePointOfSaleId = OPS.Id
         LEFT JOIN Dim.PointOfSaleClassificationLevelValuesReadingModel OPSRM 
 	        ON OPSRM.Id = OPS.PointOfSaleClassificationLevelValuesReadingModelId
         INNER JOIN Dim.Channels OC  
@@ -307,9 +309,9 @@ WITH FilteredTransferDataCte AS
 	StockOriginCte AS
 		(SELECT SUM(ActualStockOriginStore) AS TotalActualStockOriginStore,
 			   SUM(IdealStockOriginStore) AS TotalIdealStockOriginStore
-			FROM (SELECT OriginPointOfSaleId, ProductId, ActualStockOriginStore, IdealStockOriginStore
+			FROM (SELECT PointOfSaleSourcePointOfSaleId, ProductId, ActualStockOriginStore, IdealStockOriginStore
 					FROM FilteredTransferDataCte
-					GROUP BY OriginPointOfSaleId, ProductId, ActualStockOriginStore, IdealStockOriginStore
+					GROUP BY PointOfSaleSourcePointOfSaleId, ProductId, ActualStockOriginStore, IdealStockOriginStore
 				) AS Grouped
 		),
 	StockDestinationCte AS

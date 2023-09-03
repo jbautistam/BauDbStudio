@@ -7,7 +7,7 @@ namespace LibReporting.Tests;
 /// <summary>
 ///		Pruebas de ejecución de SQL de informes avanzados
 /// </summary>
-public class report_execution_sql_should
+public class report_execution_should
 {
 	/// <summary>
 	///		Comprueba si se puede cargar un esquema de base de datos y sus informes y ejecutar la cadena SQL contra la base de datos
@@ -79,14 +79,14 @@ public class report_execution_sql_should
 						System.Data.SqlClient.SqlCommand command = connection.CreateCommand();
 
 							// Añade los argumentos al comando
-							foreach (KeyValuePair<string, object?> parameter in request.Parameters)
+							foreach (ParameterRequestModel parameter in request.Parameters)
 							{
 								System.Data.SqlClient.SqlParameter sqlParameter = command.CreateParameter();
 								string key = parameter.Key;
 
 									// Normaliza el parámetro
 									if (!key.StartsWith("@"))
-										key = "@" + key;
+										key = $"@{key}";
 									// Asigna el parámetro
 									sqlParameter.ParameterName = key;
 									sqlParameter.Value = parameter.Value;

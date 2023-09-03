@@ -26,10 +26,10 @@ SELECT Capacities.ClassificationLevels,
  COUNT(*) OVER () AS TotalCount						   
 						FROM Fact.Capacities
 						 INNER JOIN  PointsOfSaleCte
-																		ON 
+															ON 
  [Capacities].[PointOfSaleId] = [PointsOfSaleCte].[PointOfSaleId]
 		            	 INNER JOIN  TypologiesCte
-																		ON 
+															ON 
  [Capacities].[TypologyId] = [TypologiesCte].[TypologyId]
 						 GROUP BY [PointsOfSaleCte].[PointOfSale], [PointsOfSaleCte].[ErpCode], [PointsOfSaleCte].[ImageUrl], [TypologiesCte].[Typology], Capacities.ClassificationLevels
 						ORDER BY Capacities.ClassificationLevels

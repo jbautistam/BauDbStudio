@@ -1,4 +1,5 @@
 ﻿using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.ComboItems;
+using Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets;
 using Bau.Libraries.LibReporting.Requests.Models;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries;
@@ -27,22 +28,28 @@ public class ListItemReportColumnFilterViewModel : BauMvvm.ViewModels.Forms.Cont
 	/// </summary>
 	private void InitViewModel()
 	{
-		// Cambia el tipo de columna
-		switch (ListViewModel.NodeColumnViewModel.Column.Type)
+		// Asigna el tipo de la columna
+		if (ListViewModel.NodeColumnViewModel.Column is null)
+			IsString = true;
+		else
 		{
-			case LibReporting.Models.DataWarehouses.DataSets.DataSourceColumnModel.FieldType.Boolean:
-					IsBool = true;
-				break;
-			case LibReporting.Models.DataWarehouses.DataSets.DataSourceColumnModel.FieldType.Date:
-					IsDateTime = true;
-				break;
-			case LibReporting.Models.DataWarehouses.DataSets.DataSourceColumnModel.FieldType.Decimal:
-			case LibReporting.Models.DataWarehouses.DataSets.DataSourceColumnModel.FieldType.Integer:
-					IsNumber = true;
-				break;
-			default:
-					IsString = true;
-				break;
+			// Cambia el tipo de columna
+			switch (ListViewModel.NodeColumnViewModel.Column.Type)
+			{
+				case DataSourceColumnModel.FieldType.Boolean:
+						IsBool = true;
+					break;
+				case DataSourceColumnModel.FieldType.Date:
+						IsDateTime = true;
+					break;
+				case DataSourceColumnModel.FieldType.Decimal:
+				case DataSourceColumnModel.FieldType.Integer:
+						IsNumber = true;
+					break;
+				default:
+						IsString = true;
+					break;
+			}
 		}
 		// Carga el combo de condiciones
 		LoadComboConditions();
@@ -70,7 +77,8 @@ public class ListItemReportColumnFilterViewModel : BauMvvm.ViewModels.Forms.Cont
 		ComboConditions.AddItem((int) FilterRequestModel.ConditionType.LessOrEqual, "Menor o igual");
 		ComboConditions.AddItem((int) FilterRequestModel.ConditionType.In, "En estos valores");
 		ComboConditions.AddItem((int) FilterRequestModel.ConditionType.Between, "Entre estos valores");
-		if (ListViewModel.NodeColumnViewModel.Column.Type == LibReporting.Models.DataWarehouses.DataSets.DataSourceColumnModel.FieldType.String)
+		if (ListViewModel.NodeColumnViewModel.Column is not null && 
+				ListViewModel.NodeColumnViewModel.Column.Type == DataSourceColumnModel.FieldType.String)
 			ComboConditions.AddItem((int) FilterRequestModel.ConditionType.Contains, "Contiene");
 		ComboConditions.SelectedId = (int) FilterRequestModel.ConditionType.Undefined;
 	}

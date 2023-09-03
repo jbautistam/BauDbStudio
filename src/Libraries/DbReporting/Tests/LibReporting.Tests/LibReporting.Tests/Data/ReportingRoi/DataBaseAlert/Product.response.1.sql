@@ -9,13 +9,13 @@ SELECT [Products].[Id] AS [ProductId], [Products].[ProductCode] AS [ProductCode]
 ),
 GroupedCte AS 
 (
-SELECT [ProductsCte].[ProductCode], [ProductsCte].[ProductDescription], [ProductsCte].[UrlImage], 			   
+SELECT [ProductsCte].[ProductCode], [ProductsCte].[ProductDescription], [ProductsCte].[UrlImage], 
 						   SUM(DataBasePointOfSales.NegativeStock) AS NegativeStock, 
  SUM(DataBasePointOfSales.NegativePendingReceptions) AS NegativePendingReceptions						   
 						FROM Fact.DataBasePointOfSales
 						
 		            	 INNER JOIN  ProductsCte
-																		ON 
+															ON 
  [DataBasePointOfSales].[ProductId] = [ProductsCte].[ProductId]
 						 GROUP BY [ProductsCte].[ProductCode], [ProductsCte].[ProductDescription], [ProductsCte].[UrlImage]
 )

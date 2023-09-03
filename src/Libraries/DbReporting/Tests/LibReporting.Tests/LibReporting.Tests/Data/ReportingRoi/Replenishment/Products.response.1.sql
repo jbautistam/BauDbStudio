@@ -49,7 +49,7 @@ SELECT [ProductsCte].[EanCode], [ProductsCte].[ProductCode], [ProductsCte].[Prod
                     FROM Fact.ReplenishmentReport
 						
 		            	 INNER JOIN  ProductsCte
-																		ON 
+															ON 
  [ReplenishmentReport].[ProductId] = [ProductsCte].[ProductId]
 						 GROUP BY [ProductsCte].[EanCode], [ProductsCte].[ProductCode], [ProductsCte].[ProductDescription], [ProductsCte].[UrlImage], [ProductsCte].[ClassificationLevelValue4]
 )

@@ -21,10 +21,10 @@ SELECT [WarehousesCte].[ErpCode], [WarehousesCte].[WarehouseName], [ProductsCte]
  SUM(DataBaseWarehouses.NegativePendingReceptions) AS NegativePendingReceptions						   
 						FROM Fact.DataBaseWarehouses
 						 INNER JOIN  WarehousesCte
-																		ON 
+															ON 
  [DataBaseWarehouses].[WarehouseId] = [WarehousesCte].[WarehouseId]
 		            	 INNER JOIN  ProductsCte
-																		ON 
+															ON 
  [DataBaseWarehouses].[ProductId] = [ProductsCte].[ProductId]
 						 GROUP BY [WarehousesCte].[ErpCode], [WarehousesCte].[WarehouseName], [ProductsCte].[ProductCode], [ProductsCte].[RootProductCode], [ProductsCte].[ProductDescription], [ProductsCte].[UrlImage]
 )

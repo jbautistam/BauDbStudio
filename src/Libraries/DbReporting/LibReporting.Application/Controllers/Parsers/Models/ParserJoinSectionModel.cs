@@ -70,6 +70,11 @@ internal class ParserJoinSectionModel : ParserBaseSectionModel
     }
 
     /// <summary>
+    ///     Relaciones asociadas al JOIN
+    /// </summary>
+    internal List<ParserJoinDimensionSectionModel> JoinDimensions { get; } = new();
+
+    /// <summary>
     ///     Sql adicional
     /// </summary>
     internal string Sql { get; set; } = string.Empty;
@@ -78,14 +83,4 @@ internal class ParserJoinSectionModel : ParserBaseSectionModel
     ///     Sql que se debe añadir cuando no hay nada en el Join
     /// </summary>
     internal string SqlNoDimension { get; set; } = string.Empty;
-
-    ///// <summary>
-    /////		Indica si es obligatorio
-    ///// </summary>
-    //internal bool Required { get; set; }
-
-    /// <summary>
-    ///     Relaciones asociadas al JOIN
-    /// </summary>
-    internal List<ParserJoinRelationSectionModel> Relations { get; } = new();
 }

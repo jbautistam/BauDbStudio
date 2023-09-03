@@ -37,15 +37,15 @@
 	                		InnerJoin 
 	                			-Dimension: PointsOfSale 
 	                				--Table: PointsOfSaleCte
+									--On:PointOfSaleId-PointOfSaleId
 								-Table: CurvesByPointOfSaleAndProduct
-								-On:PointOfSaleId-PointOfSaleId
 						}}
 		            	{{
 		            		InnerJoin 
 		            			-Dimension: Products 
 		            				--Table: ProductsCte
+									--On: ProductId-ProductId
 								-Table: CurvesByPointOfSaleAndProduct
-								-On: ProductId-ProductId
 		            	}}
 		            GROUP BY Curves.[Week]
 		            ORDER BY Curves.[Week] ASC
