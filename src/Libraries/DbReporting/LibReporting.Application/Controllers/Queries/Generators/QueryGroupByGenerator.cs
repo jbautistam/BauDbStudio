@@ -17,6 +17,7 @@ internal class QueryGroupByGenerator : QueryBaseGenerator
 	/// </summary>
 	internal override string GetSql()
 	{
+		return string.Empty;
 	}
 
 	/// <summary>

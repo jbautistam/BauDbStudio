@@ -18,6 +18,7 @@ internal class QueryOrderByGenerator : QueryBaseGenerator
 	/// </summary>
 	internal override string GetSql()
 	{
+		return string.Empty;
 	}
 
 	/// <summary>

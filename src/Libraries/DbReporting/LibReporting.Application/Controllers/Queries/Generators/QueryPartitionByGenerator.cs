@@ -18,6 +18,8 @@ internal class QueryPartitionByGenerator : QueryBaseGenerator
 	/// </summary>
 	internal override string GetSql()
 	{
+		return string.Empty;
+/*
 		string sql = GetSqlFieldsForDimensions(Section.Dimensions);
 
 			// Añade los campos adicionales
@@ -34,6 +36,7 @@ internal class QueryPartitionByGenerator : QueryBaseGenerator
 			}
 			// Devuelve la cadena SQL
 			return sql;
+*/
 	}
 
 	/// <summary>
