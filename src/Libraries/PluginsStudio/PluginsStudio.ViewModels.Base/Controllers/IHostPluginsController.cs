@@ -43,6 +43,11 @@ public interface IHostPluginsController
 	void OpenWebBrowser(string url);
 
 	/// <summary>
+	///		Abre un navegador web con un texto HTML
+	/// </summary>
+	void OpenWebBrowserWithHtml(string html);
+
+	/// <summary>
 	///		Actualiza el árbol de archivos
 	/// </summary>
 	void RefreshFiles();
@@ -60,5 +65,5 @@ public interface IHostPluginsController
 	/// <summary>
 	///		ViewModel del documento de detalles seleccionado
 	/// </summary>
-	Interfaces.IDetailViewModel SelectedDetailsViewModel { get; }
+	Interfaces.IDetailViewModel? SelectedDetailsViewModel { get; }
 }

@@ -1,12 +1,12 @@
-﻿using Microsoft.Extensions.Logging;
-using Bau.Libraries.BauMvvm.ViewModels.Controllers;
+﻿using Bau.Libraries.BauMvvm.ViewModels.Controllers;
+using Microsoft.Extensions.Logging;
 
-namespace Bau.Libraries.ToDoManager.ViewModel.Controllers;
+namespace Bau.Libraries.FileTools.ViewModel.Controllers;
 
 /// <summary>
 ///		Interface con los controladores de las vistas
 /// </summary>
-public interface IToDoManagerController
+public interface IFileToolsController
 {
 	/// <summary>
 	///		Abre una ventana de detalles
@@ -17,11 +17,6 @@ public interface IToDoManagerController
 	///		Abre un cuadro de diálogo
 	/// </summary>
 	SystemControllerEnums.ResultType OpenDialog(BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewModel dialogViewModel);
-
-	/// <summary>
-	///		Oculta las ventanas de notas
-	/// </summary>
-	void HideNotes();
 
 	/// <summary>
 	///		Controlador plugin

@@ -72,6 +72,14 @@ public class HostPluginsController : Libraries.PluginsStudio.ViewModels.Base.Con
 	}
 
 	/// <summary>
+	///		Abre un navegador web con un texto HTML
+	/// </summary>
+	public void OpenWebBrowserWithHtml(string html)
+	{
+		DbStudioViewManager.PluginsStudioViewModel.OpenWebBrowserWithHtml(html);
+	}
+
+	/// <summary>
 	///		Actualiza el árbol de archivos
 	/// </summary>
 	public void RefreshFiles()

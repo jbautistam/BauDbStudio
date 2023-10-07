@@ -1,6 +1,4 @@
-﻿using System.Data;
-
-namespace Bau.Libraries.LibPatternText.Domain.Parsers.Source;
+﻿namespace Bau.Libraries.LibPatternText.Domain.Parsers.Source;
 
 /// <summary>
 ///		Lector de texto separado por caracters

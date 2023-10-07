@@ -90,6 +90,19 @@ public class PluginsStudioViewModel : BaseObservableObject
 	}
 
 	/// <summary>
+	///		Abre un navegador Web con un texto HTML
+	/// </summary>
+	public void OpenWebBrowserWithHtml(string html)
+	{
+		Tools.Web.WebViewModel viewModel = new(this, string.Empty);
+
+			// Abre la ventana con el navegador
+			PluginsStudioController.OpenWindow(viewModel);
+			// Muestra el HTML en el navegador
+			viewModel.Html = html;
+	}
+
+	/// <summary>
 	///		Comprueba si es un archivo que se puede abrir con el explorador
 	/// </summary>
 	private bool IsBrowserFile(string fileName) => fileName.EndsWith(".pdf", StringComparison.CurrentCultureIgnoreCase);

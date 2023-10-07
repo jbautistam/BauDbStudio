@@ -13,7 +13,7 @@ public class WebViewModel : BaseObservableObject, Base.Interfaces.IDetailViewMod
 	public event EventHandler? Closed;
 	public event EventHandler? RefreshPage;
 	// Variables privadas
-	private string _header = string.Empty, _url = string.Empty;
+	private string _header = string.Empty, _url = string.Empty, _html = string.Empty;
 
 	public WebViewModel(PluginsStudioViewModel mainViewModel, string url) : base(false)
 	{
@@ -123,10 +123,8 @@ public class WebViewModel : BaseObservableObject, Base.Interfaces.IDetailViewMod
 					!IsLastUrl(value))
 				Urls.Add(value);
 
-			bool IsLastUrl(string url)
-			{
-				return Urls.Count > 0 && Urls[Urls.Count - 1].Equals(url, StringComparison.CurrentCultureIgnoreCase);
-			}
+			// Comprueba si una URL es la última
+			bool IsLastUrl(string url) => Urls.Count > 0 && Urls[Urls.Count - 1].Equals(url, StringComparison.CurrentCultureIgnoreCase);
 		}
 	}
 
@@ -137,6 +135,15 @@ public class WebViewModel : BaseObservableObject, Base.Interfaces.IDetailViewMod
 	{ 
 		get { return _header; }
 		set { CheckProperty(ref _header, value); }
+	}
+
+	/// <summary>
+	///		Html
+	/// </summary>
+	public string Html
+	{
+		get { return _html; }
+		set { CheckProperty(ref _html, value); }
 	}
 
 	/// <summary>

@@ -17,7 +17,7 @@ public class FileOptionsBuilder
 	}
 
 	/// <summary>
-	///		Indica que se debe uitlizar una carpeta
+	///		Indica que se debe utilizar una carpeta
 	/// </summary>
 	public FileOptionsBuilder WithFolder()
 	{
@@ -39,7 +39,7 @@ public class FileOptionsBuilder
 			extension = extension.Trim();
 			// Añade el punto si no empieza por punto
 			if (!extension.StartsWith('.'))
-				extension = "." + extension;
+				extension = $".{extension}";
 			// Añade la extensión a la colección
 			LastOption.FileExtension.Add(extension);
 		}
@@ -77,7 +77,7 @@ public class FileOptionsBuilder
 		{
 			// Añade una opción si no había ninguna
 			if (Options.Count == 0)
-				Options.Add(new());
+				Options.Add(new FileOptionsModel());
 			// Devuelve la última opción generada
 			return Options[Options.Count - 1];
 		}

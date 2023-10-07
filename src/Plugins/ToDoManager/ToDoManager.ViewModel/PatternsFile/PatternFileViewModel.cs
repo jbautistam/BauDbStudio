@@ -128,7 +128,7 @@ public class PatternFileViewModel : BaseFileViewModel, PluginsStudio.ViewModels.
 		// Graba el archivo
 		if (string.IsNullOrWhiteSpace(FileName) || newName)
 		{
-			string newFileName = MainViewModel.ViewsController.DialogsController.OpenDialogSave
+			string? newFileName = MainViewModel.ViewsController.DialogsController.OpenDialogSave
 									(string.Empty, 
 									 $"Archivo patrones (*{ToDoManagerViewModel.PatternFileExtension})|*{ToDoManagerViewModel.PatternFileExtension}|Todos los archivos (*.*)|*.*",
 									 FileName, ToDoManagerViewModel.PatternFileExtension);

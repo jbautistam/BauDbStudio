@@ -30,17 +30,18 @@ public partial class MainWindow : Window
 																	this);
 		DbStudioViewsManager.MainWindowsController.Logger.LogInformation("Start application");
 		// Añade los plugins
-		DbStudioViewsManager.AddPlugin(new Libraries.JobsProcessor.Plugin.JobsProcessorPlugin());
-		DbStudioViewsManager.AddPlugin(new Libraries.DbStudio.Views.DbStudioViewManager());
 		DbStudioViewsManager.AddPlugin(new Libraries.BlogReader.Views.BlogReaderPlugin());
-		DbStudioViewsManager.AddPlugin(new Libraries.ComicsReader.Plugin.ComicReaderPlugin());
-		DbStudioViewsManager.AddPlugin(new Libraries.EbooksReader.Plugin.EBookReaderPlugin());
 		DbStudioViewsManager.AddPlugin(new Libraries.ChessDataBase.Plugin.ChessDataBasePlugin());
 		DbStudioViewsManager.AddPlugin(new Libraries.CloudStudio.Plugin.CloudStudioPlugin());
-		DbStudioViewsManager.AddPlugin(new Libraries.PasswordManager.Plugin.PasswordManagerPlugin());
-		DbStudioViewsManager.AddPlugin(new Libraries.ToDoManager.Plugin.ToDoManagerPlugin());
-		DbStudioViewsManager.AddPlugin(new Libraries.StructuredFilesStudio.Views.StructuredFilesStudioViewManager());
+		DbStudioViewsManager.AddPlugin(new Libraries.ComicsReader.Plugin.ComicReaderPlugin());
+		DbStudioViewsManager.AddPlugin(new Libraries.DbStudio.Views.DbStudioViewManager());
+		DbStudioViewsManager.AddPlugin(new Libraries.EbooksReader.Plugin.EBookReaderPlugin());
+		DbStudioViewsManager.AddPlugin(new Libraries.FileTools.Plugin.FileToolsPlugin());
+		DbStudioViewsManager.AddPlugin(new Libraries.JobsProcessor.Plugin.JobsProcessorPlugin());
 		DbStudioViewsManager.AddPlugin(new Libraries.MultimediaFiles.Plugin.MultimediaFilesPlugin());
+		DbStudioViewsManager.AddPlugin(new Libraries.PasswordManager.Plugin.PasswordManagerPlugin());
+		DbStudioViewsManager.AddPlugin(new Libraries.StructuredFilesStudio.Views.StructuredFilesStudioViewManager());
+		DbStudioViewsManager.AddPlugin(new Libraries.ToDoManager.Plugin.ToDoManagerPlugin());
 		DbStudioViewsManager.Initialize();
 		// Inicializa el ViewModel
 		DataContext = ViewModel = DbStudioViewsManager.PluginsStudioViewModel;
