@@ -5,6 +5,7 @@ using Bau.Libraries.LibHelper.Files;
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Models;
+using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.Trees;
 
 namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files;
 
@@ -55,11 +56,136 @@ public class TreeFilesViewModel : PluginTreeViewModel
 	}
 
 	/// <summary>
+	///		Carga los nodos
+	/// </summary>
+	public override void Load()
+	{
+		object state = new object();
+
+			// Carga los nodos en el árbol
+			//? _contexUi mantiene el contexto de sincronización que creó el ViewModel (que debería ser la interface de usuario)
+			//? Al generarse las tablas en otro hilo o desde un evento, no se puede borrar ObservableCollection sin una
+			//? excepción del tipo "Este tipo de CollectionView no admite cambios en su SourceCollection desde un hilo diferente del hilo Dispatcher"
+			//? Por eso se tiene que añadir el mensaje de log desde el contexto de sincronización de la UI
+			ContextUI.Send(_ => {
+									ControlHierarchicalViewModel? previousSelectedNode = SelectedNode;
+									List<ControlHierarchicalViewModel> nodesExpanded = GetNodesExpanded(Children);
+
+										// Limpia la colección de hijos
+										Children.Clear();
+										// Añade los nodos raíz
+										AddRootNodes();
+										// Expande los nodos previamente abiertos
+										ExpandFilesNodes(nodesExpanded);
+										// Cambia el nodo seleccionado
+										if (previousSelectedNode is not null)
+											SelectNode(previousSelectedNode);
+								},
+								state
+						  );
+	}
+
+	/// <summary>
+	///		Selecciona un nodo (debe estar abierto previamente)
+	/// </summary>
+	private void SelectNode(ControlHierarchicalViewModel selectedNode)
+	{
+		// Deselecciona el nodo
+		SelectedNode = null;
+		// Selecciona el nodo pasado como parámetro
+		SelectNode(Children, selectedNode);
+	}
+
+	/// <summary>
+	///		Genera un nodo
+	/// </summary>
+	private void SelectNode(AsyncObservableCollection<ControlHierarchicalViewModel> children, ControlHierarchicalViewModel selectedNode)
+	{
+		foreach (ControlHierarchicalViewModel node in children)
+			if (SelectedNode is null) // ... no sigue si ya se ha encontrado el nodo seleccionado
+				switch (node)
+				{
+					case NodeFolderRootViewModel rootViewModel:
+							if (selectedNode is NodeFolderRootViewModel nodeRoot && rootViewModel.IsEquals(nodeRoot))
+							{
+								nodeRoot.IsSelected = true;
+								SelectedNode = node;
+							}
+							else
+								SelectNode(node.Children, selectedNode);
+						break;
+					case NodeFileViewModel fileViewModel:
+							if (selectedNode is NodeFileViewModel nodeFile && fileViewModel.IsEquals(nodeFile))
+							{
+								SelectedNode = node;
+								nodeFile.IsSelected = true;
+							}
+							else
+								SelectNode(node.Children, selectedNode);
+						break;
+				}
+	}
+
+	/// <summary>
+	///		Expande los nodos de archivos
+	/// </summary>
+	private void ExpandFilesNodes(List<ControlHierarchicalViewModel> nodesExpanded)
+	{
+		foreach (ControlHierarchicalViewModel node in nodesExpanded)
+			if (node is NodeFolderRootViewModel nodeRoot)
+				ExpandRootNode(nodeRoot, nodesExpanded);
+	}
+
+	/// <summary>
+	///		Expande un nodo raíz
+	/// </summary>
+	private void ExpandRootNode(NodeFolderRootViewModel nodeRoot, List<ControlHierarchicalViewModel> nodesExpanded)
+	{
+		foreach (ControlHierarchicalViewModel treeNode in Children)
+			if (treeNode is NodeFolderRootViewModel treeNodeRoot && nodeRoot.FileName.Equals(treeNodeRoot.FileName, StringComparison.CurrentCultureIgnoreCase))
+			{
+				// Expande el nodo
+				treeNodeRoot.IsExpanded = true;
+				// Expande los nodos hijo
+				ExpandFolderNodes(treeNodeRoot.Children, nodesExpanded);
+			}
+	}
+
+	/// <summary>
+	///		Expande los nodos de una carpeta
+	/// </summary>
+	private void ExpandFolderNodes(AsyncObservableCollection<ControlHierarchicalViewModel> children, List<ControlHierarchicalViewModel> nodesExpanded)
+	{
+		foreach (ControlHierarchicalViewModel nodeFile in children)
+			if (nodeFile is NodeFileViewModel nodeFileViewModel && nodeFileViewModel.IsFolder && 
+				IsOpenNode(nodesExpanded, nodeFileViewModel))
+			{
+				// Abre el nodo
+				nodeFileViewModel.LoadAndExpandNodes();
+				// Expande los nodos hijo
+				ExpandFolderNodes(nodeFileViewModel.Children, nodesExpanded);
+			}
+	}
+
+	/// <summary>
+	///		Comprueba si un nodo está abierto
+	/// </summary>
+	private bool IsOpenNode(List<ControlHierarchicalViewModel> nodesExpanded, NodeFileViewModel nodeFileViewModel)
+	{
+		// Indica si el nodo está abierto
+		foreach (ControlHierarchicalViewModel nodeExpanded in nodesExpanded)
+			if (nodeExpanded is NodeFileViewModel nodeViewModel && nodeViewModel.IsEquals(nodeFileViewModel))
+				return true;
+		// Si ha llegado hasta aquí es porque no se ha encontrado el nodo
+		return false;
+	}
+
+	/// <summary>
 	///		Carga los nodos hijo
 	/// </summary>
 	protected override void AddRootNodes()
 	{
-		List<string> paths = new List<string>();
+		List<string> paths = new();
 
 			// Añade los directorios
 			if (MainViewModel.WorkspacesViewModel.SelectedItem != null)
@@ -473,7 +599,7 @@ public class TreeFilesViewModel : PluginTreeViewModel
 				// Asocia las opciones de los plugins
 				if (PluginsFileOptions is not null)
 					foreach (FileOptionsModel option in PluginsFileOptions)
-						if (option.Check(node.IsFolder, node.FileName))
+						if (option.Menu is not null && option.Check(node.IsFolder, node.FileName))
 							menus.Add(option.Menu);
 				// Asocia las opciones propias
 				// ... por ahora no tiene ninguna opción

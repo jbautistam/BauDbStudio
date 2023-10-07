@@ -2,6 +2,9 @@
 
 namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.LastFiles;
 
+/// <summary>
+///		ViewModel del último archivo abierto
+/// </summary>
 public class LastFileViewModel : BauMvvm.ViewModels.BaseObservableObject
 {
 	// Variables privadas

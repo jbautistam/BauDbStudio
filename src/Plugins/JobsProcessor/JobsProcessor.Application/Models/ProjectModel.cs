@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace Bau.Libraries.JobsProcessor.Application.Models;
 
-namespace Bau.Libraries.JobsProcessor.Application.Models
+/// <summary>
+///		Clase con los datos de un proyecto
+/// </summary>
+public class ProjectModel
 {
 	/// <summary>
-	///		Clase con los datos de un proyecto
+	///		Contextos de ejecución
 	/// </summary>
-	public class ProjectModel
-	{
-		/// <summary>
-		///		Contextos de ejecución
-		/// </summary>
-		public List<ContextModel> Contexts { get; } = new();
+	public List<ContextModel> Contexts { get; } = new();
 
-		/// <summary>
-		///		Comandos
-		/// </summary>
-		public List<CommandModel> Commands { get; } = new();
-	}
+	/// <summary>
+	///		Comandos
+	/// </summary>
+	public List<CommandModel> Commands { get; } = new();
 }

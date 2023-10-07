@@ -16,8 +16,7 @@ public class NodeFileViewModel : PluginNodeAsyncViewModel
 
 	public NodeFileViewModel(TreeFilesViewModel trvTree, ControlHierarchicalViewModel? parent, string fileName, bool isFolder) 
 				: base(trvTree, parent, string.Empty, TreeFilesViewModel.NodeType.File.ToString(), 
-					   string.Empty, fileName, isFolder, isFolder,
-					   isFolder ? MvvmColor.Navy : MvvmColor.Black)
+					   string.Empty, fileName, isFolder, isFolder, isFolder ? MvvmColor.Navy : MvvmColor.Black)
 	{
 		ViewModel = trvTree;
 		FileName = fileName;
@@ -36,10 +35,19 @@ public class NodeFileViewModel : PluginNodeAsyncViewModel
 	/// </summary>
 	protected override async Task<List<PluginNodeViewModel>> GetChildNodesAsync(CancellationToken cancellationToken)
 	{
+		// Evita las advertencias
+		await Task.Delay(1, cancellationToken);
+		// Devuelve la lista
+		return GetChildNodes();
+	}
+
+	/// <summary>
+	///		Obtiene la lista de nodos hijo
+	/// </summary>
+	private List<PluginNodeViewModel> GetChildNodes()
+	{
 		List<PluginNodeViewModel> nodes = new();
 
-			// Evita las advertencias
-			await Task.Delay(1);
 			// Carga los nodos
 			if (!string.IsNullOrWhiteSpace(FileName) && Directory.Exists(FileName))
 			{
@@ -54,6 +62,20 @@ public class NodeFileViewModel : PluginNodeAsyncViewModel
 			return nodes;
 	}
 
+	/// <summary>
+	///		Carga los nodos y expande el nodo actual
+	/// </summary>
+	public void LoadAndExpandNodes()
+	{
+		// Limpia los nodos
+		Children.Clear();
+		// Añade los nodos
+		foreach (PluginNodeViewModel node in GetChildNodes())
+			Children.Add(node);
+		// Expande el nodo (antes indica que ya se han cargado los nodos)
+		LazyLoad = false;
+		IsExpanded = true;
+	}
 
 	/// <summary>
 	///		Comprueba si dos nodos son iguales

@@ -40,9 +40,8 @@ public class WorkspaceListViewModel : BaseObservableObject
 		// Obtiene los espacios de trabajo
 		if (Directory.Exists(path))
 			foreach (string childPath in Directory.EnumerateDirectories(path))
-				foreach (string fileName in Directory.GetFiles(childPath, $"*.{WorkspaceExtension}"))
-					if (!System.IO.Path.GetFileName(childPath).Equals(DefaultWorkSpace, StringComparison.CurrentCultureIgnoreCase))
-						Add(System.IO.Path.GetFileName(childPath));
+				if (!System.IO.Path.GetFileName(childPath).Equals(DefaultWorkSpace, StringComparison.CurrentCultureIgnoreCase))
+					Add(System.IO.Path.GetFileName(childPath));
 	}
 
 	/// <summary>
@@ -113,7 +112,8 @@ public class WorkspaceListViewModel : BaseObservableObject
 	/// </summary>
 	private void DeleteWorkspace()
 	{
-		if (MainViewModel.PluginsStudioController.MainWindowController.SystemController.ShowQuestion($"¿Desea eliminar el espacio de trabajo '{SelectedItem.Name}'?"))
+		if (SelectedItem is not null && 
+			MainViewModel.PluginsStudioController.MainWindowController.SystemController.ShowQuestion($"¿Desea eliminar el espacio de trabajo '{SelectedItem.Name}'?"))
 		{
 			// Borra el directorio
 			LibHelper.Files.HelperFiles.KillPath(SelectedItem.Path);

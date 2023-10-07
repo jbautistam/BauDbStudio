@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace Bau.Libraries.JobsProcessor.Application.Models;
 
-namespace Bau.Libraries.JobsProcessor.Application.Models
+/// <summary>
+///		Clase con los datos de contexto
+/// </summary>
+public class ContextModel
 {
 	/// <summary>
-	///		Clase con los datos de contexto
+	///		Id del contexto
 	/// </summary>
-	public class ContextModel
-	{
-		/// <summary>
-		///		Id del contexto
-		/// </summary>
-		public string Id { get; } = Guid.NewGuid().ToString();
+	public string Id { get; } = Guid.NewGuid().ToString();
 
-		/// <summary>
-		///		Parámetros del contexto
-		/// </summary>
-		public List<ParameterModel> Parameters { get; } = new();
-	}
+	/// <summary>
+	///		Parámetros del contexto
+	/// </summary>
+	public List<ParameterModel> Parameters { get; } = new();
 }

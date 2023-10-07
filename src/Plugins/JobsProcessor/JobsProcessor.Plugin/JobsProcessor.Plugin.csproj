@@ -4,6 +4,8 @@
     <TargetFramework>net7.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <RootNamespace>Bau.Libraries.JobsProcessor.Plugin</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,6 +21,7 @@
     <None Remove="Resources\FolderNode.png" />
     <None Remove="Resources\Log.png" />
     <None Remove="Resources\Parameter.png" />
+    <None Remove="Resources\Refresh.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -40,6 +43,7 @@
     <Resource Include="Resources\FolderNode.png" />
     <Resource Include="Resources\Log.png" />
     <Resource Include="Resources\Parameter.png" />
+    <Resource Include="Resources\Refresh.png" />
   </ItemGroup>
 
   <ItemGroup>

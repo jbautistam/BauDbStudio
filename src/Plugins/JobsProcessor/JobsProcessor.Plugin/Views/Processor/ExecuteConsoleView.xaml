@@ -24,6 +24,16 @@
 				<Button ToolTip="Cancel" Command="{Binding Path=CancelCommand}" Margin="2">
 					<Image Width="16" Height="16" Source="/JobsProcessor.Plugin;component/Resources/Cancel.png" />
 				</Button>
+				<Button ToolTip="Clear" Command="{Binding Path=ClearCommand}" Margin="2">
+					<Image Width="16" Height="16" Source="/JobsProcessor.Plugin;component/Resources/Log.png" />
+				</Button>
+				<Separator/>
+				<Button ToolTip="Open file" Command="{Binding Path=OpenFileCommand}" Margin="2">
+					<Image Width="16" Height="16" Source="/JobsProcessor.Plugin;component/Resources/FolderNode.png" />
+				</Button>
+				<Button ToolTip="Refresh" Command="{Binding Path=RefreshCommand}" Margin="2">
+					<Image Width="16" Height="16" Source="/JobsProcessor.Plugin;component/Resources/Refresh.png" />
+				</Button>
 			</ToolBar>
 		</ToolBarTray>
 

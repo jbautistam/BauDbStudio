@@ -182,9 +182,9 @@ public class CreateFileViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogVi
 		get
 		{
 			if (!string.IsNullOrWhiteSpace(FileName))
-				return System.IO.Path.Combine(Folder, FileName);
+				return Path.Combine(Folder, FileName);
 			else
-				return System.IO.Path.Combine(Folder, "New file.sql");
+				return Path.Combine(Folder, "New file.sql");
 		}
 	}
 

@@ -28,7 +28,7 @@ public abstract class PluginNodeAsyncViewModel : PluginNodeViewModel
 	/// <summary>
 	///		Carga los nodos del árbol de forma asíncrona
 	/// </summary>
-	private async Task LoadNodesAsync(CancellationToken cancellationToken)
+	protected async Task LoadNodesAsync(CancellationToken cancellationToken)
 	{
 		object state = new object();
 		List<PluginNodeViewModel> nodes = await GetChildNodesAsync(cancellationToken);

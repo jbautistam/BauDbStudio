@@ -69,7 +69,7 @@ public class CommandModel
 	/// <summary>
 	///		Nombre del ejecutable
 	/// </summary>
-	public string FileName { get; set; }
+	public string FileName { get; set; } = default!;
 
 	/// <summary>
 	///		Argumentos de la consola
