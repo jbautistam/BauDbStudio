@@ -1,40 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace Bau.Libraries.CloudStudio.Models;
 
-namespace Bau.Libraries.CloudStudio.Models
+/// <summary>
+///		Clase con los datos de la solución
+/// </summary>
+public class SolutionModel : LibDataStructures.Base.BaseExtendedModel
 {
 	/// <summary>
-	///		Clase con los datos de la solución
+	///		Nombre de archivo
 	/// </summary>
-	public class SolutionModel : LibDataStructures.Base.BaseExtendedModel
+	public string FileName { get; set; } = default!;
+
+	/// <summary>
+	///		Directorio base de la solución
+	/// </summary>
+	public string Path
 	{
-		/// <summary>
-		///		Nombre de archivo
-		/// </summary>
-		public string FileName { get; set; }
-
-		/// <summary>
-		///		Directorio base de la solución
-		/// </summary>
-		public string Path
+		get 
 		{
-			get 
-			{
-				if (string.IsNullOrWhiteSpace(FileName))
-					return string.Empty;
-				else
-					return System.IO.Path.GetDirectoryName(FileName);
-			}
+			if (string.IsNullOrWhiteSpace(FileName))
+				return string.Empty;
+			else
+				return System.IO.Path.GetDirectoryName(FileName) ?? string.Empty;
 		}
-
-		/// <summary>
-		///		Blob storage
-		/// </summary>
-		public Cloud.StorageModelCollection	Storages { get; } = new Cloud.StorageModelCollection();
-
-		/// <summary>
-		///		Carpetas abiertas
-		/// </summary>
-		public List<string> Folders { get; } = new List<string>();
 	}
+
+	/// <summary>
+	///		Blob storage
+	/// </summary>
+	public Cloud.StorageModelCollection	Storages { get; } = new();
+
+	/// <summary>
+	///		Carpetas abiertas
+	/// </summary>
+	public List<string> Folders { get; } = new();
 }
