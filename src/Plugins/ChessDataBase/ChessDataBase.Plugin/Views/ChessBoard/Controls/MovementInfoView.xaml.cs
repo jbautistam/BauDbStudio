@@ -25,5 +25,5 @@ public partial class MovementInfoView : UserControl
 	/// <summary>
 	///		ViewModel
 	/// </summary>
-	public GameBoardViewModel ViewModel { get; private set; } = default!
+	public GameBoardViewModel ViewModel { get; private set; } = default!;
 }

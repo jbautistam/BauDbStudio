@@ -14,7 +14,7 @@ public class PatternFileViewModel : BaseFileViewModel, PluginsStudio.ViewModels.
 	private string _source = string.Empty, _separator = string.Empty, _quoteChar = string.Empty;
 	private string _formula = string.Empty, _extensionHighlight = string.Empty;
 	private bool _withHeader;
-	private ComboViewModel? _comboSeparators, _comboExtensions;
+	private ComboViewModel _comboSeparators = default!, _comboExtensions = default!;
 
 	public PatternFileViewModel(ToDoManagerViewModel mainViewModel, string fileName) : base(fileName)
 	{ 
@@ -130,7 +130,7 @@ public class PatternFileViewModel : BaseFileViewModel, PluginsStudio.ViewModels.
 		{
 			string? newFileName = MainViewModel.ViewsController.DialogsController.OpenDialogSave
 									(string.Empty, 
-									 $"Archivo patrones (*{ToDoManagerViewModel.PatternFileExtension})|*{ToDoManagerViewModel.PatternFileExtension}|Todos los archivos (*.*)|*.*",
+									 $"Pattern file (*{ToDoManagerViewModel.PatternFileExtension})|*{ToDoManagerViewModel.PatternFileExtension}|All files (*.*)|*.*",
 									 FileName, ToDoManagerViewModel.PatternFileExtension);
 
 				// Cambia el nombre de archivo si es necesario

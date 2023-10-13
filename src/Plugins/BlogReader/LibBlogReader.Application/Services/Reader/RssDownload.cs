@@ -32,8 +32,8 @@ public class RssDownload
 	/// </summary>
 	public async Task<int> DownloadAsync(bool includeDisabled, BlogsModelCollection? blogs, CancellationToken cancellationToken)
 	{
-		FeedProcessor processor = new FeedProcessor();
-		EntriesModelCollection entriesForDownload = new EntriesModelCollection();
+		FeedProcessor processor = new();
+		EntriesModelCollection entriesForDownload = new();
 		int dowloadedItems = 0;
 
 			// Log
@@ -212,7 +212,7 @@ public class RssDownload
 					string fileName = Path.Combine(_blogManager.Configuration.PathBlogs, entry.DownloadFileName);
 
 						// Descarga el archivo
-						if (!File.Exists(fileName))
+						if (!File.Exists(fileName) && !string.IsNullOrWhiteSpace(entry.UrlEnclosure))
 						{
 							_blogManager.Logger.LogInformation($"Donwloaded attachment file for {entry.Description}");
 							await webClient.DownloadFileAsync(entry.UrlEnclosure, fileName);

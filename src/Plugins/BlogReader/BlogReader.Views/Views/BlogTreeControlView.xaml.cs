@@ -26,9 +26,9 @@ public partial class BlogTreeControlView : UserControl
 
 	private void trvBlogs_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
 	{
-		if (trvBlogs.DataContext is TreeBlogsViewModel && 
-				(sender as TreeView).SelectedItem is BaseBlogsNodeViewModel node)
-			(trvBlogs.DataContext as TreeBlogsViewModel).SelectedNode = node;
+		if (trvBlogs.DataContext is TreeBlogsViewModel dataContext && sender is TreeView treeView &&
+				treeView.SelectedItem is BaseBlogsNodeViewModel node)
+			dataContext.SelectedNode = node;
 	}
 
 	private void trvBlogs_MouseDoubleClick(object sender, MouseButtonEventArgs e)

@@ -15,10 +15,10 @@ public class BlogViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewMode
 	private bool _downloadPodcast, _enabled;
 	private DateTime? _lastDownload, _lastEntry;
 
-	public BlogViewModel(BlogReaderViewModel mainViewModel, FolderModel? parent, BlogModel blog)
+	public BlogViewModel(BlogReaderViewModel mainViewModel, FolderModel? parent, BlogModel? blog)
 	{
 		MainViewModel = mainViewModel;
-		if (blog == null)
+		if (blog is null)
 		{
 			_blog = new BlogModel();
 			_blog.Folder = parent;
@@ -69,7 +69,7 @@ public class BlogViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewMode
 		if (ValidateData())
 		{ 
 			// Asigna la carpeta
-			if (_parent != null && !_parent.Blogs.Exists(_blog.GlobalId))
+			if (_parent is not null && !_parent.Blogs.Exists(_blog.GlobalId))
 				_parent.Blogs.Add(_blog);
 			// Asigna los datos del formulario al objeto
 			_blog.Folder = Parent;

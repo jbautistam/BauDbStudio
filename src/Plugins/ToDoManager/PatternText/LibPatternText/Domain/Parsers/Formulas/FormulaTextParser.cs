@@ -41,12 +41,12 @@ internal class FormulaTextParser
 			TokenModel.TokenType type = GetTokenType();
 		
 				return type switch
-					{
-						TokenModel.TokenType.Field => new TokenModel(type, GetIdentifier()),
-						TokenModel.TokenType.Separator => new TokenModel(type, GetSeparator()),
-						TokenModel.TokenType.Dolar => new TokenModel(type, GetContentScape()),
-						_ => new TokenModel(type, GetContent())
-					};
+						{
+							TokenModel.TokenType.Field => new TokenModel(type, GetIdentifier()),
+							TokenModel.TokenType.Separator => new TokenModel(type, GetSeparator()),
+							TokenModel.TokenType.Dolar => new TokenModel(type, GetContentScape()),
+							_ => new TokenModel(type, GetContent())
+						};
 		}
 	}
 

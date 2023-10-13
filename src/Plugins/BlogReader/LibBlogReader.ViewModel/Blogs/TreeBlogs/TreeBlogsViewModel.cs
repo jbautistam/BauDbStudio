@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 
-using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.LibBlogReader.Model;
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.BauMvvm.ViewModels.Controllers;
@@ -64,7 +63,7 @@ public class TreeBlogsViewModel : PluginsStudio.ViewModels.Base.Explorers.Plugin
 			FolderNodeViewModel node = new(this, MainViewModel, parent, child);
 
 				// Añade el nodo
-				if (parent != null)
+				if (parent is not null)
 					parent.Children.Add(node);
 				else
 					Children.Add(node);
@@ -79,7 +78,7 @@ public class TreeBlogsViewModel : PluginsStudio.ViewModels.Base.Explorers.Plugin
 			BlogNodeViewModel node = new(this, MainViewModel, null, blog);
 
 				// Añade el nodo
-				if (parent != null)
+				if (parent is not null)
 					parent.Children.Add(node);
 				else
 					Children.Add(node);
@@ -109,7 +108,7 @@ public class TreeBlogsViewModel : PluginsStudio.ViewModels.Base.Explorers.Plugin
 					SaveOpml();
 				break;
 			case nameof(DeleteCommand):
-					if (SelectedNode != null)
+					if (SelectedNode is not null)
 					{
 						if (SelectedNode is FolderNodeViewModel folderNode)
 							DeleteFolder(folderNode.Folder);
@@ -129,12 +128,12 @@ public class TreeBlogsViewModel : PluginsStudio.ViewModels.Base.Explorers.Plugin
 		{
 			case nameof(NewFolderCommand):
 			case nameof(NewBlogCommand):
-				return IsSelectedFolder || SelectedNode == null;
+				return IsSelectedFolder || SelectedNode is null;
 			case nameof(OpenCommand):
 			case nameof(DeleteCommand):
 			case nameof(DownloadCommand):
 			case nameof(SeeNewsCommand):
-				return SelectedNode != null;
+				return SelectedNode is not null;
 			case nameof(SaveOpml):
 				return true;
 			default:
@@ -147,7 +146,7 @@ public class TreeBlogsViewModel : PluginsStudio.ViewModels.Base.Explorers.Plugin
 	/// </summary>
 	protected override void OpenProperties()
 	{
-		if (SelectedNode != null)
+		if (SelectedNode is not null)
 		{
 			if (SelectedNode is FolderNodeViewModel folderNode)
 				OpenFormUpdateFolder(folderNode.Folder);
@@ -169,7 +168,7 @@ public class TreeBlogsViewModel : PluginsStudio.ViewModels.Base.Explorers.Plugin
 	/// </summary>
 	private List<BaseBlogsNodeViewModel> ConvertNodes(ObservableCollection<ControlHierarchicalViewModel> nodes) 
 	{
-		List<BaseBlogsNodeViewModel> converted = new List<BaseBlogsNodeViewModel>();
+		List<BaseBlogsNodeViewModel> converted = new();
 
 			// Convierte los elementos
 			foreach (BaseBlogsNodeViewModel node in nodes)
@@ -199,22 +198,19 @@ public class TreeBlogsViewModel : PluginsStudio.ViewModels.Base.Explorers.Plugin
 	/// <summary>
 	///		Obtiene los nodos chequeados
 	/// </summary>
-	public List<int> GetCheckedNodes()
-	{
-		return GetCheckedNodes(ConvertNodes(Children));
-	}
+	public List<int> GetCheckedNodes() => GetCheckedNodes(ConvertNodes(Children));
 
 	/// <summary>
 	///		Obtiene los nodos chequeados
 	/// </summary>
 	private List<int> GetCheckedNodes(List<BaseBlogsNodeViewModel> nodes)
 	{
-		List<int> ids = new List<int>();
+		List<int> ids = new();
 
 			// Obtiene los nodos
 			foreach (ControlHierarchicalViewModel node in nodes)
-				if (node is BlogNodeViewModel && node.IsChecked)
-					ids.Add((node as BlogNodeViewModel).Blog.Id ?? 0);
+				if (node is BlogNodeViewModel nodeViewModel && nodeViewModel.IsChecked)
+					ids.Add(nodeViewModel.Blog.Id ?? 0);
 				else
 					ids.AddRange(GetCheckedNodes(ConvertNodes(node.Children)));
 			// Devuelve la colección de IDs
@@ -226,12 +222,12 @@ public class TreeBlogsViewModel : PluginsStudio.ViewModels.Base.Explorers.Plugin
 	/// </summary>
 	private void OpenFileOpml()
 	{
-		string fileName = MainViewModel.ViewsController.DialogsController.OpenDialogLoad(null, OpmlFilter);
+		string? fileName = MainViewModel.ViewsController.DialogsController.OpenDialogLoad(null, OpmlFilter);
 
-			if (!fileName.IsEmpty() && System.IO.File.Exists(fileName))
+			if (!string.IsNullOrWhiteSpace(fileName) && File.Exists(fileName))
 			{ 
 				// Carga el archivo
-				 MainViewModel.BlogManager.LoadOpml(fileName);
+				MainViewModel.BlogManager.LoadOpml(fileName);
 				// Graba la configuración
 				MainViewModel.BlogManager.Save();
 				// Actualiza el árbol
@@ -244,21 +240,21 @@ public class TreeBlogsViewModel : PluginsStudio.ViewModels.Base.Explorers.Plugin
 	/// </summary>
 	private void SaveOpml()
 	{
-		string fileName = MainViewModel.ViewsController.DialogsController.OpenDialogSave(null, OpmlFilter);
+		string? fileName = MainViewModel.ViewsController.DialogsController.OpenDialogSave(null, OpmlFilter);
 
-			if (!fileName.IsEmpty())
+			if (!string.IsNullOrWhiteSpace(fileName))
 				MainViewModel.BlogManager.SaveOpml(fileName);
 	}
 
 	/// <summary>
 	///		Abre el formulario de modificación / creación de una carpeta
 	/// </summary>
-	private void OpenFormUpdateFolder(FolderModel folder)
+	private void OpenFormUpdateFolder(FolderModel? folder)
 	{
-		FolderModel parent = null;
+		FolderModel? parent = null;
 
 			// Obtiene la carpeta seleccionada
-			if (folder == null)
+			if (folder is null)
 			{
 				if (SelectedNode is FolderNodeViewModel node)
 					parent = node.Folder;
@@ -273,12 +269,12 @@ public class TreeBlogsViewModel : PluginsStudio.ViewModels.Base.Explorers.Plugin
 	/// <summary>
 	///		Abre el formulario de modificación / creación de una carpeta
 	/// </summary>
-	private void OpenFormUpdateBlog(BlogModel blog)
+	private void OpenFormUpdateBlog(BlogModel? blog)
 	{
-		FolderModel folder = null;
+		FolderModel? folder;
 
 			// Obtiene la carpeta a la que se añade el blog
-			if (blog == null)
+			if (blog is null)
 			{
 				if (SelectedNode is FolderNodeViewModel node)
 					folder = node.Folder;
@@ -352,7 +348,7 @@ public class TreeBlogsViewModel : PluginsStudio.ViewModels.Base.Explorers.Plugin
 	private void KillPaths(BlogsModelCollection blogs)
 	{
 		foreach (BlogModel blog in blogs)
-			LibHelper.Files.HelperFiles.KillPath(System.IO.Path.Combine(MainViewModel.ConfigurationViewModel.PathBlogs, blog.Path));
+			LibHelper.Files.HelperFiles.KillPath(Path.Combine(MainViewModel.ConfigurationViewModel.PathBlogs, blog.Path));
 	}
 
 	/// <summary>
@@ -361,7 +357,7 @@ public class TreeBlogsViewModel : PluginsStudio.ViewModels.Base.Explorers.Plugin
 	private async Task DownloadItemsAsync()
 	{
 		if (SelectedNode is BaseBlogsNodeViewModel node)
-			await MainViewModel.BlogDownloadProcesor.DownloadBlogsAsync(true, node.GetBlogs(), System.Threading.CancellationToken.None);
+			await MainViewModel.BlogDownloadProcesor.DownloadBlogsAsync(node.GetBlogs(), CancellationToken.None);
 	}
 
 	/// <summary>
@@ -387,10 +383,7 @@ public class TreeBlogsViewModel : PluginsStudio.ViewModels.Base.Explorers.Plugin
 	/// <summary>
 	///		Indica si está seleccionada una carpeta
 	/// </summary>
-	public bool IsSelectedFolder
-	{
-		get { return SelectedNode != null && SelectedNode is FolderNodeViewModel; }
-	}
+	public bool IsSelectedFolder => SelectedNode != null && SelectedNode is FolderNodeViewModel;
 
 	/// <summary>
 	///		ViewModel principal

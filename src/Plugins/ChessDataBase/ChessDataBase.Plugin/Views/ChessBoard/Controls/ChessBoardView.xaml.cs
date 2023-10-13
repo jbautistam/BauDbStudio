@@ -439,7 +439,7 @@ public partial class ChessBoardView : UserControl
 	/// <summary>
 	///		ViewModel
 	/// </summary>
-	public GameBoardViewModel ViewModel { get; private set; } = default!
+	public GameBoardViewModel ViewModel { get; private set; } = default!;
 
 	private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
 	{

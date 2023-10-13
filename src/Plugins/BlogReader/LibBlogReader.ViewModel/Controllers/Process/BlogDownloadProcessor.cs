@@ -7,6 +7,8 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Controllers.Process;
 /// </summary>
 internal class BlogDownloadProcessor : IDisposable
 {   
+	// Constantes privadas
+	private const int MinutesBetweenDownload = 5;
 	// Variables privadas
 	private System.Timers.Timer? _timer;
 	private object _lock = new();
@@ -22,7 +24,7 @@ internal class BlogDownloadProcessor : IDisposable
 	public void Start()
 	{
 		// Inicializa el temporizador
-		_timer = new System.Timers.Timer(TimeSpan.FromMinutes(5).TotalMilliseconds);
+		_timer = new System.Timers.Timer(TimeSpan.FromMinutes(MinutesBetweenDownload).TotalMilliseconds);
 		_timer.Enabled = true;
 		// Asigna el manejador de eventos
 		_timer.Elapsed += (sender, args) => Execute();
@@ -56,13 +58,21 @@ internal class BlogDownloadProcessor : IDisposable
 	/// </summary>
 	private async Task DownloadBlogsAsync(CancellationToken cancellationToken)
 	{
-		await DownloadBlogsAsync(false, MainViewModel.BlogManager.File.GetBlogsRecursive(), cancellationToken);
+		await DownloadBlogsAsync(MainViewModel.ConfigurationViewModel.DownloadDisabledBlogs, MainViewModel.BlogManager.File.GetBlogsRecursive(), cancellationToken);
 	}
 
 	/// <summary>
 	///		Descarga los blogs
 	/// </summary>
-	public async Task DownloadBlogsAsync(bool includeDisabled, Model.BlogsModelCollection blogs, CancellationToken cancellationToken)
+	public async Task DownloadBlogsAsync(Model.BlogsModelCollection blogs, CancellationToken cancellationToken)
+	{
+		await DownloadBlogsAsync(MainViewModel.ConfigurationViewModel.DownloadDisabledBlogs, blogs, cancellationToken);
+	}
+
+	/// <summary>
+	///		Descarga los blogs
+	/// </summary>
+	private async Task DownloadBlogsAsync(bool includeDisabled, Model.BlogsModelCollection blogs, CancellationToken cancellationToken)
 	{
 		RssDownload downloader = new(MainViewModel.BlogManager);
 
@@ -81,7 +91,7 @@ internal class BlogDownloadProcessor : IDisposable
 			// Libera los recursos
 			if (disposing)
 			{
-				if (_timer != null)
+				if (_timer is not null)
 				{
 					_timer.Stop();
 					_timer = null;
@@ -97,7 +107,7 @@ internal class BlogDownloadProcessor : IDisposable
 	/// </summary>
 	public void Dispose()
 	{
-		Dispose(disposing: true);
+		Dispose(true);
 		GC.SuppressFinalize(this);
 	}
 

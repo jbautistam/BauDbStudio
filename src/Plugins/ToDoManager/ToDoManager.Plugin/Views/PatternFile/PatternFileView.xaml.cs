@@ -21,8 +21,10 @@ public partial class PatternFileView : UserControl
 		DataContext = ViewModel = viewModel;
 		// Asigna los manejadores de eventos
 		ViewModel.PropertyChanged += (sender, args) => {
-															if (args.PropertyName.Equals(nameof(PatternFileViewModel.ExtensionHighlight), StringComparison.CurrentCultureIgnoreCase))
-																UpdateHighlights();
+															string property = args.PropertyName ?? string.Empty;
+
+																if (property.Equals(nameof(PatternFileViewModel.ExtensionHighlight), StringComparison.CurrentCultureIgnoreCase))
+																	UpdateHighlights();
 													   };
 	}
 

@@ -40,6 +40,9 @@ internal class FormulaConversor
 							!part.Trim().StartsWith("+top", StringComparison.CurrentCultureIgnoreCase) &&
 							!part.Trim().StartsWith("+bottom", StringComparison.CurrentCultureIgnoreCase))
 						result += part + Environment.NewLine;
+			// Quita los saltos de línea del final
+			if (!string.IsNullOrWhiteSpace(result))
+				result = result.TrimEnd();
 			// Devuelve el resultado
 			return result;
 	}
@@ -60,13 +63,7 @@ internal class FormulaConversor
 			result += convertedFormula;
 			// Añade las cadenas inferiores
 			if (bottoms.Count > 0)
-			{
-				// Añade un salto de línea
-				if (!string.IsNullOrWhiteSpace(result))
-					result += Environment.NewLine;
-				// Añade las cadenas inferiores
 				result += Join(bottoms);
-			}
 			// Devuelve el resultado
 			return result;
 	}
@@ -151,7 +148,6 @@ internal class FormulaConversor
 				return builder.ToString();
 			}
 	}
-
 
 	/// <summary>
 	///		Patrón

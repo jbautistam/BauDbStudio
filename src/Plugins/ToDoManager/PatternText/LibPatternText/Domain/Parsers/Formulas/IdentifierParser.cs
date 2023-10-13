@@ -92,21 +92,15 @@ internal class IdentifierParser
 	/// </summary>
 	private string FormatSql(object? value)
 	{
-		switch (value)
-		{
-			case null:
-				return "NULL";
-			case int result:
-				return result.ToString(System.Globalization.CultureInfo.InvariantCulture);
-			case double result:
-				return result.ToString(System.Globalization.CultureInfo.InvariantCulture);
-			case DateTime result:
-				return $"{result:yyyy-MM-dd HH:mm:ss}";
-			case bool result:
-				return result ? "1" : "0";
-			default:
-				return (value?.ToString() ?? string.Empty).Replace("'", "''");
-		}
+		return value switch
+				{
+					null => "NULL",
+					int result => result.ToString(System.Globalization.CultureInfo.InvariantCulture),
+					double result => result.ToString(System.Globalization.CultureInfo.InvariantCulture),
+					DateTime result => $"{result:yyyy-MM-dd HH:mm:ss}",
+					bool result => result ? "1" : "0",
+					_ => (value?.ToString() ?? string.Empty).Replace("'", "''")
+				};
 	}
 
 	/// <summary>
@@ -130,10 +124,7 @@ internal class IdentifierParser
 	/// <summary>
 	///		Obtiene un valor lógico
 	/// </summary>
-	private bool GetBool(string value)
-	{
-		return !string.IsNullOrWhiteSpace(value) && (value.Equals("true", StringComparison.CurrentCultureIgnoreCase) || value.Equals("1"));
-	}
+	private bool GetBool(string value) => !string.IsNullOrWhiteSpace(value) && (value.Equals("true", StringComparison.CurrentCultureIgnoreCase) || value.Equals("1"));
 
 	/// <summary>
 	///		Obtiene un valor entero

@@ -84,7 +84,7 @@ internal class PatternTextRepository
 			nodeML.Attributes.Add(TagQuotes, pattern.QuoteChar);
 			nodeML.Attributes.Add(TagExtensionHighlight, pattern.ExtensionHighlight);
 			// Añade la fórmula
-			rootML.Nodes.Add(TagFormula, pattern.Formula);
+			rootML.Nodes.AddCData(TagFormula, pattern.Formula);
 			// Graba el archivo
 			new LibMarkupLanguage.Services.XML.XMLWriter().Save(fileName, fileML);
 	}

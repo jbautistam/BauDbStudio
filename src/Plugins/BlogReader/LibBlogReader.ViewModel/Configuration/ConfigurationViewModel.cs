@@ -12,7 +12,7 @@ public class ConfigurationViewModel : BauMvvm.ViewModels.BaseObservableObject
 	// Variables privadas
 	private string _pathBlogs = default!;
 	private int _minutesBetweenDownload, _recordsPerPage;
-	private bool _downloadEnabled, _seeEntriesRead, _seeEntriesNotRead, _seeEntriesInteresting, _showDisabledBlogs;
+	private bool _downloadEnabled, _seeEntriesRead, _seeEntriesNotRead, _seeEntriesInteresting, _showDisabledBlogs, _downloadDisabledBlogs;
 
 	public ConfigurationViewModel(BlogReaderViewModel mainViewModel)
 	{
@@ -32,6 +32,7 @@ public class ConfigurationViewModel : BauMvvm.ViewModels.BaseObservableObject
 		SeeEntriesNotRead = MainViewModel.ViewsController.PluginController.ConfigurationController.GetConfiguration(ApplicationName, nameof(SeeEntriesNotRead)).GetBool();
 		SeeEntriesInteresting = MainViewModel.ViewsController.PluginController.ConfigurationController.GetConfiguration(ApplicationName, nameof(SeeEntriesInteresting)).GetBool();
 		ShowNewsDisabledBlogs = MainViewModel.ViewsController.PluginController.ConfigurationController.GetConfiguration(ApplicationName, nameof(ShowNewsDisabledBlogs)).GetBool();
+		DownloadDisabledBlogs = MainViewModel.ViewsController.PluginController.ConfigurationController.GetConfiguration(ApplicationName, nameof(DownloadDisabledBlogs)).GetBool();
 	}
 
 	/// <summary>
@@ -70,6 +71,8 @@ public class ConfigurationViewModel : BauMvvm.ViewModels.BaseObservableObject
 																								SeeEntriesInteresting.ToString());
 		MainViewModel.ViewsController.PluginController.ConfigurationController.SetConfiguration(ApplicationName, nameof(ShowNewsDisabledBlogs), 
 																								ShowNewsDisabledBlogs.ToString());
+		MainViewModel.ViewsController.PluginController.ConfigurationController.SetConfiguration(ApplicationName, nameof(DownloadDisabledBlogs), 
+																								DownloadDisabledBlogs.ToString());
 		// Actualiza el árbol
 		MainViewModel.Load(PathBlogs);
 	}
@@ -149,5 +152,14 @@ public class ConfigurationViewModel : BauMvvm.ViewModels.BaseObservableObject
 	{
 		get { return _showDisabledBlogs; }
 		set { CheckProperty(ref _showDisabledBlogs, value); }
+	}
+
+	/// <summary>
+	///		Indica si se deben descargar los blogs inactivos
+	/// </summary>
+	public bool DownloadDisabledBlogs
+	{
+		get { return _downloadDisabledBlogs; }
+		set { CheckProperty(ref _downloadDisabledBlogs, value); }
 	}
 }

@@ -13,17 +13,15 @@ public class FolderViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewMo
 	private FolderModel _folder = default!;
 	private string _name = default!;
 
-	public FolderViewModel(BlogReaderViewModel mainViewModel, FolderModel parent, FolderModel folder)
+	public FolderViewModel(BlogReaderViewModel mainViewModel, FolderModel? parent, FolderModel? folder)
 	{
 		MainViewModel = mainViewModel;
 		_parent = parent;
-		_folder = folder;
-		if (_parent == null)
+		_folder = folder ?? new FolderModel();
+		if (_parent is null)
 			_parent =  MainViewModel.BlogManager.File;
-		if (_folder == null)
-			_folder = new FolderModel();
-		else
-			_parent = folder.Parent;
+		if (_folder is not null)
+			_parent = _folder.Parent;
 		InitProperties();
 	}
 
@@ -57,7 +55,7 @@ public class FolderViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewMo
 	protected override void Save()
 	{
 		if (ValidateData())
-		{ 
+		{
 			// Asigna la carpeta
 			if (_parent != null && !_parent.Folders.Exists(_folder.GlobalId))
 				_parent.Folders.Add(_folder);
