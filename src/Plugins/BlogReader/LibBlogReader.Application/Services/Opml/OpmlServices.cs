@@ -1,111 +1,109 @@
-﻿using System;
-
-using Bau.Libraries.LibHelper.Extensors;
-using Bau.Libraries.LibFeeds.Syndication.OPML.Data;
+﻿using Bau.Libraries.LibFeeds.Syndication.OPML.Data;
 using Bau.Libraries.LibFeeds.Syndication.OPML.Transforms;
 
-namespace Bau.Libraries.LibBlogReader.Application.Services.Opml
+namespace Bau.Libraries.LibBlogReader.Application.Services.Opml;
+
+/// <summary>
+///		Servicios sobre OPML
+/// </summary>
+internal class OpmlServices
 {
 	/// <summary>
-	///		Servicios sobre OPML
+	///		Carga un archivo OPML sobre la carpeta actual
 	/// </summary>
-	internal class OpmlServices
+	internal void Load(BlogReaderManager manager, string fileName)
 	{
-		/// <summary>
-		///		Carga un archivo OPML sobre la carpeta actual
-		/// </summary>
-		internal void Load(BlogReaderManager manager, string fileName)
-		{
-			if (System.IO.File.Exists(fileName))
-				try
-				{
-					OPMLChannel channel = new OPMLParser().Parse(fileName);
-					string title = channel.Title;
+		if (File.Exists(fileName))
+			try
+			{
+				OPMLChannel? channel = new OPMLParser().Parse(fileName);
 
-						// Obtiene el título de la carpeta
-						if (string.IsNullOrWhiteSpace(title))
-							title = "Opml";
-						// Añade las entradas
-						if (channel.Entries.Count > 0)
-							AddEntries(manager.File.Folders.Add(title), channel.Entries);
-				}
-				catch (Exception exception)
-				{
-					System.Diagnostics.Debug.WriteLine("Excepción: " + exception.Message);
-				}
-		}
+					if (channel is not null)
+					{
+						string? title = channel.Title;
 
-		/// <summary>
-		///		Añade las entradas de un archivo OPML a una carpeta
-		/// </summary>
-		private void AddEntries(Model.FolderModel folder, OPMLEntriesCollection entries)
-		{
-			foreach (OPMLEntry entry in entries)
-				if (entry.Entries.Count == 0 && !entry.URL.IsEmpty())
-					folder.Blogs.Add(entry.Text, entry.Title, entry.URL);
-				else if (entry.Entries.Count > 0)
-					AddEntries(folder.Folders.Add(entry.Text), entry.Entries);
-		}
+							// Obtiene el título de la carpeta
+							if (string.IsNullOrWhiteSpace(title))
+								title = "Opml";
+							// Añade las entradas
+							if (channel.Entries.Count > 0)
+								AddEntries(manager.File.Folders.Add(title), channel.Entries);
+					}
+			}
+			catch (Exception exception)
+			{
+				System.Diagnostics.Debug.WriteLine("Excepción: " + exception.Message);
+			}
+	}
 
-		/// <summary>
-		///		Graba un archivo OPML con los datos actuales
-		/// </summary>
-		internal void Save(BlogReaderManager manager, string fileName)
-		{
-			OPMLChannel channel = new OPMLChannel();
+	/// <summary>
+	///		Añade las entradas de un archivo OPML a una carpeta
+	/// </summary>
+	private void AddEntries(Model.FolderModel folder, OPMLEntriesCollection entries)
+	{
+		foreach (OPMLEntry entry in entries)
+			if (entry.Entries.Count == 0 && !string.IsNullOrWhiteSpace(entry.URL))
+				folder.Blogs.Add(entry.Text, entry.Title, entry.URL);
+			else if (entry.Entries.Count > 0)
+				AddEntries(folder.Folders.Add(entry.Text), entry.Entries);
+	}
 
-				// Asigna las propiedades
-				channel.Title = "Archivo creado con Bau Studio";
-				// Añade las carpetas
-				foreach (Model.FolderModel folder in manager.File.Folders)
-					AddFolder(folder, channel.Entries);
-				// Añade los blogs
-				foreach (Model.BlogModel blog in manager.File.Blogs)
-					AddBlog(blog, channel.Entries);
-				// Graba el archivo
-				LibHelper.Files.HelperFiles.MakePath(System.IO.Path.GetDirectoryName(fileName));
-				new OPMLWriter().Save(channel, fileName);
-		}
+	/// <summary>
+	///		Graba un archivo OPML con los datos actuales
+	/// </summary>
+	internal void Save(BlogReaderManager manager, string fileName)
+	{
+		OPMLChannel channel = new OPMLChannel();
 
-		/// <summary>
-		///		Añade una carpeta a la colección de entrada
-		/// </summary>
-		private void AddFolder(Model.FolderModel folder, OPMLEntriesCollection entries)
-		{
-			OPMLEntry entry = CreateEntry(folder.Name, "Folder", null, null);
+			// Asigna las propiedades
+			channel.Title = "Archivo creado con Bau Studio";
+			// Añade las carpetas
+			foreach (Model.FolderModel folder in manager.File.Folders)
+				AddFolder(folder, channel.Entries);
+			// Añade los blogs
+			foreach (Model.BlogModel blog in manager.File.Blogs)
+				AddBlog(blog, channel.Entries);
+			// Graba el archivo
+			LibHelper.Files.HelperFiles.MakePath(Path.GetDirectoryName(fileName));
+			new OPMLWriter().Save(channel, fileName);
+	}
 
-				// Añade la entrada a la colección
-				entries.Add(entry);
-				// Añade las carpetas
-				foreach (Model.FolderModel child in folder.Folders)
-					AddFolder(child, entry.Entries);
-				// Añade los blogs
-				foreach (Model.BlogModel blog in folder.Blogs)
-					AddBlog(blog, entry.Entries);
-		}
+	/// <summary>
+	///		Añade una carpeta a la colección de entrada
+	/// </summary>
+	private void AddFolder(Model.FolderModel folder, OPMLEntriesCollection entries)
+	{
+		OPMLEntry entry = CreateEntry(folder.Name, "Folder", null, null);
 
-		/// <summary>
-		///		Añade un blog a la colección de entradas
-		/// </summary>
-		private void AddBlog(Model.BlogModel blog, OPMLEntriesCollection entries)
-		{
-			entries.Add(CreateEntry(blog.Name, "Blog", blog.Description, blog.URL));
-		}
+			// Añade la entrada a la colección
+			entries.Add(entry);
+			// Añade las carpetas
+			foreach (Model.FolderModel child in folder.Folders)
+				AddFolder(child, entry.Entries);
+			// Añade los blogs
+			foreach (Model.BlogModel blog in folder.Blogs)
+				AddBlog(blog, entry.Entries);
+	}
 
-		/// <summary>
-		///		Crea una entrada
-		/// </summary>
-		private OPMLEntry CreateEntry(string name, string type, string description, string url)
-		{
-			OPMLEntry entry = new OPMLEntry();
+	/// <summary>
+	///		Añade un blog a la colección de entradas
+	/// </summary>
+	private void AddBlog(Model.BlogModel blog, OPMLEntriesCollection entries)
+	{
+		entries.Add(CreateEntry(blog.Name, "Blog", blog.Description, blog.URL));
+	}
 
-				// Asigna las propiedades
-				entry.Text = name;
-				entry.Type = type;
-				entry.Title = description;
-				entry.URL = url;
-				// Devuelve la entrada
-				return entry;
-		}
+	/// <summary>
+	///		Crea una entrada
+	/// </summary>
+	private OPMLEntry CreateEntry(string name, string type, string description, string url)
+	{
+		return new OPMLEntry()
+					{
+						Text = name,
+						Type = type,
+						Title = description,
+						URL = url
+					};
 	}
 }

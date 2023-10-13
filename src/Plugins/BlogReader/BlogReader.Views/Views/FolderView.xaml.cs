@@ -1,26 +1,24 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 
 using Bau.Libraries.LibBlogReader.ViewModel.Blogs;
 
-namespace Bau.Libraries.BlogReader.Views.Views
+namespace Bau.Libraries.BlogReader.Views.Views;
+
+/// <summary>
+///		Formulario para mantenimiento de un <see cref="FolderModel"/>
+/// </summary>
+public partial class FolderView : Window
 {
-	/// <summary>
-	///		Formulario para mantenimiento de un <see cref="FolderModel"/>
-	/// </summary>
-	public partial class FolderView : Window
-	{
-		public FolderView(FolderViewModel viewModel)
-		{ 
-			// Inicializa los componentes
-			InitializeComponent();
-			// Inicializa el ViewModel
-			DataContext = viewModel;
-			viewModel.Close += (sender, result) =>
-											{
-												DialogResult = result.IsAccepted;
-												Close();
-											};
-		}
+	public FolderView(FolderViewModel viewModel)
+	{ 
+		// Inicializa los componentes
+		InitializeComponent();
+		// Inicializa el ViewModel
+		DataContext = viewModel;
+		viewModel.Close += (sender, result) =>
+										{
+											DialogResult = result.IsAccepted;
+											Close();
+										};
 	}
 }

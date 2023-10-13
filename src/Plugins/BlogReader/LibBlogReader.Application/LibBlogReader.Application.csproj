@@ -3,24 +3,19 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <RootNamespace>Bau.Libraries.LibBlogReader.Application</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Bussiness\Blogs\**" />
     <Compile Remove="Services\EventArguments\**" />
-    <EmbeddedResource Remove="Bussiness\Blogs\**" />
     <EmbeddedResource Remove="Services\EventArguments\**" />
-    <None Remove="Bussiness\Blogs\**" />
     <None Remove="Services\EventArguments\**" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Communications\LibFeeds\src\LibFeeds.csproj" />
     <ProjectReference Include="..\LibBlogReader.Model\LibBlogReader.Model.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Bussiness\" />
   </ItemGroup>
 
   <ItemGroup>

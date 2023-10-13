@@ -10,7 +10,7 @@ public class ConfigurationViewModel : BauMvvm.ViewModels.BaseObservableObject
 	// Constants privadas
 	private const string ApplicationName = "BlogReader";
 	// Variables privadas
-	private string _pathBlogs;
+	private string _pathBlogs = default!;
 	private int _minutesBetweenDownload, _recordsPerPage;
 	private bool _downloadEnabled, _seeEntriesRead, _seeEntriesNotRead, _seeEntriesInteresting, _showDisabledBlogs;
 
@@ -42,7 +42,7 @@ public class ConfigurationViewModel : BauMvvm.ViewModels.BaseObservableObject
 		// Inicializa los argumentos de salida
 		error = string.Empty;
 		// Comprueba los datos
-		if (string.IsNullOrWhiteSpace(PathBlogs) || !System.IO.Directory.Exists(PathBlogs))
+		if (string.IsNullOrWhiteSpace(PathBlogs) || !Directory.Exists(PathBlogs))
 			error = "Enter a valid path";
 		// Devuelve el valor que indica si los datos son correctos
 		return error.IsEmpty();
