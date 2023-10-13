@@ -1,88 +1,85 @@
-﻿using System;
-using System.Windows.Controls;
-using System.Threading.Tasks;
+﻿using System.Windows.Controls;
 
 using Bau.Libraries.ComicsReader.ViewModel.Reader;
 
-namespace Bau.Libraries.ComicsReader.Plugin.Views
+namespace Bau.Libraries.ComicsReader.Plugin.Views;
+
+/// <summary>
+///		Formulario para mostrar el contenido de un cómic
+/// </summary>
+public partial class ComicContentView : UserControl
 {
-	/// <summary>
-	///		Formulario para mostrar el contenido de un cómic
-	/// </summary>
-	public partial class ComicContentView : UserControl
+	// Variables privadas
+	private bool _isLoaded;
+
+	public ComicContentView(ComicContentViewModel viewModel)
 	{
-		// Variables privadas
-		private bool _isLoaded;
+		// Inicializa los componentes
+		InitializeComponent();
+		// Asigna la clase del documento
+		DataContext = ViewModel = viewModel;
+	}
 
-		public ComicContentView(ComicContentViewModel viewModel)
+	/// <summary>
+	///		Inicializa el control
+	/// </summary>
+	private async Task InitControlAsync()
+	{
+		if (!_isLoaded)
 		{
-			// Inicializa los componentes
-			InitializeComponent();
-			// Asigna la clase del documento
-			DataContext = ViewModel = viewModel;
+			// Indica que ya no se debe cargar de nuevo
+			_isLoaded = true;
+			// Carga el archivo
+			await ViewModel.ParseAsync();
+			// Asigna las propiedades al control de imagen
+			ZoomAndPanControl.MinimumZoomType = Controls.ZoomAndPanControls.MinimumZoomTypeEnum.FitScreen;
+			ZoomAndPanControl.ZoomAndPanContent.MinimumZoomType = Controls.ZoomAndPanControls.MinimumZoomTypeEnum.FitScreen;
+			ZoomAndPanControl.ZoomAndPanContent.MaximumZoom = 3;
+			ZoomAndPanControl.ZoomAndPanContent.MinimumZoom = 0.25;
+			// Asigna los manejadores de eventos sobre el control de imagen
+			ZoomAndPanControl.ZoomAndPanContent.ContentZoomChanged += (sender, args) => ViewModel.Zoom = ZoomAndPanControl.ZoomAndPanContent.ViewportZoom;
+			// Asigna los manejadores de eventos sobre el ViewModel
+			ViewModel.UpdateZoom += (sender, args) => ZoomAndPanControl.ZoomAndPanContent.ViewportZoom = args.Zoom; 
 		}
+	}
 
-		/// <summary>
-		///		Inicializa el control
-		/// </summary>
-		private async Task InitControlAsync()
+	/// <summary>
+	///		ViewModel asociado al control
+	/// </summary>
+	public ComicContentViewModel ViewModel { get; }
+
+	private async void UserControl_Loaded(object sender, EventArgs e)
+	{
+		await InitControlAsync();
+	}
+
+	private void chkShowThumb_Click(object sender, System.Windows.RoutedEventArgs e)
+	{
+		if (wndZoom != null)
 		{
-			if (!_isLoaded)
-			{
-				// Indica que ya no se debe cargar de nuevo
-				_isLoaded = true;
-				// Carga el archivo
-				await ViewModel.ParseAsync();
-				// Asigna las propiedades al control de imagen
-				ZoomAndPanControl.MinimumZoomType = Controls.ZoomAndPanControls.MinimumZoomTypeEnum.FitScreen;
-				ZoomAndPanControl.ZoomAndPanContent.MinimumZoomType = Controls.ZoomAndPanControls.MinimumZoomTypeEnum.FitScreen;
-				ZoomAndPanControl.ZoomAndPanContent.MaximumZoom = 3;
-				ZoomAndPanControl.ZoomAndPanContent.MinimumZoom = 0.25;
-				// Asigna los manejadores de eventos sobre el control de imagen
-				ZoomAndPanControl.ZoomAndPanContent.ContentZoomChanged += (sender, args) => ViewModel.Zoom = ZoomAndPanControl.ZoomAndPanContent.ViewportZoom;
-				// Asigna los manejadores de eventos sobre el ViewModel
-				ViewModel.UpdateZoom += (sender, args) => ZoomAndPanControl.ZoomAndPanContent.ViewportZoom = args.Zoom; 
-			}
+			if (chkShowThumb.IsChecked ?? false)
+				wndZoom.Visibility = System.Windows.Visibility.Visible;
+			else
+				wndZoom.Visibility = System.Windows.Visibility.Collapsed;
 		}
+	}
 
-		/// <summary>
-		///		ViewModel asociado al control
-		/// </summary>
-		public ComicContentViewModel ViewModel { get; }
+	private void lstThumbs_SelectionChanged(object sender, SelectionChangedEventArgs e)
+	{
+		if (lstThumbs.SelectedItem != null)
+			lstThumbs.ScrollIntoView(lstThumbs.SelectedItem);
+	}
 
-		private async void UserControl_Loaded(object sender, EventArgs e)
+	private void ZoomAndPanControl_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+	{
+		switch (e.Key)
 		{
-			await InitControlAsync();
-		}
-
-		private void chkShowThumb_Click(object sender, System.Windows.RoutedEventArgs e)
-		{
-			if (wndZoom != null)
-			{
-				if (chkShowThumb.IsChecked ?? false)
-					wndZoom.Visibility = System.Windows.Visibility.Visible;
-				else
-					wndZoom.Visibility = System.Windows.Visibility.Collapsed;
-			}
-		}
-
-		private void lstThumbs_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			if (lstThumbs.SelectedItem != null)
-				lstThumbs.ScrollIntoView(lstThumbs.SelectedItem);
-		}
-
-		private void ZoomAndPanControl_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
-		{
-			switch (e.Key)
-			{
-				case System.Windows.Input.Key.PageDown:
-						ViewModel.GoNextPage();
-					break;
-				case System.Windows.Input.Key.PageUp:
-						ViewModel.GoPreviousPage();
-					break;
-			}
+			case System.Windows.Input.Key.PageDown:
+					ViewModel.GoNextPage();
+				break;
+			case System.Windows.Input.Key.PageUp:
+					ViewModel.GoPreviousPage();
+				break;
 		}
 	}
 }
