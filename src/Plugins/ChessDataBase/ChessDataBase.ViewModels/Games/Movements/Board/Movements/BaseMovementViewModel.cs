@@ -1,11 +1,8 @@
-﻿using System;
+﻿namespace Bau.Libraries.ChessDataBase.ViewModels.Games.Movements.Board.Movements;
 
-namespace Bau.Libraries.ChessDataBase.ViewModels.Games.Movements.Board.Movements
+/// <summary>
+///		Clase base para los viewmodel de los movimientos
+/// </summary>
+public class BaseMovementViewModel : BauMvvm.ViewModels.BaseObservableObject
 {
-	/// <summary>
-	///		Clase base para los viewmodel de los movimientos
-	/// </summary>
-	public class BaseMovementViewModel : BauMvvm.ViewModels.BaseObservableObject
-	{
-	}
 }
