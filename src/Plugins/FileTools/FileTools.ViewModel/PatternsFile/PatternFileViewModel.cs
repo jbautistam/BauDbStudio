@@ -3,7 +3,7 @@
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Files;
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.ComboItems;
 
-namespace Bau.Libraries.ToDoManager.ViewModel.PatternsFile;
+namespace Bau.Libraries.FileTools.ViewModel.PatternsFile;
 
 /// <summary>
 ///		ViewModel para ver el contenido de un archivo de tareas
@@ -16,7 +16,7 @@ public class PatternFileViewModel : BaseFileViewModel, PluginsStudio.ViewModels.
 	private bool _withHeader;
 	private ComboViewModel _comboSeparators = default!, _comboExtensions = default!;
 
-	public PatternFileViewModel(ToDoManagerViewModel mainViewModel, string fileName) : base(fileName)
+	public PatternFileViewModel(FileToolsViewModel mainViewModel, string fileName) : base(fileName)
 	{ 
 		// Asigna las propiedades
 		MainViewModel = mainViewModel;
@@ -49,8 +49,8 @@ public class PatternFileViewModel : BaseFileViewModel, PluginsStudio.ViewModels.
 		}
 		catch (Exception exception)
 		{
-			MainViewModel.ViewsController.Logger.LogError(exception, $"Error when load {FileName}. {exception.Message}");
-			MainViewModel.ViewsController.SystemController.ShowMessage($"Error when load {FileName}. {exception.Message}");
+			MainViewModel.MainController.Logger.LogError(exception, $"Error when load {FileName}. {exception.Message}");
+			MainViewModel.MainController.SystemController.ShowMessage($"Error when load {FileName}. {exception.Message}");
 		}
 	}
 
@@ -128,10 +128,10 @@ public class PatternFileViewModel : BaseFileViewModel, PluginsStudio.ViewModels.
 		// Graba el archivo
 		if (string.IsNullOrWhiteSpace(FileName) || newName)
 		{
-			string? newFileName = MainViewModel.ViewsController.DialogsController.OpenDialogSave
+			string? newFileName = MainViewModel.MainController.DialogsController.OpenDialogSave
 									(string.Empty, 
-									 $"Pattern file (*{ToDoManagerViewModel.PatternFileExtension})|*{ToDoManagerViewModel.PatternFileExtension}|All files (*.*)|*.*",
-									 FileName, ToDoManagerViewModel.PatternFileExtension);
+									 $"Pattern file (*{FileToolsViewModel.PatternFileExtension})|*{FileToolsViewModel.PatternFileExtension}|All files (*.*)|*.*",
+									 FileName, FileToolsViewModel.PatternFileExtension);
 
 				// Cambia el nombre de archivo si es necesario
 				if (!string.IsNullOrWhiteSpace(newFileName))
@@ -143,9 +143,9 @@ public class PatternFileViewModel : BaseFileViewModel, PluginsStudio.ViewModels.
 			// Graba el archivo
 			new LibPatternText.PatternManager().Save(FileName, GetPattern());
 			// Actualiza el árbol
-			MainViewModel.ViewsController.HostPluginsController.RefreshFiles();
+			MainViewModel.MainController.HostPluginsController.RefreshFiles();
 			// Añade el archivo a los últimos archivos abiertos
-			MainViewModel.ViewsController.HostPluginsController.AddFileUsed(FileName);
+			MainViewModel.MainController.HostPluginsController.AddFileUsed(FileName);
 			// Indica que no ha habido modificaciones
 			IsUpdated = false;
 		}
@@ -192,8 +192,8 @@ public class PatternFileViewModel : BaseFileViewModel, PluginsStudio.ViewModels.
 		}
 		catch (Exception exception)
 		{
-			MainViewModel.ViewsController.Logger.LogError(exception, $"Error when execute {FileName}. {exception.Message}");
-			MainViewModel.ViewsController.SystemController.ShowMessage($"Error when execute {FileName}. {exception.Message}");
+			MainViewModel.MainController.Logger.LogError(exception, $"Error when execute {FileName}. {exception.Message}");
+			MainViewModel.MainController.SystemController.ShowMessage($"Error when execute {FileName}. {exception.Message}");
 		}
 		// Devuelve el resultado
 		return string.Empty;
@@ -210,7 +210,7 @@ public class PatternFileViewModel : BaseFileViewModel, PluginsStudio.ViewModels.
 	/// <summary>
 	///		ViewModel principal
 	/// </summary>
-	public ToDoManagerViewModel MainViewModel { get; }
+	public FileToolsViewModel MainViewModel { get; }
 
 	/// <summary>
 	///		Origen de los datos

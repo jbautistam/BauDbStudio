@@ -19,12 +19,12 @@ public class FileToolsController : ViewModel.Controllers.IFileToolsController
 	public SystemControllerEnums.ResultType OpenWindow(PluginsStudio.ViewModels.Base.Interfaces.IDetailViewModel detailsViewModel)
 	{
 		// Abre la ventana
-		//switch (detailsViewModel)
-		//{
-		//	case ViewModel.Processor.MarkdownProcessor viewModel:
-		//			FileToolsPlugin.AppViewsController.OpenDocument(new Views.Processor.OpenMarkdownView(viewModel), viewModel);
-		//		break;
-		//}
+		switch (detailsViewModel)
+		{
+			case ViewModel.PatternsFile.PatternFileViewModel viewModel:
+					FileToolsPlugin.AppViewsController.OpenDocument(new Views.PatternFile.PatternFileView(viewModel), viewModel);
+				break;
+		}
 		// Devuelve el valor predeterminado
 		return SystemControllerEnums.ResultType.Yes;
 	}

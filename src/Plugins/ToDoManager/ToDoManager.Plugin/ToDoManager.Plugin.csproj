@@ -19,7 +19,6 @@
     <None Remove="Resources\Copy.png" />
     <None Remove="Resources\Execute.png" />
     <None Remove="Resources\Green.png" />
-    <None Remove="Resources\PatternFile.png" />
     <None Remove="Resources\Pin.png" />
     <None Remove="Resources\Red.png" />
     <None Remove="Resources\Task.png" />
@@ -51,7 +50,6 @@
     <Resource Include="Resources\Copy.png" />
     <Resource Include="Resources\Green.png" />
     <Resource Include="Resources\Execute.png" />
-    <Resource Include="Resources\PatternFile.png" />
     <Resource Include="Resources\Pin.png" />
     <Resource Include="Resources\Red.png" />
     <Resource Include="Resources\Task.png" />
@@ -62,9 +60,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Views\PatternFile\PatternFileView.xaml.cs">
-      <DependentUpon>PatternFileView.xaml</DependentUpon>
-    </Compile>
     <Compile Update="Views\TodoFileView.xaml.cs">
       <DependentUpon>TodoFileView.xaml</DependentUpon>
     </Compile>

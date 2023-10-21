@@ -1,9 +1,9 @@
 ﻿using System.Windows.Controls;
 using System.Windows;
 
-using Bau.Libraries.ToDoManager.ViewModel.PatternsFile;
+using Bau.Libraries.FileTools.ViewModel.PatternsFile;
 
-namespace Bau.Libraries.ToDoManager.Plugin.Views.PatternFile;
+namespace Bau.Libraries.FileTools.Plugin.Views.PatternFile;
 
 /// <summary>
 ///		Formulario para mostrar el contenido de un patrón de texto y sus resultados

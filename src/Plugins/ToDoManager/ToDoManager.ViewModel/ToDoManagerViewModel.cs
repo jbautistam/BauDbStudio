@@ -7,7 +7,6 @@ public class ToDoManagerViewModel : BauMvvm.ViewModels.BaseObservableObject
 {
 	// Constantes públicas
 	public const string ToDoFileExtension = ".bau.todo";
-	public const string PatternFileExtension = ".pattern";
 
 	public ToDoManagerViewModel(Controllers.IToDoManagerController mainController)
 	{
@@ -57,13 +56,6 @@ public class ToDoManagerViewModel : BauMvvm.ViewModels.BaseObservableObject
 							ViewsController.OpenWindow(viewModel);
 						// e indica que ha podido abrir el archivo (para que no se abra ningún documento)
 						open = true;
-				}
-				else if (fileName.EndsWith(PatternFileExtension, StringComparison.CurrentCultureIgnoreCase))
-				{
-					// Abre el archivo
-					ViewsController.OpenWindow(new PatternsFile.PatternFileViewModel(this, fileName));
-					// indica que ha podido abrir el archivo
-					open = true;
 				}
 			}
 			// Devuelve el valor que indica si se ha abierto

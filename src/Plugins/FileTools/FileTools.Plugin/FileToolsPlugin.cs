@@ -86,17 +86,28 @@ public class FileToolsPlugin : IPlugin
 	/// <summary>
 	///		Obtiene las extensiones de archivo asociadas al plugin
 	/// </summary>
-	public List<FileAssignedModel> GetFilesAssigned() => new();
+	public List<FileAssignedModel> GetFilesAssigned()
+	{
+		return new()
+				{
+					new FileAssignedModel
+							{
+								Name = "Pattern text file",
+								FileExtension = FileToolsViewModel.PatternFileExtension,
+								Icon = GetIconName("PatternFile.png", true)
+							}
+				};
+	}
 
 	/// <summary>
 	///		Obtiene un nombre de recurso
 	/// </summary>
-	private string GetIconName(string name, bool packApplication)
+	private string GetIconName(string icon, bool packApplication)
 	{
 		if (packApplication)
-			return $"pack://application:,,,/FileTools.Plugin;component/Resources/{name}";
+			return $"pack://application:,,,/FileTools.Plugin;component/Resources/{icon}";
 		else
-			return $"/FileTools.Plugin;component/Resources/{name}";
+			return $"/FileTools.Plugin;component/Resources/{icon}";
 	}
 
 	/// <summary>

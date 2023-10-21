@@ -14,8 +14,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Execute.png" />
     <None Remove="Resources\FolderNode.png" />
     <None Remove="Resources\Format.png" />
+    <None Remove="Resources\PatternFile.png" />
     <None Remove="Resources\Refresh.png" />
     <None Remove="Resources\ShowMarkdown.png" />
   </ItemGroup>
@@ -32,8 +34,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\Execute.png" />
     <Resource Include="Resources\FolderNode.png" />
     <Resource Include="Resources\Format.png" />
+    <Resource Include="Resources\PatternFile.png" />
     <Resource Include="Resources\Refresh.png" />
     <Resource Include="Resources\ShowMarkdown.png" />
   </ItemGroup>
@@ -43,6 +47,9 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Views\PatternFile\PatternFileView.xaml.cs">
+      <DependentUpon>PatternFileView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 

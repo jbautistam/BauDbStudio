@@ -7,12 +7,15 @@ namespace Bau.Libraries.FileTools.ViewModel;
 /// </summary>
 public class FileToolsViewModel : BaseObservableObject
 {
+	// Constantes públicas
+	public const string PatternFileExtension = ".pattern";
+
 	public FileToolsViewModel(Controllers.IFileToolsController mainController)
 	{
 		// Asigna el controlador de vistas
 		MainController = mainController;
 		// Inicializa los comandos
-		ExecuteFileCommand = new BaseCommand(parameter => ExecuteFolderFile(parameter));
+		ExecuteFileCommand = new BaseCommand(_ => ExecuteFolderFile(_));
 	}
 
 	/// <summary>
@@ -34,12 +37,30 @@ public class FileToolsViewModel : BaseObservableObject
 	/// <summary>
 	///		Abre un archivo (no hace nada, sólo implementa la interface)
 	/// </summary>
-	public bool OpenFile(string fileName) => false;
+	public bool OpenFile(string fileName)
+	{
+		bool open = false;
+
+			// Abre el archivo
+			if (!string.IsNullOrWhiteSpace(fileName)) 
+			{
+				if (fileName.EndsWith(PatternFileExtension, StringComparison.CurrentCultureIgnoreCase))
+				{
+					// Abre el archivo
+					MainController.OpenWindow(new PatternsFile.PatternFileViewModel(this, fileName));
+					// indica que ha podido abrir el archivo
+					open = true;
+				}
+			}
+			// Devuelve el valor que indica si se ha abierto
+			return open;
+	}
+
 
 	/// <summary>
 	///		Ejecuta el script de un archivo o una carpeta
 	/// </summary>
-	private void ExecuteFolderFile(object parameter)
+	private void ExecuteFolderFile(object? parameter)
 	{
 		if (parameter is not null && parameter is string fileName && !string.IsNullOrWhiteSpace(fileName))
 		{
