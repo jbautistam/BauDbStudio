@@ -52,6 +52,9 @@ public class ToDoManagerController : ViewModel.Controllers.IToDoManagerControlle
 							// Añade la ventana a la vista
 							WindowNotes.Add(view);
 					break;
+				case ViewModel.Appointments.AppointmentViewModel viewModel:
+						result = TaskManagerPlugin.AppViewsController.OpenDialog(new Views.Appointments.AppointmentView(viewModel));
+					break;
 			}
 			// Devuelve el resultado
 			return result;

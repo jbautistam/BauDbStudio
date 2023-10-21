@@ -19,4 +19,9 @@ public partial class AppointmentsPane : UserControl
 	///		ViewModel del calendario
 	/// </summary>
 	public CalendarViewModel ViewModel { get; }
+
+	private void lswAppointments_SelectionChanged(object sender, SelectionChangedEventArgs e)
+	{
+
+    }
 }

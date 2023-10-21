@@ -13,17 +13,14 @@ public class AppointmentsManager
 	/// <summary>
 	///		Carga las citas
 	/// </summary>
-	public void Load()
-	{
-		Appointments = new Repository.AppointmentRepository().Load(GetFileName(Manager.Folder));
-	}
+	public Models.AppointmentsRootModel Load() => new Repository.AppointmentRepository().Load(GetFileName(Manager.Folder));
 
 	/// <summary>
 	///		Graba las citas
 	/// </summary>
-	public void Save()
+	public void Save(Models.AppointmentsRootModel appointmentsRoot)
 	{
-		new Repository.AppointmentRepository().Save(GetFileName(Manager.Folder), Appointments);
+		new Repository.AppointmentRepository().Save(GetFileName(Manager.Folder), appointmentsRoot);
 	}
 
 	/// <summary>
@@ -35,9 +32,4 @@ public class AppointmentsManager
 	///		Manager
 	/// </summary>
 	public ToDoManager Manager { get; }
-
-	/// <summary>
-	///		Notas
-	/// </summary>
-	public Models.AppointmentsRootModel Appointments { get; private set; } = new();
 }

@@ -35,6 +35,7 @@ public class ToDoManagerViewModel : BauMvvm.ViewModels.BaseObservableObject
 	public void Load(string path)
 	{
 		ToDoManager.Load(path);
+		CalendarViewModel.Load();
 	}
 
 	/// <summary>

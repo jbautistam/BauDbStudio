@@ -48,7 +48,7 @@ internal class AppointmentRepository
 
 			// Carga los datos
 			appointment.Id = rootML.Attributes[TagId].Value.TrimIgnoreNull();
-			appointment.Header = rootML.Nodes[TagHeader].Value.TrimIgnoreNull();
+			appointment.Header = rootML.Attributes[TagHeader].Value.TrimIgnoreNull();
 			appointment.Description = rootML.Nodes[TagDescription].Value.TrimIgnoreNull();
 			appointment.Notes = rootML.Nodes[TagNotes].Value.TrimIgnoreNull();
 			appointment.CreatedAt = rootML.Attributes[TagCreatedAt].Value.GetDateTime(DateTime.UtcNow);

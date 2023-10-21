@@ -71,6 +71,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Update="Views\Appointments\AppointmentView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
     <Page Update="Views\TodoFileView.xaml">
       <SubType>Designer</SubType>
     </Page>

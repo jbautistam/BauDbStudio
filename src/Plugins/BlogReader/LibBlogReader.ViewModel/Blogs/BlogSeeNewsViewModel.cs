@@ -697,10 +697,7 @@ public class BlogSeeNewsViewModel : BaseObservableObject, PluginsStudio.ViewMode
 	/// <summary>
 	///		Cabecera
 	/// </summary>
-	public string Header 
-	{
-		get { return "News"; }
-	}
+	public string Header => "News";
 
 	/// <summary>
 	///		Id de la ficha
@@ -750,7 +747,7 @@ public class BlogSeeNewsViewModel : BaseObservableObject, PluginsStudio.ViewMode
 	/// <summary>
 	///		Entrada seleccionada
 	/// </summary>
-	public BlogEntryViewModel SelectedEntry
+	public BlogEntryViewModel? SelectedEntry
 	{
 		get { return _selectedEntry; }
 		set { CheckObject(ref _selectedEntry, value); }

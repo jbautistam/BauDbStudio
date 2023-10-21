@@ -88,6 +88,7 @@ public class ToDoManagerPlugin : IPlugin
 	/// </summary>
 	public List<PaneModel> GetPanes()
 	{
+		#if DEBUG
 		return new List<PaneModel>
 						{
 							new PaneModel
@@ -98,6 +99,9 @@ public class ToDoManagerPlugin : IPlugin
 										View = new Views.Appointments.AppointmentsPane(MainViewModel.CalendarViewModel)
 									}
 						};
+		#else
+		return new List<PaneModel>();
+		#endif
 	}
 
 	/// <summary>

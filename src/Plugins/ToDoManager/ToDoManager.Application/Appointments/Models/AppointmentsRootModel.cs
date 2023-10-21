@@ -24,6 +24,14 @@ public class AppointmentsRootModel
 	}
 
 	/// <summary>
+	///		Ordena las <see cref="AppointmentModel"/>
+	/// </summary>
+	public void Sort()
+	{
+		Appointments.Sort((first, second) => first.DueAt.CompareTo(second.DueAt));
+	}
+
+	/// <summary>
 	///		Lista de <see cref="Appointments"/>
 	/// </summary>
 	public List<AppointmentModel> Appointments { get; } = new();

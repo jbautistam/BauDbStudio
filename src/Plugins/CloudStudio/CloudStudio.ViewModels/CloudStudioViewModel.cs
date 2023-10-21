@@ -76,7 +76,7 @@ public class CloudStudioViewModel : BaseObservableObject
 	/// <summary>
 	///		Solución
 	/// </summary>
-	public SolutionModel Solution { get; private set; } = default!
+	public SolutionModel Solution { get; private set; } = default!;
 
 	/// <summary>
 	///		Manager de solución
@@ -91,7 +91,7 @@ public class CloudStudioViewModel : BaseObservableObject
 	/// <summary>
 	///		Directorio de datos
 	/// </summary>
-	public string PathData { get; private set; } = default!
+	public string PathData { get; private set; } = default!;
 
 	/// <summary>
 	///		Título de la ventana
