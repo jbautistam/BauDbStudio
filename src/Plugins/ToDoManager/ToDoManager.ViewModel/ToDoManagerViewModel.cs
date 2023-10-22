@@ -49,7 +49,7 @@ public class ToDoManagerViewModel : BauMvvm.ViewModels.BaseObservableObject
 			{
 				if (fileName.EndsWith(ToDoFileExtension, StringComparison.CurrentCultureIgnoreCase))
 				{
-					Reader.ToDoFileViewModel viewModel = new(this, fileName);
+					ToDo.ToDoFileViewModel viewModel = new(this, fileName);
 
 						// Carga el archivo
 						if (viewModel.LoadFile())

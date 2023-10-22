@@ -23,8 +23,8 @@ public class ToDoManagerController : ViewModel.Controllers.IToDoManagerControlle
 		// Abre la ventana
 		switch (detailsViewModel)
 		{
-			case ViewModel.Reader.ToDoFileViewModel viewModel:
-					TaskManagerPlugin.AppViewsController.OpenDocument(new Views.TodoFileView(viewModel), viewModel);
+			case ViewModel.ToDo.ToDoFileViewModel viewModel:
+					TaskManagerPlugin.AppViewsController.OpenDocument(new Views.ToDos.TodoFileView(viewModel), viewModel);
 				break;
 		}
 		// Devuelve el valor predeterminado
@@ -51,6 +51,9 @@ public class ToDoManagerController : ViewModel.Controllers.IToDoManagerControlle
 					break;
 				case ViewModel.Appointments.AppointmentViewModel viewModel:
 						result = TaskManagerPlugin.AppViewsController.OpenDialog(new Views.Appointments.AppointmentView(viewModel));
+					break;
+				case ViewModel.ToDo.ToDoTaskViewModel viewModel:
+						result = TaskManagerPlugin.AppViewsController.OpenDialog(new Views.ToDos.TaskView(viewModel));
 					break;
 			}
 			// Devuelve el resultado

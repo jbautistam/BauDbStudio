@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows.Data;
+﻿using System.Windows.Data;
 
 namespace Bau.DbStudio.Converters;
 
@@ -26,7 +25,7 @@ public class FileNameIconConverter : IValueConverter
 	/// <summary>
 	///		Obtiene la imagen asociada a un icono
 	/// </summary>
-	private object GetIcon(string fileName)
+	private object? GetIcon(string fileName)
 	{
 		string icon = GetUriApplicationImage("File.png");
 
@@ -75,10 +74,7 @@ public class FileNameIconConverter : IValueConverter
 	/// <summary>
 	///		Obtiene la URL de carga del icono desde un recurso de la aplicación
 	/// </summary>
-	private string GetUriApplicationImage(string icon)
-	{
-		return $"pack://application:,,,/BauDbStudio;component/Resources/Images/{icon}";
-	}
+	private string GetUriApplicationImage(string icon) => $"pack://application:,,,/BauDbStudio;component/Resources/Images/{icon}";
 
 	/// <summary>
 	///		Obtiene la URL de carga del icono desde un recurso de un plugin.

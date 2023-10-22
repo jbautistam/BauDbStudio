@@ -8,21 +8,13 @@ public class ToDoFileManager
 	/// <summary>
 	///		Carga los datos de un archivo
 	/// </summary>
-	public void Load(string fileName)
-	{
-		File = new Repository.ToDoRepository().Load(fileName);
-	}
+	public Models.ToDoFileModel Load(string fileName) => new Repository.ToDoRepository().Load(fileName);
 
 	/// <summary>
 	///		Graba el archivo
 	/// </summary>
-	public void Save(string fileName)
+	public void Save(string fileName, Models.ToDoFileModel file)
 	{
-		new Repository.ToDoRepository().Save(fileName, File);
+		new Repository.ToDoRepository().Save(fileName, file);
 	}
-
-	/// <summary>
-	///		Archivo con los elementos de tarea
-	/// </summary>
-	public Models.FileModel File { get; private set; } = new();
 }

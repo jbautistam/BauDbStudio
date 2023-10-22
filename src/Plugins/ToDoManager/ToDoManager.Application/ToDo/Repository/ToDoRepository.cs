@@ -11,25 +11,25 @@ internal class ToDoRepository
 {
 	// Constantes privadas
 	private const string TagRoot = "BauToDo";
-	private const string TagFolder = "Folder";
+	private const string TagId = "Id";
+	private const string TagTask = "Task";
 	private const string TagName = "Name";
 	private const string TagDescription = "Description";
-	private const string TagId = "Id";
-	private const string TagCreatedAt = "CreatedAt";
-	private const string TagGroup = "Group";
+	private const string TagStatus = "Status";
+	private const string TagPriority = "Priority";
+	private const string TagMoskow = "Moskow";
 	private const string TagNotes = "Notes";
-	private const string TagPending = "Pending";
-	private const string TagInProgress = "InProgress";
-	private const string TagDone = "Done";
-	private const string TagDiscard = "Discard";
-	private const string TagTask = "Task";
+	private const string TagTag = "Tag";
+	private const string TagCreatedAt = "CreatedAt";
+	private const string TagDueAt = "DueAt";
+	private const string TagFinishedAt = "FinishedAt";
 
 	/// <summary>
 	///		Carga los datos de un archivo
 	/// </summary>
-	internal FileModel Load(string fileName)
+	internal ToDoFileModel Load(string fileName)
 	{
-		FileModel file = new();
+		ToDoFileModel file = new();
 		MLFile fileML = new LibMarkupLanguage.Services.XML.XMLParser().Load(fileName);
 
 			// Carga los datos
@@ -39,97 +39,15 @@ internal class ToDoRepository
 						foreach (MLNode nodeML in rootML.Nodes)
 							switch (nodeML.Name)
 							{
-								case TagFolder:
-										LoadFolders(file.Root, nodeML);
+								case TagTask:
+										file.Tasks.Add(LoadTask(nodeML));
 									break;
-								case TagGroup:
-										file.Root.Groups.Add(LoadGroup(nodeML));
+								case TagTag:
+										file.Tags.Add(LoadTag(nodeML));
 									break;
 							}
 			// Devuelve el archivo leido
 			return file;
-	}
-
-	/// <summary>
-	///		Carga los datos de una carpeta
-	/// </summary>
-	private void LoadFolders(FolderModel parent, MLNode rootML)
-	{
-		foreach (MLNode nodeML in rootML.Nodes)
-			switch (nodeML.Name)
-			{
-				case TagFolder:
-						parent.Folders.Add(LoadFolder(nodeML));
-					break;
-				case TagGroup:
-						parent.Groups.Add(LoadGroup(nodeML));
-					break;
-			}
-	}
-
-	/// <summary>
-	///		Carga los datos de una carpeta
-	/// </summary>
-	private FolderModel LoadFolder(MLNode rootML)
-	{
-		FolderModel folder = new();
-
-			// Asigna las propiedades
-			folder.GlobalId = rootML.Attributes[TagId].Value.TrimIgnoreNull();
-			folder.Name = rootML.Attributes[TagName].Value.TrimIgnoreNull();
-			// Carga los hijos
-			LoadFolders(folder, rootML);
-			// Devuelve la carpeta cargada
-			return folder;
-	}
-
-	/// <summary>
-	///		Carga los datos de un grupo
-	/// </summary>
-	private GroupModel LoadGroup(MLNode rootML)
-	{
-		GroupModel group = new();
-
-			// Carga los datos del grupo
-			foreach (MLNode nodeML in rootML.Nodes)
-				switch (nodeML.Name)
-				{
-					case TagName:
-							group.Name = nodeML.Value.TrimIgnoreNull();
-						break;
-					case TagDescription:
-							group.Description = nodeML.Value.TrimIgnoreNull();
-						break;
-					case TagPending:
-							group.Pending.AddRange(LoadTasks(nodeML));
-						break;
-					case TagInProgress:
-							group.InProgress.AddRange(LoadTasks(nodeML));
-						break;
-					case TagDone:
-							group.Done.AddRange(LoadTasks(nodeML));
-						break;
-					case TagDiscard:
-							group.Discard.AddRange(LoadTasks(nodeML));
-						break;
-				}
-			// Devuelve el grupo
-			return group;
-	}
-
-	/// <summary>
-	///		Carga la colección de tareas
-	/// </summary>
-	private TaskModelCollection LoadTasks(MLNode rootML)
-	{
-		TaskModelCollection tasks = new();
-
-			// Carga los elementos
-			foreach (MLNode nodeML in rootML.Nodes)
-				if (nodeML.Name == TagTask)
-					tasks.Add(LoadTask(nodeML));
-			// Devuelve la colección de elementos
-			return tasks;
 	}
 
 	/// <summary>
@@ -144,95 +62,89 @@ internal class ToDoRepository
 			task.Name = rootML.Attributes[TagName].Value.TrimIgnoreNull();
 			task.Description = rootML.Nodes[TagDescription].Value.TrimIgnoreNull();
 			task.Notes = rootML.Nodes[TagNotes].Value.TrimIgnoreNull();
+			task.Status = rootML.Attributes[TagStatus].Value.GetEnum(TaskModel.StatusType.Planned);
+			task.Priority = rootML.Attributes[TagPriority].Value.GetEnum(TaskModel.PriorityType.Normal);
+			task.Moskow = rootML.Attributes[TagMoskow].Value.GetEnum(TaskModel.MoskowType.CouldHave);
 			task.CreatedAt = rootML.Attributes[TagCreatedAt].Value.GetDateTime(DateTime.Now);
+			task.DueAt = rootML.Attributes[TagDueAt].Value.GetDateTime();
+			task.FinishedAt = rootML.Attributes[TagFinishedAt].Value.GetDateTime();
+			// Carga los Id de etiquetas
+			foreach (MLNode nodeML in rootML.Nodes)
+				if (nodeML.Name == TagTag)
+					task.TagsId.Add(nodeML.Attributes[TagId].Value.TrimIgnoreNull());
 			// Devuelve la entrada
 			return task;
 	}
 
 	/// <summary>
+	///		Carga una etiqueta
+	/// </summary>
+	private TagModel LoadTag(MLNode rootML)
+	{
+		return new TagModel
+						{
+							GlobalId = rootML.Attributes[TagId].Value.TrimIgnoreNull(),
+							Name = rootML.Attributes[TagName].Value.TrimIgnoreNull()
+						};
+	}
+
+	/// <summary>
 	///		Graba los datos en un archivo
 	/// </summary>
-	internal void Save(string fileName, FileModel file)
+	internal void Save(string fileName, ToDoFileModel file)
 	{
 		MLFile fileML = new MLFile();
 		MLNode rootML = fileML.Nodes.Add(TagRoot);
 
-			// Añade las carpetas
-			foreach (FolderModel folder in file.Root.Folders)
-				rootML.Nodes.Add(GetXmlFolder(folder));
-			// Añade los grupos
-			foreach (GroupModel group in file.Root.Groups)
-				rootML.Nodes.Add(GetXmlGroup(group));
+			// Añade las tareas
+			foreach (TaskModel task in file.Tasks)
+				rootML.Nodes.Add(GetXmlTask(task));
+			// Añade las etiquetas
+			foreach (TagModel tag in file.Tags)
+				rootML.Nodes.Add(GetXmlTag(tag));
 			// Graba el archivo
 			new LibMarkupLanguage.Services.XML.XMLWriter().Save(fileName, fileML);
 	}
 
 	/// <summary>
-	///		Obtiene los nodos de una carpeta
-	/// </summary>
-	private MLNode GetXmlFolder(FolderModel folder)
-	{
-		MLNode rootML = new(TagFolder);
-
-			// Añade los datos de la carpeta
-			rootML.Attributes.Add(TagId, folder.GlobalId);
-			rootML.Attributes.Add(TagName, folder.Name);
-			// Crea los nodos de las carpetas hija
-			foreach (FolderModel child in folder.Folders)
-				rootML.Nodes.Add(GetXmlFolder(child));
-			// Añade los grupos
-			foreach (GroupModel group in folder.Groups)
-				rootML.Nodes.Add(GetXmlGroup(group));
-			// Devuelve el nodo
-			return rootML;
-	}
-
-	/// <summary>
-	///		Obtiene los datos de un nodo de grupo
-	/// </summary>
-	private MLNode GetXmlGroup(GroupModel group)
-	{
-		MLNode rootML = new(TagGroup);
-
-			// Añade los nodos
-			rootML.Nodes.Add(TagName, group.Name);
-			rootML.Nodes.Add(TagDescription, group.Description);
-			// Añade los grupos
-			rootML.Nodes.Add(GetXmlTasks(TagPending, group.Pending));
-			rootML.Nodes.Add(GetXmlTasks(TagInProgress, group.InProgress));
-			rootML.Nodes.Add(GetXmlTasks(TagDone, group.Done));
-			rootML.Nodes.Add(GetXmlTasks(TagDiscard, group.Discard));
-			// Devuelve los datos del nodo
-			return rootML;
-	}
-
-	/// <summary>
-	///		Obtiene los nodos de una serie de tareas
-	/// </summary>
-	private MLNode GetXmlTasks(string tag, TaskModelCollection items)
-	{
-		MLNode nodeML = new(tag);
-
-			// Añade los elementos
-			foreach (TaskModel item in items)
-				nodeML.Nodes.Add(GetXmlTask(item));
-			// Devuelve el nodo
-			return nodeML;
-	}
-
-	/// <summary>
 	///		Obtiene los datos del nodo de una tarea
 	/// </summary>
-	private MLNode GetXmlTask(TaskModel ToDo)
+	private MLNode GetXmlTask(TaskModel task)
 	{
 		MLNode rootML = new(TagTask);
 
 			// Añade las propiedades
-			rootML.Attributes.Add(TagId, ToDo.GlobalId);
-			rootML.Nodes.Add(TagName, ToDo.Name);
-			rootML.Nodes.Add(TagDescription, ToDo.Description);
-			rootML.Nodes.Add(TagNotes, ToDo.Notes);
-			rootML.Attributes.Add(TagCreatedAt, ToDo.CreatedAt);
+			rootML.Attributes.Add(TagId, task.GlobalId);
+			rootML.Attributes.Add(TagName, task.Name);
+			rootML.Nodes.Add(TagDescription, task.Description);
+			rootML.Nodes.Add(TagNotes, task.Notes);
+			rootML.Attributes.Add(TagStatus, task.Status.ToString());
+			rootML.Attributes.Add(TagPriority, task.Priority.ToString());
+			rootML.Attributes.Add(TagMoskow, task.Moskow.ToString());
+			rootML.Attributes.Add(TagCreatedAt, task.CreatedAt);
+			rootML.Attributes.Add(TagDueAt, task.DueAt);
+			rootML.Attributes.Add(TagFinishedAt, task.FinishedAt);
+			// Añade las etiquetas
+			foreach (string tagId in task.TagsId)
+			{
+				MLNode tagML = rootML.Nodes.Add(TagTag);
+
+					tagML.Attributes.Add(TagId, tagId);
+			}
+			// Devuelve el nodo
+			return rootML;
+	}
+
+	/// <summary>
+	///		Obtiene el XML de una etiqueta
+	/// </summary>
+	private MLNode GetXmlTag(TagModel tag)
+	{
+		MLNode rootML = new(TagTag);
+
+			// Añade los atributos
+			rootML.Attributes.Add(TagId, tag.GlobalId);
+			rootML.Attributes.Add(TagName, tag.Name);
 			// Devuelve el nodo
 			return rootML;
 	}

@@ -40,7 +40,7 @@
 			<Setter Property="HorizontalContentAlignment" Value="Left" />
 			<Setter Property="VerticalContentAlignment" Value="Top" />
 		</Style>
-
+	
 		<!-- Estilo de los textBox -->
 		<Style TargetType="TextBox">
 			<Setter Property="Foreground" Value="Black" />
@@ -77,13 +77,6 @@
 			<Setter Property="FontWeight" Value="Normal" />
 			<Setter Property="Margin" Value="5" />
 		</Style>
-
-		<!--
-	<Style TargetType="xctk:IntegerUpDown">
-		<Setter Property="FontWeight" Value="Normal" />
-		<Setter Property="Margin" Value="2" />
-	</Style>
--->
 
 		<Style TargetType="TreeViewItem">
 			<Style.Resources>

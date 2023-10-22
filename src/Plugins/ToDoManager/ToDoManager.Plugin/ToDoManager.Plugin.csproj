@@ -60,7 +60,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Views\TodoFileView.xaml.cs">
+    <Compile Update="Views\ToDos\TodoFileView.xaml.cs">
       <DependentUpon>TodoFileView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -69,8 +69,11 @@
     <Page Update="Views\Appointments\AppointmentView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
-    <Page Update="Views\TodoFileView.xaml">
+    <Page Update="Views\ToDos\TodoFileView.xaml">
       <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\ToDos\TaskView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
   </ItemGroup>
 
