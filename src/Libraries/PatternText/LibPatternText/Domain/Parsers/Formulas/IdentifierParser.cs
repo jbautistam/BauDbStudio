@@ -32,11 +32,12 @@ internal class IdentifierParser
 		(bool header, int? field, string format) = SplitIdentifierParts(content);
 
 			if (field is null)
-				throw new Exceptions.PatternTextException($"Can't parse field index at {content}");
+				throw new Exceptions.PatternTextException($"Can't parse field index at {content}. Row: {(row + 1).ToString()}");
 			else if (field > reader.RecordValues.Count)
-				throw new Exceptions.PatternTextException($"Can't find the value '{content}'");
+				throw new Exceptions.PatternTextException($"Can't find the value '{content}'. Row: {(row + 1).ToString()}");
 			else if (field < 0 && reader.Columns.Count - (field ?? 0) < 0)
-				throw new Exceptions.PatternTextException($"Can't find a value with inndex '{content}'");
+				throw new Exceptions.PatternTextException($"Can't find a value with inndex '{content}'. Row: {(row + 1).ToString()}");
+			else
 			{
 				if (header)
 				{

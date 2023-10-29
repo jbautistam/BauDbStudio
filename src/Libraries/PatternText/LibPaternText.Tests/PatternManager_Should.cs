@@ -182,6 +182,7 @@ public class PatternManager_Should
 			// Comprueba los resultados
 			Normalize(converted).Should().Be(Normalize(result));
 	}
+
 	/// <summary>
 	///		Comprueba la conversión de textos
 	/// </summary>

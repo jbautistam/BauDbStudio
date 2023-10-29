@@ -81,7 +81,10 @@ public class WebViewModel : BaseObservableObject, Base.Interfaces.IDetailViewMod
 	private void OpenExplorer()
 	{
 		if (Uri.TryCreate(Url, UriKind.Absolute, out Uri? url))
+		{
 			MainViewModel.PluginsStudioController.MainWindowController.OpenWindowsWebBrowser(url);
+			MainViewModel.PluginsStudioController.MainWindowController.CloseWindow(TabId);
+		}
 	}
 
 	/// <summary>

@@ -45,7 +45,7 @@
 					</ListView.ItemsPanel>
 				</ListView>
 				<Label Grid.Row="1" Grid.Column="0" Margin="5" Content="Nombre de archivo:"/>
-				<TextBox Grid.Row="1" Grid.Column="1" 
+				<TextBox x:Name="txtFileName" Grid.Row="1" Grid.Column="1" GotFocus="txtFileName_GotFocus"
 						Text="{Binding Path=FileName, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
 				<Label Grid.Row="2" Grid.Column="0" Margin="5" Content="Codificación:"/>
 				<ComboBox Grid.Row="2" Grid.Column="1" Margin="5" 
