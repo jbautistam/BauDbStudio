@@ -47,6 +47,8 @@ public class ToDoFileViewModel : BaseObservableObject, PluginsStudio.ViewModels.
 				TasksPlanned = LoadListTasks(ToDoFile, TaskModel.StatusType.Planned);
 				TasksDoing = LoadListTasks(ToDoFile, TaskModel.StatusType.Doing);
 				TasksDone = LoadListTasks(ToDoFile, TaskModel.StatusType.Done);
+				// Ordena las listas
+				SetOrders();
 				// Indica que se ha cargado el archivo
 				loaded = true;
 			}
@@ -66,8 +68,8 @@ public class ToDoFileViewModel : BaseObservableObject, PluginsStudio.ViewModels.
 	{
 		ControlItemCollectionViewModel<ToDoTaskItemViewModel> tasksViewModel = new();
 
-			// Ordena las tareas por fecha de planificación
-			toDoFile.Tasks.SortByDueAt();
+			// Ordena las tareas por orden
+			toDoFile.Tasks.SortByOrder();
 			// Añade las tareas del tipo solicitado
 			foreach (TaskModel task in toDoFile.Tasks)
 				if (task.Status == status)
@@ -164,8 +166,12 @@ public class ToDoFileViewModel : BaseObservableObject, PluginsStudio.ViewModels.
 				// Elimina la tarea anterior de la lista
 				if (toDoTaskItemViewModel is not null)
 					GetTasksList(oldStatus).Remove(toDoTaskItemViewModel);
+				// Asigna el orden
+				if (toDoTaskItemViewModel is null || oldStatus != taskViewModel.Task.Status)
+					taskViewModel.Task.Order = GetTasksList(taskViewModel.Task.Status).Count;
 				// Añade la nueva tarea
-				GetTasksList(taskViewModel.Task.Status).Add(new ToDoTaskItemViewModel(this, taskViewModel.Task));
+				GetTasksList(taskViewModel.Task.Status).Insert(taskViewModel.Task.Order, new ToDoTaskItemViewModel(this, taskViewModel.Task));
+				SetOrders();
 				// Indica que se ha modificado
 				IsUpdated = true;
 			}
@@ -195,8 +201,43 @@ public class ToDoFileViewModel : BaseObservableObject, PluginsStudio.ViewModels.
 			// Añade la tarea a la nueva lista
 			task.Status = newStatus;
 			GetTasksList(newStatus).Add(new ToDoTaskItemViewModel(this, task));
+			// Reordena las tareas
+			SetOrders();
 			// Indica que ha habido modificaciones
 			IsUpdated = true;
+	}
+
+	/// <summary>
+	///		Reordena las tareas
+	/// </summary>
+	private void SetOrders()
+	{
+		SetOrder(TaskModel.StatusType.Planned);
+		SetOrder(TaskModel.StatusType.Doing);
+		SetOrder(TaskModel.StatusType.Done);
+	}
+
+	/// <summary>
+	///		Cambia el orden de las tareas de una lista
+	/// </summary>
+	private void SetOrder(TaskModel.StatusType status)
+	{
+		SetOrder(GetTasksList(status));
+	}
+
+	/// <summary>
+	///		Cambia el orden de las tareas de una lista
+	/// </summary>
+	private void SetOrder(ControlItemCollectionViewModel<ToDoTaskItemViewModel> list)
+	{
+		int order = 0;
+
+			// Cambia el orden de los elementos
+			foreach (ToDoTaskItemViewModel item in list)
+			{
+				item.Order = item.Task.Order = order++;
+				item.MaxOrder = list.Count - 1;
+			}
 	}
 
 	/// <summary>
@@ -235,6 +276,49 @@ public class ToDoFileViewModel : BaseObservableObject, PluginsStudio.ViewModels.
 				else
 					return TaskModel.StatusType.Doing;
 		}
+	}
+
+	/// <summary>
+	///		Modifica el orden
+	/// </summary>
+	internal void UpdateOrder(ToDoTaskItemViewModel toDoTaskItemViewModel, bool moveUp)
+	{
+		ControlItemCollectionViewModel<ToDoTaskItemViewModel> list = Clone(GetTasksList(toDoTaskItemViewModel.Task.Status));
+		ToDoTaskItemViewModel itemNew = list[GetTasksList(toDoTaskItemViewModel.Task.Status).IndexOf(toDoTaskItemViewModel)];
+
+			// Mueve el elemento
+			list.Move(itemNew, moveUp);
+			// Recarga la lista
+			switch (toDoTaskItemViewModel.Task.Status)
+			{
+				case TaskModel.StatusType.Planned:
+						TasksPlanned = Clone(list);
+					break;
+				case TaskModel.StatusType.Doing:
+						TasksDoing = Clone(list);
+					break;
+				case TaskModel.StatusType.Done:
+						TasksDone = Clone(list);
+					break;
+			}
+			// Cambia el orden
+			SetOrder(toDoTaskItemViewModel.Task.Status);
+			// Indica que se ha modificado
+			IsUpdated = true;
+	}
+
+	/// <summary>
+	///		Clona una lista
+	/// </summary>
+	private ControlItemCollectionViewModel<ToDoTaskItemViewModel> Clone(ControlItemCollectionViewModel<ToDoTaskItemViewModel> source)
+	{
+		ControlItemCollectionViewModel<ToDoTaskItemViewModel> list = new();
+
+			// Clona los objetos
+			foreach (ToDoTaskItemViewModel item in source)
+				list.Add(new ToDoTaskItemViewModel(this, item.Task));
+			// Devuelve la lista
+			return list;
 	}
 
 	/// <summary>

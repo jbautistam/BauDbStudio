@@ -20,6 +20,7 @@ internal class ToDoRepository
 	private const string TagMoskow = "Moskow";
 	private const string TagNotes = "Notes";
 	private const string TagTag = "Tag";
+	private const string TagOrder = "Order";
 	private const string TagCreatedAt = "CreatedAt";
 	private const string TagDueAt = "DueAt";
 	private const string TagFinishedAt = "FinishedAt";
@@ -46,6 +47,8 @@ internal class ToDoRepository
 										file.Tags.Add(LoadTag(nodeML));
 									break;
 							}
+			// Reordena las tareas
+			file.Tasks.SetOrder();
 			// Devuelve el archivo leido
 			return file;
 	}
@@ -65,6 +68,7 @@ internal class ToDoRepository
 			task.Status = rootML.Attributes[TagStatus].Value.GetEnum(TaskModel.StatusType.Planned);
 			task.Priority = rootML.Attributes[TagPriority].Value.GetEnum(TaskModel.PriorityType.Normal);
 			task.Moskow = rootML.Attributes[TagMoskow].Value.GetEnum(TaskModel.MoskowType.CouldHave);
+			task.Order = rootML.Attributes[TagOrder].Value.GetInt(0);
 			task.CreatedAt = rootML.Attributes[TagCreatedAt].Value.GetDateTime(DateTime.Now);
 			task.DueAt = rootML.Attributes[TagDueAt].Value.GetDateTime();
 			task.FinishedAt = rootML.Attributes[TagFinishedAt].Value.GetDateTime();
@@ -121,6 +125,7 @@ internal class ToDoRepository
 			rootML.Attributes.Add(TagStatus, task.Status.ToString());
 			rootML.Attributes.Add(TagPriority, task.Priority.ToString());
 			rootML.Attributes.Add(TagMoskow, task.Moskow.ToString());
+			rootML.Attributes.Add(TagOrder, task.Order);
 			rootML.Attributes.Add(TagCreatedAt, task.CreatedAt);
 			rootML.Attributes.Add(TagDueAt, task.DueAt);
 			rootML.Attributes.Add(TagFinishedAt, task.FinishedAt);

@@ -26,10 +26,10 @@
 									<ColumnDefinition Width="*"/>
 									<ColumnDefinition Width="Auto"/>
 								</Grid.ColumnDefinitions>
-								<Label Margin="2" Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" 
+								<Label Margin="2" Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Width="10"
 										Background="{Binding Path=Priority,Converter={StaticResource PriorityToColorConverter}}" />
-								<TextBlock Grid.Row="0" Grid.Column="1" Margin="5" FontSize="16" Text="{Binding Path=Name}"/>
-									<StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2">
+								<TextBlock Grid.Row="0" Grid.Column="1" FontSize="16" FontWeight="Bold" Margin="3" Text="{Binding Path=Name}"/>
+								<StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2">
 									<Button ToolTip="Edit" Command="{Binding Path=EditTaskCommand}" Background="Transparent" BorderBrush="Transparent">
 										<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Properties.gif" />
 									</Button>
@@ -45,8 +45,28 @@
 										<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
 									</Button>
 								</StackPanel>
-								<TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="5" Text="{Binding Path=Description}"/>
-								<TextBlock Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="5" Text="{Binding Path=Moskow}" TextAlignment="Right"/>
+								<Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Width="450" >
+									<Grid.RowDefinitions>
+										<RowDefinition Height="Auto"/>
+										<RowDefinition Height="Auto"/>
+									</Grid.RowDefinitions>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="Auto"/>
+										<ColumnDefinition Width="*"/>
+									</Grid.ColumnDefinitions>
+									<TextBlock Margin="10" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" TextWrapping="Wrap" Text="{Binding Path=DescriptionShort}"/>
+									<StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
+										<Button ToolTip="Move up" Command="{Binding Path=MoveTaskUpCommand}" Background="Transparent" BorderBrush="Transparent"
+											Visibility="{Binding Path=CanMoveUp,Converter={StaticResource BoolToVisibilityConverter}}">
+											<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/ArrowUp.png" />
+										</Button>
+										<Button ToolTip="Move down" Command="{Binding Path=MoveTaskDownCommand}" Background="Transparent" BorderBrush="Transparent"
+											Visibility="{Binding Path=CanMoveDown,Converter={StaticResource BoolToVisibilityConverter}}">
+											<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/ArrowDown.png" />
+										</Button>
+									</StackPanel>
+									<TextBlock Margin="5" Grid.Row="1" Grid.Column="1" Text="{Binding Path=Moskow}" TextAlignment="Right"/>
+								</Grid>
 							</Grid>
 						</Border>
 					</DataTemplate>

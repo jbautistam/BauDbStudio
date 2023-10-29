@@ -1,17 +1,20 @@
-﻿using Bau.Libraries.BauMvvm.ViewModels;
+﻿using Bau.Libraries.LibHelper.Extensors;
+using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.BauMvvm.ViewModels.Media;
 using Bau.Libraries.ToDoManager.Application.ToDo.Models;
+using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
 
 namespace Bau.Libraries.ToDoManager.ViewModel.ToDo;
 
 /// <summary>
 ///		ViewModel de un <see cref="TaskModel"/>
 /// </summary>
-public class ToDoTaskItemViewModel : BauMvvm.ViewModels.Forms.ControlItems.ControlItemViewModel
+public class ToDoTaskItemViewModel : ControlItemViewModel
 {
 	// Variables privadas
-	private string _name = default!, _description = default!;
-	private bool _canMoveNext, _canMovePrevious;
+	private string _name = default!, _description = default!, _descriptionShort = default!;
+	private int _order, _maxOrder;
+	private bool _canMoveNext, _canMovePrevious, _canMoveUp, _canMoveDown;
 	private TaskModel.PriorityType _priority = TaskModel.PriorityType.Normal;
 	private TaskModel.MoskowType _moskow = TaskModel.MoskowType.CouldHave;
 
@@ -28,6 +31,12 @@ public class ToDoTaskItemViewModel : BauMvvm.ViewModels.Forms.ControlItems.Contr
 		DeleteTaskCommand = new BaseCommand(_ => DeleteTask());
 		MoveTaskNextCommand = new BaseCommand(_ => MoveTask(true), _ => Task.Status != TaskModel.StatusType.Done);
 		MoveTaskPreviousCommand = new BaseCommand(_ => MoveTask(false), _ => Task.Status != TaskModel.StatusType.Planned);
+		MoveTaskUpCommand = new BaseCommand(_ => UpdateOrder(true), _ => CanUpdateOrder(true))
+									.AddListener(this, nameof(CanMoveDown))
+									.AddListener(this, nameof(CanMoveUp));
+		MoveTaskDownCommand = new BaseCommand(_ => UpdateOrder(false), _ => CanUpdateOrder(false))
+									.AddListener(this, nameof(CanMoveDown))
+									.AddListener(this, nameof(CanMoveUp));
 	}
 
 	/// <summary>
@@ -39,8 +48,11 @@ public class ToDoTaskItemViewModel : BauMvvm.ViewModels.Forms.ControlItems.Contr
 		Description = Task.Description;
 		Priority = Task.Priority;
 		Moskow = Task.Moskow;
+		Order = Task.Order;
 		CanMoveNext = Task.Status != TaskModel.StatusType.Done;
 		CanMovePrevious = Task.Status != TaskModel.StatusType.Planned;
+		CanMoveUp = CanUpdateOrder(true);
+		CanMoveDown = CanUpdateOrder(false);
 	}
 
 	/// <summary>
@@ -70,6 +82,25 @@ public class ToDoTaskItemViewModel : BauMvvm.ViewModels.Forms.ControlItems.Contr
 	}
 
 	/// <summary>
+	///		Modifica el orden
+	/// </summary>
+	private void UpdateOrder(bool moveUp)
+	{
+		ToDoFileViewModel.UpdateOrder(this, moveUp);
+	}
+	
+	/// <summary>
+	///		Indica si puede modificar el orden
+	/// </summary>
+	private bool CanUpdateOrder(bool moveUp)
+	{
+		if (moveUp)
+			return Task.Order > 0;
+		else
+			return Task.Order < MaxOrder;
+	}
+
+	/// <summary>
 	///		ViewModel del archivo
 	/// </summary>
 	public ToDoFileViewModel ToDoFileViewModel { get; }
@@ -94,7 +125,54 @@ public class ToDoTaskItemViewModel : BauMvvm.ViewModels.Forms.ControlItems.Contr
 	public string Description
 	{
 		get { return _description; }
-		set { CheckProperty(ref _description, value); }
+		set 
+		{ 
+			if (CheckProperty(ref _description, value))
+				DescriptionShort = value;
+		}
+	}
+
+	/// <summary>
+	///		Descripción corta de la tarea
+	/// </summary>
+	public string DescriptionShort
+	{
+		get { return _descriptionShort; }
+		set { CheckProperty(ref _descriptionShort, value.Left(750)); }
+	}
+
+	/// <summary>
+	///		Orden de la tarea
+	/// </summary>
+	public int Order
+	{
+		get { return _order; }
+		set 
+		{ 
+			// Cambia el valor de la propiedad
+			CheckProperty(ref _order, value);
+			// Cambia el valor que indica si se puede mover arriba o abajo
+			//? Aunque no haya cambiado el orden porque se puede haber añadido otro después
+			CanMoveUp = CanUpdateOrder(true);
+			CanMoveDown = CanUpdateOrder(false);
+		}
+	}
+
+	/// <summary>
+	///		Orden máximo de la lista
+	/// </summary>
+	public int MaxOrder
+	{
+		get { return _maxOrder; }
+		set 
+		{ 
+			// Cambia el valor de la propiedad
+			CheckProperty(ref _maxOrder, value);
+			// Cambia el valor que indica si se puede mover arriba o abajo
+			//? Aunque no haya cambiado el orden porque se puede haber añadido otro después
+			CanMoveUp = CanUpdateOrder(true);
+			CanMoveDown = CanUpdateOrder(false);
+		}
 	}
 
 	/// <summary>
@@ -134,6 +212,24 @@ public class ToDoTaskItemViewModel : BauMvvm.ViewModels.Forms.ControlItems.Contr
 	}
 
 	/// <summary>
+	///		Indica si se puede mover la tarea hacia arriba
+	/// </summary>
+	public bool CanMoveUp
+	{
+		get { return _canMoveUp;}
+		set { CheckProperty(ref _canMoveUp, value); }
+	}
+	
+	/// <summary>
+	///		Indica si se puede mover la tarea hacia abajo
+	/// </summary>
+	public bool CanMoveDown
+	{
+		get { return _canMoveDown;}
+		set { CheckProperty(ref _canMoveDown, value); }
+	}
+
+	/// <summary>
 	///		Comando para editar una tarea
 	/// </summary>
 	public BaseCommand EditTaskCommand { get; }
@@ -147,6 +243,16 @@ public class ToDoTaskItemViewModel : BauMvvm.ViewModels.Forms.ControlItems.Contr
 	///		Comando para mover una tarea al pool anterior
 	/// </summary>
 	public BaseCommand MoveTaskPreviousCommand { get; }
+
+	/// <summary>
+	///		Comando para mover arriba una tarea
+	/// </summary>
+	public BaseCommand MoveTaskUpCommand { get; }
+
+	/// <summary>
+	///		Comando para mover abajo una tarea
+	/// </summary>
+	public BaseCommand MoveTaskDownCommand { get; }
 
 	/// <summary>
 	///		Comando para borrar una tarea

@@ -31,9 +31,8 @@
 				<TextBox Grid.Row="0" Grid.Column="1" 
 						Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
 				<Label Grid.Row="1" Grid.Column="0" Margin="5" Content="Descripción:"/>
-				<TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Top" VerticalContentAlignment="Top" VerticalScrollBarVisibility="Auto" 
-						MinLines="4" MaxLines="5" MinHeight="90"
-						Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+				<TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource MultilineTextBox}"
+						Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"/>
 			</Grid>
 		</GroupBox>
 		<GroupBox Header="Definición" Grid.Row="1" Grid.Column="0">
@@ -136,8 +135,8 @@
 					</Grid.ColumnDefinitions>
 					<Label Grid.Row="0" Grid.Column="0" Margin="5" Content="Propiedades adicionales:"/>
 					<Label Grid.Row="0" Grid.Column="1" Margin="5" Content="Valores adicionales para la cadena de conexión. Formato Key=Value;Key=Value,..." Foreground="Red"/>
-					<TextBox Grid.Row="1" Grid.Column="1" Margin="5" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" 
-							AcceptsReturn="True" TextWrapping="Wrap" MinHeight="75" MaxHeight="75"
+					<TextBox Grid.Row="1" Grid.Column="1" 
+							Style="{StaticResource MultilineTextBox}"
 							Text="{Binding Path=AdditionalProperties,UpdateSourceTrigger=PropertyChanged}"/>
 				</Grid>
 			</Grid>

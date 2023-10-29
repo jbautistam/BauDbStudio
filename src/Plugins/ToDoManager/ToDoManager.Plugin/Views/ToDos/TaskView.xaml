@@ -6,14 +6,14 @@
         xmlns:local="clr-namespace:Bau.Libraries.ToDoManager.Plugin.Views.ToDos"
 		x:Class="Bau.Libraries.ToDoManager.Plugin.Views.ToDos.TaskView"
         mc:Ignorable="d"
-        Title="Task" Height="550" Width="900" ResizeMode="NoResize" ShowInTaskbar="False"
+        Title="Task" Height="500" Width="900" ResizeMode="NoResize" ShowInTaskbar="False"
 		xmlns:Behaviors="clr-namespace:Bau.Libraries.BauMvvm.Views.Converters;assembly=BauMvvm.Views"
 		Behaviors:FocusBehavior.FocusFirst="true">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
 		<GroupBox Grid.Row="0" Grid.Column="0" Header="Definition">
@@ -30,9 +30,9 @@
 				<TextBox Grid.Row="0" Grid.Column="1" 
 						Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
 				<Label Grid.Row="1" Grid.Column="0" Margin="5" Content="Description:"/>
-				<TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Top" VerticalContentAlignment="Top" VerticalScrollBarVisibility="Auto" 
-						MinLines="4" MaxLines="5"
-						Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+				<TextBox Grid.Row="1" Grid.Column="1" 
+						Style="{StaticResource MultilineTextBox}"
+						Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
 			</Grid>
 		</GroupBox>
 		<GroupBox Header="Properties" Grid.Row="1" Grid.Column="0">
@@ -70,8 +70,7 @@
 			</Grid>
 		</GroupBox>
 		<GroupBox Header="Notes" Grid.Row="2" Grid.Column="0">
-			<TextBox VerticalAlignment="Top" VerticalContentAlignment="Top" VerticalScrollBarVisibility="Auto" 
-					MinLines="4" MaxLines="5" MinHeight="90"
+			<TextBox Style="{StaticResource MultilineTextBox}"
 					Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
 		</GroupBox>
 		<StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">

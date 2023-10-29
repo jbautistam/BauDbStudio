@@ -75,6 +75,11 @@ public class TaskModel : LibDataStructures.Base.BaseModel
 	public string Notes { get; set; } = default!;
 
 	/// <summary>
+	///		Orden del elemento
+	/// </summary>
+	public int Order { get; set; }
+
+	/// <summary>
 	///		Fecha de creación
 	/// </summary>
 	public DateTime CreatedAt { get; set; } = DateTime.Now;
