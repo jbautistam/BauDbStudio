@@ -49,7 +49,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibJsonConversor", "..\..\L
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibParquetFiles", "..\..\Libraries\Formats\LibParquetFiles\src\LibParquetFiles.csproj", "{82D3B0AB-45B4-4DB1-B189-2E8AC267DDD2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibCsvFiles", "..\..\Libraries\Formats\LibCsvFiles\src\LibCsvFiles.csproj", "{038292F5-80D9-4A86-A172-DD6865A20BEB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibCsvFiles", "..\..\Libraries\Formats\LibCsvFiles\src\LibCsvFiles\LibCsvFiles.csproj", "{038292F5-80D9-4A86-A172-DD6865A20BEB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibExcelFiles", "..\..\Libraries\Formats\LibExcelFiles\src\LibExcelFiles.csproj", "{5880BC7F-26CC-4C09-818E-2BD2BBB71688}"
 EndProject
