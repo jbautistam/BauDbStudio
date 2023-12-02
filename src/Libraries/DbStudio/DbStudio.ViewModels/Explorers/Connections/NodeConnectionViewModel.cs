@@ -54,7 +54,7 @@ public class NodeConnectionViewModel : PluginNodeAsyncViewModel
 					nodes.Add(new PluginNodeMessageViewModel(TreeViewModel, this, "No se puede cargar el esquema de la conexión", 
 															 TreeConnectionsViewModel.IconType.Error.ToString()));
 					tree.SolutionViewModel.MainController.MainWindowController.Logger
-							.LogError(exception, "Error when load schema", exception);
+							.LogError(exception, "Error when load schema");
 				}
 			// Devuelve la colección de nodos
 			return nodes;

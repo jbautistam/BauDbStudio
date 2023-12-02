@@ -15,6 +15,7 @@ public class ConnectionViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogVi
 	private string _server = string.Empty, _user = string.Empty, _password = string.Empty, _database = string.Empty, _fileName = string.Empty;
 	private string _additionalProperties = string.Empty;
 	private bool _useIntegratedSecurity, _multipleActiveResultSets, _isServerConnection, _isOdbcConnection, _hasFileName, _isNew, _showAdditionalProperties;
+	private bool _hasInMemory, _inMemory, _hasPassword;
 	private int _timeoutExecuteScriptMinutes, _port;
 	private ComboViewModel _comboTypes = default!;
 
@@ -46,6 +47,7 @@ public class ConnectionViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogVi
 		User = Connection.Parameters[nameof(User)];
 		Password = Connection.Parameters[nameof(Password)];
 		Database = Connection.Parameters[nameof(Database)];
+		InMemory = Connection.Parameters[nameof(InMemory)].GetBool();
 		UseIntegratedSecurity = Connection.Parameters[nameof(UseIntegratedSecurity)].GetBool();
 		if (IsNew)
 			MultipleActiveResultSets = true;
@@ -74,6 +76,7 @@ public class ConnectionViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogVi
 		ComboTypes.AddItem((int) ConnectionModel.ConnectionType.SqLite, "SqLite");
 		ComboTypes.AddItem((int) ConnectionModel.ConnectionType.MySql, "MySql");
 		ComboTypes.AddItem((int) ConnectionModel.ConnectionType.PostgreSql, "Postgresql");
+		ComboTypes.AddItem((int) ConnectionModel.ConnectionType.DuckDb, "DuckDb");
 		// Selecciona el primer elemento
 		ComboTypes.SelectedItem = ComboTypes.Items[0];
 		// Asigna el manejador de eventos
@@ -87,9 +90,11 @@ public class ConnectionViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogVi
 														IsServerConnection = type == ConnectionModel.ConnectionType.SqlServer ||
 																			 type == ConnectionModel.ConnectionType.PostgreSql ||
 																			 type == ConnectionModel.ConnectionType.MySql;
-														HasFileName = type == ConnectionModel.ConnectionType.SqLite;
+														HasFileName = type == ConnectionModel.ConnectionType.SqLite || type == ConnectionModel.ConnectionType.DuckDb;
+														HasPassword = type == ConnectionModel.ConnectionType.SqLite;
+														HasInMemory = type == ConnectionModel.ConnectionType.DuckDb;
 														IsOdbcConnection = type == ConnectionModel.ConnectionType.Odbc || type == ConnectionModel.ConnectionType.Spark;
-														ShowAdditionalProperties = !IsOdbcConnection;
+														ShowAdditionalProperties = !IsOdbcConnection && type != ConnectionModel.ConnectionType.DuckDb;
 														// Muestra el puerto predeterminado
 														if (IsNew)
 															Port = GetDefaultPort(type);
@@ -150,7 +155,7 @@ public class ConnectionViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogVi
 			}
 			else if (HasFileName)
 			{
-				if (string.IsNullOrWhiteSpace(FileName))
+				if (string.IsNullOrWhiteSpace(FileName) && !InMemory)
 					SolutionViewModel.MainController.SystemController.ShowMessage("Introduzca el nombre de archivo");
 				else
 					validated = true;
@@ -177,6 +182,8 @@ public class ConnectionViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogVi
 			Connection.Name = Name;
 			Connection.Description = Description;
 			Connection.Type = (ConnectionModel.ConnectionType) (ComboTypes.SelectedId ?? 0);
+			// Asigna los parámetros
+			Connection.Parameters.Clear();
 			Connection.Parameters[nameof(Server)] = Server;
 			Connection.Parameters[nameof(Port)] = Port.ToString();
 			Connection.Parameters[nameof(User)] = User;
@@ -184,9 +191,14 @@ public class ConnectionViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogVi
 			Connection.Parameters[nameof(Database)] = Database;
 			Connection.Parameters[nameof(UseIntegratedSecurity)] = UseIntegratedSecurity.ToString();
 			Connection.Parameters[nameof(MultipleActiveResultSets)] = MultipleActiveResultSets.ToString();
-			Connection.Parameters[nameof(ConnectionString)] = ConnectionString;
-			Connection.Parameters[nameof(FileName)] = FileName;
-			Connection.Parameters[nameof(AdditionalProperties)] = AdditionalProperties;
+			if (IsOdbcConnection)
+				Connection.Parameters[nameof(ConnectionString)] = ConnectionString;
+			if (HasFileName)
+				Connection.Parameters[nameof(FileName)] = FileName;
+			if (ShowAdditionalProperties)
+				Connection.Parameters[nameof(AdditionalProperties)] = AdditionalProperties;
+			if (HasInMemory)
+				Connection.Parameters[nameof(InMemory)] = InMemory.ToString();
 			Connection.TimeoutExecuteScript = TimeSpan.FromMinutes(TimeoutExecuteScriptMinutes);
 			// Añade la conexión a la solución si es necesario
 			if (IsNew)
@@ -290,6 +302,24 @@ public class ConnectionViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogVi
 	}
 
 	/// <summary>
+	///		Indica si es un tipo de conexión que puede estar en memoria
+	/// </summary>
+	public bool HasInMemory
+	{
+		get { return _hasInMemory; }
+		set { CheckProperty(ref _hasInMemory, value); }
+	}
+
+	/// <summary>
+	///		Indica si es un tipo de conexión que puede tener contraseña
+	/// </summary>
+	public bool HasPassword
+	{
+		get { return _hasPassword; }
+		set { CheckProperty(ref _hasPassword, value); }
+	}
+
+	/// <summary>
 	///		Indica si se deben mostrar las propiedades adicionales
 	/// </summary>
 	public bool ShowAdditionalProperties
@@ -386,6 +416,15 @@ public class ConnectionViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogVi
 	{
 		get { return _fileName; }
 		set { CheckProperty(ref _fileName, value); }
+	}
+
+	/// <summary>
+	///		Indica si la conexión es en memoria
+	/// </summary>
+	public bool InMemory
+	{
+		get { return _inMemory; }
+		set { CheckProperty(ref _inMemory, value); }
 	}
 
 	/// <summary>

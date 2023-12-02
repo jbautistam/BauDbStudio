@@ -22,6 +22,11 @@ public class BlogReaderPlugin : IPlugin
 	}
 
 	/// <summary>
+	///		Obtiene la clave del plugin
+	/// </summary>
+	public string GetKey() => "BlogReader";
+
+	/// <summary>
 	///		Carga los datos del directorio
 	/// </summary>
 	public void Load(string path)

@@ -140,6 +140,9 @@ internal class ConnectionManager
 					case ConnectionModel.ConnectionType.PostgreSql:
 							provider = new LibDbProviders.PostgreSql.PostgreSqlProvider(new LibDbProviders.PostgreSql.PostgreSqlConnectionString(connection.Parameters.ToDictionary()));
 						break;
+					case ConnectionModel.ConnectionType.DuckDb:
+							provider = new LibDbProviders.DuckDb.DuckDbProvider(new LibDbProviders.DuckDb.DuckDbConnectionString(connection.Parameters.ToDictionary()));
+						break;
 					default:
 						throw new ArgumentOutOfRangeException($"Cant find provider for '{connection.Name}'");
 				}

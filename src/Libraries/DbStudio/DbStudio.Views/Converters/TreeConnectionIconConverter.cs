@@ -24,31 +24,21 @@ public class TreeConnectionIconConverter : IValueConverter
 	/// <summary>
 	///		Obtiene la imagen asociada a un icono
 	/// </summary>
-	private object GetIcon(TreeConnectionsViewModel.IconType icon)
+	private object? GetIcon(TreeConnectionsViewModel.IconType icon)
 	{
-		switch (icon)
-		{ 
-			case TreeConnectionsViewModel.IconType.Connection:
-				return "/DbStudio.Views;component/Resources/Images/Connection.png";
-			case TreeConnectionsViewModel.IconType.Schema:
-				return "/DbStudio.Views;component/Resources/Images/Schema.png";
-			case TreeConnectionsViewModel.IconType.Project:
-				return "/DbStudio.Views;component/Resources/Images/Project.png";
-			case TreeConnectionsViewModel.IconType.Table:
-				return "/DbStudio.Views;component/Resources/Images/Table.png";
-			case TreeConnectionsViewModel.IconType.View:
-				return "/DbStudio.Views;component/Resources/Images/View.png";
-			case TreeConnectionsViewModel.IconType.Key:
-				return "/DbStudio.Views;component/Resources/Images/Key.png";
-			case TreeConnectionsViewModel.IconType.Field:
-				return "/DbStudio.Views;component/Resources/Images/Field.png";
-			case TreeConnectionsViewModel.IconType.Error:
-				return "/DbStudio.Views;component/Resources/Images/DataError.png";
-			case TreeConnectionsViewModel.IconType.Loading:
-				return "/DbStudio.Views;component/Resources/Images/Loading.png";
-			default:
-				return null;
-		}
+		return icon switch
+				{
+					TreeConnectionsViewModel.IconType.Connection => "/DbStudio.Views;component/Resources/Images/Connection.png",
+					TreeConnectionsViewModel.IconType.Schema => "/DbStudio.Views;component/Resources/Images/Schema.png",
+					TreeConnectionsViewModel.IconType.Project => "/DbStudio.Views;component/Resources/Images/Project.png",
+					TreeConnectionsViewModel.IconType.Table => "/DbStudio.Views;component/Resources/Images/Table.png",
+					TreeConnectionsViewModel.IconType.View => "/DbStudio.Views;component/Resources/Images/View.png",
+					TreeConnectionsViewModel.IconType.Key => "/DbStudio.Views;component/Resources/Images/Key.png",
+					TreeConnectionsViewModel.IconType.Field => "/DbStudio.Views;component/Resources/Images/Field.png",
+					TreeConnectionsViewModel.IconType.Error => "/DbStudio.Views;component/Resources/Images/DataError.png",
+					TreeConnectionsViewModel.IconType.Loading => "/DbStudio.Views;component/Resources/Images/Loading.png",
+					_ => null,
+				};
 	}
 
 	/// <summary>

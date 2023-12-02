@@ -21,6 +21,11 @@ public class JobsProcessorPlugin : IPlugin
 	}
 
 	/// <summary>
+	///		Obtiene la clave del plugin
+	/// </summary>
+	public string GetKey() => "JobsProcessor";
+
+	/// <summary>
 	///		Carga los datos del directorio
 	/// </summary>
 	public void Load(string path)

@@ -20,6 +20,11 @@ public class CloudStudioPlugin : IPlugin
 	}
 
 	/// <summary>
+	///		Obtiene la clave del plugin
+	/// </summary>
+	public string GetKey() => "CloudStudio";
+
+	/// <summary>
 	///		Carga los datos del directorio
 	/// </summary>
 	public void Load(string path)

@@ -21,6 +21,11 @@ public class ChessDataBasePlugin : IPlugin
 	}
 
 	/// <summary>
+	///		Obtiene la clave del plugin
+	/// </summary>
+	public string GetKey() => "ChessDataBase";
+
+	/// <summary>
 	///		Carga los datos del directorio
 	/// </summary>
 	public void Load(string path)

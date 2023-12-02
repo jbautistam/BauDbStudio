@@ -24,6 +24,11 @@ namespace Bau.Libraries.PasswordManager.Plugin
 		}
 
 		/// <summary>
+		///		Obtiene la clave del plugin
+		/// </summary>
+		public string GetKey() => "PasswordManager";
+
+		/// <summary>
 		///		Carga los datos del directorio
 		/// </summary>
 		public void Load(string path)

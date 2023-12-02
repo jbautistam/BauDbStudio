@@ -21,7 +21,9 @@ public class ConnectionModel : LibDataStructures.Base.BaseExtendedModel
 		/// <summary>SqLite</summary>
 		SqLite,
 		/// <summary>MySql</summary>
-		MySql
+		MySql,
+		/// <summary>DuckDb</summary>
+		DuckDb
 	}
 
 	public ConnectionModel(SolutionModel solution)

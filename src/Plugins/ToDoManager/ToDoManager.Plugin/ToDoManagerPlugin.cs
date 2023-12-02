@@ -27,6 +27,11 @@ public class ToDoManagerPlugin : IPlugin
 	}
 
 	/// <summary>
+	///		Obtiene la clave del plugin
+	/// </summary>
+	public string GetKey() => "ToDoManager";
+
+	/// <summary>
 	///		Inicializa el manager de teclado
 	/// </summary>
 	private void InitHookManager()

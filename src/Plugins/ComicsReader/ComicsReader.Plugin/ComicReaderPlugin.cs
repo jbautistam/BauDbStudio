@@ -21,6 +21,11 @@ public class ComicReaderPlugin : IPlugin
 	}
 
 	/// <summary>
+	///		Obtiene la clave del plugin
+	/// </summary>
+	public string GetKey() => "ComicReader";
+
+	/// <summary>
 	///		Carga los datos del directorio
 	/// </summary>
 	public void Load(string path)

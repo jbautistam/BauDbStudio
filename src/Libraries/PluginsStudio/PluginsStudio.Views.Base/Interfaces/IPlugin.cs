@@ -11,6 +11,11 @@ public interface IPlugin
 	void Initialize(IAppViewsController appController, ViewModels.Base.Controllers.IPluginsController pluginsController);
 
 	/// <summary>
+	///		Obtiene la clave del plugin
+	/// </summary>
+	string GetKey();
+
+	/// <summary>
 	///		Carga los datos de un plugin
 	/// </summary>
 	void Load(string path);

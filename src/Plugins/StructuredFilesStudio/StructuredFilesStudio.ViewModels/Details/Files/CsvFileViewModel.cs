@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 
 using Bau.Libraries.LibCsvFiles.Controllers;
 using Bau.Libraries.StructuredFilesStudio.ViewModels.Details.Filters;
-using Bau.Libraries.LibParquetFiles.Writers;
 
 namespace Bau.Libraries.StructuredFilesStudio.ViewModels.Details.Files;
 

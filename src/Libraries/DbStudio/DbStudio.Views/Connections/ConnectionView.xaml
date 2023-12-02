@@ -43,6 +43,7 @@
 					<RowDefinition Height="Auto"/>
 					<RowDefinition Height="Auto"/>
 					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
 				</Grid.RowDefinitions>
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto"/>
@@ -118,8 +119,8 @@
 					</Grid.ColumnDefinitions>
 					<Label Grid.Row="0" Grid.Column="0" Margin="5" Content="Archivo:"/>
 					<Files:FileSelect Grid.Row="0" Grid.Column="1" Margin="5" VerticalAlignment="Stretch" FileName="{Binding Path=FileName, UpdateSourceTrigger=PropertyChanged}"/>
-					<Label Grid.Row="1" Grid.Column="0" Margin="5" Content="Contraseña:"/>
-					<Editors:PasswordTextBox Grid.Row="1" Grid.Column="1" 
+					<Label Grid.Row="1" Grid.Column="0" Margin="5" Content="Contraseña:" Visibility="{Binding HasPassword, Converter={StaticResource BoolToVisibilityConverter}}"/>
+					<Editors:PasswordTextBox Grid.Row="1" Grid.Column="1" Visibility="{Binding HasPassword, Converter={StaticResource BoolToVisibilityConverter}}"
 							PasswordText="{Binding Password, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
 				</Grid>
 				<Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="5" Margin="50,0,0,0"
@@ -138,6 +139,18 @@
 					<TextBox Grid.Row="1" Grid.Column="1" 
 							Style="{StaticResource MultilineTextBox}"
 							Text="{Binding Path=AdditionalProperties,UpdateSourceTrigger=PropertyChanged}"/>
+				</Grid>
+				<Grid Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="5" Margin="50,0,0,0"
+						Visibility="{Binding HasInMemory, Converter={StaticResource BoolToVisibilityConverter}}">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition Width="*"/>
+					</Grid.ColumnDefinitions>
+					<CheckBox Grid.Row="1" Grid.Column="1" Content="En memoria" Margin="5" VerticalAlignment="Center"
+							IsChecked="{Binding InMemory, UpdateSourceTrigger=PropertyChanged}"/>
 				</Grid>
 			</Grid>
 		</GroupBox>

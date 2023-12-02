@@ -580,7 +580,7 @@ public class TreeFilesViewModel : PluginTreeViewModel
 	/// <summary>
 	///		Guarda las opciones de los plugins asociados a los archivos
 	/// </summary>
-	public void AddPluginOptions(List<FileOptionsModel> fileOptions)
+	public void AddPluginOptions(List<FileOptionsModel>? fileOptions)
 	{
 		if (fileOptions is not null)
 			PluginsFileOptions.AddRange(fileOptions);

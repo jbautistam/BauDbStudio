@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 using Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Reports;
 
