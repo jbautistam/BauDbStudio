@@ -31,7 +31,7 @@ public abstract class PluginNodeAsyncViewModel : PluginNodeViewModel
 	protected async Task LoadNodesAsync(CancellationToken cancellationToken)
 	{
 		object state = new object();
-		List<PluginNodeViewModel> nodes = await GetChildNodesAsync(cancellationToken);
+		List<PluginNodeViewModel>? nodes = await GetChildNodesAsync(cancellationToken);
 
 			// Carga los nodos en el árbol
 			//? _contexUi mantiene el contexto de sincronización que creó el ViewModel (que debería ser la interface de usuario)
@@ -44,7 +44,7 @@ public abstract class PluginNodeAsyncViewModel : PluginNodeViewModel
 													// Limpia la lista de nodos
 													Children.Clear();
 													// Añade la lista de contenedores
-													if (nodes != null)
+													if (nodes is not null)
 														foreach (PluginNodeViewModel node in nodes)
 															Children.Add(node);
 												}
@@ -64,5 +64,5 @@ public abstract class PluginNodeAsyncViewModel : PluginNodeViewModel
 	/// <summary>
 	///		Obtiene la lista de nodos hijo
 	/// </summary>
-	protected abstract Task<List<PluginNodeViewModel>> GetChildNodesAsync(CancellationToken cancellationToken);
+	protected abstract Task<List<PluginNodeViewModel>?> GetChildNodesAsync(CancellationToken cancellationToken);
 }

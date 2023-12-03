@@ -31,7 +31,7 @@ internal class PasswordRepository
 	internal FileModel Load(string fileName, string password)
 	{
 		FileModel file = new();
-		MLFile fileML = new Bau.Libraries.LibMarkupLanguage.Services.XML.XMLParser().Load(fileName);
+		MLFile fileML = new LibMarkupLanguage.Services.XML.XMLParser().Load(fileName);
 
 			// Carga los datos
 			if (fileML != null)
@@ -61,7 +61,7 @@ internal class PasswordRepository
 	/// </summary>
 	private void LoadEncryptedContent(FileModel file, string xml)
 	{
-		MLFile fileML = new Bau.Libraries.LibMarkupLanguage.Services.XML.XMLParser().ParseText(xml);
+		MLFile fileML = new LibMarkupLanguage.Services.XML.XMLParser().ParseText(xml);
 
 			if (fileML is not null)
 				foreach (MLNode rootML in fileML.Nodes)
@@ -131,14 +131,14 @@ internal class PasswordRepository
 	/// </summary>
 	internal void Save(string fileName, FileModel file, string password)
 	{
-		MLFile fileML = new MLFile();
+		MLFile fileML = new();
 		MLNode rootML = fileML.Nodes.Add(TagRoot);
 
 			// Añade la clave de salto
 			rootML.Attributes.Add(TagSalt, file.Salt);
 			rootML.Nodes.Add(TagContent, CreateXmlContent(file, password));
 			// Graba el archivo
-			new Bau.Libraries.LibMarkupLanguage.Services.XML.XMLWriter().Save(fileName, fileML);
+			new LibMarkupLanguage.Services.XML.XMLWriter().Save(fileName, fileML);
 	}
 
 	/// <summary>
@@ -149,7 +149,7 @@ internal class PasswordRepository
 		MLNode rootML = GetXmlFolder(file.Root);
 
 			if (rootML.Nodes.Count > 0)
-				return Encrypt($"<{TagRoot}>" + new Bau.Libraries.LibMarkupLanguage.Services.XML.XMLWriter().ConvertToString(rootML) + $"</{TagRoot}>", 
+				return Encrypt($"<{TagRoot}>" + new LibMarkupLanguage.Services.XML.XMLWriter().ConvertToString(rootML) + $"</{TagRoot}>", 
 							   password, file.Salt);
 			else
 				return string.Empty;
@@ -158,10 +158,7 @@ internal class PasswordRepository
 	/// <summary>
 	///		Encripta el contenido XML
 	/// </summary>
-	private string Encrypt(string xml, string password, string salt)
-	{
-		return GetCryptographyController(password, salt).EncryptToBase64(xml);
-	}
+	private string Encrypt(string xml, string password, string salt) => GetCryptographyController(password, salt).EncryptToBase64(xml);
 
 	/// <summary>
 	///		Desencripta una cadena en XML

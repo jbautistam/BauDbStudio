@@ -11,7 +11,7 @@ namespace Bau.Libraries.PasswordManager.ViewModel.Reader.Explorer;
 public class TreePasswordsViewModel : PluginsStudio.ViewModels.Base.Explorers.PluginTreeViewModel
 {   
 	// Variables privadas
-	private ControlHierarchicalViewModel _selectedNode;
+	private ControlHierarchicalViewModel? _selectedNode;
 
 	public TreePasswordsViewModel(PasswordFileViewModel mainViewModel)
 	{
@@ -35,7 +35,7 @@ public class TreePasswordsViewModel : PluginsStudio.ViewModels.Base.Explorers.Pl
 	/// <summary>
 	///		Añade los nodos de una carpeta
 	/// </summary>
-	private void AddChildFolderNodes(FolderNodeViewModel parent, FolderModel folder)
+	private void AddChildFolderNodes(FolderNodeViewModel? parent, FolderModel folder)
 	{
 		// Ordena las carpetas
 		folder.Folders.SortByName();
@@ -127,9 +127,9 @@ public class TreePasswordsViewModel : PluginsStudio.ViewModels.Base.Explorers.Pl
 	/// <summary>
 	///		Abre el formulario de modificación / creación de una carpeta
 	/// </summary>
-	private void OpenFormUpdateFolder(FolderModel folder)
+	private void OpenFormUpdateFolder(FolderModel? folder)
 	{
-		FolderModel parent = null;
+		FolderModel? parent = null;
 		string folderName = string.Empty;
 
 			// Obtiene la carpeta seleccionada
@@ -148,12 +148,15 @@ public class TreePasswordsViewModel : PluginsStudio.ViewModels.Base.Explorers.Pl
 				!string.IsNullOrWhiteSpace(folderName))
 			{
 				// Crea la carpeta si no existía
-				if (folder == null)
+				if (folder is null)
 				{
 					// Crea la carpeta
 					folder = new FolderModel();
 					// La añade al padre
-					parent.Folders.Add(folder);
+					if (parent is not null)
+						parent.Folders.Add(folder);
+					else
+						FileViewModel.PasswordManager.File.Root.Folders.Add(folder);
 					// y abre el nodo
 					if (SelectedNode is not null)
 						SelectedNode.IsExpanded = true;
@@ -168,14 +171,14 @@ public class TreePasswordsViewModel : PluginsStudio.ViewModels.Base.Explorers.Pl
 	/// <summary>
 	///		Abre el formulario de modificación / creación de una entrada
 	/// </summary>
-	private void OpenFormUpdateEntry(EntryModel entry)
+	private void OpenFormUpdateEntry(EntryModel? entry)
 	{
 		if (!FileViewModel.CanUpdateSelectedEntry())
 			FileViewModel.MainViewModel.ViewsController.HostController.SystemController.ShowMessage("Grabe los datos de la entrada actual antes de crear una nueva");
 		else
 		{
 			// Obtiene la carpeta a la que se añade la entrada
-			if (entry == null)
+			if (entry is null)
 			{
 				FolderModel folder;
 
@@ -280,7 +283,7 @@ public class TreePasswordsViewModel : PluginsStudio.ViewModels.Base.Explorers.Pl
 	/// <summary>
 	///		Actualiza el nodo seleccionado
 	/// </summary>
-	public override ControlHierarchicalViewModel SelectedNode
+	public override ControlHierarchicalViewModel? SelectedNode
 	{
 		get { return _selectedNode; }
 		set

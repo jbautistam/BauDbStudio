@@ -1,6 +1,4 @@
-﻿using System;
-
-using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
+﻿using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.Trees;
 
 namespace Bau.Libraries.PasswordManager.ViewModel.Reader.Explorer;
@@ -10,7 +8,7 @@ namespace Bau.Libraries.PasswordManager.ViewModel.Reader.Explorer;
 /// </summary>
 public abstract class BaseNodeEntryViewModel : PluginNodeAsyncViewModel
 {
-	public BaseNodeEntryViewModel(PluginTreeViewModel trvTree, ControlHierarchicalViewModel parent, string text, bool lazyLoadChildren = true)
+	public BaseNodeEntryViewModel(PluginTreeViewModel trvTree, ControlHierarchicalViewModel? parent, string text, bool lazyLoadChildren = true)
 							: base(trvTree, parent, text, "Node", string.Empty, null, lazyLoadChildren)
 	{
 	}

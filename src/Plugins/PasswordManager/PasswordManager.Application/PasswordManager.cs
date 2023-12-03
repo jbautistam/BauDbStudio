@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Bau.Libraries.PasswordManager.Application;
+﻿namespace Bau.Libraries.PasswordManager.Application;
 
 /// <summary>
 ///		Clase principal del manager de contraseñas
