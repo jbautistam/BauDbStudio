@@ -152,56 +152,7 @@ public class TreeConnectionsViewModel : TreeSolutionBaseViewModel
 		if (table is null)
 			return string.Empty;
 		else
-		{
-			(string start, string end) separators = GetSqlSeparators(table.Connection);
-
-				// Devuelve la consulta
-				return $"""
-						SELECT {GetSqlSelectFields(separators, table)}
-						  FROM {GetSqlName(separators, table.Schema, table.Name)}
-						""";
-		}
-	}
-
-	/// <summary>
-	///		Obtiene una cadena con los campos
-	/// </summary>
-	private string GetSqlSelectFields((string start, string end) separators, ConnectionTableModel table)
-	{
-		string fields = string.Empty;
-		int length = 80;
-
-			// Obtiene la cadena con los campos
-			foreach (ConnectionTableFieldModel field in table.Fields)
-			{
-				// Añade un salto de línea cada 80 caracteres (más o menos)
-				if (fields.Length > length)
-				{
-					fields += Environment.NewLine + "\t\t";
-					length += 80;
-				}
-				// Añade el nombre de campo
-				fields += GetSqlName(separators, field.Table.Name, field.Name);
-				// Añade la coma si es necesario (no se hace con AddSeparator porque como tenemos un salto de línea, añadiría la coma después
-				// del salto de línea)
-				if (table.Fields.IndexOf(field) < table.Fields.Count - 1)
-					fields += ", ";
-			}
-			// Devuelve la cadena con los campos
-			return fields;
-	}
-
-	/// <summary>
-	///		Obtiene los separadores para una conexión
-	/// </summary>
-	private (string separatorStart, string separatorEnd) GetSqlSeparators(ConnectionModel connection)
-	{
-		return connection.Type switch
-					{
-						ConnectionModel.ConnectionType.Spark => ("`", "`"),
-						ConnectionModel.ConnectionType.PostgreSql => ("\"", "\""),
-						_ => ("[", "]")
-					};
+			return SolutionViewModel.Manager.GetSqlQuery(table);
 	}
 
 	/// <summary>
@@ -212,7 +163,7 @@ public class TreeConnectionsViewModel : TreeSolutionBaseViewModel
 		if (fullSql)
 			return GetQuery(tableViewModel.Table);
 		else
-			return GetSqlName(GetSqlSeparators(tableViewModel.Table.Connection), tableViewModel.Table.Schema, tableViewModel.Table.Name);
+			return SolutionViewModel.Manager.GetSqlTableName(tableViewModel.Table);
 	}
 
 	/// <summary>
@@ -221,23 +172,9 @@ public class TreeConnectionsViewModel : TreeSolutionBaseViewModel
 	internal string GetSqlSelect(NodeTableFieldViewModel fieldViewModel, bool fullSql)
 	{
 		if (fullSql)
-			return GetSqlSelectFields(GetSqlSeparators(fieldViewModel.Field.Table.Connection), fieldViewModel.Field.Table);
+			return GetQuery(fieldViewModel.Field.Table);
 		else
-			return GetSqlName(GetSqlSeparators(fieldViewModel.Field.Table.Connection), fieldViewModel.Field.Table.Name, fieldViewModel.Field.Name);
-	}
-
-	/// <summary>
-	///		Obtiene un nombre de tabla / campo para una consulta SQL 
-	/// </summary>
-	private string GetSqlName((string start, string end) separators, string schema, string name)
-	{
-		string result = string.Empty;
-
-			// Añade el nombre de esquema
-			if (!string.IsNullOrWhiteSpace(schema))
-				result = $"{separators.start}{schema}{separators.end}.";
-			// Devuelve el nombre del campo / tabla
-			return $"{result}{separators.start}{name}{separators.end}";
+			return SolutionViewModel.Manager.GetSqlFieldName(fieldViewModel.Field);
 	}
 
 	/// <summary>

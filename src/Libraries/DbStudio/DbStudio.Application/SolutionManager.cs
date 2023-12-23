@@ -86,6 +86,21 @@ public class SolutionManager
 	}
 
 	/// <summary>
+	///		Obtiene la cadena de consulta de una tabla (SELECT Fields FROM Table)
+	/// </summary>
+	public string GetSqlQuery(ConnectionTableModel table) => DbScriptsManager.GetSqlQuery(table);
+
+	/// <summary>
+	///		Obtiene el nombre completo de una tabla [Schema].[Table] con lo separadores adecuados
+	/// </summary>
+	public string GetSqlTableName(ConnectionTableModel table) => DbScriptsManager.GetSqlTableName(table);
+
+	/// <summary>
+	///		Obtiene el nombre completo de un campo [Table].[Field] con lo separadores adecuados
+	/// </summary>
+	public string GetSqlFieldName(ConnectionTableFieldModel field) => DbScriptsManager.GetSqlFieldName(field);
+
+	/// <summary>
 	///		Manager de log
 	/// </summary>
 	public ILogger Logger { get; }

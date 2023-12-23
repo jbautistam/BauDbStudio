@@ -40,6 +40,7 @@ public partial class MainWindow : Window
 		DbStudioViewsManager.AddPlugin(new Libraries.JobsProcessor.Plugin.JobsProcessorPlugin());
 		DbStudioViewsManager.AddPlugin(new Libraries.MultimediaFiles.Plugin.MultimediaFilesPlugin());
 		DbStudioViewsManager.AddPlugin(new Libraries.PasswordManager.Plugin.PasswordManagerPlugin());
+		DbStudioViewsManager.AddPlugin(new Libraries.RestManager.Plugin.RestManagerPlugin());
 		DbStudioViewsManager.AddPlugin(new Libraries.StructuredFilesStudio.Views.StructuredFilesStudioViewManager());
 		DbStudioViewsManager.AddPlugin(new Libraries.ToDoManager.Plugin.ToDoManagerPlugin());
 		DbStudioViewsManager.Initialize();
@@ -78,7 +79,7 @@ public partial class MainWindow : Window
 	{
 		// Muestra los paneles
 		foreach (Libraries.PluginsStudio.Views.Base.Models.PaneModel pane in DbStudioViewsManager.GetPanes())
-			if (pane != null)
+			if (pane is not null && pane.View is not null)
 				dckManager.AddPane(pane.Id, pane.Title, pane.View, pane.ViewModel, ConvertPosition(pane.Position));
 		// Abre los paneles predefinidos
 		dckManager.OpenGroup(Controls.DockLayout.DockLayoutManager.DockPosition.Left);

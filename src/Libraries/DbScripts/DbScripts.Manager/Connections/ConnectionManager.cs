@@ -70,7 +70,7 @@ internal class ConnectionManager
 			// Asigna las propiedades
 			tableView.Name = baseTableView.Name;
 			tableView.Description = baseTableView.Description;
-			tableView.Schema = baseTableView.Schema;
+			tableView.Schema = baseTableView.Schema ?? string.Empty;
 			tableView.IsSystem = baseTableView.IsSystem;
 			// Asigna los campos
 			foreach (FieldDbModel fieldSchema in baseTableView.Fields)
@@ -80,7 +80,7 @@ internal class ConnectionManager
 					// Asigna las propiedades
 					field.Name = fieldSchema.Name;
 					field.Description = fieldSchema.Description;
-					field.TypeText = fieldSchema.DbType; // fieldSchema.Type.ToString();
+					field.TypeText = fieldSchema.DbType ?? string.Empty; // fieldSchema.Type.ToString();
 					field.Type = Convert(fieldSchema.Type);
 					field.Length = fieldSchema.Length;
 					field.IsRequired = fieldSchema.IsRequired;
@@ -160,6 +160,98 @@ internal class ConnectionManager
 	}
 
 	/// <summary>
+	///		Obtiene la cadena SQL de consulta de una tabla (SELECT Fields FROM Table)
+	/// </summary>
+	internal string GetSqlQuery(ConnectionTableModel table)
+	{
+		IDbProvider? provider = GetDbProvider(table.Connection);
+
+			// Obtiene la cadena de los campos
+			if (provider is not null)
+			{
+				(string start, string end) separators = (provider.SqlHelper.SeparatorStart, provider.SqlHelper.SeparatorEnd);
+
+					// Devuelve la consulta
+					return $"""
+							SELECT {GetSqlSelectFields(separators, table)}
+							  FROM {GetSqlName(separators, table.Schema, table.Name)}
+							""";
+			}
+			// Devuelve la cadena SQL
+			return string.Empty;
+	}
+
+	/// <summary>
+	///		Obtiene el nombre completo de una tabla [Schema].[Table] con lo separadores adecuados
+	/// </summary>
+	internal string GetSqlTableName(ConnectionTableModel table)
+	{
+		IDbProvider? provider = GetDbProvider(table.Connection);
+
+			// Obtiene la cadena de los campos
+			if (provider is not null)
+				return GetSqlName((provider.SqlHelper.SeparatorStart, provider.SqlHelper.SeparatorEnd), table.Schema, table.Name);
+			else
+				return string.Empty;
+	}
+
+	/// <summary>
+	///		Obtiene el nombre completo de un campo [Table].[Field] con lo separadores adecuados
+	/// </summary>
+	internal string GetSqlFieldName(ConnectionTableFieldModel field)
+	{
+		IDbProvider? provider = GetDbProvider(field.Table.Connection);
+
+			// Obtiene la cadena de los campos
+			if (provider is not null)
+				return GetSqlName((provider.SqlHelper.SeparatorStart, provider.SqlHelper.SeparatorEnd), field.Table.Name, field.Name);
+			else
+				return string.Empty;
+	}
+
+	/// <summary>
+	///		Obtiene una cadena con los campos
+	/// </summary>
+	private string GetSqlSelectFields((string start, string end) separators, ConnectionTableModel table)
+	{
+		string fields = string.Empty;
+		int length = 80;
+
+			// Obtiene la cadena con los campos
+			foreach (ConnectionTableFieldModel field in table.Fields)
+			{
+				// Añade un salto de línea cada 80 caracteres (más o menos)
+				if (fields.Length > length)
+				{
+					fields += Environment.NewLine + "\t\t";
+					length += 80;
+				}
+				// Añade el nombre de campo
+				fields += GetSqlName(separators, field.Table.Name, field.Name);
+				// Añade la coma si es necesario (no se hace con AddSeparator porque como tenemos un salto de línea, añadiría la coma después
+				// del salto de línea)
+				if (table.Fields.IndexOf(field) < table.Fields.Count - 1)
+					fields += ", ";
+			}
+			// Devuelve la cadena con los campos
+			return fields;
+	}
+
+	/// <summary>
+	///		Obtiene un nombre de tabla / campo para una consulta SQL 
+	/// </summary>
+	private string GetSqlName((string start, string end) separators, string schema, string name)
+	{
+		string result = string.Empty;
+
+			// Añade el nombre de esquema
+			if (!string.IsNullOrWhiteSpace(schema))
+				result = $"{separators.start}{schema}{separators.end}.";
+			// Devuelve el nombre del campo / tabla
+			return $"{result}{separators.start}{name}{separators.end}";
+	}
+
+	/// <summary>
 	///		Manager de scripts
 	/// </summary>
 	internal DbScriptsManager Manager { get; }
@@ -167,5 +259,5 @@ internal class ConnectionManager
 	/// <summary>
 	///		Proveedores de datos
 	/// </summary>
-	private Cache.ProvidersCache CacheProviders = new Cache.ProvidersCache();
+	private Cache.ProvidersCache CacheProviders = new();
 }

@@ -169,7 +169,7 @@ public partial class FileTextView : UserControl
 
 	private async void udtEditor_Drop(object sender, System.Windows.DragEventArgs e)
 	{
-		if (_dragDropController.GetDragDropFileNode(e.Data) is  Libraries.PluginsStudio.ViewModels.Base.Explorers.PluginNodeViewModel nodeViewModel)
+		if (_dragDropController.GetDragDropFileNode(e.Data) is Libraries.PluginsStudio.ViewModels.Base.Explorers.PluginNodeViewModel nodeViewModel)
 		{
 			string text = nodeViewModel.GetTextForEditor(e.KeyStates == System.Windows.DragDropKeyStates.ShiftKey);
 

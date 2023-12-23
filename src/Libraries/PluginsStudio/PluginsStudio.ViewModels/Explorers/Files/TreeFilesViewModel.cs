@@ -271,10 +271,7 @@ public class TreeFilesViewModel : PluginTreeViewModel
 					if (move)
 						copied = HelperFiles.MovePath(fileSource, pathTarget);
 					else
-					{
-						HelperFiles.CopyPath(fileSource, pathTarget);
-						copied = true;
-					}
+						copied = HelperFiles.CopyPath(fileSource, pathTarget);
 				}
 				// Log
 				if (copied)
