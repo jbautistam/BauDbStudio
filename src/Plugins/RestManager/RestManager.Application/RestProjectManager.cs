@@ -1,6 +1,6 @@
 ﻿using Bau.Libraries.RestManager.Application.Models;
 
-namespace Bau.Libraries.RestManager.Application.Managers;
+namespace Bau.Libraries.RestManager.Application;
 
 /// <summary>
 ///		Manager de procesamiento Rest
@@ -10,12 +10,12 @@ public class RestProjectManager
 	/// <summary>
 	///		Carga el proyecto
 	/// </summary>
-	public ProjectModel Load(string fileName) => new Repositories.ProjectRepository().Load(fileName);
+	public RestProjectModel Load(string fileName) => new Repositories.ProjectRepository().Load(fileName);
 
 	/// <summary>
 	///		Graba el proyecto
 	/// </summary>
-	public void Save(ProjectModel project, string fileName)
+	public void Save(RestProjectModel project, string fileName)
 	{
 		new Repositories.ProjectRepository().Save(project, fileName);
 	}
@@ -23,7 +23,7 @@ public class RestProjectManager
 	/// <summary>
 	///		Ejecuta un proyecto
 	/// </summary>
-	public async Task ExecuteAsync(ProjectModel project, CancellationToken cancellationToken)
+	public async Task ExecuteAsync(RestProjectModel project, CancellationToken cancellationToken)
 	{
 		await new Compiler.ProjectInterpreter(project).ExecuteAsync(cancellationToken);
 	}

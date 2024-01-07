@@ -3,13 +3,13 @@
 namespace Bau.Libraries.RestManager.Plugin.Controllers;
 
 /// <summary>
-///		Controlador del visulaizador de archivos multimedia
+///		Controlador de la ejecución de proyectos REST
 /// </summary>
 public class RestManagerController : ViewModel.Controllers.IRestManagerController
 {
-	public RestManagerController(RestManagerPlugin multimediaFilesPlugin, PluginsStudio.ViewModels.Base.Controllers.IPluginsController pluginController)
+	public RestManagerController(RestManagerPlugin restManagerPlugin, PluginsStudio.ViewModels.Base.Controllers.IPluginsController pluginController)
 	{
-		MultimediaFilesPlugin = multimediaFilesPlugin;
+		RestManagerPlugin = restManagerPlugin;
 		PluginController = pluginController;
 	}
 
@@ -18,6 +18,14 @@ public class RestManagerController : ViewModel.Controllers.IRestManagerControlle
 	/// </summary>
 	public SystemControllerEnums.ResultType OpenWindow(PluginsStudio.ViewModels.Base.Interfaces.IDetailViewModel detailsViewModel)
 	{
+		// Abre la ventana del editor
+		switch (detailsViewModel)
+		{
+			case ViewModel.Project.RestFileViewModel viewModel:
+					RestManagerPlugin.AppViewsController.OpenDocument(new Views.RestFileView(viewModel), viewModel);
+				break;
+		}
+		// Devuelve el valor que indica que se ha abierto correctamente
 		return SystemControllerEnums.ResultType.Yes;
 	}
 
@@ -31,8 +39,8 @@ public class RestManagerController : ViewModel.Controllers.IRestManagerControlle
 			// Abre la ventana
 			switch (dialogViewModel)
 			{
-				case ViewModel.Reader.RestFileViewModel viewModel:
-						MultimediaFilesPlugin.AppViewsController.OpenNoModalDialog(new Views.MediaFileView(viewModel));
+				case ViewModel.Project.ParameterViewModel viewModel:
+						result = RestManagerPlugin.AppViewsController.OpenDialog(new Views.ParameterView(viewModel));
 					break;
 			}
 			// Devuelve el resultado
@@ -42,7 +50,7 @@ public class RestManagerController : ViewModel.Controllers.IRestManagerControlle
 	/// <summary>
 	///		ViewManager
 	/// </summary>
-	public RestManagerPlugin MultimediaFilesPlugin { get; }
+	public RestManagerPlugin RestManagerPlugin { get; }
 
 	/// <summary>
 	///		Controlador de plugin

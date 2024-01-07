@@ -26,10 +26,10 @@ internal class ProjectRepository
 	/// <summary>
 	///		Carga un proyecto del archivo
 	/// </summary>
-	internal ProjectModel Load(string fileName)
+	internal RestProjectModel Load(string fileName)
 	{
-		ProjectModel project = new();
-		MLFile fileML = new Bau.Libraries.LibMarkupLanguage.Services.XML.XMLParser().Load(fileName);
+		RestProjectModel project = new();
+		MLFile fileML = new LibMarkupLanguage.Services.XML.XMLParser().Load(fileName);
 
 			// Carga los datos
 			if (fileML is not null)
@@ -91,7 +91,7 @@ internal class ProjectRepository
 	/// <summary>
 	///		Graba los datos del proyecto
 	/// </summary>
-	internal void Save(ProjectModel project, string fileName)
+	internal void Save(RestProjectModel project, string fileName)
 	{
 		MLFile fileML = new MLFile();
 		MLNode rootML = fileML.Nodes.Add(TagRoot);
@@ -104,7 +104,7 @@ internal class ProjectRepository
 			// Añade los datos de los pasos
 			rootML.Nodes.AddRange(GetXmlSteps(project.Steps));
 			// Graba el archivo
-			new Bau.Libraries.LibMarkupLanguage.Services.XML.XMLWriter().Save(fileName, fileML);
+			new LibMarkupLanguage.Services.XML.XMLWriter().Save(fileName, fileML);
 	}
 
 	/// <summary>

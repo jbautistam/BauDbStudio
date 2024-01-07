@@ -9,19 +9,20 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\Messengers\**" />
-    <Compile Remove="Reader\EventArguments\**" />
+    <Compile Remove="Project\EventArguments\**" />
     <EmbeddedResource Remove="Controllers\Messengers\**" />
-    <EmbeddedResource Remove="Reader\EventArguments\**" />
+    <EmbeddedResource Remove="Project\EventArguments\**" />
     <None Remove="Controllers\Messengers\**" />
-    <None Remove="Reader\EventArguments\**" />
+    <None Remove="Project\EventArguments\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Reader\MediaFileListViewModel.cs" />
+    <Compile Remove="Project\MediaFileListViewModel.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Libraries\PluginsStudio\PluginsStudio.ViewModels\PluginsStudio.ViewModels.csproj" />
+    <ProjectReference Include="..\RestManager.Application\RestManager.Application.csproj" />
   </ItemGroup>
 
 </Project>

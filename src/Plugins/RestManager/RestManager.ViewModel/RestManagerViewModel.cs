@@ -34,25 +34,16 @@ public class RestManagerViewModel : BauMvvm.ViewModels.BaseObservableObject
 		bool isOpen = false;
 
 			// Abre el archivo si está entre los reconocidos
-			if (!string.IsNullOrWhiteSpace(fileName))
+			if (!string.IsNullOrWhiteSpace(fileName) && fileName.EndsWith(".rest", StringComparison.CurrentCultureIgnoreCase))
 			{
-				if (fileName.EndsWith(".mp3", StringComparison.CurrentCultureIgnoreCase) ||
-					fileName.EndsWith(".wav", StringComparison.CurrentCultureIgnoreCase))
-				{
-					// Reproduce el archivo
-					ViewsController.OpenDialog(new Reader.RestFileViewModel(this, fileName, true));
+				Project.RestFileViewModel restFileViewModel = new(this, fileName);
+
+					// Carga el archivo
+					restFileViewModel.Load();
+					// Abre la ventana
+					ViewsController.OpenWindow(restFileViewModel);
 					// e indica que ha podido abrir el archivo
 					isOpen = true;
-				}
-				else if (fileName.EndsWith(".mp4", StringComparison.CurrentCultureIgnoreCase) ||
-						 fileName.EndsWith(".mkv", StringComparison.CurrentCultureIgnoreCase) ||
-						 fileName.EndsWith(".avi", StringComparison.CurrentCultureIgnoreCase))
-				{
-					// Reproduce el archivo
-					ViewsController.OpenDialog(new Reader.RestFileViewModel(this, fileName, true));
-					// e indica que ha podido abrir el archivo
-					isOpen = true;
-				}
 			}
 			// Devuelve el valor que indica si se ha abierto el archivo
 			return isOpen;

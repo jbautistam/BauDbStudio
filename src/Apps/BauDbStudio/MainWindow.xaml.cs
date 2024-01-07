@@ -380,7 +380,7 @@ public partial class MainWindow : Window
 	/// </summary>
 	private MenuItem CreateMenu(string text, string icon, bool isCheckable, System.Windows.Input.ICommand? command, object? tag = null)
 	{
-		MenuItem mnuNewItem = new MenuItem();
+		MenuItem mnuNewItem = new();
 
 			// Asigna las propiedades
 			mnuNewItem.Header = text;

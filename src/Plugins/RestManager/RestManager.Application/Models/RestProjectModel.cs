@@ -3,7 +3,7 @@
 /// <summary>
 ///		Datos de un proyecto Rest
 /// </summary>
-public class ProjectModel
+public class RestProjectModel
 {
 	/// <summary>
 	///		Nombre del proyecto

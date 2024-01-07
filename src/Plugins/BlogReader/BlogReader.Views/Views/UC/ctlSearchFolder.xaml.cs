@@ -13,7 +13,7 @@ namespace Bau.Libraries.BlogReader.Views.Views.UC;
 /// </summary>
 public partial class ctlSearchFolder : UserControl
 { 
-	// Propiedades de dependencias
+	// Propiedades de dependencia
 	public static readonly DependencyProperty FolderProperty = DependencyProperty.Register(nameof(Folder), typeof(FolderModel), typeof(ctlSearchFolder),
 																						   new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
 																														 new PropertyChangedCallback(Folder_PropertyChanged)));
@@ -36,14 +36,17 @@ public partial class ctlSearchFolder : UserControl
 	/// </summary>
 	private void OpenTreeDocuments()
 	{ 
-		TreeFoldersViewModel tree = new(MainViewModel, null);
+		if (MainViewModel is not null)
+		{
+			TreeFoldersViewModel tree = new(MainViewModel, null);
 
-			// Carga los nodos
-			tree.Load();
-			// Asigna el dataContext
-			wndPopUp.DataContext = tree;
-			// Abre la ventana
-			wndPopUp.IsOpen = true;
+				// Carga los nodos
+				tree.Load();
+				// Asigna el dataContext
+				wndPopUp.DataContext = tree;
+				// Abre la ventana
+				wndPopUp.IsOpen = true;
+		}
 	}
 
 	/// <summary>
@@ -55,20 +58,6 @@ public partial class ctlSearchFolder : UserControl
 		Folder = node?.Folder;
 		// Cierra la ventana
 		wndPopUp.IsOpen = false;
-	}
-
-	/// <summary>
-	///		ViewModel de la ventana principal
-	/// </summary>
-	public LibBlogReader.ViewModel.BlogReaderViewModel MainViewModel { get; private set; }
-
-	/// <summary>
-	///		Carpeta seleccionada
-	/// </summary>
-	public FolderModel? Folder
-	{
-		get { return (FolderModel) GetValue(FolderProperty); }
-		set { SetValue(FolderProperty, value); }
 	}
 
 	private static void Folder_PropertyChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
@@ -102,5 +91,19 @@ public partial class ctlSearchFolder : UserControl
 	{
 		if (trvPages.SelectedItem is FolderNodeViewModel folder)
 			SelectFolder(folder);
+	}
+
+	/// <summary>
+	///		ViewModel de la ventana principal
+	/// </summary>
+	public LibBlogReader.ViewModel.BlogReaderViewModel? MainViewModel { get; private set; }
+
+	/// <summary>
+	///		Carpeta seleccionada
+	/// </summary>
+	public FolderModel? Folder
+	{
+		get { return (FolderModel) GetValue(FolderProperty); }
+		set { SetValue(FolderProperty, value); }
 	}
 }

@@ -12,7 +12,7 @@ public class TreeFoldersViewModel : PluginsStudio.ViewModels.Base.Explorers.Plug
 	// Variables privadas
 	private bool _isTreeUpdated;
 
-	public TreeFoldersViewModel(BlogReaderViewModel mainViewModel, BauMvvm.ViewModels.BaseObservableObject viewModelParent)
+	public TreeFoldersViewModel(BlogReaderViewModel mainViewModel, BauMvvm.ViewModels.BaseObservableObject? viewModelParent)
 	{
 		MainViewModel = mainViewModel;
 		ViewModelParent = viewModelParent;
@@ -26,7 +26,7 @@ public class TreeFoldersViewModel : PluginsStudio.ViewModels.Base.Explorers.Plug
 		// Carga los nodos de carpetas
 		LoadNodes(null, MainViewModel.BlogManager.File.Folders);
 		// Indica que no ha habido modificaciones
-		if (ViewModelParent != null)
+		if (ViewModelParent is not null)
 			ViewModelParent.IsUpdated = false;
 	}
 
@@ -91,7 +91,7 @@ public class TreeFoldersViewModel : PluginsStudio.ViewModels.Base.Explorers.Plug
 	/// <summary>
 	///		ViewModel padre
 	/// </summary>
-	public BauMvvm.ViewModels.BaseObservableObject ViewModelParent { get; }
+	public BauMvvm.ViewModels.BaseObservableObject? ViewModelParent { get; }
 
 	/// <summary>
 	///		Indica si se ha modificado el árbol

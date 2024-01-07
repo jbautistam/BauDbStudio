@@ -31,6 +31,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\Controls\WPF\BauControls\src\BauControls.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Controls\WPF\CodeEditor\src\CodeEditor.csproj" />
     <ProjectReference Include="..\..\..\Libraries\PluginsStudio\PluginsStudio.Views.Base\PluginsStudio.Views.Base.csproj" />
     <ProjectReference Include="..\RestManager.ViewModel\RestManager.ViewModel.csproj" />
   </ItemGroup>
@@ -48,13 +49,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Views\MediaFileView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <PackageReference Update="Microsoft.VCRTForwarders.140" Version="1.0.7" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Update="Microsoft.VCRTForwarders.140" Version="1.0.7" />
+    <Page Update="Views\ParameterView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
   </ItemGroup>
 
 </Project>

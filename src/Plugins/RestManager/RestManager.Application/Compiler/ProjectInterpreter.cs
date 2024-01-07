@@ -3,11 +3,11 @@
 namespace Bau.Libraries.RestManager.Application.Compiler;
 
 /// <summary>
-///		Intérprete de <see cref="ProjectModel"/>
+///		Intérprete de <see cref="RestProjectModel"/>
 /// </summary>
 internal class ProjectInterpreter
 {
-	internal ProjectInterpreter(ProjectModel project)
+	internal ProjectInterpreter(RestProjectModel project)
 	{
 		Project = project;
 	}
@@ -99,7 +99,7 @@ internal class ProjectInterpreter
 	/// <summary>
 	///		Proyecto en ejecución
 	/// </summary>
-	public ProjectModel Project { get; }
+	public RestProjectModel Project { get; }
 
 	/// <summary>
 	///		Contextos

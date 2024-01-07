@@ -84,7 +84,7 @@ public class ToDoFileViewModel : BaseObservableObject, PluginsStudio.ViewModels.
 	public string GetSaveAndCloseMessage()
 	{
 		if (string.IsNullOrWhiteSpace(FileName))
-			return "¿Desea grabar el archivo antes de continuar?";
+			return "Do you want to save the file before continuing?";
 		else
 			return $"¿Desea grabar el archivo '{Path.GetFileName(FileName)}' antes de continuar?";
 	}

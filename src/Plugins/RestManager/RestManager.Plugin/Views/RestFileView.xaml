@@ -1,0 +1,96 @@
+﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Bau.Libraries.RestManager.Plugin.Views"
+		xmlns:Editor="clr-namespace:Bau.Controls.CodeEditor;assembly=CodeEditor"
+		x:Class="Bau.Libraries.RestManager.Plugin.Views.RestFileView"
+        mc:Ignorable="d" 
+		d:DesignHeight="250" d:DesignWidth="800" >
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+		<ToolBarTray x:Name="tbMain" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" >
+			<ToolBar BandIndex="1">
+				<Button ToolTip="Execute" Command="{Binding Path=ExecuteCommand}" Margin="2">
+					<Image Width="16" Height="16" Source="/JobsProcessor.Plugin;component/Resources/ArrowNext.png" />
+				</Button>
+				<Button ToolTip="Cancel" Command="{Binding Path=CancelCommand}" Margin="2">
+					<Image Width="16" Height="16" Source="/JobsProcessor.Plugin;component/Resources/Cancel.png" />
+				</Button>
+				<Button ToolTip="Clear" Command="{Binding Path=ClearCommand}" Margin="2">
+					<Image Width="16" Height="16" Source="/JobsProcessor.Plugin;component/Resources/Log.png" />
+				</Button>
+				<Separator/>
+				<Button ToolTip="Open file" Command="{Binding Path=OpenFileCommand}" Margin="2">
+					<Image Width="16" Height="16" Source="/JobsProcessor.Plugin;component/Resources/FolderNode.png" />
+				</Button>
+				<Button ToolTip="Refresh" Command="{Binding Path=RefreshCommand}" Margin="2">
+					<Image Width="16" Height="16" Source="/JobsProcessor.Plugin;component/Resources/Refresh.png" />
+				</Button>
+			</ToolBar>
+		</ToolBarTray>
+
+		<TabControl Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Margin="5">
+			<TabItem Header="Steps">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="*"/>
+					</Grid.RowDefinitions>
+					<ToolBar Grid.Row="0">
+						<Button ToolTip="New" Command="{Binding Path=StepsViewModel.NewCommand}" Margin="2">
+							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
+						</Button>
+						<Button ToolTip="Update" Command="{Binding Path=StepsViewModel.UpdateCommand}" Margin="2">
+							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Properties.gif" />
+						</Button>
+						<Button ToolTip="Delete" Command="{Binding Path=StepsViewModel.DeleteCommand}" Margin="2">
+							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
+						</Button>
+					</ToolBar>
+					<ListBox Grid.Row="1" Grid.Column="0" Margin="5" 
+						  ItemsSource="{Binding StepsViewModel.Items}"
+						  SelectedItem="{Binding StepsViewModel.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+						<ListBox.ItemTemplate>
+							<DataTemplate>
+								<Grid>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="Auto"/>
+										<ColumnDefinition Width="*"/>
+									</Grid.ColumnDefinitions>
+									<Image Grid.Row="0" Grid.Column="0" Margin="5" Source="/JobsProcessor.Plugin;component/Resources/Log.png" Width="16" Height="16"/>
+									<TextBlock Grid.Row="0" Grid.Column="1" Margin="5" Text="{Binding Path=Url}"/>
+								</Grid>
+							</DataTemplate>
+						</ListBox.ItemTemplate>
+					</ListBox>
+				</Grid>
+			</TabItem>
+			<TabItem Header="Variables">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="*"/>
+						<RowDefinition Height="*"/>
+					</Grid.RowDefinitions>
+					<GroupBox Header="Default headers" Grid.Row="0" Grid.Column="0" Margin="2">
+						<local:ParametersListView Margin="2" Parameters="{Binding Path=ProjectHeaders}" />
+					</GroupBox>
+					<GroupBox Header="Variables" Grid.Row="1" Grid.Column="0" Margin="2">
+						<local:ParametersListView Margin="2" Parameters="{Binding Path=ProjectVariables}" />
+					</GroupBox>
+				</Grid>
+			</TabItem>
+		</TabControl>
+		<GridSplitter Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" HorizontalAlignment="Right" VerticalAlignment="Stretch"
+					Background="AliceBlue" Width="8" Margin="2"/>
+		<local:RestFileStepView Grid.Row="1" Grid.Column="1" x:Name="udtStep"
+			Step="{Binding Path=StepsViewModel.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+	</Grid>
+</UserControl>

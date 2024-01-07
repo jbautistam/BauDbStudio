@@ -3,13 +3,13 @@
 namespace Bau.Libraries.RestManager.Application.Builders;
 
 /// <summary>
-///		Generador de <see cref="ProjectModel"/>
+///		Generador de <see cref="RestProjectModel"/>
 /// </summary>
 public class ProjectBuilder
 {
 	public ProjectBuilder(string name)
 	{
-		Project = new ProjectModel
+		Project = new RestProjectModel
 						{
 							Name = name
 						};
@@ -56,15 +56,15 @@ public class ProjectBuilder
 	/// <summary>
 	///		Genera el proyecto
 	/// </summary>
-	public ProjectModel Build() => Project;
+	public RestProjectModel Build() => Project;
 
 	/// <summary>
 	///		Sobrecarga del operador de casting
 	/// </summary>
-	public static implicit operator ProjectModel(ProjectBuilder builder) => builder.Build();
+	public static implicit operator RestProjectModel(ProjectBuilder builder) => builder.Build();
 
 	/// <summary>
 	///		Proyecto
 	/// </summary>
-	public ProjectModel Project { get; }
+	public RestProjectModel Project { get; }
 }
