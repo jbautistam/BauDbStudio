@@ -93,7 +93,7 @@ public class FileNameIconConverter : IValueConverter
 	/// </summary>
 	private bool IsImage(string fileName)
 	{
-		string[] extensions = { ".bmp", ".gif", ".png", ".tif", ".tiff", ".jpg", ".jpeg" };
+		string[] extensions = { ".bmp", ".gif", ".png", ".tif", ".tiff", ".jpg", ".jpeg", ".webp" };
 
 			// Comprueba las extensiones
 			foreach (string extension in extensions)

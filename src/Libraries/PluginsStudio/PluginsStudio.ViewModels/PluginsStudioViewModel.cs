@@ -117,7 +117,8 @@ public class PluginsStudioViewModel : BaseObservableObject
 			   fileName.EndsWith(".jpg", StringComparison.CurrentCultureIgnoreCase) ||
 			   fileName.EndsWith(".jpeg", StringComparison.CurrentCultureIgnoreCase) ||
 			   fileName.EndsWith(".tiff", StringComparison.CurrentCultureIgnoreCase) ||
-			   fileName.EndsWith(".png", StringComparison.CurrentCultureIgnoreCase);
+			   fileName.EndsWith(".png", StringComparison.CurrentCultureIgnoreCase) ||
+			   fileName.EndsWith(".webp", StringComparison.CurrentCultureIgnoreCase);
 	}
 
 	/// <summary>
