@@ -1,4 +1,5 @@
-﻿using Bau.Libraries.BauMvvm.ViewModels.Media;
+﻿using Bau.Libraries.LibHelper.Extensors;
+using Bau.Libraries.BauMvvm.ViewModels.Media;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Models.Processes;
 
 namespace Bau.Libraries.PluginsStudio.ViewModels.TasksQueue;
@@ -26,12 +27,14 @@ public class TasksQueueItemViewModel : BauMvvm.ViewModels.Forms.ControlItems.Con
 		Error
 	}
 	// Variables privadas
-	private string _statusText = string.Empty, _executionTime = string.Empty, _message = string.Empty;
+	private string _statusText = string.Empty, _executionTime = string.Empty, _message = string.Empty, _additionalInfoText = string.Empty;
+	private Dictionary<string, string>? _additionalInfo;
 	private long _actual, _total;
 	private bool _isExecuting;
-	private System.Timers.Timer _timer;
+	private System.Timers.Timer? _timer;
 	private DateTime? _start;
 	private Status _status;
+	private MvvmColor? _background = MvvmColor.White;
 
 	public TasksQueueItemViewModel(TasksQueueListViewModel viewModel, ProcessModel process, bool isBold = false, MvvmColor? foreground = null) 
 										: base(process.Name, null, isBold, foreground)
@@ -77,7 +80,8 @@ public class TasksQueueItemViewModel : BauMvvm.ViewModels.Forms.ControlItems.Con
 			case Status.Processing:
 					StatusText = "In progress";
 					IsBold = true;
-					_timer.Start();
+					if (_timer is not null)
+						_timer.Start();
 				break;
 			case Status.End:
 					StatusText = "Success";
@@ -104,8 +108,8 @@ public class TasksQueueItemViewModel : BauMvvm.ViewModels.Forms.ControlItems.Con
 		// Cierra el temporizador
 		if (State == Status.End || State == Status.Error || State == Status.Canceled)
 		{
-			_timer.Stop();
-			_timer.Dispose();
+			_timer?.Stop();
+			_timer?.Dispose();
 		}
 		// Muestra el tiempo de ejecución
 		ExecutionTime = $"{(DateTime.Now - _start).ToString()}";
@@ -137,20 +141,25 @@ public class TasksQueueItemViewModel : BauMvvm.ViewModels.Forms.ControlItems.Con
 			case LogEventArgs.Status.Error:
 					State = Status.Error;
 					Message = args.Message;
+					Background = MvvmColor.Red;
 				break;
 			case LogEventArgs.Status.Success:
 					if (State != Status.Canceled && State !=  Status.Error)
 					{
 						State = Status.End;
 						Message = args.Message;
+						Background = MvvmColor.Green;
 					}
 				break;
 			case LogEventArgs.Status.Warning:
 			case LogEventArgs.Status.Info:
 					State = Status.Processing;
 					Message = args.Message;
+					Background = MvvmColor.White;
 				break;
 		}
+		// Ajusta la información adicional
+		AdditionalInfo = args.AdditionalInfo;
 		// Actualiza la pantalla
 		Update();
 	}
@@ -182,6 +191,14 @@ public class TasksQueueItemViewModel : BauMvvm.ViewModels.Forms.ControlItems.Con
 	/// </summary>
 	private void Delete()
 	{
+		// Detiene el temporizador
+		if (_timer is not null)
+		{
+			_timer.Stop();
+			_timer.Dispose();
+			_timer = null;
+		}
+		// Borra este elemento
 		ViewModel.Delete(this);
 	}
 
@@ -265,6 +282,46 @@ public class TasksQueueItemViewModel : BauMvvm.ViewModels.Forms.ControlItems.Con
 	{
 		get { return _total; }
 		set { CheckProperty(ref _total, value); }
+	}
+
+	/// <summary>
+	///		Color de fondo
+	/// </summary>
+	public MvvmColor? Background
+	{
+		get { return _background; }
+		set { CheckObject(ref _background, value); }
+	}
+
+	/// <summary>
+	///		Información adicional
+	/// </summary>
+	public Dictionary<string, string>? AdditionalInfo 
+	{ 
+		get { return _additionalInfo; }
+		set 
+		{ 
+			if (CheckObject(ref _additionalInfo, value))
+			{
+				string info = string.Empty;
+
+					// Concatena los valores del diccionario
+					if (_additionalInfo is not null)
+						foreach (KeyValuePair<string, string> keyValue in _additionalInfo)
+							info = info.AddWithSeparator($"{keyValue.Key}: {keyValue.Value}", ",");
+					// Guarda la información adicional
+					AdditionalInfoText = info;
+			}
+		}
+	}
+
+	/// <summary>
+	///		Texto con la información adicional
+	/// </summary>
+	public string AdditionalInfoText
+	{
+		get { return _additionalInfoText; }
+		set { CheckProperty(ref _additionalInfoText, value); }
 	}
 
 	/// <summary>

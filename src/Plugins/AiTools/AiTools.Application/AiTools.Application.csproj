@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Parser\**" />
+    <EmbeddedResource Remove="Parser\**" />
+    <None Remove="Parser\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Bau.Libraries.LibHelper" Version="1.1.29" />
+    <PackageReference Include="Bau.Libraries.LibMarkup" Version="1.1.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Libraries\AiImageGenerator\LibAiImageGeneration\LibAiImageGeneration.csproj" />
+  </ItemGroup>
+
+</Project>

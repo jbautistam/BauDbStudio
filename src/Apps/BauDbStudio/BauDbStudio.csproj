@@ -106,6 +106,7 @@
     <ProjectReference Include="..\..\..\..\..\Libraries\Common\LibSystem.Windows\LibSystem.Windows.csproj" />
     <ProjectReference Include="..\..\Libraries\DbStudio\DbStudio.Views\DbStudio.Views.csproj" />
     <ProjectReference Include="..\..\Libraries\PluginsStudio\PluginsStudio.ViewModels\PluginsStudio.ViewModels.csproj" />
+    <ProjectReference Include="..\..\Plugins\AiTools\AiTools.Plugin\AiTools.Plugin.csproj" />
     <ProjectReference Include="..\..\Plugins\BlogReader\BlogReader.Views\BlogReader.Views.csproj" />
     <ProjectReference Include="..\..\Plugins\ChessDataBase\ChessDataBase.Plugin\ChessDataBase.Plugin.csproj" />
     <ProjectReference Include="..\..\Plugins\CloudStudio\CloudStudio.Plugin\CloudStudio.Plugin.csproj" />

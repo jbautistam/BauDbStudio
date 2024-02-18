@@ -23,9 +23,9 @@ public abstract class ProcessModel
     /// <summary>
     ///     Lanza un evento de log
     /// </summary>
-    protected void RaiseLog(LogEventArgs.Status status, string message)
+    protected void RaiseLog(LogEventArgs.Status status, string message, Dictionary<string, string>? additionalInfo = null)
     {
-        Log?.Invoke(this, new LogEventArgs(status, message));
+        Log?.Invoke(this, new LogEventArgs(status, message, additionalInfo));
     }
 
     /// <summary>

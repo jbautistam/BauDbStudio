@@ -1,0 +1,464 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Definitions>
+	<Definition Text="Adjectives">
+		<Definition Text="Stunning, Breathtaking, 8K, 4K, Impressive, Exquisite, Captivating"/>
+		<Definition Text="Intricate, Magnificent, Elegant, Meticulous, Vibrant, Spectacular"/>
+		<Definition Text="Immersive, Astounding, Striking, Unparalleled, Phenomenal, Enchanting"/>
+		<Definition Text="Extraordinary, Mind-blowing, Unforgettable, Masterpiece, Detailed"/>
+	</Definition>
+	<Definition Text="Lens">
+		<Definition Text="35mm">
+			<Definition Text="Wide-angle lens, Panoramic view, Wide angle"/>
+		</Definition>
+		<Definition Text="50mm">
+			<Definition Text="Standard lens, Nifty fifty, Versatile focal length, Natural field of view"/>
+		</Definition>
+		<Definition Text="80mm">
+			<Definition Text="Portrait lens, Medium telephoto, Flattering focal length"/>
+		</Definition>
+		<Definition Text="800mm lens">
+			<Definition Text="Super telephoto lens, Extreme reach, Distant subjects"/>
+		</Definition>
+		<Definition Text="circular polarizer">
+			<Definition Text="Polarizing filter, Reduced reflections, Enhanced colors, Increased contrast, Blue sky enhancement"/>
+		</Definition>
+		<Definition Text="depth of field 100mm">
+			<Definition Text="Shallow depth of field, Narrow depth of field, Wide aperture, Blurry background, Isolated subject"/>
+		</Definition>
+		<Definition Text="depth of field 270mm">
+			<Definition Text="Deep depth of field, Extended depth of field, Small aperture, Sharp from front to back"/>
+		</Definition>
+		<Definition Text="f/1.8">
+			<Definition Text="Wide aperture, Shallow depth of field, Low-light photography, Subject isolation, Creative bokeh"/>
+		</Definition>
+		<Definition Text="f/2.8">
+			<Definition Text="Fast lens, Wide aperture, Low-light photography, Shallow depth of field, Zoom lens"/>
+		</Definition>
+		<Definition Text="f/5">
+			<Definition Text="Moderate aperture, Balanced depth of field, Versatile for different scenes, Sharpness throughout"/>
+		</Definition>
+		<Definition Text="f/8">
+			<Definition Text="Optimal aperture, Sharpness across the frame, Good depth of field"/>
+		</Definition>
+		<Definition Text="f/14">
+			<Definition Text="Narrow aperture, Wide depth of field, Range depth of field"/>
+		</Definition>
+		<Definition Text="fish-eye lens">
+			<Definition Text="Ultra-wide-angle lens, Extreme perspective distortion, Unique visual effect, 360-degree photography, Creative compositions"/>
+		</Definition>
+		<Definition Text="l usm">
+			<Definition Text="Ultrasonic motor, Fast and silent autofocus, High-performance lens, Precise focusing, Professional-grade optics"/>
+		</Definition>
+		<Definition Text="low shutter">
+			<Definition Text="Slow shutter speed, Long exposure, Motion blur, Light trails, Creative effects"/>
+		</Definition>
+		<Definition Text="macro lens">
+			<Definition Text="Close-up lens, High magnification, Small details"/>
+		</Definition>
+		<Definition Text="selective focus">
+			<Definition Text="Bokeh effect, Subject separation, Background blur, Creatively controlling focus, Artistic photography"/>
+		</Definition>
+		<Definition Text="telephoto lens">
+			<Definition Text="Long focal length lens, Magnification, Compressed perspective"/>
+		</Definition>
+		<Definition Text="zoom lens">
+			<Definition Text="Telephoto lens, Wide-angle lens, Prime lens, Variable focal length lens, Optical zoom"/>
+		</Definition>
+	</Definition>
+	<Definition Text="Styles">
+		<Definition Text="3d style">
+			<Definition Text="3D art, Stereoscopic 3D art, 3D modeling, Three-dimensional artwork, 3D rendering"/>
+		</Definition>
+		<Definition Text="abstract">
+			<Definition Text="Non-representational, Non-objective, Experimental, Conceptual, Non-figurative"/>
+		</Definition>
+		<Definition Text="chalk painting:">
+			<Definition Text="Chalk art, Sidewalk art, Pavement art, Chalk mural, Chalk drawing"/>
+		</Definition>
+		<Definition Text="color splash:">
+			<Definition Text="Color pop, Selective color, Color highlight, Vibrant color, Color accent"/>
+		</Definition>
+		<Definition Text="concept art">
+			<Definition Text="Conceptual art, Artwork, Design concept, Visual representation, Illustrative concept"/>
+		</Definition>
+		<Definition Text="digital artwork">
+			<Definition Text="Digital creation, Digital illustration, Digital design, Digital masterpiece, Digital masterpiece"/>
+		</Definition>
+		<Definition Text="drawing">
+			<Definition Text="Sketch, Illustration, Artwork, Pencil drawing, Hand-drawn image"/>
+		</Definition>
+		<Definition Text="drone photo">
+			<Definition Text="Aerial photo, Drone shot, Quadcopter photo, Birds-eye view photo, Dronography"/>
+		</Definition>
+		<Definition Text="fractal">
+			<Definition Text="Fractal art, Mathematical art, Complex geometry, Self-similar pattern, Fractal visualization"/>
+		</Definition>
+		<Definition Text="oil painting">
+			<Definition Text="Oil artwork, Canvas painting, Traditional painting, Impressionist painting, Oil on canvas"/>
+		</Definition>
+		<Definition Text="painting">
+			<Definition Text="Artwork, Canvas painting, Fine art, Traditional painting, Painterly creation"/>
+		</Definition>
+		<Definition Text="pastels artwork">
+			<Definition Text="Pastel painting, Soft pastels art, Pastel creation, Colorful pastel art, Chalk pastels drawing"/>
+		</Definition>
+		<Definition Text="pencil painting">
+			<Definition Text="Pencil art, Sketch, Shading art, Pencil illustration, Graphite drawing"/>
+		</Definition>
+		<Definition Text="photograph">
+			<Definition Text="Photo, Picture, Image, Snapshot, Capture"/>
+		</Definition>
+		<Definition Text="portrait">
+			<Definition Text="Portraiture, Character study, Human likeness, Person depiction, Portrait artwork"/>
+		</Definition>
+		<Definition Text="raw photo">
+			<Definition Text="Unprocessed photo, Original photo, Untouched photo, RAW Image, Unedited photo"/>
+		</Definition>
+		<Definition Text="spray paint style">
+			<Definition Text="Graffiti style, Urban art style, Spray paint technique, Street art approach, Spray art"/>
+		</Definition>
+		<Definition Text="vector art">
+			<Definition Text="Vector illustration, Vector graphics, Digital vector, Scalable art, Geometric design"/>
+		</Definition>
+		<Definition Text="wall graffiti">
+			<Definition Text="Street art, Mural, Spray paint art, Urban art, Graffiti artwork"/>
+		</Definition>
+		<Definition Text="water color painting">
+			<Definition Text="Watercolor artwork, Aquarelle painting, Watercolor creation, Wash painting, Transparent painting"/>
+		</Definition>
+	</Definition>
+	<Definition Text="Lightning">
+		<Definition Text="accent lighting">
+			<Definition Text="Highlighting light, Emphasis illumination, Feature lighting, Focal point light, Accentuated glow"/>
+		</Definition>
+		<Definition Text="back-light">
+			<Definition Text="Rim light, Silhouette effect, Separation light, Halo effect, Glow from behind"/>
+		</Definition>
+		<Definition Text="beautifully lit">
+			<Definition Text="Gorgeously illuminated, Stunning light, Exquisitely lit, Beautiful glow, Radiant illumination"/>
+		</Definition>
+		<Definition Text="bloom light">
+			<Definition Text="Glowing light, Radiant illumination, Soft glow, Light halo, Luminous effect"/>
+		</Definition>
+		<Definition Text="broad lighting">
+			<Definition Text="Wide lighting, Full-face illumination, Frontal light, Evenly lit, Generally bright"/>
+		</Definition>
+		<Definition Text="candle light">
+			<Definition Text="Candlelit, Soft candlelight, Warm glow, Flickering light, Cozy illumination"/>
+		</Definition>
+		<Definition Text="cinematic lighting">
+			<Definition Text="Dramatic lighting, Mood lighting, Filmic illumination, Cinematic atmosphere, Evocative lighting"/>
+		</Definition>
+		<Definition Text="direct light">
+			<Definition Text="Primary light, Main illumination, Straight light, Focused lighting, Direct beam"/>
+		</Definition>
+		<Definition Text="dramatic lighting">
+			<Definition Text="Intense lighting, High contrast illumination, Dynamic light, Theatrical lighting, Striking illumination"/>
+		</Definition>
+		<Definition Text="ethereal lighting">
+			<Definition Text="Otherworldly illumination, Dreamlike light, Ethereal glow, Transcendent atmosphere, Magical lighting"/>
+		</Definition>
+		<Definition Text="flat lighting">
+			<Definition Text="Even lighting, No shadows, Uniform illumination, Low contrast lighting, Smooth lighting"/>
+		</Definition>
+		<Definition Text="gel lighting">
+			<Definition Text="Colored lighting, Gel filter, Color gel, Tinted illumination, Colorful light"/>
+		</Definition>
+		<Definition Text="hair light">
+			<Definition Text="Back light, Rim light, Highlight hair, Accentuate hair, Illuminate hair"/>
+		</Definition>
+		<Definition Text="hard light">
+			<Definition Text="Direct light, Focused illumination, Strong lighting, Harsh lighting, Sharp light"/>
+		</Definition>
+		<Definition Text="indirect light">
+			<Definition Text="Ambient light, Scattered illumination, Reflected light, Soft lighting, Diffused glow"/>
+		</Definition>
+		<Definition Text="key light">
+			<Definition Text="Main light, Primary light, Dominant illumination, Key source, Keying light"/>
+		</Definition>
+		<Definition Text="light caustics">
+			<Definition Text="Light patterns, Light reflections, Light refractions, Water caustics, Sparkling light"/>
+		</Definition>
+		<Definition Text="loop lighting">
+			<Definition Text="Loop shadow, Loop highlight, Crescent light, Continuous light, Curved light"/>
+		</Definition>
+		<Definition Text="moody lighting">
+			<Definition Text="Atmospheric lighting, Emotive illumination, Expressive light, Dramatic atmosphere, Evocative lighting"/>
+		</Definition>
+		<Definition Text="moonlight">
+			<Definition Text="Moonlit, Lunar illumination, Nighttime glow, Moonbeam, Moonlit atmosphere"/>
+		</Definition>
+		<Definition Text="moonlit">
+			<Definition Text="Moonlight, Lunar illumination, Nighttime glow, Moonbeam, Moonlit atmosphere"/>
+		</Definition>
+		<Definition Text="motion blur">
+			<Definition Text="Blurry motion, Movement blur, Dynamic blur, Action blur, Speed blur"/>
+		</Definition>
+		<Definition Text="natural lighting">
+			<Definition Text="Ambient lighting, Daylight, Sunlight, Outdoor lighting, Soft natural light"/>
+		</Definition>
+		<Definition Text="neon light">
+			<Definition Text="Neon illumination, Glowing light, Vibrant glow, Fluorescent lighting, Electrifying light"/>
+		</Definition>
+		<Definition Text="nostalgic lighting">
+			<Definition Text="Retro lighting, Vintage illumination, Old-fashioned light, Nostalgic atmosphere, Antique glow"/>
+		</Definition>
+		<Definition Text="reflected light">
+			<Definition Text="Reflected illumination, Bounce light, Indirect lighting, Mirror reflection, Secondary light"/>
+		</Definition>
+		<Definition Text="rim light">
+			<Definition Text="Backlighting, Edge light, Outline light, Contour light, Highlight from behind"/>
+		</Definition>
+		<Definition Text="short lighting">
+			<Definition Text="Narrow lighting, Side-facing illumination, Partial light, Focused on shadow side, Dramatic shadows"/>
+		</Definition>
+		<Definition Text="side light">
+			<Definition Text="Sideways lighting, Lateral illumination, Cross-lighting, Off-axis lighting, Directional light"/>
+		</Definition>
+		<Definition Text="side lit">
+			<Definition Text="Sideways lit, Lateral lit, Cross-lit, Off-axis lit, Directionally lit"/>
+		</Definition>
+		<Definition Text="side lighting">
+			<Definition Text="Lateral illumination, Sideways light, Cross-lighting, Off-axis lighting, Directional light"/>
+		</Definition>
+		<Definition Text="soft light">
+			<Definition Text="Diffused light, Gentle light, Subtle illumination, Mild lighting, Feathered light"/>
+		</Definition>
+		<Definition Text="soft lighting">
+			<Definition Text="Diffused lighting, Gentle illumination, Subtle lighting, Mild lighting, Feathered lighting"/>
+		</Definition>
+		<Definition Text="specular lighting">
+			<Definition Text="Shiny light, Reflective illumination, Gleaming light, Highlights and reflections, Glossy lighting"/>
+		</Definition>
+		<Definition Text="split lighting">
+			<Definition Text="Divided lighting, Two-sided illumination, Contrasting light and shadow, Halves light, Distinct separation"/>
+		</Definition>
+		<Definition Text="spotlight">
+			<Definition Text="Focused light, Center of attention, Highlighting, Beam of light, Spot illumination"/>
+		</Definition>
+		<Definition Text="spotlit">
+			<Definition Text="Spotlighted, Focused light, Highlighted, Center of attention, Lit up"/>
+		</Definition>
+		<Definition Text="studio lighting">
+			<Definition Text="Professional lighting, Controlled illumination, Photography lighting, Controlled light"/>
+		</Definition>
+		<Definition Text="sun rays">
+			<Definition Text="Sunbeams, Sunshine rays, Sunlight beams, Golden light, Sun shafts"/>
+		</Definition>
+		<Definition Text="sunlight">
+			<Definition Text="Sunshine, Daylight, Sun rays, Bright light, Sunny illumination"/>
+		</Definition>
+		<Definition Text="volumetric lighting">
+			<Definition Text="God rays, Light scattering, Atmospheric illumination, Beam of light, Hazy lighting"/>
+		</Definition>
+		<Definition Text="waning light">
+			<Definition Text="Diminishing light, Fading illumination, Weakening glow, Waning sun, Declining light"/>
+		</Definition>
+	</Definition>
+		<Definition Text="Countries">
+			<Definition Text="African American, Black, Afro-American, African descent, Melanated, Black American"/>
+			<Definition Text="Latina, Hispanic, Latinx, Chicana, Mexican American, Hispanic-Latina"/>
+			<Definition Text="Asian, East Asian, South Asian, Southeast Asian, Asian American, Oriental"/>
+			<Definition Text="Thai, Siamese, Thailand national, Thai descent, Thai, Thai people"/>
+			<Definition Text="Native American, Indigenous, First Nations, Native tribe member, American Indian, Aboriginal"/>
+			<Definition Text="Caucasian, White, European descent, White American, Caucasian ethnicity, White/Caucasian"/>
+			<Definition Text="Middle Eastern, Arab, Arabian, Middle Easterner, Levantine, Persian"/>
+			<Definition Text="Indian, South Asian, Desi, Hindustani, Indian American, Bharatiya"/>
+			<Definition Text="Afro-Latina, Black Hispanic, Afro-Latinx, Black Latina, African diaspora, Afro-Latin"/>
+			<Definition Text="Pacific Islander, Polynesian, Melanesian, Micronesian, Pacific Islander American, Oceanian"/>
+			<Definition Text="Japanese, Nihonjin, Japanese national, Japanese descent, Japanese, Yamato"/>
+			<Definition Text="Chinese, Han Chinese, Chinese national, Chinese descent, Chinese, Zhongguoren"/>
+			<Definition Text="Korean, Hanguk saram, Korean national, Korean descent, Korean, Joseonjok"/>
+			<Definition Text="Vietnamese, Viet, Vietnamese national, Vietnamese descent, Vietnamese, Kinh"/>
+			<Definition Text="Filipino, Pinoy, Filipino national, Filipino descent, Filipino, Tagalog"/>
+			<Definition Text="Mexican, Mexicana, Mexican national, Mexican descent, Mexican, Chicana"/>
+			<Definition Text="Brazilian, Brasileira, Brazilian national, Brazilian descent, Brazilian, Lusobrazilian"/>
+			<Definition Text="Russian, Russkiy, Russian national, Russian descent, Russian, Rus"/>
+			<Definition Text="French, Française, French national, French descent, French, Gallic"/>
+			<Definition Text="British, Briton, British national, British descent, British, Brit"/>
+		</Definition>
+		<Definition Text="Anime">
+			<Definition Text="Shonen">
+				<Definition Text="Action, Adventure, Power-ups, Battle"/>
+			</Definition>
+			<Definition Text="Shojo">
+				<Definition Text="Romance, Drama, Friendship, Magical Girl"/>
+			</Definition>
+			<Definition Text="Seinen">
+				<Definition Text="Mature, Psychological, Thriller, Slice of Life"/>
+			</Definition>
+			<Definition Text="Josei">
+				<Definition Text="Women's Issues, Realistic, Romance, Adult Themes"/>
+			</Definition>
+			<Definition Text="Isekai">
+				<Definition Text="Transported to Another World, Fantasy, Game-like Mechanics, Overpowered Protagonist"/>
+			</Definition>
+			<Definition Text="Mecha">
+				<Definition Text="Giant Robots, Pilots, Mechanical Battles, Sci-Fi"/>
+			</Definition>
+			<Definition Text="Slice of Life">
+				<Definition Text="Everyday Life, Character-driven, Heartwarming, Minimal Plot"/>
+			</Definition>
+			<Definition Text="Harem">
+				<Definition Text="Multiple Love Interests, Ecchi, Comedic Situations, Fanservice"/>
+			</Definition>
+		</Definition>
+		<Definition Text="Animals">
+			<Definition Text="Lion">
+				<Definition Text="Wildcat, King of the Jungle, Roar, Mane, Predator"/>
+			</Definition>
+			<Definition Text="Elephant">
+				<Definition Text="Pachyderm, Tusks, Trunk, Herbivore, Gentle Giant"/>
+			</Definition>
+			<Definition Text="Tiger">
+				<Definition Text="Big Cat, Stripes, Ferocious, Carnivore, Camouflage"/>
+			</Definition>
+			<Definition Text="Giraffe">
+				<Definition Text="Tall Herbivore, Long Neck, Spots, Graceful, Browser"/>
+			</Definition>
+			<Definition Text="Zebra">
+				<Definition Text="Striped Horse, Herbivore, Hooves, Social, Grazer"/>
+			</Definition>
+			<Definition Text="Gorilla">
+				<Definition Text="Great Ape, Intelligent, Strong, Herbivore, Family-Oriented"/>
+			</Definition>
+			<Definition Text="Kangaroo">
+				<Definition Text="Marsupial, Pouch, Hopping, Australia, Joey"/>
+			</Definition>
+			<Definition Text="Koala">
+				<Definition Text="Tree-Dwelling Marsupial, Eucalyptus, Sleepy, Cute, Climber"/>
+			</Definition>
+			<Definition Text="Panda">
+				<Definition Text="Bear, Bamboo, Endangered, Black and White, China"/>
+			</Definition>
+			<Definition Text="Monkey">
+				<Definition Text="Primate, Playful, Swinging, Intelligent, Curious"/>
+			</Definition>
+			<Definition Text="Horse">
+				<Definition Text="Equine, Hooves, Gallop, Domesticated, Equestrian"/>
+			</Definition>
+			<Definition Text="Dog">
+				<Definition Text="Canine, Loyal, Bark, Pets, Man's Best Friend"/>
+			</Definition>
+			<Definition Text="Cat">
+				<Definition Text="Feline, Meow, Independent, Purr, Curious"/>
+			</Definition>
+			<Definition Text="Cow">
+				<Definition Text="Bovine, Moo, Milk, Grazing, Farm Animal"/>
+			</Definition>
+			<Definition Text="Sheep">
+				<Definition Text="Ovine, Wool, Herd, Baa, Docile"/>
+			</Definition>
+			<Definition Text="Goat">
+				<Definition Text="Caprine, Beard, Climber, Horned, Cheese"/>
+			</Definition>
+			<Definition Text="Pig">
+				<Definition Text="Swine, Oink, Mud, Domesticated, Bacon"/>
+			</Definition>
+			<Definition Text="Rabbit">
+				<Definition Text="Lagomorph, Hop, Carrot, Burrow, Fast Breeder"/>
+			</Definition>
+			<Definition Text="Mouse">
+				<Definition Text="Rodent, Cheese, Squeak, Small, Nibbler"/>
+			</Definition>
+			<Definition Text="Bear">
+				<Definition Text="Ursine, Hibernate, Claws, Omnivore, Strong"/>
+			</Definition>
+			<Definition Text="Wolf">
+				<Definition Text="Canine, Howl, Pack, Predator, Territorial"/>
+			</Definition>
+			<Definition Text="Fox">
+				<Definition Text="Canine, Cunning, Sly, Red, Hunter"/>
+			</Definition>
+			<Definition Text="Deer">
+				<Definition Text="Ungulate, Antlers, Graze, Swift, Buck"/>
+			</Definition>
+			<Definition Text="Squirrel">
+				<Definition Text="Rodent, Nut, Climb, Busy, Bushy Tail"/>
+			</Definition>
+			<Definition Text="Raccoon">
+				<Definition Text="Procyonid, Mask, Night, Mischievous, Urban"/>
+			</Definition>
+			<Definition Text="Hippopotamus">
+				<Definition Text="Hippo, River, Water, Herbivore, Large"/>
+			</Definition>
+			<Definition Text="Rhino">
+				<Definition Text="Rhinoceros, Horn, Thick-Skinned, Endangered, Charge"/>
+			</Definition>
+			<Definition Text="Crocodile">
+				<Definition Text="Reptile, Jaws, Swim, Scaly, Predator"/>
+			</Definition>
+			<Definition Text="Alligator">
+				<Definition Text="Reptile, Teeth, Swamp, Lurk, Reptile"/>
+			</Definition>
+			<Definition Text="Snake">
+				<Definition Text="Reptile, Slither, Venomous, Cold-Blooded, Scales"/>
+			</Definition>
+			<Definition Text="Turtle">
+				<Definition Text="Reptile, Shell, Slow, Longevity, Aquatic"/>
+			</Definition>
+			<Definition Text="Frog">
+				<Definition Text="Amphibian, Ribbit, Jump, Pond, Tadpole"/>
+			</Definition>
+			<Definition Text="Fish">
+				<Definition Text="Aquatic Animal, Gills, Swim, Scales, School"/>
+			</Definition>
+			<Definition Text="Shark">
+				<Definition Text="Predatory Fish, Teeth, Ocean, Fins, Apex Predator"/>
+			</Definition>
+			<Definition Text="Dolphin">
+				<Definition Text="Marine Mammal, Intelligent, Sleek, Acrobatic, Communicative"/>
+			</Definition>
+			<Definition Text="Whale">
+				<Definition Text="Marine Mammal, Ocean, Blowhole, Migrate, Giant"/>
+			</Definition>
+			<Definition Text="Octopus">
+				<Definition Text="Cephalopod, Tentacles, Camouflage, Ink, Intelligent"/>
+			</Definition>
+			<Definition Text="Jellyfish">
+				<Definition Text="Cnidarian, Stingers, Translucent, Tentacles, Poisonous"/>
+			</Definition>
+			<Definition Text="Seahorse">
+				<Definition Text="Fish, Curly Tail, Seas, Gentle, Camouflage"/>
+			</Definition>
+			<Definition Text="Eagle">
+				<Definition Text="Bird of Prey, Raptor, Soaring, Vision, Predator"/>
+			</Definition>
+			<Definition Text="Owl">
+				<Definition Text="Nocturnal Bird, Wise, Hoot, Feathers, Hunter"/>
+			</Definition>
+			<Definition Text="Hawk">
+				<Definition Text="Bird of Prey, Sharp Talons, Swoop, Screech, Predator"/>
+			</Definition>
+			<Definition Text="Peacock">
+				<Definition Text="Bird, Vibrant Feathers, Display, Proud, Plumage"/>
+			</Definition>
+			<Definition Text="Swan">
+				<Definition Text="Waterfowl, Graceful, Elegant, Swim, Mating Dance"/>
+			</Definition>
+			<Definition Text="Flamingo">
+				<Definition Text="Wading Bird, Pink, Long Legs, Sociable, Stand on One Leg"/>
+			</Definition>
+			<Definition Text="Penguin">
+				<Definition Text="Flightless Bird, Antarctica, Waddle, Colony, Tuxedo"/>
+			</Definition>
+			<Definition Text="Parrot">
+				<Definition Text="Colorful Bird, Talk, Feathers, Tropical, Companion"/>
+			</Definition>
+			<Definition Text="Hummingbird">
+				<Definition Text="Tiny Bird, Nectar, Hover, Fast, Iridescent"/>
+			</Definition>
+			<Definition Text="Butterfly">
+				<Definition Text="Insect, Wings, Metamorphosis, Nectar, Beauty"/>
+			</Definition>
+			<Definition Text="Bee">
+				<Definition Text="Insect, Pollinate, Honey, Hive, Stinger"/>
+			</Definition>
+			<Definition Text="Ladybug">
+				<Definition Text="Insect, Spots, Lucky, Gardener, Small"/>
+			</Definition>
+			<Definition Text="Ant">
+				<Definition Text="Insect, Colony, Strong, Hardworking, Organized"/>
+			</Definition>
+		</Definition>
+	</Definitions>

@@ -21,7 +21,7 @@ public class ComicReaderController : ViewModel.Controllers.IComicReaderControlle
 		// Abre la ventana
 		switch (detailsViewModel)
 		{
-			case Bau.Libraries.ComicsReader.ViewModel.Reader.ComicContentViewModel viewModel:
+			case ViewModel.Reader.ComicContentViewModel viewModel:
 					ComicReaderPlugin.AppViewsController.OpenDocument(new Views.ComicContentView(viewModel), viewModel);
 				break;
 		}

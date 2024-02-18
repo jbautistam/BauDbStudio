@@ -20,10 +20,11 @@ public class LogEventArgs : EventArgs
 		Success
 	}
 
-	public LogEventArgs(Status state, string message)
+	public LogEventArgs(Status state, string message, Dictionary<string, string>? additionalInfo = null)
 	{	
 		State = state;
 		Message = message;
+		AdditionalInfo = additionalInfo;
 	}
 
 	/// <summary>
@@ -35,4 +36,9 @@ public class LogEventArgs : EventArgs
 	///		Mensaje
 	/// </summary>
 	public string Message { get; }
+
+	/// <summary>
+	///		Información adicional
+	/// </summary>
+	public Dictionary<string, string>? AdditionalInfo { get; }
 }

@@ -30,6 +30,7 @@ public partial class MainWindow : Window
 																	this);
 		DbStudioViewsManager.MainWindowsController.Logger.LogInformation("Start application");
 		// Añade los plugins
+		DbStudioViewsManager.AddPlugin(new Libraries.AiTools.Plugin.AiToolsPlugin());
 		DbStudioViewsManager.AddPlugin(new Libraries.BlogReader.Views.BlogReaderPlugin());
 		DbStudioViewsManager.AddPlugin(new Libraries.ChessDataBase.Plugin.ChessDataBasePlugin());
 		DbStudioViewsManager.AddPlugin(new Libraries.CloudStudio.Plugin.CloudStudioPlugin());
