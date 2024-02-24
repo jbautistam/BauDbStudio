@@ -57,7 +57,7 @@ public class NodeFolderRootViewModel : PluginNodeViewModel
 	}
 
 	/// <summary>
-	///		Directorio
+	///		Directorio / nombre de archivo
 	/// </summary>
 	public string FileName
 	{
@@ -68,8 +68,12 @@ public class NodeFolderRootViewModel : PluginNodeViewModel
 			{
 				if (!string.IsNullOrWhiteSpace(value))
 				{
+					// Asigna el texto y el toolTip
 					Text = Path.GetFileName(value);
 					ToolTipText = value;
+					// Si está vacío, guarda el valor entero (si el nombre de archivo es C:\, Path.GetFileName devuelve un valor vacío)
+					if (string.IsNullOrWhiteSpace(Text))
+						Text = value;
 				}
 				else
 				{

@@ -83,7 +83,7 @@ public class AiToolsPlugin : IPlugin
 					Name = $"Prompt imágenes {extension}",
 					FileExtension = extension,
 					Icon = "/AiTools.Plugin;component/Resources/AiImageFile.png",
-					CanCreate = false
+					CanCreate = true
 				};
 		}
 	}

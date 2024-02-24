@@ -33,7 +33,7 @@ public class NodeFileViewModel : PluginNodeAsyncViewModel
 	/// <summary>
 	///		Obtiene la lista de nodos hijo
 	/// </summary>
-	protected override async Task<List<PluginNodeViewModel>> GetChildNodesAsync(CancellationToken cancellationToken)
+	protected override async Task<List<PluginNodeViewModel>?> GetChildNodesAsync(CancellationToken cancellationToken)
 	{
 		// Evita las advertencias
 		await Task.Delay(1, cancellationToken);
@@ -104,7 +104,11 @@ public class NodeFileViewModel : PluginNodeAsyncViewModel
 	public string FileName
 	{
 		get { return _fileName; }
-		set { CheckProperty(ref _fileName, value); }
+		set 
+		{ 
+			if (CheckProperty(ref _fileName, value))
+				ToolTipText = value;
+		}
 	}
 
 	/// <summary>
