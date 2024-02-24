@@ -1,4 +1,4 @@
-﻿namespace Bau.Libraries.ComicsReader.ViewModel.Reader;
+﻿namespace Bau.Libraries.EbooksReader.ViewModel.Reader.Comics;
 
 /// <summary>
 ///		ViewModel para la página

@@ -18,6 +18,7 @@
     <None Remove="Resources\ArrowNext.png" />
     <None Remove="Resources\ArrowPrevious.png" />
     <None Remove="Resources\File.png" />
+    <None Remove="Resources\FileCbr.png" />
     <None Remove="Resources\FileEpub.png" />
     <None Remove="Resources\FileMobi.png" />
     <None Remove="Resources\FolderNode.png" />
@@ -31,6 +32,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\Controls\WPF\BauControls\src\BauControls.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Controls\WPF\ZoomAndPanControl\ZoomAndPanControls.csproj" />
     <ProjectReference Include="..\..\..\Libraries\PluginsStudio\PluginsStudio.Views.Base\PluginsStudio.Views.Base.csproj" />
     <ProjectReference Include="..\EbooksReader.ViewModel\EbooksReader.ViewModel.csproj" />
   </ItemGroup>
@@ -41,6 +43,7 @@
     <Resource Include="Resources\ArrowNext.png" />
     <Resource Include="Resources\ArrowPrevious.png" />
     <Resource Include="Resources\File.png" />
+    <Resource Include="Resources\FileCbr.png" />
     <Resource Include="Resources\FileEpub.png" />
     <Resource Include="Resources\FileMobi.png" />
     <Resource Include="Resources\FolderNode.png" />
@@ -53,6 +56,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\ComicContentView.xaml.cs">
+      <DependentUpon>ComicContentView.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\EBookContentView.xaml.cs">
       <DependentUpon>EBookContentView.xaml</DependentUpon>
     </Compile>

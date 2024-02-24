@@ -1,4 +1,4 @@
-﻿namespace Bau.Libraries.ComicsReader.ViewModel.Reader.EventArguments;
+﻿namespace Bau.Libraries.EbooksReader.ViewModel.Reader.Comics.EventArguments;
 
 /// <summary>
 ///		Argumentos del evento de zoom

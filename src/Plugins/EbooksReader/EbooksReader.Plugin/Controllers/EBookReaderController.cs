@@ -21,8 +21,11 @@ public class EBookReaderController : ViewModel.Controllers.IEBookReaderControlle
 		// Abre la ventana
 		switch (detailsViewModel)
 		{
-			case ViewModel.Reader.EBookContentViewModel viewModel:
+			case ViewModel.Reader.eBooks.EBookContentViewModel viewModel:
 					EBookReaderPlugin.AppViewsController.OpenDocument(new Views.EBookContentView(viewModel), viewModel);
+				break;
+			case ViewModel.Reader.Comics.ComicContentViewModel viewModel:
+					EBookReaderPlugin.AppViewsController.OpenDocument(new Views.ComicContentView(viewModel), viewModel);
 				break;
 		}
 		// Devuelve el valor predeterminado

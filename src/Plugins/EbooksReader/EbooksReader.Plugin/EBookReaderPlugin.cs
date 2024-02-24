@@ -6,12 +6,12 @@ using Bau.Libraries.PluginsStudio.Views.Base.Models;
 namespace Bau.Libraries.EbooksReader.Plugin;
 
 /// <summary>
-///		Plugin para el lector de eBooks
+///		Plugin para el lector de eBooks y cómics
 /// </summary>
 public class EBookReaderPlugin : IPlugin
 { 
 	/// <summary>
-	///		Inicializa el manager de vistas del lector de cómics
+	///		Inicializa el manager de vistas del lector de ebooks y cómics
 	/// </summary>
 	public void Initialize(IAppViewsController appViewsController, PluginsStudio.ViewModels.Base.Controllers.IPluginsController pluginController)
 	{
@@ -73,21 +73,28 @@ public class EBookReaderPlugin : IPlugin
 	{
 		return new List<FileAssignedModel>
 						{
-							new FileAssignedModel
-								{
-									Name = "Ebook",
-									FileExtension = ".epub",
-									Icon = "/EbooksReader.Plugin;component/Resources/FileEpub.png",
-									CanCreate = false
-								},
-							new FileAssignedModel
-								{
-									Name = "Ebook",
-									FileExtension = ".mobi",
-									Icon = "/EbooksReader.Plugin;component/Resources/FileMobi.png",
-									CanCreate = false
-								}
+							GetFileAssigned("Ebook", ".epub", "FileEpub"),
+							GetFileAssigned("Ebook", ".mobi", "FileMobi"),
+							GetFileComic(".cbr"),
+							GetFileComic(".cbz"),
+							GetFileComic(".zip"),
+							GetFileComic(".rar")
 						};
+
+		// Obtiene un archivo de cómic
+		FileAssignedModel GetFileComic(string extension) => GetFileAssigned($"Comic {extension}", extension, "FileCbr"); 
+
+		// Obtiene un archivo
+		FileAssignedModel GetFileAssigned(string name, string extension, string icon)
+		{
+			return new FileAssignedModel
+							{
+								Name = name,
+								FileExtension = extension,
+								Icon = $"/EbooksReader.Plugin;component/Resources/{icon}.png",
+								CanCreate = false
+							};
+		}
 	}
 
 	/// <summary>

@@ -1,6 +1,6 @@
 ﻿using Bau.Libraries.BauMvvm.ViewModels;
 
-namespace Bau.Libraries.EbooksReader.ViewModel.Reader;
+namespace Bau.Libraries.EbooksReader.ViewModel.Reader.eBooks;
 
 /// <summary>
 ///		ViewModel para ver el contenido de un <see cref="BookModel"/>

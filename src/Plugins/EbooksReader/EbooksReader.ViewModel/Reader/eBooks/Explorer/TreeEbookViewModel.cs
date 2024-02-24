@@ -1,6 +1,6 @@
 ﻿using Bau.Libraries.LibEBooks.Models.eBook;
 
-namespace Bau.Libraries.EbooksReader.ViewModel.Reader.Explorer;
+namespace Bau.Libraries.EbooksReader.ViewModel.Reader.eBooks.Explorer;
 
 /// <summary>
 ///		ViewModel para el árbol de páginas de un libro

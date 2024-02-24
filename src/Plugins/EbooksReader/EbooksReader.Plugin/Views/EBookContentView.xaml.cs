@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-using Bau.Libraries.EbooksReader.ViewModel.Reader;
+using Bau.Libraries.EbooksReader.ViewModel.Reader.eBooks;
 
 namespace Bau.Libraries.EbooksReader.Plugin.Views;
 
@@ -61,7 +61,7 @@ public partial class EBookContentView : UserControl
 
 	private void trvExplorer_SelectedItemChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<object> e)
 	{
-		if ((sender as TreeView)?.SelectedItem is ViewModel.Reader.Explorer.EbookNodeViewModel node)
+		if ((sender as TreeView)?.SelectedItem is ViewModel.Reader.eBooks.Explorer.EbookNodeViewModel node)
 			ViewModel.TreePages.SelectedNode = node;
 	}
 }

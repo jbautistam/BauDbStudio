@@ -1,6 +1,7 @@
 ﻿using System.Windows.Data;
 
 using Bau.Libraries.LibHelper.Extensors;
+using Bau.Libraries.EbooksReader.ViewModel.Reader.eBooks.Explorer;
 
 namespace Bau.Libraries.EbooksReader.Plugin.Converters;
 
@@ -14,17 +15,17 @@ public class PageIconConverter : IValueConverter
 	/// </summary>
 	public object Convert(object? value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
 	{ 
-		return GetIcon((value?.ToString() ?? string.Empty).GetEnum(ViewModel.Reader.Explorer.TreeEbookViewModel.NodeType.Unknown));
+		return GetIcon((value?.ToString() ?? string.Empty).GetEnum(TreeEbookViewModel.NodeType.Unknown));
 	}
 
 	/// <summary>
 	///		Obtiene la imagen asociada a un nodo
 	/// </summary>
-	private object GetIcon(ViewModel.Reader.Explorer.TreeEbookViewModel.NodeType type)
+	private object GetIcon(TreeEbookViewModel.NodeType type)
 	{
 		return type switch
 				{
-					ViewModel.Reader.Explorer.TreeEbookViewModel.NodeType.Page => "/EbooksReader.Plugin;component/Resources/File.png",
+					TreeEbookViewModel.NodeType.Page => "/EbooksReader.Plugin;component/Resources/File.png",
 					_ => "/EbooksReader.Plugin;component/Resources/FolderNode.png",
 				};
 	}

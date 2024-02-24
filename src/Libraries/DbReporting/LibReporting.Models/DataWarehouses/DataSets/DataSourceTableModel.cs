@@ -37,21 +37,13 @@ public class DataSourceTableModel : BaseDataSourceModel
 	}
 
 	/// <summary>
-	///		Obtiene el nombre completo del origen de datos (utilizando o no los caracteres del proveedor), no se utilizan
-	///	los caracteres del proveedor cuando es para el Id normalizado (NormalizedFullName) que se usa en el acceso por
-	///	diccionario
+	///		Obtiene el nombre completo del origen de datos
 	/// </summary>
-	private string GetFullName(bool useProviderChars)
+	private string GetFullName()
 	{
 		string charStart = "[", charEnd = "]";
 		string fullName = string.Empty;
 
-			// Cambia los caracteres si tiene que utilizar los caracteres del proveedor
-			if (useProviderChars)
-			{
-				charStart = DataWarehouse.Schema.Configuration.CharFieldNameStart;
-				charEnd = DataWarehouse.Schema.Configuration.CharFieldNameEnd;
-			}
 			// Añade el esquema
 			fullName += NormalizeName(Schema, charStart, charEnd);
 			// Añade el nombre
@@ -99,12 +91,7 @@ public class DataSourceTableModel : BaseDataSourceModel
 	/// <summary>
 	///		Nombre completo
 	/// </summary>
-	public string FullName => GetFullName(true);
-
-	/// <summary>
-	///		Nombre completo normalizado: es el que se utiliza como Id
-	/// </summary>
-	public string NormalizedFullName => GetFullName(false);
+	public string FullName => GetFullName();
 
 	/// <summary>
 	///		Indica si es un origen de datos establecido sobre una vista

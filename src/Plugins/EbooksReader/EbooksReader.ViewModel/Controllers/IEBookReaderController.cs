@@ -1,5 +1,6 @@
-﻿using Bau.Libraries.BauMvvm.ViewModels.Controllers;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
+
+using Bau.Libraries.BauMvvm.ViewModels.Controllers;
 
 namespace Bau.Libraries.EbooksReader.ViewModel.Controllers;
 

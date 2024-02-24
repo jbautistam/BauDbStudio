@@ -34,7 +34,6 @@ public partial class MainWindow : Window
 		DbStudioViewsManager.AddPlugin(new Libraries.BlogReader.Views.BlogReaderPlugin());
 		DbStudioViewsManager.AddPlugin(new Libraries.ChessDataBase.Plugin.ChessDataBasePlugin());
 		DbStudioViewsManager.AddPlugin(new Libraries.CloudStudio.Plugin.CloudStudioPlugin());
-		DbStudioViewsManager.AddPlugin(new Libraries.ComicsReader.Plugin.ComicReaderPlugin());
 		DbStudioViewsManager.AddPlugin(new Libraries.DbStudio.Views.DbStudioViewManager());
 		DbStudioViewsManager.AddPlugin(new Libraries.EbooksReader.Plugin.EBookReaderPlugin());
 		DbStudioViewsManager.AddPlugin(new Libraries.FileTools.Plugin.FileToolsPlugin());

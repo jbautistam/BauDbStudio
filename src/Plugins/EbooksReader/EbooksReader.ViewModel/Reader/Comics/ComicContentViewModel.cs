@@ -2,12 +2,12 @@
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.ListView;
 
-namespace Bau.Libraries.ComicsReader.ViewModel.Reader;
+namespace Bau.Libraries.EbooksReader.ViewModel.Reader.Comics;
 
-    /// <summary>
-    ///		ViewModel para ver el contenido de un <see cref="BookModel"/>
-    /// </summary>
-    public class ComicContentViewModel : BaseObservableObject, PluginsStudio.ViewModels.Base.Interfaces.IDetailViewModel
+/// <summary>
+///		ViewModel para ver el contenido de un <see cref="BookModel"/>
+/// </summary>
+public class ComicContentViewModel : BaseObservableObject, PluginsStudio.ViewModels.Base.Interfaces.IDetailViewModel
 {
 	// Eventos públícos
 	public EventHandler<EventArguments.ZoomEventArgs>? UpdateZoom;
@@ -16,7 +16,7 @@ namespace Bau.Libraries.ComicsReader.ViewModel.Reader;
 	private string _tempPath = default!, _fileName = default!;
 	private double _zoom;
 
-	public ComicContentViewModel(ComicReaderViewModel mainViewModel, string fileName) : base(false)
+	public ComicContentViewModel(EBookReaderViewModel mainViewModel, string fileName) : base(false)
 	{ 
 		// Asigna las propiedades
 		MainViewModel = mainViewModel;
@@ -190,7 +190,7 @@ namespace Bau.Libraries.ComicsReader.ViewModel.Reader;
 	/// <summary>
 	///		ViewModel principal
 	/// </summary>
-	public ComicReaderViewModel MainViewModel { get; set; }
+	public EBookReaderViewModel MainViewModel { get; set; }
 
 	/// <summary>
 	///		Cabecera

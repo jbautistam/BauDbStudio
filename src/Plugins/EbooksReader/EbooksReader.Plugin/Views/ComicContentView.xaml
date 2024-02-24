@@ -1,4 +1,5 @@
-﻿<UserControl xmlns:Graphical="clr-namespace:Bau.Controls.Graphical;assembly=BauControls"  x:Class="Bau.Libraries.ComicsReader.Plugin.Views.ComicContentView"
+﻿<UserControl xmlns:Graphical="clr-namespace:Bau.Controls.Graphical;assembly=BauControls"  
+			x:Class="Bau.Libraries.EbooksReader.Plugin.Views.ComicContentView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -7,7 +8,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="400" 
 			 xmlns:zoomAndPan="clr-namespace:Bau.Controls.ZoomAndPanControls;assembly=ZoomAndPanControls"
-			 >
+>
 	<UserControl.InputBindings>
 		<KeyBinding Key="Home" Command="{Binding Path=FirstPageCommand}"/>
 		<KeyBinding Key="PageUp" Command="{Binding Path=NextPageCommand}"/>
@@ -29,10 +30,10 @@
 		<ToolBarTray Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" >
 			<ToolBar HorizontalAlignment="Stretch" >
 				<Button ToolTip="Primera página" Command="{Binding FirstPageCommand}">
-					<Image Source="/ComicsReader.Plugin;component/Resources/ArrowFirst.png"></Image>
+					<Image Source="/EbooksReader.Plugin;component/Resources/ArrowFirst.png"></Image>
 				</Button>
 				<Button ToolTip="Página anterior" Command="{Binding PreviousPageCommand}">
-					<Image Source="/ComicsReader.Plugin;component/Resources/ArrowPrevious.png"></Image>
+					<Image Source="/EbooksReader.Plugin;component/Resources/ArrowPrevious.png"></Image>
 				</Button>
 				<TextBlock VerticalAlignment="Center" Margin="20,0">
 					<TextBlock.Text>
@@ -43,24 +44,24 @@
 					</TextBlock.Text>
 				</TextBlock>
 				<Button ToolTip="Página siguiente" Command="{Binding NextPageCommand}">
-					<Image Source="/ComicsReader.Plugin;component/Resources/ArrowNext.png"></Image>
+					<Image Source="/EbooksReader.Plugin;component/Resources/ArrowNext.png"></Image>
 				</Button>
 				<Button Command="{Binding LastPageCommand}">
-					<Image Source="/ComicsReader.Plugin;component/Resources/ArrowLast.png"></Image>
+					<Image Source="/EbooksReader.Plugin;component/Resources/ArrowLast.png"></Image>
 				</Button>
 				<Separator/>
 				<Button Margin="5" Command="{Binding ElementName=ZoomAndPanControl, Path=ZoomPercentCommand}" ToolTip="100%">
-					<Image Width="16" Height="16" Source="/ComicsReader.Plugin;component/Resources/Zoom100.png" />
+					<Image Width="16" Height="16" Source="/EbooksReader.Plugin;component/Resources/Zoom100.png" />
 				</Button>
 				<Button Margin="5" Command="{Binding ElementName=ZoomAndPanControl, Path=FitCommand}" ToolTip="Ajustar al alto">
-					<Image Width="16" Height="16" Source="/ComicsReader.Plugin;component/Resources/ZoomFit.png" />
+					<Image Width="16" Height="16" Source="/EbooksReader.Plugin;component/Resources/ZoomFit.png" />
 				</Button>
 				<Button Margin="5" Command="{Binding ElementName=ZoomAndPanControl, Path=FillCommand}" ToolTip="Ajustar al ancho">
-					<Image Width="16" Height="16" Source="/ComicsReader.Plugin;component/Resources/ZoomFill.png" />
+					<Image Width="16" Height="16" Source="/EbooksReader.Plugin;component/Resources/ZoomFill.png" />
 				</Button>
 				<Separator/>
 				<Button Margin="5" Command="{Binding ElementName=ZoomAndPanControl, Path=ZoomOutCommand}">
-					<Image Width="16" Height="16" Source="/ComicsReader.Plugin;component/Resources/ZoomOut.png" />
+					<Image Width="16" Height="16" Source="/EbooksReader.Plugin;component/Resources/ZoomOut.png" />
 				</Button>
 				<Slider Width="120" LargeChange="20" Margin="5"
                     Maximum="{Binding ElementName=ZoomAndPanControl, Path=ZoomAndPanContent.MaximumZoom, Converter={zoomAndPan:ZoomAdjustConverter}}"
@@ -70,14 +71,14 @@
                     TickFrequency="10"
                     TickPlacement="TopLeft" />
 				<Button Margin="5" Command="{Binding ElementName=ZoomAndPanControl, Path=ZoomInCommand}">
-					<Image Width="16" Height="16" Source="/ComicsReader.Plugin;component/Resources/ZoomIn.png" />
+					<Image Width="16" Height="16" Source="/EbooksReader.Plugin;component/Resources/ZoomIn.png" />
 				</Button>
 				<TextBlock Width="50" VerticalAlignment="Center" Margin="5"
 						Text="{Binding ElementName=ZoomAndPanControl, Path=ViewportZoom, StringFormat=p1}"
 						TextAlignment="Right" />
 				<Separator/>
 				<ToggleButton x:Name="chkShowThumb" IsChecked="True" Click="chkShowThumb_Click" ToolTip="Mostrar thumbnail">
-					<Image Width="16" Height="16" Source="/ComicsReader.Plugin;component/Resources/SeeWindow.png" />
+					<Image Width="16" Height="16" Source="/EbooksReader.Plugin;component/Resources/SeeWindow.png" />
 				</ToggleButton>
 			</ToolBar>
 		</ToolBarTray>

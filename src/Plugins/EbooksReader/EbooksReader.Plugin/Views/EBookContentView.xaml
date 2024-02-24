@@ -6,7 +6,7 @@
 			 Loaded="UserControl_Loaded"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="400" 
-			 xmlns:NodeViewModel="clr-namespace:Bau.Libraries.EbooksReader.ViewModel.Reader.Explorer;assembly=EbooksReader.ViewModel"
+			 xmlns:NodeViewModel="clr-namespace:Bau.Libraries.EbooksReader.ViewModel.Reader.eBooks.Explorer;assembly=EbooksReader.ViewModel"
 			 xmlns:Converters="clr-namespace:Bau.Libraries.EbooksReader.Plugin.Converters"
 			 xmlns:BauControls="clr-namespace:Bau.Controls.WebExplorers;assembly=BauControls"
 			 >

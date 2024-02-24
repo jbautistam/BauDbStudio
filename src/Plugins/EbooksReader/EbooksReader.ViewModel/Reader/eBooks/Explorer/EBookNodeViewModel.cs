@@ -3,7 +3,7 @@ using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.Trees;
 using Bau.Libraries.LibEBooks.Models.eBook;
 
-namespace Bau.Libraries.EbooksReader.ViewModel.Reader.Explorer;
+namespace Bau.Libraries.EbooksReader.ViewModel.Reader.eBooks.Explorer;
 
 /// <summary>
 ///		Clase base para los nodos del árbol <see cref="TreeEbookViewModel"/>

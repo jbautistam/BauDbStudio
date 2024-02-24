@@ -28,21 +28,33 @@ public class EBookReaderViewModel : BauMvvm.ViewModels.BaseObservableObject
 	}
 
 	/// <summary>
-	///		Abre un archivo de cómic
+	///		Abre un archivo
 	/// </summary>
 	public bool OpenFile(string fileName)
 	{
-		if (!string.IsNullOrWhiteSpace(fileName) && 
-			(fileName.EndsWith(".epub", StringComparison.CurrentCultureIgnoreCase) ||
-			 fileName.EndsWith(".mobi", StringComparison.CurrentCultureIgnoreCase)))
+		if (!string.IsNullOrWhiteSpace(fileName))
 		{
-			// Abre la ventana
-			ViewsController.OpenWindow(new Reader.EBookContentViewModel(this, fileName));
-			// e indica que ha podido abrir el archivo
-			return true;
+			if (fileName.EndsWith(".epub", StringComparison.CurrentCultureIgnoreCase) ||
+					fileName.EndsWith(".mobi", StringComparison.CurrentCultureIgnoreCase))
+			{
+				// Abre la ventana
+				ViewsController.OpenWindow(new Reader.eBooks.EBookContentViewModel(this, fileName));
+				// e indica que ha podido abrir el archivo
+				return true;
+			}
+			else if (fileName.EndsWith(".cbr", StringComparison.CurrentCultureIgnoreCase) ||
+						fileName.EndsWith(".cbz", StringComparison.CurrentCultureIgnoreCase) ||
+						fileName.EndsWith(".zip", StringComparison.CurrentCultureIgnoreCase) ||
+						fileName.EndsWith(".rar", StringComparison.CurrentCultureIgnoreCase))
+			{
+				// Abre la ventana
+				ViewsController.OpenWindow(new Reader.Comics.ComicContentViewModel(this, fileName));
+				// e indica que ha podido abrir el archivo
+				return true;
+			}
 		}
-		else
-			return false;
+		// Indica que no se ha abierto el archivo
+		return false;
 	}
 
 	/// <summary>

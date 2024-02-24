@@ -1,8 +1,8 @@
 ﻿using System.Windows.Controls;
 
-using Bau.Libraries.ComicsReader.ViewModel.Reader;
+using Bau.Libraries.EbooksReader.ViewModel.Reader.Comics;
 
-namespace Bau.Libraries.ComicsReader.Plugin.Views;
+namespace Bau.Libraries.EbooksReader.Plugin.Views;
 
 /// <summary>
 ///		Formulario para mostrar el contenido de un cómic
