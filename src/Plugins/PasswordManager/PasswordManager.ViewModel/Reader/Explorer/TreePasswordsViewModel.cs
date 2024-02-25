@@ -270,10 +270,7 @@ public class TreePasswordsViewModel : PluginsStudio.ViewModels.Base.Explorers.Pl
 	/// <summary>
 	///		Indica si está seleccionada una carpeta
 	/// </summary>
-	public bool IsSelectedFolder
-	{
-		get { return SelectedNode != null && SelectedNode is FolderNodeViewModel; }
-	}
+	public bool IsSelectedFolder => SelectedNode is FolderNodeViewModel;
 
 	/// <summary>
 	///		ViewModel principal

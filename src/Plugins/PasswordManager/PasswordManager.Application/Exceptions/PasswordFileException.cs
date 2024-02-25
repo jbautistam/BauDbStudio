@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-
-namespace Bau.Libraries.PasswordManager.Application.Exceptions;
+﻿namespace Bau.Libraries.PasswordManager.Application.Exceptions;
 
 /// <summary>
 ///		Excepciones de <see cref="PasswordManager"/>
@@ -16,10 +14,6 @@ public class PasswordFileException : Exception
 	}
 
 	public PasswordFileException(string? message, Exception? innerException) : base(message, innerException)
-	{
-	}
-
-	protected PasswordFileException(SerializationInfo info, StreamingContext context) : base(info, context)
 	{
 	}
 }

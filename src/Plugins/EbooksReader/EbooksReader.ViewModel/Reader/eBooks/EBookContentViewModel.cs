@@ -3,7 +3,7 @@
 namespace Bau.Libraries.EbooksReader.ViewModel.Reader.eBooks;
 
 /// <summary>
-///		ViewModel para ver el contenido de un <see cref="BookModel"/>
+///		ViewModel para ver el contenido de un <see cref="LibEBooks.Models.eBook.Book"/>
 /// </summary>
 public class EBookContentViewModel : BaseObservableObject, PluginsStudio.ViewModels.Base.Interfaces.IDetailViewModel
 {

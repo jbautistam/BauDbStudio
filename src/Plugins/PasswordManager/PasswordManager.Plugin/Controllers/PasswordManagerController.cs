@@ -21,7 +21,7 @@ public class PasswordManagerController : ViewModel.Controllers.IPasswordManagerC
 		// Abre la ventana
 		switch (detailsViewModel)
 		{
-			case Bau.Libraries.PasswordManager.ViewModel.Reader.PasswordFileViewModel viewModel:
+			case ViewModel.Reader.PasswordFileViewModel viewModel:
 					PasswordManagerPlugin.AppViewsController.OpenDocument(new Views.PasswordFileView(viewModel), viewModel);
 				break;
 		}
@@ -39,7 +39,7 @@ public class PasswordManagerController : ViewModel.Controllers.IPasswordManagerC
 			// Abre la ventana
 			switch (dialogViewModel)
 			{
-				case PasswordManager.ViewModel.Generator.GeneratorViewModel viewModel:
+				case ViewModel.Generator.GeneratorViewModel viewModel:
 						result = PasswordManagerPlugin.AppViewsController.OpenDialog(new Views.GeneratorView(viewModel));
 					break;
 			}

@@ -19,7 +19,7 @@ public class FolderNodeViewModel : BaseNodeEntryViewModel
 	/// <summary>
 	///		Obtiene los nodos hijo
 	/// </summary>
-	protected override async Task<List<PluginNodeViewModel>> GetChildNodesAsync(CancellationToken cancellationToken)
+	protected override async Task<List<PluginNodeViewModel>?> GetChildNodesAsync(CancellationToken cancellationToken)
 	{
 		List<PluginNodeViewModel> nodes = new();
 
