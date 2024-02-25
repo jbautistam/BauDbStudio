@@ -3,7 +3,7 @@
 namespace Bau.Libraries.FileTools.ViewModel;
 
 /// <summary>
-///		ViewModel principal del procesador de trabajos
+///		ViewModel principal de la herramienta de archivos
 /// </summary>
 public class FileToolsViewModel : BaseObservableObject
 {
@@ -15,7 +15,7 @@ public class FileToolsViewModel : BaseObservableObject
 		// Asigna el controlador de vistas
 		MainController = mainController;
 		// Inicializa los comandos
-		ExecuteFileCommand = new BaseCommand(_ => ExecuteFolderFile(_));
+		ExecuteFileCommand = new BaseCommand(ExecuteFolderFile);
 	}
 
 	/// <summary>
@@ -51,11 +51,27 @@ public class FileToolsViewModel : BaseObservableObject
 					// indica que ha podido abrir el archivo
 					open = true;
 				}
+				else if (fileName.EndsWith(".mp3", StringComparison.CurrentCultureIgnoreCase) ||
+					fileName.EndsWith(".wav", StringComparison.CurrentCultureIgnoreCase))
+				{
+					// Reproduce el archivo
+					MainController.OpenDialog(new Multimedia.MediaFileViewModel(this, fileName, true));
+					// e indica que ha podido abrir el archivo
+					open = true;
+				}
+				else if (fileName.EndsWith(".mp4", StringComparison.CurrentCultureIgnoreCase) ||
+						 fileName.EndsWith(".mkv", StringComparison.CurrentCultureIgnoreCase) ||
+						 fileName.EndsWith(".avi", StringComparison.CurrentCultureIgnoreCase))
+				{
+					// Reproduce el archivo
+					MainController.OpenDialog(new Multimedia.MediaFileViewModel(this, fileName, true));
+					// e indica que ha podido abrir el archivo
+					open = true;
+				}
 			}
 			// Devuelve el valor que indica si se ha abierto
 			return open;
 	}
-
 
 	/// <summary>
 	///		Ejecuta el script de un archivo o una carpeta

@@ -38,7 +38,6 @@ public partial class MainWindow : Window
 		DbStudioViewsManager.AddPlugin(new Libraries.EbooksReader.Plugin.EBookReaderPlugin());
 		DbStudioViewsManager.AddPlugin(new Libraries.FileTools.Plugin.FileToolsPlugin());
 		DbStudioViewsManager.AddPlugin(new Libraries.JobsProcessor.Plugin.JobsProcessorPlugin());
-		DbStudioViewsManager.AddPlugin(new Libraries.MultimediaFiles.Plugin.MultimediaFilesPlugin());
 		DbStudioViewsManager.AddPlugin(new Libraries.PasswordManager.Plugin.PasswordManagerPlugin());
 		DbStudioViewsManager.AddPlugin(new Libraries.RestManager.Plugin.RestManagerPlugin());
 		DbStudioViewsManager.AddPlugin(new Libraries.StructuredFilesStudio.Views.StructuredFilesStudioViewManager());

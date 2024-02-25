@@ -113,7 +113,6 @@
     <ProjectReference Include="..\..\Plugins\EbooksReader\EbooksReader.Plugin\EbooksReader.Plugin.csproj" />
     <ProjectReference Include="..\..\Plugins\FileTools\FileTools.Plugin\FileTools.Plugin.csproj" />
     <ProjectReference Include="..\..\Plugins\JobsProcessor\JobsProcessor.Plugin\JobsProcessor.Plugin.csproj" />
-    <ProjectReference Include="..\..\Plugins\MultimediaFiles\MultimediaFiles.Plugin\MultimediaFiles.Plugin.csproj" />
     <ProjectReference Include="..\..\Plugins\PasswordManager\PasswordManager.Plugin\PasswordManager.Plugin.csproj" />
     <ProjectReference Include="..\..\Plugins\RestManager\RestManager.Plugin\RestManager.Plugin.csproj" />
     <ProjectReference Include="..\..\Plugins\StructuredFilesStudio\StructuredFilesStudio.Views\StructuredFilesStudio.Views.csproj" />

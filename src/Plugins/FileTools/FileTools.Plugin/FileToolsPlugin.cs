@@ -95,13 +95,35 @@ public class FileToolsPlugin : IPlugin
 	{
 		return new()
 				{
-					new FileAssignedModel
-							{
-								Name = "Pattern text file",
-								FileExtension = FileToolsViewModel.PatternFileExtension,
-								Icon = GetIconName("PatternFile.png", true)
-							}
+					GetFileAssigned("Pattern text file", FileToolsViewModel.PatternFileExtension, "PatternFile.png", true),
+					GetMediaFileAssigned(true, ".mp3"),
+					GetMediaFileAssigned(true, ".wav"),
+					GetMediaFileAssigned(false, ".mp4"),
+					GetMediaFileAssigned(false, ".mkv"),
+					GetMediaFileAssigned(false, ".avi")
 				};
+
+
+		// Obtiene el archivo asociado a una extensión
+		FileAssignedModel GetFileAssigned(string name, string extension, string icon, bool canCreate)
+		{
+			return new FileAssignedModel
+							{
+								Name = name,
+								FileExtension = extension,
+								Icon = GetIconName(icon, true),
+								CanCreate = canCreate
+							};
+		}
+
+		// Obtiene el archivo asociado a una extensión
+		FileAssignedModel GetMediaFileAssigned(bool isAudio, string extension)
+		{
+			if (isAudio)
+				return GetFileAssigned($"Audio {extension}", extension, "AudioFile.png", false);
+			else
+				return GetFileAssigned($"Vídeo {extension}", extension, "VideoFile.png", false);
+		}
 	}
 
 	/// <summary>

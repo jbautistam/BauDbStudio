@@ -14,12 +14,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Resources\AudioFile.png" />
+    <None Remove="Resources\Back.png" />
     <None Remove="Resources\Execute.png" />
     <None Remove="Resources\FolderNode.png" />
     <None Remove="Resources\Format.png" />
+    <None Remove="Resources\Next.png" />
     <None Remove="Resources\PatternFile.png" />
+    <None Remove="Resources\Pause.png" />
+    <None Remove="Resources\Pin.png" />
+    <None Remove="Resources\Play.png" />
     <None Remove="Resources\Refresh.png" />
     <None Remove="Resources\ShowMarkdown.png" />
+    <None Remove="Resources\Stop.png" />
+    <None Remove="Resources\VideoFile.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,12 +42,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\AudioFile.png" />
+    <Resource Include="Resources\Back.png" />
     <Resource Include="Resources\Execute.png" />
     <Resource Include="Resources\FolderNode.png" />
     <Resource Include="Resources\Format.png" />
+    <Resource Include="Resources\Next.png" />
     <Resource Include="Resources\PatternFile.png" />
+    <Resource Include="Resources\Pause.png" />
+    <Resource Include="Resources\Pin.png" />
+    <Resource Include="Resources\Play.png" />
     <Resource Include="Resources\Refresh.png" />
     <Resource Include="Resources\ShowMarkdown.png" />
+    <Resource Include="Resources\Stop.png" />
+    <Resource Include="Resources\VideoFile.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -51,6 +67,9 @@
     <Compile Update="Views\PatternFile\PatternFileView.xaml.cs">
       <DependentUpon>PatternFileView.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\Multimedia\MediaFileView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -58,10 +77,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Views\Processor\" />
   </ItemGroup>
 
 </Project>

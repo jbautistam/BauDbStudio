@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 
-using Bau.Libraries.MultimediaFiles.ViewModel.Reader;
+using Bau.Libraries.FileTools.ViewModel.Multimedia;
 
-namespace Bau.Libraries.MultimediaFiles.Plugin.Views;
+namespace Bau.Libraries.FileTools.Plugin.Views.Multimedia;
 
 /// <summary>
 ///		Ventana de visualización de archivos multimedia

@@ -7,9 +7,9 @@ namespace Bau.Libraries.FileTools.Plugin.Controllers;
 /// </summary>
 public class FileToolsController : ViewModel.Controllers.IFileToolsController
 {
-	public FileToolsController(FileToolsPlugin jobsProcessorPlugin, PluginsStudio.ViewModels.Base.Controllers.IPluginsController pluginController)
+	public FileToolsController(FileToolsPlugin fileToolsPlugin, PluginsStudio.ViewModels.Base.Controllers.IPluginsController pluginController)
 	{
-		FileToolsPlugin = jobsProcessorPlugin;
+		FileToolsPlugin = fileToolsPlugin;
 		PluginController = pluginController;
 	}
 
@@ -37,12 +37,12 @@ public class FileToolsController : ViewModel.Controllers.IFileToolsController
 		SystemControllerEnums.ResultType result = SystemControllerEnums.ResultType.No;
 
 			// Abre la ventana
-			//switch (dialogViewModel)
-			//{
-			//	case JobsProcessor.ViewModel.Blogs.BlogViewModel viewModel:
-			//			result = JobsProcessorPlugin.AppViewsController.OpenDialog(new Views.BlogView(viewModel));
-			//		break;
-			//}
+			switch (dialogViewModel)
+			{
+				case ViewModel.Multimedia.MediaFileViewModel viewModel:
+						FileToolsPlugin.AppViewsController.OpenNoModalDialog(new Views.Multimedia.MediaFileView(viewModel));
+					break;
+			}
 			// Devuelve el resultado
 			return result;
 	}

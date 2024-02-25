@@ -1,6 +1,6 @@
 ﻿using Bau.Libraries.BauMvvm.ViewModels;
 
-namespace Bau.Libraries.MultimediaFiles.ViewModel.Reader;
+namespace Bau.Libraries.FileTools.ViewModel.Multimedia;
 
 /// <summary>
 ///		ViewModel para ver el contenido de un archivo multimedia
@@ -15,10 +15,10 @@ public class MediaFileViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogVie
 	private string _fileName = string.Empty, _shortFileName = string.Empty;
 	private bool _isAudio, _isPlaying, _overAllWindows;
 
-	public MediaFileViewModel(MultimediaFilesViewModel mediaFileListView, string fileName, bool isAudio)
+	public MediaFileViewModel(FileToolsViewModel mainViewModel, string fileName, bool isAudio)
 	{ 
 		// Asigna los objetos
-		MainViewModel = mediaFileListView;
+		MainViewModel = mainViewModel;
 		// Asigna las propiedades
 		FileName = fileName;
 		if (!string.IsNullOrWhiteSpace(FileName))
@@ -90,9 +90,9 @@ public class MediaFileViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogVie
 	}
 
 	/// <summary>
-	///		ViewModel de la lista de archivos
+	///		ViewModel principal
 	/// </summary>
-	public MultimediaFilesViewModel MainViewModel { get; set; }
+	public FileToolsViewModel MainViewModel { get; set; }
 
 	/// <summary>
 	///		Nombre de archivo
