@@ -56,6 +56,10 @@
 									</Grid.ColumnDefinitions>
 									<TextBlock Margin="10" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" TextWrapping="Wrap" Text="{Binding Path=DescriptionShort}"/>
 									<StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
+										<Button ToolTip="Move first" Command="{Binding Path=MoveTaskFirstCommand}" Background="Transparent" BorderBrush="Transparent"
+											Visibility="{Binding Path=CanMoveUp,Converter={StaticResource BoolToVisibilityConverter}}">
+											<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/ArrowTop.png" />
+										</Button>
 										<Button ToolTip="Move up" Command="{Binding Path=MoveTaskUpCommand}" Background="Transparent" BorderBrush="Transparent"
 											Visibility="{Binding Path=CanMoveUp,Converter={StaticResource BoolToVisibilityConverter}}">
 											<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/ArrowUp.png" />
@@ -63,6 +67,10 @@
 										<Button ToolTip="Move down" Command="{Binding Path=MoveTaskDownCommand}" Background="Transparent" BorderBrush="Transparent"
 											Visibility="{Binding Path=CanMoveDown,Converter={StaticResource BoolToVisibilityConverter}}">
 											<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/ArrowDown.png" />
+										</Button>
+										<Button ToolTip="Move last" Command="{Binding Path=MoveTaskLastCommand}" Background="Transparent" BorderBrush="Transparent"
+											Visibility="{Binding Path=CanMoveDown,Converter={StaticResource BoolToVisibilityConverter}}">
+											<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/ArrowBottom.png" />
 										</Button>
 									</StackPanel>
 									<TextBlock Margin="5" Grid.Row="1" Grid.Column="1" Text="{Binding Path=Moskow}" TextAlignment="Right"/>

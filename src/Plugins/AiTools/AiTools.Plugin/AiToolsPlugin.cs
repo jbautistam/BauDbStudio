@@ -80,7 +80,7 @@ public class AiToolsPlugin : IPlugin
 		{
 			return new FileAssignedModel
 				{
-					Name = $"Prompt imágenes {extension}",
+					Name = $"AI images",
 					FileExtension = extension,
 					Icon = "/AiTools.Plugin;component/Resources/AiImageFile.png",
 					CanCreate = true
