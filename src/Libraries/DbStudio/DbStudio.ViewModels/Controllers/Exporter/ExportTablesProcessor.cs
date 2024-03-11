@@ -66,7 +66,7 @@ internal class ExportTablesProcessor : ProcessModel
 	/// </summary>
 	private async Task ExportTableAsync(ConnectionTableModel table, CancellationToken cancellationToken)
 	{
-		ExportDataBaseGenerator generator = new(MainViewModel.Manager);
+		ExportDataBaseProcessors generator = new(MainViewModel.Manager);
 
 			// Asocia el manejador de eventos
 			generator.Progress += (sender, args) => RaiseLog(LogEventArgs.Status.Info, $"Export table {table.FullName}. {args.Actual:#,##0} records");

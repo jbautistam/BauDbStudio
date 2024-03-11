@@ -1,10 +1,15 @@
-﻿namespace Bau.Libraries.PluginsStudio.ViewModels.Files;
+﻿using Bau.Libraries.LibHelper.Extensors;
+
+namespace Bau.Libraries.PluginsStudio.ViewModels.Files;
 
 /// <summary>
 ///		ViewModel para un archivo de imagen
 /// </summary>
 public class ImageViewModel : Base.Files.BaseFileViewModel
 {
+	// Eventos públicos
+	public event EventHandler? SaveImage;
+
 	public ImageViewModel(PluginsStudioViewModel mainViewModel, string fileName) : base(fileName)
 	{
 		MainViewModel = mainViewModel;
@@ -13,7 +18,7 @@ public class ImageViewModel : Base.Files.BaseFileViewModel
 	}
 
 	/// <summary>
-	///		Carga el arcchivo (en este caso se carga directamente en la vista)
+	///		Carga el archivo (en este caso se carga directamente en la vista)
 	/// </summary>
 	public override void Load()
 	{
@@ -28,7 +33,30 @@ public class ImageViewModel : Base.Files.BaseFileViewModel
 	/// </summary>
 	public override void SaveDetails(bool newName)
 	{
+		string? fileName = MainViewModel.PluginsStudioController.MainWindowController.DialogsController
+									.OpenDialogSave(Path.GetDirectoryName(FileName),
+													GetMask(), Path.GetFileName(FileName),
+													Path.GetExtension(FileName));
+
+			if (!string.IsNullOrWhiteSpace(fileName))
+			{
+				FileName = fileName;
+				SaveImage?.Invoke(this, EventArgs.Empty);
+			}
+		// Indica que no ha habido modificaciones
 		IsUpdated = false;
+
+		// Obtiene la máscara de archivos
+		string GetMask()
+		{
+			string mask = string.Empty;
+
+				// Crea la cadena de máscara
+				foreach ((string file, string extension) in MainViewModel.ImageTypeFiles)
+					mask = mask.AddWithSeparator($"{file} (*{extension})|*{extension}", "|", false);
+				// Devuelve la máscara
+				return mask;
+		}
 	}
 
 	/// <summary>

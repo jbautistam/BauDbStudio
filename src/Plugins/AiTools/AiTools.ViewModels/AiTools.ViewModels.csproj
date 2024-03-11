@@ -28,6 +28,7 @@
     <ProjectReference Include="..\AiTools.Application\AiTools.Application.csproj" />
     <ProjectReference Include="..\Libraries\AiImageGenerator\LibFakeAi.Api\LibFakeAi.Api.csproj" />
     <ProjectReference Include="..\Libraries\AiImageGenerator\LibStableHorde.Api\LibStableHorde.Api.csproj" />
+    <ProjectReference Include="..\Libraries\AiTextPrompt\LibOllama.Api\LibOllama.Api.csproj" />
   </ItemGroup>
 
 </Project>

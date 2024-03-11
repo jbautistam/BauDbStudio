@@ -228,6 +228,50 @@ public class ConnectionExecutionViewModel : BaseObservableObject
 	}
 
 	/// <summary>
+	///		Importa un archivo sobre una tabla
+	/// </summary>
+	public async Task ImportDataBaseAsync(ConnectionModel connection, ConnectionTableModel? table, CancellationToken cancellationToken)
+	{
+		if (IsExecuting)
+			SolutionViewModel.MainController.SystemController.ShowMessage("No se pueden importar los datos en este momento. Espere que finalice la ejecución de los scripts");
+		else if (connection is null)
+			SolutionViewModel.MainController.SystemController.ShowMessage("Seleccione una conexión");
+		else
+		{
+			ImportDatabaseViewModel viewModel = new(connection, SolutionViewModel);
+
+				// Carga los datos
+				await viewModel.InitializeAsync(table, cancellationToken);
+				// Muestra la ventana
+				if (SolutionViewModel.MainController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+				{
+					// Si realmente tenemos algo seleccionado
+					if (connection is null)
+						SolutionViewModel.MainController.SystemController.ShowMessage("Seleccione la conexión");
+					else if (string.IsNullOrWhiteSpace(viewModel.FileName))
+						SolutionViewModel.MainController.SystemController.ShowMessage("Seleccione el nombre de archivo");
+					else
+					{
+						ConnectionTableModel? selectedTable = viewModel.GetSelectedTable();
+
+							if (selectedTable is not null)
+							{
+								Controllers.Exporter.ImportFilesProcessor processor = new(SolutionViewModel, connection,
+																						 viewModel.FileName, selectedTable,
+																						 viewModel.GetColumnsImported(), 
+																						 viewModel.BlockSize);
+
+									// Encola el proceso
+									await SolutionViewModel.MainController.MainWindowController.EnqueueProcessAsync(processor, cancellationToken);
+									// Log
+									SolutionViewModel.MainController.Logger.LogInformation($"Importando tablas de {connection.Name}");
+							}
+					}
+				}
+		}
+	}
+
+	/// <summary>
 	///		Arranca los procesos para ejecución
 	/// </summary>
 	private void StartExecution()

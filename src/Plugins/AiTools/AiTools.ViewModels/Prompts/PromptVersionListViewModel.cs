@@ -26,7 +26,7 @@ public class PromptVersionListViewModel : BaseObservableObject
 	{
 		// Añade una versión
 		if (SelectedItem is not null)
-			Add(SelectedItem.Prompt.Clone(GetNewVersion()));
+			Add(SelectedItem.GetPrompt().Clone(GetNewVersion()));
 		else
 			Add(new PromptModel(string.Empty));
 		// Selecciona el último elemento

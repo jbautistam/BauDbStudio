@@ -60,7 +60,7 @@
 											Maximum="{Binding Path=Total}" Value="{Binding Path=Actual}"/>
 
 						<TextBlock Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="4" Margin="2" 
-										Text="{Binding Path=AdditionalInfoText}" TextAlignment="Center" />
+										Text="{Binding Path=ShortAdditionalInfoText}" ToolTip="{Binding Path=AdditionalInfoText}" TextAlignment="Center" />
 					</Grid>
 				</Border>
 			</DataTemplate>

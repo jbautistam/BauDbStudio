@@ -10,7 +10,8 @@ public class ConfigurationViewModel : BauMvvm.ViewModels.BaseObservableObject
 	// Constantes privadas
 	private const string ApplicationName = "AiTools";
 	// Variables privadas
-	private string _stableHordeApiUrl = default!, _stableHordeApiKey = default!;
+	private string _stableHordeApiUrl = default!, _stableHordeApiKey = default!, _ollamaUrl = default!;
+	private int? _ollamaTimeout = 3;
 
 	public ConfigurationViewModel(AiToolsViewModel mainViewModel)
 	{
@@ -24,6 +25,8 @@ public class ConfigurationViewModel : BauMvvm.ViewModels.BaseObservableObject
 	{
 		StableHordeApiUrl = MainViewModel.ViewsController.PluginController.ConfigurationController.GetConfiguration(ApplicationName, nameof(StableHordeApiUrl));
 		StableHordeApiKey = MainViewModel.ViewsController.PluginController.ConfigurationController.GetConfiguration(ApplicationName, nameof(StableHordeApiKey));
+		OllamaUrl = MainViewModel.ViewsController.PluginController.ConfigurationController.GetConfiguration(ApplicationName, nameof(OllamaUrl));
+		OllamaTimeout = MainViewModel.ViewsController.PluginController.ConfigurationController.GetConfiguration(ApplicationName, nameof(OllamaTimeout)).GetInt(3);
 	}
 
 	/// <summary>
@@ -38,6 +41,8 @@ public class ConfigurationViewModel : BauMvvm.ViewModels.BaseObservableObject
 			error = "Enter the Stable Horde Url (default https://stablehorde.net)";
 		else if (string.IsNullOrWhiteSpace(StableHordeApiKey))
 			error = "Enter the Stable Horde Api Key (default 0000000000)";
+		else if (string.IsNullOrWhiteSpace(OllamaUrl))
+			error = "Enter the Ollama Url (default http://localhost:11434)";
 		// Devuelve el valor que indica si los datos son correctos
 		return error.IsEmpty();
 	}
@@ -52,6 +57,9 @@ public class ConfigurationViewModel : BauMvvm.ViewModels.BaseObservableObject
 																								StableHordeApiUrl);
 		MainViewModel.ViewsController.PluginController.ConfigurationController.SetConfiguration(ApplicationName, nameof(StableHordeApiKey), 
 																								StableHordeApiKey);
+		MainViewModel.ViewsController.PluginController.ConfigurationController.SetConfiguration(ApplicationName, nameof(OllamaUrl), OllamaUrl);
+		MainViewModel.ViewsController.PluginController.ConfigurationController.SetConfiguration(ApplicationName, nameof(OllamaTimeout), 
+																								OllamaTimeout.ToString());
 	}
 
 	/// <summary>
@@ -85,5 +93,30 @@ public class ConfigurationViewModel : BauMvvm.ViewModels.BaseObservableObject
 			return _stableHordeApiKey; 
 		}
 		set { CheckProperty(ref _stableHordeApiKey, value); }
+	}
+
+	/// <summary>
+	///		Url de Ollama
+	/// </summary>
+	public string OllamaUrl
+	{
+		get
+		{
+			// Asigna la URL predeterminada
+			if (string.IsNullOrWhiteSpace(_ollamaUrl) || !Uri.TryCreate(_ollamaUrl, UriKind.Absolute, out Uri? _))
+				_ollamaUrl = "http://localhost:11434";
+			// Devuelve la URL
+			return _ollamaUrl;
+		}
+		set { CheckProperty(ref _ollamaUrl, value); }
+	}
+
+	/// <summary>
+	///		Timeout de las llamadas a Ollama
+	/// </summary>
+	public int OllamaTimeout
+	{
+		get { return _ollamaTimeout ?? 3; }
+		set { _ollamaTimeout = value; }
 	}
 }

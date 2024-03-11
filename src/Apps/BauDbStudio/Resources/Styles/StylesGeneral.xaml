@@ -111,4 +111,24 @@
 -->
 		</Style.Resources>
 	</Style>
+
+	<!-- Estilo para mostrar / ocultar un botón-->
+	<Style x:Key="FadeOutButton" TargetType="{x:Type Button}">
+		<Style.Triggers>
+			<EventTrigger RoutedEvent="Control.MouseEnter">
+				<BeginStoryboard>
+					<Storyboard >
+						<DoubleAnimation Duration="0:0:1" To="1" Storyboard.TargetProperty="Opacity"/>
+					</Storyboard>
+				</BeginStoryboard>
+			</EventTrigger>
+			<EventTrigger RoutedEvent="Control.MouseLeave">
+				<BeginStoryboard>
+					<Storyboard >
+						<DoubleAnimation Duration="0:0:1" To="0.2" Storyboard.TargetProperty="Opacity"/>
+					</Storyboard>
+				</BeginStoryboard>
+			</EventTrigger>
+		</Style.Triggers>
+	</Style>
 </ResourceDictionary>

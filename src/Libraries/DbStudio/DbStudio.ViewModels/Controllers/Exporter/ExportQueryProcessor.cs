@@ -60,7 +60,7 @@ internal class ExportQueryProcessor : ProcessModel
 	/// </summary>
 	private async Task ExportQueryAsync(CancellationToken cancellationToken)
 	{
-		ExportDataBaseGenerator generator = new(MainViewModel.Manager);
+		ExportDataBaseProcessors generator = new(MainViewModel.Manager);
 
 			// Asocia el manejador de eventos
 			generator.Progress += (sender, args) => RaiseLog(LogEventArgs.Status.Info, $"Export query to {Path.GetFileName(FileName)}. {args.Actual:#,##0} records");
