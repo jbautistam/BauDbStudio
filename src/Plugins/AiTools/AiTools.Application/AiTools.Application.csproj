@@ -16,7 +16,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibHelper\src\LibHelper.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibMarkup\src\LibMarkup.csproj" />
-    <ProjectReference Include="..\Libraries\AiImageGenerator\LibAiImageGeneration\LibAiImageGeneration.csproj" />
   </ItemGroup>
 
 </Project>
