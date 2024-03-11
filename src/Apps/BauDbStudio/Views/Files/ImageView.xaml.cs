@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Media;
-
+using System.Windows.Media.Imaging;
 using Bau.Libraries.PluginsStudio.ViewModels.Files;
 
 namespace Bau.DbStudio.Views.Files;
@@ -14,10 +14,13 @@ public partial class ImageView : UserControl
 	{
 		// Inicializa los componentes
 		InitializeComponent();
+		ViewModel = viewModel;
 		// Indica al viewmodel que se cargue
 		viewModel.Load();
 		// Carga el archivo
 		LoadImage(viewModel.FileName);
+		// Asigna los manejadores de eventos
+		viewModel.SaveImage += (sender, args) => SaveAs(viewModel.FileName);
 		//// Cambia el zoom
 		//pnlZoom.ZoomMode = Bau.Controls.Graphical.ImageZoomBoxPanel.eZoomMode.ActualSize;
 	}
@@ -27,13 +30,13 @@ public partial class ImageView : UserControl
 	/// </summary>
 	private void LoadImage(string fileName)
 	{
-		// Asigna la imagen
-		imgImage.Source = CreateBitmapImage(fileName);
-		// Muestra las propiedades de la imagen
-		// lblStatus.Text = $"Dimensiones {image.PixelWidth} x {image.PixelHeight}";
-		// Inicializa los controles
 		try
 		{
+			// Asigna la imagen
+			imgImage.Source = CreateBitmapImage(fileName);
+			// Muestra las propiedades de la imagen
+			// lblStatus.Text = $"Dimensiones {image.PixelWidth} x {image.PixelHeight}";
+			// Inicializa los controles
 			if (ZoomAndPanControl.ZoomAndPanContent is not null)
 			{
 				ZoomAndPanControl.ZoomAndPanContent.MinimumZoom = 0.25;
@@ -46,7 +49,8 @@ public partial class ImageView : UserControl
 		}
 		catch (Exception exception)
 		{
-			System.Diagnostics.Debug.WriteLine($"Error when set image zoom. {exception.Message}");
+			ViewModel.MainViewModel.PluginsStudioController.MainWindowController.HostController.SystemController.ShowMessage($"Error when load image {fileName}");
+			ViewModel.MainViewModel.LogViewModel.WriteLog(Microsoft.Extensions.Logging.LogLevel.Error, $"Error when load image {fileName}", exception);
 		}
 	}
 
@@ -61,6 +65,28 @@ public partial class ImageView : UserControl
 			return null;
 	}
 
+	/// <summary>
+	///		Graba la imagen con otro nombre
+	/// </summary>
+	private void SaveAs(string fileName)
+	{
+		bool saved = false;
+
+			// Graba la imagen
+			if (imgImage.Source is BitmapImage image)
+				saved = new Controllers.Helpers.ImageHelper().SaveImage(image, fileName);
+			// Si no se ha grabado, muestra un mensaje al usuario, si se ha grabado, actualiza el árbol
+			if (!saved)
+				ViewModel.MainViewModel.PluginsStudioController.MainWindowController.HostController.SystemController.ShowMessage($"Can't save the image {fileName}");
+			else
+			{
+				// Actualiza el árbol
+				ViewModel.MainViewModel.PluginsStudioController.HostPluginsController.RefreshFiles();
+				// Añade el archivo a los últimos archivos abiertos
+				ViewModel.MainViewModel.PluginsStudioController.HostPluginsController.AddFileUsed(fileName);
+			}
+	}
+
 	private void chkShowThumb_Click(object sender, System.Windows.RoutedEventArgs e)
 	{
 		if (wndZoom != null)
@@ -71,4 +97,9 @@ public partial class ImageView : UserControl
 				wndZoom.Visibility = System.Windows.Visibility.Collapsed;
 		}
 	}
+
+	/// <summary>
+	///		ViewModel de la imagen
+	/// </summary>
+	private ImageViewModel ViewModel { get; }
 }

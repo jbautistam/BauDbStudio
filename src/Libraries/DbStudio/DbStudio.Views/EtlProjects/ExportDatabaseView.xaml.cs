@@ -5,7 +5,7 @@ using Bau.Libraries.DbStudio.ViewModels.Details.EtlProjects;
 namespace Bau.Libraries.DbStudio.Views.EtlProjects;
 
 /// <summary>
-///		Vista para crear proyectos de prueba de base de datos
+///		Vista para exportar archivos de una base de datos
 /// </summary>
 public partial class ExportDatabaseView : Window
 {

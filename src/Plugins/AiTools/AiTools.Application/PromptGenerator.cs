@@ -24,11 +24,24 @@ public class PromptGenerator
 	public PromptFileModel LoadFile(string fileName) => new Repository.PromptsRepository().Load(fileName);
 
 	/// <summary>
+	///		Carga un archivo de mensajes de chat
+	/// </summary>
+	public List<Models.Chat.ChatModel> LoadChat(string fileName) => new Repository.ChatRepository().Load(fileName);
+
+	/// <summary>
 	///		Graba un archivo de prompts
 	/// </summary>
 	public void SaveFile(string fileName, PromptFileModel promptFile)
 	{
 		new Repository.PromptsRepository().Save(fileName, promptFile);
+	}
+
+	/// <summary>
+	///		Graba un archivo de chats
+	/// </summary>
+	public void SaveChat(List<Models.Chat.ChatModel> chats, string fileName)
+	{
+		new Repository.ChatRepository().Save(fileName, chats);
 	}
 
 	/// <summary>

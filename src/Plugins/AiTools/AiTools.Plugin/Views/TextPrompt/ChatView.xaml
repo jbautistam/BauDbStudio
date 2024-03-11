@@ -1,0 +1,65 @@
+﻿<UserControl x:Class="Bau.Libraries.AiTools.Plugin.Views.TextPrompt.ChatView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Bau.Libraries.AiTools.Plugin.Views.TextPrompt"
+		xmlns:Converters="clr-namespace:Bau.Libraries.BauMvvm.Views.Converters;assembly=BauMvvm.Views"
+		xmlns:ConverterLocal="clr-namespace:Bau.Libraries.AiTools.Plugin.Converters"
+        mc:Ignorable="d" Loaded="UserControl_Initialized">
+	<UserControl.Resources>
+		<ConverterLocal:SourceMarginConverter x:Key="SourceMarginConverter"/>
+		<Converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+
+		</UserControl.Resources>
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto"/>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="Auto"/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+		<Label Grid.Row="0" Grid.Column="0" Content="Models:" Margin="5"/>
+		<ComboBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="5"
+		 ItemsSource="{Binding ComboModels.Items}" DisplayMemberPath="Text" 
+						  SelectedItem="{Binding ComboModels.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+		<ListBox x:Name="lstChat" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="5" 
+						ItemsSource="{Binding Path=ChatItemsViewModel}"
+						VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling"
+						 SelectedItem="{Binding Path=SelectedItem}"
+						 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+			<ListBox.ItemTemplate>
+				<DataTemplate>
+					<!--<StackPanel Orientation="Horizontal">
+-->
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="Auto"/>
+						</Grid.ColumnDefinitions>
+						<TextBlock Grid.Column="0" Text="{Binding Path=Text}" Margin="{Binding Path=Source,Converter={StaticResource SourceMarginConverter}}" 
+								Foreground="{Binding Path=Foreground,Converter={StaticResource MVVMColorConverter}}" 
+								TextWrapping="Wrap" />
+						<Button Grid.Column="1" Margin="5" Command="{Binding Path=CopyCommand}"
+							Visibility="{Binding Path=CanCopy,Converter={StaticResource BoolToVisibilityConverter}}"
+							Style="{StaticResource FadeOutButton}" Opacity="0.2" ToolTip="Copy"
+							VerticalAlignment="Center">
+							<Image Width="16" Height="16" Source="/AiTools.Plugin;component/Resources/Copy.png"/>
+						</Button>
+					</Grid>
+					<!--</StackPanel>-->
+				</DataTemplate>
+			</ListBox.ItemTemplate>
+		</ListBox>
+		<TextBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="5" Text="{Binding Path=Prompt,UpdateSourceTrigger=PropertyChanged}" 
+			MinHeight="50" Height="50" MinLines="3" MaxLines="3" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap"
+			AcceptsReturn="True"/>
+		<Button Grid.Row="2" Grid.Column="2" Margin="5" ToolTip="Send" Command="{Binding Path=SendCommand}" Background="Transparent" BorderBrush="Transparent">
+			<Image Width="32" Height="32" Source="/AiTools.Plugin;component/Resources/Send.png"/>
+		</Button>
+	</Grid>
+</UserControl>

@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <None Remove="Resources\Accept.png" />
+    <None Remove="Resources\AiChatFile.png" />
     <None Remove="Resources\AiImageFile.png" />
     <None Remove="Resources\ArrowDown.png" />
     <None Remove="Resources\ArrowFirst.png" />
@@ -28,6 +29,7 @@
     <None Remove="Resources\Delete.png" />
     <None Remove="Resources\Document.png" />
     <None Remove="Resources\NewItem.png" />
+    <None Remove="Resources\Send.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,12 +38,14 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\Controls\WPF\BauControls\src\BauControls.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.Views\BauMvvm.Views.csproj" />
     <ProjectReference Include="..\..\..\Libraries\PluginsStudio\PluginsStudio.Views.Base\PluginsStudio.Views.Base.csproj" />
     <ProjectReference Include="..\AiTools.ViewModels\AiTools.ViewModels.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Resources\Accept.png" />
+    <Resource Include="Resources\AiChatFile.png" />
     <Resource Include="Resources\AiImageFile.png" />
     <Resource Include="Resources\ArrowDown.png" />
     <Resource Include="Resources\ArrowFirst.png" />
@@ -54,6 +58,7 @@
     <Resource Include="Resources\Delete.png" />
     <Resource Include="Resources\Document.png" />
     <Resource Include="Resources\NewItem.png" />
+    <Resource Include="Resources\Send.png" />
   </ItemGroup>
 
   <ItemGroup>

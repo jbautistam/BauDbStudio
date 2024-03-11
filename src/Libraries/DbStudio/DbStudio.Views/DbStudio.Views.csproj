@@ -46,6 +46,7 @@
     <None Remove="Resources\Images\NoSort.png" />
     <None Remove="Resources\Images\Project.png" />
     <None Remove="Resources\Images\ProjectDisabled.png" />
+    <None Remove="Resources\Images\Refresh.png" />
     <None Remove="Resources\Images\Report.png" />
     <None Remove="Resources\Images\ReportDimension.png" />
     <None Remove="Resources\Images\Schema.png" />
@@ -102,6 +103,7 @@
     <Resource Include="Resources\Images\NoSort.png" />
     <Resource Include="Resources\Images\Project.png" />
     <Resource Include="Resources\Images\ProjectDisabled.png" />
+    <Resource Include="Resources\Images\Refresh.png" />
     <Resource Include="Resources\Images\Report.png" />
     <Resource Include="Resources\Images\ReportDimension.png" />
     <Resource Include="Resources\Images\Schema.png" />
@@ -137,6 +139,9 @@
     <Page Update="EtlProjects\CreateValidationScriptView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Update="EtlProjects\ImportDatabaseView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
     <Page Update="EtlProjects\ExportDatabaseView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>

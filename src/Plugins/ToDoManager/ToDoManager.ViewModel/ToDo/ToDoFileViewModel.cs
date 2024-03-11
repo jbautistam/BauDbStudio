@@ -11,6 +11,21 @@ namespace Bau.Libraries.ToDoManager.ViewModel.ToDo;
 /// </summary>
 public class ToDoFileViewModel : BaseObservableObject, PluginsStudio.ViewModels.Base.Interfaces.IDetailViewModel
 {
+	// Enumerados
+	/// <summary>
+	///		Tipo de movimiento
+	/// </summary>
+	internal enum MovementType
+	{
+		/// <summary>Mover al principio</summary>
+		First,
+		/// <summary>Mover al final</summary>
+		Last,
+		/// <summary>Mover hacia arriba</summary>
+		Up,
+		/// <summary>Mover hacia abajo</summary>
+		Down
+	}
 	// Variables privadas
 	private string _fileName = string.Empty;
 	private ControlItemCollectionViewModel<ToDoTaskItemViewModel> _tasksPlanned = default!;
@@ -281,13 +296,27 @@ public class ToDoFileViewModel : BaseObservableObject, PluginsStudio.ViewModels.
 	/// <summary>
 	///		Modifica el orden
 	/// </summary>
-	internal void UpdateOrder(ToDoTaskItemViewModel toDoTaskItemViewModel, bool moveUp)
+	internal void UpdateOrder(ToDoTaskItemViewModel toDoTaskItemViewModel, MovementType type)
 	{
 		ControlItemCollectionViewModel<ToDoTaskItemViewModel> list = Clone(GetTasksList(toDoTaskItemViewModel.Task.Status));
 		ToDoTaskItemViewModel itemNew = list[GetTasksList(toDoTaskItemViewModel.Task.Status).IndexOf(toDoTaskItemViewModel)];
 
 			// Mueve el elemento
-			list.Move(itemNew, moveUp);
+			switch (type)
+			{
+				case MovementType.Up:
+						list.Move(itemNew, true);
+					break;
+				case MovementType.Down:
+						list.Move(itemNew, false);
+					break;
+				case MovementType.First:
+						list.MoveToFirst(itemNew);
+					break;
+				case MovementType.Last:
+						list.MoveToLast(itemNew);
+					break;
+			}
 			// Recarga la lista
 			switch (toDoTaskItemViewModel.Task.Status)
 			{

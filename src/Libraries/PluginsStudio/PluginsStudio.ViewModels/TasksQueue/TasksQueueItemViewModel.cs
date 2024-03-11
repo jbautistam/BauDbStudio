@@ -27,7 +27,7 @@ public class TasksQueueItemViewModel : BauMvvm.ViewModels.Forms.ControlItems.Con
 		Error
 	}
 	// Variables privadas
-	private string _statusText = string.Empty, _executionTime = string.Empty, _message = string.Empty, _additionalInfoText = string.Empty;
+	private string _statusText = string.Empty, _executionTime = string.Empty, _message = string.Empty, _additionalInfoText = string.Empty, _shortAdditionalInfoText = string.Empty;
 	private Dictionary<string, string>? _additionalInfo;
 	private long _actual, _total;
 	private bool _isExecuting;
@@ -103,10 +103,10 @@ public class TasksQueueItemViewModel : BauMvvm.ViewModels.Forms.ControlItems.Con
 		// Cambia el valor que indica si se está ejecutando
 		if (State == Status.Processing)
 			IsExecuting = true;
-		else if (State == Status.End || State == Status.Canceled)
+		else if (State == Status.End || State == Status.Canceled || State == Status.Error)
 			IsExecuting = false;
 		// Cierra el temporizador
-		if (State == Status.End || State == Status.Error || State == Status.Canceled)
+		if (State == Status.End || State == Status.Canceled || State == Status.Error)
 		{
 			_timer?.Stop();
 			_timer?.Dispose();
@@ -249,6 +249,15 @@ public class TasksQueueItemViewModel : BauMvvm.ViewModels.Forms.ControlItems.Con
 	}
 
 	/// <summary>
+	///		Texto corto del estado
+	/// </summary>
+	public string ShortAdditionalInfoText
+	{
+		get { return _shortAdditionalInfoText.Left(100); }
+		set { CheckProperty(ref _shortAdditionalInfoText, value); }
+	}
+
+	/// <summary>
 	///		Tiempo de ejecución
 	/// </summary>
 	public string ExecutionTime
@@ -321,7 +330,11 @@ public class TasksQueueItemViewModel : BauMvvm.ViewModels.Forms.ControlItems.Con
 	public string AdditionalInfoText
 	{
 		get { return _additionalInfoText; }
-		set { CheckProperty(ref _additionalInfoText, value); }
+		set 
+		{ 
+			if (CheckProperty(ref _additionalInfoText, value))
+				ShortAdditionalInfoText = value;
+		}
 	}
 
 	/// <summary>

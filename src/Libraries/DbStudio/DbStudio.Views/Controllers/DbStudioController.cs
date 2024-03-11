@@ -82,6 +82,9 @@ public class DbStudioController : ViewModels.Controllers.IDbStudioController
 				case ViewModels.Details.EtlProjects.ExportDatabaseViewModel viewModel:
 						result = DbStudioViewManager.AppViewsController.OpenDialog(new EtlProjects.ExportDatabaseView(viewModel));
 					break;
+				case ViewModels.Details.EtlProjects.ImportDatabaseViewModel viewModel:
+						result = DbStudioViewManager.AppViewsController.OpenDialog(new EtlProjects.ImportDatabaseView(viewModel));
+					break;
 				case ViewModels.Details.Reporting.Relations.DimensionRelationViewModel viewModel:
 						result = DbStudioViewManager.AppViewsController.OpenDialog(new Reporting.Details.Relations.DimensionRelationView(viewModel));
 					break;

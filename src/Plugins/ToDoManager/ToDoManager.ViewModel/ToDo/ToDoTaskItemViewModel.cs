@@ -31,10 +31,16 @@ public class ToDoTaskItemViewModel : ControlItemViewModel
 		DeleteTaskCommand = new BaseCommand(_ => DeleteTask());
 		MoveTaskNextCommand = new BaseCommand(_ => MoveTask(true), _ => Task.Status != TaskModel.StatusType.Done);
 		MoveTaskPreviousCommand = new BaseCommand(_ => MoveTask(false), _ => Task.Status != TaskModel.StatusType.Planned);
-		MoveTaskUpCommand = new BaseCommand(_ => UpdateOrder(true), _ => CanUpdateOrder(true))
+		MoveTaskFirstCommand = new BaseCommand(_ => UpdateOrder(ToDoFileViewModel.MovementType.First), _ => CanUpdateOrder(true))
 									.AddListener(this, nameof(CanMoveDown))
 									.AddListener(this, nameof(CanMoveUp));
-		MoveTaskDownCommand = new BaseCommand(_ => UpdateOrder(false), _ => CanUpdateOrder(false))
+		MoveTaskUpCommand = new BaseCommand(_ => UpdateOrder(ToDoFileViewModel.MovementType.Up), _ => CanUpdateOrder(true))
+									.AddListener(this, nameof(CanMoveDown))
+									.AddListener(this, nameof(CanMoveUp));
+		MoveTaskDownCommand = new BaseCommand(_ => UpdateOrder(ToDoFileViewModel.MovementType.Down), _ => CanUpdateOrder(false))
+									.AddListener(this, nameof(CanMoveDown))
+									.AddListener(this, nameof(CanMoveUp));
+		MoveTaskLastCommand = new BaseCommand(_ => UpdateOrder(ToDoFileViewModel.MovementType.Last), _ => CanUpdateOrder(false))
 									.AddListener(this, nameof(CanMoveDown))
 									.AddListener(this, nameof(CanMoveUp));
 	}
@@ -84,9 +90,9 @@ public class ToDoTaskItemViewModel : ControlItemViewModel
 	/// <summary>
 	///		Modifica el orden
 	/// </summary>
-	private void UpdateOrder(bool moveUp)
+	private void UpdateOrder(ToDoFileViewModel.MovementType type)
 	{
-		ToDoFileViewModel.UpdateOrder(this, moveUp);
+		ToDoFileViewModel.UpdateOrder(this, type);
 	}
 	
 	/// <summary>
@@ -245,6 +251,11 @@ public class ToDoTaskItemViewModel : ControlItemViewModel
 	public BaseCommand MoveTaskPreviousCommand { get; }
 
 	/// <summary>
+	///		Comando para mover una tarea a la primera posición
+	/// </summary>
+	public BaseCommand MoveTaskFirstCommand { get; }
+
+	/// <summary>
 	///		Comando para mover arriba una tarea
 	/// </summary>
 	public BaseCommand MoveTaskUpCommand { get; }
@@ -253,6 +264,11 @@ public class ToDoTaskItemViewModel : ControlItemViewModel
 	///		Comando para mover abajo una tarea
 	/// </summary>
 	public BaseCommand MoveTaskDownCommand { get; }
+
+	/// <summary>
+	///		Comando para mover una tarea a la primera posición
+	/// </summary>
+	public BaseCommand MoveTaskLastCommand { get; }
 
 	/// <summary>
 	///		Comando para borrar una tarea

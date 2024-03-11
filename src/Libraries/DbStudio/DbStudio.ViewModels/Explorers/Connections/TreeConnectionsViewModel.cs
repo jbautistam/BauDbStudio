@@ -300,8 +300,19 @@ public class TreeConnectionsViewModel : TreeSolutionBaseViewModel
 	/// </summary>
 	private async Task ImportDataAsync(CancellationToken cancellationToken)
 	{
-		await Task.Delay(1, cancellationToken);
-		SolutionViewModel.MainController.SystemController.ShowMessage("Importar datos");
+		ConnectionModel? connection = null;
+		ConnectionTableModel? table = null;
+
+			// Obtiene los datos de conexión y tabla
+			if (SelectedNode is NodeConnectionViewModel node)
+				connection = node.Connection;
+			else if (SelectedNode is NodeTableViewModel nodeTable)
+			{
+				connection = nodeTable.Table.Connection;
+				table = nodeTable.Table;
+			}
+			// Abre el formulario de exportación
+			await SolutionViewModel.ConnectionExecutionViewModel.ImportDataBaseAsync(connection, table, cancellationToken);
 	}
 
 	/// <summary>

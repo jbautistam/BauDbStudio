@@ -13,12 +13,12 @@ namespace Bau.Libraries.DbStudio.Application.Controllers.Export;
 /// <summary>
 ///		Exportación de archivos de base de datos
 /// </summary>
-public class ExportDataBaseGenerator
+public class ExportDataBaseProcessors
 {
 	// Eventos
 	public event EventHandler<EventArguments.ProgressEventArgs>? Progress;
 
-	public ExportDataBaseGenerator(SolutionManager manager)
+	public ExportDataBaseProcessors(SolutionManager manager)
 	{
 		Manager = manager;
 	}
@@ -88,10 +88,12 @@ public class ExportDataBaseGenerator
 			foreach (ConnectionTableFieldModel field in table.Fields)
 				sqlFields = sqlFields.AddWithSeparator(provider.SqlHelper.FormatName(field.Name), ",");
 			// Devuelve la cadena SQL
-			return @$"SELECT {sqlFields}
+			return $"""
+						SELECT {sqlFields}
 							FROM (SELECT Row_Number() OVER (ORDER BY 1 ASC) AS {nameRowId}, {sqlFields} 
 									FROM {provider.SqlHelper.FormatName(table.Schema, table.Name)}) AS tmp
-							WHERE {nameRowId} BETWEEN {actualPage * blockSize + 1} AND {(actualPage + 1) * blockSize}";
+							WHERE {nameRowId} BETWEEN {actualPage * blockSize + 1} AND {(actualPage + 1) * blockSize}
+					""";
 	}
 
 	/// <summary>
@@ -166,14 +168,6 @@ public class ExportDataBaseGenerator
 			}
 			// Devuelve el nombre de archivo
 			return Path.Combine(path, name);
-	}
-
-	/// <summary>
-	///		Lanza el evento de progreso
-	/// </summary>
-	private void RaiseProgress(long actual)
-	{
-		Progress?.Invoke(this, new EventArguments.ProgressEventArgs(actual, actual + 1));
 	}
 
 	/// <summary>

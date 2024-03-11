@@ -9,6 +9,16 @@ public class PluginsStudioViewModel : BaseObservableObject
 {
 	// Eventos públicos
 	public event EventHandler? WorkspacesChanged;
+	// Constantes públicas
+	internal List<(string name, string extension)> ImageTypeFiles = [
+																		("PNG file", ".png"),
+																		("JPG file", ".jpg"),
+																		("JPEG file", ".jpeg"),
+																		("BMP file", ".bmp"),
+																		("GIF file", ".gif"),
+																		("TIFF file", ".tiff"),
+																		("WebP file", ".webp"),
+																  ];
 	// Variables privadas
 	private Tools.LastFiles.LastFilesListViewModel _lastFilesViewModel = default!;
 	private Tools.Workspaces.WorkspaceListViewModel _workspacesViewModel = default!;
@@ -112,13 +122,12 @@ public class PluginsStudioViewModel : BaseObservableObject
 	/// </summary>
 	private bool IsImage(string fileName)
 	{
-		return fileName.EndsWith(".bmp", StringComparison.CurrentCultureIgnoreCase) ||
-			   fileName.EndsWith(".gif", StringComparison.CurrentCultureIgnoreCase) ||
-			   fileName.EndsWith(".jpg", StringComparison.CurrentCultureIgnoreCase) ||
-			   fileName.EndsWith(".jpeg", StringComparison.CurrentCultureIgnoreCase) ||
-			   fileName.EndsWith(".tiff", StringComparison.CurrentCultureIgnoreCase) ||
-			   fileName.EndsWith(".png", StringComparison.CurrentCultureIgnoreCase) ||
-			   fileName.EndsWith(".webp", StringComparison.CurrentCultureIgnoreCase);
+		// Busca entre las extensiones si es un archivo de imagen
+		foreach ((string _, string extension) in ImageTypeFiles)
+			if (fileName.EndsWith(extension, StringComparison.CurrentCultureIgnoreCase))
+				return true;
+		// Si ha llegado hasta aquí es porque no es una imagen
+		return false;
 	}
 
 	/// <summary>

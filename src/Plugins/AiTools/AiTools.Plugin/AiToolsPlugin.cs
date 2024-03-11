@@ -72,17 +72,18 @@ public class AiToolsPlugin : IPlugin
 	public List<FileAssignedModel> GetFilesAssigned()
 	{
 		return new() {
-						GetIcon(".prompt.def")
+						GetIcon("AI Images", AiToolsViewModel.ExtensionAiImageFile, "AiImageFile.png"),
+						GetIcon("AI Chat", AiToolsViewModel.ExtensionAiChatFile, "AiChatFile.png")
 					 };
 
 		// Obtiene el icono asociado a una extensión
-		FileAssignedModel GetIcon(string extension)
+		FileAssignedModel GetIcon(string name, string extension, string image)
 		{
 			return new FileAssignedModel
 				{
-					Name = $"Prompt imágenes {extension}",
+					Name = name,
 					FileExtension = extension,
-					Icon = "/AiTools.Plugin;component/Resources/AiImageFile.png",
+					Icon = $"/AiTools.Plugin;component/Resources/{image}",
 					CanCreate = true
 				};
 		}

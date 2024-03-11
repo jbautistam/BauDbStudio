@@ -9,9 +9,8 @@ namespace Bau.Libraries.AiTools.ViewModels.Prompts;
 public class PromptFileViewModel : BaseObservableObject, PluginsStudio.ViewModels.Base.Interfaces.IDetailViewModel
 {
 	// Constantes privadas
-	private const string DefaultExtension = "prompt.def";
-	private const string DefaultFileName = $"NewFile.{DefaultExtension}";
-	private const string Mask = $"Prompt image files (*.{DefaultExtension})|*.{DefaultExtension}|All files (*.*)|*.*";
+	private const string DefaultFileName = $"NewFile{AiToolsViewModel.ExtensionAiImageFile}";
+	private const string Mask = $"Prompt image files (*{AiToolsViewModel.ExtensionAiImageFile})|*{AiToolsViewModel.ExtensionAiImageFile}|All files (*.*)|*.*";
 	// Eventos públicos
 	public event EventHandler<string>? CopiedText;
 	// Variables privadas
@@ -98,7 +97,7 @@ public class PromptFileViewModel : BaseObservableObject, PluginsStudio.ViewModel
 
 			// Si hay que cambiar el nombre de archivo
 			if (PromptFile is null || string.IsNullOrWhiteSpace(PromptFile.FileName) || newName)
-				fileName = MainViewModel.ViewsController.DialogsController.OpenDialogSave(null, Mask, DefaultFileName, DefaultExtension);
+				fileName = MainViewModel.ViewsController.DialogsController.OpenDialogSave(null, Mask, DefaultFileName, AiToolsViewModel.ExtensionAiImageFile);
 			else
 				fileName = PromptFile.FileName;
 			// Graba el archivo

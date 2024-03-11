@@ -24,6 +24,9 @@ public class AiToolsController : ViewModels.Controllers.IAiToolsController
 			case ViewModels.Prompts.PromptFileViewModel viewModel:
 					AiToolsPlugin.AppViewsController.OpenDocument(new Views.ImagesPrompt.ImagePromptView(viewModel), viewModel);
 				break;
+			case ViewModels.TextPrompt.ChatViewModel viewModel:
+					AiToolsPlugin.AppViewsController.OpenDocument(new Views.TextPrompt.ChatView(viewModel), viewModel);
+				break;
 		}
 		// Devuelve el valor predeterminado
 		return SystemControllerEnums.ResultType.Yes;
