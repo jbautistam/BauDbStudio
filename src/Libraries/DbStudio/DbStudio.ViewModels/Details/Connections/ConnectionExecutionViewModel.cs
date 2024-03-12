@@ -216,7 +216,8 @@ public class ConnectionExecutionViewModel : BaseObservableObject
 					else
 					{
 						Controllers.Exporter.ExportTablesProcessor processor = new(SolutionViewModel, connection, viewModel.TreeConnection.GetSelectedTables(),
-																					viewModel.OutputPath, viewModel.FormatType, viewModel.BlockSize);
+																					viewModel.OutputPath, viewModel.FormatType, viewModel.BlockSize,
+																					viewModel.FileCsvViewModel.GetCsvParameters());
 
 							// Encola el proceso
 							await SolutionViewModel.MainController.MainWindowController.EnqueueProcessAsync(processor, cancellationToken);
@@ -259,7 +260,8 @@ public class ConnectionExecutionViewModel : BaseObservableObject
 								Controllers.Exporter.ImportFilesProcessor processor = new(SolutionViewModel, connection,
 																						 viewModel.FileName, selectedTable,
 																						 viewModel.GetColumnsImported(), 
-																						 viewModel.BlockSize);
+																						 viewModel.BlockSize,
+																						 viewModel.FileCsvViewModel.GetCsvParameters());
 
 									// Encola el proceso
 									await SolutionViewModel.MainController.MainWindowController.EnqueueProcessAsync(processor, cancellationToken);

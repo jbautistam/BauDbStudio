@@ -15,6 +15,8 @@ public class ExportDatabaseViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDial
 	private string _outputPath = string.Empty;
 	private Application.SolutionManager.FormatType _formatType;
 	private long _blockSize;
+	private CsvFileViewModel _csvFileViewModel;
+	private bool _isCsvFile;
 
 	public ExportDatabaseViewModel(ConnectionModel? connectionDefault, ConnectionTableModel? tableDefault, DbStudioViewModel solutionViewModel)
 	{
@@ -28,6 +30,7 @@ public class ExportDatabaseViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDial
 																				UpdateConnection();
 																		  };
 		// Inicializa el viewModel
+		_csvFileViewModel = new CsvFileViewModel(solutionViewModel);
 		InitViewModel(connectionDefault, tableDefault);
 	}
 
@@ -38,6 +41,11 @@ public class ExportDatabaseViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDial
 	{
 		// Combo de formato de los archivos
 		ComboFormat = new ComboViewModel(this);
+		ComboFormat.PropertyChanged += (sender, args) => {
+															if (!string.IsNullOrWhiteSpace(args.PropertyName) &&
+																	args.PropertyName.Equals(nameof(ComboFormat.SelectedItem), StringComparison.CurrentCultureIgnoreCase))
+																IsCsvFile = ComboFormat.SelectedId == (int) Application.SolutionManager.FormatType.Csv;
+														 };
 		ComboFormat.AddItem((int) Application.SolutionManager.FormatType.Parquet, "Parquet");
 		ComboFormat.AddItem((int) Application.SolutionManager.FormatType.Csv, "CSV");
 		ComboFormat.SelectedItem = ComboFormat.Items[0];
@@ -151,7 +159,11 @@ public class ExportDatabaseViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDial
 	public Application.SolutionManager.FormatType FormatType
 	{
 		get { return _formatType; }
-		set { CheckProperty(ref _formatType, value); }
+		set 
+		{ 
+			if (CheckProperty(ref _formatType, value))
+				IsCsvFile = value == Application.SolutionManager.FormatType.Csv;
+		}
 	}
 
 	/// <summary>
@@ -161,5 +173,23 @@ public class ExportDatabaseViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDial
 	{
 		get { return _blockSize; }
 		set { CheckProperty(ref _blockSize, value); }
+	}
+
+	/// <summary>
+	///		Parámetros del archivo CSV
+	/// </summary>
+	public CsvFileViewModel FileCsvViewModel
+	{
+		get { return _csvFileViewModel; }
+		set { CheckObject(ref _csvFileViewModel, value); }
+	}
+
+	/// <summary>
+	///		Indica si es un archivo CSV
+	/// </summary>
+	public bool IsCsvFile
+	{
+		get { return _isCsvFile; }
+		set { CheckProperty(ref _isCsvFile, value); }
 	}
 }

@@ -11,7 +11,7 @@ namespace Bau.Libraries.DbStudio.ViewModels.Controllers.Exporter;
 internal class ExportTablesProcessor : ProcessModel
 {
 	public ExportTablesProcessor(DbStudioViewModel mainViewModel, ConnectionModel connection, List<ConnectionTableModel> tables, string outputPath, 
-								  SolutionManager.FormatType formatType, long blockSize) : base("DbStudio", "Export tables")
+								 SolutionManager.FormatType formatType, long blockSize, CsvFileParameters csvFileParameters) : base("DbStudio", "Export tables")
 	{
 		MainViewModel = mainViewModel;
 		Connection = connection;
@@ -19,6 +19,7 @@ internal class ExportTablesProcessor : ProcessModel
 		OutputPath = outputPath;
 		FormatType = formatType;
 		BlockSize = blockSize;
+		CsvFileParameters = csvFileParameters;
 	}
 
 	/// <summary>
@@ -71,7 +72,7 @@ internal class ExportTablesProcessor : ProcessModel
 			// Asocia el manejador de eventos
 			generator.Progress += (sender, args) => RaiseLog(LogEventArgs.Status.Info, $"Export table {table.FullName}. {args.Actual:#,##0} records");
 			// Ejecuta el proceso
-			await generator.ExportTableAsync(Connection, table, OutputPath, FormatType, BlockSize, cancellationToken);
+			await generator.ExportTableAsync(Connection, table, OutputPath, FormatType, BlockSize, CsvFileParameters, cancellationToken);
 			// Log
 			RaiseLog(LogEventArgs.Status.Info, $"End export table {table.FullName}");
 	}
@@ -105,4 +106,9 @@ internal class ExportTablesProcessor : ProcessModel
 	///		Tamaño de bloque
 	/// </summary>
 	internal long BlockSize { get; }
+
+	/// <summary>
+	///		Parámetros del archivo CSV
+	/// </summary>
+	internal CsvFileParameters CsvFileParameters { get; }
 }

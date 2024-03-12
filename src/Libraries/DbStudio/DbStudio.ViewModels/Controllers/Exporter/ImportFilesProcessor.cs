@@ -1,6 +1,6 @@
-﻿using Bau.Libraries.DbStudio.Models.Connections;
+﻿using Bau.Libraries.DbStudio.Application.Controllers.Export;
+using Bau.Libraries.DbStudio.Models.Connections;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Models.Processes;
-using DbExporter = Bau.Libraries.DbStudio.Application.Controllers.Export;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Controllers.Exporter;
 
@@ -10,7 +10,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Controllers.Exporter;
 internal class ImportFilesProcessor : ProcessModel
 {
 	public ImportFilesProcessor(DbStudioViewModel mainViewModel, ConnectionModel connection, string fileName, ConnectionTableModel table, 
-							   List<(string field, string fileField)> mappings, long blockSize) : base("DbStudio", "Import file")
+							   List<(string field, string fileField)> mappings, long blockSize,
+							   CsvFileParameters csvFileParameters) : base("DbStudio", "Import file")
 	{
 		MainViewModel = mainViewModel;
 		Connection = connection;
@@ -18,6 +19,7 @@ internal class ImportFilesProcessor : ProcessModel
 		Table = table;
 		Mappings = mappings;
 		BlockSize = blockSize;
+		CsvFileParameters = csvFileParameters;
 	}
 
 	/// <summary>
@@ -49,12 +51,12 @@ internal class ImportFilesProcessor : ProcessModel
 	/// </summary>
 	private async Task ImportAsync(CancellationToken cancellationToken)
 	{
-		DbExporter.ImportFileProcessor processor = new(MainViewModel.Manager);
+		ImportFileProcessor processor = new(MainViewModel.Manager);
 
 			// Asocia el manejador de eventos
 			processor.Progress += (sender, args) => RaiseProgress(args.Actual, args.Total);
 			// Importa los datos
-			await processor.ImportAsync(Connection, FileName, Table, Mappings, BlockSize, cancellationToken);
+			await processor.ImportAsync(Connection, FileName, Table, Mappings, BlockSize, CsvFileParameters, cancellationToken);
 	}
 
 	/// <summary>
@@ -86,4 +88,9 @@ internal class ImportFilesProcessor : ProcessModel
 	///		Tamaño de bloque
 	/// </summary>
 	internal long BlockSize { get; }
+
+	/// <summary>
+	///		Parámetros del archivo CSV
+	/// </summary>
+	internal CsvFileParameters CsvFileParameters { get; }
 }

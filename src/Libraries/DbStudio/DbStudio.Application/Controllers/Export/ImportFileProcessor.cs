@@ -23,7 +23,7 @@ public class ImportFileProcessor
 	///		Importa los datos
 	/// </summary>
 	public async Task ImportAsync(ConnectionModel connection, string fileName, ConnectionTableModel table, List<(string field, string fileField)> mappings, 
-								  long blockSize, CancellationToken cancellationToken)
+								  long blockSize, CsvFileParameters csvFileParameters, CancellationToken cancellationToken)
 	{
 		long record = 0;
 
@@ -34,7 +34,7 @@ public class ImportFileProcessor
 					// Abre la conexión
 					await provider.OpenAsync(cancellationToken);
 					// Importa los datos
-					using (IDataReader reader = await GetDataReaderAsync(fileName, cancellationToken))
+					using (IDataReader reader = await GetDataReaderAsync(fileName, table, mappings, csvFileParameters, cancellationToken))
 					{
 						// Guarda los registros en la cadena de inserción
 						while (reader.Read())
@@ -148,10 +148,11 @@ public class ImportFileProcessor
 	/// <summary>
 	///		Obtiene el <see cref="IDataReader"/> sobre un archivo
 	/// </summary>
-	private async Task<IDataReader> GetDataReaderAsync(string fileName, CancellationToken cancellationToken)
+	private async Task<IDataReader> GetDataReaderAsync(string fileName, ConnectionTableModel table, List<(string field, string fileField)> mappings, 
+													   CsvFileParameters csvFileParameters, CancellationToken cancellationToken)
 	{
 		if (fileName.EndsWith(".csv", StringComparison.CurrentCultureIgnoreCase))
-			return GetCsvReader(fileName);
+			return GetCsvReader(fileName, table, mappings, csvFileParameters);
 		else if (fileName.EndsWith(".parquet", StringComparison.CurrentCultureIgnoreCase))
 			return await GetParquetReaderAsync(fileName, cancellationToken);
 		else
@@ -161,14 +162,59 @@ public class ImportFileProcessor
 	/// <summary>
 	///		Obtiene un <see cref="IDataReader"/> sobre un archivo CSV
 	/// </summary>
-	private IDataReader GetCsvReader(string fileName)
+	private IDataReader GetCsvReader(string fileName, ConnectionTableModel table, List<(string field, string fileField)> mappings, CsvFileParameters csvFileParameters)
 	{
-		LibCsvFiles.CsvReader reader = new LibCsvFiles.CsvReader(null, null);
+		LibCsvFiles.CsvReader reader = new LibCsvFiles.CsvReader(csvFileParameters.GetFileModel(), null);
 
+			// Añade las columnas
+			reader.Columns.AddRange(GetColumns(table, mappings));
 			// Abre el archivo
 			reader.Open(fileName);
 			// Devuelve el lector
 			return reader;
+
+			// Obtiene las columnas
+			List<LibCsvFiles.Models.ColumnModel> GetColumns(ConnectionTableModel table, List<(string field, string fileField)> mappings)
+			{
+				List<LibCsvFiles.Models.ColumnModel> columns = [];
+
+					// Obtiene las columnas que están mapeadas y sus tipos
+					foreach ((string field, string fileField) in mappings)
+					{
+						ConnectionTableFieldModel? tableField = table.Fields.FirstOrDefault(item => item.Name.Equals(field, StringComparison.CurrentCultureIgnoreCase));
+
+							if (tableField is not null)
+							{
+								LibCsvFiles.Models.ColumnModel.ColumnType type = LibCsvFiles.Models.ColumnModel.ColumnType.String;
+
+									// Convierte el tipo
+									switch (tableField.Type)
+									{
+										case ConnectionTableFieldModel.Fieldtype.Date:
+												type = LibCsvFiles.Models.ColumnModel.ColumnType.DateTime;
+											break;
+										case ConnectionTableFieldModel.Fieldtype.Integer:
+												type = LibCsvFiles.Models.ColumnModel.ColumnType.Integer;
+											break;
+										case ConnectionTableFieldModel.Fieldtype.Decimal:
+												type = LibCsvFiles.Models.ColumnModel.ColumnType.Decimal;
+											break;
+										case ConnectionTableFieldModel.Fieldtype.Boolean:
+												type = LibCsvFiles.Models.ColumnModel.ColumnType.Boolean;
+											break;
+									}
+									// Añade la columna
+									columns.Add(new LibCsvFiles.Models.ColumnModel
+															{
+																Name = fileField,
+																Type = type
+															}
+												);
+							}
+					}
+					// Devuelve la lista de columnas
+					return columns;
+			}
 	}
 
 	/// <summary>

@@ -65,7 +65,7 @@ internal class ExportQueryProcessor : ProcessModel
 			// Asocia el manejador de eventos
 			generator.Progress += (sender, args) => RaiseLog(LogEventArgs.Status.Info, $"Export query to {Path.GetFileName(FileName)}. {args.Actual:#,##0} records");
 			// Ejecuta el proceso
-			await generator.ExportQueryAsync(Query, FileName, FormatType, BlockSize, cancellationToken);
+			await generator.ExportQueryAsync(Query, FileName, FormatType, BlockSize, new CsvFileParameters(), cancellationToken);
 	}
 
 	/// <summary>

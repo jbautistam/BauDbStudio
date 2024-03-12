@@ -14,6 +14,8 @@ public class ImportDatabaseViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDial
 	private BauMvvm.ViewModels.Forms.ControlItems.ControlItemCollectionViewModel<ImportDatabaseFieldViewModel> _listFields = default!;
 	private List<string> _fileFields = new();
 	private long _blockSize;
+	private bool _isCsvFile;
+	private CsvFileViewModel _csvFileViewModel = default!;
 
 	public ImportDatabaseViewModel(ConnectionModel connection, DbStudioViewModel solutionViewModel)
 	{
@@ -26,6 +28,7 @@ public class ImportDatabaseViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDial
 																	LoadTableFields();
 														 };
 		ListFields = new BauMvvm.ViewModels.Forms.ControlItems.ControlItemCollectionViewModel<ImportDatabaseFieldViewModel>();
+		FileCsvViewModel = new CsvFileViewModel(solutionViewModel);
 	}
 
 	/// <summary>
@@ -279,7 +282,12 @@ public class ImportDatabaseViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDial
 		set 
 		{ 
 			if (CheckProperty(ref _fileName, value))
+			{
+				// Carga los campos del archivo
 				Task.Run(async () => await LoadFileFieldsAsync(CancellationToken.None));
+				// Indica si es un archivo de tipo CSV
+				IsCsvFile = (FileName ?? string.Empty).EndsWith(".csv", StringComparison.CurrentCultureIgnoreCase);
+			}
 		}
 	}
 
@@ -302,11 +310,29 @@ public class ImportDatabaseViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDial
 	}
 
 	/// <summary>
+	///		Parámetros del archivo CSV
+	/// </summary>
+	public CsvFileViewModel FileCsvViewModel
+	{
+		get { return _csvFileViewModel; }
+		set { CheckObject(ref _csvFileViewModel, value); }
+	}
+
+	/// <summary>
 	///		Tamaño del bloque de escritura
 	/// </summary>
 	public long BlockSize
 	{
 		get { return _blockSize; }
 		set { CheckProperty(ref _blockSize, value); }
+	}
+
+	/// <summary>
+	///		Indica si es un archivo CSV
+	/// </summary>
+	public bool IsCsvFile
+	{
+		get { return _isCsvFile; }
+		set { CheckProperty(ref _isCsvFile, value); }
 	}
 }

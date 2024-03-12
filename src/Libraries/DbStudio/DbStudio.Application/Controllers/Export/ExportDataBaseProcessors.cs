@@ -7,6 +7,7 @@ using DbBase = Bau.Libraries.LibDbProviders.Base.Models;
 using Bau.Libraries.DbStudio.Models.Connections;
 using Bau.Libraries.LibDbProviders.Base;
 using Bau.Libraries.DbScripts.Manager.Models;
+using Bau.Libraries.LibCsvFiles.Models;
 
 namespace Bau.Libraries.DbStudio.Application.Controllers.Export;
 
@@ -28,7 +29,8 @@ public class ExportDataBaseProcessors
 	///	y da un error de OutOfMemory)
 	/// </summary>
 	public async Task ExportTableAsync(ConnectionModel connection, ConnectionTableModel table, string path, 
-									   SolutionManager.FormatType formatType, long blockSize, CancellationToken cancellationToken)
+									   SolutionManager.FormatType formatType, long blockSize, CsvFileParameters csvFileParameters, 
+									   CancellationToken cancellationToken)
 	{
 		IDbProvider provider = Manager.DbScriptsManager.GetDbProvider(connection);
 		long records = 0;
@@ -62,18 +64,19 @@ public class ExportDataBaseProcessors
 					// Exporta la tabla
 					await ExportQueryAsync(connection, 
 										   new DbBase.QueryModel(sql, DbBase.QueryModel.QueryType.Text, connection.TimeoutExecuteScript), 
-										   fileName, formatType, cancellationToken);
+										   fileName, formatType, csvFileParameters, cancellationToken);
 			}
 	}
 
 	/// <summary>
 	///		Exporta el resultado de una consulta a un archivo
 	/// </summary>
-	public async Task ExportQueryAsync(QueryModel query, string fileName, SolutionManager.FormatType formatType, long blockSize, CancellationToken cancellationToken)
+	public async Task ExportQueryAsync(QueryModel query, string fileName, SolutionManager.FormatType formatType, long blockSize,
+									   CsvFileParameters csvFileParameters, CancellationToken cancellationToken)
 	{
 		await ExportQueryAsync(query.Connection, 
 							   new DbBase.QueryModel(query.Sql, DbBase.QueryModel.QueryType.Text, query.Connection.TimeoutExecuteScript),
-							   fileName, formatType, cancellationToken);
+							   fileName, formatType, csvFileParameters, cancellationToken);
 	}
 
 	/// <summary>
@@ -100,14 +103,14 @@ public class ExportDataBaseProcessors
 	///		Exporta una tabla
 	/// </summary>
 	private async Task ExportQueryAsync(ConnectionModel connection, DbBase.QueryModel query, string fileName, 
-										SolutionManager.FormatType formatType, CancellationToken cancellationToken)
+										SolutionManager.FormatType formatType, CsvFileParameters csvFileParameters, CancellationToken cancellationToken)
 	{
 		using (DbDataReader reader = await Manager.DbScriptsManager.GetDbProvider(connection).ExecuteReaderAsync(query, cancellationToken))
 		{
 			switch (formatType)
 			{
 				case SolutionManager.FormatType.Csv:
-						ExportToCsv(fileName, reader);
+						ExportToCsv(fileName, reader, csvFileParameters);
 					break;
 				case SolutionManager.FormatType.Parquet:
 						await ExportToParquetAsync(fileName, reader, cancellationToken);
@@ -119,9 +122,9 @@ public class ExportDataBaseProcessors
 	/// <summary>
 	///		Exporta la tabla a CSV
 	/// </summary>
-	private void ExportToCsv(string fileName, IDataReader reader)
+	private void ExportToCsv(string fileName, IDataReader reader, CsvFileParameters csvFileParameters)
 	{
-		LibCsvFiles.Controllers.CsvDataReaderWriter writer = new LibCsvFiles.Controllers.CsvDataReaderWriter();
+		LibCsvFiles.Controllers.CsvDataReaderWriter writer = new LibCsvFiles.Controllers.CsvDataReaderWriter(csvFileParameters.GetFileModel());
 		
 			// Asigna el evento de progreso
 			writer.Progress += (sender, args) => Manager.Logger.LogInformation($"Exporting to {Path.GetFileName(fileName)} ({args.Records:#,##0} / {args.Records + 1:#,##0})");
