@@ -1,4 +1,5 @@
 ﻿using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.ComboItems;
+using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.ListView;
 using Bau.Libraries.LibAiImageGeneration.Controllers;
 using Bau.Libraries.LibAiImageGeneration.Domain.Models.Results;
 using Bau.Libraries.AiTools.Application.Models.Prompts;
@@ -22,7 +23,7 @@ public class PromptVersionViewModel : BauMvvm.ViewModels.BaseObservableObject
 	private ComboViewModel _comboGenerators = default!;
 	private ComboViewModel _comboModels = default!;
 	private ComboViewModel _comboSampler = default!;
-	private ComboViewModel _comboPostprocessing = default!;
+	private ControlListViewModel _listPostProcessing = default!;
 	private Images.ImagesGeneratedListViewModel _imagesViewModel = default!;
 
 	public PromptVersionViewModel(PromptVersionListViewModel promptVersionListViewModel, PromptModel prompt)
@@ -43,7 +44,7 @@ public class PromptVersionViewModel : BauMvvm.ViewModels.BaseObservableObject
 		// Inicializa los combos
 		InitComboGenerators();
 		InitComboSamplers();
-		InitComboPostProcess();
+		InitListPostProcess(Prompt.PostProcessing);
 		// Inicializa los datos
 		Version = Prompt.Version;
 		Positive = Prompt.Positive;
@@ -55,10 +56,6 @@ public class PromptVersionViewModel : BauMvvm.ViewModels.BaseObservableObject
 		Seed = Prompt.Seed;
 		Height = Prompt.Height;
 		Width = Prompt.Width;
-		if (Prompt.PostProcessing.Count > 0)
-			ComboPostprocessing.SelectedId = (int) Prompt.PostProcessing[0];
-		else
-			ComboPostprocessing.SelectedIndex = 0;
 		Karras = Prompt.Karras;
 		Steps = Prompt.Steps;
 		ImagesToGenerate = Prompt.ImagesToGenerate;
@@ -129,20 +126,22 @@ public class PromptVersionViewModel : BauMvvm.ViewModels.BaseObservableObject
 	}
 
 	/// <summary>
-	///		Inicializa el combo de postproceso
+	///		Inicializa la lista de postproceso
 	/// </summary>
-	private void InitComboPostProcess()
+	private void InitListPostProcess(List<PromptModel.PostProcessType> postProcessing)
 	{
-		// Limpia el combo
-		ComboPostprocessing = new ComboViewModel(this);
-		// Añade el elemento vacío
-		ComboPostprocessing.AddItem(null, "<Select the posprocess type>");
+		// Limpia la lista
+		ListViewPostProcessing = new ControlListViewModel();
 		// Añade los sampleadores
 		foreach (PromptModel.PostProcessType postProcess in Enum.GetValues<PromptModel.PostProcessType>())
-			ComboPostprocessing.AddItem((int) postProcess, postProcess.ToString());
-		// Selecciona el primer elemento
-		if (ComboPostprocessing.Items.Count > 0)
-			ComboPostprocessing.SelectedId = null;
+		{
+			BauMvvm.ViewModels.Forms.ControlItems.ControlItemViewModel controlItem = new(postProcess.ToString(), postProcess);
+
+				// Selecciona el elemento si es necesario
+				controlItem.IsChecked = postProcessing.Any(item => item == postProcess);
+				// Añade el elemento
+				ListViewPostProcessing.Items.Add(controlItem);
+		}
 	}
 
 	/// <summary>
@@ -174,8 +173,9 @@ public class PromptVersionViewModel : BauMvvm.ViewModels.BaseObservableObject
 				prompt.Sampler = (PromptModel.SamplerType) ComboSampler.SelectedId;
 			// Añade los datos de postproceso
 			prompt.PostProcessing.Clear();
-			if (ComboPostprocessing.SelectedId is not null)
-				prompt.PostProcessing.Add((PromptModel.PostProcessType) ComboPostprocessing.SelectedId);
+			foreach (BauMvvm.ViewModels.Forms.ControlItems.ControlItemViewModel item in ListViewPostProcessing.Items)
+				if (item.IsChecked && item.Tag is PromptModel.PostProcessType type)
+					prompt.PostProcessing.Add(type);
 			// Devuelve el prompt
 			return prompt;
 	}
@@ -240,12 +240,12 @@ public class PromptVersionViewModel : BauMvvm.ViewModels.BaseObservableObject
 	}
 
 	/// <summary>
-	///		Combo con los tipos de postproceso: esto en realidad puede ser selección múltiple
+	///		ListView con los tipos de postproceso
 	/// </summary>
-	public ComboViewModel ComboPostprocessing
+	public ControlListViewModel ListViewPostProcessing
 	{
-		get { return _comboPostprocessing; }
-		set { CheckObject(ref _comboPostprocessing, value); }
+		get { return _listPostProcessing; }
+		set { CheckObject(ref _listPostProcessing, value); }
 	}
 
 	/// <summary>

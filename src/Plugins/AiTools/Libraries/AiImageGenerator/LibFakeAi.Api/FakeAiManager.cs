@@ -92,7 +92,7 @@ public class FakeAiManager : LibAiImageGeneration.Domain.Interfaces.IImageGenera
 				// Añade las imágeneso
 				for (int index = 0; index < generation.prompt.ImagesToGenerate; index++)
 					result.Images.Add(new ProcessImageResultModel(Guid.NewGuid().ToString(), generation.prompt.Models[0], generation.prompt.Seed,
-															 false, GetImage(index), ".png"));
+																  false, GetImage(index), ".png"));
 			}
 			else
 			{

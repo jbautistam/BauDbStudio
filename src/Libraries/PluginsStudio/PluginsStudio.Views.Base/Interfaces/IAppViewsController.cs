@@ -16,7 +16,7 @@ public interface IAppViewsController
 	/// <summary>
 	///		Abre una ventana no modal
 	/// </summary>
-	void OpenNoModalDialog(System.Windows.Window window);
+	void OpenNoModalDialog(System.Windows.Window window, bool withoutParent);
 
 	/// <summary>
 	///		Abre un documento

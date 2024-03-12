@@ -40,7 +40,7 @@ public class FileToolsController : ViewModel.Controllers.IFileToolsController
 			switch (dialogViewModel)
 			{
 				case ViewModel.Multimedia.MediaFileViewModel viewModel:
-						FileToolsPlugin.AppViewsController.OpenNoModalDialog(new Views.Multimedia.MediaFileView(viewModel));
+						FileToolsPlugin.AppViewsController.OpenNoModalDialog(new Views.Multimedia.MediaFileView(viewModel), true);
 					break;
 			}
 			// Devuelve el resultado

@@ -149,8 +149,9 @@ internal class AiImageProcessor : ProcessModel
 						// Lanza el progreso
 						RaiseProgress(4, 4);
 						RaiseLog(LogEventArgs.Status.Success, "Success");
-						// Carga las imágenes en la lista
+						// Carga las imágenes en la lista y en el árbol
 						PromptVersionViewModel.LoadImages();
+						PromptVersionViewModel.PromptVersionListViewModel.PromptFileViewModel.RefreshFiles();
 					break;
 				case GenerationModel.GenerationStatus.Processing:
 						RaiseLog(LogEventArgs.Status.Info, "Processing", GetAdditionalInfo(generation));

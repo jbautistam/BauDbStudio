@@ -45,7 +45,7 @@ public class ToDoManagerController : ViewModel.Controllers.IToDoManagerControlle
 						Window view = new Views.Notes.NoteView(viewModel);
 
 							// Abre la ventana de forma no modal
-							TaskManagerPlugin.AppViewsController.OpenNoModalDialog(view);
+							TaskManagerPlugin.AppViewsController.OpenNoModalDialog(view, true);
 							// Añade la ventana a la vista
 							WindowNotes.Add(view);
 					break;

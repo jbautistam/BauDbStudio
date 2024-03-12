@@ -1,15 +1,14 @@
-﻿
-using Bau.Libraries.BauMvvm.ViewModels;
+﻿using Bau.Libraries.BauMvvm.ViewModels;
 
 namespace Bau.Libraries.AiTools.ViewModels.Prompts.Images;
 
 /// <summary>
 ///		Imagen de la lista de generaciones
 /// </summary>
-public class ImagesGeneratedListItemViewModel : BauMvvm.ViewModels.BaseObservableObject
+public class ImagesGeneratedListItemViewModel : BaseObservableObject
 {
 	// Variables privadas
-	private string _fileName = default!;
+	private string _fileName = default!, _shortFileName = default!;
 
 	public ImagesGeneratedListItemViewModel(ImagesGeneratedListViewModel imagesGeneratedListViewModel, string fileName)
 	{
@@ -40,6 +39,8 @@ public class ImagesGeneratedListItemViewModel : BauMvvm.ViewModels.BaseObservabl
 			LibHelper.Files.HelperFiles.KillFile(FileName);
 			// Elimina la imagen de la lista
 			ImagesGeneratedListViewModel.Items.Remove(this);
+			// Actualiza el árbol de archivos
+			ImagesGeneratedListViewModel.PromptVersionViewModel.PromptVersionListViewModel.PromptFileViewModel.RefreshFiles();
 		}
 	}
 
@@ -54,7 +55,24 @@ public class ImagesGeneratedListItemViewModel : BauMvvm.ViewModels.BaseObservabl
 	public string FileName
 	{ 
 		get { return _fileName; }
-		set { CheckProperty(ref _fileName, value); }
+		set 
+		{ 
+			if (CheckProperty(ref _fileName, value))
+			{
+				ShortFileName = string.Empty;
+				if (!string.IsNullOrWhiteSpace(value))
+					ShortFileName = Path.GetFileName(value);
+			}
+		}
+	}
+
+	/// <summary>
+	///		Nombre corto de archivo
+	/// </summary>
+	public string ShortFileName
+	{
+		get { return _shortFileName; }
+		set { CheckProperty(ref _shortFileName, value); }
 	}
 
 	/// <summary>

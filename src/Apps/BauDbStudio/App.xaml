@@ -15,6 +15,7 @@
 			<converter:InverseBooleanConverter x:Key="InverseBooleanConverter" />
 			<converter:BoolToFontWeightConverter x:Key="BoolToFontWeightConverter" />
 			<converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+			<converter:ImageSourceConverter x:Key="ImageSourceConverter" />
 			<converter:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter" />
 			<converter:ObjectToVisibilityConverter x:Key="ObjectToVisibilityConverter" />
 			<converter:MVVMColorConverter x:Key="MVVMColorConverter" />

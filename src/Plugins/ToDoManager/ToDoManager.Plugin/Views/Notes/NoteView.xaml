@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bau.Libraries.ToDoManager.Plugin.Views.Notes"
         mc:Ignorable="d"
-        Title="Nota" Height="450" Width="800" MinHeight="200" MinWidth="300"
+        Title="Nota" Height="350" Width="400" MinHeight="200" MinWidth="300"
 		ContextMenu="{DynamicResource ResourceKey=mnuExplorer}"
         Loaded="Window_Loaded" 
 		Closing="Window_Closing" LocationChanged="Window_LocationChanged" WindowStyle="ToolWindow"
@@ -50,14 +50,16 @@
 			<ColumnDefinition Width="Auto"/>
 			<ColumnDefinition Width="Auto"/>
 		</Grid.ColumnDefinitions>
-		<ToggleButton Grid.Row="0" Grid.Column="0" Padding="5" BorderThickness="1" IsTabStop="False" IsChecked="{Binding Path=OverAllWindows}">
+		<ToggleButton Grid.Row="0" Grid.Column="0" Padding="5" IsTabStop="False" 
+				BorderThickness="0"
+				IsChecked="{Binding Path=OverAllWindows}" ToolTip="Always on top">
 			<Image Width="32" Height="32" Source="/ToDoManager.Plugin;component/Resources/Pin.png"/>
 		</ToggleButton>
 		<TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=Title,UpdateSourceTrigger=PropertyChanged}" Padding="5"/>
-		<Button Grid.Row="0" Grid.Column="2" Padding="5" Background="Transparent" BorderThickness="0" Command="{Binding Path=DeleteCommand}" IsTabStop="False">
+		<Button Grid.Row="0" Grid.Column="2" Padding="5" Background="Transparent" BorderThickness="0" Command="{Binding Path=DeleteCommand}" IsTabStop="False" ToolTip="Delete">
 			<Image Width="32" Height="32" Source="/ToDoManager.Plugin;component/Resources/Trash.png"/>
 		</Button>
-		<Button Grid.Row="0" Grid.Column="3" Padding="5" Background="Transparent" BorderThickness="0" Click="cmdClose_Click" IsTabStop="False">
+		<Button Grid.Row="0" Grid.Column="3" Padding="5" Background="Transparent" BorderThickness="0" Click="cmdClose_Click" IsTabStop="False" ToolTip="Close">
 			<Image Width="32" Height="32" Source="/ToDoManager.Plugin;component/Resources/Close.png" />
 		</Button>
 		<TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Text="{Binding Path=Content,UpdateSourceTrigger=PropertyChanged}" Margin="5"

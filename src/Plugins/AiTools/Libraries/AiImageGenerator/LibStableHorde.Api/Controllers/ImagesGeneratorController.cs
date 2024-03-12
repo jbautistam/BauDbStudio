@@ -161,7 +161,7 @@ internal class ImagesGeneratorController : BaseController
 					if (result.generations is not null)
 						foreach (ImageProcessResultGenerationDto generationDto in result.generations)
 							process.Images.Add(new ProcessImageResultModel(generationDto.id, generationDto.model, generationDto.seed, 
-																	  generationDto.censored, generationDto.img, ".webp"));
+																		   generationDto.censored, generationDto.img, ".webp"));
 				}
 			}
 			// Devueve los resultados

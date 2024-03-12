@@ -125,6 +125,14 @@ public class PromptFileViewModel : BaseObservableObject, PluginsStudio.ViewModel
 	}
 
 	/// <summary>
+	///		Actualiza el explorador de archivos
+	/// </summary>
+	internal void RefreshFiles()
+	{
+		MainViewModel.ViewsController.PluginController.HostPluginsController.RefreshFiles();
+	}
+
+	/// <summary>
 	///		Cierra la ventana de detalles: limpia las versiones para que se descarguen las imágenes que pueda haber en memoria
 	/// </summary>
 	public void Close()

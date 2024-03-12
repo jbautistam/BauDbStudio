@@ -27,9 +27,9 @@ public class AppViewsController : Libraries.PluginsStudio.Views.Base.Interfaces.
 	/// <summary>
 	///		Abre una ventana no modal
 	/// </summary>
-	public void OpenNoModalDialog(System.Windows.Window window)
+	public void OpenNoModalDialog(System.Windows.Window window, bool withoutParent)
 	{
-		DbStudioViewsManager.MainWindowsController.HostHelperController.ShowNoModal(DbStudioViewsManager.MainWindow, window);
+		DbStudioViewsManager.MainWindowsController.HostHelperController.ShowNoModal(DbStudioViewsManager.MainWindow, window, withoutParent);
 	}
 
 	/// <summary>

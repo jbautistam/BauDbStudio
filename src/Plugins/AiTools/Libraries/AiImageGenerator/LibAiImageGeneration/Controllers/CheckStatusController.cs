@@ -141,7 +141,7 @@ internal class CheckStatusController : IDisposable
 				if (!string.IsNullOrWhiteSpace(prefix) && prefix.EndsWith('.'))
 					prefix = prefix.Substring(0, prefix.Length - 1);
 				// Devuelve el nombre de archivo
-				return $"{folder}/{prefix}.{index}{extension}";
+				return $"{folder}/{prefix}.{index:000}{extension}";
 			}
 	}
 
