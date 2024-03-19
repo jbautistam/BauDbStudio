@@ -19,8 +19,8 @@ public class FolderViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewMo
 		_parent = parent;
 		_folder = folder ?? new FolderModel();
 		if (_parent is null)
-			_parent =  MainViewModel.BlogManager.File;
-		if (_folder is not null)
+			_parent = MainViewModel.BlogManager.File;
+		if (_folder is not null && _folder.Parent is not null)
 			_parent = _folder.Parent;
 		InitProperties();
 	}

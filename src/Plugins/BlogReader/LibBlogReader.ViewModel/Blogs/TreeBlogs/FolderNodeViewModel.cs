@@ -20,7 +20,7 @@ public class FolderNodeViewModel : BaseBlogsNodeViewModel
 	/// <summary>
 	///		Obtiene los nodos, en este caso sólo implementa la interface
 	/// </summary>
-	protected override async Task<List<PluginNodeViewModel>> GetChildNodesAsync(CancellationToken cancellationToken)
+	protected override async Task<List<PluginNodeViewModel>?> GetChildNodesAsync(CancellationToken cancellationToken)
 	{
 		List<PluginNodeViewModel> nodes = new();
 
@@ -34,6 +34,10 @@ public class FolderNodeViewModel : BaseBlogsNodeViewModel
 			Folder.Blogs.SortByName();
 			foreach (BlogModel blog in Folder.Blogs)
 				nodes.Add(new BlogNodeViewModel(TreeViewModel, MainViewModel, this, blog));
+			// Carga los hipervínculos hijo
+			Folder.Hyperlinks.SortByName();
+			foreach (HyperlinkModel hyperlink in Folder.Hyperlinks)
+				nodes.Add(new HyperlinkNodeViewModel(TreeViewModel, MainViewModel, this, hyperlink));
 			// Devuelve la lista de nodos
 			return nodes;
 	}

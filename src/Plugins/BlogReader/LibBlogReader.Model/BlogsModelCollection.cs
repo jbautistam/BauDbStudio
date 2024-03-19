@@ -1,4 +1,5 @@
-﻿namespace Bau.Libraries.LibBlogReader.Model;
+﻿
+namespace Bau.Libraries.LibBlogReader.Model;
 
 /// <summary>
 ///		Colección de <see cref="BlogModel"/>
@@ -6,7 +7,7 @@
 public class BlogsModelCollection : LibDataStructures.Base.BaseExtendedModelCollection<BlogModel>
 {
 	/// <summary>
-	///		Añade un blog a la colección
+	///		Añade un <see cref="BlogModel"/> a la colección
 	/// </summary>
 	public BlogModel Add(string name, string description, string url)
 	{
@@ -21,6 +22,21 @@ public class BlogsModelCollection : LibDataStructures.Base.BaseExtendedModelColl
 			Add(blog);
 			// Devuelve el blog
 			return blog;
+	}
+
+	/// <summary>
+	///		Cuenta los <see cref="BlogModel"/> activos
+	/// </summary>
+	public int CountEnabled()
+	{
+		int count = 0;
+
+			// Cuenta el número de elementos
+			foreach (BlogModel blog in this)
+				if (blog.Enabled)
+					count++;
+			// Devuelve el número de elementos
+			return count;
 	}
 
 	/// <summary>

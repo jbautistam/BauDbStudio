@@ -581,7 +581,7 @@ public class BlogSeeNewsViewModel : BaseObservableObject, PluginsStudio.ViewMode
 	/// </summary>
 	private void ExportEntries()
 	{
-		string fileName = MainViewModel.ViewsController.DialogsController
+		string? fileName = MainViewModel.ViewsController.DialogsController
 								.OpenDialogSave(null, "Archivos XML (*.xml)|*.xml|Todos los archivos (*.*)|*.*", "ExportEntries.xml", ".xml");
 
 			if (!string.IsNullOrWhiteSpace(fileName))

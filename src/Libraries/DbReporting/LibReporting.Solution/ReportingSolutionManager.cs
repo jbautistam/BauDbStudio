@@ -32,7 +32,7 @@ public class ReportingSolutionManager
 	/// </summary>
 	public void AddDataWarehouse(string fileName)
 	{
-		DataWarehouseModel dataWarehouse = new Repositories.DataWarehouseRepository().Load(Manager.Schema, fileName);
+		DataWarehouseModel dataWarehouse = GetRepository().DataWarehouseRepository.Get(fileName, Manager.Schema);
 
 			// Añade el datawarehouse al esquema y al diccionario
 			if (dataWarehouse is not null)
@@ -52,7 +52,7 @@ public class ReportingSolutionManager
 	/// </summary>
 	public void RefreshAdvancedReport(DataWarehouseModel dataWarehouse, string fileName)
 	{
-		ReportModel report = new Repositories.ReportRepository().LoadReport(dataWarehouse, fileName);
+		ReportModel report = GetRepository().ReportRepository.Get(fileName, dataWarehouse);
 
 			if (report is not null)
 				dataWarehouse.Reports.Add(report);
@@ -96,7 +96,7 @@ public class ReportingSolutionManager
 	/// </summary>
 	public void LoadDataWarehouse(string fileName)
 	{
-		DataWarehouseModel dataWarehouse = new Repositories.DataWarehouseRepository().Load(Manager.Schema, fileName);
+		DataWarehouseModel dataWarehouse = GetRepository().DataWarehouseRepository.Get(fileName, Manager.Schema);
 
 			// Añade el dashboard al esquema
 			if (dataWarehouse != null)
@@ -127,7 +127,7 @@ public class ReportingSolutionManager
 			if (string.IsNullOrWhiteSpace(fileName))
 				throw new NotImplementedException($"Cant find file name for '{dataWarehouse.Name}'");
 			else
-				new Repositories.DataWarehouseRepository().Save(dataWarehouse, fileName);
+				GetRepository().DataWarehouseRepository.Update(fileName, dataWarehouse);
 	}
 
 	/// <summary>
@@ -135,21 +135,26 @@ public class ReportingSolutionManager
 	/// </summary>
 	public void SaveDataWarehouse(DataWarehouseModel dataWarehouse, string fileName)
 	{
-		new Repositories.DataWarehouseRepository().Save(dataWarehouse, fileName);
+		GetRepository().DataWarehouseRepository.Update(fileName, dataWarehouse);
 	}
 
 	/// <summary>
 	///		Carga los datos de un <see cref="Requests.Models.ReportRequestModel"/> de un archivo
 	/// </summary>
-	public Requests.Models.ReportRequestModel LoadRequest(string fileName) => new Repositories.RequestRepository().Load(fileName);
+	public Requests.Models.ReportRequestModel LoadRequest(string fileName) => GetRepository().RequestRepository.Get(fileName);
 
 	/// <summary>
 	///		Graba los datos de un <see cref="Requests.Models.ReportRequestModel"/> en un archivo
 	/// </summary>
 	public void SaveRequest(Requests.Models.ReportRequestModel request, string fileName)
 	{
-		new Repositories.RequestRepository().Save(request, fileName);
+		GetRepository().RequestRepository.Update(fileName, request);
 	}
+
+	/// <summary>
+	///		Obtiene el repositorio
+	/// </summary>
+	private Repository.Xml.ReportingRepositoryXml GetRepository() => new(); 
 
 	/// <summary>
 	///		Obtiene la SQL resultante de procesar una solicitud de informe
@@ -159,7 +164,7 @@ public class ReportingSolutionManager
 	/// <summary>
 	///		<see cref="Application.ReportingManager"/> con el que trabaja la aplicación
 	/// </summary>
-	public Application.ReportingManager Manager { get; private set; }
+	public Application.ReportingManager Manager { get; }
 
 	/// <summary>
 	///		Solución para informes

@@ -294,6 +294,17 @@ public class ToDoFileViewModel : BaseObservableObject, PluginsStudio.ViewModels.
 	}
 
 	/// <summary>
+	///		Abre el elemento seleccionado de una lista (posiblemente desde un doble click)
+	/// </summary>
+	public void OpenSelected(TaskModel.StatusType type)
+	{
+		ControlItemCollectionViewModel<ToDoTaskItemViewModel> viewModel = GetTasksList(type);
+
+			if (viewModel.SelectedItem is not null)
+				OpenUpdateTask(viewModel.SelectedItem);
+	}
+
+	/// <summary>
 	///		Modifica el orden
 	/// </summary>
 	internal void UpdateOrder(ToDoTaskItemViewModel toDoTaskItemViewModel, MovementType type)

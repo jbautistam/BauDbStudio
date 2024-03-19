@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
+using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.LibBlogReader.Model;
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.BauMvvm.ViewModels.Controllers;
@@ -20,7 +21,8 @@ public class TreeBlogsViewModel : PluginsStudio.ViewModels.Base.Explorers.Plugin
 	{
 		Unknown,
 		Folder,
-		Blog
+		Blog,
+		Hyperlink
 	}
 
 	public TreeBlogsViewModel(BlogReaderViewModel mainViewModel)
@@ -33,11 +35,14 @@ public class TreeBlogsViewModel : PluginsStudio.ViewModels.Base.Explorers.Plugin
 								.AddListener(this, nameof(SelectedNode));
 		NewBlogCommand = new BaseCommand(_ => ExecuteAction(nameof(NewBlogCommand)), _ => CanExecuteAction(nameof(NewBlogCommand)))
 								.AddListener(this, nameof(SelectedNode));
+		NewHyperlinkCommand = new BaseCommand(_ => ExecuteAction(nameof(NewHyperlinkCommand)), _ => CanExecuteAction(nameof(NewHyperlinkCommand)))
+								.AddListener(this, nameof(SelectedNode));
 		DownloadCommand = new BaseCommand(async _ => await DownloadItemsAsync(), _ => CanExecuteAction(nameof(DownloadCommand)))
 								.AddListener(this, nameof(SelectedNode));
 		SeeNewsCommand = new BaseCommand(_ => ExecuteAction(nameof(SeeNewsCommand)), _ => CanExecuteAction(nameof(SeeNewsCommand)))
 								.AddListener(this, nameof(SelectedNode));
 	}
+
 	/// <summary>
 	///		Carga los nodos
 	/// </summary>
@@ -83,6 +88,18 @@ public class TreeBlogsViewModel : PluginsStudio.ViewModels.Base.Explorers.Plugin
 				else
 					Children.Add(node);
 		}
+		// Carga los hipervínculos hijo
+		folder.Hyperlinks.SortByName();
+		foreach (HyperlinkModel hyperlink in folder.Hyperlinks)
+		{
+			HyperlinkNodeViewModel node = new(this, MainViewModel, null, hyperlink);
+
+				// Añade el nodo
+				if (parent is not null)
+					parent.Children.Add(node);
+				else
+					Children.Add(node);
+		}
 	}
 
 	/// <summary>
@@ -100,6 +117,9 @@ public class TreeBlogsViewModel : PluginsStudio.ViewModels.Base.Explorers.Plugin
 				break;
 			case nameof(NewBlogCommand):
 					OpenFormUpdateBlog(null);
+				break;
+			case nameof(NewHyperlinkCommand):
+					OpenFormUpdateHyperlink(null);
 				break;
 			case nameof(SeeNewsCommand):
 					SeeNews();
@@ -128,6 +148,7 @@ public class TreeBlogsViewModel : PluginsStudio.ViewModels.Base.Explorers.Plugin
 		{
 			case nameof(NewFolderCommand):
 			case nameof(NewBlogCommand):
+			case nameof(NewHyperlinkCommand):
 				return IsSelectedFolder || SelectedNode is null;
 			case nameof(OpenCommand):
 			case nameof(DeleteCommand):
@@ -152,6 +173,8 @@ public class TreeBlogsViewModel : PluginsStudio.ViewModels.Base.Explorers.Plugin
 				OpenFormUpdateFolder(folderNode.Folder);
 			else if (SelectedNode is BlogNodeViewModel blogNode)
 				OpenFormUpdateBlog(blogNode.Blog);
+			else if (SelectedNode is HyperlinkNodeViewModel hyperlinkNode)
+				OpenFormUpdateHyperlink(hyperlinkNode.Hyperlink);
 		}
 
 	}
@@ -267,7 +290,7 @@ public class TreeBlogsViewModel : PluginsStudio.ViewModels.Base.Explorers.Plugin
 	}
 
 	/// <summary>
-	///		Abre el formulario de modificación / creación de una carpeta
+	///		Abre el formulario de modificación / creación de un <see cref="BlogModel"/>
 	/// </summary>
 	private void OpenFormUpdateBlog(BlogModel? blog)
 	{
@@ -289,6 +312,28 @@ public class TreeBlogsViewModel : PluginsStudio.ViewModels.Base.Explorers.Plugin
 	}
 
 	/// <summary>
+	///		Abre el formulario de modificación / creación de un <see cref="HyperlinkModel"/>
+	/// </summary>
+	private void OpenFormUpdateHyperlink(HyperlinkModel? hyperlink)
+	{
+		FolderModel? folder;
+
+			// Obtiene la carpeta a la que se añade el hipervínculo
+			if (hyperlink is null)
+			{
+				if (SelectedNode is FolderNodeViewModel node)
+					folder = node.Folder;
+				else
+					folder = MainViewModel.BlogManager.File;
+			}
+			else
+				folder = hyperlink.Folder;
+			// Abre la ventana de modificación
+			if (MainViewModel.ViewsController.OpenDialog(new HyperlinkViewModel(MainViewModel, folder, hyperlink)) == SystemControllerEnums.ResultType.Yes)
+				Refresh();
+	}
+
+	/// <summary>
 	///		Borra un elemento
 	/// </summary>
 	protected override void DeleteItem()
@@ -300,6 +345,9 @@ public class TreeBlogsViewModel : PluginsStudio.ViewModels.Base.Explorers.Plugin
 				break;
 			case BlogNodeViewModel node:
 					DeleteBlog(node.Blog);
+				break;
+			case HyperlinkNodeViewModel node:
+					DeleteHyperlink(node.Hyperlink);
 				break;
 		}
 	}
@@ -343,6 +391,22 @@ public class TreeBlogsViewModel : PluginsStudio.ViewModels.Base.Explorers.Plugin
 	}
 
 	/// <summary>
+	///		Borra un <see cref="HyperlinkModel"/>
+	/// </summary>
+	private void DeleteHyperlink(HyperlinkModel hyperlink)
+	{
+		if (hyperlink != null && MainViewModel.ViewsController.SystemController.ShowQuestion($"¿Realmente desea eliminar el hipervínculo '{hyperlink.Name}'?"))
+		{ 
+			// Borra el blog
+			MainViewModel.BlogManager.File.Delete(hyperlink);
+			// Graba los datos
+			MainViewModel.BlogManager.Save();
+			// Actualiza
+			Refresh();
+		}
+	}
+
+	/// <summary>
 	///		Elimina los directorios de una serie de blogs
 	/// </summary>
 	private void KillPaths(BlogsModelCollection blogs)
@@ -365,8 +429,17 @@ public class TreeBlogsViewModel : PluginsStudio.ViewModels.Base.Explorers.Plugin
 	/// </summary>
 	private void SeeNews()
 	{
-		if (SelectedNode != null && SelectedNode is BaseBlogsNodeViewModel blogsViewModel)
-			MainViewModel.ViewsController.OpenWindow(new BlogSeeNewsViewModel(MainViewModel, blogsViewModel.GetBlogs()));
+		if (SelectedNode is HyperlinkNodeViewModel hyperlinkViewModel)
+			MainViewModel.ViewsController.HostPluginsController.OpenWebBrowser(hyperlinkViewModel.Hyperlink.Url);
+		else if (SelectedNode is BaseBlogsNodeViewModel blogsViewModel)
+		{
+			BlogsModelCollection blogs = blogsViewModel.GetBlogs();
+
+				if (blogs.Count == 0 || blogs.CountEnabled() == 0)
+					MainViewModel.ViewsController.SystemController.ShowMessage("No hay ningún blog activo seleccionado");
+				else
+					MainViewModel.ViewsController.OpenWindow(new BlogSeeNewsViewModel(MainViewModel, blogsViewModel.GetBlogs()));
+		}
 	}
 
 	/// <summary>
@@ -404,6 +477,11 @@ public class TreeBlogsViewModel : PluginsStudio.ViewModels.Base.Explorers.Plugin
 	///		Comando de nuevo blog
 	/// </summary>
 	public BaseCommand NewBlogCommand { get; }
+
+	/// <summary>
+	///		Comando de nuevo hipervínculo
+	/// </summary>
+	public BaseCommand NewHyperlinkCommand { get; }
 
 	/// <summary>
 	///		Comando de descarga

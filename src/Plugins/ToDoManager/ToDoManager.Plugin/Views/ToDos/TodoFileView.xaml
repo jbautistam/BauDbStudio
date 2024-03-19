@@ -103,14 +103,17 @@
 		<Label Grid.Row="1" Grid.Column="0" Content="Pending"/>
 		<ListBox Grid.Row="2" Grid.Column="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
 				ItemsSource="{Binding Path=TasksPlanned}" 
-				SelectedItem="{Binding Path=TasksPlanned.SelectedItem}"/>
+				SelectedItem="{Binding Path=TasksPlanned.SelectedItem}" 
+				MouseDoubleClick="lstPending_MouseDoubleClick" />
 		<Label Grid.Row="1" Grid.Column="1" Content="Doing"/>
 		<ListBox Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
 				ItemsSource="{Binding Path=TasksDoing}" 
-				SelectedItem="{Binding Path=TasksDoing.SelectedItem}"/>
+				SelectedItem="{Binding Path=TasksDoing.SelectedItem}"
+				MouseDoubleClick="lstDoing_MouseDoubleClick" />
 		<Label Grid.Row="1" Grid.Column="2" Content="Done"/>
 		<ListBox Grid.Row="2" Grid.Column="2" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
 				ItemsSource="{Binding Path=TasksDone}" 
-				SelectedItem="{Binding Path=TasksDone.SelectedItem}"/>
+				SelectedItem="{Binding Path=TasksDone.SelectedItem}"
+				MouseDoubleClick="lstDone_MouseDoubleClick" />
 	</Grid>
 </UserControl>

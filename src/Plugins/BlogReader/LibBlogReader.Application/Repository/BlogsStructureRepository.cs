@@ -24,6 +24,7 @@ internal class BlogsStructureRepository
 	private const string TagNumberNotRead = "NumberNotRead";
 	private const string TagDateLastDownload = "DateLastDownload";
 	private const string TagDateLastEntry = "DateLastEntry";
+	private const string TagHyperlink = "Hyperlink";
 
 	/// <summary>
 	///		Carga una estructura de carpetas
@@ -35,14 +36,16 @@ internal class BlogsStructureRepository
 		MLFile fileML = new XMLParser().Load(fileName);
 
 			// Si existe el archivo, lo carga
-			if (fileML != null)
-				foreach (MLNode nodeML in fileML.Nodes)
-					if (nodeML.Name == TagRoot)
-						foreach (MLNode childML in nodeML.Nodes)
-							if (childML.Name == TagFolder)
-								folder.Folders.Add(LoadFolder(folder, childML));
-							else if (childML.Name == TagBlog)
-								folder.Blogs.Add(LoadBlog(folder, childML));
+			if (fileML is not null)
+				foreach (MLNode rootML in fileML.Nodes)
+					if (rootML.Name == TagRoot)
+						foreach (MLNode nodeML in rootML.Nodes)
+							if (nodeML.Name == TagFolder)
+								folder.Folders.Add(LoadFolder(folder, nodeML));
+							else if (nodeML.Name == TagBlog)
+								folder.Blogs.Add(LoadBlog(folder, nodeML));
+							else if (nodeML.Name == TagHyperlink)
+								folder.Hyperlinks.Add(LoadHyperlink(folder, nodeML));
 			// Devuelve la carpeta cargada
 			return folder;
 	}
@@ -50,20 +53,22 @@ internal class BlogsStructureRepository
 	/// <summary>
 	///		Carga los datos de una carpeta de un nodo
 	/// </summary>
-	private FolderModel LoadFolder(FolderModel parent, MLNode nodeML)
+	private FolderModel LoadFolder(FolderModel parent, MLNode rootML)
 	{
 		FolderModel folder = new();
 
 			// Carga los datos de la carpeta
-			folder.Name = nodeML.Nodes[TagName].Value;
-			folder.NumberNotRead = nodeML.Attributes[TagNumberNotRead].Value.GetInt(0);
+			folder.Name = rootML.Nodes[TagName].Value;
+			folder.NumberNotRead = rootML.Attributes[TagNumberNotRead].Value.GetInt(0);
 			folder.Parent = parent;
 			// Carga los hijos de la carpetas
-			foreach (MLNode childML in nodeML.Nodes)
-				if (childML.Name == TagFolder)
-					folder.Folders.Add(LoadFolder(folder, childML));
-				else if (childML.Name == TagBlog)
-					folder.Blogs.Add(LoadBlog(folder, childML));
+			foreach (MLNode nodeML in rootML.Nodes)
+				if (nodeML.Name == TagFolder)
+					folder.Folders.Add(LoadFolder(folder, nodeML));
+				else if (nodeML.Name == TagBlog)
+					folder.Blogs.Add(LoadBlog(folder, nodeML));
+				else if (nodeML.Name == TagHyperlink)
+					folder.Hyperlinks.Add(LoadHyperlink(folder, nodeML));
 			// Devuelve la carpeta
 			return folder;
 	}
@@ -92,11 +97,28 @@ internal class BlogsStructureRepository
 	}
 
 	/// <summary>
+	///		Carga los datos de un <see cref="HyperlinkModel"/>
+	/// </summary>
+	private HyperlinkModel LoadHyperlink(FolderModel parent, MLNode nodeML)
+	{
+		HyperlinkModel hyperlink = new();
+
+			// Carga los datos
+			hyperlink.Folder = parent;
+			hyperlink.GlobalId = nodeML.Attributes[TagID].Value;
+			hyperlink.Name = nodeML.Nodes[TagName].Value;
+			hyperlink.Description = nodeML.Nodes[TagDescription].Value;
+			hyperlink.Url = nodeML.Nodes[TagUrl].Value;
+			// Devuelve los datos del hipervínculo
+			return hyperlink;
+	}
+
+	/// <summary>
 	///		Graba una estructura de carpetas
 	/// </summary>
 	internal void Save(FolderModel folder, string path)
 	{
-		MLFile fileML = new MLFile();
+		MLFile fileML = new();
 		MLNode nodeML = fileML.Nodes.Add(TagRoot);
 
 			// Añade los nodos de las carpetas
@@ -105,6 +127,9 @@ internal class BlogsStructureRepository
 			// Añade los nodos de los blogs
 			foreach (BlogModel blog in folder.Blogs)
 				nodeML.Nodes.Add(GetNode(blog));
+			// Añade los nodos de los hipervínculos
+			foreach (HyperlinkModel hyperlink in folder.Hyperlinks)
+				nodeML.Nodes.Add(GetNode(hyperlink));
 			// Graba el archivo
 			new XMLWriter().Save(GetFileName(path), fileML);
 	}
@@ -114,7 +139,7 @@ internal class BlogsStructureRepository
 	/// </summary>
 	private MLNode GetNode(FolderModel folder)
 	{
-		MLNode nodeML = new MLNode(TagFolder);
+		MLNode nodeML = new(TagFolder);
 
 			// Añade los datos de la carpeta
 			nodeML.Attributes.Add(TagNumberNotRead, folder.NumberNotRead);
@@ -125,6 +150,9 @@ internal class BlogsStructureRepository
 			// Añade los nodos de los blogs
 			foreach (BlogModel blog in folder.Blogs)
 				nodeML.Nodes.Add(GetNode(blog));
+			// Añade los nodos de los hipervínculos
+			foreach (HyperlinkModel hyperlink in folder.Hyperlinks)
+				nodeML.Nodes.Add(GetNode(hyperlink));
 			// Devuelve el nodo
 			return nodeML;
 	}
@@ -134,7 +162,7 @@ internal class BlogsStructureRepository
 	/// </summary>
 	private MLNode GetNode(BlogModel blog)
 	{
-		MLNode nodeML = new MLNode(TagBlog);
+		MLNode nodeML = new(TagBlog);
 
 			// Añade los datos del nodo
 			nodeML.Attributes.Add(TagID, blog.GlobalId);
@@ -147,6 +175,22 @@ internal class BlogsStructureRepository
 			nodeML.Nodes.Add(TagDescription, blog.Description);
 			nodeML.Nodes.Add(TagPath, blog.Path);
 			nodeML.Nodes.Add(TagUrl, blog.URL);
+			// Devuelve el nodo
+			return nodeML;
+	}
+
+	/// <summary>
+	///		Obtiene el nodo XML de un blog
+	/// </summary>
+	private MLNode GetNode(HyperlinkModel hyperlink)
+	{
+		MLNode nodeML = new(TagHyperlink);
+
+			// Añade los datos del nodo
+			nodeML.Attributes.Add(TagID, hyperlink.GlobalId);
+			nodeML.Nodes.Add(TagName, hyperlink.Name);
+			nodeML.Nodes.Add(TagDescription, hyperlink.Description);
+			nodeML.Nodes.Add(TagUrl, hyperlink.Url);
 			// Devuelve el nodo
 			return nodeML;
 	}

@@ -21,4 +21,19 @@ public partial class TodoFileView : UserControl
 	///		ViewModel asociado al control
 	/// </summary>
 	public ToDoFileViewModel ViewModel { get; }
+
+	private void lstPending_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+	{
+		ViewModel.OpenSelected(Application.ToDo.Models.TaskModel.StatusType.Planned);
+    }
+
+	private void lstDoing_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+	{
+		ViewModel.OpenSelected(Application.ToDo.Models.TaskModel.StatusType.Doing);
+	}
+	
+	private void lstDone_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+	{
+		ViewModel.OpenSelected(Application.ToDo.Models.TaskModel.StatusType.Done);
+	}
 }

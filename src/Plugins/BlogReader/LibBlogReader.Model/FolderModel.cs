@@ -23,7 +23,7 @@ public class FolderModel : LibDataStructures.Base.BaseExtendedModel
 	/// </summary>
 	public BlogsModelCollection GetBlogsRecursive()
 	{
-		BlogsModelCollection blogs = new BlogsModelCollection();
+		BlogsModelCollection blogs = [];
 
 			// Añade los blogs de la carpeta
 			foreach (BlogModel blog in Blogs)
@@ -71,6 +71,18 @@ public class FolderModel : LibDataStructures.Base.BaseExtendedModel
 	}
 
 	/// <summary>
+	///		Borra un <see cref="HyperlinkModel"/>
+	/// </summary>
+	public void Delete(HyperlinkModel hyperlink)
+	{
+		if (Hyperlinks.Search(hyperlink.GlobalId) != null)
+			Hyperlinks.RemoveById(hyperlink.GlobalId);
+		else
+			foreach (FolderModel childFolder in Folders)
+				childFolder.Delete(hyperlink);
+	}
+
+	/// <summary>
 	///		Actualiza el número de elementos no leidos de un blog
 	/// </summary>
 	public void UpdateNumberNotRead(BlogModel blog, int numberNotRead)
@@ -103,6 +115,11 @@ public class FolderModel : LibDataStructures.Base.BaseExtendedModel
 	///		Blogs de esta carpeta
 	/// </summary>
 	public BlogsModelCollection Blogs { get; } = new();
+
+	/// <summary>
+	///		Hipervínculos de esta carpeta
+	/// </summary>
+	public HyperlinkModelCollection Hyperlinks { get; } = [];
 
 	/// <summary>
 	///		Nombre completo de la carpeta

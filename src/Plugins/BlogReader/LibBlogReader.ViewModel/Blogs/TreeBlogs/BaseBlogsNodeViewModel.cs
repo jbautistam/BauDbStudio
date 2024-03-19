@@ -10,7 +10,7 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs.TreeBlogs;
 /// </summary>
 public abstract class BaseBlogsNodeViewModel : PluginNodeAsyncViewModel
 {
-	public BaseBlogsNodeViewModel(PluginTreeViewModel trvTree, ControlHierarchicalViewModel parent, string nodeID, string text, bool lazyLoadChildren = true)
+	public BaseBlogsNodeViewModel(PluginTreeViewModel trvTree, ControlHierarchicalViewModel? parent, string nodeID, string text, bool lazyLoadChildren = true)
 							: base(trvTree, parent, text, TreeBlogsViewModel.NodeType.Unknown.ToString(), 
 								   TreeBlogsViewModel.NodeType.Unknown.ToString(), null, lazyLoadChildren)
 	{

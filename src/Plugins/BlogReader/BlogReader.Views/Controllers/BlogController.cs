@@ -42,6 +42,9 @@ public class BlogController : LibBlogReader.ViewModel.Controllers.IBlogReaderCon
 				case LibBlogReader.ViewModel.Blogs.BlogViewModel viewModel:
 						result = BlogReaderPlugin.AppViewsController.OpenDialog(new Views.BlogView(viewModel));
 					break;
+				case LibBlogReader.ViewModel.Blogs.HyperlinkViewModel viewModel:
+						result = BlogReaderPlugin.AppViewsController.OpenDialog(new Views.HyperlinkView(viewModel));
+					break;
 				case LibBlogReader.ViewModel.Blogs.FolderViewModel viewModel:
 						result = BlogReaderPlugin.AppViewsController.OpenDialog(new Views.FolderView(viewModel));
 					break;

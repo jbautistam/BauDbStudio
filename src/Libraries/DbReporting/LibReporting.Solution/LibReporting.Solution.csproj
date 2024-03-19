@@ -8,15 +8,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Repositories\**" />
+    <EmbeddedResource Remove="Repositories\**" />
+    <None Remove="Repositories\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Converters\SchemaScriptsConverter.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="Repositories\SolutionRepository.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\DataBaseProviders\src\LibDbProviders.Base\LibDbProviders.Base.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\DbReporting\src\LibReporting.Application\LibReporting.Application.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\DbReporting\src\LibReporting.Repository.Xml\LibReporting.Repository.Xml.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\Schema\LibDbSchema.Repository.Xml\LibDbSchema.Repository.Xml.csproj" />
-    <ProjectReference Include="..\LibReporting.Application\LibReporting.Application.csproj" />
-    <ProjectReference Include="..\LibReporting.Models\LibReporting.Models.csproj" />
-    <ProjectReference Include="..\LibReporting.Requests\LibReporting.Requests.csproj" />
   </ItemGroup>
 
 </Project>

@@ -14,7 +14,7 @@
 			<Converter:MVVMColorConverter x:Key="MVVMColorConverter"/>
 		</Grid.Resources>
 		<TreeView x:Name="trvBlogs" SelectedItemChanged="trvBlogs_SelectedItemChanged" BorderThickness="0"
-				ItemsSource="{Binding Path=Children}"
+				ItemsSource="{Binding Path=Children}" FontSize="12"
 				VirtualizingStackPanel.IsVirtualizing="True"
 				VirtualizingStackPanel.VirtualizationMode="Recycling"
 				MouseDoubleClick="trvBlogs_MouseDoubleClick" MouseDown="trvBlogs_MouseDown"	
@@ -36,7 +36,7 @@
 				<HierarchicalDataTemplate DataType="{x:Type ViewModel:FolderNodeViewModel}" ItemsSource="{Binding Children}">
 					<StackPanel Orientation="Horizontal">
 						<Image Width="16" Height="16" Margin="3,0" Source="/BauControls;component/Themes/Images/Folder.png" />
-						<TextBlock Text="{Binding Path=Text}" 
+						<TextBlock Text="{Binding Path=Text}" Margin="2"
 								FontWeight="{Binding IsBold,Converter={StaticResource BoolToFontWeightConverter}}"
 								FontStyle="{Binding IsItalic,Converter={StaticResource BoolToFontStyleConverter}}"
 								Foreground="{Binding Path=Foreground,Converter={StaticResource MVVMColorConverter}}" 
@@ -46,8 +46,18 @@
 				<!-- Plantilla para las carpetas (BlogModel) -->
 				<DataTemplate DataType="{x:Type ViewModel:BlogNodeViewModel}">
 					<StackPanel Orientation="Horizontal">
-						<Image Width="16" Height="16" Margin="3,0" Source="/BauControls;component/Themes/Images/Blog.png" />
-						<TextBlock Text="{Binding Path=Text}"
+						<Image Width="16" Height="16" Margin="3,0" Source="/BlogReader.Views;component/Resources/Blog.png" />
+						<TextBlock Text="{Binding Path=Text}" Margin="2"
+								FontWeight="{Binding IsBold,Converter={StaticResource BoolToFontWeightConverter}}"
+								FontStyle="{Binding IsItalic,Converter={StaticResource BoolToFontStyleConverter}}"
+								Foreground="{Binding Path=Foreground,Converter={StaticResource MVVMColorConverter}}" />
+					</StackPanel>
+				</DataTemplate>
+				<!-- Plantilla para los hipervínculos (HyperlinkModel) -->
+				<DataTemplate DataType="{x:Type ViewModel:HyperlinkNodeViewModel}">
+					<StackPanel Orientation="Horizontal">
+						<Image Width="16" Height="16" Margin="3,0" Source="/BlogReader.Views;component/Resources/Hyperlink.png" />
+						<TextBlock Text="{Binding Path=Text}" Margin="2"
 								FontWeight="{Binding IsBold,Converter={StaticResource BoolToFontWeightConverter}}"
 								FontStyle="{Binding IsItalic,Converter={StaticResource BoolToFontStyleConverter}}"
 								Foreground="{Binding Path=Foreground,Converter={StaticResource MVVMColorConverter}}" />
@@ -66,7 +76,12 @@
 						</MenuItem>
 						<MenuItem Header="_Blog" Command="{Binding Path=NewBlogCommand}">
 							<MenuItem.Icon>
-								<Image Source="/BauControls;component/Themes/Images/Blog.png" />
+								<Image Source="/BlogReader.Views;component/Resources/Blog.png" />
+							</MenuItem.Icon>
+						</MenuItem>
+						<MenuItem Header="_Hipervínculo" Command="{Binding Path=NewHyperlinkCommand}">
+							<MenuItem.Icon>
+								<Image Source="/BlogReader.Views;component/Resources/Hyperlink.png" />
 							</MenuItem.Icon>
 						</MenuItem>
 					</MenuItem>
