@@ -49,7 +49,7 @@ public partial class ImageView : UserControl
 		}
 		catch (Exception exception)
 		{
-			ViewModel.MainViewModel.PluginsStudioController.MainWindowController.HostController.SystemController.ShowMessage($"Error when load image {fileName}");
+			ViewModel.MainViewModel.MainController.MainWindowController.HostController.SystemController.ShowMessage($"Error when load image {fileName}");
 			ViewModel.MainViewModel.LogViewModel.WriteLog(Microsoft.Extensions.Logging.LogLevel.Error, $"Error when load image {fileName}", exception);
 		}
 	}
@@ -77,13 +77,13 @@ public partial class ImageView : UserControl
 				saved = new Controllers.Helpers.ImageHelper().SaveImage(image, fileName);
 			// Si no se ha grabado, muestra un mensaje al usuario, si se ha grabado, actualiza el árbol
 			if (!saved)
-				ViewModel.MainViewModel.PluginsStudioController.MainWindowController.HostController.SystemController.ShowMessage($"Can't save the image {fileName}");
+				ViewModel.MainViewModel.MainController.MainWindowController.HostController.SystemController.ShowMessage($"Can't save the image {fileName}");
 			else
 			{
 				// Actualiza el árbol
-				ViewModel.MainViewModel.PluginsStudioController.HostPluginsController.RefreshFiles();
+				ViewModel.MainViewModel.MainController.HostPluginsController.RefreshFiles();
 				// Añade el archivo a los últimos archivos abiertos
-				ViewModel.MainViewModel.PluginsStudioController.HostPluginsController.AddFileUsed(fileName);
+				ViewModel.MainViewModel.MainController.HostPluginsController.AddFileUsed(fileName);
 			}
 	}
 

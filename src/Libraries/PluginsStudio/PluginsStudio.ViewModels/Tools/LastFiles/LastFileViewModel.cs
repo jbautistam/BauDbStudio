@@ -32,7 +32,7 @@ public class LastFileViewModel : BauMvvm.ViewModels.BaseObservableObject
 	/// </summary>
 	private void OpenFile()
 	{
-		MainViewModel.PluginsStudioController.HostPluginsController.OpenFile(FileName);
+		MainViewModel.MainController.HostPluginsController.OpenFile(FileName);
 	}
 
 	/// <summary>

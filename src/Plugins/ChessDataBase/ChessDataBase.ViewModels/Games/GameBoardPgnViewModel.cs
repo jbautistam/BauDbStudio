@@ -27,7 +27,7 @@ public class GameBoardPgnViewModel : BauMvvm.ViewModels.BaseObservableObject, Pl
 	/// </summary>
 	private void OpenFile()
 	{
-		MainViewModel.ViewsController.HostPluginsController.OpenTextEditor(ChessGameViewModel.FileName);
+		MainViewModel.ViewsController.HostPluginsController.OpenTextEditor(ChessGameViewModel.FileName, "Pgn file (*.pgn)|*.pgn");
 	}
 
 	/// <summary>

@@ -205,7 +205,7 @@ public partial class TreeFilesExplorer : UserControl
 							}
 							catch (Exception exception)
 							{
-								ViewModel.MainViewModel.PluginsStudioController.MainWindowController.Logger.LogError(exception, "Error when drop files");
+								ViewModel.MainViewModel.MainController.MainWindowController.Logger.LogError(exception, "Error when drop files");
 							}
 					}
 					else

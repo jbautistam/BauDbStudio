@@ -60,7 +60,7 @@ public class DbStudioViewsManager
 	public void OpenFile(string fileName)
 	{
 		if (!PluginsManager.OpenFile(fileName))
-			PluginsStudioViewModel.OpenFile(fileName);
+			PluginsStudioViewModel.OpenFile(fileName, string.Empty);
 	}
 
 	/// <summary>

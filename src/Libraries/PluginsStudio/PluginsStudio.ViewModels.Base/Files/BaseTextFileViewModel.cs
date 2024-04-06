@@ -13,9 +13,8 @@ public abstract class BaseTextFileViewModel : BaseFileViewModel
 	private System.Text.Encoding _fileEncoding = default!;
 	private bool _fileWithBom;
 
-	public BaseTextFileViewModel(Controllers.IPluginsController pluginsController, string fileName) : base(fileName) 
+	public BaseTextFileViewModel(Controllers.IPluginsController pluginsController, string fileName, string mask) : base(pluginsController, fileName, mask) 
 	{
-		PluginsController = pluginsController;
 	}
 
 	/// <summary>
@@ -45,37 +44,37 @@ public abstract class BaseTextFileViewModel : BaseFileViewModel
 	/// </summary>
 	public override void SaveDetails(bool newName)
 	{
-		// Graba el archivo
-		if (string.IsNullOrWhiteSpace(FileName) || newName)
-		{
-			string? newFileName = PluginsController.MainWindowController.DialogsController.OpenDialogSave(string.Empty, "Script SQL (*.sql)|*.sql|Todos los archivos (*.*)|*.*",
-																										  FileName, ".sql");
+		string oldTabId = TabId;
 
-				// Cambia el nombre de archivo si es necesario
-				if (!string.IsNullOrWhiteSpace(newFileName))
-					FileName = newFileName;
-		}
-		// Graba el archivo
-		if (!string.IsNullOrWhiteSpace(FileName))
-		{
 			// Graba el archivo
-			if (FileWithBom)
-				LibHelper.Files.HelperFiles.SaveTextFile(FileName, Content, FileEncoding);
-			else
-				LibHelper.Files.HelperFiles.SaveTextFileWithoutBom(FileName, Content);
-			// Actualiza el árbol
-			PluginsController.HostPluginsController.RefreshFiles();
-			// Añade el archivo a los últimos archivos abiertos
-			PluginsController.HostPluginsController.AddFileUsed(FileName);
-			// Indica que no ha habido modificaciones
-			IsUpdated = false;
-		}
+			if (string.IsNullOrWhiteSpace(FileName) || newName)
+			{
+				string? newFileName = PluginsController.MainWindowController.DialogsController.OpenDialogSave(FileName, "Script SQL (*.sql)|*.sql|Todos los archivos (*.*)|*.*",
+																											  FileName, ".sql");
+
+					// Cambia el nombre de archivo si es necesario
+					if (!string.IsNullOrWhiteSpace(newFileName))
+						FileName = newFileName;
+			}
+			// Graba el archivo
+			if (!string.IsNullOrWhiteSpace(FileName))
+			{
+				// Graba el archivo
+				if (FileWithBom)
+					LibHelper.Files.HelperFiles.SaveTextFile(FileName, Content, FileEncoding);
+				else
+					LibHelper.Files.HelperFiles.SaveTextFileWithoutBom(FileName, Content);
+				// Actualiza el nombre de archivo
+				UpdateFileName(oldTabId);
+				// Indica que no ha habido modificaciones
+				IsUpdated = false;
+			}
 	}
 
 	/// <summary>
 	///		Lanza un evento para solicitar el texto seleccionado al editor
 	/// </summary>
-	protected string GetEditorSelectedText()
+	protected string? GetEditorSelectedText()
 	{
 		Controllers.EventArguments.EditorSelectedTextRequiredEventArgs eventArgs = new Controllers.EventArguments.EditorSelectedTextRequiredEventArgs(string.Empty);
 
@@ -109,11 +108,6 @@ public abstract class BaseTextFileViewModel : BaseFileViewModel
 	{
 		Content = string.Empty;
 	}
-
-	/// <summary>
-	///		Controlador de plugins
-	/// </summary>
-	public Controllers.IPluginsController PluginsController { get; }
 
 	/// <summary>
 	///		Codificación del archivo

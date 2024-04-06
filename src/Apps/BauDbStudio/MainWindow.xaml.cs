@@ -68,7 +68,7 @@ public partial class MainWindow : Window
 		// Carga los menús de espacios de trabajo
 		ShowMenuWorkspaces();
 		// Carga la configuración en los controladores
-		ViewModel.PluginsStudioController.MainWindowController.HostController.DialogsController.LastPathSelected = DbStudioViewsManager.ConfigurationController.LastPathSelected;
+		ViewModel.MainController.MainWindowController.HostController.DialogsController.LastPathSelected = DbStudioViewsManager.ConfigurationController.LastPathSelected;
 	}
 
 	/// <summary>
@@ -417,7 +417,7 @@ public partial class MainWindow : Window
 			// Muestra la ventana que solicita grabar las ventanas
 			if (views.Count > 0)
 			{
-				bool cancel = ViewModel.PluginsStudioController.OpenDialog(new Libraries.PluginsStudio.ViewModels.Tools.SaveOpenFilesViewModel(ViewModel, views)) 
+				bool cancel = ViewModel.MainController.OpenDialog(new Libraries.PluginsStudio.ViewModels.Tools.SaveOpenFilesViewModel(ViewModel, views)) 
 								== Libraries.BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.No;
 
 					// No se puede salir si se ha cancelado
@@ -434,8 +434,8 @@ public partial class MainWindow : Window
 	private void ExitApp()
 	{
 		// Graba la configuración
-		if (!string.IsNullOrWhiteSpace(ViewModel.PluginsStudioController.MainWindowController.HostController.DialogsController.LastPathSelected))
-			DbStudioViewsManager.ConfigurationController.LastPathSelected = ViewModel.PluginsStudioController.MainWindowController.HostController.DialogsController.LastPathSelected;
+		if (!string.IsNullOrWhiteSpace(ViewModel.MainController.MainWindowController.HostController.DialogsController.LastPathSelected))
+			DbStudioViewsManager.ConfigurationController.LastPathSelected = ViewModel.MainController.MainWindowController.HostController.DialogsController.LastPathSelected;
 		DbStudioViewsManager.ConfigurationController.LastWorkSpace = ViewModel.WorkspacesViewModel.SelectedItem?.Name ?? string.Empty;
 		DbStudioViewsManager.ConfigurationController.LastFiles = ViewModel.LastFilesViewModel.GetFiles();
 		DbStudioViewsManager.ConfigurationController.Save();
@@ -551,22 +551,22 @@ public partial class MainWindow : Window
 
 	private void ExecuteScriptCommandBinding_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
 	{
-		ViewModel.PluginsStudioController.HostPluginsController.ExecutePluginCommand("DbStudio", "ConnectionExecutionViewModel", "ExecuteScripCommand");
+		ViewModel.MainController.HostPluginsController.ExecutePluginCommand("DbStudio", "ConnectionExecutionViewModel", "ExecuteScripCommand");
 	}
 
 	private void ExecuteScriptCommandBinding_CanExecute(object sender, System.Windows.Input.CanExecuteRoutedEventArgs e)
 	{
-		e.CanExecute = ViewModel.PluginsStudioController.HostPluginsController.CheckCanExecutePluginCommand("DbStudio", "ConnectionExecutionViewModel", "ExecuteScripCommand");
+		e.CanExecute = ViewModel.MainController.HostPluginsController.CheckCanExecutePluginCommand("DbStudio", "ConnectionExecutionViewModel", "ExecuteScripCommand");
 	}
 
 	private void NewQueryCommandBinding_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
 	{
-		ViewModel.PluginsStudioController.HostPluginsController.ExecutePluginCommand("DbStudio", "TreeConnectionsViewModel", "NewQueryCommand");
+		ViewModel.MainController.HostPluginsController.ExecutePluginCommand("DbStudio", "TreeConnectionsViewModel", "NewQueryCommand");
 	}
 
 	private void NewQueryCommandBinding_CanExecute(object sender, System.Windows.Input.CanExecuteRoutedEventArgs e)
 	{
-		e.CanExecute = ViewModel.PluginsStudioController.HostPluginsController.CheckCanExecutePluginCommand("DbStudio", "TreeConnectionsViewModel", "NewQueryCommand");
+		e.CanExecute = ViewModel.MainController.HostPluginsController.CheckCanExecutePluginCommand("DbStudio", "TreeConnectionsViewModel", "NewQueryCommand");
 	}
 
 	private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

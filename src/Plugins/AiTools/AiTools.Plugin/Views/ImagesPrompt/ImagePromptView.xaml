@@ -61,8 +61,10 @@
 					ItemsSource="{Binding VersionsViewModel.SelectedItem.ComboModels.Items}" DisplayMemberPath="Text" 
 					SelectedItem="{Binding VersionsViewModel.SelectedItem.ComboModels.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 				<Label Grid.Row="2" Grid.Column="0" Margin="5" Content="Positive:" Foreground="Navy" FontWeight="Bold"/>
-				<TextBox x:Name="txtResultPositive" Grid.Row="2" Grid.Column="1" Margin="5" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" 
-						AcceptsReturn="True" VerticalAlignment="Stretch"
+				<TextBox x:Name="txtResultPositive" Grid.Row="2" Grid.Column="1" Margin="5" 
+				
+						Style="{StaticResource MultilineTextBox}"
+
 						Text="{Binding Path=VersionsViewModel.SelectedItem.Positive,UpdateSourceTrigger=PropertyChanged}"/>
 				<StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center">
 					<Button Click="cmdCopyPositive_Click" Width="16" Height="16" Margin="2"
@@ -75,8 +77,10 @@
 					</Button>
 				</StackPanel>
 				<Label Grid.Row="2" Grid.Column="3" Margin="5" Content="Negative:" Foreground="Navy" FontWeight="Bold"/>
-				<TextBox x:Name="txtResultNegative" Grid.Row="2" Grid.Column="4" Margin="5" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" 
-						AcceptsReturn="True" VerticalAlignment="Stretch"
+				<TextBox x:Name="txtResultNegative" Grid.Row="2" Grid.Column="4" Margin="5" 
+				
+						Style="{StaticResource MultilineTextBox}"
+
 						Text="{Binding Path=VersionsViewModel.SelectedItem.Negative,UpdateSourceTrigger=PropertyChanged}"/>
 				<StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="5" VerticalAlignment="Center">
 					<Button Click="cmdCopyNegative_Click" Width="16" Height="16" Margin="2"

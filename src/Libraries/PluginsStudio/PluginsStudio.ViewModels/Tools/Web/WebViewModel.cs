@@ -72,7 +72,7 @@ public class WebViewModel : BaseObservableObject, Base.Interfaces.IDetailViewMod
 	/// </summary>
 	public void OpenBrowser(string url)
 	{
-		MainViewModel.PluginsStudioController.HostPluginsController.OpenWebBrowser(url);
+		MainViewModel.MainController.HostPluginsController.OpenWebBrowser(url);
 	}
 
 	/// <summary>
@@ -82,8 +82,8 @@ public class WebViewModel : BaseObservableObject, Base.Interfaces.IDetailViewMod
 	{
 		if (Uri.TryCreate(Url, UriKind.Absolute, out Uri? url))
 		{
-			MainViewModel.PluginsStudioController.MainWindowController.OpenWindowsWebBrowser(url);
-			MainViewModel.PluginsStudioController.MainWindowController.CloseWindow(TabId);
+			MainViewModel.MainController.MainWindowController.OpenWindowsWebBrowser(url);
+			MainViewModel.MainController.MainWindowController.CloseWindow(TabId);
 		}
 	}
 

@@ -36,7 +36,7 @@ public class LogListItemViewModel : BauMvvm.ViewModels.Forms.ControlItems.Contro
 	/// </summary>
 	private void ShowDetails()
 	{
-		ListViewModel.MainViewModel.PluginsStudioController.MainWindowController.SystemController.ShowMessage(Content);
+		ListViewModel.MainViewModel.MainController.MainWindowController.SystemController.ShowMessage(Content);
 	}
 
 	/// <summary>

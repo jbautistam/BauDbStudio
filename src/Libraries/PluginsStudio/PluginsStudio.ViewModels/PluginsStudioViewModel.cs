@@ -31,7 +31,7 @@ public class PluginsStudioViewModel : BaseObservableObject
 	public PluginsStudioViewModel(Controllers.IPluginsStudioController pluginsStudioController)
 	{
 		// Asigna las propiedades
-		PluginsStudioController = pluginsStudioController;
+		MainController = pluginsStudioController;
 		// Inicializa los objetos principales
 		LastFilesViewModel = new Tools.LastFiles.LastFilesListViewModel(this);
 		WorkspacesViewModel = new Tools.Workspaces.WorkspaceListViewModel(this);
@@ -81,14 +81,14 @@ public class PluginsStudioViewModel : BaseObservableObject
 	/// <summary>
 	///		Abre el archivo
 	/// </summary>
-	public void OpenFile(string fileName)
+	public void OpenFile(string fileName, string mask)
 	{
 		if (IsImage(fileName))
-			PluginsStudioController.OpenWindow(new Files.ImageViewModel(this, fileName));
+			MainController.OpenWindow(new Files.ImageViewModel(this, fileName));
 		else if (IsBrowserFile(fileName))
 			OpenWebBrowser(fileName);
 		else
-			PluginsStudioController.OpenWindow(new Files.FileTextViewModel(this, fileName));
+			MainController.OpenWindow(new Files.FileTextViewModel(this, fileName, mask));
 	}
 
 	/// <summary>
@@ -96,7 +96,7 @@ public class PluginsStudioViewModel : BaseObservableObject
 	/// </summary>
 	public void OpenWebBrowser(string url)
 	{
-		PluginsStudioController.OpenWindow(new Tools.Web.WebViewModel(this, url));
+		MainController.OpenWindow(new Tools.Web.WebViewModel(this, url));
 	}
 
 	/// <summary>
@@ -107,7 +107,7 @@ public class PluginsStudioViewModel : BaseObservableObject
 		Tools.Web.WebViewModel viewModel = new(this, string.Empty);
 
 			// Abre la ventana con el navegador
-			PluginsStudioController.OpenWindow(viewModel);
+			MainController.OpenWindow(viewModel);
 			// Muestra el HTML en el navegador
 			viewModel.Html = html;
 	}
@@ -143,7 +143,7 @@ public class PluginsStudioViewModel : BaseObservableObject
 		// Actualiza los árboles principales
 		TreeFoldersViewModel.Load();
 		// Indica que se actualicen los plugins
-		PluginsStudioController.Refresh();
+		MainController.Refresh();
 	}
 
 	/// <summary>
@@ -160,7 +160,7 @@ public class PluginsStudioViewModel : BaseObservableObject
 	/// </summary>
 	private void SaveAll()
 	{
-		foreach (Base.Interfaces.IDetailViewModel viewModel in PluginsStudioController.MainWindowController.GetOpenedDetails())
+		foreach (Base.Interfaces.IDetailViewModel viewModel in MainController.MainWindowController.GetOpenedDetails())
 			if (viewModel.IsUpdated)
 				viewModel.SaveDetails(false);
 	}
@@ -168,7 +168,7 @@ public class PluginsStudioViewModel : BaseObservableObject
 	/// <summary>
 	///		Controlador principal
 	/// </summary>
-	public Controllers.IPluginsStudioController PluginsStudioController { get; }
+	public Controllers.IPluginsStudioController MainController { get; }
 
 	/// <summary>
 	///		ViewModel de detalles seleccionado en la ventana principal

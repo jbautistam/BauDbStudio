@@ -35,7 +35,7 @@ public class LogListViewModel : BauMvvm.ViewModels.Forms.ControlItems.ListView.C
 							SelectedItem = Items[0];
 							// Lanza una notificación
 							if (level == LogLevel.Error)
-								MainViewModel.PluginsStudioController.MainWindowController
+								MainViewModel.MainController.MainWindowController
 										.ShowNotification(BauMvvm.ViewModels.Controllers.SystemControllerEnums.NotificationType.Error,
 															"Error", content);
 						}

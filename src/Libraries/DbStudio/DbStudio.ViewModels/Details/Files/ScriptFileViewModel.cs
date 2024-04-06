@@ -11,7 +11,8 @@ namespace Bau.Libraries.DbStudio.ViewModels.Details.Files;
 /// </summary>
 public class ScriptFileViewModel : PluginsStudio.ViewModels.Base.Files.BaseTextFileViewModel
 {
-	public ScriptFileViewModel(DbStudioViewModel solutionViewModel, string fileName) : base(solutionViewModel.MainController.PluginController, fileName)
+	public ScriptFileViewModel(DbStudioViewModel solutionViewModel, string fileName) 
+				: base(solutionViewModel.MainController.PluginController, fileName, "Sql script (*.sql)|*.sql|Sql extended (*.sqlx)|*.sqlx")
 	{
 		SolutionViewModel = solutionViewModel;
 	}
@@ -19,7 +20,7 @@ public class ScriptFileViewModel : PluginsStudio.ViewModels.Base.Files.BaseTextF
 	/// <summary>
 	///		Ejecuta el script
 	/// </summary>
-	internal async Task ExecuteSqlScriptAsync(ConnectionModel connection, ArgumentListModel arguments, System.Threading.CancellationToken cancellationToken)
+	internal async Task ExecuteSqlScriptAsync(ConnectionModel connection, ArgumentListModel arguments, CancellationToken cancellationToken)
 	{
 		if (string.IsNullOrWhiteSpace(Content))
 			SolutionViewModel.MainController.SystemController.ShowMessage("Introduzca una consulta para ejecutar");
@@ -27,7 +28,7 @@ public class ScriptFileViewModel : PluginsStudio.ViewModels.Base.Files.BaseTextF
 			SolutionViewModel.MainController.SystemController.ShowMessage("Seleccione una conexión");
 		else 
 		{
-			string selectedText = GetEditorSelectedText();
+			string? selectedText = GetEditorSelectedText();
 
 				// Log
 				SolutionViewModel.Manager.Logger.LogInformation($"Comienza la ejecución de la consulta");

@@ -35,7 +35,7 @@ public interface IHostPluginsController
 	/// <summary>
 	///		Abre la ventana de edición de un archivo de texto
 	/// </summary>
-	void OpenTextEditor(string fileName);
+	void OpenTextEditor(string fileName, string mask);
 
 	/// <summary>
 	///		Abre un navegador Web

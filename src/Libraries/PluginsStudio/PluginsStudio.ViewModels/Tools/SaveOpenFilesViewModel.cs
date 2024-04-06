@@ -61,7 +61,7 @@ public class SaveOpenFilesViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialo
 					validated = true;
 			// Si no hay nada seleccionado, muestra el mensaje
 			if (!validated)
-				MainViewModel.PluginsStudioController.MainWindowController.SystemController.ShowMessage("Seleccione al menos un archivo");
+				MainViewModel.MainController.MainWindowController.SystemController.ShowMessage("Seleccione al menos un archivo");
 			// Devuelve el valor que indica si es correcto
 			return validated;
 	}

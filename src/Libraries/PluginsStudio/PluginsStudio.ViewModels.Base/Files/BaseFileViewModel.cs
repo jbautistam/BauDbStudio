@@ -8,11 +8,13 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Files;
 public abstract class BaseFileViewModel : BaseObservableObject, Interfaces.IDetailViewModel
 {
 	// Variables privadas
-	private string _header = string.Empty, _fileName = string.Empty;
+	private string _header = string.Empty, _fileName = string.Empty, _mask = string.Empty;
 
-	public BaseFileViewModel(string fileName)
+	public BaseFileViewModel(Controllers.IPluginsController pluginsController, string fileName, string mask)
 	{
+		PluginsController = pluginsController;
 		FileName = fileName;
+		Mask = mask;
 	}
 
 	/// <summary>
@@ -37,6 +39,19 @@ public abstract class BaseFileViewModel : BaseObservableObject, Interfaces.IDeta
 	}
 
 	/// <summary>
+	///		Actualiza el nombre de archivo
+	/// </summary>
+	protected void UpdateFileName(string oldTabId)
+	{
+		// Actualiza el árbol
+		PluginsController.HostPluginsController.RefreshFiles();
+		// Añade el archivo a los últimos archivos abiertos
+		PluginsController.HostPluginsController.AddFileUsed(FileName);
+		// Cambia la cabecera
+		PluginsController.MainWindowController.UpdateTabId(oldTabId, TabId, Header);
+	}
+
+	/// <summary>
 	///		Cierra el viewModel
 	/// </summary>
 	public abstract void Close();
@@ -45,6 +60,32 @@ public abstract class BaseFileViewModel : BaseObservableObject, Interfaces.IDeta
 	///		Id de la ficha
 	/// </summary>
 	public string TabId => GetType().ToString() + "_" + FileName;
+
+	/// <summary>
+	///		Máscara de archivos
+	/// </summary>
+	public string Mask 
+	{ 
+		get 
+		{
+			const string maskAll = "All files (*.*)|*.*";
+
+				// Añade el filtro predeterminado
+				if (string.IsNullOrWhiteSpace(_mask))
+					_mask = maskAll;
+				_mask = _mask.Trim();
+				if (!_mask.EndsWith("|*.*"))
+					_mask += "|" + maskAll;
+				// Devuelve la máscara
+				return _mask;
+		}
+		protected set { _mask = value; }
+	}
+
+	/// <summary>
+	///		Controlador de plugins
+	/// </summary>
+	public Controllers.IPluginsController PluginsController { get; }
 
 	/// <summary>
 	///		Cabecera
@@ -68,7 +109,7 @@ public abstract class BaseFileViewModel : BaseObservableObject, Interfaces.IDeta
 				if (!string.IsNullOrWhiteSpace(value))
 					Header = Path.GetFileName(value);
 				else
-					Header = "Archivo";
+					Header = "File";
 			}
 		}
 	}

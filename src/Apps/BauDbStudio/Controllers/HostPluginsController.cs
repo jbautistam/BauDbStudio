@@ -57,9 +57,9 @@ public class HostPluginsController : Libraries.PluginsStudio.ViewModels.Base.Con
 	/// <summary>
 	///		Abre la ventana de edición de un archivo de texto
 	/// </summary>
-	public void OpenTextEditor(string fileName)
+	public void OpenTextEditor(string fileName, string mask)
 	{
-		DbStudioViewManager.PluginStudioController.DbStudioViewManager.PluginsStudioViewModel.OpenFile(fileName);
+		DbStudioViewManager.PluginStudioController.DbStudioViewManager.PluginsStudioViewModel.OpenFile(fileName, mask);
 		AddFileUsed(fileName);
 	}
 

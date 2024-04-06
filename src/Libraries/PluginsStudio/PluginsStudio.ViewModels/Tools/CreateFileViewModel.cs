@@ -132,9 +132,9 @@ public class CreateFileViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogVi
 
 			// Comprueba los datos
 			if (string.IsNullOrWhiteSpace(FileName))
-				MainViewModel.PluginsStudioController.MainWindowController.SystemController.ShowMessage("Introduzca el nombre de archivo");
+				MainViewModel.MainController.MainWindowController.SystemController.ShowMessage("Introduzca el nombre de archivo");
 			else if (File.Exists(FullFileName))
-				MainViewModel.PluginsStudioController.MainWindowController.SystemController.ShowMessage("Ya existe este nombre de archivo en el directorio");
+				MainViewModel.MainController.MainWindowController.SystemController.ShowMessage("Ya existe este nombre de archivo en el directorio");
 			else
 				validated = true;
 			// Devuelve el valor que indica si los datos son correctos

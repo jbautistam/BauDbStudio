@@ -16,7 +16,9 @@ public class PatternFileViewModel : BaseFileViewModel, PluginsStudio.ViewModels.
 	private bool _withHeader;
 	private ComboViewModel _comboSeparators = default!, _comboExtensions = default!;
 
-	public PatternFileViewModel(FileToolsViewModel mainViewModel, string fileName) : base(fileName)
+	public PatternFileViewModel(FileToolsViewModel mainViewModel, string fileName) 
+		: base(mainViewModel.MainController.PluginController, fileName, 
+			   $"Pattern file (*{FileToolsViewModel.PatternFileExtension})|*{FileToolsViewModel.PatternFileExtension}")
 	{ 
 		// Asigna las propiedades
 		MainViewModel = mainViewModel;
@@ -125,30 +127,28 @@ public class PatternFileViewModel : BaseFileViewModel, PluginsStudio.ViewModels.
 	/// </summary>
 	public override void SaveDetails(bool newName)
 	{
-		// Graba el archivo
-		if (string.IsNullOrWhiteSpace(FileName) || newName)
-		{
-			string? newFileName = MainViewModel.MainController.DialogsController.OpenDialogSave
-									(string.Empty, 
-									 $"Pattern file (*{FileToolsViewModel.PatternFileExtension})|*{FileToolsViewModel.PatternFileExtension}|All files (*.*)|*.*",
-									 FileName, FileToolsViewModel.PatternFileExtension);
+		string oldTabId = TabId;
 
-				// Cambia el nombre de archivo si es necesario
-				if (!string.IsNullOrWhiteSpace(newFileName))
-					FileName = newFileName;
-		}
-		// Graba el archivo
-		if (!string.IsNullOrWhiteSpace(FileName))
-		{
 			// Graba el archivo
-			new LibPatternText.PatternManager().Save(FileName, GetPattern());
-			// Actualiza el árbol
-			MainViewModel.MainController.HostPluginsController.RefreshFiles();
-			// Añade el archivo a los últimos archivos abiertos
-			MainViewModel.MainController.HostPluginsController.AddFileUsed(FileName);
-			// Indica que no ha habido modificaciones
-			IsUpdated = false;
-		}
+			if (string.IsNullOrWhiteSpace(FileName) || newName)
+			{
+				string? newFileName = MainViewModel.MainController.DialogsController.OpenDialogSave
+										(FileName, Mask, FileName, FileToolsViewModel.PatternFileExtension);
+
+					// Cambia el nombre de archivo si es necesario
+					if (!string.IsNullOrWhiteSpace(newFileName))
+						FileName = newFileName;
+			}
+			// Graba el archivo
+			if (!string.IsNullOrWhiteSpace(FileName))
+			{
+				// Graba el archivo
+				new LibPatternText.PatternManager().Save(FileName, GetPattern());
+				// Actualiza el nombre de archivo
+				UpdateFileName(oldTabId);
+				// Indica que no ha habido modificaciones
+				IsUpdated = false;
+			}
 	}
 
 	/// <summary>

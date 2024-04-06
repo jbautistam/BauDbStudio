@@ -30,7 +30,7 @@ public class MainViewModel : BaseObservableObject
 	/// </summary>
 	public bool OpenFile(string fileName)
 	{
-		if (!string.IsNullOrWhiteSpace(fileName) && fileName.EndsWith(".pgn") && System.IO.File.Exists(fileName))
+		if (!string.IsNullOrWhiteSpace(fileName) && fileName.EndsWith(".pgn") && File.Exists(fileName))
 		{
 			// Abre la ventana
 			ViewsController.OpenWindow(new Games.GameBoardPgnViewModel(this, fileName));

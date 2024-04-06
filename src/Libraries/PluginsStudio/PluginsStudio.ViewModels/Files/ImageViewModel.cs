@@ -10,7 +10,7 @@ public class ImageViewModel : Base.Files.BaseFileViewModel
 	// Eventos públicos
 	public event EventHandler? SaveImage;
 
-	public ImageViewModel(PluginsStudioViewModel mainViewModel, string fileName) : base(fileName)
+	public ImageViewModel(PluginsStudioViewModel mainViewModel, string fileName) : base(mainViewModel.MainController.PluginsController, fileName, string.Empty)
 	{
 		MainViewModel = mainViewModel;
 		FileName = fileName;
@@ -25,7 +25,7 @@ public class ImageViewModel : Base.Files.BaseFileViewModel
 		// Indica que no ha habido modificaciones
 		IsUpdated = false;
 		// Añade el archivo a los últimos archivos abiertos
-		MainViewModel.PluginsStudioController.HostPluginsController.AddFileUsed(FileName);
+		MainViewModel.MainController.HostPluginsController.AddFileUsed(FileName);
 	}
 
 	/// <summary>
@@ -33,18 +33,23 @@ public class ImageViewModel : Base.Files.BaseFileViewModel
 	/// </summary>
 	public override void SaveDetails(bool newName)
 	{
-		string? fileName = MainViewModel.PluginsStudioController.MainWindowController.DialogsController
+		string oldTabId = TabId;
+		string? fileName = MainViewModel.MainController.MainWindowController.DialogsController
 									.OpenDialogSave(Path.GetDirectoryName(FileName),
 													GetMask(), Path.GetFileName(FileName),
 													Path.GetExtension(FileName));
 
+			// Cambia el nombre de archivo
 			if (!string.IsNullOrWhiteSpace(fileName))
 			{
+				// Cambia el nombre de archivo
 				FileName = fileName;
 				SaveImage?.Invoke(this, EventArgs.Empty);
+				// Actualiza la ventana
+				UpdateFileName(oldTabId);
 			}
-		// Indica que no ha habido modificaciones
-		IsUpdated = false;
+			// Indica que no ha habido modificaciones
+			IsUpdated = false;
 
 		// Obtiene la máscara de archivos
 		string GetMask()

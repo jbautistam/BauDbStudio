@@ -80,7 +80,7 @@ public class WorkspaceListViewModel : BaseObservableObject
 	{
 		string workspace = string.Empty;
 
-			if (MainViewModel.PluginsStudioController.MainWindowController.SystemController.ShowInputString("Nombre del espacio de trabajo", ref workspace) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+			if (MainViewModel.MainController.MainWindowController.SystemController.ShowInputString("Nombre del espacio de trabajo", ref workspace) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 			{
 				if (!string.IsNullOrWhiteSpace(workspace))
 				{
@@ -113,7 +113,7 @@ public class WorkspaceListViewModel : BaseObservableObject
 	private void DeleteWorkspace()
 	{
 		if (SelectedItem is not null && 
-			MainViewModel.PluginsStudioController.MainWindowController.SystemController.ShowQuestion($"¿Desea eliminar el espacio de trabajo '{SelectedItem.Name}'?"))
+			MainViewModel.MainController.MainWindowController.SystemController.ShowQuestion($"¿Desea eliminar el espacio de trabajo '{SelectedItem.Name}'?"))
 		{
 			// Borra el directorio
 			LibHelper.Files.HelperFiles.KillPath(SelectedItem.Path);

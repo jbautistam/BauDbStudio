@@ -99,8 +99,7 @@ public class DbStudioViewModel : BaseObservableObject
 
 			if (MainController.OpenDialog(viewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 			{
-				XmlTestProjectGenerator generator = new XmlTestProjectGenerator(Manager, viewModel.ComboConnections.GetSelectedConnection(),
-																				viewModel.DataBase, viewModel.OutputPath);
+				XmlTestProjectGenerator generator = new(Manager, viewModel.ComboConnections.GetSelectedConnection(), viewModel.DataBase, viewModel.OutputPath);
 
 					// Log
 					MainController.Logger.LogInformation("Comienzo de la creación de proyectos de pruebas");
@@ -158,7 +157,7 @@ public class DbStudioViewModel : BaseObservableObject
 																BitFields = viewModel.BitFields,
 																CompareOnlyAlphaAndDigits = viewModel.CompareOnlyAlphaAndDigits
 															};
-				ScriptsValidationGenerator generator = new ScriptsValidationGenerator(Manager, options);
+				ScriptsValidationGenerator generator = new(Manager, options);
 
 					// Log
 					MainController.Logger.LogInformation("Comienzo de la creación de archivos de validación");

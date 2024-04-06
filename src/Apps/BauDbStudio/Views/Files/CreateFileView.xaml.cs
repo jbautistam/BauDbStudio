@@ -13,7 +13,7 @@ public partial class CreateFileView : Window
 	{
 		InitializeComponent();
 		DataContext = ViewModel = viewModel;
-		ViewModel.SelectEncoding(ViewModel.MainViewModel.PluginsStudioController.PluginsController.ConfigurationController.LastEncodingIndex);
+		ViewModel.SelectEncoding(ViewModel.MainViewModel.MainController.PluginsController.ConfigurationController.LastEncodingIndex);
 		ViewModel.ComboTypes.PropertyChanged += (sender, args) =>
 													{
 														if (!string.IsNullOrWhiteSpace(args.PropertyName) && args.PropertyName.Equals(nameof(ViewModel.ComboTypes.SelectedItem)))
@@ -24,8 +24,8 @@ public partial class CreateFileView : Window
 									// Guarda la codificación
 									if (eventArgs.IsAccepted)
 									{
-										ViewModel.MainViewModel.PluginsStudioController.PluginsController.ConfigurationController.LastEncodingIndex = (int) ViewModel.GetSelectedEncoding();
-										ViewModel.MainViewModel.PluginsStudioController.PluginsController.ConfigurationController.Save();
+										ViewModel.MainViewModel.MainController.PluginsController.ConfigurationController.LastEncodingIndex = (int) ViewModel.GetSelectedEncoding();
+										ViewModel.MainViewModel.MainController.PluginsController.ConfigurationController.Save();
 									}
 									DialogResult = eventArgs.IsAccepted; 
 									Close();

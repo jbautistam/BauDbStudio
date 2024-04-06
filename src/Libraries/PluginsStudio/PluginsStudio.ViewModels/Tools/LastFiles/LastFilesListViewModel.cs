@@ -41,7 +41,7 @@ public class LastFilesListViewModel : BaseObservableObject
 								Files.Remove(existing);
 							// Añade el archivo al principio
 							Files.Insert(0, new LastFileViewModel(MainViewModel, part, 
-																  MainViewModel.PluginsStudioController.HostPluginsController.GetIcon(part), 
+																  MainViewModel.MainController.HostPluginsController.GetIcon(part), 
 																  0)
 										);
 					}

@@ -5,7 +5,7 @@
 /// </summary>
 public class FileTextViewModel : Base.Files.BaseTextFileViewModel
 {
-	public FileTextViewModel(PluginsStudioViewModel mainViewModel, string fileName) : base(mainViewModel.PluginsStudioController.PluginsController, fileName)
+	public FileTextViewModel(PluginsStudioViewModel mainViewModel, string fileName, string mask) : base(mainViewModel.MainController.PluginsController, fileName, mask)
 	{
 		MainViewModel = mainViewModel;
 	}

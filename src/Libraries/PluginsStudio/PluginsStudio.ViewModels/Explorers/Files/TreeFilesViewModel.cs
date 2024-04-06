@@ -205,7 +205,7 @@ public class TreeFilesViewModel : PluginTreeViewModel
 	internal void AddFolderToExplorer()
 	{
 		// Selecciona la carpeta
-		MainViewModel.PluginsStudioController.MainWindowController.DialogsController.OpenDialogSelectPath(string.Empty, out string? folder);
+		MainViewModel.MainController.MainWindowController.DialogsController.OpenDialogSelectPath(string.Empty, out string? folder);
 		// Añade la carpeta a la solución
 		if (!string.IsNullOrWhiteSpace(folder) && Directory.Exists(folder))
 		{
@@ -222,7 +222,7 @@ public class TreeFilesViewModel : PluginTreeViewModel
 	public void CopyFiles(string pathTarget, string[] filesSource, bool move)
 	{
 		if (string.IsNullOrWhiteSpace(pathTarget) || !Directory.Exists(pathTarget))
-			MainViewModel.PluginsStudioController.MainWindowController.SystemController.ShowMessage("Seleccione la carpeta donde desea copiar los archivos");
+			MainViewModel.MainController.MainWindowController.SystemController.ShowMessage("Seleccione la carpeta donde desea copiar los archivos");
 		else
 		{
 			bool copied = false;
@@ -275,13 +275,13 @@ public class TreeFilesViewModel : PluginTreeViewModel
 				}
 				// Log
 				if (copied)
-					MainViewModel.PluginsStudioController.MainWindowController.Logger.LogInformation($"{(move ? "Moved" : "Copied")} {fileSource} to {pathTarget}");
+					MainViewModel.MainController.MainWindowController.Logger.LogInformation($"{(move ? "Moved" : "Copied")} {fileSource} to {pathTarget}");
 				else
-					MainViewModel.PluginsStudioController.MainWindowController.Logger.LogError($"Can't {(move ? "move" : "copy")} {fileSource} to {pathTarget}");
+					MainViewModel.MainController.MainWindowController.Logger.LogError($"Can't {(move ? "move" : "copy")} {fileSource} to {pathTarget}");
 			}
 			catch (Exception exception)
 			{
-				MainViewModel.PluginsStudioController.MainWindowController.Logger.LogError(exception, $"Error when {(move ? "move" : "copy")} {fileSource} to {pathTarget}");
+				MainViewModel.MainController.MainWindowController.Logger.LogError(exception, $"Error when {(move ? "move" : "copy")} {fileSource} to {pathTarget}");
 			}
 			// Devuelve el valor que indica si se ha copiado
 			return copied;
@@ -312,7 +312,7 @@ public class TreeFilesViewModel : PluginTreeViewModel
 				case nameof(DeleteCommand):
 					return SelectedNode is not null;
 				case nameof(PasteClipboardImageCommand):
-					return isFolder && MainViewModel.PluginsStudioController.MainWindowController.ClipboardContainImage();
+					return isFolder && MainViewModel.MainController.MainWindowController.ClipboardContainImage();
 				default:
 					return true;
 			}
@@ -337,7 +337,7 @@ public class TreeFilesViewModel : PluginTreeViewModel
 	private void OpenFile()
 	{
 		if (SelectedNode is NodeFileViewModel node && !node.IsFolder)
-			MainViewModel.PluginsStudioController.HostPluginsController.OpenFile(node.FileName);
+			MainViewModel.MainController.HostPluginsController.OpenFile(node.FileName);
 	}
 
 	/// <summary>
@@ -351,7 +351,7 @@ public class TreeFilesViewModel : PluginTreeViewModel
 			{
 				string fileName = "Nuevo directorio";
 
-					if (MainViewModel.PluginsStudioController.MainWindowController.SystemController.ShowInputString("Nombre del directorio", ref fileName) 
+					if (MainViewModel.MainController.MainWindowController.SystemController.ShowInputString("Nombre del directorio", ref fileName) 
 									== BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 					{
 						// Quita los espacios
@@ -373,9 +373,9 @@ public class TreeFilesViewModel : PluginTreeViewModel
 			if (!string.IsNullOrWhiteSpace(path))
 			{
 				Tools.CreateFileViewModel createFileViewModel = new Tools.CreateFileViewModel(MainViewModel, path, 
-																							  MainViewModel.PluginsStudioController.PluginsController.HostPluginsController.GetFilesAssigned(true));
+																							  MainViewModel.MainController.PluginsController.HostPluginsController.GetFilesAssigned(true));
 
-					if (MainViewModel.PluginsStudioController.OpenDialog(createFileViewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes &&
+					if (MainViewModel.MainController.OpenDialog(createFileViewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes &&
 						!string.IsNullOrWhiteSpace(createFileViewModel.FileName))
 					{
 						// Graba el archivo
@@ -383,7 +383,7 @@ public class TreeFilesViewModel : PluginTreeViewModel
 												 GetTemplate(createFileViewModel.FileName, createFileViewModel.FilesAssigned), 
 												 GetEncoder(createFileViewModel.GetSelectedEncoding()));
 						// Abre la ventana
-						MainViewModel.PluginsStudioController.HostPluginsController.OpenFile(createFileViewModel.FullFileName);
+						MainViewModel.MainController.HostPluginsController.OpenFile(createFileViewModel.FullFileName);
 						// Actualiza el árbol
 						Load();
 					}
@@ -482,20 +482,20 @@ public class TreeFilesViewModel : PluginTreeViewModel
 	/// </summary>
 	private void PasteClipboardImage()
 	{
-		if (!MainViewModel.PluginsStudioController.MainWindowController.ClipboardContainImage())
-			MainViewModel.PluginsStudioController.MainWindowController.SystemController.ShowMessage("No hay ninguna imagen en el portapapeles");
+		if (!MainViewModel.MainController.MainWindowController.ClipboardContainImage())
+			MainViewModel.MainController.MainWindowController.SystemController.ShowMessage("No hay ninguna imagen en el portapapeles");
 		else
 		{
 			string folder = GetSelectedFolder();
-			string? fileName = MainViewModel.PluginsStudioController.MainWindowController.DialogsController
+			string? fileName = MainViewModel.MainController.MainWindowController.DialogsController
 									.OpenDialogSave(folder,
 													"Archivos PNG (*.png)|*.png|Archivos JPG (*.jpg)|*.jpg|Archivos BMP (*.bmp)|*.bmp|Archivos GIF (*.gif)|*.gif|Archivos TIFF (*.tiff)|*.tiff",
 													GetDefaultNewFileName(folder));
 
 				if (!string.IsNullOrWhiteSpace(fileName))
 				{
-					if (!MainViewModel.PluginsStudioController.MainWindowController.SaveClipboardImage(fileName))
-						MainViewModel.PluginsStudioController.MainWindowController.SystemController.ShowMessage("No se ha podido grabar la imagen");
+					if (!MainViewModel.MainController.MainWindowController.SaveClipboardImage(fileName))
+						MainViewModel.MainController.MainWindowController.SystemController.ShowMessage("No se ha podido grabar la imagen");
 					else
 						Load();
 				}
@@ -534,7 +534,7 @@ public class TreeFilesViewModel : PluginTreeViewModel
 	/// </summary>
 	private void DeleteRoot(NodeFolderRootViewModel item)
 	{
-		if (MainViewModel.PluginsStudioController.MainWindowController.SystemController.ShowQuestion($"¿Desea quitar la carpeta '{item.Text}' de la solución?"))
+		if (MainViewModel.MainController.MainWindowController.SystemController.ShowQuestion($"¿Desea quitar la carpeta '{item.Text}' de la solución?"))
 		{
 			// Elimina la carpeta
 			MainViewModel.WorkspacesViewModel.SelectedItem?.RemoveFolder(item.FileName);
@@ -550,7 +550,7 @@ public class TreeFilesViewModel : PluginTreeViewModel
 	{
 		if (Directory.Exists(fileName))
 		{
-			if (MainViewModel.PluginsStudioController.MainWindowController.SystemController.ShowQuestion($"¿Realmente desea eliminar el directorio {Path.GetFileName(fileName)}?"))
+			if (MainViewModel.MainController.MainWindowController.SystemController.ShowQuestion($"¿Realmente desea eliminar el directorio {Path.GetFileName(fileName)}?"))
 			{
 				// Elimina el directorio
 				HelperFiles.KillPath(fileName);
@@ -562,7 +562,7 @@ public class TreeFilesViewModel : PluginTreeViewModel
 		}
 		else if (File.Exists(fileName))
 		{
-			if (MainViewModel.PluginsStudioController.MainWindowController.SystemController.ShowQuestion($"¿Realmente desea eliminar el archivo {Path.GetFileName(fileName)}?"))
+			if (MainViewModel.MainController.MainWindowController.SystemController.ShowQuestion($"¿Realmente desea eliminar el archivo {Path.GetFileName(fileName)}?"))
 			{
 				// Elimina el archivo
 				HelperFiles.KillFile(fileName);
@@ -655,7 +655,7 @@ public class TreeFilesViewModel : PluginTreeViewModel
 				path = GetSelectedPath();
 			// Abre el explorador sobre el directorio
 			if (!string.IsNullOrWhiteSpace(path) && Directory.Exists(path))
-				MainViewModel.PluginsStudioController.MainWindowController.OpenExplorer(path);
+				MainViewModel.MainController.MainWindowController.OpenExplorer(path);
 	}
 
 	/// <summary>
@@ -705,7 +705,7 @@ public class TreeFilesViewModel : PluginTreeViewModel
 			if (isFolder)
 				title = "Introduzca el nuevo nombre de directorio";
 			// Obtiene el nuevo nombre de archivo
-			if (MainViewModel.PluginsStudioController.MainWindowController.SystemController.ShowInputString(title, ref newFileName) 
+			if (MainViewModel.MainController.MainWindowController.SystemController.ShowInputString(title, ref newFileName) 
 						== BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 			{
 				// Si no se ha cambiado el nombre, vacía el nombre del archivo de salida (no tiene en cuenta si sólo se han cambiado las mayúsculas)
@@ -727,7 +727,7 @@ public class TreeFilesViewModel : PluginTreeViewModel
 	/// </summary>
 	private void RenameOpenViewModels(string oldFileName, bool isFolder, string newFileName)
 	{
-		foreach (Base.Interfaces.IDetailViewModel viewModel in MainViewModel.PluginsStudioController.MainWindowController.GetOpenedDetails())
+		foreach (Base.Interfaces.IDetailViewModel viewModel in MainViewModel.MainController.MainWindowController.GetOpenedDetails())
 			if (viewModel is Base.Files.BaseFileViewModel fileViewModel)
 			{
 				string newName = newFileName;
@@ -750,7 +750,7 @@ public class TreeFilesViewModel : PluginTreeViewModel
 							// Cambia el viewModel
 							fileViewModel.FileName = newName;
 							// Avisa a la ventana principal para cambiar los datos del documento abierto
-							MainViewModel.PluginsStudioController.MainWindowController.UpdateTabId(oldWindowId, fileViewModel.TabId, fileViewModel.Header);
+							MainViewModel.MainController.MainWindowController.UpdateTabId(oldWindowId, fileViewModel.TabId, fileViewModel.Header);
 							// Recupera en el viewModel si ha habido modificaciones
 							fileViewModel.IsUpdated = isUpdated;
 					}
@@ -762,13 +762,13 @@ public class TreeFilesViewModel : PluginTreeViewModel
 	/// </summary>
 	private void CloseWindows(string fileName, bool isFolder)
 	{
-		foreach (Base.Interfaces.IDetailViewModel viewModel in MainViewModel.PluginsStudioController.MainWindowController.GetOpenedDetails())
+		foreach (Base.Interfaces.IDetailViewModel viewModel in MainViewModel.MainController.MainWindowController.GetOpenedDetails())
 			if (MustClose(viewModel, fileName, isFolder))
 			{
 				// Indica que no se ha modificado (porque se ha borrado el archivo)
 				viewModel.IsUpdated = false;
 				// Cierra la ventana
-				MainViewModel.PluginsStudioController.MainWindowController.CloseWindow(viewModel.TabId);
+				MainViewModel.MainController.MainWindowController.CloseWindow(viewModel.TabId);
 			}
 	}
 
