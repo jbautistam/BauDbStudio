@@ -93,20 +93,25 @@ public class ToDoManagerPlugin : IPlugin
 	/// </summary>
 	public List<PaneModel> GetPanes()
 	{
-		#if DEBUG
 		return new List<PaneModel>
 						{
+		#if DEBUG
 							new PaneModel
 									{
 										Id = "CalendarPane",
 										Title = "Calendar",
 										Position = PaneModel.PositionType.Right,
 										View = new Views.Appointments.AppointmentsPane(MainViewModel.CalendarViewModel)
+									},
+		#endif
+							new PaneModel
+									{
+										Id = "TimeManagement",
+										Title = "Time Management",
+										Position = PaneModel.PositionType.Right,
+										View = new Views.TimeManagement.TimeSchedulePane(MainViewModel.TimeScheduleViewModel)
 									}
 						};
-		#else
-		return new List<PaneModel>();
-		#endif
 	}
 
 	/// <summary>

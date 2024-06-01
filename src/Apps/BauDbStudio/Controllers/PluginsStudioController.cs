@@ -42,16 +42,12 @@ public class PluginsStudioController : Libraries.PluginsStudio.ViewModels.Contro
 	/// </summary>
 	public SystemControllerEnums.ResultType OpenDialog(BaseDialogViewModel dialogViewModel)
 	{
-		// Muestra el cuadro de diálogo
-		switch (dialogViewModel)
-		{
-			case Libraries.PluginsStudio.ViewModels.Tools.CreateFileViewModel viewModel:
-				return DbStudioViewManager.AppViewController.OpenDialog(new Views.Files.CreateFileView(viewModel));
-			case Libraries.PluginsStudio.ViewModels.Tools.SaveOpenFilesViewModel viewModel:
-				return DbStudioViewManager.AppViewController.OpenDialog(new Views.Files.SaveOpenFilesView(viewModel));
-		}
-		// Devuelve el valor predeterminado
-		return SystemControllerEnums.ResultType.No;
+		return dialogViewModel switch
+					{
+						Libraries.PluginsStudio.ViewModels.Tools.CreateFileViewModel viewModel => DbStudioViewManager.AppViewController.OpenDialog(new Views.Files.CreateFileView(viewModel)),
+						Libraries.PluginsStudio.ViewModels.Tools.SaveOpenFilesViewModel viewModel => DbStudioViewManager.AppViewController.OpenDialog(new Views.Files.SaveOpenFilesView(viewModel)),
+						_ => SystemControllerEnums.ResultType.No,
+					};
 	}
 
 	/// <summary>

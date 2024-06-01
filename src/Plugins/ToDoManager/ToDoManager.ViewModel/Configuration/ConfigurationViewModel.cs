@@ -9,6 +9,7 @@ namespace Bau.Libraries.ToDoManager.ViewModel.Configuration;
 public class ConfigurationViewModel : BaseObservableObject
 {
 	// Variables privadas
+	private string _timeManagementFolder = default!;
 	private bool _hookGlobal;
 
 	public ConfigurationViewModel(ToDoManagerViewModel mainViewModel)
@@ -22,6 +23,7 @@ public class ConfigurationViewModel : BaseObservableObject
 	public void Initialize()
 	{
 		HookGlobal = MainViewModel.ViewsController.PluginController.ConfigurationController.GetConfiguration(nameof(ToDoManagerViewModel), nameof(HookGlobal)).GetBool();
+		TimeManagementFolder = MainViewModel.ViewsController.PluginController.ConfigurationController.GetConfiguration(nameof(ToDoManagerViewModel), nameof(TimeManagementFolder));
 	}
 
 	/// <summary>
@@ -30,6 +32,7 @@ public class ConfigurationViewModel : BaseObservableObject
 	public void Save()
 	{
 		MainViewModel.ViewsController.PluginController.ConfigurationController.SetConfiguration(nameof(ToDoManagerViewModel), nameof(HookGlobal), HookGlobal.ToString());
+		MainViewModel.ViewsController.PluginController.ConfigurationController.SetConfiguration(nameof(ToDoManagerViewModel), nameof(TimeManagementFolder), TimeManagementFolder);
 	}
 
 	/// <summary>
@@ -44,5 +47,21 @@ public class ConfigurationViewModel : BaseObservableObject
 	{
 		get { return _hookGlobal; }
 		set { CheckProperty(ref _hookGlobal, value); }
+	}
+
+	/// <summary>
+	///		Carpeta donde se guardan los archivos del control de tiempos
+	/// </summary>
+	public string TimeManagementFolder
+	{
+		get 
+		{ 
+			// Inicializa el directorio con la carpeta predeterminada
+			if (string.IsNullOrWhiteSpace(_timeManagementFolder))
+				_timeManagementFolder = MainViewModel.ToDoManager.Folder;
+			// Devuelve el directorio
+			return _timeManagementFolder; 
+		}
+		set { CheckProperty(ref _timeManagementFolder, value); }
 	}
 }

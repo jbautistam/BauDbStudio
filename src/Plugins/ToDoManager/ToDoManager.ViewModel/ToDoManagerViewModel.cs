@@ -15,6 +15,7 @@ public class ToDoManagerViewModel : BauMvvm.ViewModels.BaseObservableObject
 		// Inicializa los ViewModel hijos
 		ConfigurationViewModel = new Configuration.ConfigurationViewModel(this);
 		CalendarViewModel = new Appointments.CalendarViewModel(this);
+		TimeScheduleViewModel = new TimeManagement.TimeScheduleViewModel(this);
 		// Inicializa los comandos
 		CreateNewNoteCommand = new BauMvvm.ViewModels.BaseCommand(_ => CreateNewNote());
 		ShowNotesCommand = new BauMvvm.ViewModels.BaseCommand(_ => ShowNotes());
@@ -35,6 +36,7 @@ public class ToDoManagerViewModel : BauMvvm.ViewModels.BaseObservableObject
 	{
 		ToDoManager.Load(path);
 		CalendarViewModel.Load();
+		TimeScheduleViewModel.Load();
 	}
 
 	/// <summary>
@@ -99,6 +101,11 @@ public class ToDoManagerViewModel : BauMvvm.ViewModels.BaseObservableObject
 	///		ViewModel del calendario
 	/// </summary>
 	public Appointments.CalendarViewModel CalendarViewModel { get; }
+
+	/// <summary>
+	///		ViewModel del control de tiempo
+	/// </summary>
+	public TimeManagement.TimeScheduleViewModel TimeScheduleViewModel { get; }
 
 	/// <summary>
 	///		Manager de la aplicación ToDo

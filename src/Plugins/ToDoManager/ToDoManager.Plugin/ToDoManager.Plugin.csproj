@@ -14,13 +14,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Resources\ArrowPrevious.png" />
     <None Remove="Resources\Blue.png" />
     <None Remove="Resources\Close.png" />
     <None Remove="Resources\Copy.png" />
     <None Remove="Resources\Execute.png" />
+    <None Remove="Resources\FileCsv.png" />
+    <None Remove="Resources\FileExcel.png" />
     <None Remove="Resources\Green.png" />
     <None Remove="Resources\Pin.png" />
     <None Remove="Resources\Red.png" />
+    <None Remove="Resources\Start.png" />
+    <None Remove="Resources\Stop.png" />
     <None Remove="Resources\Task.png" />
     <None Remove="Resources\ToDoFile.png" />
     <None Remove="Resources\Trash.png" />
@@ -33,6 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\ArrowPrevious.png" />
     <Resource Include="Resources\Blue.png" />
     <Resource Include="Resources\Close.png" />
   </ItemGroup>
@@ -48,10 +54,14 @@
 
   <ItemGroup>
     <Resource Include="Resources\Copy.png" />
+    <Resource Include="Resources\FileCsv.png" />
+    <Resource Include="Resources\FileExcel.png" />
     <Resource Include="Resources\Green.png" />
     <Resource Include="Resources\Execute.png" />
     <Resource Include="Resources\Pin.png" />
     <Resource Include="Resources\Red.png" />
+    <Resource Include="Resources\Start.png" />
+    <Resource Include="Resources\Stop.png" />
     <Resource Include="Resources\Task.png" />
     <Resource Include="Resources\ToDoFile.png" />
     <Resource Include="Resources\Trash.png" />
@@ -67,6 +77,12 @@
 
   <ItemGroup>
     <Page Update="Views\Appointments\AppointmentView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="Views\TimeManagement\FilterView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="Views\TimeManagement\TimeView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
     <Page Update="Views\ToDos\TodoFileView.xaml">

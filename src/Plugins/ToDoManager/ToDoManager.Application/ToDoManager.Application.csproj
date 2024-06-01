@@ -11,6 +11,7 @@
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibDataStructures\src\LibDataStructures.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibHelper\src\LibHelper.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibMarkup\src\LibMarkup.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Formats\LibCsvFiles\src\LibCsvFiles\LibCsvFiles.csproj" />
   </ItemGroup>
 
 </Project>

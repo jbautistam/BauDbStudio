@@ -9,6 +9,7 @@ public class ToDoManager
 	{
 		AppointmentsManager = new Appointments.AppointmentsManager(this);
 		NotesManager = new Notes.NotesManager(this);
+		TimeManagementManager = new TimeManagement.TimeManagementManager(this);
 	}
 
 	/// <summary>
@@ -32,6 +33,11 @@ public class ToDoManager
 	///		Manager de <see cref="Notes.Models.NoteModel"/>
 	/// </summary>
 	public Notes.NotesManager NotesManager { get; }
+
+	/// <summary>
+	///		Manager de <see cref="TimeManagement.Models.ProjectModel"/>
+	/// </summary>
+	public TimeManagement.TimeManagementManager TimeManagementManager { get; }
 
 	/// <summary>
 	///		Carpeta
