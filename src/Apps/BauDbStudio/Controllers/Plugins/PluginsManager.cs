@@ -179,6 +179,21 @@ internal class PluginsManager
 	}
 
 	/// <summary>
+	///		Indica a los plugins que se está cerrando la aplicación
+	/// </summary>
+	internal bool CloseApp()
+	{
+		bool canClose = true;
+
+			// Recorre los plugins marcando si se puede cerrar
+			foreach (IPlugin plugin in Plugins)
+				if (!plugin.ClosePlugin())
+					canClose = false;
+			// Devuelve el valor que indica si se puede cerrar
+			return canClose;
+	}
+
+	/// <summary>
 	///		Comprueba si se puede ejecutar un comando sobre un plugin
 	/// </summary>
 	internal bool CheckCanExecutePluginCommand(string plugin, string viewModel, string command) => true;

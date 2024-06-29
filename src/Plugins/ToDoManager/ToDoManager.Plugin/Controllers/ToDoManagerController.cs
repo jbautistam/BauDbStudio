@@ -61,6 +61,9 @@ public class ToDoManagerController : ViewModel.Controllers.IToDoManagerControlle
 				case ViewModel.TimeManagement.CsvFilterViewModel viewModel:
 						result = TaskManagerPlugin.AppViewsController.OpenDialog(new Views.TimeManagement.FilterView(viewModel));
 					break;
+				case ViewModel.TimeManagement.ConsolidateViewModel viewModel:
+						result = TaskManagerPlugin.AppViewsController.OpenDialog(new Views.TimeManagement.ConsolidateView(viewModel));
+					break;
 			}
 			// Devuelve el resultado
 			return result;

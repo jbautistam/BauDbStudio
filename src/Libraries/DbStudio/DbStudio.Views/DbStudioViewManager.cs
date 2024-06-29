@@ -143,6 +143,11 @@ public class DbStudioViewManager : IPlugin
 	public IPluginConfigurationView GetConfigurationView() => new Configuration.ctlConfiguration(MainViewModel.ConfigurationViewModel);
 
 	/// <summary>
+	///		Cierra el plugin (en este caso simplemente implementa la interface)
+	/// </summary>
+	public bool ClosePlugin() => true;
+
+	/// <summary>
 	///		Controlador de aplicación
 	/// </summary>
 	internal IAppViewsController AppViewsController { get; private set; } = default!;

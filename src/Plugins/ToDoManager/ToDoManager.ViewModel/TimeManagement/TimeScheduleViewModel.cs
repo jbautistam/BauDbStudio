@@ -36,21 +36,9 @@ public class TimeScheduleViewModel : BaseObservableObject
 	/// <summary>
 	///		Graba los datos en un archivo
 	/// </summary>
-	public void Save()
+	internal void Save(TimeControlModel timeControl)
 	{
-		Save(ActualTimeControl);
-	}
-
-	/// <summary>
-	///		Graba los datos en un archivo
-	/// </summary>
-	public void Save(TimeControlModel timeControl)
-	{
-		// Graba los datos
 		MainViewModel.ToDoManager.TimeManagementManager.Save(timeControl, MainViewModel.ConfigurationViewModel.TimeManagementFolder);
-		// Actualiza la lista
-		if (timeControl.Date == DateOnly.FromDateTime(TimeListViewModel.Date))
-			TimeListViewModel.Load(timeControl.Date);
 	}
 
 	/// <summary>
@@ -59,6 +47,14 @@ public class TimeScheduleViewModel : BaseObservableObject
 	internal TimeControlModel LoadDate(DateOnly date)
 	{
 		return MainViewModel.ToDoManager.TimeManagementManager.Load(MainViewModel.ConfigurationViewModel.TimeManagementFolder, date);
+	}
+
+	/// <summary>
+	///		Cierra las tareas que tenga pendientes por cerrar y graba el archivo
+	/// </summary>
+	internal void Close()
+	{
+		ActualTimeViewModel.StopCommand.Execute(null);
 	}
 
 	/// <summary>
@@ -82,7 +78,7 @@ public class TimeScheduleViewModel : BaseObservableObject
 	/// <summary>
 	///		Formatea una cadena con horas
 	/// </summary>
-	internal string FormatElapsed(TimeSpan value) => $"{value.TotalHours:00}:{value.Minutes:00}:{value.Seconds:00}";
+	internal string FormatElapsed(TimeSpan value) => $"{value.Hours:00}:{value.Minutes:00}:{value.Seconds:00}";
 
 	/// <summary>
 	///		ViewModel principal

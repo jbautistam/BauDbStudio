@@ -88,6 +88,17 @@ public class ToDoManagerViewModel : BauMvvm.ViewModels.BaseObservableObject
 	}
 
 	/// <summary>
+	///		Cierra el ViewModel cuando se cierra la aplicación. Graba los archivos que tenga pendientes
+	/// </summary>
+	public bool Close()
+	{
+		// Cierra la tarea que esté activa y graba
+		TimeScheduleViewModel.Close();
+		// Devuelve el valor que indica que se ha cerrado correctamente
+		return true;
+	}
+
+	/// <summary>
 	///		Controlador de vistas de aplicación
 	/// </summary>
 	public Controllers.IToDoManagerController ViewsController { get; }

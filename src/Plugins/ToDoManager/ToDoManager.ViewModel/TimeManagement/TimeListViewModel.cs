@@ -31,6 +31,7 @@ public class TimeListViewModel : BaseObservableObject
 							.AddListener(this, nameof(SelectedItem));
 		PreviousCommand = new BaseCommand(_ => Date = Date.AddDays(-1));
 		NextCommand = new BaseCommand(_ => Date = Date.AddDays(1));
+		CollapseCommand = new BaseCommand(_ => Collapse());
 	}
 
 	/// <summary>
@@ -66,23 +67,37 @@ public class TimeListViewModel : BaseObservableObject
 	}
 
 	/// <summary>
+	///		Añade el total de la tarea que se está ejecutando en este momento
+	/// </summary>
+	internal void UpdateTotalElapsed(TimeEditableViewModel actualTimeViewModel)
+	{
+		if (actualTimeViewModel.StartDate.Date == Date.Date)
+			Elapsed = TimeScheduleViewModel.FormatElapsed(_dayTime + (actualTimeViewModel.EndDate - actualTimeViewModel.StartDate));
+	}
+
+	/// <summary>
 	///		Crea / modifica un elemento
 	/// </summary>
 	private void UpdateItem(TimeViewModel? timeViewModel)
 	{
-		bool isNew = timeViewModel is null;
+		TimeViewModel cloned = (timeViewModel ?? new TimeViewModel(TimeScheduleViewModel, null)).Clone();
 
-			// Crea el viewModel si no existía
-			if (timeViewModel is null)
-				timeViewModel = new TimeViewModel(TimeScheduleViewModel, null);
 			// Modifica los datos
-			if (TimeScheduleViewModel.MainViewModel.ViewsController.OpenDialog(timeViewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+			if (TimeScheduleViewModel.MainViewModel.ViewsController.OpenDialog(cloned) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 			{
-				// Agrega el valor si es nuevo
-				if (isNew)
-					TimeControl.Add(timeViewModel.Project, timeViewModel.Task, timeViewModel.Time.Start, timeViewModel.Time.End);
+				// Agrega el valor si es nuevo o modifica sus datos
+				if (timeViewModel is null)
+					Items.Add(cloned);
+				else
+				{
+					timeViewModel.Project = cloned.Project;
+					timeViewModel.Task = cloned.Task;
+					timeViewModel.TimeStart = cloned.TimeStart;
+					timeViewModel.TimeEnd = cloned.TimeEnd;
+					timeViewModel.Time.Remarks = cloned.Time.Remarks;
+				}
 				// Graba el archivo
-				TimeScheduleViewModel.Save(TimeControl);
+				Save();
 			}
 	}
 
@@ -92,13 +107,13 @@ public class TimeListViewModel : BaseObservableObject
 	private void DeleteItem(TimeViewModel? timeViewModel)
 	{
 		if (timeViewModel is not null &&
-				TimeControl is not null &&
-				TimeScheduleViewModel.MainViewModel.ViewsController.HostController.SystemController.ShowQuestion("Do you really want to delete this item?"))
+			TimeControl is not null &&
+			TimeScheduleViewModel.MainViewModel.ViewsController.HostController.SystemController.ShowQuestion("Do you really want to delete this item?"))
 		{
 			// Borra el elemento
-			TimeControl.DeleteTime(timeViewModel.Time.GlobalId);
-			// Graba el archivo y recarga la lista
-			TimeScheduleViewModel.Save(TimeControl);
+			Items.Remove(timeViewModel);
+			// Graba el archivo
+			Save();
 		}
 	}
 
@@ -109,6 +124,54 @@ public class TimeListViewModel : BaseObservableObject
 	{
 		if (timeViewModel is not null)
 			TimeScheduleViewModel.ActualTimeViewModel.StartTask(timeViewModel.Time.Task.Project.Name, timeViewModel.Time.Task.Name);
+	}
+
+	/// <summary>
+	///		Actualiza los datos 
+	/// </summary>
+	private void Save()
+	{
+		// Limpia los datos
+		TimeControl.Projects.Clear();
+		// Agrega los datos de la lista
+		foreach (TimeViewModel timeViewModel in Items)
+			TimeControl.Add(timeViewModel.Project, timeViewModel.Task, timeViewModel.Time.Start, timeViewModel.Time.End);
+		// Graba los datos
+		TimeScheduleViewModel.Save(TimeControl);
+	}
+
+	/// <summary>
+	///		Colapsa el proyecto
+	/// </summary>
+	private void Collapse()
+	{
+		ConsolidateViewModel filterViewModel = new(TimeScheduleViewModel);
+
+			// Asigna los datos iniciales
+			filterViewModel.TaskMinimumMinutes = TimeScheduleViewModel.MainViewModel.ConfigurationViewModel.ConsolidationTaskMinimumMinutes;
+			filterViewModel.GapBetweenTasksMinutes = TimeScheduleViewModel.MainViewModel.ConfigurationViewModel.ConsolidationGapBetweenTasksMinutes;
+			filterViewModel.GapBetweenTasksConsolidateMinutes = TimeScheduleViewModel.MainViewModel.ConfigurationViewModel.ConsolidationGapBetweenTasksConsolidateMinutes;
+			// Abre el cuadro de diálogo
+			if (TimeScheduleViewModel.MainViewModel.ViewsController.OpenDialog(filterViewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+			{
+
+				// Colapsa el proyecto
+				TimeControl.Collapse(TimeSpan.FromMinutes(filterViewModel.TaskMinimumMinutes), 
+									 TimeSpan.FromMinutes(filterViewModel.GapBetweenTasksMinutes), 
+									 TimeSpan.FromMinutes(filterViewModel.GapBetweenTasksConsolidateMinutes));
+				// Graba los datos
+				TimeScheduleViewModel.Save(TimeControl);
+				// Recarga los datos
+				Load(DateOnly.FromDateTime(Date));
+				// Guarda los nuevos datos en la configuración
+				TimeScheduleViewModel.MainViewModel.ConfigurationViewModel.ConsolidationTaskMinimumMinutes = filterViewModel.TaskMinimumMinutes;
+				TimeScheduleViewModel.MainViewModel.ConfigurationViewModel.ConsolidationGapBetweenTasksMinutes = filterViewModel.GapBetweenTasksMinutes;
+				TimeScheduleViewModel.MainViewModel.ConfigurationViewModel.ConsolidationGapBetweenTasksConsolidateMinutes = filterViewModel.GapBetweenTasksConsolidateMinutes;
+				// Graba la configuración
+				TimeScheduleViewModel.MainViewModel.ConfigurationViewModel.Save();
+				// Mensaje al usuario
+				TimeScheduleViewModel.MainViewModel.ViewsController.MainWindowController.SystemController.ShowMessage("Task consolidation completed");
+			}
 	}
 
 	/// <summary>
@@ -190,4 +253,9 @@ public class TimeListViewModel : BaseObservableObject
 	///		Pasar a la fecha siguiente
 	/// </summary>
 	public BaseCommand NextCommand { get; }
+
+	/// <summary>
+	///		Comando para consolidar
+	/// </summary>
+	public BaseCommand CollapseCommand { get; }
 }

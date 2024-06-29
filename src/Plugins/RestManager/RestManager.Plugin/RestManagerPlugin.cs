@@ -89,6 +89,11 @@ public class RestManagerPlugin : IPlugin
 	public IPluginConfigurationView? GetConfigurationView() => null;
 
 	/// <summary>
+	///		Cierra el plugin (en este caso simplemente implementa la interface)
+	/// </summary>
+	public bool ClosePlugin() => true;
+
+	/// <summary>
 	///		Controlador de aplicación
 	/// </summary>
 	internal IAppViewsController AppViewsController { get; private set; } = default!;

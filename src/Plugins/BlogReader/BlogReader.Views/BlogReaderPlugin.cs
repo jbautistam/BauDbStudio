@@ -90,6 +90,11 @@ public class BlogReaderPlugin : IPlugin
 	public IPluginConfigurationView GetConfigurationView() => new Views.Configuration.ctlConfigurationBlogReader(MainViewModel.ConfigurationViewModel);
 
 	/// <summary>
+	///		Cierra el plugin (en este caso simplemente implementa la interface)
+	/// </summary>
+	public bool ClosePlugin() => true;
+
+	/// <summary>
 	///		Controlador de aplicación
 	/// </summary>
 	internal IAppViewsController AppViewsController { get; private set; } = default!;

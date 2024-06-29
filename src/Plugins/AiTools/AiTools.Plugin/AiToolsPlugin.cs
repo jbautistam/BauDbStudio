@@ -95,6 +95,11 @@ public class AiToolsPlugin : IPlugin
 	public IPluginConfigurationView? GetConfigurationView() => new Views.Configuration.ctlConfiguration(MainViewModel.ConfigurationViewModel);
 
 	/// <summary>
+	///		Cierra el plugin (en este caso simplemente implementa la interface)
+	/// </summary>
+	public bool ClosePlugin() => true;
+
+	/// <summary>
 	///		Controlador de aplicación
 	/// </summary>
 	internal IAppViewsController AppViewsController { get; private set; } = default!;

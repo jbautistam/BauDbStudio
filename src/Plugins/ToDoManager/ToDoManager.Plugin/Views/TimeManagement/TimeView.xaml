@@ -29,21 +29,27 @@
 					<ColumnDefinition Width="*"/>
 					<ColumnDefinition Width="Auto"/>
 					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="*"/>
 				</Grid.ColumnDefinitions>
 				<Label Grid.Row="0" Grid.Column="0" Margin="5" Content="Project:"/>
-				<TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="5"
+				<TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="7"
 						Text="{Binding Path=Project, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
 				<Label Grid.Row="1" Grid.Column="0" Margin="5" Content="Task:"/>
-				<TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="5"
+				<TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="7"
 						Text="{Binding Path=Task, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
-				<Label Grid.Row="2" Grid.Column="0" Margin="5" Content="Start:"/>
-				<Editors:TimeEditor Grid.Row="2" Grid.Column="1" Margin="5" Time="{Binding Path=TimeStart,UpdateSourceTrigger=PropertyChanged}" />
-				<Label Grid.Row="2" Grid.Column="2" Margin="5" Content="End:"/>
-				<Editors:TimeEditor Grid.Row="2" Grid.Column="3" Margin="5" Time="{Binding Path=TimeEnd,UpdateSourceTrigger=PropertyChanged}" />
-				<Label Grid.Row="2" Grid.Column="4" Margin="5" Content="Elapsed:"/>
-				<TextBlock Grid.Row="2" Grid.Column="5" Margin="5" VerticalAlignment="Center" Text="{Binding Path=Elapsed}" />
+
+				<Label Grid.Row="2" Grid.Column="0" Margin="5" Content="Date:"/>
+				<TextBlock Grid.Row="2" Grid.Column="1" Margin="5" VerticalAlignment="Center" Text="{Binding Path=Date,StringFormat={}{0:yyyy-MM-dd}}"/>
+				<Label Grid.Row="2" Grid.Column="2" Margin="5" Content="Start:"/>
+				<Editors:TimeEditor Grid.Row="2" Grid.Column="3" Margin="5" Time="{Binding Path=TimeStart,UpdateSourceTrigger=PropertyChanged}" />
+				<Label Grid.Row="2" Grid.Column="4" Margin="5" Content="End:"/>
+				<Editors:TimeEditor Grid.Row="2" Grid.Column="5" Margin="5" Time="{Binding Path=TimeEnd,UpdateSourceTrigger=PropertyChanged}" />
+				<Label Grid.Row="2" Grid.Column="6" Margin="6" Content="Elapsed:"/>
+				<TextBlock Grid.Row="2" Grid.Column="7" Margin="7" VerticalAlignment="Center" Text="{Binding Path=Elapsed}" />
+
 				<Label Grid.Row="3" Grid.Column="0" Margin="5" Content="Remarks:"/>
-				<TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="5"
+				<TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="7"
 						VerticalAlignment="Top" VerticalContentAlignment="Top" VerticalScrollBarVisibility="Auto" 
 						MinLines="4" MaxLines="5" MinHeight="90"
 						Text="{Binding Path=Remarks, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>

@@ -164,6 +164,11 @@ public class ToDoManagerPlugin : IPlugin
 	public IPluginConfigurationView GetConfigurationView() => new Views.Configuration.ctlConfiguration(MainViewModel.ConfigurationViewModel);
 
 	/// <summary>
+	///		Cierra el plugin (en este caso simplemente implementa la interface)
+	/// </summary>
+	public bool ClosePlugin() => MainViewModel.Close();
+
+	/// <summary>
 	///		Controlador de aplicación
 	/// </summary>
 	internal IAppViewsController AppViewsController { get; private set; } = default!;

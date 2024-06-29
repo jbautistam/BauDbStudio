@@ -433,6 +433,8 @@ public partial class MainWindow : Window
 	/// </summary>
 	private void ExitApp()
 	{
+		// Cierra los plugins
+		DbStudioViewsManager.PluginsManager.CloseApp();
 		// Graba la configuración
 		if (!string.IsNullOrWhiteSpace(ViewModel.MainController.MainWindowController.HostController.DialogsController.LastPathSelected))
 			DbStudioViewsManager.ConfigurationController.LastPathSelected = ViewModel.MainController.MainWindowController.HostController.DialogsController.LastPathSelected;

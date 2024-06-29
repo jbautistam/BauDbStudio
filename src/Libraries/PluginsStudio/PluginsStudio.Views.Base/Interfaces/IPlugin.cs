@@ -59,4 +59,9 @@ public interface IPlugin
 	///		Obtiene la vista de configuración
 	/// </summary>
 	IPluginConfigurationView? GetConfigurationView();
+
+	/// <summary>
+	///		Cierra el plugin cuando se cierra la aplicación
+	/// </summary>
+	bool ClosePlugin();
 }

@@ -17,6 +17,7 @@
     <None Remove="Resources\ArrowPrevious.png" />
     <None Remove="Resources\Blue.png" />
     <None Remove="Resources\Close.png" />
+    <None Remove="Resources\Collapse.png" />
     <None Remove="Resources\Copy.png" />
     <None Remove="Resources\Execute.png" />
     <None Remove="Resources\FileCsv.png" />
@@ -53,6 +54,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\Collapse.png" />
     <Resource Include="Resources\Copy.png" />
     <Resource Include="Resources\FileCsv.png" />
     <Resource Include="Resources\FileExcel.png" />
@@ -77,6 +79,9 @@
 
   <ItemGroup>
     <Page Update="Views\Appointments\AppointmentView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="Views\TimeManagement\ConsolidateView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
     <Page Update="Views\TimeManagement\FilterView.xaml">

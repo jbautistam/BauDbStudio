@@ -10,6 +10,7 @@ public class TimeViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewMode
 	// Variables privadas
 	private string _project = default!, _task = default!, _elapsed = default!;
 	private string? _remarks;
+	private DateTime _date;
 	private TimeOnly _timeStart, _timeEnd;
 
 	public TimeViewModel(TimeScheduleViewModel timeScheduleViewModel, TimeModel? time)
@@ -31,8 +32,8 @@ public class TimeViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewMode
 			// Asigna las propiedades
 			time.Task.Name = TimeScheduleViewModel.ActualTimeViewModel.Task;
 			time.Task.Project.Name = TimeScheduleViewModel.ActualTimeViewModel.Project;
-			time.Start = DateTime.Now.AddMinutes(-20);
-			time.End = DateTime.Now;
+			time.Start = GetEditDate(TimeScheduleViewModel.TimeListViewModel.Date, -20);
+			time.End = GetEditDate(TimeScheduleViewModel.TimeListViewModel.Date, 0);
 		}
 		// Guarda los datos de la fecha
 		Time = time;
@@ -40,9 +41,19 @@ public class TimeViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewMode
 		Project = Time.Task.Project.Name;
 		Task = Time.Task.Name;
 		Remarks = time.Remarks;
+		Date = time.Start;
 		TimeStart = TimeOnly.FromDateTime(time.Start);
 		TimeEnd = TimeOnly.FromDateTime(time.End);
 		UpdateElapsed();
+
+		// Obtiene la fecha de edición
+		DateTime GetEditDate(DateTime start, int minutes)
+		{
+			DateTime date = new(start.Year, start.Month, start.Day, DateTime.Now.Hour, DateTime.Now.Minute, 0);
+
+				// Añade los minutos especificados a la fecha
+				return date.AddMinutes(minutes);
+		}
 	}
 
 	/// <summary>
@@ -112,6 +123,11 @@ public class TimeViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewMode
 	}
 
 	/// <summary>
+	///		Clona el ViewModel
+	/// </summary>
+	internal TimeViewModel Clone() => new TimeViewModel(TimeScheduleViewModel, Time);
+
+	/// <summary>
 	///		ViewModel principal
 	/// </summary>
 	public TimeScheduleViewModel TimeScheduleViewModel { get; }
@@ -137,6 +153,15 @@ public class TimeViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewMode
 	{
 		get { return _task; }
 		set { CheckProperty(ref _task, value); }
+	}
+
+	/// <summary>
+	///		Fecha de la tarea
+	/// </summary>
+	public DateTime Date
+	{
+		get { return _date; }
+		set { CheckProperty(ref _date, value); }
 	}
 
 	/// <summary>

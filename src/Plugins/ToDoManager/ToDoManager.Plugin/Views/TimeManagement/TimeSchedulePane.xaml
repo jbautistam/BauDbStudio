@@ -36,6 +36,9 @@
 			<Button ToolTip="Export excel" Command="{Binding Path=ExportCommand}" Margin="2" HorizontalAlignment="Right">
 				<Image Width="16" Height="16" Source="/ToDoManager.Plugin;component/Resources/FileCsv.png" />
 			</Button>
+			<Button ToolTip="Collapse tasks" Command="{Binding Path=TimeListViewModel.CollapseCommand}" Margin="2" HorizontalAlignment="Right">
+				<Image Width="16" Height="16" Source="/ToDoManager.Plugin;component/Resources/Collapse.png" />
+			</Button>
 		</ToolBar>
 		<ListView Grid.Row="2" Grid.Column="0"
 				  ItemsSource="{Binding Path=TimeListViewModel.Items}" 

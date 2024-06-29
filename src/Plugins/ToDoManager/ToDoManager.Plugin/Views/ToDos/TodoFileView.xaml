@@ -45,7 +45,7 @@
 										<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
 									</Button>
 								</StackPanel>
-								<Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Width="450" >
+								<Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" MaxWidth="450">
 									<Grid.RowDefinitions>
 										<RowDefinition Height="Auto"/>
 										<RowDefinition Height="Auto"/>

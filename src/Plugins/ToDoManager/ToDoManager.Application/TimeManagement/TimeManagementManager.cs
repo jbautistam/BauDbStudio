@@ -13,7 +13,20 @@ public class TimeManagementManager
 	/// <summary>
 	///		Carga los datos del archivo de control horario de un día
 	/// </summary>
-	public Models.TimeControlModel Load(string folder, DateOnly date) => new Repositories.TimeRepository().Load(folder, date);
+	public Models.TimeControlModel Load(string folder, DateOnly date)
+	{
+		// Carga el archivo
+		try
+		{
+			return new Repositories.TimeRepository().Load(folder, date);
+		}
+		catch (Exception exception)
+		{
+			System.Diagnostics.Debug.WriteLine($"Error when load TimeManagement file {folder} - {date:yyyy-MM-dd}. {exception.Message}");
+		}
+		// Si ha habido un error, devuelve un objeto vacío
+		return new Models.TimeControlModel(date);
+	}
 
 	/// <summary>
 	///		Graba los datos del archivo de control horario

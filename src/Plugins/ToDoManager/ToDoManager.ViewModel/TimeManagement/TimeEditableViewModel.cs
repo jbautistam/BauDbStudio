@@ -1,4 +1,5 @@
 ﻿using Bau.Libraries.BauMvvm.ViewModels;
+using Bau.Libraries.ToDoManager.Application.TimeManagement.Models;
 
 namespace Bau.Libraries.ToDoManager.ViewModel.TimeManagement;
 
@@ -46,9 +47,12 @@ public class TimeEditableViewModel : BaseObservableObject
 	{
 		if (IsStarted)
 		{
-			_end = DateTime.Now;
-			EndText = $"{_end:HH:mm:ss}";
-			Elapsed = TimeScheduleViewModel.FormatElapsed(_start, _end);
+			// Asigna los datos
+			EndDate = DateTime.Now;
+			EndText = $"{EndDate:HH:mm:ss}";
+			Elapsed = TimeScheduleViewModel.FormatElapsed(StartDate, EndDate);
+			// Lanza el evento de tarea actualizada
+			TimeScheduleViewModel.TimeListViewModel.UpdateTotalElapsed(this);
 		}
 	}
 
@@ -58,9 +62,9 @@ public class TimeEditableViewModel : BaseObservableObject
 	private void Start()
 	{
 		// Asigna la fecha de inicio
-		_start = DateTime.Now;
-		_end = DateTime.Now;
-		StartText = $"{_start:HH:mm:ss}";
+		StartDate = DateTime.Now;
+		EndDate = DateTime.Now;
+		StartText = $"{StartDate:HH:mm:ss}";
 		EndText = string.Empty;
 		// Arranca el temporizador
 		_timer.Start();
@@ -76,12 +80,11 @@ public class TimeEditableViewModel : BaseObservableObject
 		if (IsStarted)
 		{
 			// Guarda la fecha de fin
-			_end = DateTime.Now;
+			EndDate = DateTime.Now;
 			// Detiene el temporizador
 			_timer.Stop();
 			// Añade la tarea al control de tiempo y graba el archivo
-			TimeScheduleViewModel.ActualTimeControl.Add(Project, Task, _start, _end);
-			TimeScheduleViewModel.Save();
+			Save(Project, Task, StartDate, EndDate);
 			// Vacía los datos
 			StartText = string.Empty;
 			EndText = string.Empty;
@@ -103,6 +106,22 @@ public class TimeEditableViewModel : BaseObservableObject
 		// Ajusta los datos de la tarea actual
 		Project = project;
 		Task = task;
+	}
+
+	/// <summary>
+	///		Graba los datos
+	/// </summary>
+	private void Save(string project, string task, DateTime start, DateTime end)
+	{
+		TimeControlModel timeControl = TimeScheduleViewModel.LoadDate(DateOnly.FromDateTime(DateTime.Now));
+
+			// Añade los datos de la tarea
+			timeControl.Add(project, task, start, end);
+			// Graba los datos
+			TimeScheduleViewModel.Save(timeControl);
+			// Actualiza la lista
+			if (DateOnly.FromDateTime(TimeScheduleViewModel.TimeListViewModel.Date) == timeControl.Date)
+				TimeScheduleViewModel.TimeListViewModel.Load(timeControl.Date);
 	}
 
 	/// <summary>
@@ -135,6 +154,24 @@ public class TimeEditableViewModel : BaseObservableObject
 	{
 		get { return _isStarted; }
 		set { CheckProperty(ref _isStarted, value); }
+	}
+
+	/// <summary>
+	///		Fecha / hora de inicio
+	/// </summary>
+	public DateTime StartDate
+	{
+		get { return _start; }
+		set { CheckProperty(ref _start, value); }
+	}
+
+	/// <summary>
+	///		Fecha / hora de fine
+	/// </summary>
+	public DateTime EndDate
+	{
+		get { return _end; }
+		set { CheckProperty(ref _end, value); }
 	}
 
 	/// <summary>
