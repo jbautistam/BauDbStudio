@@ -35,12 +35,19 @@ public class BlogReaderViewModel : BauMvvm.ViewModels.BaseObservableObject
 	/// </summary>
 	public void Load(string path)
 	{
-		// Guarda el directorio
+		// Configura el directorio
 		if (string.IsNullOrWhiteSpace(ConfigurationViewModel.PathBlogs) && !string.IsNullOrWhiteSpace(path))
 			ConfigurationViewModel.PathBlogs = path;
-		// Carga la solución
 		BlogManager.Configuration.PathBlogs = ConfigurationViewModel.PathBlogs;
-		BlogManager.Load();
+		// Carga la lista de blogs
+		try
+		{
+			BlogManager.Load();
+		}
+		catch (Exception exception)
+		{
+			ViewsController.HostController.SystemController.ShowMessage($"Error when load blogs file at '{path}'. {exception.Message}");
+		}
 		// Carga los exploradores
 		TreeBlogs.Load();
 	}
@@ -66,7 +73,7 @@ public class BlogReaderViewModel : BauMvvm.ViewModels.BaseObservableObject
 	public Blogs.TreeBlogs.TreeBlogsViewModel TreeBlogs
 	{
 		get { return _treeBlogsViewModel; }
-		set { CheckObject(ref _treeBlogsViewModel, value); }
+		set { CheckObject(ref _treeBlogsViewModel!, value); }
 	}
 
 	/// <summary>

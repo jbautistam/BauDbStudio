@@ -90,7 +90,7 @@ public class BlogEntryViewModel : BauMvvm.ViewModels.Forms.ControlItems.ControlI
 	/// <summary>
 	///		Autor de la entrada
 	/// </summary>
-	public string Author
+	public string? Author
 	{
 		get { return _author; }
 		set { CheckProperty(ref _author, value); }
@@ -99,7 +99,7 @@ public class BlogEntryViewModel : BauMvvm.ViewModels.Forms.ControlItems.ControlI
 	/// <summary>
 	///		Contenido de la entrada
 	/// </summary>
-	public string Content
+	public string? Content
 	{
 		get
 		{ 

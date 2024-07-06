@@ -61,6 +61,21 @@ public class EntriesModelCollection : LibDataStructures.Base.BaseExtendedModelCo
 	}
 
 	/// <summary>
+	///		Obtiene el número de elementos leídos y borrados
+	/// </summary>
+	public int GetNumberReadAndDeleted()
+	{
+		int number = 0;
+
+			// Obtiene el número de elementos no leídos
+			foreach (EntryModel entry in this)
+				if (entry.Status == EntryModel.StatusEntry.Read || entry.Status == EntryModel.StatusEntry.Deleted)
+					number++;
+			// Devuelve el número de elementos
+			return number;
+	}
+
+	/// <summary>
 	///		Obtiene las entradas de un blog
 	/// </summary>
 	public EntriesModelCollection GetFrom(BlogModel blog)

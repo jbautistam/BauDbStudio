@@ -62,7 +62,32 @@ public class BlogReaderManager
 	/// </summary>
 	public void SaveBlog(BlogModel blog, EntriesModelCollection entries)
 	{
+		// Borra las entradas antiguas
+		if (blog.DeleteOldEntries)
+			DeleteOldEntries(blog, entries);
+		// Graba las entradas
 		new Repository.EntryXmlRepository().Save(blog, entries, Configuration.PathBlogs);
+	}
+
+	/// <summary>
+	///		Borra las entradas antiguas
+	/// </summary>
+	private void DeleteOldEntries(BlogModel blog, EntriesModelCollection entries)
+	{
+		int entriesRead = entries.GetNumberReadAndDeleted();
+
+			// Ordena las entradas por fecha
+			entries.SortByDate();
+			// Borra las últimas X entradas hasta tener sólo las necesarias
+			for (int index = entries.Count - 1; index >= 0; index--)
+				if ((entries[index].Status == EntryModel.StatusEntry.Read || entries[index].Status == EntryModel.StatusEntry.Deleted) &&
+					entriesRead > blog.MaximumEntriesRead && entries[index].DatePublish < DateTime.Now.AddDays(-15))
+				{
+					// Borra la entrada
+					entries.RemoveAt(index);
+					// y marca el número de elementos que siguen en la colección
+					entriesRead--;
+				}
 	}
 
 	/// <summary>

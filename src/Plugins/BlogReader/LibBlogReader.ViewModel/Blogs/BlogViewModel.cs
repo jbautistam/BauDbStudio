@@ -12,7 +12,8 @@ public class BlogViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewMode
 	private FolderModel? _parent;
 	private BlogModel _blog = default!;
 	private string _name = default!, _description = default!, _url = default!;
-	private bool _downloadPodcast, _enabled;
+	private int _maximumEntriesRead;
+	private bool _downloadPodcast, _enabled, _deleteOldEntriesRead;
 	private DateTime? _lastDownload, _lastEntry;
 
 	public BlogViewModel(BlogReaderViewModel mainViewModel, FolderModel? parent, BlogModel? blog)
@@ -39,6 +40,8 @@ public class BlogViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewMode
 		URL = _blog.URL;
 		DownloadPodcast = _blog.DownloadPodcast;
 		Enabled = _blog.Enabled;
+		MaximumEntriesRead = _blog.MaximumEntriesRead;
+		DeleteOldEntriesRead = _blog.DeleteOldEntries;
 		LastDownload = _blog.DateLastDownload;
 		LastEntry = _blog.DateLastEntry;
 	}
@@ -75,6 +78,9 @@ public class BlogViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewMode
 			_blog.Folder = Parent;
 			_blog.Name = Name;
 			_blog.Description = Description;
+			_blog.MaximumEntriesRead = MaximumEntriesRead;
+			if (!DeleteOldEntriesRead)
+				_blog.MaximumEntriesRead = 0;
 			_blog.URL = URL;
 			_blog.DownloadPodcast = DownloadPodcast;
 			_blog.Enabled = Enabled;
@@ -96,7 +102,7 @@ public class BlogViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewMode
 	public string Name
 	{
 		get { return _name; }
-		set { CheckProperty(ref _name, value); }
+		set { CheckProperty(ref _name!, value); }
 	}
 
 	/// <summary>
@@ -114,7 +120,7 @@ public class BlogViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewMode
 	public string Description
 	{
 		get { return _description; }
-		set { CheckProperty(ref _description, value); }
+		set { CheckProperty(ref _description!, value); }
 	}
 
 	/// <summary>
@@ -123,7 +129,7 @@ public class BlogViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewMode
 	public string URL
 	{
 		get { return _url; }
-		set { CheckProperty(ref _url, value); }
+		set { CheckProperty(ref _url!, value); }
 	}
 
 	/// <summary>
@@ -142,6 +148,31 @@ public class BlogViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewMode
 	{
 		get { return _enabled; }
 		set { CheckProperty(ref _enabled, value); }
+	}
+
+	/// <summary>
+	///		Indica si se deben borrar las entradas leidas
+	/// </summary>
+	public bool DeleteOldEntriesRead
+	{
+		get { return _deleteOldEntriesRead; }
+		set 
+		{ 
+			if (CheckProperty(ref _deleteOldEntriesRead, value))
+			{
+				if (_deleteOldEntriesRead && MaximumEntriesRead == 0)
+					MaximumEntriesRead = 1_000;
+			}
+		}
+	}
+
+	/// <summary>
+	///		Número máximo de entradas leidas sobre un archivo
+	/// </summary>
+	public int MaximumEntriesRead
+	{
+		get { return _maximumEntriesRead; }
+		set { CheckProperty(ref _maximumEntriesRead, value); }
 	}
 
 	/// <summary>

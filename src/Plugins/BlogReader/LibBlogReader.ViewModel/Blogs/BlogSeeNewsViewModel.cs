@@ -56,6 +56,7 @@ public class BlogSeeNewsViewModel : BaseObservableObject, PluginsStudio.ViewMode
 		MarkAsInterestingCommand = new BaseCommand(_ => ExecuteAction(nameof(MarkAsInterestingCommand)),
 												   _ => CanExecuteAction(nameof(MarkAsInterestingCommand)));
 		ExportEntriesCommand = new BaseCommand(_ => ExportEntries());
+		RefreshCommand = new BaseCommand(_ => Refresh());
 		PlayCommand = new BaseCommand(_ => PlayEntry())
 								.AddListener(this, nameof(SelectedEntry));
 		DeleteCommand = new BaseCommand(_ => ExecuteAction(nameof(DeleteCommand)),
@@ -64,7 +65,7 @@ public class BlogSeeNewsViewModel : BaseObservableObject, PluginsStudio.ViewMode
 		// Inicializa las propiedades
 		PropertyChanged += (sender, args) =>
 								{
-									if (args != null && args.PropertyName.EqualsIgnoreCase(nameof(SelectedEntry)))
+									if (args is not null && args.PropertyName!.EqualsIgnoreCase(nameof(SelectedEntry)))
 										DeleteCommand.OnCanExecuteChanged();
 									IsUpdated = false;
 								};
@@ -97,7 +98,14 @@ public class BlogSeeNewsViewModel : BaseObservableObject, PluginsStudio.ViewMode
 		// Carga las entradas de los blogs seleccionados
 		foreach (BlogModel blog in Blogs)
 			if (blog.Enabled || MainViewModel.ConfigurationViewModel.ShowNewsDisabledBlogs)
-				_blogEntries.AddRange(MainViewModel.BlogManager.LoadEntries(blog));
+				try
+				{
+					_blogEntries.AddRange(MainViewModel.BlogManager.LoadEntries(blog));
+				}
+				catch (Exception exception)
+				{
+					MainViewModel.ViewsController.SystemController.ShowMessage($"Error when load blog {blog.Name}. {exception.Message}");
+				}
 		// Ordena las entradas
 		_blogEntries.Sort((first, second) => {
 												if (first.Blog.Name.Equals(second.Blog.Name, StringComparison.CurrentCultureIgnoreCase))
@@ -112,6 +120,7 @@ public class BlogSeeNewsViewModel : BaseObservableObject, PluginsStudio.ViewMode
 		foreach (EntryModel entry in _blogEntries)
 			if (entry.Status != EntryModel.StatusEntry.Deleted)
 				EntriesList.Add(new BlogEntryViewModel(entry.Blog.Name, entry));
+
 	}
 
 	/// <summary>

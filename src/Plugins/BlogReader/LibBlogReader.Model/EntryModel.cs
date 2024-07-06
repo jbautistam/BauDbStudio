@@ -6,7 +6,9 @@
 public class EntryModel : LibDataStructures.Base.BaseExtendedModel
 { 
 	// Enumerados públicos
-	/// <summary>Estados de una entrada</summary>
+	/// <summary>
+	///		Estados de una entrada
+	///	</summary>
 	public enum StatusEntry
 	{
 		/// <summary>Desconocido</summary>
@@ -63,5 +65,5 @@ public class EntryModel : LibDataStructures.Base.BaseExtendedModel
 	/// <summary>
 	///		Blog
 	/// </summary>
-	public BlogModel? Blog { get; set; }
+	public BlogModel Blog { get; set; } = default!;
 }
