@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+
+		<PropertyGroup>
+			<TargetFramework>net8.0</TargetFramework>
+			<RootNamespace>Bau.Libraries.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+			<ImplicitUsings>enable</ImplicitUsings>
+			<Nullable>enable</Nullable>
+		</PropertyGroup>
+
+
+		<ItemGroup>
+		  <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibHelper\src\LibHelper.csproj" />
+		  <ProjectReference Include="..\..\..\Libraries\PluginsStudio\PluginsStudio.ViewModels\PluginsStudio.ViewModels.csproj" />
+		  <ProjectReference Include="..\LibChessGame.Models\LibChessGame.Models.csproj" />
+		  <ProjectReference Include="..\LibPgnConversor\LibPgn.Conversor.csproj" />
+		</ItemGroup>
+
+</Project>

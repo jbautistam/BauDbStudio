@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+  <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+	  <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>Bau.Libraries.DbStudio.Models</RootNamespace>
+    <AssemblyName>DbStudio.Models</AssemblyName>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Deployments\**" />
+    <EmbeddedResource Remove="Deployments\**" />
+    <None Remove="Deployments\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibDataStructures\src\LibDataStructures.csproj" />
+  </ItemGroup>
+
+</Project>

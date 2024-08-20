@@ -1,0 +1,41 @@
+﻿<Window x:Class="Bau.Libraries.FileTools.Plugin.Views.Multimedia.MediaFileView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Bau.Libraries.FileTools.Plugin.Views.Multimedia"
+        mc:Ignorable="d"
+        Title="Multimedia" Height="450" Width="800" MinHeight="200" MinWidth="300"
+        Loaded="Window_Loaded" Closing="Window_Closing" 
+        >
+	<Grid x:Name="grdView" Grid.Column="0" Grid.Row="0">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="16" />
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
+		<ToolBarPanel Grid.Column="0" Grid.Row="0">
+			<ToolBar>
+				<ToggleButton Padding="5" BorderThickness="1" IsTabStop="False" IsChecked="{Binding Path=OverAllWindows}">
+					<Image Source="/FileTools.Plugin;component/Resources/Pin.png" Width="16" Height="16"/>
+				</ToggleButton>
+				<Separator/>
+				<Button Command="{Binding Path=PlayCommand}" >
+					<Image Source="/FileTools.Plugin;component/Resources/Play.png" Width="16" Height="16"/>
+				</Button>
+				<Button Command="{Binding Path=PauseCommand}" >
+					<Image Source="/FileTools.Plugin;component/Resources/Pause.png" Width="16" Height="16"/>
+				</Button>
+				<Button Command="{Binding Path=StopCommand}" >
+					<Image Source="/FileTools.Plugin;component/Resources/Stop.png" Width="16" Height="16"/>
+				</Button>
+				<Label Content="{Binding Path=ShortFileName}" Foreground="Black" FontWeight="Normal"/>
+			</ToolBar>
+		</ToolBarPanel>
+		<MediaElement x:Name="plyMedia" Grid.Row="1" Grid.Column="0" LoadedBehavior="Manual" MouseDown="plyMedia_MouseDown"/>
+		<ProgressBar x:Name="prgMedia" Grid.Row="2" Grid.Column="0" MouseDown="prgMedia_MouseDown" Visibility="Hidden"/>
+	</Grid>
+</Window>

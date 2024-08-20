@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>Bau.Libraries.$(MSBuildProjectName)</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\Messengers\**" />
+    <EmbeddedResource Remove="Controllers\Messengers\**" />
+    <None Remove="Controllers\Messengers\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="JobsProcessorPlugin.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Markdig" Version="0.37.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Libraries\PatternText\LibPatternText\LibPatternText.csproj" />
+    <ProjectReference Include="..\..\..\Libraries\PluginsStudio\PluginsStudio.ViewModels.Base\PluginsStudio.ViewModels.Base.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="Bau.Libraries.ChessDataBase.Plugin.Views.Configuration.ctlConfiguration"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="303" d:DesignWidth="590"
+			 xmlns:Files="clr-namespace:Bau.Controls.Files;assembly=BauControls">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+		<GroupBox Grid.Row="0" Grid.Column="0" Header="Visor">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+				<Label Content="Imágenes tablero:" Grid.Column="0" Grid.Row="0" />
+				<Files:PathSelect Grid.Column="1" Grid.Row="0" Margin = "5" PathName="{Binding Path=PathBoardImages}" />
+				<Label Content="Imágenes piezas:" Grid.Column="0" Grid.Row="1" />
+				<Files:PathSelect Grid.Column="1" Grid.Row="1" Margin = "5" PathName="{Binding Path=PathPiecesImages}" />
+				<CheckBox Grid.Row="2" Grid.Column="1" Content="Mostrar animaciones" IsChecked="{Binding Path=ShowAnimations}" Margin="5"/>
+			</Grid>
+		</GroupBox>
+		<GroupBox Grid.Row="1" Grid.Column="0" Header="Motor de juego">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+				<Label Content="Ejecutable:" Grid.Column="0" Grid.Row="0" />
+				<Files:FileSelect Grid.Column="1" Grid.Row="0" Margin = "5" FileName="{Binding Path=FileNameEngine}" 
+								  Mask="Ejecutable (*.exe)|*.exe|Todos los archivos(*.*)|*.*" />
+				<Label Grid.Row="1" Grid.Column="1" Foreground="OrangeRed" Content="Probado con StockFish (https://stockfishchess.org/download/)" />
+			</Grid>
+		</GroupBox>
+	</Grid>
+</UserControl>

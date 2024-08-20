@@ -1,0 +1,55 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+	  <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>Bau.Libraries.$(MSBuildProjectName)</RootNamespace>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\EventArguments\**" />
+    <Compile Remove="Details\Files\ScriptsManager\**" />
+    <Compile Remove="Details\Files\Structured\**" />
+    <Compile Remove="Explorers\Files\**" />
+    <Compile Remove="Explorers\Files\**" />
+    <EmbeddedResource Remove="Controllers\EventArguments\**" />
+    <EmbeddedResource Remove="Details\Files\ScriptsManager\**" />
+    <EmbeddedResource Remove="Details\Files\Structured\**" />
+    <EmbeddedResource Remove="Explorers\Files\**" />
+    <EmbeddedResource Remove="Explorers\Files\**" />
+    <None Remove="Controllers\EventArguments\**" />
+    <None Remove="Details\Files\ScriptsManager\**" />
+    <None Remove="Details\Files\Structured\**" />
+    <None Remove="Explorers\Files\**" />
+    <None Remove="Explorers\Files\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\Exporter\ExportDataController.cs" />
+    <Compile Remove="Details\Connections\ConnectionParametersExecutionViewModel.cs" />
+    <Compile Remove="Details\EtlProjects\CreateSchemaXmlViewModel.cs" />
+    <Compile Remove="Details\EtlProjects\ExecuteEtlConsoleViewModel.cs" />
+    <Compile Remove="Details\Reporting\Explorers\NodeReportAdvancedViewModel.cs" />
+    <Compile Remove="Details\Reporting\Queries\ReportAdvancedViewModel.cs" />
+    <Compile Remove="Details\Reporting\Reports\ListReportDataSourceViewModel.cs" />
+    <Compile Remove="Details\Reporting\Tools\CreateSchemaReportingXmlViewModel.cs" />
+    <Compile Remove="Explorers\Connections\NodeSchemaViewModel.cs" />
+    <Compile Remove="Explorers\Connections\TreeDetailsNodeViewModel.cs" />
+    <Compile Remove="Explorers\Connections\TreeNodeViewModel.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibJsonConversor\src\LibJsonConversor.csproj" />
+    <ProjectReference Include="..\..\DbReporting\LibReporting.Solution\LibReporting.Solution.csproj" />
+    <ProjectReference Include="..\..\PluginsStudio\PluginsStudio.ViewModels\PluginsStudio.ViewModels.csproj" />
+    <ProjectReference Include="..\DbStudio.Application\DbStudio.Application.csproj" />
+  </ItemGroup>
+
+</Project>

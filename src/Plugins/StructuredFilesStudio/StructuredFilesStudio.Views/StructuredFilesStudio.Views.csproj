@@ -1,0 +1,58 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>Bau.Libraries.StructuredFilesStudio.Views</RootNamespace>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\AppController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\Images\File.png" />
+    <None Remove="Resources\Images\FileCsv.png" />
+    <None Remove="Resources\Images\FileExcel.png" />
+    <None Remove="Resources\Images\FileParquet.png" />
+    <None Remove="Resources\Images\Filter.png" />
+    <None Remove="Resources\Images\FilterClear.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\Controls\WPF\BauControls\src\BauControls.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Controls\WPF\CodeEditor\src\CodeEditor.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.Views.Wpf\BauMvvm.Views.Wpf.csproj" />
+    <ProjectReference Include="..\..\..\Libraries\PluginsStudio\PluginsStudio.Views.Base\PluginsStudio.Views.Base.csproj" />
+    <ProjectReference Include="..\StructuredFilesStudio.ViewModels\StructuredFilesStudio.ViewModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Images\File.png" />
+    <Resource Include="Resources\Images\FileCsv.png" />
+    <Resource Include="Resources\Images\FileExcel.png" />
+    <Resource Include="Resources\Images\FileParquet.png" />
+    <Resource Include="Resources\Images\Filter.png" />
+    <Resource Include="Resources\Images\FilterClear.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Files\CsvFilePropertiesView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="Files\DataTableFileView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="Files\ListFilterView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="Files\ParquetFilePropertiesView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
+</Project>

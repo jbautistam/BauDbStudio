@@ -1,0 +1,64 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>Bau.Libraries.JobsProcessor.Plugin</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\AppController.cs" />
+    <Compile Remove="Views\ComicContentView.xaml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\ArrowNext.png" />
+    <None Remove="Resources\Cancel.png" />
+    <None Remove="Resources\File.png" />
+    <None Remove="Resources\FileBat.png" />
+    <None Remove="Resources\FolderNode.png" />
+    <None Remove="Resources\Log.png" />
+    <None Remove="Resources\Parameter.png" />
+    <None Remove="Resources\Refresh.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="Views\ComicContentView.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\Controls\WPF\BauControls\src\BauControls.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Controls\WPF\CodeEditor\src\CodeEditor.csproj" />
+    <ProjectReference Include="..\..\..\Libraries\PluginsStudio\PluginsStudio.Views.Base\PluginsStudio.Views.Base.csproj" />
+    <ProjectReference Include="..\JobsProcessor.ViewModel\JobsProcessor.ViewModel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\ArrowNext.png" />
+    <Resource Include="Resources\Cancel.png" />
+    <Resource Include="Resources\File.png" />
+    <Resource Include="Resources\FileBat.png" />
+    <Resource Include="Resources\FolderNode.png" />
+    <Resource Include="Resources\Log.png" />
+    <Resource Include="Resources\Parameter.png" />
+    <Resource Include="Resources\Refresh.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

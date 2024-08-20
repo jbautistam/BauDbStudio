@@ -1,0 +1,61 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>Bau.Libraries.$(MSBuildProjectName)</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\AppController.cs" />
+    <Compile Remove="Views\MediaPlayerView.xaml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\AudioFile.png" />
+    <None Remove="Resources\Back.png" />
+    <None Remove="Resources\Next.png" />
+    <None Remove="Resources\Pause.png" />
+    <None Remove="Resources\Pin.png" />
+    <None Remove="Resources\Play.png" />
+    <None Remove="Resources\RestFile.png" />
+    <None Remove="Resources\Stop.png" />
+    <None Remove="Resources\VideoFile.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="Views\MediaPlayerView.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\Controls\WPF\BauControls\src\BauControls.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Controls\WPF\CodeEditor\src\CodeEditor.csproj" />
+    <ProjectReference Include="..\..\..\Libraries\PluginsStudio\PluginsStudio.Views.Base\PluginsStudio.Views.Base.csproj" />
+    <ProjectReference Include="..\RestManager.ViewModel\RestManager.ViewModel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\AudioFile.png" />
+    <Resource Include="Resources\Back.png" />
+    <Resource Include="Resources\Next.png" />
+    <Resource Include="Resources\Pause.png" />
+    <Resource Include="Resources\Pin.png" />
+    <Resource Include="Resources\Play.png" />
+    <Resource Include="Resources\RestFile.png" />
+    <Resource Include="Resources\Stop.png" />
+    <Resource Include="Resources\VideoFile.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="Microsoft.VCRTForwarders.140" Version="1.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\ParameterView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+  </ItemGroup>
+
+</Project>

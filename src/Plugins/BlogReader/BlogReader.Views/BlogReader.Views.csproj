@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>Bau.Libraries.BlogReader.Views</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\Blog.png" />
+    <None Remove="Resources\Hyperlink.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\Controls\WPF\BauControls\src\BauControls.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.Views.Wpf\BauMvvm.Views.Wpf.csproj" />
+    <ProjectReference Include="..\..\..\Libraries\PluginsStudio\PluginsStudio.Views.Base\PluginsStudio.Views.Base.csproj" />
+    <ProjectReference Include="..\LibBlogReader.ViewModel\LibBlogReader.ViewModel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\attach.png" />
+    <Resource Include="Resources\Blog.png" />
+    <Resource Include="Resources\EntryInteresting.png" />
+    <Resource Include="Resources\EntryNotRead.png" />
+    <Resource Include="Resources\EntryRead.png" />
+    <Resource Include="Resources\Hyperlink.png" />
+  </ItemGroup>
+
+</Project>

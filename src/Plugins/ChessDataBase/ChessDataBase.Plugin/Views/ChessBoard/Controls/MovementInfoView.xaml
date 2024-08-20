@@ -1,0 +1,68 @@
+﻿<UserControl x:Class="Bau.Libraries.ChessDataBase.Plugin.Views.ChessBoard.Controls.MovementInfoView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Bau.Libraries.ChessDataBase.Plugin.Views.ChessBoard.Controls"
+			 xmlns:viewModels="clr-namespace:Bau.Libraries.ChessDataBase.ViewModels.Games.Movements.Board.Movements;assembly=ChessDataBase.ViewModels"
+			 xmlns:Conversors="clr-namespace:Bau.Libraries.ChessDataBase.Plugin.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="50" d:DesignWidth="300">
+	<UserControl.Resources>
+		<Conversors:FileChessPieceConverter x:Key="FileChessPieceConverter"/>
+	</UserControl.Resources>
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="40"/>
+			<ColumnDefinition Width="40"/>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="40"/>
+			<ColumnDefinition Width="40"/>
+		</Grid.ColumnDefinitions>
+		<Button ToolTip="Salir de variación" Grid.Row="0" Grid.Column="0" Command="{Binding Path=VariationExitCommand}"
+				Visibility="{Binding Path=IsAtVariation,Converter={StaticResource BoolToVisibilityConverter}}"
+				Background="Transparent" BorderBrush="Transparent">
+			<Image Source="/ChessDataBase.Plugin;component/Resources/ChessBoard/ArrowFirst.png" />
+		</Button>
+		<Button ToolTip="Anterior" Grid.Row="0" Grid.Column="1" Command="{Binding Path=PreviousMovementCommand}"
+				Background="Transparent" BorderBrush="Transparent">
+			<Image Source="/ChessDataBase.Plugin;component/Resources/ChessBoard/ArrowPrevious.png" />
+		</Button>
+		<StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center">
+			<Image Height="32" Width="32" VerticalAlignment="Center" Margin="0,0,2,0"
+						Source="{Binding Path=MovementsList.ActualMovement.Movement,Converter={StaticResource FileChessPieceConverter}}" />
+			<TextBlock Text="{Binding Path=MovementsList.ActualMovement.Text}" 
+						Margin="0" VerticalAlignment="Center" FontSize="16" FontWeight="Bold" />
+		</StackPanel>
+		<Button ToolTip="Siguiente" Grid.Row="0" Grid.Column="3" Command="{Binding Path=NextMovementCommand}"
+				Background="Transparent" BorderBrush="Transparent">
+			<Image Source="/ChessDataBase.Plugin;component/Resources/ChessBoard/ArrowNext.png" />
+		</Button>
+		<ToggleButton x:Name="cmdShowVariation" IsChecked="False" HorizontalContentAlignment="Stretch" Margin="0" Padding="0"
+					Grid.Row="0" Grid.Column="4"
+					Visibility="{Binding Path=MovementsList.ActualMovement.HasVariation,Converter={StaticResource BoolToVisibilityConverter}}"
+					Background="Transparent" BorderBrush="Transparent">
+			<ToggleButton.Content>
+                <Image Height="32" Width="32" Margin="0,0,2,0" Source="/ChessDataBase.Plugin;component/Resources/ChessBoard/ArrowLast.png" />
+			</ToggleButton.Content>
+		</ToggleButton>
+		<Popup IsOpen="{Binding ElementName=cmdShowVariation,Path=IsChecked}"
+				PlacementTarget="{Binding ElementName=cmdShowVariation}" Placement="Bottom" PopupAnimation="Slide" StaysOpen="False" Width="200" Height="200">
+			<ListBox ItemsSource="{Binding Path=MovementsList.ActualMovement.VariationsList.Variations}" >
+				<ListBox.Resources>
+					<DataTemplate DataType="{x:Type viewModels:MovementSelectVariationViewModel}">
+						<Button Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+								Command="{Binding Path=SelectMovementCommand}">
+							<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+								<Image Width="32" Height="32" VerticalAlignment="Center" Margin="0,0,2,0"
+										Source="{Binding Path=Movement,Converter={StaticResource FileChessPieceConverter}}" />
+								<TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Path=Text}" 
+										Margin="0" VerticalAlignment="Center" FontSize="25" FontWeight="Bold" />
+							</StackPanel>
+						</Button>
+					</DataTemplate>
+				</ListBox.Resources>
+			</ListBox>
+		</Popup>
+	</Grid>
+</UserControl>

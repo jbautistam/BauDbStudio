@@ -1,0 +1,254 @@
+﻿<Window 
+		x:Class="Bau.DbStudio.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Bau.DbStudio"
+		xmlns:commandsLocal="clr-namespace:Bau.DbStudio.Converters"
+		xmlns:dockLayout="clr-namespace:Bau.Controls.DockLayout;assembly=DockLayout"
+        mc:Ignorable="d"
+        Title="BauDbStudio" Height="450" Width="800" Loaded="Window_Loaded" Unloaded="Window_Unloaded" WindowStartupLocation="CenterScreen" WindowState="Maximized" Closing="Window_Closing">
+	<Window.CommandBindings>
+		<CommandBinding Command="Save" Executed="SaveCommandBinding_Executed" CanExecute="SaveCommandBinding_CanExecute"/>
+		<CommandBinding Command="Delete" Executed="DeleteCommandBinding_Executed" CanExecute="DeleteCommandBinding_CanExecute"/>
+
+		<CommandBinding Command="Search" Executed="SearchCommandBinding_Executed"/>
+		<CommandBinding Command="commandsLocal:CustomCommands.ExecuteScript" Executed="ExecuteScriptCommandBinding_Executed" CanExecute="ExecuteScriptCommandBinding_CanExecute"/>
+		<CommandBinding Command="commandsLocal:CustomCommands.NewQuery" Executed="NewQueryCommandBinding_Executed" CanExecute="NewQueryCommandBinding_CanExecute"/>
+	</Window.CommandBindings>
+	<Window.InputBindings>
+		<KeyBinding Command="Save" Key="S" Modifiers="Ctrl"/>
+		<KeyBinding Command="Search" Key="F" Modifiers="Ctrl"/>
+		<KeyBinding Command="Delete" Key="Delete"/>
+	</Window.InputBindings>
+
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
+		<!-- Menú -->
+		<Menu Grid.Column="0" Grid.Row="0">
+			<MenuItem Header="_Archivo">
+				<MenuItem Header="_Nuevo" x:Name="mnuFilesNewItem">
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
+					</MenuItem.Icon>
+					<MenuItem Header="D_irectorio" Command="{Binding Path=TreeFoldersViewModel.NewFolderFilesCommand}" >
+						<MenuItem.Icon>
+							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Folder.png" />
+						</MenuItem.Icon>
+					</MenuItem>
+					<Separator x:Name="mnuStartFileNewItems" />
+				</MenuItem>
+				<MenuItem Header="_Guardar" InputGestureText="Ctrl+S" Command="Save" >
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Save.png" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<MenuItem Header="_Guardar como" Command="{Binding Path=SaveAsCommand}" >
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/SaveAs.png" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<MenuItem Header="Guardar _todo" Command="{Binding Path=SaveAllCommand}" >
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/SaveAll.png" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<Separator/>
+				<MenuItem Header="_Actualizar" Command="{Binding Path=RefreshCommand}" >
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Refresh.png" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<Separator/>
+				<MenuItem x:Name="mnuWorkspace" Header="_Espacio de trabajo" >
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/Resources/Images/Project.png" />
+					</MenuItem.Icon>
+					<MenuItem Header="_Nuevo" Command="{Binding Path=WorkspacesViewModel.NewWorkspaceCommand}" >
+						<MenuItem.Icon>
+							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
+						</MenuItem.Icon>
+					</MenuItem>
+					<Separator x:Name="mnuStartWorkspaces" />
+					<Separator x:Name="mnuEndWorkspaces" />
+					<MenuItem Header="_Borrar" Command="{Binding Path=WorkspacesViewModel.DeleteWorkspaceCommand}" >
+						<MenuItem.Icon>
+							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
+						</MenuItem.Icon>
+					</MenuItem>
+				</MenuItem>
+				<MenuItem Header="Archivos recientes" ItemsSource="{Binding LastFilesViewModel.Files}">
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/Resources/Images/LastFiles.png"/>
+					</MenuItem.Icon>
+					<MenuItem.ItemContainerStyle>
+						<Style>
+							<Setter Property="MenuItem.Header" Value="{Binding Header}"/>
+							<Setter Property="MenuItem.Command" Value="{Binding OpenFileCommand}"/>
+						</Style>
+					</MenuItem.ItemContainerStyle>
+				</MenuItem>
+				<Separator/>
+				<MenuItem Header="_Salir" InputGestureText="Alt+F4" Click="ExitMenuItem_Click" >
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Exit.png" />
+					</MenuItem.Icon>
+				</MenuItem>
+			</MenuItem>
+
+			<MenuItem Header="_Editar">
+				<MenuItem Header="Copiar" Command="ApplicationCommands.Copy">
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Copy.png" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<MenuItem Header="Cortar" Command="ApplicationCommands.Cut">
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Cut.png" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<MenuItem Header="Pegar" Command="ApplicationCommands.Paste">
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Paste.png" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<Separator/>
+				<MenuItem Header="Borrar" Command="ApplicationCommands.Delete">
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
+					</MenuItem.Icon>
+				</MenuItem>
+
+				<Separator/>
+				<MenuItem Header="_Buscar" InputGestureText="Ctrl+F" Command="Search">
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/Resources/Images/Search.png" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<Separator/>
+				<MenuItem Header="E_jecutar" InputGestureText="F5" Command="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.ExecuteScripCommand}">
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/Resources/Images/ArrowRight.png" />
+					</MenuItem.Icon>
+				</MenuItem>
+			</MenuItem>
+			<MenuItem Header="_Herramientas" x:Name="mnuTools">
+				<Separator x:Name="mnuToolsStart" Visibility="Collapsed"/>
+				<Separator/>
+				<MenuItem Header="_Configuración ..." Click="Configuration_Click">
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Tag.png" />
+					</MenuItem.Icon>
+				</MenuItem>
+			</MenuItem>
+
+			<MenuItem Header="_Ventana">
+				<MenuItem Header="Cambiar tema">
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
+					</MenuItem.Icon>
+					<MenuItem Header="Aero" Click="ThemeAero_Click" IsCheckable="True" x:Name="mnuThemeAero"/>
+					<MenuItem Header="Metro" Click="ThemeMetro_Click" IsCheckable="True" x:Name="mnuThemeMetro"/>
+					<MenuItem Header="Expression dark" Click="mnuThemeExpressionDark_Click" IsCheckable="True" x:Name="mnuThemeExpressionDark"/>
+					<MenuItem Header="Expression light" Click="mnuThemeExpressionLight_Click" IsCheckable="True" x:Name="mnuThemeExpressionLight"/>
+					<MenuItem Header="VS 2010" Click="ThemeVS2010_Click" IsCheckable="True" x:Name="mnuThemeVs2010"/>
+					<MenuItem Header="VS 2013 light" Click="mnuThemeVs2013Light_Click" IsCheckable="True" x:Name="mnuThemeVs2013Light"/>
+					<MenuItem Header="VS 2013 blue" Click="mnuThemeVs2013Blue_Click" IsCheckable="True" x:Name="mnuThemeVs2013Blue"/>
+					<MenuItem Header="VS 2013 dark" Click="mnuThemeVs2013Dark_Click" IsCheckable="True" x:Name="mnuThemeVs2013Dark"/>
+				</MenuItem>
+				<MenuItem Header="_Cerrar todos los documentos" Click="CloseAllWindows_Click">
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
+					</MenuItem.Icon>
+				</MenuItem>
+			</MenuItem>
+
+			<MenuItem Header="A_yuda">
+				<MenuItem Header="Acerca de ..." Click="AboutMenuItem_Click">
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" />
+					</MenuItem.Icon>
+				</MenuItem>
+			</MenuItem>
+		</Menu>
+
+		<ToolBarTray x:Name="tbMain" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" >
+			<ToolBar BandIndex="1">
+				<Button ToolTip="Añadir carpeta" Command="{Binding Path=TreeFoldersViewModel.NewFolderFilesCommand}" Margin="2">
+					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Folder.png" />
+				</Button>
+				<Separator Margin="2"/>
+				<Button ToolTip="Guardar" Command="{Binding Path=SaveCommand}" Margin="2">
+					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Save.png" />
+				</Button>
+				<Button ToolTip="Guardar como" Command="{Binding Path=SaveAsCommand}" Margin="2">
+					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/SaveAs.png" />
+				</Button>
+				<Button ToolTip="Guardar todo" Command="{Binding Path=SaveAllCommand}" Margin="2">
+					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/SaveAll.png" />
+				</Button>
+				<Separator Margin="2"/>
+				<Button ToolTip="Copiar" Command="ApplicationCommands.Copy" Margin="2">
+					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Copy.png" />
+				</Button>
+				<Button ToolTip="Cortar" Command="ApplicationCommands.Cut" Margin="2">
+					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Cut.png" />
+				</Button>
+				<Button ToolTip="Pegar" Command="ApplicationCommands.Paste" Margin="2">
+					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Paste.png" />
+				</Button>
+				<Separator/>
+				<Button ToolTip="Borrar" Command="ApplicationCommands.Delete" Margin="2">
+					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
+				</Button>
+				<Separator Margin="2"/>
+				<Button ToolTip="Actualizar" Command="{Binding Path=RefreshCommand}" Margin="2">
+					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Refresh.png" />
+				</Button>
+			</ToolBar>
+		</ToolBarTray>
+
+		<dockLayout:DockLayoutManager x:Name="dckManager" Grid.Row="2" Grid.Column="0" OpenFileRequired="dckManager_OpenFileRequired" >
+		</dockLayout:DockLayoutManager>
+
+		<!-- Barra de estado -->
+		<StatusBar Grid.Row="3" Grid.Column="0">
+			<StatusBarItem>
+				<TextBlock Text="{Binding Path=StatusMessage}"/>
+			</StatusBarItem>
+			<StatusBarItem HorizontalAlignment="Right">
+				<StackPanel Orientation="Horizontal">
+					<!--
+					<TextBlock Text="{Binding Path=ProgressMessage}" Visibility="{Binding Path=ShowProgressBar,Converter={StaticResource BoolToVisibilityConverter}}"
+					VerticalAlignment="Center"
+							  Margin="0, 2, 5, 2" />
+					<ProgressBar x:Name="prgProgress" Width="200" Height="20" Visibility="{Binding Path=ShowProgressBar,Converter={StaticResource BoolToVisibilityConverter}}"
+								 IsIndeterminate="True"
+								 VerticalAlignment="Center"
+								 Value="{Binding Path=ActualProgress}" Maximum="{Binding Path=TotalProgress}" 
+								 Margin="0, 2, 5, 2" />
+					
+					<Button Visibility="{Binding Path=ShowProgressBar,Converter={StaticResource BoolToVisibilityConverter}}"
+							Command="{Binding Path=CancelProcessCommand}">
+						<Button.Content>
+							<Image  Width="16" Height="16" Source="/BauControls;component/Themes/Images/Close.png" />
+						</Button.Content>
+					</Button>
+					-->
+				</StackPanel>
+			</StatusBarItem>
+			<StatusBarItem HorizontalAlignment="Right">
+				<TextBlock x:Name="lblVersion" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5"/>
+			</StatusBarItem>
+		</StatusBar>
+	</Grid>
+</Window>

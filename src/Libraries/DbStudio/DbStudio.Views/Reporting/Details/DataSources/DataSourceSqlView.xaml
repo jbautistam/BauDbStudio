@@ -1,0 +1,51 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Bau.Libraries.DbStudio.Views.Reporting.Details.DataSources"
+			 x:Class="Bau.Libraries.DbStudio.Views.Reporting.Details.DataSources.DataSourceSqlView"
+			 xmlns:CodeEditor="clr-namespace:Bau.Controls.CodeEditor;assembly=CodeEditor"
+             mc:Ignorable="d" Loaded="UserControl_Loaded"
+             d:DesignHeight="450" d:DesignWidth="800">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
+		<GroupBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Header="Propiedades">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+				<Label Grid.Row="0" Grid.Column="0" Content="Clave:" Margin="5"/>
+				<TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=Key,UpdateSourceTrigger=PropertyChanged}" Margin="5"
+							VerticalContentAlignment="Top"/>
+			</Grid>
+		</GroupBox>
+		<GroupBox Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Header="Sql" Margin="0,0,15,0">
+			<CodeEditor:ctlEditor Grid.Row="0" Grid.Column="0" x:Name="udtEditor" TextChanged="udtEditor_TextChanged" 
+			BorderThickness="1" BorderBrush="Black"/>
+		</GroupBox>
+		<GridSplitter Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" HorizontalAlignment="Right" VerticalAlignment="Stretch"
+				Margin="15,2,5,2" Background="AliceBlue" Width="7" />
+		<GroupBox Grid.Row="1" Grid.Column="1" Header="Columnas" Margin="5">
+			<local:ListDataSourceColumnsView x:Name="lstColumns"/>
+		</GroupBox>
+		<GridSplitter Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Bottom"
+				 Margin="5" Background="AliceBlue" Height="7" />
+		<GroupBox Grid.Row="2" Grid.Column="1" Header="Parámetros" Margin="5">
+			<local:ListDataSourceParametersView x:Name="lstParameters" />
+		</GroupBox>
+	</Grid>
+</UserControl>

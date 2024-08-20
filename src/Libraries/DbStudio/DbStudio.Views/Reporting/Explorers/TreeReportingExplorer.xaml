@@ -1,0 +1,126 @@
+﻿<UserControl x:Class="Bau.Libraries.DbStudio.Views.Reporting.Explorers.TreeReportingExplorer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Bau.Libraries.DbStudio.Views.Reporting.Explorers"
+			 xmlns:ViewModel="clr-namespace:Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;assembly=PluginsStudio.ViewModels.Base"
+             mc:Ignorable="d" 
+			 xmlns:ConverterLocal="clr-namespace:Bau.Libraries.DbStudio.Views.Converters"
+             d:DesignHeight="450" d:DesignWidth="800">
+	<UserControl.Resources>
+		<ConverterLocal:TreeReportingIconConverter x:Key="TreeIconConverter"/>
+	</UserControl.Resources>
+	<Grid>
+		<TreeView x:Name="trvExplorer" BorderThickness="0"
+				ContextMenu="{DynamicResource ResourceKey=mnuExplorer}" 
+				ItemsSource="{Binding Path=Children}"
+				VirtualizingStackPanel.IsVirtualizing="True"
+				VirtualizingStackPanel.VirtualizationMode="Recycling"
+				SelectedItemChanged="trvExplorer_SelectedItemChanged"
+				MouseDoubleClick="trvExplorer_MouseDoubleClick" MouseDown="trvExplorer_MouseDown"
+				PreviewMouseLeftButtonDown="trvExplorer_PreviewMouseLeftButtonDown" PreviewMouseMove="trvExplorer_PreviewMouseMove" >
+			<TreeView.Resources>
+				<!-- Plantilla de los nodos -->
+				<HierarchicalDataTemplate DataType="{x:Type ViewModel:PluginNodeViewModel}" ItemsSource="{Binding Children}">
+					<StackPanel Orientation="Horizontal">
+						<Image Width="20" Height="20" Margin="3,0" Source="{Binding Path=Icon,Converter={StaticResource TreeIconConverter}}"
+							 ToolTip="{Binding Path=ToolTipText}" />
+						<TextBlock Text="{Binding Text}" FontWeight="{Binding IsBold,Converter={StaticResource BoolToFontWeightConverter}}"
+								   Foreground="{Binding Path=Foreground,Converter={StaticResource MVVMColorConverter}}" 
+								   ToolTip="{Binding Path=ToolTipText }"
+								   VerticalAlignment="Center" />
+					</StackPanel>
+				</HierarchicalDataTemplate>
+				<!-- Menú -->
+				<ContextMenu x:Key="mnuExplorer">
+					<MenuItem Header="Nuevo">
+						<MenuItem.Icon>
+							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
+						</MenuItem.Icon>
+						<MenuItem Header="Almacén de datos" Command="{Binding Path=NewDataWarehouseCommand}">
+							<MenuItem.Icon>
+								<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/Connection.png" />
+							</MenuItem.Icon>
+						</MenuItem>
+						<MenuItem Header="Origen de datos" Command="{Binding Path=NewDataSourceCommand}">
+							<MenuItem.Icon>
+								<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/Connection.png" />
+							</MenuItem.Icon>
+						</MenuItem>
+						<MenuItem Header="Dimensión" Command="{Binding Path=NewDimensionCommand}">
+							<MenuItem.Icon>
+								<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/Connection.png" />
+							</MenuItem.Icon>
+						</MenuItem>
+						<MenuItem Header="Informe" Command="{Binding Path=NewReportCommand}">
+							<MenuItem.Icon>
+								<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/Connection.png" />
+							</MenuItem.Icon>
+						</MenuItem>
+						<MenuItem Header="Informe avanzado" Command="{Binding Path=NewReportAdvancedCommand}">
+							<MenuItem.Icon>
+								<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/Connection.png" />
+							</MenuItem.Icon>
+						</MenuItem>
+						<Separator/>
+						<MenuItem Header="Almacén de datos a partir de esquema ..." Command="{Binding Path=NewDataWarehouseFromFileCommand}">
+							<MenuItem.Icon>
+								<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/Connection.png" />
+							</MenuItem.Icon>
+						</MenuItem>
+					</MenuItem>
+					<MenuItem Header="Abrir" Command="{Binding OpenCommand}">
+						<MenuItem.Icon>
+							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Properties.gif" />
+						</MenuItem.Icon>
+					</MenuItem>
+					<Separator />
+					<MenuItem Header="Borrar" Command="{Binding DeleteCommand}">
+						<MenuItem.Icon>
+							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
+						</MenuItem.Icon>
+					</MenuItem>
+					<Separator/>
+					<MenuItem Header="Consulta" Command="{Binding Path=QueryCommand}">
+						<MenuItem.Icon>
+							<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/Script.png" />
+						</MenuItem.Icon>
+					</MenuItem>
+					<Separator/>
+					<MenuItem Header="Actualizar esquema físico ..." Command="{Binding Path=MergeSchemaCommand}">
+						<MenuItem.Icon>
+							<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/Step.png" />
+						</MenuItem.Icon>
+					</MenuItem>
+					<Separator/>
+					<MenuItem Header="Abrir en el Explorador" Command="{Binding Path=OpenExplorerCommand}">
+						<MenuItem.Icon>
+							<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/Project.png" />
+						</MenuItem.Icon>
+					</MenuItem>
+					<MenuItem Header="Editar XML" Command="{Binding Path=OpenXmlCommand}">
+						<MenuItem.Icon>
+							<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/File.png" />
+						</MenuItem.Icon>
+					</MenuItem>
+				</ContextMenu>
+			</TreeView.Resources>
+			<TreeView.ItemContainerStyle>
+				<Style TargetType="{x:Type TreeViewItem}">
+					<Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />
+					<Setter Property="IsSelected" Value="{Binding Path=IsSelected, Mode=TwoWay}" />
+					<Setter Property="Padding" Value="1" />
+					<Style.Resources>
+						<SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="{StaticResource HighlightTextColor}"/>
+						<SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="{StaticResource HighlightBackgroundColor}"/>
+					</Style.Resources>
+				</Style>
+			</TreeView.ItemContainerStyle>
+			<TreeView.InputBindings>
+				<KeyBinding Key="Enter" Command="{Binding OpenCommand}" />
+				<KeyBinding Key="Delete" Command="{Binding DeleteCommand}" />
+			</TreeView.InputBindings>
+		</TreeView>
+	</Grid>
+</UserControl>

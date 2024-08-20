@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+	  <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>Bau.Libraries.$(MSBuildProjectName)</RootNamespace>
+    <AssemblyName>$(MSBuildProjectName)</AssemblyName>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Connections\**" />
+    <EmbeddedResource Remove="Connections\**" />
+    <None Remove="Connections\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibHelper\src\LibHelper.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibMarkup\src\LibMarkup.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\DataBaseProviders\src\LibDbProviders.Base\LibDbProviders.Base.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\Schema\LibDbSchema.Repository.Xml\LibDbSchema.Repository.Xml.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Formats\LibCsvFiles\src\LibCsvFiles\LibCsvFiles.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Formats\LibParquetFiles\src\LibParquetFiles\LibParquetFiles.csproj" />
+    <ProjectReference Include="..\..\DbScripts\DbScripts.Manager\DbScripts.Manager.csproj" />
+    <ProjectReference Include="..\DbStudio.Models\DbStudio.Models.csproj" />
+  </ItemGroup>
+
+</Project>

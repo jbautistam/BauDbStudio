@@ -1,0 +1,71 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Bau.Libraries.DbStudio.Views.Connections"
+			 x:Class="Bau.Libraries.DbStudio.Views.Connections.ExecuteFilesView"
+             mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
+		<ListView Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Path=Files}" SelectedItem="{Binding Path=SelectedItem}" Margin="0">
+			<ListView.View>
+				<GridView>
+					<GridViewColumn Width="350" Header="Directorio">
+						<GridViewColumn.CellTemplate>
+							<DataTemplate>
+								<StackPanel Orientation="Horizontal">
+									<CheckBox IsChecked="{Binding Path=IsChecked}"/>
+									<TextBlock Margin="5" VerticalAlignment="Center" HorizontalAlignment="Center"
+											Text="{Binding Path=Path}" 
+											Foreground="{Binding Path=Foreground,Converter={StaticResource MVVMColorConverter}}" />
+								</StackPanel>
+							</DataTemplate>
+						</GridViewColumn.CellTemplate>
+					</GridViewColumn>
+					<GridViewColumn Width="200" Header="Archivo">
+						<GridViewColumn.CellTemplate>
+							<DataTemplate>
+								<TextBlock Margin="5" VerticalAlignment="Center" HorizontalAlignment="Center"
+											Text="{Binding Path=FileName}" 
+											Foreground="{Binding Path=Foreground,Converter={StaticResource MVVMColorConverter}}" />
+							</DataTemplate>
+						</GridViewColumn.CellTemplate>
+					</GridViewColumn>
+					<GridViewColumn Width="100" Header="Estado">
+						<GridViewColumn.CellTemplate>
+							<DataTemplate>
+								<TextBlock Margin="5" VerticalAlignment="Center" HorizontalAlignment="Center"
+											Text="{Binding Path=StatusText}"
+											Foreground="{Binding Path=Foreground,Converter={StaticResource MVVMColorConverter}}" />
+							</DataTemplate>
+						</GridViewColumn.CellTemplate>
+					</GridViewColumn>
+					<GridViewColumn Width="100" Header="Tiempo">
+						<GridViewColumn.CellTemplate>
+							<DataTemplate>
+								<TextBlock Margin="5" VerticalAlignment="Center" HorizontalAlignment="Center"
+												Text="{Binding Path=ExecutionTime}" 
+												Foreground="{Binding Path=Foreground,Converter={StaticResource MVVMColorConverter}}" />
+							</DataTemplate>
+						</GridViewColumn.CellTemplate>
+					</GridViewColumn>
+					<GridViewColumn Width="350" Header="Mensaje">
+						<GridViewColumn.CellTemplate>
+							<DataTemplate>
+								<TextBlock Margin="5" VerticalAlignment="Center" 
+											Text="{Binding Path=Message}"
+											Foreground="{Binding Path=Foreground,Converter={StaticResource MVVMColorConverter}}" />
+							</DataTemplate>
+						</GridViewColumn.CellTemplate>
+					</GridViewColumn>
+				</GridView>
+			</ListView.View>
+		</ListView>
+	</Grid>
+</UserControl>

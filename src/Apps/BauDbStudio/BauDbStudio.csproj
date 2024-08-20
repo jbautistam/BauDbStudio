@@ -1,0 +1,223 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+	  <TargetFramework>net8.0-windows7.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+	  <Nullable>enable</Nullable>
+    <RootNamespace>Bau.DbStudio</RootNamespace>
+    <Authors>Jose Antonio Bautista</Authors>
+    <ApplicationIcon>Resources\BauDbStudio.ico</ApplicationIcon>
+    <AssemblyVersion>1.0.57.0</AssemblyVersion>
+    <FileVersion>1.0.57.0</FileVersion>
+    <Version>1.0.57</Version>
+    <PackageProjectUrl>https://github.com/jbautistam/BauDbStudio</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/jbautistam/BauDbStudio</RepositoryUrl>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Controls\**" />
+    <EmbeddedResource Remove="Controls\**" />
+    <None Remove="Controls\**" />
+    <Page Remove="Controls\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Controllers\AppController.cs" />
+    <Compile Remove="Controllers\Helpers\LoggingHelper.cs" />
+    <Compile Remove="Converters\FileIconConverter.cs" />
+    <Compile Remove="Converters\FileNameIconConverter - Copia.cs" />
+    <Compile Remove="Views\Files\ImageView - Copia.xaml.cs" />
+    <Compile Remove="Views\Tools\ConfigurationView.xaml.cs" />
+    <Compile Remove="Views\Tools\CreateFileView.xaml.cs" />
+    <Compile Remove="Views\Tools\FindView.xaml.cs" />
+    <Compile Remove="Views\Tools\FindViewModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Resources\BauDbStudio.ico" />
+    <None Remove="Resources\Images\ArrowDown.png" />
+    <None Remove="Resources\Images\ArrowFirst.png" />
+    <None Remove="Resources\Images\ArrowLast.png" />
+    <None Remove="Resources\Images\ArrowLeft.png" />
+    <None Remove="Resources\Images\ArrowRight.png" />
+    <None Remove="Resources\Images\ArrowUp.png" />
+    <None Remove="Resources\Images\Cancel.png" />
+    <None Remove="Resources\Images\CaseSensitive.png" />
+    <None Remove="Resources\Images\Download.png" />
+    <None Remove="Resources\Images\Export.png" />
+    <None Remove="Resources\Images\File.png" />
+    <None Remove="Resources\Images\FileCsharp.png" />
+    <None Remove="Resources\Images\FileCss.png" />
+    <None Remove="Resources\Images\FileHtml.png" />
+    <None Remove="Resources\Images\FileImage.png" />
+    <None Remove="Resources\Images\FileJson.png" />
+    <None Remove="Resources\Images\FileMd.png" />
+    <None Remove="Resources\Images\FilePdf.png" />
+    <None Remove="Resources\Images\FilePowershell.png" />
+    <None Remove="Resources\Images\FilePython.png" />
+    <None Remove="Resources\Images\FileSql.png" />
+    <None Remove="Resources\Images\FileTxt.png" />
+    <None Remove="Resources\Images\FileXml.png" />
+    <None Remove="Resources\Images\Filter.png" />
+    <None Remove="Resources\Images\FolderNode.png" />
+    <None Remove="Resources\Images\LastFiles.png" />
+    <None Remove="Resources\Images\Loading.png" />
+    <None Remove="Resources\Images\Project.png" />
+    <None Remove="Resources\Images\Refresh.png" />
+    <None Remove="Resources\Images\Search.png" />
+    <None Remove="Resources\Images\SeeWindow.png" />
+    <None Remove="Resources\Images\SplashScreenImage.png" />
+    <None Remove="Resources\Images\Stop.png" />
+    <None Remove="Resources\Images\Trash.png" />
+    <None Remove="Resources\Images\Upload.png" />
+    <None Remove="Resources\Images\WholeWord.png" />
+    <None Remove="Resources\Images\Wildcards.png" />
+    <None Remove="Resources\Images\Zoom100.png" />
+    <None Remove="Resources\Images\ZoomFill.png" />
+    <None Remove="Resources\Images\ZoomFit.png" />
+    <None Remove="Resources\Images\ZoomIn.png" />
+    <None Remove="Resources\Images\ZoomOut.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Remove="Views\Files\ImageView - Copia.xaml" />
+    <Page Remove="Views\Tools\ConfigurationView.xaml" />
+    <Page Remove="Views\Tools\CreateFileView.xaml" />
+    <Page Remove="Views\Tools\FindView.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="App.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\ArrowFirst.png" />
+    <Resource Include="Resources\Images\ArrowLast.png" />
+    <Resource Include="Resources\Images\ArrowLeft.png" />
+    <Resource Include="Resources\Images\CaseSensitive.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Controls\WPF\BauControls\src\BauControls.csproj" />
+    <ProjectReference Include="..\..\..\..\..\Controls\WPF\CodeEditor\src\CodeEditor.csproj" />
+    <ProjectReference Include="..\..\..\..\..\Controls\WPF\DockLayout\src\DockLayout.csproj" />
+    <ProjectReference Include="..\..\..\..\..\Controls\WPF\ZoomAndPanControl\ZoomAndPanControls.csproj" />
+    <ProjectReference Include="..\..\..\..\..\Libraries\Common\LibSystem.Windows\LibSystem.Windows.csproj" />
+    <ProjectReference Include="..\..\Libraries\DbStudio\DbStudio.Views\DbStudio.Views.csproj" />
+    <ProjectReference Include="..\..\Libraries\PluginsStudio\PluginsStudio.ViewModels\PluginsStudio.ViewModels.csproj" />
+    <ProjectReference Include="..\..\Plugins\AiTools\AiTools.Plugin\AiTools.Plugin.csproj" />
+    <ProjectReference Include="..\..\Plugins\BlogReader\BlogReader.Views\BlogReader.Views.csproj" />
+    <ProjectReference Include="..\..\Plugins\ChessDataBase\ChessDataBase.Plugin\ChessDataBase.Plugin.csproj" />
+    <ProjectReference Include="..\..\Plugins\EbooksReader\EbooksReader.Plugin\EbooksReader.Plugin.csproj" />
+    <ProjectReference Include="..\..\Plugins\FileTools\FileTools.Plugin\FileTools.Plugin.csproj" />
+    <ProjectReference Include="..\..\Plugins\JobsProcessor\JobsProcessor.Plugin\JobsProcessor.Plugin.csproj" />
+    <ProjectReference Include="..\..\Plugins\PasswordManager\PasswordManager.Plugin\PasswordManager.Plugin.csproj" />
+    <ProjectReference Include="..\..\Plugins\RestManager\RestManager.Plugin\RestManager.Plugin.csproj" />
+    <ProjectReference Include="..\..\Plugins\StructuredFilesStudio\StructuredFilesStudio.Views\StructuredFilesStudio.Views.csproj" />
+    <ProjectReference Include="..\..\Plugins\ToDoManager\ToDoManager.Plugin\ToDoManager.Plugin.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\BauDbStudio.ico" />
+    <Resource Include="Resources\Images\ArrowDown.png" />
+    <Resource Include="Resources\Images\ArrowRight.png" />
+    <Resource Include="Resources\Images\ArrowUp.png" />
+    <Resource Include="Resources\Images\DataError.png" />
+    <Resource Include="Resources\Images\Cancel.png" />
+    <Resource Include="Resources\Images\Export.png" />
+    <Resource Include="Resources\Images\FileCss.png" />
+    <Resource Include="Resources\Images\FileHtml.png" />
+    <Resource Include="Resources\Images\FileImage.png" />
+    <Resource Include="Resources\Images\FileMd.png" />
+    <Resource Include="Resources\Images\FilePdf.png" />
+    <Resource Include="Resources\Images\FileTxt.png" />
+    <Resource Include="Resources\Images\Filter.png" />
+    <Resource Include="Resources\Images\LastFiles.png" />
+    <Resource Include="Resources\Images\Loading.png" />
+    <Resource Include="Resources\Images\Project.png" />
+    <Resource Include="Resources\Images\Refresh.png" />
+    <Resource Include="Resources\Images\SeeWindow.png" />
+    <Resource Include="Resources\Images\Trash.png" />
+    <Resource Include="Resources\Images\Upload.png" />
+    <Resource Include="Resources\Images\Download.png" />
+    <Resource Include="Resources\Images\File.png" />
+    <Resource Include="Resources\Images\FileCsharp.png" />
+    <Resource Include="Resources\Images\FileJson.png" />
+    <Resource Include="Resources\Images\FilePowershell.png" />
+    <Resource Include="Resources\Images\FilePython.png" />
+    <Resource Include="Resources\Images\FileSql.png" />
+    <Resource Include="Resources\Images\FileXml.png" />
+    <Resource Include="Resources\Images\FolderNode.png" />
+    <Resource Include="Resources\Images\Search.png" />
+    <Resource Include="Resources\Images\Stop.png" />
+    <Resource Include="Resources\Images\WholeWord.png" />
+    <Resource Include="Resources\Images\Wildcards.png" />
+    <Resource Include="Resources\Images\Zoom100.png" />
+    <Resource Include="Resources\Images\ZoomFill.png" />
+    <Resource Include="Resources\Images\ZoomFit.png" />
+    <Resource Include="Resources\Images\ZoomIn.png" />
+    <Resource Include="Resources\Images\ZoomOut.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <SplashScreen Include="Resources\SplashScreenImage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\Explorers\TreeFilesExplorer.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Files\SaveOpenFilesView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="Views\Files\CreateFileView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Files\FileTextView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Files\ImageView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\TasksQueue\TasksQueueView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="Views\Tools\LogItems\LogView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="Views\Tools\Search\SearchView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Tools\Web\WebExplorerView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,89 @@
+﻿<Window xmlns:Editors="clr-namespace:Bau.Controls.Editors;assembly=BauControls" 
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Bau.Libraries.PasswordManager.Plugin.Views"
+		x:Class="Bau.Libraries.PasswordManager.Plugin.Views.GeneratorView"
+        mc:Ignorable="d"
+        Title="Generación de contraseña" Height="350" Width="700" ResizeMode="NoResize" ShowInTaskbar="False"
+		xmlns:Behaviors="clr-namespace:Bau.Libraries.BauMvvm.Views.Converters;assembly=BauMvvm.Views"
+		Behaviors:FocusBehavior.FocusFirst="true">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
+		<GroupBox Grid.Row="0" Grid.Column="0" Header="Propiedades">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+				<Label Grid.Row="0" Grid.Column="0" Margin="5" Content="Longitud mínima:"/>
+				<Editors:IntegerUpDown Grid.Row="0" Grid.Column="1" Margin="5" 
+									   Value="{Binding Path=MinLength,UpdateSourceTrigger=PropertyChanged}" />
+				<Label Grid.Row="0" Grid.Column="2" Margin="5" Content="Longitud máxima:"/>
+				<Editors:IntegerUpDown Grid.Row="0" Grid.Column="3" Margin="5" 
+									   Value="{Binding Path=MaxLength,UpdateSourceTrigger=PropertyChanged}" />
+				<CheckBox Grid.Row="1" Grid.Column="1"
+							Margin="5" VerticalAlignment="Center"
+							Content="Incluir letras mayúsculas"
+							IsChecked="{Binding Path=WithUpperCase,UpdateSourceTrigger=PropertyChanged}"/>
+				<CheckBox Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"
+							Margin="5" VerticalAlignment="Center"
+							Content="Incluir letras minúsculas"
+							IsChecked="{Binding Path=WithLowerCase,UpdateSourceTrigger=PropertyChanged}"/>
+				<CheckBox Grid.Row="2" Grid.Column="1"
+							Margin="5" VerticalAlignment="Center"
+							Content="Incluir dígitos"
+							IsChecked="{Binding Path=WithDigit,UpdateSourceTrigger=PropertyChanged}"/>
+				<CheckBox Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2"
+							Margin="5" VerticalAlignment="Center"
+							Content="Incluir caracteres especiales"
+							IsChecked="{Binding Path=WithSpecial,UpdateSourceTrigger=PropertyChanged}"/>
+				<Label Grid.Row="3" Grid.Column="0" Margin="5" Content="Excepto:"/>
+				<TextBox Grid.Row="3" Grid.Column="1" Margin="5" 
+						 Text="{Binding Path=Except,UpdateSourceTrigger=PropertyChanged}" />
+				<Label Grid.Row="3" Grid.Column="2" Margin="5" Content="Incluir:"/>
+				<TextBox Grid.Row="3" Grid.Column="3" Margin="5"  Grid.ColumnSpan="3"
+						 Text="{Binding Path=Include,UpdateSourceTrigger=PropertyChanged}" />
+				<Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4" Command="{Binding Path=GenerateCommand}">
+					<StackPanel Orientation="Horizontal">
+						<Image Width="16" Height="16" Source="/PasswordManager.Plugin;component/Resources/FileEnc.png" />
+						<TextBlock Text="Generar contraseña" Margin="5" />
+					</StackPanel>
+				</Button>
+				<Label Grid.Row="5" Grid.Column="0" Margin="5" Content="Contraseña generada:"/>
+				<Label Grid.Row="5" Grid.Column="1" Margin="5" Foreground="Black" Content="{Binding Path=Password}"/>
+			</Grid>
+		</GroupBox>
+		<StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
+			<Button Margin="2" Padding="5" IsDefault="True" Command="{Binding SaveCommand}">
+				<StackPanel Orientation="Horizontal">
+					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Accept.png"/>
+					<TextBlock Text="Aceptar"  Margin="5,0,0,0" />
+				</StackPanel>
+			</Button>
+			<Button Margin="2" Padding="5" IsCancel="True">
+				<StackPanel Orientation="Horizontal">
+					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png"/>
+					<TextBlock Text="Cancelar" Margin="5,0,0,0" />
+				</StackPanel>
+			</Button>
+		</StackPanel>
+	</Grid>
+</Window>

@@ -1,0 +1,50 @@
+﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Bau.Libraries.JobsProcessor.Plugin.Views.Processor"
+		xmlns:Editor="clr-namespace:Bau.Controls.CodeEditor;assembly=CodeEditor"
+		x:Class="Bau.Libraries.JobsProcessor.Plugin.Views.Processor.ExecuteEtlConsoleView"
+        mc:Ignorable="d"
+		d:DesignHeight="250" d:DesignWidth="800" >
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+		<ToolBarTray x:Name="tbMain" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" >
+			<ToolBar BandIndex="1">
+				<Button ToolTip="Execute" Command="{Binding Path=ExecuteCommand}" Margin="2">
+					<Image Width="16" Height="16" Source="/JobsProcessor.Plugin;component/Resources/ArrowNext.png" />
+				</Button>
+				<Button ToolTip="Cancel" Command="{Binding Path=CancelCommand}" Margin="2">
+					<Image Width="16" Height="16" Source="/JobsProcessor.Plugin;component/Resources/Cancel.png" />
+				</Button>
+				<Button ToolTip="Clear" Command="{Binding Path=ClearCommand}" Margin="2">
+					<Image Width="16" Height="16" Source="/JobsProcessor.Plugin;component/Resources/Log.png" />
+				</Button>
+				<Separator/>
+				<Button ToolTip="Open file" Command="{Binding Path=OpenFileCommand}" Margin="2">
+					<Image Width="16" Height="16" Source="/JobsProcessor.Plugin;component/Resources/FolderNode.png" />
+				</Button>
+				<Button ToolTip="Refresh" Command="{Binding Path=RefreshCommand}" Margin="2">
+					<Image Width="16" Height="16" Source="/JobsProcessor.Plugin;component/Resources/Refresh.png" />
+				</Button>
+			</ToolBar>
+		</ToolBarTray>
+
+		<Editor:ctlEditor x:Name="udtEditor" Grid.Row="1" Grid.Column="0" 
+					Margin="0, 0, 10, 0" BorderBrush="Black" BorderThickness="1"
+					ReadOnly="True" />
+		<GridSplitter Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" HorizontalAlignment="Right" VerticalAlignment="Stretch"
+					Background="AliceBlue" Width="8" Margin="2"/>
+
+		<Editor:ctlEditor x:Name="udtLog" Grid.Row="1" Grid.Column="1" Grid.RowSpan="2"
+					Margin="0" BorderBrush="Black" BorderThickness="1"
+					ReadOnly="True" />
+	</Grid>
+</UserControl>

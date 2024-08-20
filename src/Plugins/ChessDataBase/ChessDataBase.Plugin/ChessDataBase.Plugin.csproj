@@ -1,0 +1,62 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>Bau.Libraries.$(MSBuildProjectName)</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\ChessBoard\BoardDarkSelected.gif" />
+    <None Remove="Resources\ChessBoard\BoardLightSelected.gif" />
+    <None Remove="Resources\Folder.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\Controls\WPF\BauControls\src\BauControls.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.Views.Wpf\BauMvvm.Views.Wpf.csproj" />
+    <ProjectReference Include="..\..\..\Libraries\PluginsStudio\PluginsStudio.Views.Base\PluginsStudio.Views.Base.csproj" />
+    <ProjectReference Include="..\ChessDataBase.ViewModels\ChessDataBase.ViewModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\ChessBoard\ArrowFirst.png" />
+    <Resource Include="Resources\ChessBoard\ArrowLast.png" />
+    <Resource Include="Resources\ChessBoard\ArrowNext.png" />
+    <Resource Include="Resources\ChessBoard\ArrowPrevious.png" />
+    <Resource Include="Resources\ChessBoard\BishopBlack.gif" />
+    <Resource Include="Resources\ChessBoard\BishopWhite.gif" />
+    <Resource Include="Resources\ChessBoard\BoardDark.gif" />
+    <Resource Include="Resources\ChessBoard\BoardDarkSelected.gif" />
+    <Resource Include="Resources\ChessBoard\BoardLight.gif" />
+    <Resource Include="Resources\ChessBoard\BoardLightSelected.gif" />
+    <Resource Include="Resources\ChessBoard\Image.png" />
+    <Resource Include="Resources\ChessBoard\KingBlack.gif" />
+    <Resource Include="Resources\ChessBoard\KingWhite.gif" />
+    <Resource Include="Resources\ChessBoard\KnightBlack.gif" />
+    <Resource Include="Resources\ChessBoard\KnightWhite.gif" />
+    <Resource Include="Resources\ChessBoard\News.png" />
+    <Resource Include="Resources\ChessBoard\NextAction.png" />
+    <Resource Include="Resources\ChessBoard\NextPage.png" />
+    <Resource Include="Resources\ChessBoard\PageBase.png" />
+    <Resource Include="Resources\ChessBoard\PawnBlack.gif" />
+    <Resource Include="Resources\ChessBoard\PawnWhite.gif" />
+    <Resource Include="Resources\ChessBoard\PgnFile.png" />
+    <Resource Include="Resources\ChessBoard\QueenBlack.gif" />
+    <Resource Include="Resources\ChessBoard\QueenWhite.gif" />
+    <Resource Include="Resources\ChessBoard\RookBlack.gif" />
+    <Resource Include="Resources\ChessBoard\RookWhite.gif" />
+    <Resource Include="Resources\ChessBoard\Tag.png" />
+    <Resource Include="Resources\FilePgn.png" />
+    <Resource Include="Resources\Folder.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\Configuration\ctlConfiguration.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+  </ItemGroup>
+
+</Project>

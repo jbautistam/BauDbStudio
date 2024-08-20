@@ -1,0 +1,42 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Bau.DbStudio.Views.Tools.Web"
+			 xmlns:bc="clr-namespace:Bau.Controls.WebExplorers;assembly=BauControls"
+			 x:Class="Bau.DbStudio.Views.Tools.Web.WebExplorerView"
+             mc:Ignorable="d" Loaded="UserControl_Loaded"
+             d:DesignHeight="450" d:DesignWidth="800">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+		<ToolBarTray Grid.Column="0" Grid.Row="0">
+			<ToolBar BandIndex="1">
+				<Button ToolTip="Primero" Command="{Binding Path=GoFirstCommand}" Margin="2">
+					<Image Width="16" Height="16" Source="/Resources/Images/ArrowFirst.png" />
+				</Button>
+				<Button ToolTip="Anterior" Command="{Binding Path=GoPreviousCommand}" Margin="2">
+					<Image Width="16" Height="16" Source="/Resources/Images/ArrowLeft.png" />
+				</Button>
+				<TextBox Text="{Binding Path=Url,UpdateSourceTrigger=LostFocus}" MinWidth="400"/>
+				<Button ToolTip="Siguiente" Command="{Binding Path=GoNextCommand}" Margin="2">
+					<Image Width="16" Height="16" Source="/Resources/Images/ArrowRight.png" />
+				</Button>
+				<Button ToolTip="Último" Command="{Binding Path=GoLastCommand}" Margin="2">
+					<Image Width="16" Height="16" Source="/Resources/Images/ArrowLast.png" />
+				</Button>
+				<Separator/>
+				<Button ToolTip="Actualizar" Command="{Binding Path=RefreshCommand}" Margin="2">
+					<Image Width="16" Height="16" Source="/Resources/Images/Refresh.png" />
+				</Button>
+				<Button ToolTip="Abrir en el explorador" Command="{Binding Path=OpenExplorerCommand}" Margin="2">
+					<Image Width="16" Height="16" Source="/Resources/Images/FileImage.png" />
+				</Button>
+			</ToolBar>
+		</ToolBarTray>
+		<bc:WebExplorer Grid.Row="1" Grid.Column="0" x:Name="wbBrowser"/>
+	</Grid>
+</UserControl>

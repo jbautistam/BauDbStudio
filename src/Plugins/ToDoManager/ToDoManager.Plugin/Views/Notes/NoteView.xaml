@@ -1,0 +1,69 @@
+﻿<Window x:Class="Bau.Libraries.ToDoManager.Plugin.Views.Notes.NoteView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Bau.Libraries.ToDoManager.Plugin.Views.Notes"
+        mc:Ignorable="d"
+        Title="Nota" Height="350" Width="400" MinHeight="200" MinWidth="300"
+		ContextMenu="{DynamicResource ResourceKey=mnuExplorer}"
+        Loaded="Window_Loaded" 
+		Closing="Window_Closing" LocationChanged="Window_LocationChanged" WindowStyle="ToolWindow"
+        >
+	<Window.Resources>
+		<ContextMenu x:Key="mnuExplorer">
+			<MenuItem Header="Amarillo" Click="mnuYellow_Click">
+				<MenuItem.Icon>
+					<Image Width="16" Height="16" Source="/ToDoManager.Plugin;component/Resources/Yellow.png" />
+				</MenuItem.Icon>
+			</MenuItem>
+			<MenuItem Header="Verde" Click="mnuGreen_Click">
+				<MenuItem.Icon>
+					<Image Width="16" Height="16" Source="/ToDoManager.Plugin;component/Resources/Green.png" />
+				</MenuItem.Icon>
+			</MenuItem>
+			<MenuItem Header="Azul" Click="mnuBlue_Click">
+				<MenuItem.Icon>
+					<Image Width="16" Height="16" Source="/ToDoManager.Plugin;component/Resources/Blue.png" />
+				</MenuItem.Icon>
+			</MenuItem>
+			<MenuItem Header="Rojo" Click="mnuRed_Click">
+				<MenuItem.Icon>
+					<Image Width="16" Height="16" Source="/ToDoManager.Plugin;component/Resources/Red.png" />
+				</MenuItem.Icon>
+			</MenuItem>
+			<MenuItem Header="Blanco" Click="mnuWhite_Click">
+				<MenuItem.Icon>
+					<Image Width="16" Height="16" Source="/ToDoManager.Plugin;component/Resources/White.png" />
+				</MenuItem.Icon>
+			</MenuItem>
+		</ContextMenu>
+	</Window.Resources>
+	<Grid Background="{Binding Path=Background,Converter={StaticResource MVVMColorConverter}}" MouseDown="Grid_MouseDown">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto"/>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="Auto"/>
+			<ColumnDefinition Width="Auto"/>
+		</Grid.ColumnDefinitions>
+		<ToggleButton Grid.Row="0" Grid.Column="0" Padding="5" IsTabStop="False" 
+				BorderThickness="0"
+				IsChecked="{Binding Path=OverAllWindows}" ToolTip="Always on top">
+			<Image Width="32" Height="32" Source="/ToDoManager.Plugin;component/Resources/Pin.png"/>
+		</ToggleButton>
+		<TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=Title,UpdateSourceTrigger=PropertyChanged}" Padding="5"/>
+		<Button Grid.Row="0" Grid.Column="2" Padding="5" Background="Transparent" BorderThickness="0" Command="{Binding Path=DeleteCommand}" IsTabStop="False" ToolTip="Delete">
+			<Image Width="32" Height="32" Source="/ToDoManager.Plugin;component/Resources/Trash.png"/>
+		</Button>
+		<Button Grid.Row="0" Grid.Column="3" Padding="5" Background="Transparent" BorderThickness="0" Click="cmdClose_Click" IsTabStop="False" ToolTip="Close">
+			<Image Width="32" Height="32" Source="/ToDoManager.Plugin;component/Resources/Close.png" />
+		</Button>
+		<TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Text="{Binding Path=Content,UpdateSourceTrigger=PropertyChanged}" Margin="5"
+			TextAlignment="Left" VerticalContentAlignment="Top" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
+			VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MaxLines="200" AcceptsReturn="True" AcceptsTab="True"/>
+	</Grid>
+</Window>

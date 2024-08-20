@@ -1,0 +1,82 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>Bau.Libraries.$(MSBuildProjectName)</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\AppController.cs" />
+    <Compile Remove="Views\ComicContentView.xaml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\AudioFile.png" />
+    <None Remove="Resources\Back.png" />
+    <None Remove="Resources\Execute.png" />
+    <None Remove="Resources\FolderNode.png" />
+    <None Remove="Resources\Format.png" />
+    <None Remove="Resources\Next.png" />
+    <None Remove="Resources\PatternFile.png" />
+    <None Remove="Resources\Pause.png" />
+    <None Remove="Resources\Pin.png" />
+    <None Remove="Resources\Play.png" />
+    <None Remove="Resources\Refresh.png" />
+    <None Remove="Resources\ShowMarkdown.png" />
+    <None Remove="Resources\Stop.png" />
+    <None Remove="Resources\VideoFile.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="Views\ComicContentView.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\Controls\WPF\BauControls\src\BauControls.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Controls\WPF\CodeEditor\src\CodeEditor.csproj" />
+    <ProjectReference Include="..\..\..\Libraries\PluginsStudio\PluginsStudio.Views.Base\PluginsStudio.Views.Base.csproj" />
+    <ProjectReference Include="..\FileTools.ViewModel\FileTools.ViewModel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\AudioFile.png" />
+    <Resource Include="Resources\Back.png" />
+    <Resource Include="Resources\Execute.png" />
+    <Resource Include="Resources\FolderNode.png" />
+    <Resource Include="Resources\Format.png" />
+    <Resource Include="Resources\Next.png" />
+    <Resource Include="Resources\PatternFile.png" />
+    <Resource Include="Resources\Pause.png" />
+    <Resource Include="Resources\Pin.png" />
+    <Resource Include="Resources\Play.png" />
+    <Resource Include="Resources\Refresh.png" />
+    <Resource Include="Resources\ShowMarkdown.png" />
+    <Resource Include="Resources\Stop.png" />
+    <Resource Include="Resources\VideoFile.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Views\PatternFile\PatternFileView.xaml.cs">
+      <DependentUpon>PatternFileView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Multimedia\MediaFileView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

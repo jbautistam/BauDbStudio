@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>Bau.Libraries.$(MSBuildProjectName)</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\Messengers\**" />
+    <Compile Remove="Project\EventArguments\**" />
+    <EmbeddedResource Remove="Controllers\Messengers\**" />
+    <EmbeddedResource Remove="Project\EventArguments\**" />
+    <None Remove="Controllers\Messengers\**" />
+    <None Remove="Project\EventArguments\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Project\MediaFileListViewModel.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Libraries\PluginsStudio\PluginsStudio.ViewModels\PluginsStudio.ViewModels.csproj" />
+    <ProjectReference Include="..\RestManager.Application\RestManager.Application.csproj" />
+  </ItemGroup>
+
+</Project>

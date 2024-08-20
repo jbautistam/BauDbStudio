@@ -1,0 +1,111 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Bau.Libraries.DbStudio.Views.Reporting.Details.Reports"
+			 x:Class="Bau.Libraries.DbStudio.Views.Reporting.Details.Reports.ReportView"
+             mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
+		<GroupBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Header="Propiedades">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+				<Label Grid.Row="0" Grid.Column="0" Content="Clave:" Margin="5"/>
+				<TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=Key,UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+				<Label Grid.Row="2" Grid.Column="0" Content="Descripción:" Margin="5"/>
+				<TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Path=Description,UpdateSourceTrigger=PropertyChanged}" Margin="5"
+							AcceptsReturn="True" MaxLines="5" MinLines="5" VerticalContentAlignment="Top"/>
+			</Grid>
+		</GroupBox>
+		<GroupBox Grid.Row="1" Grid.Column="0" Header="Orígenes de datos" Margin="0,2,15,2">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="*"/>
+				</Grid.RowDefinitions>
+				<ToolBar Grid.Row="0">
+					<Button ToolTip="Nuevo origen de datos" Command="{Binding Path=NewDataSourceCommand}" Margin="2">
+						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
+					</Button>
+					<Button ToolTip="Borrar origen de datos" Command="{Binding Path=DeleteDataSourceCommand}" Margin="2">
+						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
+					</Button>
+				</ToolBar>
+				<ListView Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Path=DataSources}" SelectedItem="{Binding Path=SelectedDataSource}" Margin="0">
+					<ListView.View>
+						<GridView>
+							<GridViewColumn Width="300" Header="Origen de datos">
+								<GridViewColumn.CellTemplate>
+									<DataTemplate>
+										<ComboBox Width="270"
+												ItemsSource="{Binding ComboDataSources.Items}" DisplayMemberPath="Text" 
+												SelectedItem="{Binding ComboDataSources.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+									</DataTemplate>
+								</GridViewColumn.CellTemplate>
+							</GridViewColumn>
+						</GridView>
+					</ListView.View>
+				</ListView>
+			</Grid>
+		</GroupBox>
+		<GridSplitter Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Stretch"
+				Margin="15,2,5,2" Background="AliceBlue" Width="7" />
+
+		<GroupBox Grid.Row="1" Grid.Column="1" Header="Dimensiones relacionadas">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="*"/>
+				</Grid.RowDefinitions>
+				<ToolBar Grid.Row="0">
+					<Button ToolTip="Nueva relación" Command="{Binding Path=SelectedDataSource.ListRelationsViewModel.NewRelationCommand}" Margin="2">
+						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
+					</Button>
+					<Button ToolTip="Modificar relación" Command="{Binding Path=SelectedDataSource.ListRelationsViewModel.OpenRelationCommand}" Margin="2">
+						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Properties.gif" />
+					</Button>
+					<Button ToolTip="Borrar relación" Command="{Binding Path=SelectedDataSource.ListRelationsViewModel.DeleteRelationCommand}" Margin="2">
+						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
+					</Button>
+				</ToolBar>
+				<ListView Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Path=SelectedDataSource.ListRelationsViewModel.ListRelations}" 
+							SelectedItem="{Binding Path=SelectedDataSource.ListRelationsViewModel.SelectedItem}" Margin="0">
+					<ListView.View>
+						<GridView>
+							<GridViewColumn Width="200" Header="Dimensión">
+								<GridViewColumn.CellTemplate>
+									<DataTemplate>
+										<TextBlock Text="{Binding Path=TargetDimensionName}" VerticalAlignment="Center"/>
+									</DataTemplate>
+								</GridViewColumn.CellTemplate>
+							</GridViewColumn>
+							<GridViewColumn Width="200" Header="Columnas">
+								<GridViewColumn.CellTemplate>
+									<DataTemplate>
+										<TextBlock Text="{Binding Path=ForeignKeysTitle}" VerticalAlignment="Center"/>
+									</DataTemplate>
+								</GridViewColumn.CellTemplate>
+							</GridViewColumn>
+						</GridView>
+					</ListView.View>
+				</ListView>
+			</Grid>
+		</GroupBox>
+	</Grid>
+</UserControl>

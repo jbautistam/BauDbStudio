@@ -1,0 +1,65 @@
+﻿<UserControl x:Class="Bau.Libraries.FileTools.Plugin.Views.PatternFile.PatternFileView"
+			 xmlns:CodeEditor="clr-namespace:Bau.Controls.CodeEditor;assembly=CodeEditor"  
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+			 Loaded="UserControl_Loaded"
+             mc:Ignorable="d" d:DesignHeight="600" d:DesignWidth="600" >
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+
+		<ToolBarTray Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+			<ToolBar HorizontalAlignment="Stretch" >
+				<Button ToolTip="Ejecutar" Click="cmdExecute_Click">
+					<Image Width="16" Height="16" Source="/FileTools.Plugin;component/Resources/Execute.png" />
+				</Button>
+				<Separator/>
+				<Button ToolTip="Borrar" Click="cmdDelete_Click">
+					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
+				</Button>
+			</ToolBar>
+			<ToolBar HorizontalAlignment="Stretch" >
+				<Label Content="Separator:" Margin="2"/>
+				<ComboBox  Margin="5" MinWidth="100"
+						  IsEditable="True"
+						  ItemsSource="{Binding ComboSeparators.Items}" DisplayMemberPath="Text" 
+						  SelectedItem="{Binding ComboSeparators.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+						  Text="{Binding Separator, UpdateSourceTrigger=PropertyChanged}"
+				/>
+				<Label Content="Quote:" Margin="2"/>
+				<TextBox Text="{Binding Path=QuoteChar,UpdateSourceTrigger=PropertyChanged}" Margin="2" MinWidth="50"/>
+				<CheckBox Content="With header" VerticalAlignment="Center" Margin="2"
+						IsChecked="{Binding Path=WithHeader}"/>
+				<Separator/>
+				<Label Content="Output:" Margin="2"/>
+				<ComboBox Margin="5" MinWidth="100"
+						  IsEditable="True"
+						  ItemsSource="{Binding ComboExtensions.Items}" DisplayMemberPath="Text" 
+						  SelectedItem="{Binding ComboExtensions.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+						  Text="{Binding ExtensionHighlight, UpdateSourceTrigger=PropertyChanged}"
+				/>
+			</ToolBar>
+		</ToolBarTray>
+		<GroupBox Grid.Row="1" Grid.Column="0" Header="Sample" Margin="5,5,20,5">
+			<CodeEditor:ctlEditor x:Name="txtSource" TextChanged="txtSource_TextChanged" />
+		</GroupBox>
+		<GridSplitter Grid.Column="0" Grid.Row="1" Background="#FF4A63A0" Width="5" Margin="5" 
+			VerticalAlignment="Stretch" HorizontalAlignment="Right" />
+		<GroupBox Grid.Row="1" Grid.Column="1" Header="Command" Margin="5,5,5,20">
+			<CodeEditor:ctlEditor x:Name="txtCommand" TextChanged="txtCommand_TextChanged"/>
+		</GroupBox>
+		<GridSplitter Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Background="#FF4A63A0" Height="5" Margin="5" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" />
+		<GroupBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Header="Result" Margin="5">
+			<CodeEditor:ctlEditor x:Name="txtResult" />
+		</GroupBox>
+	</Grid>
+</UserControl>

@@ -1,0 +1,48 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:Files="clr-namespace:Bau.Controls.Files;assembly=BauControls" x:Class="Bau.Libraries.ToDoManager.Plugin.Views.Configuration.ctlConfiguration" 
+             mc:Ignorable="d" 
+             d:DesignHeight="203" d:DesignWidth="590">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+		<GroupBox Header="Time management" Grid.Row="0">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+				<Label Grid.Row="0" Grid.Column="0" Content="Folder:"/>
+				<Files:PathSelect Grid.Row="0" Grid.Column="1" PathName="{Binding Path=TimeManagementFolder,UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+				<CheckBox Grid.Row="1" Grid.Column="1" Content="Arrancar tareas automáticamente"
+					IsChecked="{Binding Path=StartTasksAutomatically,UpdateSourceTrigger=PropertyChanged}" Margin="5" />
+			</Grid>
+		</GroupBox>
+		<GroupBox Header="Notes" Grid.Row="1">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+				<CheckBox Content="Asociar a los eventos de teclado" IsChecked="{Binding HookGlobal}" Grid.Row="0" Grid.Column="0" Margin = "5" VerticalAlignment="Center" />
+				<Label Grid.Row="1" Content="Permite abrir y añadir notas utilizando Ctrl+F1 y Ctr+F2 desde el sistema operativo" Margin="2"/>
+				<Label Grid.Row="2" Content="Asociar una aplicación a los eventos de teclado, puede originar advertencias de antivirus" Margin="2"/>
+				<Label Grid.Row="3" Content="Se aplicará la siguiente vez que se abra la aplicación" Margin="2"/>
+			</Grid>
+		</GroupBox>
+	</Grid>
+</UserControl>

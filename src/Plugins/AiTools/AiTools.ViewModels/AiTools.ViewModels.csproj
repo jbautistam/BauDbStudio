@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>Bau.Libraries.$(MSBuildProjectName)</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\Messengers\**" />
+    <Compile Remove="Prompts\Generations\**" />
+    <Compile Remove="Reader\**" />
+    <EmbeddedResource Remove="Controllers\Messengers\**" />
+    <EmbeddedResource Remove="Prompts\Generations\**" />
+    <EmbeddedResource Remove="Reader\**" />
+    <None Remove="Controllers\Messengers\**" />
+    <None Remove="Prompts\Generations\**" />
+    <None Remove="Reader\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="MainViewModel.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Libraries\PluginsStudio\PluginsStudio.ViewModels\PluginsStudio.ViewModels.csproj" />
+    <ProjectReference Include="..\AiTools.Application\AiTools.Application.csproj" />
+    <ProjectReference Include="..\Libraries\AiImageGenerator\LibFakeAi.Api\LibFakeAi.Api.csproj" />
+    <ProjectReference Include="..\Libraries\AiImageGenerator\LibStableHorde.Api\LibStableHorde.Api.csproj" />
+    <ProjectReference Include="..\Libraries\AiTextPrompt\LibOllama.Api\LibOllama.Api.csproj" />
+  </ItemGroup>
+
+</Project>

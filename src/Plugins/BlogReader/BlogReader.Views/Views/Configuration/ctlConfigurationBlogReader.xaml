@@ -1,0 +1,41 @@
+﻿<UserControl x:Class="Bau.Libraries.BlogReader.Views.Views.Configuration.ctlConfigurationBlogReader"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="303" d:DesignWidth="690"
+			 xmlns:Files="clr-namespace:Bau.Controls.Files;assembly=BauControls"
+			 xmlns:Editors="clr-namespace:Bau.Controls.Editors;assembly=BauControls">
+    <Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto"/>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="Auto"/>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
+		<Label Content="Directorio:" Grid.Column="0" Grid.Row="0" />
+		<Files:PathSelect Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="3" Margin = "5" PathName="{Binding Path=PathBlogs,UpdateSourceTrigger=PropertyChanged}" />
+		<Label Content="Minutos entre descarga de blogs:" Grid.Row="1" Grid.Column="0" />
+		<Editors:IntegerUpDown Grid.Column="1" Grid.Row="1" Margin = "5" MinWidth="50" Width="50" HorizontalAlignment="Left"
+			Minimum="5" Maximum="240"
+			Value="{Binding Path=MinutesBetweenDownload}" FontWeight="Normal" />
+		<Label Content="Entradas por página:" Grid.Row="1" Grid.Column="2" />
+		<Editors:IntegerUpDown Grid.Row="1" Grid.Column="3" Margin = "5" Value="{Binding Path=RecordsPerPage}" FontWeight="Normal" Minimum="5" Maximum="200"
+			MinWidth="50" Width="50" HorizontalAlignment="Left"/>
+		<CheckBox Content="Descarga automática de blogs" IsChecked="{Binding Path=DownloadEnabled}" 
+			Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" Margin = "5" VerticalAlignment="Center" />
+		<CheckBox Content="Mostrar las noticias de blogs inactivos" IsChecked="{Binding Path=ShowNewsDisabledBlogs}" 
+			Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" Margin = "5" VerticalAlignment="Center" />
+		<CheckBox Content="Descargar los blogs inactivos" IsChecked="{Binding Path=DownloadDisabledBlogs}" 
+			Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" Margin = "5" VerticalAlignment="Center" />
+	</Grid>
+</UserControl>

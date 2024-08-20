@@ -1,0 +1,55 @@
+﻿<UserControl x:Class="Bau.Libraries.ToDoManager.Plugin.Views.Appointments.AppointmentsPane"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Bau.Libraries.ToDoManager.Plugin.Views.Appointments"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+		<Calendar Grid.Row="0" Grid.Column="0" DisplayDateEnd="2023-12-31" DisplayDateStart="2021-01-01" />
+		<ToolBar Grid.Row="1" Grid.Column="0">
+			<Button ToolTip="New appointment" Command="{Binding Path=AppointmentsList.NewAppointmentCommand}" Margin="2">
+				<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
+			</Button>
+			<Button ToolTip="Update appointment" Command="{Binding Path=AppointmentsList.UpdateAppointmentCommand}" Margin="2">
+				<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Properties.gif" />
+			</Button>
+			<Button ToolTip="Delete appointment" Command="{Binding Path=AppointmentsList.DeleteAppointmentCommand}" Margin="2">
+				<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
+			</Button>
+		</ToolBar>
+		<ListView x:Name="lswAppointments" Grid.Column="0" Grid.Row="2"
+				ItemsSource="{Binding Path=AppointmentsList.Items}" SelectionMode="Extended" SelectedItem="{Binding Path=AppointmentsList.SelectedItem}" 
+				VirtualizingStackPanel.IsVirtualizing="True"
+				VirtualizingStackPanel.VirtualizationMode="Recycling">
+			<ListView.View>
+				<GridView>
+					<GridViewColumn Width="150" Header="Appointment">
+						<GridViewColumn.CellTemplate>
+							<DataTemplate>
+								<StackPanel Orientation="Horizontal">
+									<TextBlock Text="{Binding Text}" Margin="5,0,0,0" VerticalAlignment="Center"/>
+								</StackPanel>
+							</DataTemplate>
+						</GridViewColumn.CellTemplate>
+					</GridViewColumn>
+					<GridViewColumn Width="140" Header="Due at">
+						<GridViewColumn.CellTemplate>
+							<DataTemplate>
+								<StackPanel Orientation="Horizontal">
+									<TextBlock Text="{Binding DueAt}" Margin="5,0,0,0" VerticalAlignment="Center"/>
+								</StackPanel>
+							</DataTemplate>
+						</GridViewColumn.CellTemplate>
+					</GridViewColumn>
+				</GridView>
+			</ListView.View>
+		</ListView>
+	</Grid>
+</UserControl>

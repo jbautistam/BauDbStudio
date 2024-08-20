@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+	  <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>Bau.Libraries.StructuredFilesStudio.ViewModels</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Configuration\**" />
+    <Compile Remove="Controllers\EventArguments\**" />
+    <Compile Remove="Details\Files\ScriptsManager\**" />
+    <EmbeddedResource Remove="Configuration\**" />
+    <EmbeddedResource Remove="Controllers\EventArguments\**" />
+    <EmbeddedResource Remove="Details\Files\ScriptsManager\**" />
+    <None Remove="Configuration\**" />
+    <None Remove="Controllers\EventArguments\**" />
+    <None Remove="Details\Files\ScriptsManager\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibSystem.Windows\LibSystem.Windows.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Formats\LibCsvFiles\src\LibCsvFiles\LibCsvFiles.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Formats\LibExcelFiles\src\LibExcelFiles.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Formats\LibParquetFiles\src\LibParquetFiles\LibParquetFiles.csproj" />
+    <ProjectReference Include="..\..\..\Libraries\PluginsStudio\PluginsStudio.ViewModels\PluginsStudio.ViewModels.csproj" />
+  </ItemGroup>
+
+</Project>

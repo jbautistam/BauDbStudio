@@ -1,0 +1,212 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>Bau.Libraries.$(MSBuildProjectName)</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Files\**" />
+    <EmbeddedResource Remove="Files\**" />
+    <None Remove="Files\**" />
+    <Page Remove="Files\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\AppController.cs" />
+    <Compile Remove="EtlProjects\CreateSchemaXmlView.xaml.cs" />
+    <Compile Remove="Reporting\Queries\ReportAdvancedView.xaml.cs" />
+    <Compile Remove="Reporting\Tools\CreateSchemaReportingXmlView.xaml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\Images\ArrowDown.png" />
+    <None Remove="Resources\Images\ArrowRight.png" />
+    <None Remove="Resources\Images\ArrowUp.png" />
+    <None Remove="Resources\Images\Chart.png" />
+    <None Remove="Resources\Images\Connection.png" />
+    <None Remove="Resources\Images\DataError.png" />
+    <None Remove="Resources\Images\DimensionChild.png" />
+    <None Remove="Resources\Images\Download.png" />
+    <None Remove="Resources\Images\ExecutionPlan.png" />
+    <None Remove="Resources\Images\Export.png" />
+    <None Remove="Resources\Images\Field.png" />
+    <None Remove="Resources\Images\File.png" />
+    <None Remove="Resources\Images\FileSql.png" />
+    <None Remove="Resources\Images\FileSqlExtended.png" />
+    <None Remove="Resources\Images\Filter.png" />
+    <None Remove="Resources\Images\FilterSelected.png" />
+    <None Remove="Resources\Images\FolderNode.png" />
+    <None Remove="Resources\Images\Import.png" />
+    <None Remove="Resources\Images\Key.png" />
+    <None Remove="Resources\Images\Loading.png" />
+    <None Remove="Resources\Images\NoSort.png" />
+    <None Remove="Resources\Images\Project.png" />
+    <None Remove="Resources\Images\ProjectDisabled.png" />
+    <None Remove="Resources\Images\Refresh.png" />
+    <None Remove="Resources\Images\Report.png" />
+    <None Remove="Resources\Images\ReportDimension.png" />
+    <None Remove="Resources\Images\Schema.png" />
+    <None Remove="Resources\Images\Script.png" />
+    <None Remove="Resources\Images\ScriptDisabled.png" />
+    <None Remove="Resources\Images\Search.png" />
+    <None Remove="Resources\Images\SortAscending.png" />
+    <None Remove="Resources\Images\SortDescending.png" />
+    <None Remove="Resources\Images\Step.png" />
+    <None Remove="Resources\Images\StepDisabled.png" />
+    <None Remove="Resources\Images\Stop.png" />
+    <None Remove="Resources\Images\Storage.png" />
+    <None Remove="Resources\Images\Table.png" />
+    <None Remove="Resources\Images\Upload.png" />
+    <None Remove="Resources\Images\View.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="EtlProjects\CreateSchemaXmlView.xaml" />
+    <Page Remove="Reporting\Queries\ReportAdvancedView.xaml" />
+    <Page Remove="Reporting\Tools\CreateSchemaReportingXmlView.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\Controls\WPF\BauControls\src\BauControls.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Controls\WPF\CodeEditor\src\CodeEditor.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.Views.Wpf\BauMvvm.Views.Wpf.csproj" />
+    <ProjectReference Include="..\..\PluginsStudio\PluginsStudio.Views.Base\PluginsStudio.Views.Base.csproj" />
+    <ProjectReference Include="..\DbStudio.ViewModels\DbStudio.ViewModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Images\ArrowDown.png" />
+    <Resource Include="Resources\Images\ArrowRight.png" />
+    <Resource Include="Resources\Images\ArrowUp.png" />
+    <Resource Include="Resources\Images\Chart.png" />
+    <Resource Include="Resources\Images\Connection.png" />
+    <Resource Include="Resources\Images\DataError.png" />
+    <Resource Include="Resources\Images\DimensionChild.png" />
+    <Resource Include="Resources\Images\Download.png" />
+    <Resource Include="Resources\Images\ExecutionPlan.png" />
+    <Resource Include="Resources\Images\Export.png" />
+    <Resource Include="Resources\Images\Field.png" />
+    <Resource Include="Resources\Images\File.png" />
+    <Resource Include="Resources\Images\FileSql.png" />
+    <Resource Include="Resources\Images\FileSqlExtended.png" />
+    <Resource Include="Resources\Images\Filter.png" />
+    <Resource Include="Resources\Images\FilterSelected.png" />
+    <Resource Include="Resources\Images\FolderNode.png" />
+    <Resource Include="Resources\Images\Import.png" />
+    <Resource Include="Resources\Images\Key.png" />
+    <Resource Include="Resources\Images\Loading.png" />
+    <Resource Include="Resources\Images\NoSort.png" />
+    <Resource Include="Resources\Images\Project.png" />
+    <Resource Include="Resources\Images\ProjectDisabled.png" />
+    <Resource Include="Resources\Images\Refresh.png" />
+    <Resource Include="Resources\Images\Report.png" />
+    <Resource Include="Resources\Images\ReportDimension.png" />
+    <Resource Include="Resources\Images\Schema.png" />
+    <Resource Include="Resources\Images\Script.png" />
+    <Resource Include="Resources\Images\ScriptDisabled.png" />
+    <Resource Include="Resources\Images\Search.png" />
+    <Resource Include="Resources\Images\SortAscending.png" />
+    <Resource Include="Resources\Images\SortDescending.png" />
+    <Resource Include="Resources\Images\Step.png" />
+    <Resource Include="Resources\Images\StepDisabled.png" />
+    <Resource Include="Resources\Images\Stop.png" />
+    <Resource Include="Resources\Images\Storage.png" />
+    <Resource Include="Resources\Images\Table.png" />
+    <Resource Include="Resources\Images\Upload.png" />
+    <Resource Include="Resources\Images\View.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Connections\ConnectionView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="Connections\ExecuteFilesView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="EtlProjects\CreateImportFilesScriptView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="EtlProjects\CreateTestXmlView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="EtlProjects\CreateValidationScriptView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="EtlProjects\ImportDatabaseView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="EtlProjects\ExportDatabaseView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Explorers\TreeConnectionsExplorer.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="Queries\ExecuteQueryView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="Queries\QueryViewControl.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Reporting\Details\DataSources\DataSourceSqlView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Reporting\Details\DataSources\DataSourceTableView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Reporting\Details\DataSources\ListDataSourceColumnsView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Reporting\Details\DataSources\ListDataSourceParametersView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Reporting\Details\Dimensions\DimensionChildView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="Reporting\Details\Dimensions\DimensionView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Reporting\Details\Relations\DimensionRelationView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Reporting\Details\Reports\ReportView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Reporting\Explorers\TreeReportingExplorer.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Reporting\Queries\ListFilterColumnView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Reporting\Queries\ReportView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Reporting\Queries\TreeReportColumnsControl.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Reporting\Tools\CreateReportingSqlView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
+</Project>

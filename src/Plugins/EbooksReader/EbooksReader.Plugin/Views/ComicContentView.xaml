@@ -1,0 +1,142 @@
+﻿<UserControl xmlns:Graphical="clr-namespace:Bau.Controls.Graphical;assembly=BauControls"  
+			x:Class="Bau.Libraries.EbooksReader.Plugin.Views.ComicContentView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+			 Loaded="UserControl_Loaded"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="400" 
+			 xmlns:zoomAndPan="clr-namespace:Bau.Controls.ZoomAndPanControls;assembly=ZoomAndPanControls"
+>
+	<UserControl.InputBindings>
+		<KeyBinding Key="Home" Command="{Binding Path=FirstPageCommand}"/>
+		<KeyBinding Key="PageUp" Command="{Binding Path=NextPageCommand}"/>
+		<KeyBinding Key="Next" Command="{Binding Path=PreviousPageCommand}"/>
+		<KeyBinding Key="End" Command="{Binding Path=LastPageCommand}"/>
+	</UserControl.InputBindings>
+	<Grid x:Name="grdComic">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="150" />
+			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+
+		<ToolBarTray Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" >
+			<ToolBar HorizontalAlignment="Stretch" >
+				<Button ToolTip="Primera página" Command="{Binding FirstPageCommand}">
+					<Image Source="/EbooksReader.Plugin;component/Resources/ArrowFirst.png"></Image>
+				</Button>
+				<Button ToolTip="Página anterior" Command="{Binding PreviousPageCommand}">
+					<Image Source="/EbooksReader.Plugin;component/Resources/ArrowPrevious.png"></Image>
+				</Button>
+				<TextBlock VerticalAlignment="Center" Margin="20,0">
+					<TextBlock.Text>
+						<MultiBinding StringFormat=" Página {0:#0} de {1:#0}">
+							<Binding Path="ComicPages.SelectedItem.Page" />
+							<Binding Path="ComicPages.Items.Count" />
+						</MultiBinding>
+					</TextBlock.Text>
+				</TextBlock>
+				<Button ToolTip="Página siguiente" Command="{Binding NextPageCommand}">
+					<Image Source="/EbooksReader.Plugin;component/Resources/ArrowNext.png"></Image>
+				</Button>
+				<Button Command="{Binding LastPageCommand}">
+					<Image Source="/EbooksReader.Plugin;component/Resources/ArrowLast.png"></Image>
+				</Button>
+				<Separator/>
+				<Button Margin="5" Command="{Binding ElementName=ZoomAndPanControl, Path=ZoomPercentCommand}" ToolTip="100%">
+					<Image Width="16" Height="16" Source="/EbooksReader.Plugin;component/Resources/Zoom100.png" />
+				</Button>
+				<Button Margin="5" Command="{Binding ElementName=ZoomAndPanControl, Path=FitCommand}" ToolTip="Ajustar al alto">
+					<Image Width="16" Height="16" Source="/EbooksReader.Plugin;component/Resources/ZoomFit.png" />
+				</Button>
+				<Button Margin="5" Command="{Binding ElementName=ZoomAndPanControl, Path=FillCommand}" ToolTip="Ajustar al ancho">
+					<Image Width="16" Height="16" Source="/EbooksReader.Plugin;component/Resources/ZoomFill.png" />
+				</Button>
+				<Separator/>
+				<Button Margin="5" Command="{Binding ElementName=ZoomAndPanControl, Path=ZoomOutCommand}">
+					<Image Width="16" Height="16" Source="/EbooksReader.Plugin;component/Resources/ZoomOut.png" />
+				</Button>
+				<Slider Width="120" LargeChange="20" Margin="5"
+                    Maximum="{Binding ElementName=ZoomAndPanControl, Path=ZoomAndPanContent.MaximumZoom, Converter={zoomAndPan:ZoomAdjustConverter}}"
+                    Minimum="{Binding ElementName=ZoomAndPanControl, Path=ZoomAndPanContent.MinimumZoomClamped, Converter={zoomAndPan:ZoomAdjustConverter}}"
+                    Value="{Binding ElementName=ZoomAndPanControl, Path=ViewportZoom, Converter={zoomAndPan:ZoomAdjustConverter}}"
+                    SmallChange=".1"
+                    TickFrequency="10"
+                    TickPlacement="TopLeft" />
+				<Button Margin="5" Command="{Binding ElementName=ZoomAndPanControl, Path=ZoomInCommand}">
+					<Image Width="16" Height="16" Source="/EbooksReader.Plugin;component/Resources/ZoomIn.png" />
+				</Button>
+				<TextBlock Width="50" VerticalAlignment="Center" Margin="5"
+						Text="{Binding ElementName=ZoomAndPanControl, Path=ViewportZoom, StringFormat=p1}"
+						TextAlignment="Right" />
+				<Separator/>
+				<ToggleButton x:Name="chkShowThumb" IsChecked="True" Click="chkShowThumb_Click" ToolTip="Mostrar thumbnail">
+					<Image Width="16" Height="16" Source="/EbooksReader.Plugin;component/Resources/SeeWindow.png" />
+				</ToggleButton>
+			</ToolBar>
+		</ToolBarTray>
+		<Slider Grid.Column="0" Grid.Row="2" x:Name="sldThumbWidth" Minimum="50" Maximum="150" Value="100" Width="100"/>
+		<ListBox x:Name="lstThumbs" Grid.Column="0" Grid.Row="1" ItemsSource="{Binding Path=ComicPages.Items}"
+				VirtualizingStackPanel.IsVirtualizing="True"
+				VirtualizingStackPanel.VirtualizationMode="Recycling"
+				 SelectedItem="{Binding Path=ComicPages.SelectedItem}"
+				 SelectionChanged="lstThumbs_SelectionChanged">
+			<ListBox.ItemTemplate>
+				<DataTemplate>
+					<StackPanel Grid.Column="1" Margin = "3" >
+						<Border CornerRadius="5" BorderThickness="1" BorderBrush="Black" Padding="5">
+							<Graphical:ImageNoLock SourceFile="{Binding Path=ThumbFileName}" Stretch="Fill" 
+										 Width="{Binding ElementName=sldThumbWidth,Path=Value}" 
+										 Height="{Binding ElementName=sldThumbWidth,Path=Value}" />
+						</Border>
+						<TextBlock Text="{Binding Path=Page}" FontWeight="Bold" TextAlignment="Center" />
+					</StackPanel>
+				</DataTemplate>
+			</ListBox.ItemTemplate>
+			<ListBox.ItemsPanel>
+				<ItemsPanelTemplate>
+					<WrapPanel 
+						 IsItemsHost="True"
+						 Width="{Binding 
+											Path=ActualWidth,
+											RelativeSource={RelativeSource 
+													Mode=FindAncestor, 
+													AncestorType={x:Type ScrollContentPresenter}}}" />
+				</ItemsPanelTemplate>
+			</ListBox.ItemsPanel>
+		</ListBox>
+
+		<GridSplitter Grid.Column="0" Grid.Row="1" Background="#FF4A63A0" Width="2" Grid.RowSpan="2" />
+
+		<Grid Grid.Row="1" Grid.Column="2" Grid.RowSpan="2">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="Auto"/>
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="Auto"/>
+			</Grid.ColumnDefinitions>
+
+			<zoomAndPan:ZoomAndPanScrollViewer x:Name="ZoomAndPanControl" Background="#AACCCCCC" 
+										   Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="2"
+										   MinimumZoomType="FitScreen" UseAnimations="True"
+										   ZoomAndPanInitialPosition="FillScreen" KeyDown="ZoomAndPanControl_KeyDown">
+
+				<Graphical:ImageNoLock SourceFile="{Binding Path=ComicPages.SelectedItem.FileName}" />
+			</zoomAndPan:ZoomAndPanScrollViewer>
+
+			<Border x:Name="wndZoom" Grid.Row="2" Grid.Column="1" Width="200" Height="200" BorderBrush="White" Background="#AACCCCCC" BorderThickness="3">
+				<zoomAndPan:ZoomAndPanViewBox DataContext="{Binding ElementName=ZoomAndPanControl}" Visual="{Binding ElementName=imgImage}"/>
+			</Border>
+		</Grid>
+	</Grid>
+</UserControl>

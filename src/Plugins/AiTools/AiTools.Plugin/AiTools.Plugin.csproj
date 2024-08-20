@@ -1,0 +1,74 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>Bau.Libraries.$(MSBuildProjectName)</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\AppController.cs" />
+    <Compile Remove="Controllers\HostController.cs" />
+    <Compile Remove="Views\MediaPlayerView.xaml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\Accept.png" />
+    <None Remove="Resources\AiChatFile.png" />
+    <None Remove="Resources\AiImageFile.png" />
+    <None Remove="Resources\ArrowDown.png" />
+    <None Remove="Resources\ArrowFirst.png" />
+    <None Remove="Resources\ArrowLast.png" />
+    <None Remove="Resources\ArrowNext.png" />
+    <None Remove="Resources\ArrowPrevious.png" />
+    <None Remove="Resources\ArrowUp.png" />
+    <None Remove="Resources\Close.png" />
+    <None Remove="Resources\Copy.png" />
+    <None Remove="Resources\Delete.png" />
+    <None Remove="Resources\Document.png" />
+    <None Remove="Resources\NewItem.png" />
+    <None Remove="Resources\Send.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="Views\MediaPlayerView.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\Controls\WPF\BauControls\src\BauControls.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.Views\BauMvvm.Views.csproj" />
+    <ProjectReference Include="..\..\..\Libraries\PluginsStudio\PluginsStudio.Views.Base\PluginsStudio.Views.Base.csproj" />
+    <ProjectReference Include="..\AiTools.ViewModels\AiTools.ViewModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Accept.png" />
+    <Resource Include="Resources\AiChatFile.png" />
+    <Resource Include="Resources\AiImageFile.png" />
+    <Resource Include="Resources\ArrowDown.png" />
+    <Resource Include="Resources\ArrowFirst.png" />
+    <Resource Include="Resources\ArrowLast.png" />
+    <Resource Include="Resources\ArrowNext.png" />
+    <Resource Include="Resources\ArrowPrevious.png" />
+    <Resource Include="Resources\ArrowUp.png" />
+    <Resource Include="Resources\Close.png" />
+    <Resource Include="Resources\Copy.png" />
+    <Resource Include="Resources\Delete.png" />
+    <Resource Include="Resources\Document.png" />
+    <Resource Include="Resources\NewItem.png" />
+    <Resource Include="Resources\Send.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="Microsoft.VCRTForwarders.140" Version="1.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Data\Prompts.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
