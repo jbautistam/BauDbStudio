@@ -19,6 +19,18 @@
 				Drop="trvExplorer_Drop" AllowDrop="True" ContextMenuOpening="trvExplorer_ContextMenuOpening">
 			<TreeView.Resources>
 				<!-- Plantilla de los nodos -->
+				<HierarchicalDataTemplate DataType="{x:Type ViewModel:PluginNodeCommandViewModel}" ItemsSource="{Binding Children}">
+					<Button Command="{Binding Path=ExecuteCommand}" BorderThickness="0" Background="Transparent">
+						<StackPanel Orientation="Horizontal">
+							<Image Width="24" Height="24" Margin="3,0" ToolTip="{Binding Path=ToolTipText}" Source="/Resources/Images/ArrowRight.png" />
+							<TextBlock Text="{Binding Text}" FontWeight="{Binding IsBold,Converter={StaticResource BoolToFontWeightConverter}}"
+									   Foreground="{Binding Path=Foreground,Converter={StaticResource MVVMColorConverter}}" 
+									   ToolTip="{Binding Path=ToolTipText }"
+									   VerticalAlignment="Center" />
+						</StackPanel>
+					</Button>
+				</HierarchicalDataTemplate>
+
 				<HierarchicalDataTemplate DataType="{x:Type ViewModel:PluginNodeMessageViewModel}" ItemsSource="{Binding Children}">
 					<StackPanel Orientation="Horizontal">
 						<Image Width="24" Height="24" Margin="3,0" ToolTip="{Binding Path=ToolTipText}" Source="/Resources/Images/Loading.png" />

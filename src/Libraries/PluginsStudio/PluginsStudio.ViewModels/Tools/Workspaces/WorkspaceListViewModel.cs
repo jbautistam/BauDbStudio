@@ -56,7 +56,7 @@ public class WorkspaceListViewModel : BaseObservableObject
 		if (!string.IsNullOrWhiteSpace(actual) && !actual.Equals(SelectedItem?.Name))
 		{
 			// Selecciona el espacio de trabajo
-			foreach (WorkSpaceViewModel workSpace in Items)
+			foreach (WorkSpaceViewModel workSpace in Items!)
 				if (workSpace.Name.Equals(actual, StringComparison.CurrentCultureIgnoreCase))
 					SelectedItem = workSpace;
 			// Si no se ha seleccionado uno, selecciona el predeterminado
@@ -80,9 +80,12 @@ public class WorkspaceListViewModel : BaseObservableObject
 	{
 		string workspace = string.Empty;
 
-			if (MainViewModel.MainController.MainWindowController.SystemController.ShowInputString("Nombre del espacio de trabajo", ref workspace) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
+			if (MainViewModel.MainController.MainWindowController.SystemController.ShowInputString("Nombre del espacio de trabajo", ref workspace) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes &&
+				!string.IsNullOrWhiteSpace(workspace))
 			{
-				if (!string.IsNullOrWhiteSpace(workspace))
+				if (Items.Any(item => item.Name.Equals(workspace, StringComparison.CurrentCultureIgnoreCase)))
+					MainViewModel.MainController.MainWindowController.SystemController.ShowMessage($"Ya existe el espacio de trabajo '{workspace}'");
+				else
 				{
 					// Crea el directorio
 					LibHelper.Files.HelperFiles.MakePath(System.IO.Path.Combine(Path, workspace));
@@ -90,7 +93,7 @@ public class WorkspaceListViewModel : BaseObservableObject
 					Add(workspace);
 					// Cambia el Workspace
 					Select(workspace);
-					// Graba un archivo vacío
+					// Inicializa las carpetas del espacio de trabajo
 					if (SelectedItem is not null)
 						LibHelper.Files.HelperFiles.SaveTextFile(SelectedItem.FileName, string.Empty);
 					// y lanza el evento de modificación
@@ -115,6 +118,8 @@ public class WorkspaceListViewModel : BaseObservableObject
 		if (SelectedItem is not null && 
 			MainViewModel.MainController.MainWindowController.SystemController.ShowQuestion($"¿Desea eliminar el espacio de trabajo '{SelectedItem.Name}'?"))
 		{
+			// Elimina el elemento en la lista
+			Items.Remove(SelectedItem);
 			// Borra el directorio
 			LibHelper.Files.HelperFiles.KillPath(SelectedItem.Path);
 			// Lanza el evento de carga del menú

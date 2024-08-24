@@ -33,11 +33,18 @@
 				<Image Width="16" Height="16" Source="/ToDoManager.Plugin;component/Resources/Start.png" />
 			</Button>
 			<Separator/>
-			<Button ToolTip="Export excel" Command="{Binding Path=ExportCommand}" Margin="2" HorizontalAlignment="Right">
+			<Button ToolTip="List tasks" Command="{Binding Path=ListTasksCommand}" Margin="2" HorizontalAlignment="Right">
+				<Image Width="16" Height="16" Source="/ToDoManager.Plugin;component/Resources/ListTasks.png" />
+			</Button>
+			<Button ToolTip="Export CSV" Command="{Binding Path=ExportCommand}" Margin="2" HorizontalAlignment="Right">
 				<Image Width="16" Height="16" Source="/ToDoManager.Plugin;component/Resources/FileCsv.png" />
 			</Button>
 			<Button ToolTip="Collapse tasks" Command="{Binding Path=TimeListViewModel.CollapseCommand}" Margin="2" HorizontalAlignment="Right">
 				<Image Width="16" Height="16" Source="/ToDoManager.Plugin;component/Resources/Collapse.png" />
+			</Button>
+			<Separator/>
+			<Button ToolTip="Convert files (delete command)" Command="{Binding Path=ConvertFilesCommand}" Margin="2" HorizontalAlignment="Right">
+				<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
 			</Button>
 		</ToolBar>
 		<ListView Grid.Row="2" Grid.Column="0"

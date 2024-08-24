@@ -6,7 +6,7 @@
 public class WorkSpaceViewModel : BauMvvm.ViewModels.BaseObservableObject
 {
 	// Variables privadas
-	private string _name = string.Empty, _fileName = string.Empty;
+	private string _name = default!, _fileName = default!;
 
 	public WorkSpaceViewModel(WorkspaceListViewModel listViewModel, string name, string fileName)
 	{
@@ -101,5 +101,5 @@ public class WorkSpaceViewModel : BauMvvm.ViewModels.BaseObservableObject
 	/// <summary>
 	///		Carpetas asociadas el espacio de trabajo
 	/// </summary>
-	public List<string> Folders { get; } = new List<string>();
+	public List<string> Folders { get; } = [];
 }

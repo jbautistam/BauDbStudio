@@ -1,10 +1,10 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Windows.Threading;
+using Microsoft.Extensions.Logging;
 
 using Bau.Libraries.BauMvvm.Views.Wpf.Controllers;
 using Bau.Libraries.BauMvvm.ViewModels.Controllers;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Interfaces;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Models.Processes;
-using System.Windows.Threading;
 
 namespace Bau.DbStudio.Controllers;
 
@@ -72,7 +72,7 @@ public class MainWindowController : Libraries.PluginsStudio.ViewModels.Base.Cont
 		if (DbStudioViewsManager.ConfigurationController.ShowWindowNotifications || type == SystemControllerEnums.NotificationType.Error)
 			DbStudioViewsManager.MainWindowsController.HostController.SystemController.ShowNotification(type, title, message, TimeSpan.FromSeconds(5));
 		else
-			Logger.LogInformation(title + ". " + message);
+			Logger.LogInformation($"{title}.{message}");
 	}
 
 	/// <summary>

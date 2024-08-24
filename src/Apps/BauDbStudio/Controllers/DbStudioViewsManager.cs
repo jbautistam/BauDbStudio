@@ -80,37 +80,37 @@ public class DbStudioViewsManager
 	/// </summary>
 	public List<PaneModel> GetPanes()
 	{
-		List<PaneModel> panes = new()
-									{
-										new PaneModel
-												{
-													Id = "LogView",
-													Title = "Log",
-													Position = PaneModel.PositionType.Bottom,
-													View = new Views.Tools.Log.LogView(PluginsStudioViewModel.LogViewModel)
-												},
-										new PaneModel
-												{
-													Id = "SearchView",
-													Title = "Search",
-													Position = PaneModel.PositionType.Right,
-													View = new Views.Tools.Search.SearchView(PluginsStudioViewModel.SearchFilesViewModel)
-												},
-										new PaneModel
-												{
-													Id = "FilesExplorerView",
-													Title = "Files explorer",
-													Position = PaneModel.PositionType.Left,
-													View = new Views.Explorers.TreeFilesExplorer(PluginsStudioViewModel.TreeFoldersViewModel)
-												},
-										new PaneModel
-												{
-													Id = "TasksQueueView",
-													Title = "Processes queue",
-													Position = PaneModel.PositionType.Bottom,
-													View = new Views.TasksQueue.TasksQueueView(PluginsStudioViewModel.TasksQueueListViewModel)
-												}
-							};
+		List<PaneModel> panes = [
+									new PaneModel
+											{
+												Id = "LogView",
+												Title = "Log",
+												Position = PaneModel.PositionType.Bottom,
+												View = new Views.Tools.Log.LogView(PluginsStudioViewModel.LogViewModel)
+											},
+									new PaneModel
+											{
+												Id = "SearchView",
+												Title = "Search",
+												Position = PaneModel.PositionType.Right,
+												View = new Views.Tools.Search.SearchView(PluginsStudioViewModel.SearchFilesViewModel)
+											},
+									new PaneModel
+											{
+												Id = "FilesExplorerView",
+												Title = "Files explorer",
+												Position = PaneModel.PositionType.Left,
+												View = new Views.Explorers.TreeFilesExplorer(PluginsStudioViewModel.TreeFoldersViewModel)
+											},
+									new PaneModel
+											{
+												Id = "TasksQueueView",
+												Title = "Processes queue",
+												Position = PaneModel.PositionType.Bottom,
+												View = new Views.TasksQueue.TasksQueueView(PluginsStudioViewModel.TasksQueueListViewModel)
+											}
+								];
+
 			// Añade los paneles de los plugins
 			panes.AddRange(PluginsManager.GetPanes());
 			// Devuelve la colección de paneles

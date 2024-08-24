@@ -227,7 +227,7 @@ public class ConfigurationController : Libraries.PluginsStudio.ViewModels.Base.C
 	/// <summary>
 	///		Nombre de la fuente del editor
 	/// </summary>
-	public string EditorFontName { get; set; } = "Consolas";
+	public string EditorFontName { get; set; } = "Consoles";
 
 	/// <summary>
 	///		Tamaños de la fuente del editor

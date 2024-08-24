@@ -292,8 +292,8 @@ public class BlogSeeNewsViewModel : BaseObservableObject, PluginsStudio.ViewMode
 					_blogEntries.UpdateStatus(entryViewModel.Entry.Blog, entryViewModel.Entry.GlobalId, EntryModel.StatusEntry.Deleted);
 					// Elimina los archivos asociados
 					if (!string.IsNullOrEmpty(entryViewModel.Entry.DownloadFileName) &&
-							System.IO.File.Exists(entryViewModel.Entry.DownloadFileName))
-						LibHelper.Files.HelperFiles.KillFile(System.IO.Path.Combine(MainViewModel.ConfigurationViewModel.PathBlogs, entryViewModel.Entry.DownloadFileName));
+							File.Exists(entryViewModel.Entry.DownloadFileName))
+						LibHelper.Files.HelperFiles.KillFile(Path.Combine(MainViewModel.ConfigurationViewModel.PathBlogs, entryViewModel.Entry.DownloadFileName));
 					// Indica que algo se ha borrado
 					deleted = true;
 				}
@@ -618,15 +618,15 @@ public class BlogSeeNewsViewModel : BaseObservableObject, PluginsStudio.ViewMode
 	/// <summary>
 	///		Obtiene el nombre de adjunto de la entrada seleccionada
 	/// </summary>
-	private KeyValuePair<string, string> GetAttachment(EntryModel entry)
+	private KeyValuePair<string, string> GetAttachment(EntryModel? entry)
 	{
-		KeyValuePair<string, string> attachment = new KeyValuePair<string, string>();
+		KeyValuePair<string, string> attachment = new();
 
 			// Obtiene el nombre de archivo o la URL del adjunto
-			if (entry != null && !string.IsNullOrWhiteSpace(entry.UrlEnclosure))
+			if (entry is not null && !string.IsNullOrWhiteSpace(entry.UrlEnclosure))
 			{
 				// Obtiene el nombre de archivo
-				attachment = new KeyValuePair<string, string>(entry.Name, System.IO.Path.Combine(MainViewModel.ConfigurationViewModel.PathBlogs, entry.DownloadFileName));
+				attachment = new KeyValuePair<string, string>(entry.Name, Path.Combine(MainViewModel.ConfigurationViewModel.PathBlogs, entry.DownloadFileName));
 				// Si no existe el archivo, obtiene la Url
 				if (!System.IO.File.Exists(attachment.Value))
 					attachment = new KeyValuePair<string, string>(entry.Name, entry.UrlEnclosure);

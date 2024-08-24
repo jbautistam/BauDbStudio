@@ -10,7 +10,8 @@ namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs;
 public class BlogEntryViewModel : BauMvvm.ViewModels.Forms.ControlItems.ControlItemViewModel
 { 
 	// Variables privadas
-	private string _blogName = default!, _name = default!, _content = default!, _author = default!, _url = default!, _urlEnclosure = default!;
+	private string _blogName = default!, _name = default!, _content = default!, _author = default!, _url = default!;
+	private string? _urlEnclosure;
 	private DateTime _publish;
 	private EntryModel.StatusEntry _status;
 	private bool _hasAttachment;
@@ -124,7 +125,7 @@ public class BlogEntryViewModel : BauMvvm.ViewModels.Forms.ControlItems.ControlI
 	/// <summary>
 	///		Url del adjunto
 	/// </summary>
-	public string UrlEnclosure 
+	public string? UrlEnclosure 
 	{ 
 		get { return _urlEnclosure; }
 		set { CheckProperty(ref _urlEnclosure, value); }

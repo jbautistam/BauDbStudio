@@ -157,5 +157,5 @@ internal class TimeRepository
 	/// <summary>
 	///		Obtiene el nombre de archivo
 	/// </summary>
-	private string GetFileName(string folder, DateOnly date) => Path.Combine(folder, $"schedule_{date:yyyy-MM-dd}.time.xml");
+	private string GetFileName(string folder, DateOnly date) => Path.Combine(folder, $"{date.Year:0000}/{date.Month:00}/schedule_{date:yyyy-MM-dd}.time.xml");
 }

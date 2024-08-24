@@ -9,7 +9,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
 public abstract class PluginNodeViewModel : ControlHierarchicalViewModel
 {	
 	protected PluginNodeViewModel(PluginTreeViewModel trvTree, ControlHierarchicalViewModel? parent, string text, 
-								    string type, string icon, object? tag, bool lazyLoad, bool isBold = false, MvvmColor? foreground = null) 
+								  string type, string icon, object? tag, bool lazyLoad, bool isBold = false, MvvmColor? foreground = null) 
 						: base(parent, text, type, icon, tag, lazyLoad, isBold, foreground)
 	{ 
 		TreeViewModel = trvTree;

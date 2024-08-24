@@ -338,15 +338,17 @@ public partial class MainWindow : Window
 					// Inserta el menú tras el separador
 					mnuWorkspace.Items.Insert(++startIndex, mnuNewWorkspace);
 					// Añade el manejador
-					mnuNewWorkspace.Click += (sender, args) => {
-																	Libraries.PluginsStudio.ViewModels.Tools.Workspaces.WorkSpaceViewModel? workSpace = (sender as MenuItem)?.Tag as Libraries.PluginsStudio.ViewModels.Tools.Workspaces.WorkSpaceViewModel;
-
-																		// Selecciona el espacio de trabajo
-																		if (workSpace != null)
-																			DbStudioViewsManager.SelectWorkspace(workSpace.Name);
-																		// Cambia las marcas de check de los menús
-																		CheckWorkSpaceMenu();
-															   };
+					mnuNewWorkspace.Click += (sender, args) => 
+												{
+													if ((sender as MenuItem)?.Tag is Libraries.PluginsStudio.ViewModels.Tools.Workspaces.WorkSpaceViewModel workSpace)
+													{
+														// Selecciona el espacio de trabajo
+														if (workSpace != null)
+															DbStudioViewsManager.SelectWorkspace(workSpace.Name);
+														// Cambia las marcas de check de los menús
+														CheckWorkSpaceMenu();
+													}
+												};
 					mnuNewWorkspace.Checked += (sender, args) => CheckWorkSpaceMenu();
 					mnuNewWorkspace.IsChecked = false;
 			}
@@ -369,7 +371,8 @@ public partial class MainWindow : Window
 
 			// Recorre los menús seleccionando / deseleccionando
 			for (int index = startIndex; index < indexEnd; index++)
-				if (mnuWorkspace.Items[index] is MenuItem child && child.Tag is Libraries.PluginsStudio.ViewModels.Tools.Workspaces.WorkSpaceViewModel workSpace)
+				if (mnuWorkspace.Items[index] is MenuItem child && 
+						child.Tag is Libraries.PluginsStudio.ViewModels.Tools.Workspaces.WorkSpaceViewModel workSpace)
 					child.IsChecked = workSpace.Name.Equals(ViewModel.WorkspacesViewModel.SelectedItem?.Name, StringComparison.CurrentCultureIgnoreCase);
 	}
 

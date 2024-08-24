@@ -24,7 +24,9 @@ public class TreeFilesViewModel : PluginTreeViewModel
 		/// <summary>Raíz de archivos de proyecto</summary>
 		FilesRoot,
 		/// <summary>Archivo / directorio</summary>
-		File
+		File,
+		/// <summary>Comando</summary>
+		Command
 	}
 
 	// Variables privadas
@@ -192,11 +194,20 @@ public class TreeFilesViewModel : PluginTreeViewModel
 				foreach (string path in MainViewModel.WorkspacesViewModel.SelectedItem.Folders)
 					if (!string.IsNullOrWhiteSpace(path) && Directory.Exists(path))
 						paths.Add(path);
-			// Ordena por el nombre del directorio
-			paths.Sort((first, second) => Path.GetFileName(first).CompareTo(Path.GetFileName(second)));
-			// Recarga los nodos
-			foreach (string path in paths)
-				Children.Add(new NodeFolderRootViewModel(this, null, path));
+			// Si no hay ningún directorio añade los comandos básicos
+			if (paths.Count == 0)
+			{
+				Children.Add(new NodeCommandViewModel(this, null, NodeCommandViewModel.CommandType.AddDriveNodes, string.Empty));
+				Children.Add(new NodeCommandViewModel(this, null, NodeCommandViewModel.CommandType.AddOneFolder, string.Empty));
+			}
+			else
+			{
+				// Ordena por el nombre del directorio
+				paths.Sort((first, second) => Path.GetFileName(first).CompareTo(Path.GetFileName(second)));
+				// Recarga los nodos
+				foreach (string path in paths)
+					Children.Add(new NodeFolderRootViewModel(this, null, path));
+			}
 	}
 
 	/// <summary>
@@ -204,16 +215,29 @@ public class TreeFilesViewModel : PluginTreeViewModel
 	/// </summary>
 	internal void AddFolderToExplorer()
 	{
-		// Selecciona la carpeta
-		MainViewModel.MainController.MainWindowController.DialogsController.OpenDialogSelectPath(string.Empty, out string? folder);
-		// Añade la carpeta a la solución
-		if (!string.IsNullOrWhiteSpace(folder) && Directory.Exists(folder))
-		{
+		string? folder = MainViewModel.MainController.MainWindowController.DialogsController.SelectPath(string.Empty);
+
 			// Añade la carpeta a la solución
-			MainViewModel.WorkspacesViewModel.SelectedItem?.AddFolder(folder);
-			// Carga el árbol
-			Load();
-		}
+			if (!string.IsNullOrWhiteSpace(folder) && Directory.Exists(folder))
+			{
+				// Añade la carpeta a la solución
+				MainViewModel.WorkspacesViewModel.SelectedItem?.AddFolder(folder);
+				// Carga el árbol
+				Load();
+			}
+	}
+
+	/// <summary>
+	///		Añade las unidades del ordenador como carpetas
+	/// </summary>
+	internal void AddDriveNodes()
+	{
+		// Añade las unidades
+		if (MainViewModel.WorkspacesViewModel.SelectedItem is not null)
+			foreach (DriveInfo drive in DriveInfo.GetDrives())
+				MainViewModel.WorkspacesViewModel.SelectedItem.AddFolder(drive.Name);
+		// Recarga el árbol
+		Load();
 	}
 
 	/// <summary>

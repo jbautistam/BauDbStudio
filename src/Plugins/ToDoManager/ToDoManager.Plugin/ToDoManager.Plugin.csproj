@@ -23,6 +23,7 @@
     <None Remove="Resources\FileCsv.png" />
     <None Remove="Resources\FileExcel.png" />
     <None Remove="Resources\Green.png" />
+    <None Remove="Resources\ListTasks.png" />
     <None Remove="Resources\Pin.png" />
     <None Remove="Resources\Red.png" />
     <None Remove="Resources\Start.png" />
@@ -60,6 +61,7 @@
     <Resource Include="Resources\FileExcel.png" />
     <Resource Include="Resources\Green.png" />
     <Resource Include="Resources\Execute.png" />
+    <Resource Include="Resources\ListTasks.png" />
     <Resource Include="Resources\Pin.png" />
     <Resource Include="Resources\Red.png" />
     <Resource Include="Resources\Start.png" />
