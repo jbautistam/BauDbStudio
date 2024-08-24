@@ -78,7 +78,7 @@ public class TimeScheduleViewModel : BaseObservableObject
 	/// </summary>
 	private void OpenWindowListTasks()
 	{
-		MainViewModel.ToDoManager
+		MainViewModel.ViewsController.OpenWindow(new TimeListTasksViewModel(this));
 	}
 
 	/// <summary>

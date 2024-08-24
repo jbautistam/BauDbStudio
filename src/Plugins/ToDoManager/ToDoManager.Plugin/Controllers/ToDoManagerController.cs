@@ -23,6 +23,9 @@ public class ToDoManagerController : ViewModel.Controllers.IToDoManagerControlle
 		// Abre la ventana
 		switch (detailsViewModel)
 		{
+			case ViewModel.TimeManagement.TimeListTasksViewModel viewModel:
+					TaskManagerPlugin.AppViewsController.OpenDocument(new Views.TimeManagement.TimeListView(viewModel), viewModel);
+				break;
 			case ViewModel.ToDo.ToDoFileViewModel viewModel:
 					TaskManagerPlugin.AppViewsController.OpenDocument(new Views.ToDos.TodoFileView(viewModel), viewModel);
 				break;
