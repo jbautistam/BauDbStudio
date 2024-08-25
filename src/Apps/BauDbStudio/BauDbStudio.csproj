@@ -7,9 +7,9 @@
     <RootNamespace>Bau.DbStudio</RootNamespace>
     <Authors>Jose Antonio Bautista</Authors>
     <ApplicationIcon>Resources\BauDbStudio.ico</ApplicationIcon>
-    <AssemblyVersion>1.0.57.0</AssemblyVersion>
-    <FileVersion>1.0.57.0</FileVersion>
-    <Version>1.0.57</Version>
+    <AssemblyVersion>1.0.58.0</AssemblyVersion>
+    <FileVersion>1.0.58.0</FileVersion>
+    <Version>1.0.58</Version>
     <PackageProjectUrl>https://github.com/jbautistam/BauDbStudio</PackageProjectUrl>
     <RepositoryUrl>https://github.com/jbautistam/BauDbStudio</RepositoryUrl>
     <ImplicitUsings>enable</ImplicitUsings>
