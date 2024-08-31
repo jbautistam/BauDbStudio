@@ -3,7 +3,7 @@
 /// <summary>
 ///		Interface para los viewModel de detalles
 /// </summary>
-public interface IDetailViewModel
+public interface IDetailViewModel : IDocumentViewModel
 {
 	/// <summary>
 	///		Inicia una búsqueda (por ejemplo, abre la ventana de búsqueda)
@@ -19,24 +19,4 @@ public interface IDetailViewModel
 	///		Graba los datos
 	/// </summary>
 	void SaveDetails(bool newName);
-
-	/// <summary>
-	///		Cierra la ventana
-	/// </summary>
-	void Close();
-
-	/// <summary>
-	///		Título de la ficha
-	/// </summary>
-	string Header { get; }
-
-	/// <summary>
-	///		Id de la ficha
-	/// </summary>
-	string TabId { get; }
-
-	/// <summary>
-	///		Indica si se ha modificado el ViewModel
-	/// </summary>
-	bool IsUpdated { get; set; }
 }

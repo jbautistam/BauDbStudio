@@ -42,12 +42,7 @@ public class BlogModel : LibDataStructures.Base.BaseExtendedModel
 	/// <summary>
 	///		Indica si se deben eliminar las entradas leidas
 	/// </summary>
-	public bool DeleteOldEntries => MaximumEntriesRead != 0;
-
-	/// <summary>
-	///		Número máximo de entradas leidas del archivo
-	/// </summary>
-	public int MaximumEntriesRead { get; set; }
+	public bool DeleteOldEntries { get; set; }
 
 	/// <summary>
 	///		Fecha de última descarga

@@ -316,7 +316,7 @@ public class BlogSeeNewsViewModel : BaseObservableObject, PluginsStudio.ViewMode
 	{
 		BlogEntriesCollectionViewModel entries = LastEntriesSelectedForView;
 		System.Text.StringBuilder sbHtml = new System.Text.StringBuilder();
-		string lastBlog = null;
+		string lastBlog = string.Empty;
 		int startIndex, endIndex;
 		bool addedEntry = false;
 
@@ -438,9 +438,9 @@ public class BlogSeeNewsViewModel : BaseObservableObject, PluginsStudio.ViewMode
 
 				if (parameters.Length == 2)
 				{
-					BlogEntryViewModel entry = EntriesList.Search(parameters[1]);
+					BlogEntryViewModel? entry = EntriesList.Search(parameters[1]);
 
-						if (entry != null)
+						if (entry is not null)
 						{
 							BlogEntriesCollectionViewModel entries = new BlogEntriesCollectionViewModel { entry };
 

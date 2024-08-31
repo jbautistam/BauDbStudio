@@ -30,7 +30,8 @@ public partial class BlogSeeNewsControlView : UserControl
 		// Observa el evento PropertyChanged para ver cuándo se cambia el Html
 		ViewModel.PropertyChanged += (sender, args) =>
 											{
-												if (args.PropertyName.Equals(nameof(BlogSeeNewsViewModel.HtmlNews), StringComparison.CurrentCultureIgnoreCase))
+												if (!string.IsNullOrWhiteSpace(args.PropertyName) &&
+														args.PropertyName.Equals(nameof(BlogSeeNewsViewModel.HtmlNews), StringComparison.CurrentCultureIgnoreCase))
 													ShowHtmlNews();
 											};
 		ViewModel.Closed += async (sender, args) => await DestroyWindowAsync();
@@ -73,7 +74,7 @@ public partial class BlogSeeNewsControlView : UserControl
 	/// <summary>
 	///		Trata la navegación a una URL: abre un nuevo explorador si es necesario
 	/// </summary>
-	private void TreatExplorerNavigateTo(object sender, Controls.WebExplorers.WebExplorerNavigateToEventArgs e)
+	private void TreatExplorerNavigateTo(object? sender, Controls.WebExplorers.WebExplorerNavigateToEventArgs e)
 	{
 		OpenBrowser(e.Url);
 		e.Cancel = true;
@@ -108,7 +109,7 @@ public partial class BlogSeeNewsControlView : UserControl
 	/// <summary>
 	///		Tratamiento del evento del temporizador
 	/// </summary>
-	private void tmrRead_Tick(object sender, EventArgs e)
+	private void tmrRead_Tick(object? sender, EventArgs e)
 	{
 		if ((DateTime.Now - _lastRead).TotalSeconds > 30 && IsVisible)
 		{ 

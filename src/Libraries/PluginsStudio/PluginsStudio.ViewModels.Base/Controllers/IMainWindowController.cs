@@ -31,6 +31,11 @@ public interface IMainWindowController
 	List<Interfaces.IDetailViewModel> GetOpenedDetails();
 
 	/// <summary>
+	///		Obtiene el panel activo
+	/// </summary>
+	Interfaces.IPaneViewModel? GetActivePane();
+
+	/// <summary>
 	///		Indica a la ventana principal que cambie el Id de un documento
 	/// </summary>
 	void UpdateTabId(string oldTabId, string newTabId, string newHeader);

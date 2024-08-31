@@ -53,6 +53,11 @@ public class EntryModel : LibDataStructures.Base.BaseExtendedModel
 	public string? Author { get; set; }
 
 	/// <summary>
+	///		Indica si una entrada es antigua
+	/// </summary>
+	public bool IsOld => (Status == StatusEntry.Deleted || Status == StatusEntry.Read) && DatePublish < DateTime.Now.AddDays(-15);
+
+	/// <summary>
 	///		Fecha de publicación
 	/// </summary>
 	public DateTime DatePublish { get; set; } = DateTime.Now;

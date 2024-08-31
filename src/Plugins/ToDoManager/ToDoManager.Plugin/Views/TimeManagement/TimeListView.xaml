@@ -7,100 +7,79 @@
 			 xmlns:ViewModel ="clr-namespace:Bau.Libraries.ToDoManager.ViewModel.ToDo;assembly=ToDoManager.ViewModel"
 			 xmlns:localConverter="clr-namespace:Bau.Libraries.ToDoManager.Plugin.Converters"
              mc:Ignorable="d" d:DesignHeight="600" d:DesignWidth="600" >
-	<UserControl.Resources>
-		<localConverter:PriorityToColorConverter x:Key="PriorityToColorConverter"/>
-		<converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
-		<Style TargetType="{x:Type ListBox}">
-			<Setter Property="ItemTemplate">
-				<Setter.Value>
-					<DataTemplate>
-						<Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Padding="5" Margin="2">
-							<Grid>
-								<Grid.RowDefinitions>
-									<RowDefinition Height="Auto"/>
-									<RowDefinition Height="*"/>
-									<RowDefinition Height="Auto"/>
-								</Grid.RowDefinitions>
-								<Grid.ColumnDefinitions>
-									<ColumnDefinition Width="Auto"/>
-									<ColumnDefinition Width="*"/>
-									<ColumnDefinition Width="Auto"/>
-								</Grid.ColumnDefinitions>
-								<Label Margin="2" Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Width="10"
-										Background="{Binding Path=Priority,Converter={StaticResource PriorityToColorConverter}}" />
-								<TextBlock Grid.Row="0" Grid.Column="1" FontSize="16" FontWeight="Bold" Margin="3" Text="{Binding Path=Name}"/>
-								<StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2">
-									<Button ToolTip="Edit" Command="{Binding Path=EditTaskCommand}" Background="Transparent" BorderBrush="Transparent">
-										<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Properties.gif" />
-									</Button>
-									<Button ToolTip="Move back" Command="{Binding Path=MoveTaskPreviousCommand}" Background="Transparent" BorderBrush="Transparent"
-											Visibility="{Binding Path=CanMovePrevious,Converter={StaticResource BoolToVisibilityConverter}}">
-										<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/ArrowPrevious.png" />
-									</Button>
-									<Button ToolTip="Move next" Command="{Binding Path=MoveTaskNextCommand}" Background="Transparent" BorderBrush="Transparent"
-											Visibility="{Binding Path=CanMoveNext,Converter={StaticResource BoolToVisibilityConverter}}">
-										<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/ArrowNext.png" />
-									</Button>
-									<Button ToolTip="Delete" Command="{Binding Path=DeleteTaskCommand}" Background="Transparent" BorderBrush="Transparent">
-										<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
-									</Button>
-								</StackPanel>
-								<Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" MaxWidth="450">
-									<Grid.RowDefinitions>
-										<RowDefinition Height="Auto"/>
-										<RowDefinition Height="Auto"/>
-									</Grid.RowDefinitions>
-									<Grid.ColumnDefinitions>
-										<ColumnDefinition Width="Auto"/>
-										<ColumnDefinition Width="*"/>
-									</Grid.ColumnDefinitions>
-									<TextBlock Margin="10" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" TextWrapping="Wrap" Text="{Binding Path=DescriptionShort}"/>
-									<StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
-										<Button ToolTip="Move first" Command="{Binding Path=MoveTaskFirstCommand}" Background="Transparent" BorderBrush="Transparent"
-											Visibility="{Binding Path=CanMoveUp,Converter={StaticResource BoolToVisibilityConverter}}">
-											<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/ArrowTop.png" />
-										</Button>
-										<Button ToolTip="Move up" Command="{Binding Path=MoveTaskUpCommand}" Background="Transparent" BorderBrush="Transparent"
-											Visibility="{Binding Path=CanMoveUp,Converter={StaticResource BoolToVisibilityConverter}}">
-											<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/ArrowUp.png" />
-										</Button>
-										<Button ToolTip="Move down" Command="{Binding Path=MoveTaskDownCommand}" Background="Transparent" BorderBrush="Transparent"
-											Visibility="{Binding Path=CanMoveDown,Converter={StaticResource BoolToVisibilityConverter}}">
-											<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/ArrowDown.png" />
-										</Button>
-										<Button ToolTip="Move last" Command="{Binding Path=MoveTaskLastCommand}" Background="Transparent" BorderBrush="Transparent"
-											Visibility="{Binding Path=CanMoveDown,Converter={StaticResource BoolToVisibilityConverter}}">
-											<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/ArrowBottom.png" />
-										</Button>
-									</StackPanel>
-									<TextBlock Margin="5" Grid.Row="1" Grid.Column="1" Text="{Binding Path=Moskow}" TextAlignment="Right"/>
-								</Grid>
-							</Grid>
-						</Border>
-					</DataTemplate>
-				</Setter.Value>
-			</Setter>
-		</Style>
-	</UserControl.Resources>
 	<Grid>
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="*" />
-			<ColumnDefinition Width="*" />
-			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="*"/>
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="*" />
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
-		<ToolBarPanel Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3">
-			<ToolBar>
-				<Button ToolTip="Nuevo" Command="{Binding NewTaskCommand}">
-					<Image Source="/BauControls;component/Themes/Images/NewItem.png" Width="16" Height="16"/>
-				</Button>
-			</ToolBar>
-		</ToolBarPanel>
-		<Label Grid.Row="1" Grid.Column="0" Content="Pending"/>
-
+		<Grid Grid.Row="0" Grid.Column="0">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="Auto"/>
+			</Grid.ColumnDefinitions>
+			<Label Grid.Row="0" Grid.Column="0" Margin="5" Content="Start:"/>
+			<DatePicker Grid.Row="1" Grid.Column="1" SelectedDate="{Binding Path=Start,UpdateSourceTrigger=PropertyChanged}" />
+			<Label Grid.Row="0" Grid.Column="2" Margin="5" Content="End:"/>
+			<DatePicker Grid.Row="0" Grid.Column="3" SelectedDate="{Binding Path=End,UpdateSourceTrigger=PropertyChanged}" />
+			<Button Grid.Row="0" Grid.Column="4" Margin="2" Padding="5" IsDefault="True" Command="{Binding SearchCommand}">
+				<StackPanel Orientation="Horizontal">
+					<Image Width="16" Height="16" Source="/ToDoManager.Plugin;component/Resources/ListTasks.png"/>
+					<TextBlock Text="Filter"  Margin="5,0,0,0" />
+				</StackPanel>
+			</Button>
+		</Grid>
+		<ListView Grid.Row="1" Grid.Column="0"
+				  ItemsSource="{Binding Path=Items}" 
+				  SelectedItem="{Binding Path=SelectedItem}"
+				  Margin="0">
+			<ListView.View>
+				<GridView>
+					<GridViewColumn Width="200" Header="Project">
+						<GridViewColumn.CellTemplate>
+							<DataTemplate>
+								<TextBlock Text="{Binding Path=Project}" Margin="5" />
+							</DataTemplate>
+						</GridViewColumn.CellTemplate>
+					</GridViewColumn>
+					<GridViewColumn Width="200" Header="Task">
+						<GridViewColumn.CellTemplate>
+							<DataTemplate>
+								<TextBlock Text="{Binding Path=Task}" />
+							</DataTemplate>
+						</GridViewColumn.CellTemplate>
+					</GridViewColumn>
+					<GridViewColumn Width="100" Header="Start">
+						<GridViewColumn.CellTemplate>
+							<DataTemplate>
+								<TextBlock Text="{Binding Path=TimeStart,StringFormat={}{0:HH:mm:ss}}" />
+							</DataTemplate>
+						</GridViewColumn.CellTemplate>
+					</GridViewColumn>
+					<GridViewColumn Width="100" Header="End">
+						<GridViewColumn.CellTemplate>
+							<DataTemplate>
+								<TextBlock Text="{Binding Path=TimeEnd,StringFormat={}{0:HH:mm:ss}}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+							</DataTemplate>
+						</GridViewColumn.CellTemplate>
+					</GridViewColumn>
+					<GridViewColumn Width="100" Header="Time">
+						<GridViewColumn.CellTemplate>
+							<DataTemplate>
+								<TextBlock Text="{Binding Path=Elapsed}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+							</DataTemplate>
+						</GridViewColumn.CellTemplate>
+					</GridViewColumn>
+				</GridView>
+			</ListView.View>
+		</ListView>
 	</Grid>
 </UserControl>

@@ -243,12 +243,23 @@ public partial class MainWindow : Window
 	}
 
 	/// <summary>
-	///		Obtiene la ventalla de detalles activa
+	///		Obtiene la ventana de detalles activa
 	/// </summary>
 	internal IDetailViewModel? GetActiveDetails()
 	{
 		if (dckManager.ActiveDocument?.Tag is IDetailViewModel details)
 			return details;
+		else
+			return null;
+	}
+
+	/// <summary>
+	///		Obtiene el panel activo
+	/// </summary>
+	internal IPaneViewModel? GetActivePane()
+	{
+		if (dckManager.ActiveDocument?.UserControl?.DataContext is IPaneViewModel pane)
+			return pane;
 		else
 			return null;
 	}

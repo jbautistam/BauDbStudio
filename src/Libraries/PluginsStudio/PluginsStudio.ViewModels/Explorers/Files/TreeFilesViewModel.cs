@@ -12,7 +12,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files;
 /// <summary>
 ///		ViewModel de un árbol de archivos
 /// </summary>
-public class TreeFilesViewModel : PluginTreeViewModel
+public class TreeFilesViewModel : PluginTreeViewModel, Base.Interfaces.IPaneViewModel
 {
 	/// <summary>
 	///		Tipo de nodo
@@ -187,7 +187,7 @@ public class TreeFilesViewModel : PluginTreeViewModel
 	/// </summary>
 	protected override void AddRootNodes()
 	{
-		List<string> paths = new();
+		List<string> paths = [];
 
 			// Añade los directorios
 			if (MainViewModel.WorkspacesViewModel.SelectedItem != null)
@@ -315,6 +315,14 @@ public class TreeFilesViewModel : PluginTreeViewModel
 	///		Comprueba si se puede crear una carpeta o un achivo
 	/// </summary>
 	private bool CanCreateFileOrFolder() => !string.IsNullOrWhiteSpace(GetSelectedFolder());
+
+	/// <summary>
+	///		Ejecuta un comando externo
+	/// </summary>
+	public void Execute(Base.Models.Commands.ExternalCommand externalCommand)
+	{
+		MainViewModel.MainController.MainWindowController.SystemController.ShowMessage($"Execute {externalCommand}");
+	}
 
 	/// <summary>
 	///		Comprueba si se puede ejecutar una acción general
@@ -816,6 +824,14 @@ public class TreeFilesViewModel : PluginTreeViewModel
 	}
 
 	/// <summary>
+	///		Cierra el panel
+	/// </summary>
+	public void Close()
+	{
+		MainViewModel.MainController.MainWindowController.SystemController.ShowMessage("Cerrar panel");
+	}
+
+	/// <summary>
 	///		Indica si se puede renombrar un archivo o carpeta
 	/// </summary>
 	private bool CanRename() => !string.IsNullOrEmpty(GetSelectedPath());
@@ -829,6 +845,16 @@ public class TreeFilesViewModel : PluginTreeViewModel
 	///		Opciones de los plugins asociadas a los archivos
 	/// </summary>
 	public List<FileOptionsModel> PluginsFileOptions { get; private set; }
+
+	/// <summary>
+	///		Cabecera
+	/// </summary>
+	public string Header => "Tree files explorer";
+
+	/// <summary>
+	///		Id del panel
+	/// </summary>
+	public string TabId => GetType().ToString();
 
 	/// <summary>
 	///		Comando para añadir un directorio de archivos a la solución

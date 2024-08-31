@@ -171,16 +171,19 @@ public class PluginsStudioViewModel : BaseObservableObject
 	/// </summary>
 	private void Delete()
 	{
-		MainController.MainWindowController.SystemController.ShowMessage("Borrar");
+		Base.Interfaces.IDetailViewModel? details = MainController.MainWindowController.GetActiveDetails();
+		Base.Interfaces.IPaneViewModel? pane = MainController.MainWindowController.GetActivePane();
+
+			if (details is not null)
+				MainController.MainWindowController.SystemController.ShowMessage($"{details.Header}: Borrar");
+			else if (pane is not null)
+				MainController.MainWindowController.SystemController.ShowMessage($"{pane.Header}: Borrar");
 	}
 	
 	/// <summary>
 	///		Comprueba si puede borrar los datos
 	/// </summary>
-	private bool CanDelete()
-	{
-		return true;
-	}
+	private bool CanDelete() => true;
 
 	/// <summary>
 	///		Controlador principal

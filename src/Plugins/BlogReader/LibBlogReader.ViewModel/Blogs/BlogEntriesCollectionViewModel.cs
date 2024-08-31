@@ -30,7 +30,7 @@ public class BlogEntriesCollectionViewModel : ObservableCollection<BlogEntryView
 	/// </summary>
 	internal BlogEntriesCollectionViewModel GetSelected()
 	{
-		BlogEntriesCollectionViewModel entries = new BlogEntriesCollectionViewModel();
+		BlogEntriesCollectionViewModel entries = new();
 
 			// Obtiene las seleccionadas
 			foreach (BlogEntryViewModel entry in this)
@@ -45,7 +45,7 @@ public class BlogEntriesCollectionViewModel : ObservableCollection<BlogEntryView
 	/// </summary>
 	internal BlogEntriesCollectionViewModel GetByParameters(bool seeNotRead, bool seeRead, bool seeInteresting)
 	{
-		BlogEntriesCollectionViewModel entries = new BlogEntriesCollectionViewModel();
+		BlogEntriesCollectionViewModel entries = new();
 
 			// Obtiene las entradas no leídas
 			foreach (BlogEntryViewModel entry in this)
@@ -62,7 +62,7 @@ public class BlogEntriesCollectionViewModel : ObservableCollection<BlogEntryView
 	/// </summary>
 	internal BlogEntriesCollectionViewModel GetRead()
 	{
-		BlogEntriesCollectionViewModel entries = new BlogEntriesCollectionViewModel();
+		BlogEntriesCollectionViewModel entries = new();
 
 			// Obtiene las entradas no leídas
 			foreach (BlogEntryViewModel entry in this)

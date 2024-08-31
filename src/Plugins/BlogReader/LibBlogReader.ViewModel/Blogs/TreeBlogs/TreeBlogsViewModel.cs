@@ -1,17 +1,17 @@
 ﻿using System.Collections.ObjectModel;
 
-using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.LibBlogReader.Model;
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.BauMvvm.ViewModels.Controllers;
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.Trees;
+using Bau.Libraries.PluginsStudio.ViewModels.Base.Models.Commands;
 
 namespace Bau.Libraries.LibBlogReader.ViewModel.Blogs.TreeBlogs;
 
 /// <summary>
 ///		ViewModel para el árbol de blogs
 /// </summary>
-public class TreeBlogsViewModel : PluginsStudio.ViewModels.Base.Explorers.PluginTreeViewModel
+public class TreeBlogsViewModel : PluginsStudio.ViewModels.Base.Explorers.PluginTreeViewModel, PluginsStudio.ViewModels.Base.Interfaces.IPaneViewModel
 {   
 	// Constantes privadas
 	private const string OpmlFilter = "Archivos OPML (*.opml)|*.opml|Todos los archivos (*.*)|*.*";
@@ -191,7 +191,7 @@ public class TreeBlogsViewModel : PluginsStudio.ViewModels.Base.Explorers.Plugin
 	/// </summary>
 	private List<BaseBlogsNodeViewModel> ConvertNodes(ObservableCollection<ControlHierarchicalViewModel> nodes) 
 	{
-		List<BaseBlogsNodeViewModel> converted = new();
+		List<BaseBlogsNodeViewModel> converted = [];
 
 			// Convierte los elementos
 			foreach (BaseBlogsNodeViewModel node in nodes)
@@ -452,6 +452,32 @@ public class TreeBlogsViewModel : PluginsStudio.ViewModels.Base.Explorers.Plugin
 		// Llama al método base
 		Load();
 	}
+
+	/// <summary>
+	///		Ejecuta un comando externo
+	/// </summary>
+	public void Execute(ExternalCommand externalCommand)
+	{
+		MainViewModel.ViewsController.HostController.SystemController.ShowMessage($"Ejecuta el comando {externalCommand.Name} en {Header}");
+	}
+
+	/// <summary>
+	///		Cierra el panel
+	/// </summary>
+	public void Close()
+	{
+		MainViewModel.ViewsController.HostController.SystemController.ShowMessage("Cerrar el panel de blogs");
+	}
+
+	/// <summary>
+	///		Cabecera de panel
+	/// </summary>
+	public string Header => "Blogs";
+
+	/// <summary>
+	///		Id del panel
+	/// </summary>
+	public string TabId => GetType().ToString();
 
 	/// <summary>
 	///		Indica si está seleccionada una carpeta

@@ -25,7 +25,7 @@ internal class BlogsStructureRepository
 	private const string TagDateLastDownload = "DateLastDownload";
 	private const string TagDateLastEntry = "DateLastEntry";
 	private const string TagHyperlink = "Hyperlink";
-	private const string TagMaximumEntriesRead = "MaximumEntriesRead";
+	private const string TagDeleteOldEntries = "DeleteOldEntries";
 
 	/// <summary>
 	///		Carga una estructura de carpetas
@@ -89,7 +89,7 @@ internal class BlogsStructureRepository
 			blog.Path = nodeML.Nodes[TagPath].Value;
 			blog.URL = nodeML.Nodes[TagUrl].Value;
 			blog.NumberNotRead = nodeML.Attributes[TagNumberNotRead].Value.GetInt(0);
-			blog.MaximumEntriesRead = nodeML.Attributes[TagMaximumEntriesRead].Value.GetInt(0);
+			blog.DeleteOldEntries = nodeML.Attributes[TagDeleteOldEntries].Value.GetBool();
 			blog.DateLastDownload = nodeML.Attributes[TagDateLastDownload].Value.GetDateTime();
 			blog.DateLastEntry = nodeML.Attributes[TagDateLastEntry].Value.GetDateTime();
 			blog.DownloadPodcast = nodeML.Attributes[TagDownloadPodcast].Value.GetBool();
@@ -169,7 +169,7 @@ internal class BlogsStructureRepository
 			// Añade los datos del nodo
 			nodeML.Attributes.Add(TagID, blog.GlobalId);
 			nodeML.Attributes.Add(TagNumberNotRead, blog.NumberNotRead);
-			nodeML.Attributes.Add(TagMaximumEntriesRead, blog.MaximumEntriesRead);
+			nodeML.Attributes.Add(TagDeleteOldEntries, blog.DeleteOldEntries);
 			nodeML.Attributes.Add(TagDateLastDownload, blog.DateLastDownload ?? DateTime.Now);
 			nodeML.Attributes.Add(TagDateLastEntry, blog.DateLastEntry ?? DateTime.Now);
 			nodeML.Attributes.Add(TagDownloadPodcast, blog.DownloadPodcast);

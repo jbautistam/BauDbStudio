@@ -39,13 +39,13 @@
 			<Button Margin="2" Padding="5" IsDefault="True" Command="{Binding SaveCommand}">
 				<StackPanel Orientation="Horizontal">
 					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Accept.png"/>
-					<TextBlock Text="Aceptar"  Margin="5,0,0,0" />
+					<TextBlock Text="Export"  Margin="5,0,0,0" />
 				</StackPanel>
 			</Button>
 			<Button Margin="2" Padding="5" IsCancel="True">
 				<StackPanel Orientation="Horizontal">
 					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png"/>
-					<TextBlock Text="Cancelar" Margin="5,0,0,0" />
+					<TextBlock Text="Cancel" Margin="5,0,0,0" />
 				</StackPanel>
 			</Button>
 		</StackPanel>

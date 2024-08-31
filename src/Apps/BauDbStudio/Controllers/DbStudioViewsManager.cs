@@ -86,7 +86,7 @@ public class DbStudioViewsManager
 												Id = "LogView",
 												Title = "Log",
 												Position = PaneModel.PositionType.Bottom,
-												View = new Views.Tools.Log.LogView(PluginsStudioViewModel.LogViewModel)
+												View = new Views.Tools.Log.LogView(PluginsStudioViewModel.LogViewModel),
 											},
 									new PaneModel
 											{

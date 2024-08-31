@@ -16,7 +16,7 @@ public partial class BlogTreeControlView : UserControl
 		// Inicializa los componentes
 		InitializeComponent();
 		// Inicializa el formulario
-		trvBlogs.DataContext = ViewModel = viewModel;
+		DataContext = ViewModel = viewModel;
 	}
 
 	/// <summary>

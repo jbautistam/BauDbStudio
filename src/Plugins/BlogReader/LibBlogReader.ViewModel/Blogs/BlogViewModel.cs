@@ -12,7 +12,6 @@ public class BlogViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewMode
 	private FolderModel? _parent;
 	private BlogModel _blog = default!;
 	private string _name = default!, _description = default!, _url = default!;
-	private int _maximumEntriesRead;
 	private bool _downloadPodcast, _enabled, _deleteOldEntriesRead;
 	private DateTime? _lastDownload, _lastEntry;
 
@@ -40,8 +39,7 @@ public class BlogViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewMode
 		URL = _blog.URL;
 		DownloadPodcast = _blog.DownloadPodcast;
 		Enabled = _blog.Enabled;
-		MaximumEntriesRead = _blog.MaximumEntriesRead;
-		DeleteOldEntriesRead = _blog.DeleteOldEntries;
+		DeleteOldEntries = _blog.DeleteOldEntries;
 		LastDownload = _blog.DateLastDownload;
 		LastEntry = _blog.DateLastEntry;
 	}
@@ -78,9 +76,7 @@ public class BlogViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewMode
 			_blog.Folder = Parent;
 			_blog.Name = Name;
 			_blog.Description = Description;
-			_blog.MaximumEntriesRead = MaximumEntriesRead;
-			if (!DeleteOldEntriesRead)
-				_blog.MaximumEntriesRead = 0;
+			_blog.DeleteOldEntries = DeleteOldEntries;
 			_blog.URL = URL;
 			_blog.DownloadPodcast = DownloadPodcast;
 			_blog.Enabled = Enabled;
@@ -151,28 +147,12 @@ public class BlogViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogViewMode
 	}
 
 	/// <summary>
-	///		Indica si se deben borrar las entradas leidas
+	///		Indica si se deben borrar las entradas antiguas
 	/// </summary>
-	public bool DeleteOldEntriesRead
+	public bool DeleteOldEntries
 	{
 		get { return _deleteOldEntriesRead; }
-		set 
-		{ 
-			if (CheckProperty(ref _deleteOldEntriesRead, value))
-			{
-				if (_deleteOldEntriesRead && MaximumEntriesRead == 0)
-					MaximumEntriesRead = 1_000;
-			}
-		}
-	}
-
-	/// <summary>
-	///		Número máximo de entradas leidas sobre un archivo
-	/// </summary>
-	public int MaximumEntriesRead
-	{
-		get { return _maximumEntriesRead; }
-		set { CheckProperty(ref _maximumEntriesRead, value); }
+		set { CheckProperty(ref _deleteOldEntriesRead, value); }
 	}
 
 	/// <summary>
