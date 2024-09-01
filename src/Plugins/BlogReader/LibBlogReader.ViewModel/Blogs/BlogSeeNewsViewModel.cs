@@ -147,6 +147,19 @@ public class BlogSeeNewsViewModel : BaseObservableObject, PluginsStudio.ViewMode
 	}
 
 	/// <summary>
+	///		Ejecuta un comando
+	/// </summary>
+	public void Execute(PluginsStudio.ViewModels.Base.Models.Commands.ExternalCommand externalCommand)
+	{
+		switch (externalCommand.Type)
+		{
+			case PluginsStudio.ViewModels.Base.Models.Commands.ExternalCommand.ExternalCommandType.Delete:
+					DeleteSelectedEntries();
+				break;
+		}
+	}
+
+	/// <summary>
 	///		Ejecuta una acción
 	/// </summary>
 	private void ExecuteAction(string action)

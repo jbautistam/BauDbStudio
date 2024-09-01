@@ -73,6 +73,14 @@ public class FileTextViewModel : Base.Files.BaseTextFileViewModel
 	private bool IsFileName(string text) => !string.IsNullOrWhiteSpace(text) && text.Length < 8_000 && text.IndexOf('\r') < 0 && text.IndexOf('.') >= 0;
 
 	/// <summary>
+	///		Ejecuta un comando
+	/// </summary>
+	public override void Execute(PluginsStudio.ViewModels.Base.Models.Commands.ExternalCommand externalCommand)
+	{
+		System.Diagnostics.Debug.WriteLine($"Execute command {externalCommand.Type.ToString()} at {Header}");
+	}
+
+	/// <summary>
 	///		ViewModel principal
 	/// </summary>
 	public PluginsStudioViewModel MainViewModel { get; }

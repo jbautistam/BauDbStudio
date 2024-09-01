@@ -78,7 +78,13 @@ public partial class MainWindow : Window
 		// Muestra los paneles
 		foreach (Libraries.PluginsStudio.Views.Base.Models.PaneModel pane in DbStudioViewsManager.GetPanes())
 			if (pane is not null && pane.View is not null)
+			{
+				// Añade el panel al control
 				dckManager.AddPane(pane.Id, pane.Title, pane.View, pane.ViewModel, ConvertPosition(pane.Position));
+				// Añade el panel a la lista
+				if (pane.View.DataContext is IPaneViewModel paneViewModel)
+					ViewModel.WindowsViewModel.AddPane(paneViewModel.TabId, paneViewModel.Header);
+			}
 		// Abre los paneles predefinidos
 		dckManager.OpenGroup(Controls.DockLayout.DockLayoutManager.DockPosition.Left);
 	}
@@ -182,6 +188,7 @@ public partial class MainWindow : Window
 	private void AddTab(UserControl control, IDetailViewModel detailsViewModel)
 	{
 		dckManager.AddDocument(detailsViewModel.TabId, detailsViewModel.Header, control, detailsViewModel);
+		ViewModel.WindowsViewModel.AddDocument(detailsViewModel.TabId, detailsViewModel.Header);
 	}
 
 	/// <summary>
@@ -205,7 +212,8 @@ public partial class MainWindow : Window
 	/// </summary>
 	private void CloseWindow(Controls.DockLayout.EventArguments.ClosingEventArgs args)
 	{
-		if (args.Document != null && args.Document.Tag != null && args.Document.Tag is IDetailViewModel detailViewModel && detailViewModel.IsUpdated)
+		if (args.Document != null && args.Document.Tag != null && args.Document.Tag is IDetailViewModel detailViewModel && 
+			detailViewModel.IsUpdated)
 		{
 			Libraries.BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType result = DbStudioViewsManager.MainWindowsController.HostController.SystemController.ShowQuestionCancel
 																										(detailViewModel.GetSaveAndCloseMessage());
@@ -227,8 +235,13 @@ public partial class MainWindow : Window
 	/// </summary>
 	private void DestroyWindow(Controls.DockLayout.EventArguments.ClosedEventArgs args)
 	{
-		if (args.Document.Tag != null && args.Document.Tag is IDetailViewModel detailViewModel)
-			detailViewModel.Close();
+		if (args.Document.UserControl is not null && args.Document.UserControl.DataContext is IDocumentViewModel document)
+		{
+			// Cierra el documento
+			document.Close();
+			// Lo quita de la lista de ventanas
+			ViewModel.WindowsViewModel.Close(document.TabId);
+		}
 	}
 
 	/// <summary>
@@ -269,7 +282,7 @@ public partial class MainWindow : Window
 	/// </summary>
 	internal List<IDetailViewModel> GetOpenedDetails()
 	{
-		List<IDetailViewModel> detailViewModels = new List<IDetailViewModel>();
+		List<IDetailViewModel> detailViewModels = [];
 
 			// Obtiene la lista
 			foreach (object view in dckManager.GetOpenedViews())

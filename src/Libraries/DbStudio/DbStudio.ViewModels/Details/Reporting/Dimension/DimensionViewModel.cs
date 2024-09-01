@@ -68,6 +68,14 @@ public class DimensionViewModel : BaseObservableObject, PluginsStudio.ViewModels
 	}
 
 	/// <summary>
+	///		Ejecuta un comando
+	/// </summary>
+	public void Execute(PluginsStudio.ViewModels.Base.Models.Commands.ExternalCommand externalCommand)
+	{
+		System.Diagnostics.Debug.WriteLine($"Execute command {externalCommand.Type.ToString()} at {Header}");
+	}
+
+	/// <summary>
 	///		Obtiene el mensaje de grabación
 	/// </summary>
 	public string GetSaveAndCloseMessage() => $"¿Desea grabar las modificaciones de la dimensión '{Key}'?";

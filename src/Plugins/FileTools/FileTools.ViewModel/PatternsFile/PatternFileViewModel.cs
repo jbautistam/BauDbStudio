@@ -123,6 +123,14 @@ public class PatternFileViewModel : BaseFileViewModel, PluginsStudio.ViewModels.
 	}
 
 	/// <summary>
+	///		Ejecuta un comando
+	/// </summary>
+	public override void Execute(PluginsStudio.ViewModels.Base.Models.Commands.ExternalCommand externalCommand)
+	{
+		System.Diagnostics.Debug.WriteLine($"Execute command {externalCommand.Type.ToString()} at {Header}");
+	}
+
+	/// <summary>
 	///		Graba el archivo
 	/// </summary>
 	public override void SaveDetails(bool newName)

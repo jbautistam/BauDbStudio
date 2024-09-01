@@ -1,4 +1,5 @@
 ﻿using Bau.Libraries.BauMvvm.ViewModels;
+using Bau.Libraries.PluginsStudio.ViewModels.Base.Models.Commands;
 
 namespace Bau.Libraries.PluginsStudio.ViewModels;
 
@@ -27,6 +28,7 @@ public class PluginsStudioViewModel : BaseObservableObject
 	private Base.Interfaces.IDetailViewModel? _selectedDetailsViewModel;
 	private Explorers.Files.TreeFilesViewModel _treeFoldersViewModel = default!;
 	private TasksQueue.TasksQueueListViewModel _tasksQueueListViewModel = default!;
+	private Windows.WindowsCollectionViewModel _windowsViewModel = default!;
 
 	public PluginsStudioViewModel(Controllers.IPluginsStudioController pluginsStudioController)
 	{
@@ -39,6 +41,7 @@ public class PluginsStudioViewModel : BaseObservableObject
 		SearchFilesViewModel = new Tools.Search.SearchFilesViewModel(this);
 		TasksQueueListViewModel = new TasksQueue.TasksQueueListViewModel(this);
 		TreeFoldersViewModel = new Explorers.Files.TreeFilesViewModel(this);
+		WindowsViewModel = new Windows.WindowsCollectionViewModel(this);
 		// Asigna los comandos
 		SaveCommand = new BaseCommand(_ => Save(false), _ => CanSave())
 								.AddListener(this, nameof(SelectedDetailsViewModel));
@@ -171,15 +174,12 @@ public class PluginsStudioViewModel : BaseObservableObject
 	/// </summary>
 	private void Delete()
 	{
-		Base.Interfaces.IDetailViewModel? details = MainController.MainWindowController.GetActiveDetails();
-		Base.Interfaces.IPaneViewModel? pane = MainController.MainWindowController.GetActivePane();
-
-			if (details is not null)
-				MainController.MainWindowController.SystemController.ShowMessage($"{details.Header}: Borrar");
-			else if (pane is not null)
-				MainController.MainWindowController.SystemController.ShowMessage($"{pane.Header}: Borrar");
+		if (MainController.MainWindowController.GetActiveDetails() is Base.Interfaces.IDetailViewModel details)
+			details.Execute(new ExternalCommand(ExternalCommand.ExternalCommandType.Delete));
+		else if (MainController.MainWindowController.GetActivePane() is Base.Interfaces.IPaneViewModel pane)
+			pane.Execute(new ExternalCommand(ExternalCommand.ExternalCommandType.Delete));
 	}
-	
+
 	/// <summary>
 	///		Comprueba si puede borrar los datos
 	/// </summary>
@@ -251,6 +251,15 @@ public class PluginsStudioViewModel : BaseObservableObject
 	{
 		get { return _tasksQueueListViewModel; }
 		set { CheckObject(ref _tasksQueueListViewModel, value); }
+	}
+
+	/// <summary>
+	///		ViewModel de ventanas abiertas
+	/// </summary>
+	public Windows.WindowsCollectionViewModel WindowsViewModel
+	{
+		get { return _windowsViewModel; }
+		set { CheckObject(ref _windowsViewModel, value); }
 	}
 
 	/// <summary>

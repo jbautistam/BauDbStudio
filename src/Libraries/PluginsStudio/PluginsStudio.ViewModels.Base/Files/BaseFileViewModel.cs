@@ -28,6 +28,11 @@ public abstract class BaseFileViewModel : BaseObservableObject, Interfaces.IDeta
 	public abstract void SaveDetails(bool newName);
 
 	/// <summary>
+	///		Ejecuta un comando
+	/// </summary>
+	public abstract void Execute(Models.Commands.ExternalCommand externalCommand);
+
+	/// <summary>
 	///		Obtiene el mensaje que se debe mostrar al cerrar la ventana
 	/// </summary>
 	public string GetSaveAndCloseMessage()

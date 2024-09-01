@@ -5,8 +5,4 @@
 /// </summary>
 public interface IPaneViewModel : IDocumentViewModel
 {
-	/// <summary>
-	///		Ejecuta un comando
-	/// </summary>
-	void Execute(Models.Commands.ExternalCommand externalCommand);
 }

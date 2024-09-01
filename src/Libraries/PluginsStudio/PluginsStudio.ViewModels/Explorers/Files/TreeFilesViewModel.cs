@@ -321,7 +321,12 @@ public class TreeFilesViewModel : PluginTreeViewModel, Base.Interfaces.IPaneView
 	/// </summary>
 	public void Execute(Base.Models.Commands.ExternalCommand externalCommand)
 	{
-		MainViewModel.MainController.MainWindowController.SystemController.ShowMessage($"Execute {externalCommand}");
+		switch (externalCommand.Type)
+		{
+			case Base.Models.Commands.ExternalCommand.ExternalCommandType.Delete:
+					DeleteItem();
+				break;
+		}
 	}
 
 	/// <summary>
@@ -828,7 +833,7 @@ public class TreeFilesViewModel : PluginTreeViewModel, Base.Interfaces.IPaneView
 	/// </summary>
 	public void Close()
 	{
-		MainViewModel.MainController.MainWindowController.SystemController.ShowMessage("Cerrar panel");
+		System.Diagnostics.Debug.WriteLine("Cerrar panel");
 	}
 
 	/// <summary>

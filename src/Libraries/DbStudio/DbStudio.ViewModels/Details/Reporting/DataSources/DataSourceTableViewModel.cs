@@ -40,6 +40,14 @@ public class DataSourceTableViewModel : BaseObservableObject, PluginsStudio.View
 	}
 
 	/// <summary>
+	///		Ejecuta un comando
+	/// </summary>
+	public void Execute(PluginsStudio.ViewModels.Base.Models.Commands.ExternalCommand externalCommand)
+	{
+		System.Diagnostics.Debug.WriteLine($"Execute command {externalCommand.Type.ToString()} at {Header}");
+	}
+
+	/// <summary>
 	///		Obtiene el mensaje de grabación
 	/// </summary>
 	public string GetSaveAndCloseMessage() => $"¿Desea grabar las modificaciones del origen de datos '{Schema}.{Table}'?";

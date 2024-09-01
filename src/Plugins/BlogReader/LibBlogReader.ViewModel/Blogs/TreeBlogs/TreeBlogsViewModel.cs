@@ -103,6 +103,18 @@ public class TreeBlogsViewModel : PluginsStudio.ViewModels.Base.Explorers.Plugin
 	}
 
 	/// <summary>
+	///		Ejecuta un comando externo
+	/// </summary>
+	public void Execute(ExternalCommand command)
+	{
+		switch (command.Type)
+		{
+			case ExternalCommand.ExternalCommandType.Delete:
+					DeleteItem();
+				break;
+		}
+	}
+	/// <summary>
 	///		Comprueba si se puede ejecutar una acción
 	/// </summary>
 	private void ExecuteAction(string action)
@@ -128,13 +140,7 @@ public class TreeBlogsViewModel : PluginsStudio.ViewModels.Base.Explorers.Plugin
 					SaveOpml();
 				break;
 			case nameof(DeleteCommand):
-					if (SelectedNode is not null)
-					{
-						if (SelectedNode is FolderNodeViewModel folderNode)
-							DeleteFolder(folderNode.Folder);
-						else if (SelectedNode is BlogNodeViewModel blogNode)
-							DeleteBlog(blogNode.Blog);
-					}
+					DeleteItem();
 				break;
 		}
 	}
@@ -454,19 +460,11 @@ public class TreeBlogsViewModel : PluginsStudio.ViewModels.Base.Explorers.Plugin
 	}
 
 	/// <summary>
-	///		Ejecuta un comando externo
-	/// </summary>
-	public void Execute(ExternalCommand externalCommand)
-	{
-		MainViewModel.ViewsController.HostController.SystemController.ShowMessage($"Ejecuta el comando {externalCommand.Name} en {Header}");
-	}
-
-	/// <summary>
 	///		Cierra el panel
 	/// </summary>
 	public void Close()
 	{
-		MainViewModel.ViewsController.HostController.SystemController.ShowMessage("Cerrar el panel de blogs");
+		System.Diagnostics.Debug.WriteLine("Cerrar el panel de blogs");
 	}
 
 	/// <summary>

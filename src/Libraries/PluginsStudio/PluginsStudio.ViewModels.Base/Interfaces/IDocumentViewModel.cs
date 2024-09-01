@@ -6,6 +6,11 @@
 public interface IDocumentViewModel
 {
 	/// <summary>
+	///		Ejecuta un comando
+	/// </summary>
+	void Execute(Models.Commands.ExternalCommand externalCommand);
+
+	/// <summary>
 	///		Cierra la ventana
 	/// </summary>
 	void Close();

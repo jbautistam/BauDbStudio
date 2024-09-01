@@ -88,6 +88,14 @@ public class WebViewModel : BaseObservableObject, Base.Interfaces.IDetailViewMod
 	}
 
 	/// <summary>
+	///		Ejecuta un comando
+	/// </summary>
+	public void Execute(Base.Models.Commands.ExternalCommand externalCommand)
+	{
+		System.Diagnostics.Debug.WriteLine($"Execute command {externalCommand.Type.ToString()} at {Header}");
+	}
+
+	/// <summary>
 	///		Obtiene el mensaje de grabar y cerrar
 	/// </summary>
 	public string GetSaveAndCloseMessage() => "¿Desea grabar esta página?";

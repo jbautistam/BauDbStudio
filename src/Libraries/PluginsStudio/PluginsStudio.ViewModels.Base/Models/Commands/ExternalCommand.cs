@@ -24,10 +24,13 @@ public class ExternalCommand
 		Paste
 	}
 
-	public ExternalCommand(string name, ExternalCommandType type)
+	public ExternalCommand(ExternalCommandType type, string? name = null)
 	{
-		Name = name;
 		Type = type;
+		if (!string.IsNullOrWhiteSpace(name))
+			Name = name;
+		else
+			Name = Type.ToString();
 	}
 
 	/// <summary>

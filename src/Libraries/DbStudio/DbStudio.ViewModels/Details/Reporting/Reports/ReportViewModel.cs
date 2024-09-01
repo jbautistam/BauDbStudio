@@ -66,7 +66,7 @@ public class ReportViewModel : BaseObservableObject, PluginsStudio.ViewModels.Ba
 	/// </summary>
 	private void CreateDataSource()
 	{
-		throw new NotImplementedException("¿De dónde debería recoge el datasource?");
+		throw new NotImplementedException("¿De dónde debería recogee el datasource?");
 		DataSources.Add(new ReportDataSourceViewModel(ReportingSolutionViewModel, Report, null));
 	}
 
@@ -164,6 +164,14 @@ public class ReportViewModel : BaseObservableObject, PluginsStudio.ViewModels.Ba
 				dataSources.Add(dataSource.GetReportDataSource());
 			// Devuelve los orígenes de datos
 			return dataSources;
+	}
+
+	/// <summary>
+	///		Ejecuta un comando
+	/// </summary>
+	public void Execute(PluginsStudio.ViewModels.Base.Models.Commands.ExternalCommand externalCommand)
+	{
+		System.Diagnostics.Debug.WriteLine($"Execute command {externalCommand.Type.ToString()} at {Header}");
 	}
 
 	/// <summary>

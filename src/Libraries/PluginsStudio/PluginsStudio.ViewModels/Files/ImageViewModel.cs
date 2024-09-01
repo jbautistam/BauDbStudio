@@ -65,6 +65,14 @@ public class ImageViewModel : Base.Files.BaseFileViewModel
 	}
 
 	/// <summary>
+	///		Ejecuta un comando
+	/// </summary>
+	public override void Execute(Base.Models.Commands.ExternalCommand externalCommand)
+	{
+		System.Diagnostics.Debug.WriteLine($"Execute command {externalCommand.Type.ToString()} at {Header}");
+	}
+
+	/// <summary>
 	///		Cierra el viewmodel
 	/// </summary>
 	public override void Close()
