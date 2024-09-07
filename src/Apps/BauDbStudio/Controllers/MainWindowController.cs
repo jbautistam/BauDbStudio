@@ -44,6 +44,14 @@ public class MainWindowController : Libraries.PluginsStudio.ViewModels.Base.Cont
 	public IDetailViewModel? GetActiveDetails() => DbStudioViewsManager.MainWindow.GetActiveDetails();
 
 	/// <summary>
+	///		Activa una ventana de detalles (documento)
+	/// </summary>
+	public void ActivateDetails(string tabId, string documentId)
+	{
+		DbStudioViewsManager.MainWindow.ActivateDetails(tabId, documentId);
+	}
+
+	/// <summary>
 	///		Obtiene el viewModel del panel activo
 	/// </summary>
 	public IPaneViewModel? GetActivePane() => DbStudioViewsManager.MainWindow.GetActivePane();

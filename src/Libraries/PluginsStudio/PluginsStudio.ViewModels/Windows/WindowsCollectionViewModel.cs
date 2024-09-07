@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using Bau.Libraries.PluginsStudio.ViewModels.Base.Interfaces;
 
 namespace Bau.Libraries.PluginsStudio.ViewModels.Windows;
 
@@ -26,7 +27,9 @@ public class WindowsCollectionViewModel
 	/// </summary>
 	public void AddDocument(string tabId, string name)
 	{
-		CreateWindow(tabId, tabId, name, WindowViewModel.WindowType.Document);
+		if (!ExistsDocument(tabId))
+			CreateWindow(tabId, tabId, name, WindowViewModel.WindowType.Document);
+		SetActiveDocument(tabId);
 	}
 
 	/// <summary>
@@ -67,6 +70,11 @@ public class WindowsCollectionViewModel
 	/// <summary>
 	///		Comprueba si existe un documento
 	/// </summary>
+	private bool ExistsDocument(string documentId) => Exists(documentId, Documents);
+
+	/// <summary>
+	///		Comprueba si existe un documento
+	/// </summary>
 	private bool Exists(string id, ObservableCollection<WindowViewModel> documents) => documents.Any(item => item.DocumentId.Equals(id, StringComparison.CurrentCultureIgnoreCase));
 
 	/// <summary>
@@ -78,6 +86,26 @@ public class WindowsCollectionViewModel
 			viewModel.Visible = false;
 		else
 			Documents.Remove(viewModel);
+	}
+
+	/// <summary>
+	///		Cambia el documento activo
+	/// </summary>
+	public void SetActiveDocument(IDetailViewModel details)
+	{
+		SetActiveDocument(details.TabId);
+	}
+
+	/// <summary>
+	///		Cambia el documento activo
+	/// </summary>
+	public void SetActiveDocument(string tabId)
+	{
+		foreach (WindowViewModel viewModel in Documents)
+			if (viewModel.Id.Equals(tabId, StringComparison.CurrentCultureIgnoreCase))
+				viewModel.Active = true;
+			else
+				viewModel.Active = false;
 	}
 
 	/// <summary>

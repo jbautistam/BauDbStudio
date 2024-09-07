@@ -152,11 +152,6 @@
 			</MenuItem>
 
 			<MenuItem Header="_Ventana">
-				<MenuItem Header="_Cerrar todos los documentos" Click="CloseAllWindows_Click">
-					<MenuItem.Icon>
-						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
-					</MenuItem.Icon>
-				</MenuItem>
 				<MenuItem Header="Cambiar tema">
 					<MenuItem.Icon>
 						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
@@ -180,7 +175,6 @@
 							<Setter Property="MenuItem.Header" Value="{Binding Name}"/>
 							<Setter Property="MenuItem.IsCheckable" Value="True"/>
 							<Setter Property="MenuItem.IsChecked" Value="{Binding Visible}"/>
-							<Setter Property="MenuItem.Command" Value="{Binding OpenFileCommand}"/>
 						</Style>
 					</MenuItem.ItemContainerStyle>
 				</MenuItem>
@@ -191,9 +185,17 @@
 					<MenuItem.ItemContainerStyle>
 						<Style>
 							<Setter Property="MenuItem.Header" Value="{Binding Name}"/>
-							<Setter Property="MenuItem.Command" Value="{Binding OpenFileCommand}"/>
+							<Setter Property="MenuItem.IsCheckable" Value="False"/>
+							<Setter Property="MenuItem.IsChecked" Value="{Binding Active}"/>
+							<Setter Property="MenuItem.Command" Value="{Binding ActivateDocumentCommand}"/>
 						</Style>
 					</MenuItem.ItemContainerStyle>
+				</MenuItem>
+				<Separator/>
+				<MenuItem Header="_Cerrar todos los documentos" Click="CloseAllWindows_Click">
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
+					</MenuItem.Icon>
 				</MenuItem>
 			</MenuItem>
 

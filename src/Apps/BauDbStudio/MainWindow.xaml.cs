@@ -223,7 +223,7 @@ public partial class MainWindow : Window
 
 			// Oculta / muestra el panel
 			if (!visible)
-				showed = dckManager.HidePane(tabId, documentId);
+				showed = dckManager.HidePane(documentId);
 			else
 			{
 				Libraries.PluginsStudio.Views.Base.Models.PaneModel? panel = DbStudioViewsManager.GetPane(documentId);
@@ -286,7 +286,10 @@ public partial class MainWindow : Window
 	private void UpdateSelectedTab()
 	{
 		if (dckManager.ActiveDocument?.Tag is IDetailViewModel details)
+		{
 			ViewModel.SelectedDetailsViewModel = details;
+			ViewModel.WindowsViewModel.SetActiveDocument(details);
+		}
 		else
 			ViewModel.SelectedDetailsViewModel = null;
 	}
@@ -326,6 +329,14 @@ public partial class MainWindow : Window
 					detailViewModels.Add(viewModel);
 			// Devuelve la lista
 			return detailViewModels;
+	}
+
+	/// <summary>
+	///		Activa una ventana de detalles
+	/// </summary>
+	internal void ActivateDetails(string tabId, string documentId)
+	{
+		dckManager.ActivateDocument(documentId);
 	}
 
 	/// <summary>

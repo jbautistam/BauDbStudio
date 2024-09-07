@@ -1,10 +1,12 @@
 ﻿
+using Bau.Libraries.BauMvvm.ViewModels;
+
 namespace Bau.Libraries.PluginsStudio.ViewModels.Windows;
 
 /// <summary>
 ///		ViewModel de una ventana
 /// </summary>
-public class WindowViewModel : BauMvvm.ViewModels.BaseObservableObject
+public class WindowViewModel : BaseObservableObject
 {
 	/// <summary>
 	///		Tipo de ventana
@@ -19,16 +21,27 @@ public class WindowViewModel : BauMvvm.ViewModels.BaseObservableObject
 	// Variables privadas
 	private string _id = default!, _documentId = default!, _name = default!;
 	private WindowType _type;
-	private bool _visible, _firstTime = true;
+	private bool _visible, _active, _firstTime = true;
 
 	public WindowViewModel(PluginsStudioViewModel mainViewModel, string id, string documentId, string name, WindowType type)
 	{
+		// Asigna las propiedades
 		MainViewModel = mainViewModel;
 		Id = id;
 		DocumentId = documentId;
 		Name = name;
 		Type = type;
 		Visible = true;
+		// Asigna los comandos
+		ActivateDocumentCommand = new BaseCommand(_ => ActivateDocument(), _ => Visible && Type == WindowType.Document);
+	}
+
+	/// <summary>
+	///		Activa la ventana de un documento
+	/// </summary>
+	private void ActivateDocument()
+	{
+		MainViewModel.MainController.MainWindowController.ActivateDetails(Id, DocumentId);
 	}
 
 	/// <summary>
@@ -91,6 +104,15 @@ public class WindowViewModel : BauMvvm.ViewModels.BaseObservableObject
 	}
 
 	/// <summary>
+	///		Indica si la ventana está activa
+	/// </summary>
+	public bool Active 
+	{ 
+		get { return _active; } 
+		set { CheckProperty(ref _active, value); }
+	}
+
+	/// <summary>
 	///		Indica si la ventana está visible
 	/// </summary>
 	public bool Visible
@@ -102,4 +124,9 @@ public class WindowViewModel : BauMvvm.ViewModels.BaseObservableObject
 				UpdateVisibility();
 		}
 	}
+
+	/// <summary>
+	///		Comando para activar un documento
+	/// </summary>
+	public BaseCommand ActivateDocumentCommand { get; }
 }

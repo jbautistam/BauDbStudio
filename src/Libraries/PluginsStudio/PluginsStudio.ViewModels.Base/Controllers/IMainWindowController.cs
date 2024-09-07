@@ -26,6 +26,11 @@ public interface IMainWindowController
 	Interfaces.IDetailViewModel? GetActiveDetails();
 
 	/// <summary>
+	///		Activa una ventana de detalles (documento)
+	/// </summary>
+	void ActivateDetails(string tabId, string documentId);
+
+	/// <summary>
 	///		Obtiene la lista de ventanas de detalles abiertas
 	/// </summary>
 	List<Interfaces.IDetailViewModel> GetOpenedDetails();
