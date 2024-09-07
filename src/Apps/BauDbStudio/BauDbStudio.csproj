@@ -64,6 +64,7 @@
     <None Remove="Resources\Images\FolderNode.png" />
     <None Remove="Resources\Images\LastFiles.png" />
     <None Remove="Resources\Images\Loading.png" />
+    <None Remove="Resources\Images\Panels.png" />
     <None Remove="Resources\Images\Project.png" />
     <None Remove="Resources\Images\Refresh.png" />
     <None Remove="Resources\Images\Search.png" />
@@ -134,6 +135,7 @@
     <Resource Include="Resources\Images\Filter.png" />
     <Resource Include="Resources\Images\LastFiles.png" />
     <Resource Include="Resources\Images\Loading.png" />
+    <Resource Include="Resources\Images\Panels.png" />
     <Resource Include="Resources\Images\Project.png" />
     <Resource Include="Resources\Images\Refresh.png" />
     <Resource Include="Resources\Images\SeeWindow.png" />

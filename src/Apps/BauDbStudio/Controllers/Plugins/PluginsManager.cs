@@ -64,7 +64,7 @@ internal class PluginsManager
 	/// </summary>
 	internal List<PaneModel> GetPanes()
 	{
-		List<PaneModel> panes = new();
+		List<PaneModel> panes = [];
 
 			// Añade los paneles de los diferentes plugins
 			foreach (IPlugin plugin in Plugins)
@@ -83,7 +83,7 @@ internal class PluginsManager
 	/// </summary>
 	internal List<ToolBarModel> GetToolbars()
 	{
-		List<ToolBarModel> toolbars = new();
+		List<ToolBarModel> toolbars = [];
 
 			// Añade las barras de herramientas
 			foreach (IPlugin plugin in Plugins)
@@ -102,7 +102,7 @@ internal class PluginsManager
 	/// </summary>
 	internal List<MenuListModel> GetMenus()
 	{
-		List<MenuListModel> menus = new();
+		List<MenuListModel> menus = [];
 
 			// Añade los menús
 			foreach (IPlugin plugin in Plugins)
@@ -121,7 +121,7 @@ internal class PluginsManager
 	/// </summary>
 	internal List<IPluginConfigurationView> GetConfigurationViews()
 	{
-		List<IPluginConfigurationView> views = new();
+		List<IPluginConfigurationView> views = [];
 
 			// Añade las configuraciones
 			foreach (IPlugin plugin in Plugins)

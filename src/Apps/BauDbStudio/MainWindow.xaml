@@ -152,6 +152,11 @@
 			</MenuItem>
 
 			<MenuItem Header="_Ventana">
+				<MenuItem Header="_Cerrar todos los documentos" Click="CloseAllWindows_Click">
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
+					</MenuItem.Icon>
+				</MenuItem>
 				<MenuItem Header="Cambiar tema">
 					<MenuItem.Icon>
 						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
@@ -165,10 +170,30 @@
 					<MenuItem Header="VS 2013 blue" Click="mnuThemeVs2013Blue_Click" IsCheckable="True" x:Name="mnuThemeVs2013Blue"/>
 					<MenuItem Header="VS 2013 dark" Click="mnuThemeVs2013Dark_Click" IsCheckable="True" x:Name="mnuThemeVs2013Dark"/>
 				</MenuItem>
-				<MenuItem Header="_Cerrar todos los documentos" Click="CloseAllWindows_Click">
+				<Separator/>
+				<MenuItem Header="Paneles" ItemsSource="{Binding WindowsViewModel.Panels}">
 					<MenuItem.Icon>
-						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
+						<Image Width="16" Height="16" Source="/Resources/Images/Panels.png"/>
 					</MenuItem.Icon>
+					<MenuItem.ItemContainerStyle>
+						<Style>
+							<Setter Property="MenuItem.Header" Value="{Binding Name}"/>
+							<Setter Property="MenuItem.IsCheckable" Value="True"/>
+							<Setter Property="MenuItem.IsChecked" Value="{Binding Visible}"/>
+							<Setter Property="MenuItem.Command" Value="{Binding OpenFileCommand}"/>
+						</Style>
+					</MenuItem.ItemContainerStyle>
+				</MenuItem>
+				<MenuItem Header="Ventanas" ItemsSource="{Binding WindowsViewModel.Documents}">
+					<MenuItem.Icon>
+						<Image Width="16" Height="16" Source="/Resources/Images/File.png"/>
+					</MenuItem.Icon>
+					<MenuItem.ItemContainerStyle>
+						<Style>
+							<Setter Property="MenuItem.Header" Value="{Binding Name}"/>
+							<Setter Property="MenuItem.Command" Value="{Binding OpenFileCommand}"/>
+						</Style>
+					</MenuItem.ItemContainerStyle>
 				</MenuItem>
 			</MenuItem>
 

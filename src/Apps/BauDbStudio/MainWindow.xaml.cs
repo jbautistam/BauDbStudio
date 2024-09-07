@@ -77,16 +77,31 @@ public partial class MainWindow : Window
 	{
 		// Muestra los paneles
 		foreach (Libraries.PluginsStudio.Views.Base.Models.PaneModel pane in DbStudioViewsManager.GetPanes())
+			ShowPane(pane);
+		// Abre los paneles predefinidos
+		dckManager.OpenGroup(Controls.DockLayout.DockLayoutManager.DockPosition.Left);
+	}
+
+	/// <summary>
+	///		Muestra un panel
+	/// </summary>
+	private bool ShowPane(Libraries.PluginsStudio.Views.Base.Models.PaneModel? pane)
+	{
+		bool showed = false;
+
+			// Abre el panel
 			if (pane is not null && pane.View is not null)
 			{
 				// Añade el panel al control
 				dckManager.AddPane(pane.Id, pane.Title, pane.View, pane.ViewModel, ConvertPosition(pane.Position));
 				// Añade el panel a la lista
 				if (pane.View.DataContext is IPaneViewModel paneViewModel)
-					ViewModel.WindowsViewModel.AddPane(paneViewModel.TabId, paneViewModel.Header);
+					ViewModel.WindowsViewModel.AddPane(paneViewModel.TabId, pane.Id, paneViewModel.Header);
+				// Indica que se ha mostrado
+				showed = true;
 			}
-		// Abre los paneles predefinidos
-		dckManager.OpenGroup(Controls.DockLayout.DockLayoutManager.DockPosition.Left);
+			// Devuelve el valor que indica si se ha abierto
+			return showed;
 	}
 
 	/// <summary>
@@ -197,6 +212,27 @@ public partial class MainWindow : Window
 	public void UpdateTabId(string oldTabId, string newTabId, string newHeader)
 	{
 		dckManager.UpdateTabId(oldTabId, newTabId, newHeader);
+	}
+
+	/// <summary>
+	///		Muestra / oculta un panel
+	/// </summary>
+	public bool ShowPane(string tabId, string documentId, bool visible)
+	{
+		bool showed = false;
+
+			// Oculta / muestra el panel
+			if (!visible)
+				showed = dckManager.HidePane(tabId, documentId);
+			else
+			{
+				Libraries.PluginsStudio.Views.Base.Models.PaneModel? panel = DbStudioViewsManager.GetPane(documentId);
+
+					if (panel is not null)
+						showed = ShowPane(panel);
+			}
+			// Devuelve el valor que indica si se ha mostrado / ocultado el panel
+			return showed;
 	}
 
 	/// <summary>
@@ -480,7 +516,7 @@ public partial class MainWindow : Window
 	/// </summary>
 	private void OpenAboutWindow()
 	{
-		Views.Tools.AboutView view = new Views.Tools.AboutView(GetAssemblyVersion());
+		Views.Tools.AboutView view = new(GetAssemblyVersion());
 
 			// Muestra la ventana
 			view.Owner = this;

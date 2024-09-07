@@ -52,37 +52,36 @@ public class BlogReaderPlugin : IPlugin
 	/// </summary>
 	public List<PaneModel> GetPanes()
 	{
-		return new()
-					{
-						new PaneModel
-								{
-									Id = "TreeBlogs",
-									Title = "Blogs",
-									Position = PaneModel.PositionType.Left,
-									View = new Views.BlogTreeControlView(MainViewModel.TreeBlogs)
-								}
-					};
+		return [
+					new PaneModel
+							{
+								Id = "TreeBlogs",
+								Title = "Blogs",
+								Position = PaneModel.PositionType.Left,
+								View = new Views.BlogTreeControlView(MainViewModel.TreeBlogs)
+							}
+				];
 	}
 
 	/// <summary>
 	///		Obtiene las barras de herramientas del plugin
 	/// </summary>
-	public List<ToolBarModel> GetToolBars() => new();
+	public List<ToolBarModel> GetToolBars() => [];
 
 	/// <summary>
 	///		Obtiene los menús del plugin
 	/// </summary>
-	public List<MenuListModel> GetMenus() => new();
+	public List<MenuListModel> GetMenus() => [];
 
 	/// <summary>
 	///		Obtiene las extensiones de archivo asociadas al plugin
 	/// </summary>
-	public List<FileAssignedModel> GetFilesAssigned() => new();
+	public List<FileAssignedModel> GetFilesAssigned() => [];
 
 	/// <summary>
 	///		Obtiene las opciones de menú asociadas a las extensiones de archivo y carpetas
 	/// </summary>
-	public List<FileOptionsModel> GetFilesOptions() => new();
+	public List<FileOptionsModel> GetFilesOptions() => [];
 
 	/// <summary>
 	///		Obtiene la vista de configuración del plugin

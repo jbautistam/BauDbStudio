@@ -236,4 +236,14 @@ public partial class TreeFilesExplorer : UserControl
 	{
 		PrepareContextualMenus();
 	}
+
+	private void RenameCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+	{
+		ViewModel.RenameCommand.Execute(null);
+	}
+
+	private void RenameCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+	{
+		e.CanExecute = ViewModel.RenameCommand.CanExecute(null);
+	}
 }

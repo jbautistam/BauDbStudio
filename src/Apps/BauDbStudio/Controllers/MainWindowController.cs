@@ -62,6 +62,14 @@ public class MainWindowController : Libraries.PluginsStudio.ViewModels.Base.Cont
 	}
 
 	/// <summary>
+	///		Muestra / oculta un panel
+	/// </summary>
+	public bool ShowPane(string tabId, string documentId, bool visible)
+	{
+		return DbStudioViewsManager.MainWindow.ShowPane(tabId, documentId, visible);
+	}
+
+	/// <summary>
 	///		Cierra la ventana de un documento abierto
 	/// </summary>
 	public void CloseWindow(string tabId)

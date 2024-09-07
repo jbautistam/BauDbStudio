@@ -36,4 +36,14 @@ public static class CustomCommands
 																							new KeyGesture(Key.Q, ModifierKeys.Control)
 																						}
 																		 );
+
+	/// <summary>
+	///		Abrir una consulta
+	/// </summary>
+	public static readonly RoutedUICommand Rename = new RoutedUICommand("Rename", "Rename", typeof(CustomCommands), 
+																		  new InputGestureCollection()
+																						{
+																							new KeyGesture(Key.F2)
+																						}
+																		 );
 }

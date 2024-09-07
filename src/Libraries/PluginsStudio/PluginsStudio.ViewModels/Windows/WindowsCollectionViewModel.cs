@@ -15,25 +15,29 @@ public class WindowsCollectionViewModel
 	/// <summary>
 	///		Añade un panel a la colección
 	/// </summary>
-	public void AddPane(string id, string name)
+	public void AddPane(string tabId, string paneId, string name)
 	{
-		CreateWindow(id, name, WindowViewModel.WindowType.Pane);
+		if (!ExistsPanel(paneId))
+			CreateWindow(tabId, paneId, name, WindowViewModel.WindowType.Pane);
 	}
 
 	/// <summary>
 	///		Elimina un panel de la colección
 	/// </summary>
-	public void AddDocument(string id, string name)
+	public void AddDocument(string tabId, string name)
 	{
-		CreateWindow(id, name, WindowViewModel.WindowType.Document);
+		CreateWindow(tabId, tabId, name, WindowViewModel.WindowType.Document);
 	}
 
 	/// <summary>
 	///		Crea una ventana
 	/// </summary>
-	private void CreateWindow(string id, string name, WindowViewModel.WindowType type)
+	private void CreateWindow(string tabId, string documentId, string name, WindowViewModel.WindowType type)
 	{
-		Items.Add(new WindowViewModel(MainViewModel, id, name, type));
+		if (type == WindowViewModel.WindowType.Pane)
+			Panels.Add(new WindowViewModel(MainViewModel, tabId, documentId, name, type));
+		else
+			Documents.Add(new WindowViewModel(MainViewModel, tabId, documentId, name, type));
 	}
 
 	/// <summary>
@@ -41,10 +45,29 @@ public class WindowsCollectionViewModel
 	/// </summary>
 	public void Close(string id)
 	{
-		for (int index = Items.Count - 1; index >= 0; index--)
-			if (Items[index].Id.Equals(id, StringComparison.CurrentCultureIgnoreCase))
-				Close(Items[index]);
+		Close(id, Documents);
+		Close(id, Panels);
 	}
+
+	/// <summary>
+	///		Cierra una ventana o un panel
+	/// </summary>
+	private void Close(string id, ObservableCollection<WindowViewModel> documents)
+	{
+		for (int index = documents.Count - 1; index >= 0; index--)
+			if (documents[index].Id.Equals(id, StringComparison.CurrentCultureIgnoreCase))
+				Close(documents[index]);
+	}
+
+	/// <summary>
+	///		Comprueba si existe un panel
+	/// </summary>
+	private bool ExistsPanel(string paneId) => Exists(paneId, Panels);
+
+	/// <summary>
+	///		Comprueba si existe un documento
+	/// </summary>
+	private bool Exists(string id, ObservableCollection<WindowViewModel> documents) => documents.Any(item => item.DocumentId.Equals(id, StringComparison.CurrentCultureIgnoreCase));
 
 	/// <summary>
 	///		Marca una ventana como cerrada
@@ -54,7 +77,7 @@ public class WindowsCollectionViewModel
 		if (viewModel.Type == WindowViewModel.WindowType.Pane)
 			viewModel.Visible = false;
 		else
-			Items.Remove(viewModel);
+			Documents.Remove(viewModel);
 	}
 
 	/// <summary>
@@ -65,5 +88,10 @@ public class WindowsCollectionViewModel
 	/// <summary>
 	///		Ventanas
 	/// </summary>
-	public ObservableCollection<WindowViewModel> Items { get; } = [];
+	public ObservableCollection<WindowViewModel> Documents { get; } = [];
+
+	/// <summary>
+	///		Ventanas
+	/// </summary>
+	public ObservableCollection<WindowViewModel> Panels { get; } = [];
 }

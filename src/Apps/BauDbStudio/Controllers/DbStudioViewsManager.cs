@@ -118,6 +118,11 @@ public class DbStudioViewsManager
 	}
 
 	/// <summary>
+	///		Obtiene un panel
+	/// </summary>
+	internal PaneModel? GetPane(string tabId) => GetPanes().FirstOrDefault(item => item.Id.Equals(tabId, StringComparison.CurrentCultureIgnoreCase));
+
+	/// <summary>
 	///		Obtiene las barras de herramientas del plugin
 	/// </summary>
 	public List<ToolBarModel> GetToolBars() => PluginsManager.GetToolbars();

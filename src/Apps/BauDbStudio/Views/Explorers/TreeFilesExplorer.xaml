@@ -5,8 +5,20 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Bau.DbStudio.Views.Explorers"
 			 xmlns:ViewModel="clr-namespace:Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;assembly=PluginsStudio.ViewModels.Base"
+			 xmlns:commandsLocal="clr-namespace:Bau.DbStudio.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+	<UserControl.CommandBindings>
+		<CommandBinding Command="commandsLocal:CustomCommands.Rename" Executed="RenameCommandBinding_Executed" CanExecute="RenameCommandBinding_CanExecute"/>
+	<!--
+		<CommandBinding Command="Rename" Executed="RenameCommandBinding_Executed" CanExecute="RenameCommandBinding_CanExecute"/>
+	-->
+	</UserControl.CommandBindings>
+	<UserControl.InputBindings>
+	<!--
+		<KeyBinding Command="Rename" Key="F2" />
+	-->
+	</UserControl.InputBindings>
 	<Grid>
 		<TreeView x:Name="trvExplorer" BorderThickness="0"
 				ContextMenu="{DynamicResource ResourceKey=mnuExplorer}" 

@@ -41,6 +41,11 @@ public interface IMainWindowController
 	void UpdateTabId(string oldTabId, string newTabId, string newHeader);
 
 	/// <summary>
+	///		Muestra / oculta un panel
+	/// </summary>
+	bool ShowPane(string tabId, string documentId, bool visible);
+
+	/// <summary>
 	///		Indica a la ventana principal que cierre un documento
 	/// </summary>
 	void CloseWindow(string tabId);

@@ -1,4 +1,5 @@
-﻿namespace Bau.Libraries.PluginsStudio.ViewModels.Windows;
+﻿
+namespace Bau.Libraries.PluginsStudio.ViewModels.Windows;
 
 /// <summary>
 ///		ViewModel de una ventana
@@ -16,17 +17,36 @@ public class WindowViewModel : BauMvvm.ViewModels.BaseObservableObject
 		Pane
 	}
 	// Variables privadas
-	private string _id = default!, _name = default!;
+	private string _id = default!, _documentId = default!, _name = default!;
 	private WindowType _type;
-	private bool _visible;
+	private bool _visible, _firstTime = true;
 
-	public WindowViewModel(PluginsStudioViewModel mainViewModel, string id, string name, WindowType type)
+	public WindowViewModel(PluginsStudioViewModel mainViewModel, string id, string documentId, string name, WindowType type)
 	{
 		MainViewModel = mainViewModel;
 		Id = id;
+		DocumentId = documentId;
 		Name = name;
 		Type = type;
 		Visible = true;
+	}
+
+	/// <summary>
+	///		Modifica la visibilidad
+	/// </summary>
+	private void UpdateVisibility()
+	{
+		// Modifica la visibilidad si es un panel y no estamos en la carga del panel
+		if (Type == WindowType.Pane && !_firstTime)
+			if (!MainViewModel.MainController.MainWindowController.ShowPane(Id, DocumentId, Visible))
+			{
+				// Si no se puede ocultar, deja el valor de Visible como estaba
+				_firstTime = true;
+				Visible = !Visible;
+				_firstTime = false;
+			}
+		// Indica que no es la primera vez
+		_firstTime = false;
 	}
 
 	/// <summary>
@@ -41,6 +61,15 @@ public class WindowViewModel : BauMvvm.ViewModels.BaseObservableObject
 	{
 		get { return _id; }
 		set { CheckProperty(ref _id, value); }
+	}
+
+	/// <summary>
+	///		Id del documento / panel
+	/// </summary>
+	public string DocumentId
+	{
+		get { return _documentId; }
+		set { CheckProperty(ref _documentId, value); }
 	}
 
 	/// <summary>
@@ -67,6 +96,10 @@ public class WindowViewModel : BauMvvm.ViewModels.BaseObservableObject
 	public bool Visible
 	{
 		get { return _visible; }
-		set { CheckProperty(ref _visible, value); }
+		set 
+		{ 
+			if (CheckProperty(ref _visible, value))
+				UpdateVisibility();
+		}
 	}
 }
