@@ -46,6 +46,7 @@
 		<ListView Grid.Row="2" Grid.Column="0"
 				  ItemsSource="{Binding Path=TimeListViewModel.Items}" 
 				  SelectedItem="{Binding Path=TimeListViewModel.SelectedItem}"
+				  MouseDoubleClick="TimeListViewModel_MouseDoubleClick"
 				  Margin="0">
 			<ListView.View>
 				<GridView>

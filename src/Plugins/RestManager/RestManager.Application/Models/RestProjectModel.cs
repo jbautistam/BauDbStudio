@@ -16,6 +16,11 @@ public class RestProjectModel
 	public string Description { get; set; } = default!;
 
 	/// <summary>
+	///		Conexiones
+	/// </summary>
+	public ConnectionsCollectionModel Connections { get; } = new();
+
+	/// <summary>
 	///		Parámetros del proyecto
 	/// </summary>
 	public ParametersCollectionModel Parameters { get; } = new();
@@ -23,10 +28,11 @@ public class RestProjectModel
 	/// <summary>
 	///		Cabeceras del proyecto (generales)
 	/// </summary>
+	[Obsolete("Los parámetros pertenecen a la conexión")]
 	public ParametersCollectionModel Headers { get; } = new();
 
 	/// <summary>
 	///		Pasos
 	/// </summary>
-	public List<BaseStepModel> Steps { get; } = new();
+	public List<BaseStepModel> Steps { get; } = [];
 }

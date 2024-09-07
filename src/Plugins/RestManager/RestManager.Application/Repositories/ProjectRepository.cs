@@ -13,6 +13,8 @@ internal class ProjectRepository
 	private const string TagRoot = "RestProject";
 	private const string TagName = "Name";
 	private const string TagDescription = "Description";
+	private const string TagConnection = "Connection";
+	private const string TagId = "Id";
 	private const string TagEnabled = "Enabled";
 	private const string TagParameter = "Parameter";
 	private const string TagKey = "Key";
@@ -47,6 +49,9 @@ internal class ProjectRepository
 								case TagParameter:
 										project.Parameters.Add(GetParameter(nodeML));
 									break;
+								case TagConnection:
+										project.Connections.Add(GetConnection(nodeML));
+									break;
 								case TagHeader:
 										project.Headers.Add(GetParameter(nodeML));
 									break;
@@ -64,6 +69,26 @@ internal class ProjectRepository
 	public ParameterModel GetParameter(MLNode rootML)
 	{
 		return new ParameterModel(rootML.Attributes[TagKey].Value.TrimIgnoreNull(), rootML.Attributes[TagValue].Value.TrimIgnoreNull());
+	}
+
+	/// <summary>
+	///		Obtiene los datos de una conexión
+	/// </summary>
+	public ConnectionModel GetConnection(MLNode rootML)
+	{
+		ConnectionModel connection = new();
+
+			// Obtiene los datos del paso
+			connection.Id = rootML.Attributes[TagId].Value.TrimIgnoreNull();
+			connection.Name = rootML.Nodes[TagName].Value.TrimIgnoreNull();
+			connection.Description = rootML.Nodes[TagDescription].Value.TrimIgnoreNull();
+			connection.Url = rootML.Attributes[TagUrl].Value.TrimIgnoreNull().GetUrl();
+			// Añade los datos
+			foreach (MLNode nodeML in rootML.Nodes)
+				if (nodeML.Name == TagHeader)
+					connection.Headers.Add(GetParameter(nodeML));
+			// Devuelve el paso
+			return connection;
 	}
 
 	/// <summary>
@@ -93,12 +118,13 @@ internal class ProjectRepository
 	/// </summary>
 	internal void Save(RestProjectModel project, string fileName)
 	{
-		MLFile fileML = new MLFile();
+		MLFile fileML = new();
 		MLNode rootML = fileML.Nodes.Add(TagRoot);
 
 			// Añade los datos del proyecto
 			rootML.Nodes.Add(TagName, project.Name);
 			rootML.Nodes.Add(TagDescription, project.Description);
+			rootML.Nodes.AddRange(GetXmlConnections(project.Connections));
 			rootML.Nodes.AddRange(GetXmlParameters(TagParameter, project.Parameters));
 			rootML.Nodes.AddRange(GetXmlParameters(TagHeader, project.Headers));
 			// Añade los datos de los pasos
@@ -108,11 +134,37 @@ internal class ProjectRepository
 	}
 
 	/// <summary>
+	///		Obtiene los nodos de conexiones
+	/// </summary>
+	private MLNodesCollection GetXmlConnections(ConnectionsCollectionModel connections)
+	{
+		MLNodesCollection nodesML = [];
+
+			// Añade los nodos
+			foreach (ConnectionModel connection in connections)
+			{
+				MLNode nodeML = new(TagConnection);
+
+					// Añade las propiedades
+					nodeML.Attributes.Add(TagId, connection.Id);
+					nodeML.Nodes.Add(TagName, connection.Name);
+					nodeML.Nodes.Add(TagDescription, connection.Description);
+					nodeML.Attributes.Add(TagUrl, connection.Url?.ToString());
+					// Añade las cabeceras
+					nodeML.Nodes.AddRange(GetXmlParameters(TagHeader, connection.Headers));
+					// Añade el nodo a la colección
+					nodesML.Add(nodeML);
+			}
+			// Devuelve la colección
+			return nodesML;
+	}
+
+	/// <summary>
 	///		Obtiene los nodos de parámetros
 	/// </summary>
 	private MLNodesCollection GetXmlParameters(string tag, List<ParameterModel> parameters)
 	{
-		MLNodesCollection nodesML = new();
+		MLNodesCollection nodesML = [];
 
 			// Añade los nodos
 			foreach (ParameterModel parameter in parameters)
@@ -134,7 +186,7 @@ internal class ProjectRepository
 	/// </summary>
 	private MLNodesCollection GetXmlSteps(List<BaseStepModel> steps)
 	{
-		MLNodesCollection nodesML = new();
+		MLNodesCollection nodesML = [];
 
 			// Añade los nodos de los pasos
 			foreach (BaseStepModel step in steps)

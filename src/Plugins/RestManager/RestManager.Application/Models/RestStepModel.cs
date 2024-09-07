@@ -29,6 +29,11 @@ public class RestStepModel : BaseStepModel
 	public string Description { get; set; } = default!;
 
 	/// <summary>
+	///		Conexión a la que se asocia el paso
+	/// </summary>
+	public string ConnectionId { get; set; } = default!;
+
+	/// <summary>
 	///		Método
 	/// </summary>
 	public RestMethod Method { get; set; }
@@ -41,7 +46,7 @@ public class RestStepModel : BaseStepModel
 	/// <summary>
 	///		Cabeceras
 	/// </summary>
-	public ParametersCollectionModel Headers { get; } = new();
+	public ParametersCollectionModel Headers { get; } = [];
 
 	/// <summary>
 	///		Contenido

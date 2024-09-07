@@ -29,4 +29,9 @@ public partial class TimeSchedulePane : UserControl
 	///		ViewModel
 	/// </summary>
 	public TimeScheduleViewModel ViewModel { get; private set; } = default!;
+
+	private void TimeListViewModel_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+	{
+		ViewModel.TimeListViewModel.OpenProperties();
+    }
 }

@@ -67,6 +67,15 @@ public class TimeListViewModel : BaseObservableObject
 	}
 
 	/// <summary>
+	///		Abre las propiedades del elemento seleccionado
+	/// </summary>
+	public void OpenProperties()
+	{
+		if (SelectedItem is not null)
+			UpdateItem(SelectedItem);
+	}
+
+	/// <summary>
 	///		Añade el total de la tarea que se está ejecutando en este momento
 	/// </summary>
 	internal void UpdateTotalElapsed(TimeEditableViewModel actualTimeViewModel)

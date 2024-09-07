@@ -1,7 +1,7 @@
 ﻿namespace Bau.Libraries.RestManager.ViewModel;
 
 /// <summary>
-///		ViewModel principal del player multimedia
+///		ViewModel principal del intérprete de instrucciones REST
 /// </summary>
 public class RestManagerViewModel : BauMvvm.ViewModels.BaseObservableObject
 {
@@ -19,7 +19,7 @@ public class RestManagerViewModel : BauMvvm.ViewModels.BaseObservableObject
 	}
 
 	/// <summary>
-	///		Carga el directorio
+	///		Carga el plugin
 	/// </summary>
 	public void Load(string path)
 	{
