@@ -1,6 +1,6 @@
 ﻿using Bau.Libraries.RestManager.Application.Models;
 
-namespace Bau.Libraries.RestManager.ViewModel.Project;
+namespace Bau.Libraries.RestManager.ViewModel.Project.Parameters;
 
 /// <summary>
 ///		ViewModel para la ventana de definición del parámetro

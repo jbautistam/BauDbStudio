@@ -2,7 +2,7 @@
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.ComboItems;
 using Bau.Libraries.RestManager.Application.Models;
 
-namespace Bau.Libraries.RestManager.ViewModel.Project;
+namespace Bau.Libraries.RestManager.ViewModel.Project.Steps;
 
 /// <summary>
 ///		ViewModel para un paso de un proyecto
@@ -10,9 +10,9 @@ namespace Bau.Libraries.RestManager.ViewModel.Project;
 public class RestFileStepItemViewModel : BaseObservableObject
 {
 	// Variables privadas
-	private string _url = default!, _content = default!;
-	private ComboViewModel? _comboMethods;
-	private RestParametersListViewModel? _headers;
+	private string _name = default!, _url = default!, _content = default!;
+	private ComboViewModel? _comboConnections, _comboMethods;
+	private Parameters.RestParametersListViewModel? _headers;
 
 	public RestFileStepItemViewModel(RestFileListStepsViewModel listStepsViewModel, RestStepModel restStep)
 	{
@@ -28,22 +28,40 @@ public class RestFileStepItemViewModel : BaseObservableObject
 	/// </summary>
 	private void InitViewModel()
 	{
-		// Carga el combo de tipos
-		ComboMethods = LoadComboTypes();
+		// Carga los combos
+		ComboMethods = LoadComboMethods();
+		ComboConnections = LoadComboConnections();
 		// Asigna las propiedades
 		ComboMethods.SelectedId = (int) RestStep.Method;
+		ComboConnections.SelectedTag = GetConnection(RestStep.ConnectionId);
+		Name = RestStep.Name;
 		Url = RestStep.Url;
-		Headers = new RestParametersListViewModel(ListStepsViewModel.FileViewModel, RestStep.Headers);
 		Content = RestStep.Content ?? string.Empty;
+		Headers = new Parameters.RestParametersListViewModel(ListStepsViewModel.FileViewModel);
+		Headers.AddParameters(RestStep.Headers);
 		// Asigna el manejador de eventos
 		PropertyChanged += (sender, args) => ListStepsViewModel.FileViewModel.IsUpdated = true;
 		ComboMethods.PropertyChanged += (sender, args) => ListStepsViewModel.FileViewModel.IsUpdated = true;
+		ComboConnections.PropertyChanged += (sender, args) => ListStepsViewModel.FileViewModel.IsUpdated = true;
+	}
+
+	/// <summary>
+	///		Obtiene la conexión asociada a un Id
+	/// </summary>
+	private ConnectionModel? GetConnection(string connectionId)
+	{
+		// Obtiene la conexión
+		foreach (ConnectionModel connection in ListStepsViewModel.FileViewModel.ConnectionsListViewModel.GetConnections())
+			if (connection.Id.Equals(connectionId, StringComparison.CurrentCultureIgnoreCase))
+				return connection;
+		// Si ha llegado hasta aquí es porque no ha encontrado nada
+		return null;
 	}
 
 	/// <summary>
 	///		Carga el combo de métodos
 	/// </summary>
-	private ComboViewModel LoadComboTypes()
+	private ComboViewModel LoadComboMethods()
 	{
 		ComboViewModel cboMethods = new(this);
 
@@ -61,6 +79,24 @@ public class RestFileStepItemViewModel : BaseObservableObject
 	}
 
 	/// <summary>
+	///		Carga el combo de conexiones
+	/// </summary>
+	private ComboViewModel LoadComboConnections()
+	{
+		ComboViewModel cboConnections = new(this);
+
+			// Añade un elemento vacío
+			cboConnections.AddItem(null, "<Select a connection>", null);
+			// Añade las conexiones
+			foreach (ConnectionModel connection in ListStepsViewModel.FileViewModel.ConnectionsListViewModel.GetConnections())
+				cboConnections.AddItem(cboConnections.Items.Count, connection.Name, connection);
+			// Selecciona el primer elemento
+			cboConnections.SelectedItem = cboConnections.Items[0];
+			// Devuelve el combo
+			return cboConnections;
+	}
+
+	/// <summary>
 	///		Obtiene los datos del paso
 	/// </summary>
 	internal BaseStepModel GetStep()
@@ -68,14 +104,17 @@ public class RestFileStepItemViewModel : BaseObservableObject
 		RestStepModel step = new();
 
 			// Asigna los datos
+			if (ComboConnections?.SelectedTag is ConnectionModel connection)
+				step.ConnectionId = connection.Id;
 			if (ComboMethods is not null)
 				step.Method = (RestStepModel.RestMethod) (ComboMethods.SelectedId ?? 0);
+			step.Name = Name;
 			step.Url = Url;
 			step.Content = Content;
 			// Añade las cabeceras
 			step.Headers.Clear();
 			if (Headers is not null)
-				foreach (RestParametersListItemViewModel header in Headers.Items)
+				foreach (Parameters.RestParametersListItemViewModel header in Headers.Items)
 					step.Headers.Add(new ParameterModel(header.Key, header.Value));
 			// Devuelve el paso
 			return step;
@@ -92,12 +131,30 @@ public class RestFileStepItemViewModel : BaseObservableObject
 	public RestStepModel RestStep { get; }
 
 	/// <summary>
+	///		Combo con las conexiones
+	/// </summary>
+	public ComboViewModel? ComboConnections
+	{
+		get { return _comboConnections; }
+		set { CheckObject(ref _comboConnections, value); }
+	}
+
+	/// <summary>
 	///		Combo con los métodos
 	/// </summary>
 	public ComboViewModel? ComboMethods
 	{
 		get { return _comboMethods; }
 		set { CheckObject(ref _comboMethods, value); }
+	}
+
+	/// <summary>
+	///		Nombre
+	/// </summary>
+	public string Name
+	{
+		get { return _name; }
+		set { CheckProperty(ref _name, value); }
 	}
 
 	/// <summary>
@@ -121,7 +178,7 @@ public class RestFileStepItemViewModel : BaseObservableObject
 	/// <summary>
 	///		Lista de cabeceras
 	/// </summary>
-	public RestParametersListViewModel? Headers
+	public Parameters.RestParametersListViewModel? Headers
 	{
 		get { return _headers; }
 		set { CheckObject(ref _headers, value); }

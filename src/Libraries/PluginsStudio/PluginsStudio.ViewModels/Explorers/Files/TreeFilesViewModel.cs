@@ -215,7 +215,7 @@ public class TreeFilesViewModel : PluginTreeViewModel, Base.Interfaces.IPaneView
 	/// </summary>
 	internal void AddFolderToExplorer()
 	{
-		string? folder = MainViewModel.MainController.MainWindowController.DialogsController.SelectPath(string.Empty);
+		string? folder = MainViewModel.MainController.MainWindowController.DialogsController.OpenDialogSelectPath(string.Empty);
 
 			// Añade la carpeta a la solución
 			if (!string.IsNullOrWhiteSpace(folder) && Directory.Exists(folder))

@@ -10,28 +10,40 @@
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="Auto"/>
 			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="Auto"/>
+			<ColumnDefinition Width="*"/>
 		</Grid.ColumnDefinitions>
 
-		<ComboBox Grid.Row="0" Grid.Column="0" Margin="5" Width="100"
+		<Label Content="Name:" Grid.Row="0" Grid.Column="0"/>
+		<TextBox Grid.Row="0" Grid.Column="1" Margin="5" VerticalAlignment="Center" 
+				Text="{Binding Path=Name,UpdateSourceTrigger=PropertyChanged}"/>
+		<Label Content="Connection:" Grid.Row="0" Grid.Column="2"/>
+		<ComboBox Grid.Row="0" Grid.Column="3" Margin="5" Width="200"
+						  ItemsSource="{Binding ComboConnections.Items}" DisplayMemberPath="Text" 
+						  SelectedItem="{Binding ComboConnections.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+		<Label Content="Method:" Grid.Row="1" Grid.Column="0"/>
+		<ComboBox Grid.Row="1" Grid.Column="1" Margin="5"
 						  ItemsSource="{Binding ComboMethods.Items}" DisplayMemberPath="Text" 
 						  SelectedItem="{Binding ComboMethods.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-		<TextBox Grid.Row="0" Grid.Column="1" Margin="5" VerticalAlignment="Center" 
+		<Label Content="Function:" Grid.Row="1" Grid.Column="2"/>
+		<TextBox Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="3" Margin="5" VerticalAlignment="Center" 
 				Text="{Binding Path=Url,UpdateSourceTrigger=PropertyChanged}"/>
-		<TabControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="5">
-			<TabItem Header="Headers">
-				<local:ParametersListView Margin="2" x:Name="lstHeaders" Parameters="{Binding Path=Headers, UpdateSourceTrigger=PropertyChanged}" />
-			</TabItem>
-			<TabItem Header="Body">
-				<Editor:ctlEditor x:Name="udtBody" Margin="5" BorderBrush="Black" BorderThickness="1"/>
-			</TabItem>
-		</TabControl>
-		<Editor:ctlEditor x:Name="udtLog" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
-					Margin="0" BorderBrush="Black" BorderThickness="1" ReadOnly="True" />
+
+		<Label Content="Headers" Grid.Row="2" Grid.Column="0"/>
+		<local:ParametersListView Margin="2" x:Name="lstHeaders" 
+					Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4"
+					Parameters="{Binding Path=Headers, UpdateSourceTrigger=PropertyChanged}" />
+		<Label Content="Body" Grid.Row="4" Grid.Column="0"/>
+		<Editor:ctlEditor Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="4"
+					x:Name="udtBody" Margin="5" BorderBrush="Black" BorderThickness="1"/>
 	</Grid>
 </UserControl>

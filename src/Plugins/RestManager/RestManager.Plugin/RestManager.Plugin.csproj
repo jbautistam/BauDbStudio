@@ -14,15 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Resources\AudioFile.png" />
-    <None Remove="Resources\Back.png" />
-    <None Remove="Resources\Next.png" />
-    <None Remove="Resources\Pause.png" />
-    <None Remove="Resources\Pin.png" />
-    <None Remove="Resources\Play.png" />
+    <None Remove="Resources\Log.png" />
     <None Remove="Resources\RestFile.png" />
-    <None Remove="Resources\Stop.png" />
-    <None Remove="Resources\VideoFile.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,15 +30,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\AudioFile.png" />
-    <Resource Include="Resources\Back.png" />
-    <Resource Include="Resources\Next.png" />
-    <Resource Include="Resources\Pause.png" />
-    <Resource Include="Resources\Pin.png" />
-    <Resource Include="Resources\Play.png" />
+    <Resource Include="Resources\Log.png" />
     <Resource Include="Resources\RestFile.png" />
-    <Resource Include="Resources\Stop.png" />
-    <Resource Include="Resources\VideoFile.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -53,6 +39,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Update="Views\Connections\ConnectionView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
     <Page Update="Views\ParameterView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>

@@ -1,5 +1,6 @@
 ﻿using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.RestManager.Application.Models;
+using Bau.Libraries.RestManager.ViewModel.Project.Connections;
 
 namespace Bau.Libraries.RestManager.ViewModel.Project;
 
@@ -10,17 +11,18 @@ public class RestFileViewModel : BaseObservableObject, PluginsStudio.ViewModels.
 {
 	// Variables privadas
 	private string _fileName = default!;
-	private RestParametersListViewModel? _projectHeaders, _projectVariables;
-	private RestFileListStepsViewModel _listStepsViewModel = default!;
+	private Parameters.RestParametersListViewModel? _projectVariables;
+	private Steps.RestFileListStepsViewModel _listStepsViewModel = default!;
+	private ConnectionsListViewModel _connectionsListViewModel = default!;
 	private bool _isExecuting;
 
 	public RestFileViewModel(RestManagerViewModel restManagerViewModel, string fileName)
 	{ 
 		// Asigna los objetos
 		MainViewModel = restManagerViewModel;
-		StepsViewModel = new RestFileListStepsViewModel(this);
-		ProjectHeaders = new RestParametersListViewModel(this, new ParametersCollectionModel());
-		ProjectVariables = new RestParametersListViewModel(this, new ParametersCollectionModel());
+		StepsViewModel = new Steps.RestFileListStepsViewModel(this);
+		ProjectVariables = new Parameters.RestParametersListViewModel(this);
+		ConnectionsListViewModel = new ConnectionsListViewModel(this);
 		// Asigna las propiedades
 		FileName = fileName;
 		Header = Path.GetFileNameWithoutExtension(fileName);
@@ -41,10 +43,13 @@ public class RestFileViewModel : BaseObservableObject, PluginsStudio.ViewModels.
 		// Carga el proyecto
 		RestProject = new Application.RestProjectManager().Load(FileName);
 		// Asigna los datos del proyecto
-		ProjectHeaders = new RestParametersListViewModel(this, RestProject.Headers);
-		ProjectVariables = new RestParametersListViewModel(this, RestProject.Parameters);
+		ProjectVariables = new Parameters.RestParametersListViewModel(this);
+		ProjectVariables.AddParameters(RestProject.Parameters);
+		// Carga las conexiones
+		ConnectionsListViewModel = new ConnectionsListViewModel(this);
+		ConnectionsListViewModel.AddConnections(RestProject.Connections);
 		// Carga los pasos
-		StepsViewModel = new RestFileListStepsViewModel(this);
+		StepsViewModel = new Steps.RestFileListStepsViewModel(this);
 		foreach (RestStepModel step in RestProject.Steps)
 			StepsViewModel.Add(step);
 		// Selecciona el primer paso
@@ -84,8 +89,9 @@ public class RestFileViewModel : BaseObservableObject, PluginsStudio.ViewModels.
 		if (!string.IsNullOrWhiteSpace(FileName))
 		{
 			// Guarda los datos
+			RestProject.Connections.Clear();
+			RestProject.Connections.AddRange(ConnectionsListViewModel.GetConnections());
 			UpdateSteps(RestProject, StepsViewModel);
-			UpdateParameters(RestProject.Headers, ProjectHeaders);
 			UpdateParameters(RestProject.Parameters, ProjectVariables);
 			// Graba el archivo
 			new Application.RestProjectManager().Save(RestProject, FileName);
@@ -99,26 +105,26 @@ public class RestFileViewModel : BaseObservableObject, PluginsStudio.ViewModels.
 	/// <summary>
 	///		Añade los pasos al proyecto
 	/// </summary>
-	private void UpdateSteps(RestProjectModel project, RestFileListStepsViewModel stepsViewModel)
+	private void UpdateSteps(RestProjectModel project, Steps.RestFileListStepsViewModel stepsViewModel)
 	{
 		// Limpia los pasos
 		project.Steps.Clear();
 		// Añade los pasos
 		if (stepsViewModel.Items is not null)
-			foreach (RestFileStepItemViewModel stepViewModel in stepsViewModel.Items)
+			foreach (Steps.RestFileStepItemViewModel stepViewModel in stepsViewModel.Items)
 				project.Steps.Add(stepViewModel.GetStep());
 	}
 
 	/// <summary>
 	///		Actualiza los parámetros
 	/// </summary>
-	private void UpdateParameters(ParametersCollectionModel parameters, RestParametersListViewModel? parametersViewModel)
+	private void UpdateParameters(ParametersCollectionModel parameters, Parameters.RestParametersListViewModel? parametersViewModel)
 	{
 		// Limpia la colección
 		parameters.Clear();
 		// Añade los elementos
 		if (parametersViewModel is not null)
-			foreach (RestParametersListItemViewModel parameterViewModel in parametersViewModel.Items)
+			foreach (Parameters.RestParametersListItemViewModel parameterViewModel in parametersViewModel.Items)
 				parameters.Add(new ParameterModel(parameterViewModel.Key, parameterViewModel.Value));
 	}
 
@@ -201,25 +207,25 @@ public class RestFileViewModel : BaseObservableObject, PluginsStudio.ViewModels.
 	/// <summary>
 	///		Lista de pasos
 	/// </summary>
-	public RestFileListStepsViewModel StepsViewModel 
+	public Steps.RestFileListStepsViewModel StepsViewModel 
 	{ 
 		get { return _listStepsViewModel; }
 		set { CheckObject(ref _listStepsViewModel, value); }
 	}
 
 	/// <summary>
-	///		Cabeceras predeterminadas del proyecto
+	///		Lista de conexiones
 	/// </summary>
-	public RestParametersListViewModel? ProjectHeaders 
-	{ 
-		get { return _projectHeaders; }
-		set { CheckObject(ref _projectHeaders, value); }
+	public ConnectionsListViewModel ConnectionsListViewModel
+	{
+		get { return _connectionsListViewModel; }
+		set { CheckObject(ref _connectionsListViewModel, value); }
 	}
 
 	/// <summary>
 	///		Variables del proyecto
 	/// </summary>
-	public RestParametersListViewModel? ProjectVariables 
+	public Parameters.RestParametersListViewModel? ProjectVariables 
 	{ 
 		get { return _projectVariables; }
 		set { CheckObject(ref _projectVariables, value); }

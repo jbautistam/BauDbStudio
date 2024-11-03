@@ -38,17 +38,6 @@ public class ProjectBuilder
 	}
 
 	/// <summary>
-	///		Asigna una cabecera
-	/// </summary>
-	public ProjectBuilder WithHeader(string key, string value)
-	{
-		// Asigna la cabecera
-		Project.Headers.Add(key, value);
-		// Devuelve el generador
-		return this;
-	}
-
-	/// <summary>
 	///		Asigna un paso
 	/// </summary>
 	public RestStepBuilder WithRestStep(string name, RestStepModel.RestMethod method, string url) => new RestStepBuilder(this, name, method, url);

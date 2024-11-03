@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-using Bau.Libraries.RestManager.ViewModel.Project;
+using Bau.Libraries.RestManager.ViewModel.Project.Steps;
 
 namespace Bau.Libraries.RestManager.Plugin.Views;
 
@@ -32,7 +32,7 @@ public partial class RestFileStepView : UserControl
 		udtBody.EditorFontSize = 12;
 		udtBody.ShowLinesNumber = true;
 		// Asigna el nombre de archivo
-		udtBody.Text = Step?.Content;
+		udtBody.Text = Step?.Content ?? string.Empty;
 		udtBody.ChangeHighLightByExtension(".json");
 		// Asigna el manejador de eventos
 		udtBody.TextChanged += (sender, args) => {
@@ -58,7 +58,7 @@ public partial class RestFileStepView : UserControl
 			SetValue(StepProperty, value); 
 			DataContext = value;
 			lstHeaders.Parameters = value?.Headers;
-			udtBody.Text = value?.Content;
+			udtBody.Text = value?.Content ?? string.Empty;
 		}
 	}
 }

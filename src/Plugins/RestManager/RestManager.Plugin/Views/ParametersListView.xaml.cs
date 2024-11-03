@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-using Bau.Libraries.RestManager.ViewModel.Project;
+using Bau.Libraries.RestManager.ViewModel.Project.Parameters;
 
 namespace Bau.Libraries.RestManager.Plugin.Views;
 

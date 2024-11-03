@@ -39,7 +39,10 @@ public class RestManagerController : ViewModel.Controllers.IRestManagerControlle
 			// Abre la ventana
 			switch (dialogViewModel)
 			{
-				case ViewModel.Project.ParameterViewModel viewModel:
+				case ViewModel.Project.Connections.ConnectionViewModel viewModel:
+						result = RestManagerPlugin.AppViewsController.OpenDialog(new Views.Connections.ConnectionView(viewModel));
+					break;
+				case ViewModel.Project.Parameters.ParameterViewModel viewModel:
 						result = RestManagerPlugin.AppViewsController.OpenDialog(new Views.ParameterView(viewModel));
 					break;
 			}

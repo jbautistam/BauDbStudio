@@ -49,22 +49,22 @@ public class RestManagerPlugin : IPlugin
 	/// <summary>
 	///		Obtiene los paneles del plugin
 	/// </summary>
-	public List<PaneModel> GetPanes() => new();
+	public List<PaneModel> GetPanes() => [];
 
 	/// <summary>
 	///		Obtiene las barras de herramientas del plugin
 	/// </summary>
-	public List<ToolBarModel> GetToolBars() => new();
+	public List<ToolBarModel> GetToolBars() => [];
 
 	/// <summary>
 	///		Obtiene los menús del plugin
 	/// </summary>
-	public List<MenuListModel> GetMenus() => new();
+	public List<MenuListModel> GetMenus() => [];
 
 	/// <summary>
 	///		Obtiene las opciones de menú asociadas a las extensiones de archivo y carpetas
 	/// </summary>
-	public List<FileOptionsModel> GetFilesOptions() => new();
+	public List<FileOptionsModel> GetFilesOptions() => [];
 
 	/// <summary>
 	///		Obtiene las extensiones de archivo asociadas al plugin

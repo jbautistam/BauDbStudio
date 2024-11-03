@@ -100,7 +100,7 @@ public class ReportQueryViewModel : BaseObservableObject, PluginsStudio.ViewMode
 			{
 				string? newFileName = ViewModel.SolutionViewModel.MainController.DialogsController
 											.OpenDialogSave(ViewModel.SolutionViewModel.MainController.DialogsController.LastPathSelected,
-															"Archivos Sql (*.sql)|*.sql|Todos los archivos (*.*)|*.*",
+															"Sql files (*.sql)|*.sql|All files (*.*)|*.*",
 															"Query.sql", ".sql");
 
 					if (!string.IsNullOrWhiteSpace(newFileName))

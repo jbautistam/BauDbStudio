@@ -2,7 +2,7 @@
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.RestManager.Application.Models;
 
-namespace Bau.Libraries.RestManager.ViewModel.Project;
+namespace Bau.Libraries.RestManager.ViewModel.Project.Steps;
 
 /// <summary>
 ///		Lista de pasos de un proyecto Rest

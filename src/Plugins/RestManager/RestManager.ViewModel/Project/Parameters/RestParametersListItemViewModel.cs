@@ -1,6 +1,6 @@
 ﻿using Bau.Libraries.RestManager.Application.Models;
 
-namespace Bau.Libraries.RestManager.ViewModel.Project;
+namespace Bau.Libraries.RestManager.ViewModel.Project.Parameters;
 
 /// <summary>
 ///		Elemento de <see cref="RestParametersListItemViewModel"/>

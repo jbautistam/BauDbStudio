@@ -26,12 +26,6 @@ public class RestProjectModel
 	public ParametersCollectionModel Parameters { get; } = new();
 
 	/// <summary>
-	///		Cabeceras del proyecto (generales)
-	/// </summary>
-	[Obsolete("Los parámetros pertenecen a la conexión")]
-	public ParametersCollectionModel Headers { get; } = new();
-
-	/// <summary>
 	///		Pasos
 	/// </summary>
 	public List<BaseStepModel> Steps { get; } = [];

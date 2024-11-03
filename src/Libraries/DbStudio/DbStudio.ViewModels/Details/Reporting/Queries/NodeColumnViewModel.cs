@@ -134,7 +134,7 @@ public class NodeColumnViewModel : PluginNodeViewModel
 					CanFilterWhere = CanSelect;
 					CanSort = IsChecked;
 					CanAggregate = IsChecked && !string.IsNullOrWhiteSpace(DataSourceId);
-					CanFilterHaving = CanAggregate && GeSelectedAggregation() != ExpressionColumnRequestModel.AggregationType.NoAggregated;
+					CanFilterHaving = CanAggregate && GeSelectedAggregation() != DataSourceColumnRequestModel.AggregationType.NoAggregated;
 				break;
 		}
 	}
@@ -145,12 +145,12 @@ public class NodeColumnViewModel : PluginNodeViewModel
 	private void LoadComboAggregation()
 	{
 		ComboAggregationTypes = new ComboViewModel(this);
-		ComboAggregationTypes.AddItem((int) ExpressionColumnRequestModel.AggregationType.NoAggregated, "No agregado");
-		ComboAggregationTypes.AddItem((int) ExpressionColumnRequestModel.AggregationType.Sum, "Suma");
-		ComboAggregationTypes.AddItem((int) ExpressionColumnRequestModel.AggregationType.Average, "Media");
-		ComboAggregationTypes.AddItem((int) ExpressionColumnRequestModel.AggregationType.Max, "Máximo");
-		ComboAggregationTypes.AddItem((int) ExpressionColumnRequestModel.AggregationType.Min, "Mínimo");
-		ComboAggregationTypes.AddItem((int) ExpressionColumnRequestModel.AggregationType.StandardDeviation, "Desviación estándar");
+		ComboAggregationTypes.AddItem((int) DataSourceColumnRequestModel.AggregationType.NoAggregated, "No agregado");
+		ComboAggregationTypes.AddItem((int) DataSourceColumnRequestModel.AggregationType.Sum, "Suma");
+		ComboAggregationTypes.AddItem((int) DataSourceColumnRequestModel.AggregationType.Average, "Media");
+		ComboAggregationTypes.AddItem((int) DataSourceColumnRequestModel.AggregationType.Max, "Máximo");
+		ComboAggregationTypes.AddItem((int) DataSourceColumnRequestModel.AggregationType.Min, "Mínimo");
+		ComboAggregationTypes.AddItem((int) DataSourceColumnRequestModel.AggregationType.StandardDeviation, "Desviación estándar");
 		ComboAggregationTypes.SelectedItem = ComboAggregationTypes.Items[0];
 	}
 
@@ -182,7 +182,7 @@ public class NodeColumnViewModel : PluginNodeViewModel
 	/// <summary>
 	///		Obtiene el tipo de agregación seleccionado en el combo
 	/// </summary>
-	internal ExpressionColumnRequestModel.AggregationType GeSelectedAggregation() => (ExpressionColumnRequestModel.AggregationType) (ComboAggregationTypes.SelectedId ?? 0);
+	internal DataSourceColumnRequestModel.AggregationType GeSelectedAggregation() => (DataSourceColumnRequestModel.AggregationType) (ComboAggregationTypes.SelectedId ?? 0);
 
 	/// <summary>
 	///		Modifica el filtro de la columna
@@ -202,6 +202,35 @@ public class NodeColumnViewModel : PluginNodeViewModel
 				else
 					HasFiltersHaving = hasFilters;
 		}
+	}
+
+	/// <summary>
+	///		Comprueba si se debe añadir a una solicitud de informe
+	/// </summary>
+	internal bool MustAddToRequest()
+	{
+		// Comprueba si se debe añadir dependiendo del tipo de columna
+		switch (ColumnNodeType)
+		{
+			case NodeColumnType.DimensionColumn:
+					if (IsChecked || HasFiltersColumn || HasFiltersHaving)
+						return true;
+				break;
+			case NodeColumnType.ExpressionField: 
+					if (IsChecked || HasFiltersColumn || HasFiltersHaving)
+						return true;
+				break;
+			case NodeColumnType.ParameterField:
+					if (IsChecked || HasFiltersColumn)
+						return true;
+				break;
+			case NodeColumnType.DataSourceColumn:
+					if (IsChecked)
+						return true;
+				break;
+		}
+		// Si ha llegado hasta aquí es porque no se debe añadir este nodo
+		return false;
 	}
 
 	/// <summary>

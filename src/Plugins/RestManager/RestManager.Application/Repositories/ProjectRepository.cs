@@ -24,6 +24,7 @@ internal class ProjectRepository
 	private const string TagMethod = "Method";
 	private const string TagContent = "Content";
 	private const string TagRestStep = "RestStep";
+	private const string TagSecurity = "Security";
 	
 	/// <summary>
 	///		Carga un proyecto del archivo
@@ -51,9 +52,6 @@ internal class ProjectRepository
 									break;
 								case TagConnection:
 										project.Connections.Add(GetConnection(nodeML));
-									break;
-								case TagHeader:
-										project.Headers.Add(GetParameter(nodeML));
 									break;
 								case TagRestStep:
 										project.Steps.Add(GetRestStep(nodeML));
@@ -83,10 +81,19 @@ internal class ProjectRepository
 			connection.Name = rootML.Nodes[TagName].Value.TrimIgnoreNull();
 			connection.Description = rootML.Nodes[TagDescription].Value.TrimIgnoreNull();
 			connection.Url = rootML.Attributes[TagUrl].Value.TrimIgnoreNull().GetUrl();
+			connection.Authentication.Type = rootML.Attributes[TagSecurity].Value.GetEnum(AuthenticationModel.AuthenticationType.None);
 			// Añade los datos
 			foreach (MLNode nodeML in rootML.Nodes)
-				if (nodeML.Name == TagHeader)
-					connection.Headers.Add(GetParameter(nodeML));
+				switch (nodeML.Name)
+				{
+					case TagHeader:
+							connection.Headers.Add(GetParameter(nodeML));
+						break;
+					case TagSecurity:
+							connection.Authentication.SecurityOptions.Add(nodeML.Attributes[TagKey].Value.TrimIgnoreNull(),
+																		  nodeML.Attributes[TagValue].Value.TrimIgnoreNull());
+						break;
+				}
 			// Devuelve el paso
 			return connection;
 	}
@@ -101,6 +108,7 @@ internal class ProjectRepository
 			// Obtiene los datos del paso
 			step.Name = rootML.Nodes[TagName].Value.TrimIgnoreNull();
 			step.Description = rootML.Nodes[TagDescription].Value.TrimIgnoreNull();
+			step.ConnectionId = rootML.Attributes[TagConnection].Value.TrimIgnoreNull();
 			step.Method = rootML.Attributes[TagMethod].Value.GetEnum(RestStepModel.RestMethod.Get);
 			step.Url = rootML.Attributes[TagUrl].Value.TrimIgnoreNull();
 			step.Enabled = rootML.Attributes[TagEnabled].Value.GetBool();
@@ -126,7 +134,6 @@ internal class ProjectRepository
 			rootML.Nodes.Add(TagDescription, project.Description);
 			rootML.Nodes.AddRange(GetXmlConnections(project.Connections));
 			rootML.Nodes.AddRange(GetXmlParameters(TagParameter, project.Parameters));
-			rootML.Nodes.AddRange(GetXmlParameters(TagHeader, project.Headers));
 			// Añade los datos de los pasos
 			rootML.Nodes.AddRange(GetXmlSteps(project.Steps));
 			// Graba el archivo
@@ -150,8 +157,20 @@ internal class ProjectRepository
 					nodeML.Nodes.Add(TagName, connection.Name);
 					nodeML.Nodes.Add(TagDescription, connection.Description);
 					nodeML.Attributes.Add(TagUrl, connection.Url?.ToString());
+					nodeML.Attributes.Add(TagSecurity, connection.Authentication.Type.ToString());
 					// Añade las cabeceras
 					nodeML.Nodes.AddRange(GetXmlParameters(TagHeader, connection.Headers));
+					// Añade las opciones de seguridad
+					foreach (KeyValuePair<string, string?> option in connection.Authentication.SecurityOptions)
+					{
+						MLNode optionML = new(TagSecurity);
+
+							// Añade los atributos al nodo
+							optionML.Attributes.Add(TagKey, option.Key);
+							optionML.Attributes.Add(TagValue, option.Value);
+							// Añade el nodo a la colección
+							nodeML.Nodes.Add(optionML);
+					}
 					// Añade el nodo a la colección
 					nodesML.Add(nodeML);
 			}
@@ -206,6 +225,7 @@ internal class ProjectRepository
 			// Añade los datos
 			rootML.Nodes.Add(TagName, step.Name);
 			rootML.Nodes.Add(TagDescription, step.Description);
+			rootML.Attributes.Add(TagConnection, step.ConnectionId);
 			rootML.Attributes.Add(TagMethod, step.Method.ToString());
 			rootML.Attributes.Add(TagUrl, step.Url);
 			rootML.Attributes.Add(TagEnabled, step.Enabled);

@@ -26,7 +26,12 @@ public class ConnectionModel
 	public Uri? Url { get; set; }
 
 	/// <summary>
+	///		Datos de autenticación
+	/// </summary>
+	public AuthenticationModel Authentication { get; } = new();
+
+	/// <summary>
 	///		Cabeceras de la conexión (predeterminadas)
 	/// </summary>
-	public ParametersCollectionModel Headers { get; } = new();
+	public ParametersCollectionModel Headers { get; } = [];
 }

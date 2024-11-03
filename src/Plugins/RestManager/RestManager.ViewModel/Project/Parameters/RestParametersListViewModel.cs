@@ -1,30 +1,26 @@
 ﻿using Bau.Libraries.RestManager.Application.Models;
 
-namespace Bau.Libraries.RestManager.ViewModel.Project;
+namespace Bau.Libraries.RestManager.ViewModel.Project.Parameters;
 
 /// <summary>
 ///		ViewModel de una lista de parámetros (cabeceras / variables)
 /// </summary>
 public class RestParametersListViewModel : BauMvvm.ViewModels.Forms.ControlItems.ListView.ControlGenericListViewModel<RestParametersListItemViewModel>
 {
-	public RestParametersListViewModel(RestFileViewModel restFileViewModel, ParametersCollectionModel parameters)
+	public RestParametersListViewModel(RestFileViewModel restFileViewModel)
 	{
-		// Asigna las propiedades
 		RestFileViewModel = restFileViewModel;
-		Parameters = parameters;
-		// Inicializa la lista
-		InitList();
 	}
 
 	/// <summary>
 	///		Inicializa la lista
 	/// </summary>
-	private void InitList()
+	public void AddParameters(ParametersCollectionModel parameters)
 	{
 		// Limpia la lista
 		Items.Clear();
 		// Añade los elementos
-		foreach (ParameterModel parameter in Parameters)
+		foreach (ParameterModel parameter in parameters)
 			Items.Add(new RestParametersListItemViewModel(this, parameter));
 	}
 
@@ -67,12 +63,21 @@ public class RestParametersListViewModel : BauMvvm.ViewModels.Forms.ControlItems
 	}
 
 	/// <summary>
+	///		Obtiene los datos de los parámetros
+	/// </summary>
+	internal ParametersCollectionModel GetParameters()
+	{
+		ParametersCollectionModel parameters = [];
+
+			// Asigna los datos
+			foreach (RestParametersListItemViewModel item in Items)
+				parameters.Add(item.Key, item.Value);
+			// Devuelve los parámetros
+			return parameters;
+	}
+
+	/// <summary>
 	///		ViewModel principal
 	/// </summary>
 	public RestFileViewModel RestFileViewModel { get; } 
-	
-	/// <summary>
-	///		Parámetros
-	/// </summary>
-	public ParametersCollectionModel Parameters { get; }
 }

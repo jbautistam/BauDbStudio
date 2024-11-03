@@ -8,6 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Builders\**" />
+    <EmbeddedResource Remove="Builders\**" />
+    <None Remove="Builders\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Program.cs" />
   </ItemGroup>
 
