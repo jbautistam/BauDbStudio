@@ -192,7 +192,7 @@ public class TreeQueryReportViewModel : PluginTreeViewModel
 	internal void LoadRequest(ReportRequestModel request)
 	{
 		if (!request.ReportId.Equals(ReportViewModel.Report.Id, StringComparison.CurrentCultureIgnoreCase))
-			ReportViewModel.ViewModel.SolutionViewModel.MainController.HostController.SystemController.ShowMessage($"La consulta pertenece al informe {request.ReportId}");
+			ReportViewModel.ViewModel.SolutionViewModel.MainController.HostController.SystemController.ShowMessage($"The query isn't requested for report {request.ReportId}");
 		else
 			foreach (ControlHierarchicalViewModel nodeRoot in Children)
 				if (nodeRoot is NodeColumnViewModel node)

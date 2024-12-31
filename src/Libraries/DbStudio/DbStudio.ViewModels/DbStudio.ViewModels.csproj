@@ -46,6 +46,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Npgsql" Version="9.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibJsonConversor\src\LibJsonConversor.csproj" />
     <ProjectReference Include="..\..\DbReporting\LibReporting.Solution\LibReporting.Solution.csproj" />
     <ProjectReference Include="..\..\PluginsStudio\PluginsStudio.ViewModels\PluginsStudio.ViewModels.csproj" />

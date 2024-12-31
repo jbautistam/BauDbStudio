@@ -21,10 +21,7 @@ internal class RequestHelper
 	/// </summary>
 	internal ReportRequestModel GetRequest()
 	{
-		ReportRequestModel request = new()
-										{
-											ReportId = Explorer.ReportViewModel.Report.Id
-										};
+		ReportRequestModel request = new(Explorer.ReportViewModel.Report.DataWarehouse.Id, Explorer.ReportViewModel.Report.Id);
 		List<NodeColumnViewModel> nodes = GetSelectedNodes(Explorer.Children);
 
 			// Obtiene las columnas de dimensión y de expresión

@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Npgsql" Version="9.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\DataBaseProviders\src\DbAggregator\DbAggregator.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\DbScripts\LibDbScripts.Interpreter\LibDbScripts.Interpreter.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\DbScripts\LibDbScripts.Parser\LibDbScripts.Parser.csproj" />
