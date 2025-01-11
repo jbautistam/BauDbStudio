@@ -88,7 +88,7 @@
     <Page Remove="Views\Tools\FindView.xaml" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Markdig" Version="0.39.1" />
+    <PackageReference Include="Markdig" Version="0.40.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
     <PackageReference Include="Npgsql" Version="9.0.2" />
   </ItemGroup>
