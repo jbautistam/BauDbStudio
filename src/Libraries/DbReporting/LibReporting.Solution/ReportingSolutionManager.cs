@@ -141,7 +141,7 @@ public class ReportingSolutionManager
 	/// <summary>
 	///		Carga los datos de un <see cref="Requests.Models.ReportRequestModel"/> de un archivo
 	/// </summary>
-	public Requests.Models.ReportRequestModel LoadRequest(string fileName) => GetRepository().RequestRepository.Get(fileName);
+	public Requests.Models.ReportRequestModel? LoadRequest(string fileName) => GetRepository().RequestRepository.Get(fileName);
 
 	/// <summary>
 	///		Graba los datos de un <see cref="Requests.Models.ReportRequestModel"/> en un archivo
