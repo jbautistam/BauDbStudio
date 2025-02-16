@@ -25,9 +25,9 @@ internal class RequestHelper
 		List<NodeColumnViewModel> nodes = GetSelectedNodes(Explorer.Children);
 
 			// Obtiene las columnas de dimensión y de expresión
-			request.Dimensions.AddRange(GetRequestDimensions(nodes));
+			request.Dimensions.AddRange(GetRequestData(NodeColumnViewModel.NodeColumnType.DimensionColumn, nodes));
 			request.Expressions.AddRange(GetRequestExpressions(nodes));
-			request.DataSources.AddRange(GetRequestDataSources(nodes));
+			request.DataSources.AddRange(GetRequestData(NodeColumnViewModel.NodeColumnType.DataSourceColumn, nodes));
 			request.Parameters.AddRange(GetRequestParameters(nodes));
 			// Devuelve la solicitud
 			return request;
@@ -54,27 +54,24 @@ internal class RequestHelper
 	}
 
 	/// <summary>
-	///		Obtiene las dimensiones solicitadas
+	///		Obtiene los datos solicitados
 	/// </summary>
-	private List<DimensionRequestModel> GetRequestDimensions(List<NodeColumnViewModel> nodes)
+	private List<DataRequestModel> GetRequestData(NodeColumnViewModel.NodeColumnType columnType, List<NodeColumnViewModel> nodes)
 	{
-		List<DimensionRequestModel> dimensions = [];
+		List<DataRequestModel> dataRequests = [];
 
 			// Añade las dimensiones de los nodos
 			foreach (NodeColumnViewModel node in nodes)
-				if (node.ColumnNodeType == NodeColumnViewModel.NodeColumnType.DimensionColumn && node.Column is not null)
+				if (node.ColumnNodeType == columnType && node.Column is not null)
 				{
-					DimensionRequestModel dimension = new()
-														{
-															DimensionId = node.DimensionId
-														};
+					DataRequestModel dataRequest = new(node.DimensionId);
 
-						// Añade los datos de la columna a la dimensión y la dimensión a la lista de salida
-						dimension.Columns.Add(GetColumnRequest(node, false));
-						dimensions.Add(dimension);
+						// Añade los datos de la columna a la lista de salida
+						dataRequest.Columns.Add(GetColumnRequest(node, false));
+						dataRequests.Add(dataRequest);
 				}
 			// Devuelve la lista de dimensiones
-			return dimensions;
+			return dataRequests;
 	}
 
 	/// <summary>
@@ -115,18 +112,6 @@ internal class RequestHelper
 					request.Add(filterViewModel.Filter);
 			// Devuelve los filtros
 			return request;
-	}
-
-	/// <summary>
-	///		Obtiene los orígenes de datos solicitados
-	/// </summary>
-	private List<DataSourceRequestModel> GetRequestDataSources(List<NodeColumnViewModel> nodes)
-	{
-		List<DataSourceRequestModel> dataSources = [];
-
-			// Añade el origen de datos solicitado
-			// Devuelve la lista de orígenes de datos
-			return dataSources;
 	}
 
 	/// <summary>
