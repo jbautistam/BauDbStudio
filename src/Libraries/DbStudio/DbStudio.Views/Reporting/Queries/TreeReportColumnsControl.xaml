@@ -35,13 +35,6 @@
 									<Image Width="20" Height="20" Margin="3,0" Source="{Binding Path=HasFiltersColumn,Converter={StaticResource FilterIconConverter}}"/>
 								</Button.Content>
 							</Button>
-							<Button BorderBrush="Transparent" Background="Transparent"
-									Visibility="{Binding Path=CanSort,Converter={StaticResource BoolToVisibilityConverter}}"
-									Command="{Binding Path=SortOrderCommand}">
-								<Button.Content>
-									<Image Width="20" Height="20" Margin="3,0" Source="{Binding Path=SortOrder,Converter={StaticResource SortIconConverter}}"/>
-								</Button.Content>
-							</Button>
 							<ComboBox Grid.Row="0" Grid.Column="1" Margin="5" 
 							Visibility="{Binding Path=CanAggregate,Converter={StaticResource BoolToVisibilityConverter}}"
 							  ItemsSource="{Binding ComboAggregationTypes.Items}" DisplayMemberPath="Text" 
@@ -51,6 +44,13 @@
 									Command="{Binding Path=FilterHavingCommand}">
 								<Button.Content>
 									<Image Width="20" Height="20" Margin="3,0" Source="{Binding Path=HasFiltersHaving,Converter={StaticResource FilterIconConverter}}"/>
+								</Button.Content>
+							</Button>
+							<Button BorderBrush="Transparent" Background="Transparent"
+									Visibility="{Binding Path=CanSort,Converter={StaticResource BoolToVisibilityConverter}}"
+									Command="{Binding Path=SortOrderCommand}">
+								<Button.Content>
+									<Image Width="20" Height="20" Margin="3,0" Source="{Binding Path=SortOrder,Converter={StaticResource SortIconConverter}}"/>
 								</Button.Content>
 							</Button>
 						</StackPanel>

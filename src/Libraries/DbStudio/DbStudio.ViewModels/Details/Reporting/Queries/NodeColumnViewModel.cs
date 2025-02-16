@@ -44,7 +44,7 @@ public class NodeColumnViewModel : PluginNodeViewModel
 	// Variables privadas
 	private bool _canSelect, _canSort, _canFilterWhere, _canAggregate, _canFilterHaving, _hasFiltersColumn, _hasFiltersHaving;
 	private int _sortIndex;
-	private BaseColumnRequestModel.SortOrder _sortOrder;
+	private ColumnRequestModel.SortOrder _sortOrder;
 	private ComboViewModel _comboAggregationTypes = default!;
 	private ListReportColumnFilterViewModel _filterWhere = default!, _filterHaving = default!;
 
@@ -72,7 +72,7 @@ public class NodeColumnViewModel : PluginNodeViewModel
 		{
 			CanSelect = true;
 			SortIndex = -1;
-			SortOrder = BaseColumnRequestModel.SortOrder.Undefined;
+			SortOrder = ColumnRequestModel.SortOrder.Undefined;
 		}
 		// Asigna los filtros
 		if (column is not null && trvTree is TreeQueryReportViewModel tree)
@@ -114,9 +114,9 @@ public class NodeColumnViewModel : PluginNodeViewModel
 					IsBold = false;
 					IsChecked = true;
 					CanSelect = true;
-					CanFilterHaving = false;
-					CanFilterWhere = false;
-					CanSort = false;
+					CanFilterHaving = true;
+					CanFilterWhere = true;
+					CanSort = IsChecked;
 					Foreground = MvvmColor.Black;
 					Icon = Explorers.TreeReportingViewModel.IconType.Dimension.ToString();
 				break;
@@ -134,7 +134,7 @@ public class NodeColumnViewModel : PluginNodeViewModel
 					CanFilterWhere = CanSelect;
 					CanSort = IsChecked;
 					CanAggregate = IsChecked && !string.IsNullOrWhiteSpace(DataSourceId);
-					CanFilterHaving = CanAggregate && GeSelectedAggregation() != DataSourceColumnRequestModel.AggregationType.NoAggregated;
+					CanFilterHaving = CanAggregate && GeSelectedAggregation() != ColumnRequestModel.AggregationType.NoAggregated;
 				break;
 		}
 	}
@@ -145,12 +145,12 @@ public class NodeColumnViewModel : PluginNodeViewModel
 	private void LoadComboAggregation()
 	{
 		ComboAggregationTypes = new ComboViewModel(this);
-		ComboAggregationTypes.AddItem((int) DataSourceColumnRequestModel.AggregationType.NoAggregated, "No agregado");
-		ComboAggregationTypes.AddItem((int) DataSourceColumnRequestModel.AggregationType.Sum, "Suma");
-		ComboAggregationTypes.AddItem((int) DataSourceColumnRequestModel.AggregationType.Average, "Media");
-		ComboAggregationTypes.AddItem((int) DataSourceColumnRequestModel.AggregationType.Max, "Máximo");
-		ComboAggregationTypes.AddItem((int) DataSourceColumnRequestModel.AggregationType.Min, "Mínimo");
-		ComboAggregationTypes.AddItem((int) DataSourceColumnRequestModel.AggregationType.StandardDeviation, "Desviación estándar");
+		ComboAggregationTypes.AddItem((int) ColumnRequestModel.AggregationType.NoAggregated, "No agregado");
+		ComboAggregationTypes.AddItem((int) ColumnRequestModel.AggregationType.Sum, "Suma");
+		ComboAggregationTypes.AddItem((int) ColumnRequestModel.AggregationType.Average, "Media");
+		ComboAggregationTypes.AddItem((int) ColumnRequestModel.AggregationType.Max, "Máximo");
+		ComboAggregationTypes.AddItem((int) ColumnRequestModel.AggregationType.Min, "Mínimo");
+		ComboAggregationTypes.AddItem((int) ColumnRequestModel.AggregationType.StandardDeviation, "Desviación estándar");
 		ComboAggregationTypes.SelectedItem = ComboAggregationTypes.Items[0];
 	}
 
@@ -162,18 +162,18 @@ public class NodeColumnViewModel : PluginNodeViewModel
 		// Cambia el modo de ordenación
 		switch (SortOrder)
 		{
-			case BaseColumnRequestModel.SortOrder.Undefined:
-					SortOrder = BaseColumnRequestModel.SortOrder.Ascending;
+			case ColumnRequestModel.SortOrder.Undefined:
+					SortOrder = ColumnRequestModel.SortOrder.Ascending;
 				break;
-			case BaseColumnRequestModel.SortOrder.Ascending:
-					SortOrder = BaseColumnRequestModel.SortOrder.Descending;
+			case ColumnRequestModel.SortOrder.Ascending:
+					SortOrder = ColumnRequestModel.SortOrder.Descending;
 				break;
-			case BaseColumnRequestModel.SortOrder.Descending:
-					SortOrder = BaseColumnRequestModel.SortOrder.Undefined;
+			case ColumnRequestModel.SortOrder.Descending:
+					SortOrder = ColumnRequestModel.SortOrder.Undefined;
 				break;
 		}
 		// Asigna el índice de ordenación
-		if (SortOrder == BaseColumnRequestModel.SortOrder.Undefined)
+		if (SortOrder == ColumnRequestModel.SortOrder.Undefined)
 			SortIndex = -1;
 		else if (SortIndex == -1)
 			SortIndex = (TreeViewModel as TreeQueryReportViewModel)?.GetSortIndex() ?? 0;
@@ -182,7 +182,7 @@ public class NodeColumnViewModel : PluginNodeViewModel
 	/// <summary>
 	///		Obtiene el tipo de agregación seleccionado en el combo
 	/// </summary>
-	internal DataSourceColumnRequestModel.AggregationType GeSelectedAggregation() => (DataSourceColumnRequestModel.AggregationType) (ComboAggregationTypes.SelectedId ?? 0);
+	internal ColumnRequestModel.AggregationType GeSelectedAggregation() => (ColumnRequestModel.AggregationType) (ComboAggregationTypes.SelectedId ?? 0);
 
 	/// <summary>
 	///		Modifica el filtro de la columna
@@ -205,32 +205,18 @@ public class NodeColumnViewModel : PluginNodeViewModel
 	}
 
 	/// <summary>
-	///		Comprueba si se debe añadir a una solicitud de informe
+	///		Comprueba si el nodo se debe añadir a una solicitud de informe
 	/// </summary>
 	internal bool MustAddToRequest()
 	{
-		// Comprueba si se debe añadir dependiendo del tipo de columna
-		switch (ColumnNodeType)
-		{
-			case NodeColumnType.DimensionColumn:
-					if (IsChecked || HasFiltersColumn || HasFiltersHaving)
-						return true;
-				break;
-			case NodeColumnType.ExpressionField: 
-					if (IsChecked || HasFiltersColumn || HasFiltersHaving)
-						return true;
-				break;
-			case NodeColumnType.ParameterField:
-					if (IsChecked || HasFiltersColumn)
-						return true;
-				break;
-			case NodeColumnType.DataSourceColumn:
-					if (IsChecked)
-						return true;
-				break;
-		}
-		// Si ha llegado hasta aquí es porque no se debe añadir este nodo
-		return false;
+		return ColumnNodeType switch
+					{
+						NodeColumnType.DimensionColumn => IsChecked || HasFiltersColumn || HasFiltersHaving,
+						NodeColumnType.ExpressionField => IsChecked || HasFiltersColumn || HasFiltersHaving,
+						NodeColumnType.ParameterField => IsChecked || HasFiltersColumn,
+						NodeColumnType.DataSourceColumn => IsChecked,
+						_ => false
+					};
 	}
 
 	/// <summary>
@@ -353,7 +339,7 @@ public class NodeColumnViewModel : PluginNodeViewModel
 	/// <summary>
 	///		Modo de ordenación
 	/// </summary>
-	public BaseColumnRequestModel.SortOrder SortOrder
+	public ColumnRequestModel.SortOrder SortOrder
 	{
 		get { return _sortOrder; }
 		set { CheckProperty(ref _sortOrder, value); }
@@ -383,7 +369,7 @@ public class NodeColumnViewModel : PluginNodeViewModel
 	public ListReportColumnFilterViewModel FilterWhere
 	{
 		get { return _filterWhere; }
-		set { CheckObject(ref _filterWhere, value); }
+		set { CheckObject(ref _filterWhere!, value); }
 	}
 
 	/// <summary>
@@ -392,7 +378,7 @@ public class NodeColumnViewModel : PluginNodeViewModel
 	public ListReportColumnFilterViewModel FilterHaving
 	{
 		get { return _filterHaving; }
-		set { CheckObject(ref _filterHaving, value); }
+		set { CheckObject(ref _filterHaving!, value); }
 	}
 
 	/// <summary>

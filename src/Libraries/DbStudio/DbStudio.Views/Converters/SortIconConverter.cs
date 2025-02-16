@@ -14,7 +14,7 @@ public class SortIconConverter : IValueConverter
 	/// </summary>
 	public object? Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
 	{ 
-		if (value is BaseColumnRequestModel.SortOrder sort)
+		if (value is ColumnRequestModel.SortOrder sort)
 			return GetIcon(sort);
 		else
 			return null;
@@ -23,12 +23,12 @@ public class SortIconConverter : IValueConverter
 	/// <summary>
 	///		Obtiene la imagen asociada a la ordenación
 	/// </summary>
-	private object GetIcon(BaseColumnRequestModel.SortOrder sort)
+	private object GetIcon(ColumnRequestModel.SortOrder sort)
 	{
 		return sort switch
 				{
-					BaseColumnRequestModel.SortOrder.Ascending => "/DbStudio.Views;component/Resources/Images/SortAscending.png",
-					BaseColumnRequestModel.SortOrder.Descending => "/DbStudio.Views;component/Resources/Images/SortDescending.png",
+					ColumnRequestModel.SortOrder.Ascending => "/DbStudio.Views;component/Resources/Images/SortAscending.png",
+					ColumnRequestModel.SortOrder.Descending => "/DbStudio.Views;component/Resources/Images/SortDescending.png",
 					_ => "/DbStudio.Views;component/Resources/Images/NoSort.png",
 				};
 	}

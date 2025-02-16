@@ -68,41 +68,38 @@ internal class RequestHelper
 														{
 															DimensionId = node.DimensionId
 														};
-					DimensionColumnRequestModel column = new()
-															{
-																ColumnId = node.Column.Id,
-																Visible = node.IsChecked
-															};
 
-						// Asigna las propiedades adicionales a la columna: filtros, ordenación ....
-						AssignProperties(column, node, !string.IsNullOrWhiteSpace(node.DataSourceId));
 						// Añade los datos de la columna a la dimensión y la dimensión a la lista de salida
-						dimension.Columns.Add(column);
+						dimension.Columns.Add(GetColumnRequest(node, false));
 						dimensions.Add(dimension);
 				}
 			// Devuelve la lista de dimensiones
 			return dimensions;
-
 	}
+
 	/// <summary>
 	///		Asigna las propiedades adicionales a una columna solicitada: ordenación, filtros, etc...
 	/// </summary>
-	private void AssignProperties(BaseColumnRequestModel columnRequest, NodeColumnViewModel node, bool withHaving)
+	private ColumnRequestModel GetColumnRequest(NodeColumnViewModel node, bool withHaving)
 	{
-		// Indica si es visible
-		columnRequest.Visible = node.IsChecked;
-		// Añade el filtro Where
-		columnRequest.FiltersWhere.AddRange(GetFilters(node.FilterWhere));
-		// Añade la ordenación y el filtro HAVING en su caso
-		if (node.IsChecked)
-		{
-			// Añade la ordenación
-			columnRequest.OrderIndex = node.SortIndex;
-			columnRequest.OrderBy = node.SortOrder;
-			// Añade el filtro para la cláusula HAVING
-			if (withHaving)
-				columnRequest.FiltersHaving.AddRange(GetFilters(node.FilterHaving));
-		}
+		ColumnRequestModel column = new(node.Column?.Id ?? "Unknown");
+
+			// Indica si es visible
+			column.Visible = node.IsChecked;
+			// Añade el filtro Where
+			column.FiltersWhere.AddRange(GetFilters(node.FilterWhere));
+			// Añade la ordenación y el filtro HAVING en su caso
+			if (node.IsChecked)
+			{
+				// Añade la ordenación
+				column.OrderIndex = node.SortIndex;
+				column.OrderBy = node.SortOrder;
+				// Añade el filtro para la cláusula HAVING
+				if (withHaving)
+					column.FiltersHaving.AddRange(GetFilters(node.FilterHaving));
+			}
+			// Devuelve la columna
+			return column;
 	}
 
 	/// <summary>
@@ -135,26 +132,23 @@ internal class RequestHelper
 	/// <summary>
 	///		Obtiene las expresiones solicitadas
 	/// </summary>
-	private List<ExpressionColumnRequestModel> GetRequestExpressions(List<NodeColumnViewModel> nodes)
+	private List<ColumnRequestModel> GetRequestExpressions(List<NodeColumnViewModel> nodes)
 	{
-		List<ExpressionColumnRequestModel> expressions = [];
+		List<ColumnRequestModel> expressions = [];
 
 			// Añade las expresiones a partir de los nodos
 			foreach (NodeColumnViewModel node in nodes)
 				if (node.ColumnNodeType == NodeColumnViewModel.NodeColumnType.ExpressionField)
 				{
-					ExpressionColumnRequestModel expression = new();
+					ColumnRequestModel expression = new(node.Text);
 
-						// Añade los datos de la expresión
-						expressions.Add(new ExpressionColumnRequestModel
-													{
-														ColumnId = node.Text
-													}
-											);
+						// Asigna los datos de la expresión
+						expression.OrderBy = node.SortOrder;
+						expression.OrderIndex = node.SortIndex;
 						// Añade la expresión
 						expressions.Add(expression);
 				}
-			// Devuelve la lista de orígenes de datos
+			// Devuelve la lista de expresiones
 			return expressions;
 	}
 

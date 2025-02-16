@@ -254,8 +254,8 @@ public class TreeQueryReportViewModel : PluginTreeViewModel
 								// Limpia el nodo
 								nodeColumn.IsChecked = false;
 								// Asigna los datos de la solicitud
-								foreach (DimensionColumnRequestModel column in dimension.Columns)
-									if (nodeColumn.Column is not null && nodeColumn.Column.Id.Equals(column.ColumnId, StringComparison.CurrentCultureIgnoreCase))
+								foreach (ColumnRequestModel column in dimension.Columns)
+									if (nodeColumn.Column is not null && nodeColumn.Column.Id.Equals(column.Id, StringComparison.CurrentCultureIgnoreCase))
 									{
 										// Selecciona el nodo
 										nodeColumn.IsChecked = true;
@@ -266,8 +266,6 @@ public class TreeQueryReportViewModel : PluginTreeViewModel
 										nodeColumn.SortIndex = column.OrderIndex;
 									}
 							}
-						//// Selecciona las dimensiones hija
-						//LoadRequestDimensions(dimension.Childs, node.Children);
 					}
 	}
 
@@ -286,8 +284,8 @@ public class TreeQueryReportViewModel : PluginTreeViewModel
 								// Limpia el nodo
 								nodeColumn.IsChecked = false;
 								// Asigna los datos de la solicitud
-								foreach (DataSourceColumnRequestModel column in dataSource.Columns)
-									if (nodeColumn.Column is not null && nodeColumn.Column.Id.Equals(column.ColumnId, StringComparison.CurrentCultureIgnoreCase))
+								foreach (ColumnRequestModel column in dataSource.Columns)
+									if (nodeColumn.Column is not null && nodeColumn.Column.Id.Equals(column.Id, StringComparison.CurrentCultureIgnoreCase))
 									{
 										// Selecciona el nodo
 										nodeColumn.IsChecked = true;
@@ -308,8 +306,8 @@ public class TreeQueryReportViewModel : PluginTreeViewModel
 				// Deselecciona el nodo
 				node.IsChecked = false;
 				// Selecciona el nodo si es alguna de las expressiones seleccionadas
-				foreach (ExpressionColumnRequestModel expression in request.Expressions)
-					if (node.Text.Equals(expression.ColumnId, StringComparison.CurrentCultureIgnoreCase))
+				foreach (ColumnRequestModel expression in request.Expressions)
+					if (node.Text.Equals(expression.Id, StringComparison.CurrentCultureIgnoreCase))
 						node.IsChecked = true;
 			}
 	}
