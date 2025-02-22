@@ -23,8 +23,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\DataBaseProviders\src\LibDbProviders.Base\LibDbProviders.Base.csproj" />
-    <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\DbReporting\src\LibReporting.Application\LibReporting.Application.csproj" />
-    <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\DbReporting\src\LibReporting.Repository.Xml\LibReporting.Repository.Xml.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\Reporting\DbReporting\src\LibReporting.Application\LibReporting.Application.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\Reporting\DbReporting\src\LibReporting.Repository.Xml\LibReporting.Repository.Xml.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\DataBase\Schema\LibDbSchema.Repository.Xml\LibDbSchema.Repository.Xml.csproj" />
   </ItemGroup>
 

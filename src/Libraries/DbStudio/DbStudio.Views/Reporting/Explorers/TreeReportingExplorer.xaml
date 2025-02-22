@@ -58,11 +58,6 @@
 								<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/Connection.png" />
 							</MenuItem.Icon>
 						</MenuItem>
-						<MenuItem Header="Informe avanzado" Command="{Binding Path=NewReportAdvancedCommand}">
-							<MenuItem.Icon>
-								<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/Connection.png" />
-							</MenuItem.Icon>
-						</MenuItem>
 						<Separator/>
 						<MenuItem Header="Almacén de datos a partir de esquema ..." Command="{Binding Path=NewDataWarehouseFromFileCommand}">
 							<MenuItem.Icon>

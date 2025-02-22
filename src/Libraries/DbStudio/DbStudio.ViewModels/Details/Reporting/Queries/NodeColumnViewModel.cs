@@ -9,7 +9,7 @@ using Bau.Libraries.LibReporting.Requests.Models;
 namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Queries;
 
 /// <summary>
-///		ViewModel de un nodo de columna
+///		ViewModel de un nodo del árbol de informes
 /// </summary>
 public class NodeColumnViewModel : PluginNodeViewModel
 {

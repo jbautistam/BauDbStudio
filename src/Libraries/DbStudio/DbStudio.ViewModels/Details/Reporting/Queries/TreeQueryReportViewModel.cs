@@ -99,8 +99,7 @@ public class TreeQueryReportViewModel : PluginTreeViewModel
 	/// </summary>
 	private void AddDimensionNodes(NodeColumnViewModel root, BaseDimensionModel dimension)
 	{
-		NodeColumnViewModel node = new NodeColumnViewModel(this, root, NodeColumnViewModel.NodeColumnType.Dimension, 
-														   dimension.Id, null);
+		NodeColumnViewModel node = new NodeColumnViewModel(this, root, NodeColumnViewModel.NodeColumnType.Dimension, dimension.Id, null);
 		BaseReportingDictionaryModel<BaseDimensionModel> childs = new();
 
 			// Asigna el código de dimensión
@@ -123,7 +122,7 @@ public class TreeQueryReportViewModel : PluginTreeViewModel
 	/// </summary>
 	private void AddDataSourcesNodes(ReportModel report)
 	{
-		NodeColumnViewModel root = new(this, null, NodeColumnViewModel.NodeColumnType.DataSourcesRoot, "Orígenes de datos", null);
+		NodeColumnViewModel root = new(this, null, NodeColumnViewModel.NodeColumnType.DataSourcesRoot, "Data Sources", null);
 
 			// Añade los orígenes de datos
 			foreach (ReportDataSourceModel dataSource in report.DataSources)
@@ -150,8 +149,14 @@ public class TreeQueryReportViewModel : PluginTreeViewModel
 		NodeColumnViewModel root = new(this, null, NodeColumnViewModel.NodeColumnType.ExpressionsRoot, "Expresiones", null);
 
 			// Añade las expresiones
-			foreach (string expression in report.Expressions)
-				root.Children.Add(new NodeColumnViewModel(this, root, NodeColumnViewModel.NodeColumnType.ExpressionField, expression, null));
+			foreach (ReportExpressionModel expression in report.Expressions)
+				root.Children.Add(new NodeColumnViewModel(this, root, NodeColumnViewModel.NodeColumnType.ExpressionField, 
+														  expression.Id, new DataSourceColumnModel(null)
+																				{
+																					Id = expression.Id,
+																					Type = expression.Type
+																				}
+														 ));
 			// Añade el nodo raíz al árbol
 			Children.Add(root);
 	}
@@ -165,15 +170,22 @@ public class TreeQueryReportViewModel : PluginTreeViewModel
 		// Añade las columnas adecuadas al árbol
 		foreach (DataSourceColumnModel column in columns.EnumerateValuesSorted())
 			if (column.Visible)
-			{
-				NodeColumnViewModel node = new(this, root, nodeColumnType, column.Id, column);
+				AddColumnNode(root, nodeColumnType, dimensionId, dataSourceId, column.Id, column);
+	}
 
-					// Asigna las propiedades
-					node.DimensionId = dimensionId;
-					node.DataSourceId = dataSourceId;
-					// Añade el nodo
-					root.Children.Add(node);
-			}
+	/// <summary>
+	///		Añade un nodo de columna
+	/// </summary>
+	private void AddColumnNode(NodeColumnViewModel root, NodeColumnViewModel.NodeColumnType nodeColumnType, string dimensionId, 
+							   string dataSourceId, string columnId, DataSourceColumnModel? column)
+	{
+		NodeColumnViewModel node = new(this, root, nodeColumnType, columnId, column);
+
+			// Asigna las propiedades
+			node.DimensionId = dimensionId;
+			node.DataSourceId = dataSourceId;
+			// Añade el nodo
+			root.Children.Add(node);
 	}
 
 	/// <summary>

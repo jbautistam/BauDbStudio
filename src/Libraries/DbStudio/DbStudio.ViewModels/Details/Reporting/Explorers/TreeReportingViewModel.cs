@@ -74,8 +74,6 @@ public class TreeReportingViewModel : PluginTreeViewModel
 									.AddListener(this, nameof(SelectedNode));
 		NewReportCommand = new BaseCommand(_ => OpenReport(null), _ => CanExecuteAction(nameof(NewReportCommand)))
 									.AddListener(this, nameof(SelectedNode));
-		NewReportAdvancedCommand = new BaseCommand(_ => OpenReport(null), _ => CanExecuteAction(nameof(NewReportAdvancedCommand)))
-									.AddListener(this, nameof(SelectedNode));
 		QueryCommand = new BaseCommand(_ => OpenQuery(), _ => CanExecuteAction(nameof(QueryCommand)))
 									.AddListener(this, nameof(SelectedNode));
 		OpenExplorerCommand = new BaseCommand(_ => OpenExplorer(), _ => CanExecuteAction(nameof(OpenExplorerCommand)))
@@ -146,7 +144,7 @@ public class TreeReportingViewModel : PluginTreeViewModel
 		return action switch
 			{
 				nameof(NewDataWarehouseCommand) or nameof(NewDataWarehouseFromFileCommand) => true,
-				nameof(NewDataSourceCommand) or nameof(NewReportCommand) or nameof(NewReportAdvancedCommand) 
+				nameof(NewDataSourceCommand) or nameof(NewReportCommand)
 						=> ReportingSolutionViewModel.ReportingSolutionManager.Manager.Schema.DataWarehouses.Count > 0,
 				nameof(NewDimensionCommand) => SelectedNode is NodeDataSourceViewModel || SelectedNode is NodeDimensionViewModel,
 				nameof(OpenCommand) => SelectedNode is NodeDimensionViewModel || SelectedNode is NodeDataSourceViewModel || SelectedNode is NodeReportViewModel,
@@ -386,9 +384,9 @@ public class TreeReportingViewModel : PluginTreeViewModel
 							ReportingSolutionViewModel.SolutionViewModel.MainController.SystemController.ShowMessage("Can't find the datawarehouse file name");
 						else
 						{
+							string path = CreateReportFolder(Path.GetDirectoryName(dataWarehouseFile)!);
 							string? fileName = ReportingSolutionViewModel.SolutionViewModel.MainController.DialogsController.OpenDialogSave
-													(Path.GetDirectoryName(dataWarehouseFile), 
-													 "Archivos informe xml (*.report.xml)|*.report.xml|Todos los archivos (*.*)|*.*",
+													(path, "Report file xml (*.report.xml)|*.report.xml|All files (*.*)|*.*",
 													 "New report.report.xml", ".report.xml");
 
 								if (!string.IsNullOrWhiteSpace(fileName))
@@ -409,6 +407,17 @@ public class TreeReportingViewModel : PluginTreeViewModel
 								}
 						}
 				}
+		}
+
+		// Crea el directorio de informes
+		string CreateReportFolder(string folder)
+		{
+			// Añade el subdirectorio
+			folder = Path.Combine(folder, "Reports");
+			// Crea la carpeta si no existía
+			LibHelper.Files.HelperFiles.MakePath(folder);
+			// Devuelve la carpeta creada
+			return folder;
 		}
 	}
 
@@ -626,11 +635,6 @@ public class TreeReportingViewModel : PluginTreeViewModel
 	///		Comando de nuevo informe
 	/// </summary>
 	public BaseCommand NewReportCommand { get; }
-
-	/// <summary>
-	///		Comando de nuevo informe avanzado
-	/// </summary>
-	public BaseCommand NewReportAdvancedCommand { get; }
 
 	/// <summary>
 	///		Comando de consulta
