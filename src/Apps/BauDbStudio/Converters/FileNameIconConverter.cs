@@ -32,7 +32,9 @@ public class FileNameIconConverter : IValueConverter
 			// Obtiene el icono dependiendo de la extensión del archivo
 			if (!string.IsNullOrWhiteSpace(fileName))
 			{
-				if (System.IO.Directory.Exists(fileName))
+				if (fileName.EndsWith(":\\") || fileName.EndsWith(":/"))
+					icon = GetDriveIcon(fileName);
+				else if (System.IO.Directory.Exists(fileName))
 					icon = GetUriApplicationImage("FolderNode.png");
 				else
 				{
@@ -69,6 +71,24 @@ public class FileNameIconConverter : IValueConverter
 			}
 			// Devuelve el icono
 			return _cache.GetImage(icon, true);
+	}
+
+	/// <summary>
+	///		Obtiene la imagen de una unidad
+	/// </summary>
+	private string GetDriveIcon(string fileName)
+	{
+		System.IO.DriveInfo driveInfo = new(fileName);
+
+			return driveInfo.DriveType switch
+						{
+							System.IO.DriveType.Removable => GetUriApplicationImage("PenDrive.png"),
+							System.IO.DriveType.Ram => GetUriApplicationImage("MemoryDrive.png"),
+							System.IO.DriveType.Network => GetUriApplicationImage("NetworkDrive.png"),
+							System.IO.DriveType.CDRom => GetUriApplicationImage("CdDrive.png"),
+							System.IO.DriveType.Fixed => GetUriApplicationImage("HardDrive.png"),
+							_ => GetUriApplicationImage("Floppy.png")
+						};		
 	}
 
 	/// <summary>

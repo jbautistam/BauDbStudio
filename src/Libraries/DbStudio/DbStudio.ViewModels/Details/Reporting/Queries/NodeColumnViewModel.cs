@@ -24,10 +24,6 @@ public class NodeColumnViewModel : PluginNodeViewModel
 		DimensionColumn,
 		/// <summary>Raíz de expresiones</summary>
 		ExpressionsRoot,
-		/// <summary>Nombre de expresión</summary>
-		Expression,
-		/// <summary>Columna de expresión</summary>
-		ExpressionColumn,
 		/// <summary>Campo de expresión de un informe avanzado</summary>
 		ExpressionField,
 		/// <summary>Raíz de los orígenes de datos</summary>
@@ -63,7 +59,7 @@ public class NodeColumnViewModel : PluginNodeViewModel
 				Text = $"{Column.Alias} ({Column.Id})";
 		}
 		// Asigna las propiedades
-		if (column is null) // ... si no es una columna, es una cabecera
+		if (column is null && columnNodeType != NodeColumnType.ExpressionField) // ... si no es una columna, es una cabecera
 		{
 			IsBold = true;
 			Foreground = MvvmColor.Red;
@@ -85,10 +81,10 @@ public class NodeColumnViewModel : PluginNodeViewModel
 		// Normaliza las propiedades
 		NormalizeProperties();
 		// Asigna el manejador de eventos
-		PropertyChanged += (sender, args) => {
-												if ((args.PropertyName ?? string.Empty).Equals(nameof(IsChecked)) && Column != null)
-													NormalizeProperties();
-											 };
+		//PropertyChanged += (sender, args) => {
+		//										if ((args.PropertyName ?? string.Empty).Equals(nameof(IsChecked)) && Column != null)
+		//											NormalizeProperties();
+		//									 };
 		ComboAggregationTypes.PropertyChanged += (sender, args) => 
 											{ 
 												if ((args.PropertyName ?? string.Empty).Equals(nameof(ComboViewModel.SelectedItem)) && Column != null)
@@ -111,12 +107,13 @@ public class NodeColumnViewModel : PluginNodeViewModel
 		switch (ColumnNodeType)
 		{
 			case NodeColumnType.ExpressionField:
+			case NodeColumnType.DimensionColumn:
 					IsBold = false;
-					IsChecked = true;
+					IsChecked = ColumnNodeType == NodeColumnType.ExpressionField;
 					CanSelect = true;
 					CanFilterHaving = true;
 					CanFilterWhere = true;
-					CanSort = IsChecked;
+					CanSort = true;
 					Foreground = MvvmColor.Black;
 					Icon = Explorers.TreeReportingViewModel.IconType.Dimension.ToString();
 				break;
@@ -315,7 +312,7 @@ public class NodeColumnViewModel : PluginNodeViewModel
 	public ComboViewModel ComboAggregationTypes
 	{
 		get { return _comboAggregationTypes; }
-		set { CheckObject(ref _comboAggregationTypes, value); }
+		set { CheckObject(ref _comboAggregationTypes!, value); }
 	}
 
 	/// <summary>

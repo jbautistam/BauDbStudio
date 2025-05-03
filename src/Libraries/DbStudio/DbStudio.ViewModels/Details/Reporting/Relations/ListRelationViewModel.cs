@@ -158,7 +158,7 @@ public class ListRelationViewModel : BaseObservableObject
 	public ObservableCollection<DimensionRelationViewModel> ListRelations 
 	{
 		get { return _listRelations; }
-		set { CheckObject(ref _listRelations, value); }
+		set { CheckObject(ref _listRelations!, value); }
 	}
 
 	/// <summary>

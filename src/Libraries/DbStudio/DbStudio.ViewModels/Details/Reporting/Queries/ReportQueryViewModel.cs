@@ -126,7 +126,14 @@ public class ReportQueryViewModel : BaseObservableObject, PluginsStudio.ViewMode
 													"Request.request.xml", ".request.xml");
 
 			if (!string.IsNullOrWhiteSpace(fileName))
-				TreeColumns.LoadRequest(ViewModel.ReportingSolutionManager.LoadRequest(fileName));
+			{
+				ReportRequestModel? request = ViewModel.ReportingSolutionManager.LoadRequest(fileName);
+
+					if (request is null)
+						ViewModel.SolutionViewModel.MainController.SystemController.ShowMessage("Can't load the request");
+					else
+						TreeColumns.LoadRequest(request);
+			}
 	}
 
 	/// <summary>

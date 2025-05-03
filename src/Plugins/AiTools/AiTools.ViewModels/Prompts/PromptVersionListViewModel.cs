@@ -112,6 +112,7 @@ public class PromptVersionListViewModel : BaseObservableObject
 				await PromptFileViewModel.MainViewModel.ViewsController.MainWindowController.EnqueueProcessAsync(processor, cancellationToken);
 		}
 	}
+
 	/// <summary>
 	///		Carga las imágenes
 	/// </summary>

@@ -23,7 +23,7 @@ public class ConnectionViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogVi
 	{
 		// Inicializa las propiedades
 		SolutionViewModel = solutionViewModel;
-		IsNew = connection == null;
+		IsNew = connection is null;
 		Connection = connection ?? new ConnectionModel(solutionViewModel.Solution);
 		// Inicializa el viewModel
 		InitViewModel();
@@ -271,7 +271,7 @@ public class ConnectionViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogVi
 	public ComboViewModel ComboTypes
 	{
 		get { return _comboTypes; }
-		set { CheckObject(ref _comboTypes, value); }
+		set { CheckObject(ref _comboTypes!, value); }
 	}
 
 	/// <summary>

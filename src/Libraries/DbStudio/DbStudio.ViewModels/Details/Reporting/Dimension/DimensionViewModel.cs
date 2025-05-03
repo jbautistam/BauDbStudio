@@ -194,6 +194,6 @@ public class DimensionViewModel : BaseObservableObject, PluginsStudio.ViewModels
 	public Relations.ListRelationViewModel ListRelationsViewModel
 	{
 		get { return _listRelationsViewModel; }
-		set { CheckObject(ref _listRelationsViewModel, value); }
+		set { CheckObject(ref _listRelationsViewModel!, value); }
 	}
 }

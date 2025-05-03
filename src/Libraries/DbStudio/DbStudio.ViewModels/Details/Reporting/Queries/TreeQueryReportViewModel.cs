@@ -82,7 +82,7 @@ public class TreeQueryReportViewModel : PluginTreeViewModel
 	{
 		if (report.Dimensions is not null)
 		{
-			NodeColumnViewModel root = new NodeColumnViewModel(this, null, NodeColumnViewModel.NodeColumnType.DimensionsRoot, "Dimensiones", null);
+			NodeColumnViewModel root = new NodeColumnViewModel(this, null, NodeColumnViewModel.NodeColumnType.DimensionsRoot, "Dimensions", null);
 
 				// Ordena las dimensiones
 				report.Dimensions.Sort((first, second) => first.Id.CompareTo(second.Id));
@@ -146,7 +146,7 @@ public class TreeQueryReportViewModel : PluginTreeViewModel
 	/// </summary>
 	private void AddExpressionNodes(ReportModel report)
 	{
-		NodeColumnViewModel root = new(this, null, NodeColumnViewModel.NodeColumnType.ExpressionsRoot, "Expresiones", null);
+		NodeColumnViewModel root = new(this, null, NodeColumnViewModel.NodeColumnType.ExpressionsRoot, "Expressions", null);
 
 			// Añade las expresiones
 			foreach (ReportExpressionModel expression in report.Expressions)
@@ -206,122 +206,112 @@ public class TreeQueryReportViewModel : PluginTreeViewModel
 		if (!request.ReportId.Equals(ReportViewModel.Report.Id, StringComparison.CurrentCultureIgnoreCase))
 			ReportViewModel.ViewModel.SolutionViewModel.MainController.HostController.SystemController.ShowMessage($"The query isn't requested for report {request.ReportId}");
 		else
-			foreach (ControlHierarchicalViewModel nodeRoot in Children)
-				if (nodeRoot is NodeColumnViewModel node)
-					switch (node.ColumnNodeType)
-					{
-						case NodeColumnViewModel.NodeColumnType.ParametersRoot:
-								LoadRequestParameters(request.Parameters, node.Children);
-							break;
-						case NodeColumnViewModel.NodeColumnType.DimensionsRoot:
-								LoadRequestDadata(request.Dimensions, node.Children);
-							break;
-						case NodeColumnViewModel.NodeColumnType.DataSourcesRoot:
-								LoadRequestDadata(request.DataSources, node.Children);
-							break;
-						case NodeColumnViewModel.NodeColumnType.ExpressionsRoot:
-								LoadRequestExpressions(request, node.Children);
-							break;
-					}
+			LoadRequest(request, Children);
+	}
+
+	/// <summary>
+	///		Carga los datos de una solicitud en una serie de nodos
+	/// </summary>
+	private void LoadRequest(ReportRequestModel request, AsyncObservableCollection<ControlHierarchicalViewModel> children)
+	{
+		foreach (ControlHierarchicalViewModel node in children)
+		{
+			// Carga los datos del nodo
+			if (node is NodeColumnViewModel nodeColumn)
+				LoadRequest(request, nodeColumn);
+			// Carga los hijos
+			LoadRequest(request, node.Children);
+		}
+	}
+
+	/// <summary>
+	///		Carga los datos de una solicitud
+	/// </summary>
+	private void LoadRequest(ReportRequestModel request, NodeColumnViewModel node)
+	{
+		switch (node.ColumnNodeType)
+		{
+			case NodeColumnViewModel.NodeColumnType.ParameterField:
+					LoadRequestParameter(request, node);
+				break;
+			case NodeColumnViewModel.NodeColumnType.DimensionColumn:
+					LoadRequestDimension(request, node);
+				break;
+			case NodeColumnViewModel.NodeColumnType.DataSourceColumn:
+					LoadRequestDataSource(request, node);
+				break;
+			case NodeColumnViewModel.NodeColumnType.ExpressionField:
+					LoadRequestExpression(request, node);
+				break;
+		}
 	}
 
 	/// <summary>
 	///		Carga los datos de los valores de los parámetros en la solicitud
 	/// </summary>
-	private void LoadRequestParameters(List<ParameterRequestModel> parameters, AsyncObservableCollection<ControlHierarchicalViewModel> children)
+	private void LoadRequestParameter(ReportRequestModel request, NodeColumnViewModel node)
 	{
-		foreach (ControlHierarchicalViewModel baseNode in children)
-			if (baseNode is NodeColumnViewModel node && node.ColumnNodeType == NodeColumnViewModel.NodeColumnType.ParameterField)
-				foreach (ParameterRequestModel parameter in parameters)
-					if (node.Text.Equals(parameter.Key, StringComparison.CurrentCultureIgnoreCase))
-					{
-						FilterRequestModel filter = new()
-														{
-															Condition = FilterRequestModel.ConditionType.Equals
-														};
+		foreach (ParameterRequestModel requestParameter in request.Parameters)
+			if (node.Text.Equals(requestParameter.Key, StringComparison.CurrentCultureIgnoreCase))
+			{
+				FilterRequestModel filter = new()
+												{
+													Condition = FilterRequestModel.ConditionType.Equals
+												};
 
-							// Añade el valor
-							filter.Values.Add(parameter.Value);
-							// Añade el filtro
-							node.FilterWhere.Clear();
-							node.FilterWhere.Add(filter);
-							node.HasFiltersColumn = true;
-					}
+					// Añade el valor
+					filter.Values.Add(requestParameter.Value);
+					// Añade el filtro
+					node.FilterWhere.Clear();
+					node.FilterWhere.Add(filter);
+					node.HasFiltersColumn = true;
+			}
 	}
 
 	/// <summary>
 	///		Carga los datos de las solicitudes de dimensiones
 	/// </summary>
-	private void LoadRequestDadata(List<DataRequestModel> dataRequests, AsyncObservableCollection<ControlHierarchicalViewModel> children)
+	private void LoadRequestDimension(ReportRequestModel request, NodeColumnViewModel node)
 	{
-		foreach (ControlHierarchicalViewModel baseNode in children)
-			if (baseNode is NodeColumnViewModel node && node.ColumnNodeType == NodeColumnViewModel.NodeColumnType.Dimension)
-				foreach (DataRequestModel dataRequest in dataRequests)
-					if (node.Text.Equals(dataRequest.Id, StringComparison.CurrentCultureIgnoreCase))
-					{
-						// Selecciona las columnas
-						foreach (ControlHierarchicalViewModel childNode in baseNode.Children)
-							if (childNode is NodeColumnViewModel nodeColumn && nodeColumn.ColumnNodeType == NodeColumnViewModel.NodeColumnType.DimensionColumn)
-							{
-								// Limpia el nodo
-								nodeColumn.IsChecked = false;
-								// Asigna los datos de la solicitud
-								foreach (ColumnRequestModel column in dataRequest.Columns)
-									if (nodeColumn.Column is not null && nodeColumn.Column.Id.Equals(column.Id, StringComparison.CurrentCultureIgnoreCase))
-									{
-										// Selecciona el nodo
-										nodeColumn.IsChecked = true;
-										// Añade los filtros
-										nodeColumn.AddFilters(column.FiltersWhere, column.FiltersHaving);
-										// Cambia la ordenación
-										nodeColumn.SortOrder = column.OrderBy;
-										nodeColumn.SortIndex = column.OrderIndex;
-									}
-							}
-					}
+		foreach (DataRequestModel requestDimension in request.Dimensions)
+			if (!string.IsNullOrWhiteSpace(node.DimensionId) &&
+				node.DimensionId.Equals(requestDimension.Id, StringComparison.CurrentCultureIgnoreCase) &&
+				node.Column is not null)
+					foreach (ColumnRequestModel requestField in requestDimension.Columns)
+						if (node.Column.Id.Equals(requestField.Id, StringComparison.CurrentCultureIgnoreCase))
+							AssignRequest(node, requestField);
 	}
 
-	///// <summary>
-	/////		Carga las solicitudes de columnas de los orígenes de datos
-	///// </summary>
-	//private void LoadRequestDataSource(List<DataSourceRequestModel> dataSources, AsyncObservableCollection<ControlHierarchicalViewModel> children)
-	//{
-	//	foreach (ControlHierarchicalViewModel baseNode in children)
-	//		if (baseNode is NodeColumnViewModel node && node.ColumnNodeType == NodeColumnViewModel.NodeColumnType.DataSource)
-	//			foreach (DataSourceRequestModel dataSource in dataSources)
-	//				if (node.Text.Equals(dataSource.ReportDataSourceId, StringComparison.CurrentCultureIgnoreCase))
-	//					foreach (ControlHierarchicalViewModel childNode in baseNode.Children)
-	//						if (childNode is NodeColumnViewModel nodeColumn && nodeColumn.ColumnNodeType == NodeColumnViewModel.NodeColumnType.DataSourceColumn)
-	//						{
-	//							// Limpia el nodo
-	//							nodeColumn.IsChecked = false;
-	//							// Asigna los datos de la solicitud
-	//							foreach (ColumnRequestModel column in dataSource.Columns)
-	//								if (nodeColumn.Column is not null && nodeColumn.Column.Id.Equals(column.Id, StringComparison.CurrentCultureIgnoreCase))
-	//								{
-	//									// Selecciona el nodo
-	//									nodeColumn.IsChecked = true;
-	//									// Añade los filtros
-	//									nodeColumn.AddFilters(column.FiltersWhere, column.FiltersHaving);
-	//								}
-	//						}
-	//}
+	/// <summary>
+	///		Carga las solicitudes de columnas de los orígenes de datos
+	/// </summary>
+	private void LoadRequestDataSource(ReportRequestModel request, NodeColumnViewModel node)
+	{
+	}
 
 	/// <summary>
 	///		Carga las expresiones seleccionadas en la solicitud
 	/// </summary>
-	private void LoadRequestExpressions(ReportRequestModel request, AsyncObservableCollection<ControlHierarchicalViewModel> children)
+	private void LoadRequestExpression(ReportRequestModel request, NodeColumnViewModel node)
 	{
-		foreach (ControlHierarchicalViewModel baseNode in children)
-			if (baseNode is NodeColumnViewModel node && node.ColumnNodeType == NodeColumnViewModel.NodeColumnType.ExpressionField)
-			{
-				// Deselecciona el nodo
-				node.IsChecked = false;
-				// Selecciona el nodo si es alguna de las expressiones seleccionadas
-				foreach (ColumnRequestModel expression in request.Expressions)
-					if (node.Text.Equals(expression.Id, StringComparison.CurrentCultureIgnoreCase))
-						node.IsChecked = true;
-			}
+		foreach (ColumnRequestModel columnRequest in request.Expressions)
+			if (node.Text.Equals(columnRequest.Id, StringComparison.CurrentCultureIgnoreCase))
+				AssignRequest(node, columnRequest);
+	}
+
+	/// <summary>
+	///		Crea los filtros sobre un nodo
+	/// </summary>
+	private void AssignRequest(NodeColumnViewModel node, ColumnRequestModel request)
+	{
+		// Indica que se ha seleccionado
+		node.IsChecked = true;
+		// Añade los filtros
+		node.FilterWhere.Clear();
+		node.AddFilters(request.FiltersWhere, request.FiltersHaving);
+		// Cambia la ordenación
+		node.SortOrder = request.OrderBy;
+		node.SortIndex = request.OrderIndex;
 	}
 
 	/// <summary>

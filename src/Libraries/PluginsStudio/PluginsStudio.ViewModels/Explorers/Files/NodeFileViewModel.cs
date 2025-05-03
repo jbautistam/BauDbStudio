@@ -8,7 +8,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files;
 /// <summary>
 ///		ViewModel de un nodo de archivo
 /// </summary>
-public class NodeFileViewModel : PluginNodeAsyncViewModel
+public class NodeFileViewModel : PluginNodeViewModel
 {
 	// Variables privadas
 	private string _fileName = string.Empty;
@@ -31,35 +31,14 @@ public class NodeFileViewModel : PluginNodeAsyncViewModel
 	}
 
 	/// <summary>
-	///		Obtiene la lista de nodos hijo
+	///		Carga los nodos
 	/// </summary>
-	protected override async Task<List<PluginNodeViewModel>?> GetChildNodesAsync(CancellationToken cancellationToken)
+	protected override void LoadNodes()
 	{
-		// Evita las advertencias
-		await Task.Delay(1, cancellationToken);
+		// Limpia los nodos
+		Children.Clear();
 		// Devuelve la lista
-		return GetChildNodes();
-	}
-
-	/// <summary>
-	///		Obtiene la lista de nodos hijo
-	/// </summary>
-	private List<PluginNodeViewModel> GetChildNodes()
-	{
-		List<PluginNodeViewModel> nodes = new();
-
-			// Carga los nodos
-			if (!string.IsNullOrWhiteSpace(FileName) && Directory.Exists(FileName))
-			{
-				// Carga los directorios
-				foreach (string fileName in Directory.EnumerateDirectories(FileName))
-					nodes.Add(GetNode(fileName, true));
-				// Carga los archivos
-				foreach (string fileName in Directory.EnumerateFiles(FileName))
-					nodes.Add(GetNode(fileName, false));
-			}
-			// Devuelve la lista
-			return nodes;
+		Children.AddRange(new HelperFileNodes(ViewModel, this).GetChildNodes(FileName));
 	}
 
 	/// <summary>
@@ -70,7 +49,7 @@ public class NodeFileViewModel : PluginNodeAsyncViewModel
 		// Limpia los nodos
 		Children.Clear();
 		// Añade los nodos
-		foreach (PluginNodeViewModel node in GetChildNodes())
+		foreach (PluginNodeViewModel node in new HelperFileNodes(ViewModel, this).GetChildNodes(FileName))
 			Children.Add(node);
 		// Expande el nodo (antes indica que ya se han cargado los nodos)
 		LazyLoad = false;
@@ -92,11 +71,6 @@ public class NodeFileViewModel : PluginNodeAsyncViewModel
 	///		Obtiene el texto que se debe lanzar al editor
 	/// </summary>
 	public override string GetTextForEditor(bool shiftPressed) => FileName;
-
-	/// <summary>
-	///		Obtiene un nodo
-	/// </summary>
-	private NodeFileViewModel GetNode(string fileName, bool isFolder) => new NodeFileViewModel(ViewModel, this, fileName, isFolder);
 
 	/// <summary>
 	///		Nombre de archivo

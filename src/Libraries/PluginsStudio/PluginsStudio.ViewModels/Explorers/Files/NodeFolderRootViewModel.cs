@@ -26,15 +26,11 @@ public class NodeFolderRootViewModel : PluginNodeViewModel
 	{
 		string path = Tag?.ToString() ?? string.Empty;
 
+			// Limpia los nodos
+			Children.Clear();
+			// Carga losnodos del directorio
 			if (!string.IsNullOrWhiteSpace(path) && Directory.Exists(path))
-			{
-				// Carga los directorios
-				foreach (string fileName in Directory.EnumerateDirectories(path))
-					AddNode(fileName, true);
-				// Carga los archivos
-				foreach (string fileName in Directory.EnumerateFiles(path))
-					AddNode(fileName, false);
-			}
+				Children.AddRange(new HelperFileNodes(ViewModel, this).GetChildNodes(path));
 	}
 
 	/// <summary>
@@ -46,14 +42,6 @@ public class NodeFolderRootViewModel : PluginNodeViewModel
 			return FileName.Equals(target.FileName, StringComparison.CurrentCultureIgnoreCase);
 		else
 			return base.IsEquals(node);
-	}
-
-	/// <summary>
-	///		Añade un nodo
-	/// </summary>
-	private void AddNode(string fileName, bool isFolder)
-	{
-		Children.Add(new NodeFileViewModel(ViewModel, this, fileName, isFolder));
 	}
 
 	/// <summary>

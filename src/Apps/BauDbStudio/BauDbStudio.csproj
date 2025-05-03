@@ -28,7 +28,6 @@
     <Compile Remove="Controllers\AppController.cs" />
     <Compile Remove="Controllers\Helpers\LoggingHelper.cs" />
     <Compile Remove="Converters\FileIconConverter.cs" />
-    <Compile Remove="Converters\FileNameIconConverter - Copia.cs" />
     <Compile Remove="Views\Files\ImageView - Copia.xaml.cs" />
     <Compile Remove="Views\Tools\ConfigurationView.xaml.cs" />
     <Compile Remove="Views\Tools\CreateFileView.xaml.cs" />
@@ -45,6 +44,8 @@
     <None Remove="Resources\Images\ArrowUp.png" />
     <None Remove="Resources\Images\Cancel.png" />
     <None Remove="Resources\Images\CaseSensitive.png" />
+    <None Remove="Resources\Images\CdDrive.png" />
+    <None Remove="Resources\Images\Computer.png" />
     <None Remove="Resources\Images\Download.png" />
     <None Remove="Resources\Images\Export.png" />
     <None Remove="Resources\Images\File.png" />
@@ -61,10 +62,14 @@
     <None Remove="Resources\Images\FileTxt.png" />
     <None Remove="Resources\Images\FileXml.png" />
     <None Remove="Resources\Images\Filter.png" />
+    <None Remove="Resources\Images\Floppy.png" />
     <None Remove="Resources\Images\FolderNode.png" />
+    <None Remove="Resources\Images\HardDrive.png" />
     <None Remove="Resources\Images\LastFiles.png" />
     <None Remove="Resources\Images\Loading.png" />
+    <None Remove="Resources\Images\NetworkDrive.png" />
     <None Remove="Resources\Images\Panels.png" />
+    <None Remove="Resources\Images\PenDrive.png" />
     <None Remove="Resources\Images\Project.png" />
     <None Remove="Resources\Images\Refresh.png" />
     <None Remove="Resources\Images\Search.png" />
@@ -99,6 +104,7 @@
     <Resource Include="Resources\Images\ArrowFirst.png" />
     <Resource Include="Resources\Images\ArrowLast.png" />
     <Resource Include="Resources\Images\ArrowLeft.png" />
+    <Resource Include="Resources\Images\Bookmarks.png" />
     <Resource Include="Resources\Images\CaseSensitive.png" />
   </ItemGroup>
   <ItemGroup>
@@ -125,6 +131,8 @@
     <Resource Include="Resources\Images\ArrowDown.png" />
     <Resource Include="Resources\Images\ArrowRight.png" />
     <Resource Include="Resources\Images\ArrowUp.png" />
+    <Resource Include="Resources\Images\CdDrive.png" />
+    <Resource Include="Resources\Images\Computer.png" />
     <Resource Include="Resources\Images\DataError.png" />
     <Resource Include="Resources\Images\Cancel.png" />
     <Resource Include="Resources\Images\Export.png" />
@@ -135,9 +143,13 @@
     <Resource Include="Resources\Images\FilePdf.png" />
     <Resource Include="Resources\Images\FileTxt.png" />
     <Resource Include="Resources\Images\Filter.png" />
+    <Resource Include="Resources\Images\Floppy.png" />
+    <Resource Include="Resources\Images\HardDrive.png" />
     <Resource Include="Resources\Images\LastFiles.png" />
     <Resource Include="Resources\Images\Loading.png" />
+    <Resource Include="Resources\Images\NetworkDrive.png" />
     <Resource Include="Resources\Images\Panels.png" />
+    <Resource Include="Resources\Images\PenDrive.png" />
     <Resource Include="Resources\Images\Project.png" />
     <Resource Include="Resources\Images\Refresh.png" />
     <Resource Include="Resources\Images\SeeWindow.png" />

@@ -5,7 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Bau.DbStudio.Views.Explorers"
 			 xmlns:ViewModel="clr-namespace:Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;assembly=PluginsStudio.ViewModels.Base"
+			 xmlns:ViewModelExplorer="clr-namespace:Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files;assembly=PluginsStudio.ViewModels"
 			 xmlns:commandsLocal="clr-namespace:Bau.DbStudio.Converters"
+			 xmlns:converters="clr-namespace:Bau.DbStudio.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 	<UserControl.CommandBindings>
@@ -19,6 +21,11 @@
 		<KeyBinding Command="Rename" Key="F2" />
 	-->
 	</UserControl.InputBindings>
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<converters:FileTypeNodeIconConverter x:Key="FileTypeNodeIconConverter" />
+		</ResourceDictionary>
+	</UserControl.Resources>
 	<Grid>
 		<TreeView x:Name="trvExplorer" BorderThickness="0"
 				ContextMenu="{DynamicResource ResourceKey=mnuExplorer}" 
@@ -52,9 +59,22 @@
 								   VerticalAlignment="Center" />
 					</StackPanel>
 				</HierarchicalDataTemplate>
+
 				<HierarchicalDataTemplate DataType="{x:Type ViewModel:PluginNodeViewModel}" ItemsSource="{Binding Children}">
 					<StackPanel Orientation="Horizontal">
 						<Image Width="24" Height="24" Margin="3,0" Source="{Binding Path=FileName,Converter={StaticResource FileNameIconConverter}}"
+							 ToolTip="{Binding Path=ToolTipText}" />
+						<TextBlock Text="{Binding Text}" FontWeight="{Binding IsBold,Converter={StaticResource BoolToFontWeightConverter}}"
+								   Foreground="{Binding Path=Foreground,Converter={StaticResource MVVMColorConverter}}" 
+								   ToolTip="{Binding Path=ToolTipText }"
+								   VerticalAlignment="Center" />
+					</StackPanel>
+				</HierarchicalDataTemplate>
+
+				<!-- Nodo de marcadores -->
+				<HierarchicalDataTemplate DataType="{x:Type ViewModelExplorer:NodeRootViewModel}" ItemsSource="{Binding Children}">
+					<StackPanel Orientation="Horizontal">
+						<Image Width="24" Height="24" Margin="3,0" Source="{Binding Path=NodeType,Converter={StaticResource FileTypeNodeIconConverter}}"
 							 ToolTip="{Binding Path=ToolTipText}" />
 						<TextBlock Text="{Binding Text}" FontWeight="{Binding IsBold,Converter={StaticResource BoolToFontWeightConverter}}"
 								   Foreground="{Binding Path=Foreground,Converter={StaticResource MVVMColorConverter}}" 

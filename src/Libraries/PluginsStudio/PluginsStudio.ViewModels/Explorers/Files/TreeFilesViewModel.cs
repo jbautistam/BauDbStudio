@@ -21,6 +21,10 @@ public class TreeFilesViewModel : PluginTreeViewModel, Base.Interfaces.IPaneView
 	{
 		/// <summary>Desconocido. No se debería utilizar</summary>
 		Unknown,
+		/// <summary>Nodo raíz con las unidades del ordenador</summary>
+		ComputerRoot,
+		/// <summary>Nodo raíz con los marcadores</summary>
+		BookmarksRoot,
 		/// <summary>Raíz de archivos de proyecto</summary>
 		FilesRoot,
 		/// <summary>Archivo / directorio</summary>
@@ -99,7 +103,7 @@ public class TreeFilesViewModel : PluginTreeViewModel, Base.Interfaces.IPaneView
 	}
 
 	/// <summary>
-	///		Genera un nodo
+	///		Selecciona un nodo
 	/// </summary>
 	private void SelectNode(AsyncObservableCollection<ControlHierarchicalViewModel> children, ControlHierarchicalViewModel selectedNode)
 	{
@@ -134,23 +138,26 @@ public class TreeFilesViewModel : PluginTreeViewModel, Base.Interfaces.IPaneView
 	private void ExpandFilesNodes(List<ControlHierarchicalViewModel> nodesExpanded)
 	{
 		foreach (ControlHierarchicalViewModel node in nodesExpanded)
-			if (node is NodeFolderRootViewModel nodeRoot)
-				ExpandRootNode(nodeRoot, nodesExpanded);
+			if (node is NodeFolderRootViewModel nodeFolderRoot)
+				ExpandRootFolderNode(nodeFolderRoot, nodesExpanded);
 	}
 
 	/// <summary>
-	///		Expande un nodo raíz
+	///		Expande un nodo de directorio raíz
 	/// </summary>
-	private void ExpandRootNode(NodeFolderRootViewModel nodeRoot, List<ControlHierarchicalViewModel> nodesExpanded)
+	private void ExpandRootFolderNode(NodeFolderRootViewModel nodeRoot, List<ControlHierarchicalViewModel> nodesExpanded)
 	{
 		foreach (ControlHierarchicalViewModel treeNode in Children)
-			if (treeNode is NodeFolderRootViewModel treeNodeRoot && nodeRoot.FileName.Equals(treeNodeRoot.FileName, StringComparison.CurrentCultureIgnoreCase))
-			{
-				// Expande el nodo
-				treeNodeRoot.IsExpanded = true;
-				// Expande los nodos hijo
-				ExpandFolderNodes(treeNodeRoot.Children, nodesExpanded);
-			}
+			if (treeNode is NodeRootViewModel treeNodeRoot)
+				foreach (ControlHierarchicalViewModel childNode in treeNodeRoot.Children)
+					if (childNode is NodeFolderRootViewModel treeNodeFolderRoot && 
+						nodeRoot.FileName.Equals(treeNodeFolderRoot.FileName, StringComparison.CurrentCultureIgnoreCase))
+					{
+						// Expande el nodo
+						treeNodeFolderRoot.IsExpanded = true;
+						// Expande los nodos hijo
+						ExpandFolderNodes(treeNodeFolderRoot.Children, nodesExpanded);
+					}
 	}
 
 	/// <summary>
@@ -187,27 +194,19 @@ public class TreeFilesViewModel : PluginTreeViewModel, Base.Interfaces.IPaneView
 	/// </summary>
 	protected override void AddRootNodes()
 	{
-		List<string> paths = [];
+		AddRootNode(NodeType.BookmarksRoot);
+		AddRootNode(NodeType.ComputerRoot);
 
-			// Añade los directorios
-			if (MainViewModel.WorkspacesViewModel.SelectedItem != null)
-				foreach (string path in MainViewModel.WorkspacesViewModel.SelectedItem.Folders)
-					if (!string.IsNullOrWhiteSpace(path) && Directory.Exists(path))
-						paths.Add(path);
-			// Si no hay ningún directorio añade los comandos básicos
-			if (paths.Count == 0)
-			{
-				Children.Add(new NodeCommandViewModel(this, null, NodeCommandViewModel.CommandType.AddDriveNodes, string.Empty));
-				Children.Add(new NodeCommandViewModel(this, null, NodeCommandViewModel.CommandType.AddOneFolder, string.Empty));
-			}
-			else
-			{
-				// Ordena por el nombre del directorio
-				paths.Sort((first, second) => Path.GetFileName(first).CompareTo(Path.GetFileName(second)));
-				// Recarga los nodos
-				foreach (string path in paths)
-					Children.Add(new NodeFolderRootViewModel(this, null, path));
-			}
+		// Añade un nodo raíz y lo expando
+		void AddRootNode(NodeType type)
+		{
+			NodeRootViewModel rootNode = new(this, type);
+
+				// Añade el nodo
+				Children.Add(rootNode);
+				// y lo expande
+				rootNode.IsExpanded = true;
+		}
 	}
 
 	/// <summary>
@@ -225,19 +224,6 @@ public class TreeFilesViewModel : PluginTreeViewModel, Base.Interfaces.IPaneView
 				// Carga el árbol
 				Load();
 			}
-	}
-
-	/// <summary>
-	///		Añade las unidades del ordenador como carpetas
-	/// </summary>
-	internal void AddDriveNodes()
-	{
-		// Añade las unidades
-		if (MainViewModel.WorkspacesViewModel.SelectedItem is not null)
-			foreach (DriveInfo drive in DriveInfo.GetDrives())
-				MainViewModel.WorkspacesViewModel.SelectedItem.AddFolder(drive.Name);
-		// Recarga el árbol
-		Load();
 	}
 
 	/// <summary>
@@ -464,7 +450,7 @@ public class TreeFilesViewModel : PluginTreeViewModel, Base.Interfaces.IPaneView
 		string path = string.Empty;
 
 			// Obtiene la carpeta del nodo
-			if (SelectedNode != null)
+			if (SelectedNode is not null)
 			{
 				if (SelectedNode is NodeFolderRootViewModel nodeFolder)
 					path = nodeFolder.FileName;

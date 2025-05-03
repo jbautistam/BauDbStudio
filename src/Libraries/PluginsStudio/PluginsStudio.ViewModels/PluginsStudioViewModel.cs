@@ -205,7 +205,7 @@ public class PluginsStudioViewModel : BaseObservableObject
 	public Tools.LastFiles.LastFilesListViewModel LastFilesViewModel
 	{
 		get { return _lastFilesViewModel; }
-		set { CheckObject(ref _lastFilesViewModel, value); }
+		set { CheckObject(ref _lastFilesViewModel!, value); }
 	}
 
 	/// <summary>
@@ -214,7 +214,7 @@ public class PluginsStudioViewModel : BaseObservableObject
 	public Tools.Workspaces.WorkspaceListViewModel WorkspacesViewModel
 	{
 		get { return _workspacesViewModel; }
-		set { CheckObject(ref _workspacesViewModel, value); }
+		set { CheckObject(ref _workspacesViewModel!, value); }
 	}
 
 	/// <summary>
@@ -223,7 +223,7 @@ public class PluginsStudioViewModel : BaseObservableObject
 	public Tools.LogItems.LogListViewModel LogViewModel
 	{
 		get { return _logViewModel; }
-		set { CheckObject(ref _logViewModel, value); }
+		set { CheckObject(ref _logViewModel!, value); }
 	}
 
 	/// <summary>
@@ -232,7 +232,7 @@ public class PluginsStudioViewModel : BaseObservableObject
 	public Tools.Search.SearchFilesViewModel SearchFilesViewModel
 	{
 		get { return _searchFilesViewModel; }
-		set { CheckObject(ref _searchFilesViewModel, value); }
+		set { CheckObject(ref _searchFilesViewModel!, value); }
 	}
 
 	/// <summary>
@@ -241,7 +241,7 @@ public class PluginsStudioViewModel : BaseObservableObject
 	public Explorers.Files.TreeFilesViewModel TreeFoldersViewModel
 	{
 		get { return _treeFoldersViewModel; }
-		set { CheckObject(ref _treeFoldersViewModel, value); }
+		set { CheckObject(ref _treeFoldersViewModel!, value); }
 	}
 
 	/// <summary>
@@ -250,7 +250,7 @@ public class PluginsStudioViewModel : BaseObservableObject
 	public TasksQueue.TasksQueueListViewModel TasksQueueListViewModel
 	{
 		get { return _tasksQueueListViewModel; }
-		set { CheckObject(ref _tasksQueueListViewModel, value); }
+		set { CheckObject(ref _tasksQueueListViewModel!, value); }
 	}
 
 	/// <summary>
@@ -259,7 +259,7 @@ public class PluginsStudioViewModel : BaseObservableObject
 	public Windows.WindowsCollectionViewModel WindowsViewModel
 	{
 		get { return _windowsViewModel; }
-		set { CheckObject(ref _windowsViewModel, value); }
+		set { CheckObject(ref _windowsViewModel!, value); }
 	}
 
 	/// <summary>
