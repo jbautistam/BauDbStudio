@@ -1,16 +1,17 @@
 ﻿using Bau.Libraries.LibHelper.Extensors;
+using Bau.Libraries.PluginsStudio.ViewModels.Base.Files;
 
-namespace Bau.Libraries.PluginsStudio.ViewModels.Files;
+namespace Bau.Libraries.FileTools.ViewModel.Pictures;
 
 /// <summary>
 ///		ViewModel para un archivo de imagen
 /// </summary>
-public class ImageViewModel : Base.Files.BaseFileViewModel
+public class ImageViewModel : BaseFileViewModel
 {
 	// Eventos públicos
 	public event EventHandler? SaveImage;
 
-	public ImageViewModel(PluginsStudioViewModel mainViewModel, string fileName) : base(mainViewModel.MainController.PluginsController, fileName, string.Empty)
+	public ImageViewModel(FileToolsViewModel mainViewModel, string fileName) : base(mainViewModel.MainController.PluginController, fileName, string.Empty)
 	{
 		MainViewModel = mainViewModel;
 		FileName = fileName;
@@ -22,10 +23,10 @@ public class ImageViewModel : Base.Files.BaseFileViewModel
 	/// </summary>
 	public override void Load()
 	{
-		// Indica que no ha habido modificaciones
-		IsUpdated = false;
 		// Añade el archivo a los últimos archivos abiertos
 		MainViewModel.MainController.HostPluginsController.AddFileUsed(FileName);
+		// Indica que no ha habido modificaciones
+		IsUpdated = false;
 	}
 
 	/// <summary>
@@ -67,7 +68,7 @@ public class ImageViewModel : Base.Files.BaseFileViewModel
 	/// <summary>
 	///		Ejecuta un comando
 	/// </summary>
-	public override void Execute(Base.Models.Commands.ExternalCommand externalCommand)
+	public override void Execute(PluginsStudio.ViewModels.Base.Models.Commands.ExternalCommand externalCommand)
 	{
 		System.Diagnostics.Debug.WriteLine($"Execute command {externalCommand.Type.ToString()} at {Header}");
 	}
@@ -83,5 +84,5 @@ public class ImageViewModel : Base.Files.BaseFileViewModel
 	/// <summary>
 	///		Solución
 	/// </summary>
-	public PluginsStudioViewModel MainViewModel { get; }
+	public FileToolsViewModel MainViewModel { get; }
 }

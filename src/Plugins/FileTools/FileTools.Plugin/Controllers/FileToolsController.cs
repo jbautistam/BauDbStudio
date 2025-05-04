@@ -11,6 +11,7 @@ public class FileToolsController : ViewModel.Controllers.IFileToolsController
 	{
 		FileToolsPlugin = fileToolsPlugin;
 		PluginController = pluginController;
+		ImageToolsController = new ImageToolsController(this);
 	}
 
 	/// <summary>
@@ -21,6 +22,12 @@ public class FileToolsController : ViewModel.Controllers.IFileToolsController
 		// Abre la ventana
 		switch (detailsViewModel)
 		{
+			case ViewModel.Pictures.ImageEditViewModel viewModel: // tiene que ir antes del tratamiento de ImageViewModel porque hereda de ésta
+					FileToolsPlugin.AppViewsController.OpenDocument(new Views.Pictures.ImageEditView(viewModel), viewModel);
+				break;
+			case ViewModel.Pictures.ImageViewModel viewModel:
+					FileToolsPlugin.AppViewsController.OpenDocument(new Views.Pictures.ImageView(viewModel), viewModel);
+				break;
 			case ViewModel.PatternsFile.PatternFileViewModel viewModel:
 					FileToolsPlugin.AppViewsController.OpenDocument(new Views.PatternFile.PatternFileView(viewModel), viewModel);
 				break;
@@ -42,6 +49,9 @@ public class FileToolsController : ViewModel.Controllers.IFileToolsController
 				case ViewModel.Multimedia.MediaFileViewModel viewModel:
 						FileToolsPlugin.AppViewsController.OpenNoModalDialog(new Views.Multimedia.MediaFileView(viewModel), true);
 					break;
+				case ViewModel.Pictures.Tools.SplitImagesViewModel viewModel:
+						FileToolsPlugin.AppViewsController.OpenDialog(new Views.Pictures.Tools.SplitImagesView(viewModel));
+					break;
 			}
 			// Devuelve el resultado
 			return result;
@@ -56,4 +66,9 @@ public class FileToolsController : ViewModel.Controllers.IFileToolsController
 	///		Controlador de plugin
 	/// </summary>
 	public PluginsStudio.ViewModels.Base.Controllers.IPluginsController PluginController { get; }
+
+	/// <summary>
+	///		Controlador de las herramientas de imagen
+	/// </summary>
+	public ViewModel.Controllers.IImageToolsController ImageToolsController { get; }
 }

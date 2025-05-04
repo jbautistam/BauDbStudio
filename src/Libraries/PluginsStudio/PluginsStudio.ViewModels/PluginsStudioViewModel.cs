@@ -10,16 +10,6 @@ public class PluginsStudioViewModel : BaseObservableObject
 {
 	// Eventos públicos
 	public event EventHandler? WorkspacesChanged;
-	// Constantes públicas
-	internal List<(string name, string extension)> ImageTypeFiles = [
-																		("PNG file", ".png"),
-																		("JPG file", ".jpg"),
-																		("JPEG file", ".jpeg"),
-																		("BMP file", ".bmp"),
-																		("GIF file", ".gif"),
-																		("TIFF file", ".tiff"),
-																		("WebP file", ".webp"),
-																  ];
 	// Variables privadas
 	private Tools.LastFiles.LastFilesListViewModel _lastFilesViewModel = default!;
 	private Tools.Workspaces.WorkspaceListViewModel _workspacesViewModel = default!;
@@ -87,9 +77,7 @@ public class PluginsStudioViewModel : BaseObservableObject
 	/// </summary>
 	public void OpenFile(string fileName, string mask)
 	{
-		if (IsImage(fileName))
-			MainController.OpenWindow(new Files.ImageViewModel(this, fileName));
-		else if (IsBrowserFile(fileName))
+		if (IsBrowserFile(fileName))
 			OpenWebBrowser(fileName);
 		else
 			MainController.OpenWindow(new Files.FileTextViewModel(this, fileName, mask));
@@ -120,19 +108,6 @@ public class PluginsStudioViewModel : BaseObservableObject
 	///		Comprueba si es un archivo que se puede abrir con el explorador
 	/// </summary>
 	private bool IsBrowserFile(string fileName) => fileName.EndsWith(".pdf", StringComparison.CurrentCultureIgnoreCase);
-
-	/// <summary>
-	///		Comprueba si es un archivo de imagen
-	/// </summary>
-	private bool IsImage(string fileName)
-	{
-		// Busca entre las extensiones si es un archivo de imagen
-		foreach ((string _, string extension) in ImageTypeFiles)
-			if (fileName.EndsWith(extension, StringComparison.CurrentCultureIgnoreCase))
-				return true;
-		// Si ha llegado hasta aquí es porque no es una imagen
-		return false;
-	}
 
 	/// <summary>
 	///		Comprueba si puede guardar el contenido de la ventana

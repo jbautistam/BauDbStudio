@@ -75,7 +75,7 @@ internal class HelperFileNodes(TreeFilesViewModel viewModel, PluginNodeViewModel
 	/// <summary>
 	///		Obtiene un nodo
 	/// </summary>
-	private NodeFileViewModel GetNode(string fileName, bool isFolder) => new NodeFileViewModel(ViewModel, Node, fileName, isFolder);
+	private NodeFileViewModel GetNode(string fileName, bool isFolder) => new(ViewModel, Node, fileName, isFolder);
 
 	/// <summary>
 	///		ViewModel del árbol

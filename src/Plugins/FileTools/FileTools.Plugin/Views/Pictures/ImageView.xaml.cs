@@ -1,9 +1,11 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Bau.Libraries.PluginsStudio.ViewModels.Files;
+using Microsoft.Extensions.Logging;
 
-namespace Bau.DbStudio.Views.Files;
+using Bau.Libraries.FileTools.ViewModel.Pictures;
+
+namespace Bau.Libraries.FileTools.Plugin.Views.Pictures;
 
 /// <summary>
 ///		Ventana para presentar una imagen
@@ -50,7 +52,7 @@ public partial class ImageView : UserControl
 		catch (Exception exception)
 		{
 			ViewModel.MainViewModel.MainController.MainWindowController.HostController.SystemController.ShowMessage($"Error when load image {fileName}");
-			ViewModel.MainViewModel.LogViewModel.WriteLog(Microsoft.Extensions.Logging.LogLevel.Error, $"Error when load image {fileName}", exception);
+			ViewModel.MainViewModel.MainController.Logger.LogError(exception, $"Error when load image {fileName}");
 		}
 	}
 
@@ -60,7 +62,7 @@ public partial class ImageView : UserControl
 	private ImageSource? CreateBitmapImage(string fileName)
 	{
 		if (System.IO.File.Exists(fileName))
-			return new Libraries.BauMvvm.Views.Wpf.Tools.ImageToolsWpf().GetFromFileName(fileName);
+			return new BauMvvm.Views.Wpf.Tools.ImageToolsWpf().GetFromFileName(fileName);
 		else
 			return null;
 	}
@@ -74,7 +76,7 @@ public partial class ImageView : UserControl
 
 			// Graba la imagen
 			if (imgImage.Source is BitmapImage image)
-				saved = new Controllers.Helpers.ImageHelper().SaveImage(image, fileName);
+				saved = new BauMvvm.Views.Wpf.Tools.ImageHelper().SaveImage(image, fileName);
 			// Si no se ha grabado, muestra un mensaje al usuario, si se ha grabado, actualiza el árbol
 			if (!saved)
 				ViewModel.MainViewModel.MainController.MainWindowController.HostController.SystemController.ShowMessage($"Can't save the image {fileName}");

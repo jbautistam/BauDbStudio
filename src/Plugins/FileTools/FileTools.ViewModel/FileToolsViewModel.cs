@@ -8,6 +8,15 @@ namespace Bau.Libraries.FileTools.ViewModel;
 public class FileToolsViewModel : BaseObservableObject
 {
 	// Constantes públicas
+	public List<(string name, string extension)> ImageTypeFiles = [
+																		("PNG file", ".png"),
+																		("JPG file", ".jpg"),
+																		("JPEG file", ".jpeg"),
+																		("BMP file", ".bmp"),
+																		("GIF file", ".gif"),
+																		("TIFF file", ".tiff"),
+																		("WebP file", ".webp"),
+																  ];
 	public const string PatternFileExtension = ".pattern";
 
 	public FileToolsViewModel(Controllers.IFileToolsController mainController)
@@ -44,7 +53,14 @@ public class FileToolsViewModel : BaseObservableObject
 			// Abre el archivo
 			if (!string.IsNullOrWhiteSpace(fileName)) 
 			{
-				if (fileName.EndsWith(PatternFileExtension, StringComparison.CurrentCultureIgnoreCase))
+				if (IsImage(fileName))
+				{
+					// Abre el archivo
+					MainController.OpenWindow(new Pictures.ImageViewModel(this, fileName));
+					// Indica que ha podido abrir el archivo
+					open = true;
+				}
+				else if (fileName.EndsWith(PatternFileExtension, StringComparison.CurrentCultureIgnoreCase))
 				{
 					// Abre el archivo
 					MainController.OpenWindow(new PatternsFile.PatternFileViewModel(this, fileName));
@@ -74,14 +90,29 @@ public class FileToolsViewModel : BaseObservableObject
 	}
 
 	/// <summary>
+	///		Comprueba si es un archivo de imagen
+	/// </summary>
+	private bool IsImage(string fileName)
+	{
+		// Busca entre las extensiones si es un archivo de imagen
+		foreach ((string _, string extension) in ImageTypeFiles)
+			if (fileName.EndsWith(extension, StringComparison.CurrentCultureIgnoreCase))
+				return true;
+		// Si ha llegado hasta aquí es porque no es una imagen
+		return false;
+	}
+
+	/// <summary>
 	///		Ejecuta el script de un archivo o una carpeta
 	/// </summary>
 	private void ExecuteFolderFile(object? parameter)
 	{
-		if (parameter is not null && parameter is string fileName && !string.IsNullOrWhiteSpace(fileName))
+		if (parameter is not null && parameter is string fileName && !string.IsNullOrWhiteSpace(fileName) && File.Exists(fileName))
 		{
 			if (fileName.EndsWith(".md", StringComparison.CurrentCultureIgnoreCase))
 				ParseMarkdown(fileName);
+			else if (IsImage(fileName))
+				MainController.OpenWindow(new Pictures.ImageEditViewModel(this, fileName));
 		}
 	}
 

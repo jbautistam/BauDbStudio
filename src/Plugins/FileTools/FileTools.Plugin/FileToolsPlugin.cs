@@ -85,7 +85,28 @@ public class FileToolsPlugin : IPlugin
 														Command = MainViewModel.ExecuteFileCommand
 													}
 										 )
+							.WithOption()
+								.WithExtension(GetImageExtensions())
+								.WithMenu(new MenuModel
+													{
+														Header = "Edit",
+														Icon = GetIconName("Format.png", true),
+														Command = MainViewModel.ExecuteFileCommand
+													}
+										 )
 							.Build();
+
+		// Obtiene las extensiones de las imágenes
+		string[] GetImageExtensions()
+		{
+			string[] extensions = new string[MainViewModel.ImageTypeFiles.Count];
+
+				// Obtiene las extensiones de las imágenes
+				for (int index = 0; index < extensions.Length; index++)
+					extensions[index] = MainViewModel.ImageTypeFiles[index].extension;
+				// Devuelve lalista de extensiones
+				return extensions;
+		}
 	}
 
 	/// <summary>
@@ -93,16 +114,20 @@ public class FileToolsPlugin : IPlugin
 	/// </summary>
 	public List<FileAssignedModel> GetFilesAssigned()
 	{
-		return new()
-				{
-					GetFileAssigned("Pattern text file", FileToolsViewModel.PatternFileExtension, "PatternFile.png", true),
-					GetMediaFileAssigned(true, ".mp3"),
-					GetMediaFileAssigned(true, ".wav"),
-					GetMediaFileAssigned(false, ".mp4"),
-					GetMediaFileAssigned(false, ".mkv"),
-					GetMediaFileAssigned(false, ".avi")
-				};
+		List<FileAssignedModel> files = [
+											GetFileAssigned("Pattern text file", FileToolsViewModel.PatternFileExtension, "PatternFile.png", true),
+											GetMediaFileAssigned(true, ".mp3"),
+											GetMediaFileAssigned(true, ".wav"),
+											GetMediaFileAssigned(false, ".mp4"),
+											GetMediaFileAssigned(false, ".mkv"),
+											GetMediaFileAssigned(false, ".avi")
+										];
 
+			// Añade la lista de archivos de imágenes
+			foreach ((string name, string extension) in MainViewModel.ImageTypeFiles)
+				files.Add(GetImageFileAssigned(name, extension));
+			// Devuelve la lista de archivos
+			return files;
 
 		// Obtiene el archivo asociado a una extensión
 		FileAssignedModel GetFileAssigned(string name, string extension, string icon, bool canCreate)
@@ -123,6 +148,18 @@ public class FileToolsPlugin : IPlugin
 				return GetFileAssigned($"Audio {extension}", extension, "AudioFile.png", false);
 			else
 				return GetFileAssigned($"Vídeo {extension}", extension, "VideoFile.png", false);
+		}
+
+		// Obtiene el archivo asociado a una extensión de un archivo de imagen
+		FileAssignedModel GetImageFileAssigned(string name, string extension)
+		{
+			return new FileAssignedModel
+							{
+								Name = name,
+								FileExtension = extension,
+								Icon = GetIconName("FileImage.png", true),
+								CanCreate = false
+							};
 		}
 	}
 

@@ -7,9 +7,9 @@
     <RootNamespace>Bau.DbStudio</RootNamespace>
     <Authors>Jose Antonio Bautista</Authors>
     <ApplicationIcon>Resources\BauDbStudio.ico</ApplicationIcon>
-    <AssemblyVersion>1.0.63.0</AssemblyVersion>
-    <FileVersion>1.0.63.0</FileVersion>
-    <Version>1.0.63</Version>
+    <AssemblyVersion>1.0.64.0</AssemblyVersion>
+    <FileVersion>1.0.64.0</FileVersion>
+    <Version>1.0.64</Version>
     <PackageProjectUrl>https://github.com/jbautistam/BauDbStudio</PackageProjectUrl>
     <RepositoryUrl>https://github.com/jbautistam/BauDbStudio</RepositoryUrl>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -52,7 +52,6 @@
     <None Remove="Resources\Images\FileCsharp.png" />
     <None Remove="Resources\Images\FileCss.png" />
     <None Remove="Resources\Images\FileHtml.png" />
-    <None Remove="Resources\Images\FileImage.png" />
     <None Remove="Resources\Images\FileJson.png" />
     <None Remove="Resources\Images\FileMd.png" />
     <None Remove="Resources\Images\FilePdf.png" />
@@ -138,7 +137,6 @@
     <Resource Include="Resources\Images\Export.png" />
     <Resource Include="Resources\Images\FileCss.png" />
     <Resource Include="Resources\Images\FileHtml.png" />
-    <Resource Include="Resources\Images\FileImage.png" />
     <Resource Include="Resources\Images\FileMd.png" />
     <Resource Include="Resources\Images\FilePdf.png" />
     <Resource Include="Resources\Images\FileTxt.png" />
@@ -214,10 +212,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Files\FileTextView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Files\ImageView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>

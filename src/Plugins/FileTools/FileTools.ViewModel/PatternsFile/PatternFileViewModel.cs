@@ -271,7 +271,7 @@ public class PatternFileViewModel : BaseFileViewModel, PluginsStudio.ViewModels.
 	public ComboViewModel ComboSeparators
 	{
 		get { return _comboSeparators ?? default!; }
-		set { CheckObject(ref _comboSeparators, value); }
+		set { CheckObject(ref _comboSeparators!, value); }
 	}
 
 	/// <summary>
@@ -280,7 +280,7 @@ public class PatternFileViewModel : BaseFileViewModel, PluginsStudio.ViewModels.
 	public ComboViewModel ComboExtensions
 	{
 		get { return _comboExtensions ?? default!; }
-		set { CheckObject(ref _comboExtensions, value); }
+		set { CheckObject(ref _comboExtensions!, value); }
 	}
 
 	/// <summary>

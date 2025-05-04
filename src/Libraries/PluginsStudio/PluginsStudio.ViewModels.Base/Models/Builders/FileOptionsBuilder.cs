@@ -30,19 +30,20 @@ public class FileOptionsBuilder
 	/// <summary>
 	///		Añade una extensión
 	/// </summary>
-	public FileOptionsBuilder WithExtension(string extension)
+	public FileOptionsBuilder WithExtension(params string[] extensions)
 	{
-		// Añade la extensión
-		if (!string.IsNullOrWhiteSpace(extension))
-		{
-			// Quita los espacios
-			extension = extension.Trim();
-			// Añade el punto si no empieza por punto
-			if (!extension.StartsWith('.'))
-				extension = $".{extension}";
-			// Añade la extensión a la colección
-			LastOption.FileExtension.Add(extension);
-		}
+		// Añade las extensiones
+		foreach (string extension in extensions)
+			if (!string.IsNullOrWhiteSpace(extension))
+			{
+				string normalized = extension.Trim();
+
+					// Añade el punto si no empieza por punto
+					if (!normalized.StartsWith('.'))
+						normalized = $".{normalized}";
+					// Añade la extensión normalizada a la colección
+					LastOption.FileExtension.Add(normalized);
+			}
 		// Devuelve el generador
 		return this;
 	}

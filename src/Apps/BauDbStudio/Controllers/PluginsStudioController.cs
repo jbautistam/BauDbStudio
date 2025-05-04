@@ -23,9 +23,6 @@ public class PluginsStudioController : Libraries.PluginsStudio.ViewModels.Contro
 		// Abre la ventana
 		switch (detailViewModel)
 		{
-			case Libraries.PluginsStudio.ViewModels.Files.ImageViewModel viewModel:
-					DbStudioViewManager.AppViewController.OpenDocument(new Views.Files.ImageView(viewModel), viewModel);
-				break;
 			case Libraries.PluginsStudio.ViewModels.Base.Files.BaseTextFileViewModel viewModel:
 					DbStudioViewManager.AppViewController.OpenDocument(new Views.Files.FileTextView(viewModel), viewModel);
 				break;

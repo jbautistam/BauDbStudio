@@ -39,7 +39,7 @@ internal class ClipboardHelper
 				BitmapSource image = System.Windows.Clipboard.GetImage();
 
 					// Graba la imagen
-					saved = new ImageHelper().SaveImage(image, fileName);
+					saved = new Libraries.BauMvvm.Views.Wpf.Tools.ImageHelper().SaveImage(image, fileName);
 			}
 			// Devuelve el valor que indica si se ha grabado correctamente
 			return saved;

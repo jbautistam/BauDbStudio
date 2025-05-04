@@ -41,6 +41,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\Controls\WPF\BauControls\src\BauControls.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Controls\WPF\CodeEditor\src\CodeEditor.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Controls\WPF\ZoomAndPanControl\ZoomAndPanControls.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Architecture\Mvvm\src\BauMvvm.Views.Wpf\BauMvvm.Views.Wpf.csproj" />
     <ProjectReference Include="..\..\..\Libraries\PluginsStudio\PluginsStudio.Views.Base\PluginsStudio.Views.Base.csproj" />
     <ProjectReference Include="..\FileTools.ViewModel\FileTools.ViewModel.csproj" />
   </ItemGroup>
@@ -49,6 +51,7 @@
     <Resource Include="Resources\AudioFile.png" />
     <Resource Include="Resources\Back.png" />
     <Resource Include="Resources\Execute.png" />
+    <Resource Include="Resources\FileImage.png" />
     <Resource Include="Resources\FolderNode.png" />
     <Resource Include="Resources\Format.png" />
     <Resource Include="Resources\Next.png" />
@@ -57,9 +60,15 @@
     <Resource Include="Resources\Pin.png" />
     <Resource Include="Resources\Play.png" />
     <Resource Include="Resources\Refresh.png" />
+    <Resource Include="Resources\SeeWindow.png" />
     <Resource Include="Resources\ShowMarkdown.png" />
     <Resource Include="Resources\Stop.png" />
     <Resource Include="Resources\VideoFile.png" />
+    <Resource Include="Resources\Zoom100.png" />
+    <Resource Include="Resources\ZoomFill.png" />
+    <Resource Include="Resources\ZoomFit.png" />
+    <Resource Include="Resources\ZoomIn.png" />
+    <Resource Include="Resources\ZoomOut.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -81,6 +90,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="System.IO" />
   </ItemGroup>
 
 </Project>

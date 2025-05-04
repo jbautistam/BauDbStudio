@@ -1,5 +1,5 @@
-﻿using Bau.Libraries.BauMvvm.ViewModels.Controllers;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
+using Bau.Libraries.BauMvvm.ViewModels.Controllers;
 
 namespace Bau.Libraries.FileTools.ViewModel.Controllers;
 
@@ -47,6 +47,11 @@ public interface IFileToolsController
 	///		Controlador con ventanas de sistema
 	/// </summary>
 	IHostSystemController SystemController => MainWindowController.HostController.SystemController;
+
+	/// <summary>
+	///		Controlador de imágenes
+	/// </summary>
+	IImageToolsController ImageToolsController { get; }
 
 	/// <summary>
 	///		Controlador de log
