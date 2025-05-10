@@ -21,7 +21,6 @@
 				<Grid>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="Auto"/>
-						<RowDefinition Height="Auto"/>
 						<RowDefinition Height="*"/>
 					</Grid.RowDefinitions>
 					<GroupBox Grid.Row="0" Grid.Column="0" Header="Editor">
@@ -57,20 +56,7 @@
 							<CheckBox x:Name="chkShowLineNumber" Grid.Row="1" Grid.Column="2" Content="Mostrar números de línea" Margin="5" VerticalAlignment="Center"/>
 						</Grid>
 					</GroupBox>
-					<GroupBox Header="Proyectos de ETL" Grid.Row="1" Grid.Column="0">
-						<Grid>
-							<Grid.RowDefinitions>
-								<RowDefinition Height="Auto"/>
-							</Grid.RowDefinitions>
-							<Grid.ColumnDefinitions>
-								<ColumnDefinition Width="Auto"/>
-								<ColumnDefinition Width="*"/>
-							</Grid.ColumnDefinitions>
-							<Label Grid.Row="0" Grid.Column="0" Margin="5" Content="Consola:"/>
-							<Files:FileSelect x:Name="fnConsole" Grid.Row="0" Grid.Column="1" Margin="5"  />
-						</Grid>
-					</GroupBox>
-					<GroupBox Grid.Row="2" Grid.Column="0" Header="Aplicación">
+					<GroupBox Grid.Row="1" Grid.Column="0" Header="Aplicación">
 						<Grid>
 							<Grid.RowDefinitions>
 								<RowDefinition Height="Auto"/>

@@ -589,7 +589,7 @@ public class EntryViewModel : BaseObservableObject
 	public MvvmColor RemainingTimeColor
 	{
 		get { return _remainingTimeColor; }
-		set { CheckObjectNoEvent(ref _remainingTimeColor!, value); }
+		set { CheckObjectNoUpdate(ref _remainingTimeColor!, value); }
 	}
 
 	/// <summary>

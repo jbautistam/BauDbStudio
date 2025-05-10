@@ -78,7 +78,7 @@ public class EBookReaderPlugin : IPlugin
 							GetFileComic(".cbr"),
 							GetFileComic(".cbz"),
 							GetFileComic(".zip"),
-							GetFileComic(".rar")
+							GetFileComic(".rar"),
 						};
 
 		// Obtiene un archivo de cómic

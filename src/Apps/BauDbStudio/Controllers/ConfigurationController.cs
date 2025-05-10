@@ -204,10 +204,7 @@ public class ConfigurationController : Libraries.PluginsStudio.ViewModels.Base.C
 	/// <summary>
 	///		Obtiene el nombre del archivo de setup
 	/// </summary>
-	private string GetPluginsSetupFileName(string pathData)
-	{
-		return System.IO.Path.Combine(pathData, "PluginsSetup.xml");
-	}
+	private string GetPluginsSetupFileName(string pathData) => System.IO.Path.Combine(pathData, "PluginsSetup.xml");
 
 	/// <summary>
 	///		Manager principal
@@ -272,5 +269,5 @@ public class ConfigurationController : Libraries.PluginsStudio.ViewModels.Base.C
 	/// <summary>
 	///		Configuraciones de los plugins
 	/// </summary>
-	private List<PluginConfiguration> PluginsConfiguration { get; } = new();
+	private List<PluginConfiguration> PluginsConfiguration { get; } = [];
 }

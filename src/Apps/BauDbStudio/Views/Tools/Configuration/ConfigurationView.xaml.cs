@@ -72,18 +72,7 @@ public partial class ConfigurationView : Window
 	/// <summary>
 	///		Comprueba los datos introducidos en el formulario
 	/// </summary>
-	private bool ValidateData()
-	{
-		bool validated = false;
-
-			// Comprueba los datos introducidos
-			if (!string.IsNullOrWhiteSpace(fnConsole.FileName) && !System.IO.File.Exists(fnConsole.FileName))
-				MainWindow.DbStudioViewsManager.MainWindowsController.HostController.SystemController.ShowMessage("No se encuentra el archivo de ejecución de consola");
-			else
-				validated = ValidatePluginsData();
-			// Devuelve el valor que indica si los datos son correctos
-			return validated;
-	}
+	private bool ValidateData() => ValidatePluginsData();
 
 	/// <summary>
 	///		Comprueba los datos introducidos en los plugins

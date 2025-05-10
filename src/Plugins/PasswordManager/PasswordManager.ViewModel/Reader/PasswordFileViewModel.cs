@@ -184,7 +184,7 @@ public class PasswordFileViewModel : BaseObservableObject, PluginsStudio.ViewMod
 	public EntryViewModel? SelectedEntry 
 	{ 
 		get { return _selectedEntry; }
-		private set { CheckObjectNoEvent(ref _selectedEntry, value); }
+		private set { CheckObjectNoUpdate(ref _selectedEntry, value); }
 	}
 
 	///// <summary>
