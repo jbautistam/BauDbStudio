@@ -1,50 +1,27 @@
 ﻿using Bau.Libraries.BauMvvm.ViewModels;
-using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems;
-using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.ListView;
 
 namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.Search;
 
 /// <summary>
 ///		ViewModel para búsqueda de archivos
 /// </summary>
-public class SearchFilesViewModel : BaseObservableObject
+public class SearchFilesViewModel : BaseObservableObject, Base.Interfaces.IDetailViewModel
 {
 	// Variables privadas
-	private string _textSearch = string.Empty;
+	private string _textSearch = default!, _header = default!, _folder = default!;
 	private bool _caseSensitive, _wholeWord, _useRegex;
-	private ControlListViewModel _foldersViewModel = default!;
 	private TreeSearchFilesResultViewModel _treeResultsViewModel = default!;
 
-	public SearchFilesViewModel(PluginsStudioViewModel mainViewModel)
+	public SearchFilesViewModel(PluginsStudioViewModel mainViewModel, string folder) : base(false)
 	{
 		// Inicializa las propiedades
 		MainViewModel = mainViewModel;
-		FoldersViewModel = new ControlListViewModel();
 		TreeResultsViewModel = new TreeSearchFilesResultViewModel(this);
+		Header = "Search";
+		Folder = folder;
 		// Inicializa los comandos
 		SearchCommand = new BaseCommand(async _ => await SearchFilesAsync(), _ => CanSearchFiles())
 								.AddListener(this, nameof(TextSearch));
-	}
-
-	/// <summary>
-	///		Carga los directorios de la solución
-	/// </summary>
-	public void LoadFolders()
-	{
-		// Limpia la lista de directorios
-		FoldersViewModel.Items.Clear();
-		// Añade los directorios de la solución
-		if (MainViewModel.WorkspacesViewModel.SelectedItem != null)
-			foreach (string folder in MainViewModel.WorkspacesViewModel.SelectedItem.Folders)
-				if (Directory.Exists(folder))
-				{
-					ControlItemViewModel item = new ControlItemViewModel(Path.GetFileName(folder), folder);
-
-						// Selecciona la carpeta
-						item.IsChecked = true;
-						// Añade el control
-						FoldersViewModel.Add(item, false);
-				}
 	}
 
 	/// <summary>
@@ -52,23 +29,37 @@ public class SearchFilesViewModel : BaseObservableObject
 	/// </summary>
 	private async Task SearchFilesAsync()
 	{
-		await TreeResultsViewModel.SearchAsync(GetSelectedFolders(), GetMask(), TextSearch, CaseSensitive, WholeWord, UseRegex, new CancellationToken());
+		await TreeResultsViewModel.SearchAsync(Folder, GetMask(), TextSearch, CaseSensitive, WholeWord, UseRegex, new CancellationToken());
 	}
 
 	/// <summary>
-	///		Obtiene las carpetas seleccionadas
+	///		Ejecuta un comando externo
 	/// </summary>
-	private List<string> GetSelectedFolders()
+	public void Execute(Base.Models.Commands.ExternalCommand externalCommand)
 	{
-		List<string> folders = new List<string>();
-
-			// Obtiene las carpetas seleccionadas
-			foreach (ControlItemViewModel item in FoldersViewModel.Items)
-				if (item.IsChecked && item.Tag is string folder)
-					folders.Add(folder);
-			// Devuelve la lista de carpetas
-			return folders;
+		System.Diagnostics.Debug.WriteLine($"Execute command {externalCommand.Type.ToString()} at {Header}");
 	}
+
+	/// <summary>
+	///		Cierra el viewmodel
+	/// </summary>
+	public void Close()
+	{
+		// ... no hace nada, sólo implementa la interface
+	}
+
+	/// <summary>
+	///		Graba la ventana (en este caso no hace nada)
+	/// </summary>
+	public void SaveDetails(bool newName)
+	{
+		// No hace nada
+	}
+
+	/// <summary>
+	///		Obtiene el mensaje de grabación
+	/// </summary>
+	public string GetSaveAndCloseMessage() => $"¿Desea grabar las modificaciones?";
 
 	/// <summary>
 	///		Obtiene la máscara de búsqueda de archivos
@@ -86,12 +77,26 @@ public class SearchFilesViewModel : BaseObservableObject
 	public PluginsStudioViewModel MainViewModel { get; }
 
 	/// <summary>
-	///		Lista de directorios sobre los que se realiza la búsqueda
+	///		Cabecera de la ventana
 	/// </summary>
-	public ControlListViewModel FoldersViewModel
+	public string Header
 	{
-		get { return _foldersViewModel; }
-		set { CheckObject(ref _foldersViewModel, value); }
+		get { return _header; }
+		set { CheckProperty(ref _header, value); }
+	}
+
+	/// <summary>
+	///		Id de la ficha en la aplicación
+	/// </summary>
+	public string TabId => GetType().ToString();
+
+	/// <summary>
+	///		Carpeta sobre la que se realiza la búsqueda
+	/// </summary>
+	public string Folder
+	{
+		get { return _folder; }
+		set { CheckProperty(ref _folder, value); }
 	}
 
 	/// <summary>
@@ -100,7 +105,7 @@ public class SearchFilesViewModel : BaseObservableObject
 	public TreeSearchFilesResultViewModel TreeResultsViewModel
 	{
 		get { return _treeResultsViewModel; }
-		set { CheckObject(ref _treeResultsViewModel, value); }
+		set { CheckObject(ref _treeResultsViewModel!, value); }
 	}
 
 	/// <summary>

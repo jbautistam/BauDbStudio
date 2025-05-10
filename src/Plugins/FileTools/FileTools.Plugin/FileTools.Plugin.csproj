@@ -11,6 +11,7 @@
   <ItemGroup>
     <Compile Remove="Controllers\AppController.cs" />
     <Compile Remove="Views\ComicContentView.xaml.cs" />
+    <Compile Remove="Views\Pictures\ImageOldView.xaml.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,6 +33,7 @@
 
   <ItemGroup>
     <Page Remove="Views\ComicContentView.xaml" />
+    <Page Remove="Views\Pictures\ImageOldView.xaml" />
   </ItemGroup>
 
   <ItemGroup>

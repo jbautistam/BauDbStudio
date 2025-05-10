@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <Compile Remove="JobsProcessorPlugin.cs" />
+    <Compile Remove="Pictures\ImageOldViewModel.cs" />
   </ItemGroup>
 
   <ItemGroup>

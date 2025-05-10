@@ -10,7 +10,7 @@ public abstract class BaseTextFileViewModel : BaseFileViewModel
 	public event EventHandler<Controllers.EventArguments.EditorSelectedTextRequiredEventArgs>? SelectedTextRequired;
 	// Variables privadas
 	private string _content = string.Empty;
-	private System.Text.Encoding _fileEncoding = default!;
+	private System.Text.Encoding? _fileEncoding;
 	private bool _fileWithBom;
 
 	public BaseTextFileViewModel(Controllers.IPluginsController pluginsController, string fileName, string mask) : base(pluginsController, fileName, mask) 
@@ -27,7 +27,7 @@ public abstract class BaseTextFileViewModel : BaseFileViewModel
 		{
 			// Obtiene la codificación del archivo (para grabarlo después con la misma codificación)
 			FileEncoding = LibHelper.Files.HelperFiles.GetFileEncoding(FileName);
-			if (FileEncoding == null)
+			if (FileEncoding is null)
 			{
 				FileEncoding = System.Text.Encoding.UTF8;
 				FileWithBom = false;
@@ -61,7 +61,7 @@ public abstract class BaseTextFileViewModel : BaseFileViewModel
 			{
 				// Graba el archivo
 				if (FileWithBom)
-					LibHelper.Files.HelperFiles.SaveTextFile(FileName, Content, FileEncoding);
+					LibHelper.Files.HelperFiles.SaveTextFile(FileName, Content, FileEncoding ?? System.Text.Encoding.UTF8);
 				else
 					LibHelper.Files.HelperFiles.SaveTextFileWithoutBom(FileName, Content);
 				// Actualiza el nombre de archivo
@@ -76,7 +76,7 @@ public abstract class BaseTextFileViewModel : BaseFileViewModel
 	/// </summary>
 	protected string? GetEditorSelectedText()
 	{
-		Controllers.EventArguments.EditorSelectedTextRequiredEventArgs eventArgs = new Controllers.EventArguments.EditorSelectedTextRequiredEventArgs(string.Empty);
+		Controllers.EventArguments.EditorSelectedTextRequiredEventArgs eventArgs = new(string.Empty);
 
 			// Lanza el evento
 			SelectedTextRequired?.Invoke(this, eventArgs);
@@ -87,7 +87,7 @@ public abstract class BaseTextFileViewModel : BaseFileViewModel
 	/// <summary>
 	///		Lanza un evento para colocar el editor en una línea
 	/// </summary>
-	protected void GoToLine(string textSelected, int line)
+	public void GoToLine(string textSelected, int line)
 	{
 		GoToLineRequired?.Invoke(this, new Controllers.EventArguments.EditorGoToLineEventArgs(textSelected, line));
 	}
@@ -112,7 +112,7 @@ public abstract class BaseTextFileViewModel : BaseFileViewModel
 	/// <summary>
 	///		Codificación del archivo
 	/// </summary>
-	public System.Text.Encoding FileEncoding
+	public System.Text.Encoding? FileEncoding
 	{
 		get { return _fileEncoding; }
 		set { CheckObject(ref _fileEncoding, value); }

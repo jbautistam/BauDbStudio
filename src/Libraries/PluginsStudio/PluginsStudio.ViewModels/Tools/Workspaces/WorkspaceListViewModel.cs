@@ -143,7 +143,7 @@ public class WorkspaceListViewModel : BaseObservableObject
 	public ObservableCollection<WorkSpaceViewModel> Items
 	{
 		get { return _items; }
-		set { CheckObject(ref _items, value); }
+		set { CheckObject(ref _items!, value); }
 	}
 
 	/// <summary>

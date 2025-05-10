@@ -22,9 +22,6 @@ public class FileToolsController : ViewModel.Controllers.IFileToolsController
 		// Abre la ventana
 		switch (detailsViewModel)
 		{
-			case ViewModel.Pictures.ImageEditViewModel viewModel: // tiene que ir antes del tratamiento de ImageViewModel porque hereda de ésta
-					FileToolsPlugin.AppViewsController.OpenDocument(new Views.Pictures.ImageEditView(viewModel), viewModel);
-				break;
 			case ViewModel.Pictures.ImageViewModel viewModel:
 					FileToolsPlugin.AppViewsController.OpenDocument(new Views.Pictures.ImageView(viewModel), viewModel);
 				break;

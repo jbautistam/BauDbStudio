@@ -27,6 +27,11 @@ public class WorkSpaceViewModel : BauMvvm.ViewModels.BaseObservableObject
 	}
 
 	/// <summary>
+	///		Comprueba si existe una carpeta
+	/// </summary>
+	public bool Exists(string folder) => Folders.Any(item => item.Equals(folder, StringComparison.CurrentCultureIgnoreCase));
+
+	/// <summary>
 	///		Graba el espacio de trabajo
 	/// </summary>
 	internal void Save()
@@ -37,9 +42,9 @@ public class WorkSpaceViewModel : BauMvvm.ViewModels.BaseObservableObject
 	/// <summary>
 	///		Añade una carpeta al workspace
 	/// </summary>
-	internal void AddFolder(string folder)
+	internal void AddFolder(string? folder)
 	{
-		if (!string.IsNullOrWhiteSpace(folder) && Folders.FirstOrDefault(item => item.Equals(folder, StringComparison.CurrentCultureIgnoreCase)) is null)
+		if (!string.IsNullOrWhiteSpace(folder) && !Exists(folder))
 		{
 			// Añade la carpeta
 			Folders.Add(folder);

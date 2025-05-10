@@ -33,7 +33,7 @@
 					<Image Width="16" Height="16" Source="/Resources/Images/Refresh.png" />
 				</Button>
 				<Button ToolTip="Abrir en el explorador" Command="{Binding Path=OpenExplorerCommand}" Margin="2">
-					<Image Width="16" Height="16" Source="/Resources/Images/FileImage.png" />
+					<Image Width="16" Height="16" Source="/Resources/Images/SeeWindow.png" />
 				</Button>
 			</ToolBar>
 		</ToolBarTray>

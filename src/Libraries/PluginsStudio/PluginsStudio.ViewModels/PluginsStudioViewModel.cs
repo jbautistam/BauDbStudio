@@ -8,13 +8,14 @@ namespace Bau.Libraries.PluginsStudio.ViewModels;
 /// </summary>
 public class PluginsStudioViewModel : BaseObservableObject
 {
+	// Constantes públicas
+	public const string PluginName = nameof(PluginsStudioViewModel);
 	// Eventos públicos
 	public event EventHandler? WorkspacesChanged;
 	// Variables privadas
 	private Tools.LastFiles.LastFilesListViewModel _lastFilesViewModel = default!;
 	private Tools.Workspaces.WorkspaceListViewModel _workspacesViewModel = default!;
 	private Tools.LogItems.LogListViewModel _logViewModel = default!;
-	private Tools.Search.SearchFilesViewModel _searchFilesViewModel = default!;
 	private Base.Interfaces.IDetailViewModel? _selectedDetailsViewModel;
 	private Explorers.Files.TreeFilesViewModel _treeFoldersViewModel = default!;
 	private TasksQueue.TasksQueueListViewModel _tasksQueueListViewModel = default!;
@@ -28,7 +29,6 @@ public class PluginsStudioViewModel : BaseObservableObject
 		LastFilesViewModel = new Tools.LastFiles.LastFilesListViewModel(this);
 		WorkspacesViewModel = new Tools.Workspaces.WorkspaceListViewModel(this);
 		LogViewModel = new Tools.LogItems.LogListViewModel(this);
-		SearchFilesViewModel = new Tools.Search.SearchFilesViewModel(this);
 		TasksQueueListViewModel = new TasksQueue.TasksQueueListViewModel(this);
 		TreeFoldersViewModel = new Explorers.Files.TreeFilesViewModel(this);
 		WindowsViewModel = new Windows.WindowsCollectionViewModel(this);
@@ -199,15 +199,6 @@ public class PluginsStudioViewModel : BaseObservableObject
 	{
 		get { return _logViewModel; }
 		set { CheckObject(ref _logViewModel!, value); }
-	}
-
-	/// <summary>
-	///		ViewModel de búsqueda de archivos
-	/// </summary>
-	public Tools.Search.SearchFilesViewModel SearchFilesViewModel
-	{
-		get { return _searchFilesViewModel; }
-		set { CheckObject(ref _searchFilesViewModel!, value); }
 	}
 
 	/// <summary>

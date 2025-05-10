@@ -8,7 +8,7 @@ using Bau.Libraries.FileTools.ViewModel.Pictures;
 namespace Bau.Libraries.FileTools.Plugin.Views.Pictures;
 
 /// <summary>
-///		Ventana para presentar una imagen
+///		Ventana para editar una imagen
 /// </summary>
 public partial class ImageView : UserControl
 {
@@ -16,7 +16,7 @@ public partial class ImageView : UserControl
 	{
 		// Inicializa los componentes
 		InitializeComponent();
-		ViewModel = viewModel;
+		DataContext = ViewModel = viewModel;
 		// Indica al viewmodel que se cargue
 		viewModel.Load();
 		// Carga el archivo
@@ -61,7 +61,7 @@ public partial class ImageView : UserControl
 	/// </summary>
 	private ImageSource? CreateBitmapImage(string fileName)
 	{
-		if (System.IO.File.Exists(fileName))
+		if (File.Exists(fileName))
 			return new BauMvvm.Views.Wpf.Tools.ImageToolsWpf().GetFromFileName(fileName);
 		else
 			return null;

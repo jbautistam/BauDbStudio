@@ -25,14 +25,13 @@ public class TreeSearchFilesResultViewModel : BaseObservableObject
 	/// <summary>
 	///		Busca texto en los archivos
 	/// </summary>
-	internal async Task SearchAsync(List<string> folders, string mask, string textSearch, bool caseSensitive, bool wholeWords, bool useRegex, CancellationToken cancellationToken)
+	internal async Task SearchAsync(string folder, string mask, string textSearch, bool caseSensitive, bool wholeWords, bool useRegex, CancellationToken cancellationToken)
 	{
 		// Inicializa la lista
 		Children = new ObservableCollection<TreeResultNodeViewModel>();
 		// Busca el texto en los archivos
-		foreach (string folder in folders)
-			if (!cancellationToken.IsCancellationRequested)
-				await SearchFolderAsync(folder, mask.Split(';'), textSearch, caseSensitive, wholeWords, useRegex, cancellationToken);
+		if (!cancellationToken.IsCancellationRequested)
+			await SearchFolderAsync(folder, mask.Split(';'), textSearch, caseSensitive, wholeWords, useRegex, cancellationToken);
 		// Vacía el nombre de archivo que se está buscando
 		FileSearched = string.Empty;
 	}
@@ -40,7 +39,8 @@ public class TreeSearchFilesResultViewModel : BaseObservableObject
 	/// <summary>
 	///		Busca texto en los archivos de una carpeta
 	/// </summary>
-	private async Task SearchFolderAsync(string folder, string[] mask, string textSearch, bool caseSensitive, bool wholeWords, bool useRegex, CancellationToken cancellationToken)
+	private async Task SearchFolderAsync(string folder, string[] mask, string textSearch, bool caseSensitive, bool wholeWords, bool useRegex, 
+										 CancellationToken cancellationToken)
 	{
 		if (Directory.Exists(folder))
 		{
@@ -48,7 +48,8 @@ public class TreeSearchFilesResultViewModel : BaseObservableObject
 			foreach (string fileName in Directory.GetFiles(folder))
 				if (!cancellationToken.IsCancellationRequested && CheckExtension(fileName, mask))
 				{
-					List<(string text, int line, string textFound)> lines = await SearchFileAsync(fileName, textSearch, caseSensitive, wholeWords, useRegex, cancellationToken);
+					List<(string text, int line, string textFound)> lines = await SearchFileAsync(fileName, textSearch, caseSensitive, wholeWords, 
+																								  useRegex, cancellationToken);
 
 						// Añade los nodos si es necesario
 						if (lines.Count > 0)
@@ -140,7 +141,7 @@ public class TreeSearchFilesResultViewModel : BaseObservableObject
 	/// </summary>
 	private void AddNodes(string fileName, List<(string text, int line, string textFound)> texts)
 	{
-		TreeResultNodeViewModel fileNode = new TreeResultNodeViewModel(this, null, fileName, fileName, -1, string.Empty, true, BauMvvm.ViewModels.Media.MvvmColor.Navy);
+		TreeResultNodeViewModel fileNode = new(this, null, fileName, fileName, -1, string.Empty, true, BauMvvm.ViewModels.Media.MvvmColor.Navy);
 
 			// Añade los hijos
 			foreach ((string text, int line, string textFound) in texts)
@@ -156,16 +157,13 @@ public class TreeSearchFilesResultViewModel : BaseObservableObject
 	{
 		if (SelectedNode != null && !string.IsNullOrWhiteSpace(SelectedNode.FileName) && File.Exists(SelectedNode.FileName))
 		{
-			throw new NotImplementedException("Cargar el archivo y posicionarse en la línea");
-			//// Abre la ventana del archivo
-			//SearchFilesViewModel.MainViewModel.MainController.MainWindowController
-			//		.OpenWindow(new Solutions.Details.Files.FileViewModel(SearchFilesViewModel.MainViewModel.SolutionViewModel,
-			//															  SelectedNode.FileName));
+			// Abre la ventana del archivo
+			SearchFilesViewModel.MainViewModel.MainController.PluginsController.HostPluginsController.OpenFile(SelectedNode.FileName);
 			//// Va a la línea adecuada (si estamos en el editor del archivo adecuado)
-			//if (SelectedNode.Line >= 0 &&
-			//		SearchFilesViewModel.MainViewModel.MainController.PluginController.HostPluginsController.SelectedDetailsViewModel is Solutions.Details.Files.FileViewModel fileViewModel && 
-			//		SelectedNode.FileName.Equals(fileViewModel.FileName, StringComparison.CurrentCultureIgnoreCase))
-			//	fileViewModel.GoToLine(SelectedNode.TextFound, SelectedNode.Line);
+			if (SelectedNode.Line >= 0 &&
+					SearchFilesViewModel.MainViewModel.MainController.PluginsController.HostPluginsController.SelectedDetailsViewModel is Base.Files.BaseTextFileViewModel fileViewModel && 
+					SelectedNode.FileName.Equals(fileViewModel.FileName, StringComparison.CurrentCultureIgnoreCase))
+				fileViewModel.GoToLine(SelectedNode.TextFound, SelectedNode.Line);
 		}
 	}
 
@@ -180,7 +178,7 @@ public class TreeSearchFilesResultViewModel : BaseObservableObject
 	public ObservableCollection<TreeResultNodeViewModel> Children 
 	{ 
 		get { return _children; }
-		set { CheckObject(ref _children, value); }
+		set { CheckObject(ref _children!, value); }
 	}
 
 	/// <summary>

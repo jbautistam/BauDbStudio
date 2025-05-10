@@ -9,7 +9,7 @@ public class SplitImagesViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogV
 	private string _outputFolder = default!, _targetFileName = default!;
 	private int _rows, _columns;
 
-	public SplitImagesViewModel(ImageEditViewModel imageEditViewModel)
+	public SplitImagesViewModel(ImageViewModel imageEditViewModel)
 	{
 		ImageEditViewModel = imageEditViewModel;
 		InitProperties();
@@ -72,7 +72,7 @@ public class SplitImagesViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogV
 	/// <summary>
 	///		ViewModel principal
 	/// </summary>
-	public ImageEditViewModel ImageEditViewModel { get; }
+	public ImageViewModel ImageEditViewModel { get; }
 
 	/// <summary>
 	///		Directorio de salida

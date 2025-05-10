@@ -24,6 +24,8 @@ public class PasswordFileViewModel : BaseObservableObject, PluginsStudio.ViewMod
 		_password = password;
 		// Asigna los controles
 		Tree = new Explorer.TreePasswordsViewModel(this);
+		// Indica que no ha habido modificaciones
+		IsUpdated = false;
 	}
 
 	/// <summary>
@@ -182,19 +184,15 @@ public class PasswordFileViewModel : BaseObservableObject, PluginsStudio.ViewMod
 	public EntryViewModel? SelectedEntry 
 	{ 
 		get { return _selectedEntry; }
-		private set
-		{
-			if (CheckObject(ref _selectedEntry, value))
-				IsSelectedEntry = value is not null;
-		}
+		private set { CheckObjectNoEvent(ref _selectedEntry, value); }
 	}
 
-	/// <summary>
-	///		Indica si hay alguna entrada seleccionada
-	/// </summary>
-	public bool IsSelectedEntry
-	{
-		get { return _isSelectedEntry; }
-		set { CheckProperty(ref _isSelectedEntry, value); }
-	}
+	///// <summary>
+	/////		Indica si hay alguna entrada seleccionada
+	///// </summary>
+	//public bool IsSelectedEntry
+	//{
+	//	get { return _isSelectedEntry; }
+	//	set { CheckProperty(ref _isSelectedEntry, value); }
+	//}
 }

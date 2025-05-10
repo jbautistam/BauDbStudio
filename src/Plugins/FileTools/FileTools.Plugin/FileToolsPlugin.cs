@@ -85,28 +85,7 @@ public class FileToolsPlugin : IPlugin
 														Command = MainViewModel.ExecuteFileCommand
 													}
 										 )
-							.WithOption()
-								.WithExtension(GetImageExtensions())
-								.WithMenu(new MenuModel
-													{
-														Header = "Edit",
-														Icon = GetIconName("Format.png", true),
-														Command = MainViewModel.ExecuteFileCommand
-													}
-										 )
 							.Build();
-
-		// Obtiene las extensiones de las imágenes
-		string[] GetImageExtensions()
-		{
-			string[] extensions = new string[MainViewModel.ImageTypeFiles.Count];
-
-				// Obtiene las extensiones de las imágenes
-				for (int index = 0; index < extensions.Length; index++)
-					extensions[index] = MainViewModel.ImageTypeFiles[index].extension;
-				// Devuelve lalista de extensiones
-				return extensions;
-		}
 	}
 
 	/// <summary>

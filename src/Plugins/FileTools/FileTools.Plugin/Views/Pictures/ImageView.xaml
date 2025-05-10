@@ -51,6 +51,15 @@
 					<Image Width="16" Height="16" Source="/FileTools.Plugin;component/Resources/SeeWindow.png" />
 				</ToggleButton>
 			</ToolBar>
+
+			<ToolBar BandIndex="2">
+				<Label Content="Tools:" Margin="2"/>
+				<ComboBox Margin="5" MinWidth="150" IsEditable="False"
+						  ItemsSource="{Binding ComboTools.Items}" DisplayMemberPath="Text" 
+						  SelectedItem="{Binding ComboTools.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+						  Text="{Binding ComboTools.SelectedText, UpdateSourceTrigger=PropertyChanged}"
+				/>
+			</ToolBar>
 		</ToolBarTray>
 
 		<zoomAndPan:ZoomAndPanScrollViewer x:Name="ZoomAndPanControl" Background="#AACCCCCC" 

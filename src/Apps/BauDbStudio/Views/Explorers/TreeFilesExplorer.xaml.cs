@@ -121,7 +121,7 @@ public partial class TreeFilesExplorer : UserControl
 	/// <summary>
 	///		Crea una opción de menú
 	/// </summary>
-	private MenuItem CreateMenu(string text, string icon, bool isCheckable, ICommand command, string? fileName, object? tag = null)
+	private MenuItem CreateMenu(string text, string icon, bool isCheckable, ICommand? command, string? fileName, object? tag = null)
 	{
 		MenuItem mnuNewItem = new();
 

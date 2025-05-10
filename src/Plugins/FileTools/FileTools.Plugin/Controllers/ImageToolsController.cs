@@ -22,6 +22,20 @@ public class ImageToolsController(ViewModel.Controllers.IFileToolsController fil
 		}
 	}
 
+    /// <summary>
+    ///     Redimensiona una imagen sobre un archivo
+    /// </summary>
+    public void Resize(string sourceFileName, string targetFileName, int width, int height)
+	{
+		try
+		{
+			new Tools.ResizeImagesController().Resize(sourceFileName, targetFileName, width, height);
+		}
+		catch (Exception exception)
+		{
+			FileToolsController.Logger.LogError(exception, $"Error when resize file {sourceFileName}. {exception.Message}");
+		}
+	}
 	/// <summary>
 	///		Controlador principal de herramientas de archivos
 	/// </summary>

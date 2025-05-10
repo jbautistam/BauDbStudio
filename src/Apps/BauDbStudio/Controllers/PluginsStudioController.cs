@@ -29,6 +29,9 @@ public class PluginsStudioController : Libraries.PluginsStudio.ViewModels.Contro
 			case Libraries.PluginsStudio.ViewModels.Tools.Web.WebViewModel viewModel:
 					DbStudioViewManager.AppViewController.OpenDocument(new Views.Tools.Web.WebExplorerView(viewModel), viewModel);
 				break;
+			case Libraries.PluginsStudio.ViewModels.Tools.Search.SearchFilesViewModel viewModel:
+					DbStudioViewManager.AppViewController.OpenDocument(new Views.Tools.Search.SearchView(viewModel), viewModel);
+				break;
 		}
 		// Devuelve el resultado
 		return SystemControllerEnums.ResultType.Yes;

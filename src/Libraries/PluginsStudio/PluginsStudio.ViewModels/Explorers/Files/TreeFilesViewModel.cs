@@ -59,6 +59,11 @@ public class TreeFilesViewModel : PluginTreeViewModel, Base.Interfaces.IPaneView
 		PasteClipboardImageCommand = new BaseCommand(_ => PasteClipboardImage(), _ => CanExecuteAction(nameof(PasteClipboardImageCommand)))
 										.AddListener(this, nameof(SelectedNode));
 		SeeAtExplorerCommand = new BaseCommand(_ => OpenFileExplorer());
+		AddToBookmarksCommand = new BaseCommand(_ => AddFolderToBookmarks(GetSelectedFolder()), _ => CanAddFolderToBookmarks())
+										.AddListener(this, nameof(SelectedNode));
+		SearchCommand = new BaseCommand(_ => SearchFiles(), _ => CanExecuteAction(nameof(SearchCommand)))
+										.AddListener(this, nameof(SelectedNode));
+
 	}
 
 	/// <summary>
@@ -214,16 +219,44 @@ public class TreeFilesViewModel : PluginTreeViewModel, Base.Interfaces.IPaneView
 	/// </summary>
 	internal void AddFolderToExplorer()
 	{
-		string? folder = MainViewModel.MainController.MainWindowController.DialogsController.OpenDialogSelectPath(string.Empty);
+		AddFolderToBookmarks(MainViewModel.MainController.MainWindowController.DialogsController.OpenDialogSelectPath(string.Empty));
+	}
 
+	/// <summary>
+	///		Añade una carpeta al explorador
+	/// </summary>
+	private void AddFolderToBookmarks(string? folder)
+	{
+		if (CanAddFolderToBookmarks(folder))
+		{
 			// Añade la carpeta a la solución
+			MainViewModel.WorkspacesViewModel.SelectedItem?.AddFolder(folder);
+			// Carga el árbol
+			Load();
+		}
+	}
+
+	/// <summary>
+	///		Comprueba si puede añadir la carpeta seleccionada en el árbol a los marcadores
+	/// </summary>
+	private bool CanAddFolderToBookmarks() => CanAddFolderToBookmarks(GetSelectedFolder());
+
+	/// <summary>
+	///		Comprueba si puede añadir la carpeta a los marcadores
+	/// </summary>
+	private bool CanAddFolderToBookmarks(string? folder)
+	{
+		bool canAdd = false;
+
+			// Comprueba si se puede añadir la carpeta
 			if (!string.IsNullOrWhiteSpace(folder) && Directory.Exists(folder))
 			{
-				// Añade la carpeta a la solución
-				MainViewModel.WorkspacesViewModel.SelectedItem?.AddFolder(folder);
-				// Carga el árbol
-				Load();
+				if (MainViewModel.WorkspacesViewModel.SelectedItem is not null &&
+						!MainViewModel.WorkspacesViewModel.SelectedItem.Exists(folder))
+					canAdd = true;
 			}
+			// Devuelve el valor que indica si se puede añadir
+			return canAdd;
 	}
 
 	/// <summary>
@@ -336,6 +369,8 @@ public class TreeFilesViewModel : PluginTreeViewModel, Base.Interfaces.IPaneView
 					return SelectedNode is not null;
 				case nameof(PasteClipboardImageCommand):
 					return isFolder && MainViewModel.MainController.MainWindowController.ClipboardContainImage();
+				case nameof(SearchCommand):
+					return isFolder;
 				default:
 					return true;
 			}
@@ -395,8 +430,8 @@ public class TreeFilesViewModel : PluginTreeViewModel, Base.Interfaces.IPaneView
 
 			if (!string.IsNullOrWhiteSpace(path))
 			{
-				Tools.CreateFileViewModel createFileViewModel = new Tools.CreateFileViewModel(MainViewModel, path, 
-																							  MainViewModel.MainController.PluginsController.HostPluginsController.GetFilesAssigned(true));
+				Tools.CreateFileViewModel createFileViewModel = new(MainViewModel, path, 
+																	MainViewModel.MainController.PluginsController.HostPluginsController.GetFilesAssigned(true));
 
 					if (MainViewModel.MainController.OpenDialog(createFileViewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes &&
 						!string.IsNullOrWhiteSpace(createFileViewModel.FileName))
@@ -611,7 +646,7 @@ public class TreeFilesViewModel : PluginTreeViewModel, Base.Interfaces.IPaneView
 	/// </summary>
 	public List<MenuModel> GetFileMenus()
 	{
-		List<MenuModel> menus = new();
+		List<MenuModel> menus = [];
 
 			// Obtiene las opciones de menú asociadas al nodo
 			if (SelectedNode is not null && SelectedNode is NodeFileViewModel node)
@@ -815,6 +850,17 @@ public class TreeFilesViewModel : PluginTreeViewModel, Base.Interfaces.IPaneView
 	}
 
 	/// <summary>
+	///		Búsqueda de texto en archivos
+	/// </summary>
+	private void SearchFiles()
+	{
+		string? folder = GetSelectedFolder();
+
+			if (!string.IsNullOrWhiteSpace(folder) && Directory.Exists(folder))
+				MainViewModel.MainController.OpenWindow(new Tools.Search.SearchFilesViewModel(MainViewModel, folder));
+	}
+
+	/// <summary>
 	///		Cierra el panel
 	/// </summary>
 	public void Close()
@@ -891,4 +937,14 @@ public class TreeFilesViewModel : PluginTreeViewModel, Base.Interfaces.IPaneView
 	///		Comando para abrir en el explorador
 	/// </summary>
 	public BaseCommand SeeAtExplorerCommand { get; }
+
+	/// <summary>
+	///		Comando para añadir un marcador al explorador
+	/// </summary>
+	public BaseCommand AddToBookmarksCommand { get; }
+
+	/// <summary>
+	///		Comando para buscar texto en archivos
+	/// </summary>
+	public BaseCommand SearchCommand { get; }
 }

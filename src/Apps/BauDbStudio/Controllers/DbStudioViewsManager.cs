@@ -90,13 +90,6 @@ public class DbStudioViewsManager
 											},
 									new PaneModel
 											{
-												Id = "SearchView",
-												Title = "Search",
-												Position = PaneModel.PositionType.Right,
-												View = new Views.Tools.Search.SearchView(PluginsStudioViewModel.SearchFilesViewModel)
-											},
-									new PaneModel
-											{
 												Id = "FilesExplorerView",
 												Title = "Files explorer",
 												Position = PaneModel.PositionType.Left,

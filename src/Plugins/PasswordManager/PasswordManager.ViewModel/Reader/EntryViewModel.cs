@@ -95,6 +95,7 @@ public class EntryViewModel : BaseObservableObject
 		// Indica que no ha habido modificaciones
 		IsUpdated = false;
 	}
+
 	/// <summary>
 	///		Carga el combo de codificaciones
 	/// </summary>
@@ -561,7 +562,7 @@ public class EntryViewModel : BaseObservableObject
 	public string HotpCode
 	{
 		get { return _hotpCode; }
-		set { CheckProperty(ref _hotpCode, value); }
+		set { CheckPropertyNoUpdate(ref _hotpCode, value); }
 	}
 
 	/// <summary>
@@ -570,7 +571,7 @@ public class EntryViewModel : BaseObservableObject
 	public string TotpCode
 	{
 		get { return _totpCode; }
-		set { CheckProperty(ref _totpCode, value); }
+		set { CheckPropertyNoUpdate(ref _totpCode, value); }
 	}
 
 	/// <summary>
@@ -579,7 +580,7 @@ public class EntryViewModel : BaseObservableObject
 	public string RemainingTime
 	{
 		get { return _remainingTime; }
-		set { CheckProperty(ref _remainingTime, value); }
+		set { CheckPropertyNoUpdate(ref _remainingTime, value); }
 	}
 
 	/// <summary>
@@ -588,7 +589,7 @@ public class EntryViewModel : BaseObservableObject
 	public MvvmColor RemainingTimeColor
 	{
 		get { return _remainingTimeColor; }
-		set { CheckObject(ref _remainingTimeColor!, value); }
+		set { CheckObjectNoEvent(ref _remainingTimeColor!, value); }
 	}
 
 	/// <summary>

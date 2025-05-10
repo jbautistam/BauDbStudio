@@ -112,7 +112,7 @@ public class FileToolsViewModel : BaseObservableObject
 			if (fileName.EndsWith(".md", StringComparison.CurrentCultureIgnoreCase))
 				ParseMarkdown(fileName);
 			else if (IsImage(fileName))
-				MainController.OpenWindow(new Pictures.ImageEditViewModel(this, fileName));
+				MainController.OpenWindow(new Pictures.ImageViewModel(this, fileName));
 		}
 	}
 

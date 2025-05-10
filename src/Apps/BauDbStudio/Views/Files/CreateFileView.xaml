@@ -19,14 +19,15 @@
 				<Grid.RowDefinitions>
 					<RowDefinition Height="*"/>
 					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="Auto"/>
 				</Grid.RowDefinitions>
 				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="2*"/>
 					<ColumnDefinition Width="Auto"/>
 					<ColumnDefinition Width="*"/>
 				</Grid.ColumnDefinitions>
 				<Label Grid.Row="0" Grid.Column="0" Margin="5" Content="Tipo:"/>
-				<ListView Grid.Row="0" Grid.Column="1" Margin="5"
+				<ListView Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" Margin="5"
 						ItemsSource="{Binding Path=ComboTypes.Items}" 
 						SelectedItem="{Binding Path=ComboTypes.SelectedItem}" 
 						ScrollViewer.HorizontalScrollBarVisibility="Disabled">
@@ -47,8 +48,8 @@
 				<Label Grid.Row="1" Grid.Column="0" Margin="5" Content="Nombre de archivo:"/>
 				<TextBox x:Name="txtFileName" Grid.Row="1" Grid.Column="1" GotFocus="txtFileName_GotFocus"
 						Text="{Binding Path=FileName, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
-				<Label Grid.Row="2" Grid.Column="0" Margin="5" Content="Codificación:"/>
-				<ComboBox Grid.Row="2" Grid.Column="1" Margin="5" 
+				<Label Grid.Row="1" Grid.Column="2" Margin="5" Content="Codificación:"/>
+				<ComboBox Grid.Row="1" Grid.Column="3" Margin="5" 
 						  ItemsSource="{Binding ComboEncoding.Items}" DisplayMemberPath="Text" 
 						  SelectedItem="{Binding ComboEncoding.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 			</Grid>

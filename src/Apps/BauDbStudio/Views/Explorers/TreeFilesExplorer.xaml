@@ -88,7 +88,7 @@
 						<MenuItem.Icon>
 							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
 						</MenuItem.Icon>
-						<MenuItem Header="Directorio de archivos" Command="{Binding Path=NewFolderFilesCommand}">
+						<MenuItem Header="Bookmark" Command="{Binding Path=NewFolderFilesCommand}">
 							<MenuItem.Icon>
 								<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Folder.png" />
 							</MenuItem.Icon>
@@ -142,9 +142,19 @@
 						</MenuItem.Icon>
 					</MenuItem>
 					<Separator/>
+					<MenuItem Header="Search" Command="{Binding Path=SearchCommand}">
+						<MenuItem.Icon>
+							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Search.png" />
+						</MenuItem.Icon>
+					</MenuItem>
 					<MenuItem Header="Abrir en el explorador" Command="{Binding Path=SeeAtExplorerCommand}">
 						<MenuItem.Icon>
 							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Folder.png" />
+						</MenuItem.Icon>
+					</MenuItem>
+					<MenuItem Header="Add to bookmarks" Command="{Binding Path=AddToBookmarksCommand}">
+						<MenuItem.Icon>
+							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Tag.png" />
 						</MenuItem.Icon>
 					</MenuItem>
 					<Separator x:Name="mnuPluginsSeparator" />
