@@ -1,7 +1,7 @@
 ﻿using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.Trees;
 using Bau.Libraries.BauMvvm.ViewModels.Media;
 
-namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.Search;
+namespace Bau.Libraries.PluginsStudio.ViewModels.Files.Search;
 
 /// <summary>
 ///		ViewModel base de un nodo del árbol de resultados de búsqueda
@@ -18,7 +18,7 @@ public class TreeResultNodeViewModel : ControlHierarchicalViewModel
 	{ 
 		TreeViewModel = trvTree;
 		if (!string.IsNullOrWhiteSpace(fileName) && line < 1)
-			Text = Path.GetFileName(fileName);
+			Text = $"{Path.GetFileName(fileName)} ({Path.GetDirectoryName(fileName)})";
 		FileName = fileName;
 		Line = line;
 		TextFound = textFound;

@@ -1,9 +1,9 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-using Bau.Libraries.PluginsStudio.ViewModels.Tools.Search;
+using Bau.Libraries.PluginsStudio.ViewModels.Files.Search;
 
-namespace Bau.DbStudio.Views.Tools.Search;
+namespace Bau.DbStudio.Views.Files;
 
 /// <summary>
 ///		Vista para la búsqueda de archivos

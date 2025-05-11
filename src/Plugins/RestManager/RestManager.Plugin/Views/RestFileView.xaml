@@ -58,9 +58,10 @@
 							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
 						</Button>
 					</ToolBar>
-					<ListBox Grid.Row="1" Grid.Column="0" Margin="5" 
+					<!--
+					<ListBox Grid.Row="1" Grid.Column="0" Margin="5,5,5,5" 
 						  ItemsSource="{Binding StepsViewModel.Items}"
-						  SelectedItem="{Binding StepsViewModel.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+						  SelectedItem="{Binding StepsViewModel.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="3" >
 						<ListBox.ItemTemplate>
 							<DataTemplate>
 								<Grid>
@@ -74,9 +75,11 @@
 							</DataTemplate>
 						</ListBox.ItemTemplate>
 					</ListBox>
+					-->
 
 					<ListView Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Path=StepsViewModel.Items}" 
-							SelectedItem="{Binding Path=StepsViewModel.SelectedItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="0">
+							SelectedItem="{Binding Path=StepsViewModel.SelectedItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+							Margin="0,2,15,2">
 						<ListView.View>
 							<GridView>
 								<GridViewColumn Width="200" Header="Connection">
@@ -92,7 +95,7 @@
 								<GridViewColumn Width="200" Header="Name">
 									<GridViewColumn.CellTemplate>
 										<DataTemplate>
-												<TextBlock Text="{Binding Path=Name}" VerticalAlignment="Center"/>
+											<TextBlock Text="{Binding Path=Name}" VerticalAlignment="Center"/>
 										</DataTemplate>
 									</GridViewColumn.CellTemplate>
 								</GridViewColumn>
@@ -103,7 +106,7 @@
 										</DataTemplate>
 									</GridViewColumn.CellTemplate>
 								</GridViewColumn>
-								<GridViewColumn Width="200" Header="Function">
+								<GridViewColumn Width="200" Header="EndPoint">
 									<GridViewColumn.CellTemplate>
 										<DataTemplate>
 											<TextBlock Text="{Binding Path=Url}" VerticalAlignment="Center"/>
@@ -115,10 +118,9 @@
 					</ListView>
 
 					<GridSplitter Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Stretch"
-					Background="AliceBlue" Width="8" Margin="2"/>
+						Margin="5,2,5,2" Background="AliceBlue" Width="7"  />
 					<local:RestFileStepView Grid.Row="1" Grid.Column="1" x:Name="udtStep"
-			Step="{Binding Path=StepsViewModel.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
+						Step="{Binding Path=StepsViewModel.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 				</Grid>
 			</TabItem>
 			<TabItem Header="Project">

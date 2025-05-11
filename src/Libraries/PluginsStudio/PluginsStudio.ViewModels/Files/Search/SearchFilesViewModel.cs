@@ -1,6 +1,6 @@
 ﻿using Bau.Libraries.BauMvvm.ViewModels;
 
-namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.Search;
+namespace Bau.Libraries.PluginsStudio.ViewModels.Files.Search;
 
 /// <summary>
 ///		ViewModel para búsqueda de archivos
@@ -8,7 +8,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.Search;
 public class SearchFilesViewModel : BaseObservableObject, Base.Interfaces.IDetailViewModel
 {
 	// Variables privadas
-	private string _textSearch = default!, _header = default!, _folder = default!;
+	private string _textSearch = default!, _header = default!, _folder = default!, _mask = default!;
 	private bool _caseSensitive, _wholeWord, _useRegex;
 	private TreeSearchFilesResultViewModel _treeResultsViewModel = default!;
 
@@ -19,6 +19,7 @@ public class SearchFilesViewModel : BaseObservableObject, Base.Interfaces.IDetai
 		TreeResultsViewModel = new TreeSearchFilesResultViewModel(this);
 		Header = "Search";
 		Folder = folder;
+		Mask = ".sql;.sqlx;.py;.md;.xml;.txt;.json";
 		// Inicializa los comandos
 		SearchCommand = new BaseCommand(async _ => await SearchFilesAsync(), _ => CanSearchFiles())
 								.AddListener(this, nameof(TextSearch));
@@ -29,7 +30,7 @@ public class SearchFilesViewModel : BaseObservableObject, Base.Interfaces.IDetai
 	/// </summary>
 	private async Task SearchFilesAsync()
 	{
-		await TreeResultsViewModel.SearchAsync(Folder, GetMask(), TextSearch, CaseSensitive, WholeWord, UseRegex, new CancellationToken());
+		await TreeResultsViewModel.SearchAsync(Folder, Mask, TextSearch, CaseSensitive, WholeWord, UseRegex, new CancellationToken());
 	}
 
 	/// <summary>
@@ -62,11 +63,6 @@ public class SearchFilesViewModel : BaseObservableObject, Base.Interfaces.IDetai
 	public string GetSaveAndCloseMessage() => $"¿Desea grabar las modificaciones?";
 
 	/// <summary>
-	///		Obtiene la máscara de búsqueda de archivos
-	/// </summary>
-	private string GetMask() => ".sql;.sqlx;.py;.md;.xml;.txt;.json";
-
-	/// <summary>
 	///		Indica si se pueden buscar archivos
 	/// </summary>
 	private bool CanSearchFiles() => !string.IsNullOrWhiteSpace(TextSearch);
@@ -97,6 +93,15 @@ public class SearchFilesViewModel : BaseObservableObject, Base.Interfaces.IDetai
 	{
 		get { return _folder; }
 		set { CheckProperty(ref _folder, value); }
+	}
+
+	/// <summary>
+	///		Máscara de búsqueda de archivos
+	/// </summary>
+	public string Mask
+	{
+		get { return _mask; }
+		set { CheckProperty(ref _mask, value); }
 	}
 
 	/// <summary>

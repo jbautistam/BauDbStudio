@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 using Bau.Libraries.BauMvvm.ViewModels;
 
-namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.Search;
+namespace Bau.Libraries.PluginsStudio.ViewModels.Files.Search;
 
 /// <summary>
 ///		ViewModel para los resultados de la búsqueda
@@ -11,14 +11,14 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.Search;
 public class TreeSearchFilesResultViewModel : BaseObservableObject
 {
 	// Variables privadas
-	private ObservableCollection<TreeResultNodeViewModel> _children = new();
+	private ObservableCollection<TreeResultNodeViewModel> _children = [];
 	private TreeResultNodeViewModel? _selectedNode;
 	private string _fileSearched = string.Empty;
 
 	public TreeSearchFilesResultViewModel(SearchFilesViewModel searchFilesViewModel)
 	{
 		SearchFilesViewModel = searchFilesViewModel;
-		OpenCommand = new BaseCommand(_ => OpenFile(), _ => SelectedNode != null)
+		OpenCommand = new BaseCommand(_ => OpenFile(), _ => SelectedNode is not null)
 								.AddListener(this, nameof(SelectedNode));
 	}
 
@@ -83,7 +83,7 @@ public class TreeSearchFilesResultViewModel : BaseObservableObject
 	private async Task<List<(string text, int line, string textFound)>> SearchFileAsync(string fileName, string textSearch, bool caseSensitive, bool wholeWords, 
 																						bool useRegex, CancellationToken cancellationToken)
 	{
-		List<(string text, int line, string textFound)> texts = new List<(string text, int line, string textFound)>();
+		List<(string text, int line, string textFound)> texts = [];
 		string [] lines = await File.ReadAllLinesAsync(fileName, cancellationToken);
 		int actual = 1;
 		Regex regex = GetRegEx(textSearch, caseSensitive, wholeWords, useRegex);
@@ -112,9 +112,9 @@ public class TreeSearchFilesResultViewModel : BaseObservableObject
 	/// <summary>
 	///		Obtiene la expresión regular
 	/// </summary>
-        private Regex GetRegEx(string textToFind, bool caseSensitive, bool wholeWord, bool useRegex)
-        {
-            RegexOptions options = RegexOptions.None;
+    private Regex GetRegEx(string textToFind, bool caseSensitive, bool wholeWord, bool useRegex)
+    {
+        RegexOptions options = RegexOptions.None;
 
 			// Añade las opciones de búsqueda
 			if (!caseSensitive)
@@ -134,7 +134,7 @@ public class TreeSearchFilesResultViewModel : BaseObservableObject
 					// Devuelve la expresión regular
 					return new Regex(pattern, options);
 			}
-        }
+    }
 
 	/// <summary>
 	///		Añade los nodos
@@ -155,7 +155,7 @@ public class TreeSearchFilesResultViewModel : BaseObservableObject
 	/// </summary>
 	private void OpenFile()
 	{
-		if (SelectedNode != null && !string.IsNullOrWhiteSpace(SelectedNode.FileName) && File.Exists(SelectedNode.FileName))
+		if (SelectedNode is not null && !string.IsNullOrWhiteSpace(SelectedNode.FileName) && File.Exists(SelectedNode.FileName))
 		{
 			// Abre la ventana del archivo
 			SearchFilesViewModel.MainViewModel.MainController.PluginsController.HostPluginsController.OpenFile(SelectedNode.FileName);

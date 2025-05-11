@@ -39,6 +39,8 @@ internal class HelperFileNodes(TreeFilesViewModel viewModel, PluginNodeViewModel
 					foreach (DirectoryInfo folder in new DirectoryInfo(fileName).GetDirectories())
 						if (MustAdd(folder.Attributes))
 							paths.Add(folder.FullName);
+					// Ordena los directorios
+					paths.Sort();
 					// Devuelve los directorios
 					return paths;
 			}
@@ -59,6 +61,8 @@ internal class HelperFileNodes(TreeFilesViewModel viewModel, PluginNodeViewModel
 					foreach (FileInfo file in new DirectoryInfo(fileName).GetFiles())
 						if (MustAdd(file.Attributes))
 							paths.Add(file.FullName);
+					// Ordena los archivos
+					paths.Sort();
 					// Devuelve los directorios
 					return paths;
 			}

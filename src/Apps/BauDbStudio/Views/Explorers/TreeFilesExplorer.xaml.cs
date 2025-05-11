@@ -16,6 +16,9 @@ namespace Bau.DbStudio.Views.Explorers;
 /// </summary>
 public partial class TreeFilesExplorer : UserControl
 {
+	// Constantes privadas
+	private const int DragOffset = 50;
+	private const int DragFileDistance = 20;
 	// Variables privadas
 	private Point _startDrag;
 	private DragDropTreeController _dragDropController;
@@ -176,9 +179,8 @@ public partial class TreeFilesExplorer : UserControl
 			Point pntMouse = e.GetPosition(null);
 			Vector vctDifference = _startDrag - pntMouse;
 
-				if (pntMouse.X < trvExplorer.ActualWidth - 50 && pntMouse.Y < trvExplorer.ActualHeight - 50 &&
-						(Math.Abs(vctDifference.X) > SystemParameters.MinimumHorizontalDragDistance ||
-						 Math.Abs(vctDifference.Y) > SystemParameters.MinimumVerticalDragDistance))
+				if (pntMouse.X < trvExplorer.ActualWidth - DragOffset && pntMouse.Y < trvExplorer.ActualHeight - DragOffset &&
+						Math.Abs(vctDifference.Y) > DragFileDistance)
 					_dragDropController.InitDragOperation(trvExplorer, trvExplorer.SelectedItem as ControlHierarchicalViewModel);
 		}
 	}

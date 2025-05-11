@@ -857,7 +857,7 @@ public class TreeFilesViewModel : PluginTreeViewModel, Base.Interfaces.IPaneView
 		string? folder = GetSelectedFolder();
 
 			if (!string.IsNullOrWhiteSpace(folder) && Directory.Exists(folder))
-				MainViewModel.MainController.OpenWindow(new Tools.Search.SearchFilesViewModel(MainViewModel, folder));
+				MainViewModel.MainController.OpenWindow(new ViewModels.Files.Search.SearchFilesViewModel(MainViewModel, folder));
 	}
 
 	/// <summary>
