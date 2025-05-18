@@ -1,13 +1,14 @@
 ﻿using Microsoft.Extensions.Logging;
 
 using Bau.Libraries.BauMvvm.ViewModels.Media;
+using Bau.Libraries.PluginsStudio.ViewModels.Base.Models.Commands;
 
 namespace Bau.Libraries.PluginsStudio.ViewModels.Tools.LogItems;
 
 /// <summary>
 ///		ViewModel con los datos de log
 /// </summary>
-public class LogListViewModel : BauMvvm.ViewModels.Forms.ControlItems.ListView.ControlGenericListViewModel<LogListItemViewModel>
+public class LogListViewModel : BauMvvm.ViewModels.Forms.ControlItems.ListView.ControlGenericListViewModel<LogListItemViewModel>, Base.Interfaces.IPaneViewModel
 {
 	// Constantes privadas
 	private const int LogMaximum = 4500;
@@ -45,7 +46,7 @@ public class LogListViewModel : BauMvvm.ViewModels.Forms.ControlItems.ListView.C
 	/// <summary>
 	///		Obtiene el mensaje de log
 	/// </summary>
-	private string GetLogMessage(string content, Exception exception)
+	private string GetLogMessage(string content, Exception? exception)
 	{
 		string message = content;
 
@@ -71,7 +72,33 @@ public class LogListViewModel : BauMvvm.ViewModels.Forms.ControlItems.ListView.C
 	}
 
 	/// <summary>
+	///		Ejecuta un comando externo
+	/// </summary>
+	public void Execute(ExternalCommand externalCommand)
+	{
+		// No hace nada, sólo implementa la interface
+	}
+
+	/// <summary>
+	///		Cierra el panel
+	/// </summary>
+	public void Close()
+	{
+		// No hace nada, sólo implementa la interface
+	}
+
+	/// <summary>
 	///		ViewModel principal
 	/// </summary>
 	public PluginsStudioViewModel MainViewModel { get; }
+
+	/// <summary>
+	///		Cabecera del panel
+	/// </summary>
+	public string Header => "Log";
+
+	/// <summary>
+	///		Id del panel
+	/// </summary>
+	public string TabId => GetType().ToString();
 }

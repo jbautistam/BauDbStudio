@@ -6,7 +6,7 @@ namespace Bau.Libraries.PluginsStudio.ViewModels.TasksQueue;
 /// <summary>
 ///		ViewModel para mostrar procesos en ejecución
 /// </summary>
-public class TasksQueueListViewModel : BaseObservableObject, Base.Interfaces.IDetailViewModel
+public class TasksQueueListViewModel : BaseObservableObject, Base.Interfaces.IPaneViewModel
 {
 	// Variables privadas
 	private string _header = string.Empty;
@@ -47,7 +47,7 @@ public class TasksQueueListViewModel : BaseObservableObject, Base.Interfaces.IDe
 	/// <summary>
 	///		Ejecuta un comando
 	/// </summary>
-	public void Execute(PluginsStudio.ViewModels.Base.Models.Commands.ExternalCommand externalCommand)
+	public void Execute(Base.Models.Commands.ExternalCommand externalCommand)
 	{
 		System.Diagnostics.Debug.WriteLine($"Execute command {externalCommand.Type.ToString()} at {Header}");
 	}
@@ -106,6 +106,6 @@ public class TasksQueueListViewModel : BaseObservableObject, Base.Interfaces.IDe
 	public BauMvvm.ViewModels.Forms.ControlItems.ControlItemCollectionViewModel<TasksQueueItemViewModel> Tasks
 	{
 		get { return _tasks; }
-		set { CheckObject(ref _tasks, value); }
+		set { CheckObject(ref _tasks!, value); }
 	}
 }

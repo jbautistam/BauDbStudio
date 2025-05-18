@@ -73,17 +73,18 @@ public class PasswordManagerPlugin : IPlugin
 	{
 		 return new List<FileAssignedModel>
 							{
-								GetIcon(".bau.enc")
+								GetFileAssigned(".bau.enc", false)
 							};
 
-			// Obtiene el icono del archivo de recursos
-			FileAssignedModel GetIcon(string extension)
+			// Crea un archivo asignado
+			FileAssignedModel GetFileAssigned(string extension, bool canSearch)
 			{
 				return new FileAssignedModel
 								{
 									Name = "Password manager file",
 									FileExtension = extension,
-									Icon = "/PasswordManager.Plugin;component/Resources/FileEnc.png"
+									Icon = "/PasswordManager.Plugin;component/Resources/FileEnc.png",
+									CanSearch = canSearch
 								};
 			}
 	}

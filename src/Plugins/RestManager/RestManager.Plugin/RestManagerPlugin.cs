@@ -78,7 +78,8 @@ public class RestManagerPlugin : IPlugin
 											Name = $"Rest project",
 											FileExtension = ".rest",
 											Icon = "/RestManager.Plugin;component/Resources/RestFile.png",
-											CanCreate = true
+											CanCreate = true,
+											CanSearch = false
 										}
 							};
 	}

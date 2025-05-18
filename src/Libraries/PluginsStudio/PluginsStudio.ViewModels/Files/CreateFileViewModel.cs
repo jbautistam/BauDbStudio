@@ -2,7 +2,7 @@
 using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.ComboItems;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Models;
 
-namespace Bau.Libraries.PluginsStudio.ViewModels.Tools;
+namespace Bau.Libraries.PluginsStudio.ViewModels.Files;
 
 /// <summary>
 ///		ViewModel para la creación de archivos

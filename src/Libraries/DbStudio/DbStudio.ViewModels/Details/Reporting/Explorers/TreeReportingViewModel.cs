@@ -3,13 +3,14 @@ using Bau.Libraries.BauMvvm.ViewModels.Forms.ControlItems.Trees;
 using Bau.Libraries.LibReporting.Models.DataWarehouses;
 using Bau.Libraries.LibReporting.Models.DataWarehouses.DataSets;
 using Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;
+using Bau.Libraries.PluginsStudio.ViewModels.Base.Interfaces;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Details.Reporting.Explorers;
 
 /// <summary>
 ///		ViewModel para el árbol de almacenes de datos
 /// </summary>
-public class TreeReportingViewModel : PluginTreeViewModel
+public class TreeReportingViewModel : PluginTreeViewModel, IPaneViewModel
 {
 	/// <summary>
 	///		Tipo de nodo
@@ -607,9 +608,35 @@ public class TreeReportingViewModel : PluginTreeViewModel
 	}
 
 	/// <summary>
+	///		Ejecuta un comando externo: sólo implementa el interface
+	/// </summary>
+	public void Execute(PluginsStudio.ViewModels.Base.Models.Commands.ExternalCommand externalCommand)
+	{
+		// No hace nada sólo implementa el interface
+	}
+
+	/// <summary>
+	///		Cierra el panel: sólo implementa el interface
+	/// </summary>
+	public void Close()
+	{
+		// No hace nada sólo implementa el interface
+	}
+
+	/// <summary>
 	///		ViewModel de la solución para reporting
 	/// </summary>
 	public ReportingSolutionViewModel ReportingSolutionViewModel { get; }
+
+	/// <summary>
+	///		Cabecera del panel
+	/// </summary>
+	public string Header => "Reporting";
+
+	/// <summary>
+	///		Id del panel
+	/// </summary>
+	public string TabId => GetType().ToString();
 
 	/// <summary>
 	///		Comando de nuevo almacén de datos

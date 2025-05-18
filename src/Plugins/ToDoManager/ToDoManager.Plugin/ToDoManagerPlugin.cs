@@ -117,7 +117,7 @@ public class ToDoManagerPlugin : IPlugin
 	/// <summary>
 	///		Obtiene las barras de herramientas del plugin
 	/// </summary>
-	public List<ToolBarModel> GetToolBars() => new();
+	public List<ToolBarModel> GetToolBars() => [];
 
 	/// <summary>
 	///		Obtiene los menús del plugin
@@ -135,7 +135,7 @@ public class ToDoManagerPlugin : IPlugin
 	/// <summary>
 	///		Obtiene las opciones de menú asociadas a las extensiones de archivo y carpetas
 	/// </summary>
-	public List<FileOptionsModel> GetFilesOptions() => new();
+	public List<FileOptionsModel> GetFilesOptions() => [];
 
 	/// <summary>
 	///		Obtiene las extensiones de archivo asociadas al plugin

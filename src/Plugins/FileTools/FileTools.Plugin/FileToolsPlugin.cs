@@ -94,7 +94,7 @@ public class FileToolsPlugin : IPlugin
 	public List<FileAssignedModel> GetFilesAssigned()
 	{
 		List<FileAssignedModel> files = [
-											GetFileAssigned("Pattern text file", FileToolsViewModel.PatternFileExtension, "PatternFile.png", true),
+											GetFileAssigned("Pattern text file", FileToolsViewModel.PatternFileExtension, "PatternFile.png", true, false),
 											GetMediaFileAssigned(true, ".mp3"),
 											GetMediaFileAssigned(true, ".wav"),
 											GetMediaFileAssigned(false, ".mp4"),
@@ -109,14 +109,15 @@ public class FileToolsPlugin : IPlugin
 			return files;
 
 		// Obtiene el archivo asociado a una extensión
-		FileAssignedModel GetFileAssigned(string name, string extension, string icon, bool canCreate)
+		FileAssignedModel GetFileAssigned(string name, string extension, string icon, bool canCreate, bool canSearch)
 		{
 			return new FileAssignedModel
 							{
 								Name = name,
 								FileExtension = extension,
 								Icon = GetIconName(icon, true),
-								CanCreate = canCreate
+								CanCreate = canCreate,
+								CanSearch = canSearch
 							};
 		}
 
@@ -124,9 +125,9 @@ public class FileToolsPlugin : IPlugin
 		FileAssignedModel GetMediaFileAssigned(bool isAudio, string extension)
 		{
 			if (isAudio)
-				return GetFileAssigned($"Audio {extension}", extension, "AudioFile.png", false);
+				return GetFileAssigned($"Audio {extension}", extension, "AudioFile.png", false, false);
 			else
-				return GetFileAssigned($"Vídeo {extension}", extension, "VideoFile.png", false);
+				return GetFileAssigned($"Vídeo {extension}", extension, "VideoFile.png", false, false);
 		}
 
 		// Obtiene el archivo asociado a una extensión de un archivo de imagen

@@ -7,7 +7,7 @@ public class CsvFilterViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogVie
 {
 	// Variables privadas
 	private string _fileName = default!;
-	private DateTime _start = DateTime.Now.AddYears(-1), _end = DateTime.Now;
+	private DateTime _start = DateTime.Now.AddDays(-15), _end = DateTime.Now;
 
 	public CsvFilterViewModel(TimeScheduleViewModel viewModel)
 	{

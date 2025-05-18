@@ -44,7 +44,7 @@ public class PluginsStudioController : Libraries.PluginsStudio.ViewModels.Contro
 	{
 		return dialogViewModel switch
 					{
-						Libraries.PluginsStudio.ViewModels.Tools.CreateFileViewModel viewModel => DbStudioViewManager.AppViewController.OpenDialog(new Views.Files.CreateFileView(viewModel)),
+						Libraries.PluginsStudio.ViewModels.Files.CreateFileViewModel viewModel => DbStudioViewManager.AppViewController.OpenDialog(new Views.Files.CreateFileView(viewModel)),
 						Libraries.PluginsStudio.ViewModels.Tools.SaveOpenFilesViewModel viewModel => DbStudioViewManager.AppViewController.OpenDialog(new Views.Files.SaveOpenFilesView(viewModel)),
 						_ => SystemControllerEnums.ResultType.No,
 					};

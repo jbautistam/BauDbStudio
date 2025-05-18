@@ -32,7 +32,6 @@ public class TreeFilesViewModel : PluginTreeViewModel, Base.Interfaces.IPaneView
 		/// <summary>Comando</summary>
 		Command
 	}
-
 	// Variables privadas
 	private NodeFileViewModel? _nodeToCopy;
 	private bool _actionNodeToCopyMove;
@@ -63,7 +62,6 @@ public class TreeFilesViewModel : PluginTreeViewModel, Base.Interfaces.IPaneView
 										.AddListener(this, nameof(SelectedNode));
 		SearchCommand = new BaseCommand(_ => SearchFiles(), _ => CanExecuteAction(nameof(SearchCommand)))
 										.AddListener(this, nameof(SelectedNode));
-
 	}
 
 	/// <summary>
@@ -430,8 +428,8 @@ public class TreeFilesViewModel : PluginTreeViewModel, Base.Interfaces.IPaneView
 
 			if (!string.IsNullOrWhiteSpace(path))
 			{
-				Tools.CreateFileViewModel createFileViewModel = new(MainViewModel, path, 
-																	MainViewModel.MainController.PluginsController.HostPluginsController.GetFilesAssigned(true));
+				ViewModels.Files.CreateFileViewModel createFileViewModel = new(MainViewModel, path, 
+																			   MainViewModel.MainController.PluginsController.HostPluginsController.GetFilesAssigned(true));
 
 					if (MainViewModel.MainController.OpenDialog(createFileViewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes &&
 						!string.IsNullOrWhiteSpace(createFileViewModel.FileName))
@@ -465,14 +463,14 @@ public class TreeFilesViewModel : PluginTreeViewModel, Base.Interfaces.IPaneView
 	/// <summary>
 	///		Obtiene la codificación adecuada para el archivo
 	/// </summary>
-	private System.Text.Encoding GetEncoder(Tools.CreateFileViewModel.Encoding encoding)
+	private System.Text.Encoding GetEncoder(ViewModels.Files.CreateFileViewModel.Encoding encoding)
 	{
 		return encoding switch
 					{
-						Tools.CreateFileViewModel.Encoding.Utf8 => System.Text.Encoding.UTF8,
-						Tools.CreateFileViewModel.Encoding.Utf8NoBom => new System.Text.UTF8Encoding(false),
-						Tools.CreateFileViewModel.Encoding.Utf32 => System.Text.Encoding.UTF32,
-						Tools.CreateFileViewModel.Encoding.Unicode => System.Text.Encoding.Unicode,
+						ViewModels.Files.CreateFileViewModel.Encoding.Utf8 => System.Text.Encoding.UTF8,
+						ViewModels.Files.CreateFileViewModel.Encoding.Utf8NoBom => new System.Text.UTF8Encoding(false),
+						ViewModels.Files.CreateFileViewModel.Encoding.Utf32 => System.Text.Encoding.UTF32,
+						ViewModels.Files.CreateFileViewModel.Encoding.Unicode => System.Text.Encoding.Unicode,
 						_ => System.Text.Encoding.ASCII
 					};
 	}
@@ -857,7 +855,11 @@ public class TreeFilesViewModel : PluginTreeViewModel, Base.Interfaces.IPaneView
 		string? folder = GetSelectedFolder();
 
 			if (!string.IsNullOrWhiteSpace(folder) && Directory.Exists(folder))
-				MainViewModel.MainController.OpenWindow(new ViewModels.Files.Search.SearchFilesViewModel(MainViewModel, folder));
+				MainViewModel.MainController.OpenWindow
+							(new ViewModels.Files.Search.SearchFilesViewModel
+										(MainViewModel, folder, 
+										 MainViewModel.MainController.PluginsController.HostPluginsController.GetFilesAssigned(true))
+							);
 	}
 
 	/// <summary>

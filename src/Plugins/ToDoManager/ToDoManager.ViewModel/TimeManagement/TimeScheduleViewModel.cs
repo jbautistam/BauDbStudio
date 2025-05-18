@@ -1,5 +1,5 @@
-﻿using Bau.Libraries.LibHelper.Extensors;
-using Bau.Libraries.BauMvvm.ViewModels;
+﻿using Bau.Libraries.BauMvvm.ViewModels;
+using Bau.Libraries.PluginsStudio.ViewModels.Base.Interfaces;
 using Bau.Libraries.ToDoManager.Application.TimeManagement.Models;
 
 namespace Bau.Libraries.ToDoManager.ViewModel.TimeManagement;
@@ -7,7 +7,7 @@ namespace Bau.Libraries.ToDoManager.ViewModel.TimeManagement;
 /// <summary>
 ///		ViewModel principal para la administración de horas de trabajo
 /// </summary>
-public class TimeScheduleViewModel : BaseObservableObject
+public class TimeScheduleViewModel : BaseObservableObject, IPaneViewModel
 {
 	// Variables privadas
 	private TimeListViewModel _timeListViewModel = default!;
@@ -54,7 +54,7 @@ public class TimeScheduleViewModel : BaseObservableObject
 	/// <summary>
 	///		Cierra las tareas que tenga pendientes por cerrar y graba el archivo
 	/// </summary>
-	internal void Close()
+	public void Close()
 	{
 		ActualTimeViewModel.StopCommand.Execute(null);
 	}
@@ -91,6 +91,14 @@ public class TimeScheduleViewModel : BaseObservableObject
 	internal string FormatElapsed(TimeSpan value) => $"{value.Hours:00}:{value.Minutes:00}:{value.Seconds:00}";
 
 	/// <summary>
+	///		Ejecuta un comando externo: sólo implementa el interface
+	/// </summary>
+	public void Execute(PluginsStudio.ViewModels.Base.Models.Commands.ExternalCommand externalCommand)
+	{
+		// No hace nada sólo implementa el interface
+	}
+
+	/// <summary>
 	///		ViewModel principal
 	/// </summary>
 	public ToDoManagerViewModel MainViewModel { get; }
@@ -101,12 +109,22 @@ public class TimeScheduleViewModel : BaseObservableObject
 	public TimeControlModel ActualTimeControl { get; private set; } = default!;
 
 	/// <summary>
+	///		Cabecera del panel
+	/// </summary>
+	public string Header => "Time management";
+
+	/// <summary>
+	///		Id del panel
+	/// </summary>
+	public string TabId => GetType().ToString();
+
+	/// <summary>
 	///		ViewModel para la lista de horas
 	/// </summary>
 	public TimeListViewModel TimeListViewModel
 	{
 		get { return _timeListViewModel; }
-		set { CheckObject(ref _timeListViewModel, value); }
+		set { CheckObject(ref _timeListViewModel!, value); }
 	}
 
 	/// <summary>
@@ -115,7 +133,7 @@ public class TimeScheduleViewModel : BaseObservableObject
 	public TimeEditableViewModel ActualTimeViewModel
 	{ 
 		get { return _actualTimeViewModel; }
-		set { CheckObject(ref _actualTimeViewModel, value); }
+		set { CheckObject(ref _actualTimeViewModel!, value); }
 	}
 
 	/// <summary>

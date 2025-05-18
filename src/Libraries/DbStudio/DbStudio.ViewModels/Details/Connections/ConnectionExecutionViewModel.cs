@@ -231,7 +231,7 @@ public class ConnectionExecutionViewModel : BaseObservableObject
 	/// <summary>
 	///		Importa un archivo sobre una tabla
 	/// </summary>
-	public async Task ImportDataBaseAsync(ConnectionModel connection, ConnectionTableModel? table, CancellationToken cancellationToken)
+	public async Task ImportDataBaseAsync(ConnectionModel? connection, ConnectionTableModel? table, CancellationToken cancellationToken)
 	{
 		if (IsExecuting)
 			SolutionViewModel.MainController.SystemController.ShowMessage("No se pueden importar los datos en este momento. Espere que finalice la ejecución de los scripts");

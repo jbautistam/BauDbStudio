@@ -34,4 +34,9 @@ public class FileAssignedModel
 	///		Indica si se puede crear un archivo de este tipo o sólo es de lectura
 	/// </summary>
 	public bool CanCreate { get; set; } = true;
+
+	/// <summary>
+	///		Indica si se puede buscar en este tipo de archivos
+	/// </summary>
+	public bool CanSearch { get; set; } = true;
 }

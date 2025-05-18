@@ -19,7 +19,7 @@
 			<ColumnDefinition Width="Auto"/>
 		</Grid.ColumnDefinitions>
 		<TextBox Grid.Row="0" Grid.Column="0" Text="{Binding Path=TextSearch,UpdateSourceTrigger=PropertyChanged}"/>
-		<TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=Mask,UpdateSourceTrigger=PropertyChanged}"/>
+		<TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=Mask,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
 		<ToggleButton x:Name="cmdSelectMasks" Grid.Row="0" Grid.Column="2" IsChecked="False" ToolTip="Select file extensions"
 						Background="Transparent" BorderThickness="0">
 			<ToggleButton.Content>
@@ -49,24 +49,36 @@
 			</ToggleButton>
 		</ToolBar>
 		<Popup IsOpen="{Binding ElementName=cmdSelectMasks,Path=IsChecked}" PlacementTarget="{Binding ElementName=cmdSelectMasks}" 
-				   Placement="Bottom" PopupAnimation="Slide" StaysOpen="False" Width="300">
-			<ListView ItemsSource="{Binding Path=FoldersViewModel.Items}" SelectedItem="{Binding Path=FoldersViewModel.SelectedItem}" Margin="0">
-				<ListView.View>
-					<GridView>
-						<GridViewColumn Width="250" Header="Carpeta">
-							<GridViewColumn.CellTemplate>
-								<DataTemplate>
-									<StackPanel Orientation="Horizontal">
-										<CheckBox IsChecked="{Binding Path=IsChecked}"/>
-										<TextBlock Margin="5" VerticalAlignment="Center" HorizontalAlignment="Center"
-												Text="{Binding Path=Text}" ToolTip="{Binding Path=Tag}" />
-									</StackPanel>
-								</DataTemplate>
-							</GridViewColumn.CellTemplate>
-						</GridViewColumn>
-					</GridView>
-				</ListView.View>
-			</ListView>
+				   Placement="Bottom" PopupAnimation="Slide" StaysOpen="False" Width="750" Height="400">
+			<Grid Background="White">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+				<ListView Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="5" BorderThickness="1"
+							ItemsSource="{Binding Path=FileTypes}" 
+							ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+					<ListView.ItemTemplate>
+						<DataTemplate>
+							<StackPanel Margin = "3" MaxWidth="150" MinWidth="150">
+								<Image Source="{Binding Path=Icon}" Stretch="Fill" Width="32" Height="32" Margin="5"/>
+								<CheckBox IsChecked="{Binding Path=IsChecked,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" Content="{Binding Path=Text}"/>
+							</StackPanel>
+						</DataTemplate>
+					</ListView.ItemTemplate>
+					<ListView.ItemsPanel>
+						<ItemsPanelTemplate>
+							<WrapPanel Orientation="Horizontal"/>
+						</ItemsPanelTemplate>
+					</ListView.ItemsPanel>
+				</ListView>
+				<Button Grid.Row="1" Grid.Column="0" Margin="5" Content="Select all" Command="{Binding Path=SelectAllCommand}"/>
+				<Button Grid.Row="1" Grid.Column="1" Margin="5" Content="Unselect all" Command="{Binding Path=UnSelectAllCommand}"/>
+			</Grid>
 		</Popup>
 		<TreeView x:Name="trvResults"  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4"
 				BorderThickness="1" BorderBrush="Black"

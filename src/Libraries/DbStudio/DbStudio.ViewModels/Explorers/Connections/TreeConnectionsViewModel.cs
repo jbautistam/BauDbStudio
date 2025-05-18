@@ -1,13 +1,15 @@
 ﻿using Bau.Libraries.LibHelper.Extensors;
 using Bau.Libraries.BauMvvm.ViewModels;
 using Bau.Libraries.DbStudio.Models.Connections;
+using Bau.Libraries.PluginsStudio.ViewModels.Base.Interfaces;
+using Bau.Libraries.PluginsStudio.ViewModels.Base.Models.Commands;
 
 namespace Bau.Libraries.DbStudio.ViewModels.Explorers.Connections;
 
 /// <summary>
 ///		ViewModel para el árbol de conexiones
 /// </summary>
-public class TreeConnectionsViewModel : TreeSolutionBaseViewModel
+public class TreeConnectionsViewModel : TreeSolutionBaseViewModel, IPaneViewModel
 {
 	/// <summary>
 	///		Tipo de nodo
@@ -319,6 +321,32 @@ public class TreeConnectionsViewModel : TreeSolutionBaseViewModel
 	///		Obtiene el enumerado del tipo de nodo seleccionado
 	/// </summary>
 	private NodeType GetSelectedNodeTypeConverted() => (GetSelectedNodeType() ?? string.Empty).GetEnum(NodeType.Unknown);
+
+	/// <summary>
+	///		Ejecuta un comando externo: sólo implementa el interface
+	/// </summary>
+	public void Execute(ExternalCommand externalCommand)
+	{
+		// No hace nada sólo implementa el interface
+	}
+
+	/// <summary>
+	///		Cierra el panel: sólo implementa el interface
+	/// </summary>
+	public void Close()
+	{
+		// No hace nada sólo implementa el interface
+	}
+
+	/// <summary>
+	///		Cabecera del panel
+	/// </summary>
+	public string Header => "Connections";
+
+	/// <summary>
+	///		Id del panel
+	/// </summary>
+	public string TabId => GetType().ToString();
 
 	/// <summary>
 	///		Comando de nueva conexión

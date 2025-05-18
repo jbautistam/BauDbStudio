@@ -18,29 +18,38 @@ public class WindowsCollectionViewModel
 	/// </summary>
 	public void AddPane(string tabId, string paneId, string name)
 	{
-		if (!ExistsPanel(paneId))
-			CreateWindow(tabId, paneId, name, WindowViewModel.WindowType.Pane);
+		if (!Exists(paneId, Panels))
+			CreatePanel(tabId, paneId, name);
 	}
 
 	/// <summary>
-	///		Elimina un panel de la colección
+	///		Crea los paneles por orden del nombre
+	/// </summary>
+	private void CreatePanel(string tabId, string documentId, string name)
+	{
+		int beforeIndex = -1;
+
+			// Busca el primer panel con nombe superior al que se quiere insertar
+			for (int index = 0; index < Panels.Count; index++)
+				if (beforeIndex < 0 && Panels[index].Name.CompareTo(name) > 0)
+					beforeIndex = index;
+			// Normaliza el índice
+			if (beforeIndex < 0)
+				beforeIndex = Panels.Count;
+			// Añade el panel en la posición adecuada
+			Panels.Insert(beforeIndex, new WindowViewModel(MainViewModel, tabId, documentId, name, WindowViewModel.WindowType.Pane));
+	}
+
+	/// <summary>
+	///		Añade un documento a la colección de ventanas
 	/// </summary>
 	public void AddDocument(string tabId, string name)
 	{
-		if (!ExistsDocument(tabId))
-			CreateWindow(tabId, tabId, name, WindowViewModel.WindowType.Document);
+		// Crea la ventana si no existía
+		if (!Exists(tabId, Documents))
+			Documents.Add(new WindowViewModel(MainViewModel, tabId, tabId, name, WindowViewModel.WindowType.Document));
+		// Cambia la ventana activa
 		SetActiveDocument(tabId);
-	}
-
-	/// <summary>
-	///		Crea una ventana
-	/// </summary>
-	private void CreateWindow(string tabId, string documentId, string name, WindowViewModel.WindowType type)
-	{
-		if (type == WindowViewModel.WindowType.Pane)
-			Panels.Add(new WindowViewModel(MainViewModel, tabId, documentId, name, type));
-		else
-			Documents.Add(new WindowViewModel(MainViewModel, tabId, documentId, name, type));
 	}
 
 	/// <summary>
@@ -61,16 +70,6 @@ public class WindowsCollectionViewModel
 			if (documents[index].Id.Equals(id, StringComparison.CurrentCultureIgnoreCase))
 				Close(documents[index]);
 	}
-
-	/// <summary>
-	///		Comprueba si existe un panel
-	/// </summary>
-	private bool ExistsPanel(string paneId) => Exists(paneId, Panels);
-
-	/// <summary>
-	///		Comprueba si existe un documento
-	/// </summary>
-	private bool ExistsDocument(string documentId) => Exists(documentId, Documents);
 
 	/// <summary>
 	///		Comprueba si existe un documento

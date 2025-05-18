@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-using Bau.Libraries.PluginsStudio.ViewModels.Tools;
+using Bau.Libraries.PluginsStudio.ViewModels.Files;
 
 namespace Bau.DbStudio.Views.Files;
 

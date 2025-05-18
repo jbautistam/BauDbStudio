@@ -6,7 +6,7 @@ using Bau.Libraries.BauMvvm.ViewModels;
 namespace Bau.Libraries.PluginsStudio.ViewModels.Files.Search;
 
 /// <summary>
-///		ViewModel para los resultados de la búsqueda
+///		ViewModel para la búsqueda de texto en archivos de un directorio
 /// </summary>
 public class TreeSearchFilesResultViewModel : BaseObservableObject
 {
@@ -31,7 +31,8 @@ public class TreeSearchFilesResultViewModel : BaseObservableObject
 		Children = new ObservableCollection<TreeResultNodeViewModel>();
 		// Busca el texto en los archivos
 		if (!cancellationToken.IsCancellationRequested)
-			await SearchFolderAsync(folder, mask.Split(';'), textSearch, caseSensitive, wholeWords, useRegex, cancellationToken);
+			await SearchFolderAsync(folder, mask.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries), 
+									textSearch, caseSensitive, wholeWords, useRegex, cancellationToken);
 		// Vacía el nombre de archivo que se está buscando
 		FileSearched = string.Empty;
 	}

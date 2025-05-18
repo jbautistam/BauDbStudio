@@ -40,9 +40,9 @@
 					<MenuItem.Icon>
 						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
 					</MenuItem.Icon>
-					<MenuItem Header="D_irectorio" Command="{Binding Path=TreeFoldersViewModel.NewFolderFilesCommand}" >
+					<MenuItem Header="_Bookmark" Command="{Binding Path=TreeFoldersViewModel.NewFolderFilesCommand}" >
 						<MenuItem.Icon>
-							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Folder.png" />
+							<Image Width="16" Height="16" Source="/Resources/Images/Bookmarks.png" />
 						</MenuItem.Icon>
 					</MenuItem>
 					<Separator x:Name="mnuStartFileNewItems" />
@@ -210,8 +210,8 @@
 
 		<ToolBarTray x:Name="tbMain" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" >
 			<ToolBar BandIndex="1">
-				<Button ToolTip="Añadir carpeta" Command="{Binding Path=TreeFoldersViewModel.NewFolderFilesCommand}" Margin="2">
-					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Folder.png" />
+				<Button ToolTip="Add bookmark" Command="{Binding Path=TreeFoldersViewModel.NewFolderFilesCommand}" Margin="2">
+					<Image Width="16" Height="16" Source="/Resources/Images/Bookmarks.png" />
 				</Button>
 				<Separator Margin="2"/>
 				<Button ToolTip="Guardar" Command="{Binding Path=SaveCommand}" Margin="2">
