@@ -167,7 +167,6 @@ public class TreeQueryReportViewModel : PluginTreeViewModel
 	private void AddColumnNodes(NodeColumnViewModel root, BaseReportingDictionaryModel<DataSourceColumnModel> columns, 
 								NodeColumnViewModel.NodeColumnType nodeColumnType, string dimensionId, string dataSourceId)
 	{
-		// Añade las columnas adecuadas al árbol
 		foreach (DataSourceColumnModel column in columns.EnumerateValuesSorted())
 			if (column.Visible)
 				AddColumnNode(root, nodeColumnType, dimensionId, dataSourceId, column.Id, column);

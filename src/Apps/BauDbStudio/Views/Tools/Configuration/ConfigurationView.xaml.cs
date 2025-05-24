@@ -40,6 +40,7 @@ public partial class ConfigurationView : Window
 		txtFontSize.Value = MainWindow.DbStudioViewsManager.ConfigurationController.EditorFontSize;
 		chkShowLineNumber.IsChecked = MainWindow.DbStudioViewsManager.ConfigurationController.EditorShowLinesNumber;
 		chkShowNotifications.IsChecked = MainWindow.DbStudioViewsManager.ConfigurationController.ShowWindowNotifications;
+		chkRemoveToRecycleBin.IsChecked = MainWindow.DbStudioViewsManager.ConfigurationController.RemoveFilesToRecycleBin;
 		// Inicializa los controles de configuración de los plugins
 		InitPluginsControls();
 	}
@@ -108,6 +109,7 @@ public partial class ConfigurationView : Window
 			MainWindow.DbStudioViewsManager.ConfigurationController.EditorFontSize = txtFontSize.Value;
 			MainWindow.DbStudioViewsManager.ConfigurationController.EditorShowLinesNumber = chkShowLineNumber.IsChecked ?? false;
 			MainWindow.DbStudioViewsManager.ConfigurationController.ShowWindowNotifications = chkShowNotifications.IsChecked ?? false;
+			MainWindow.DbStudioViewsManager.ConfigurationController.RemoveFilesToRecycleBin = chkRemoveToRecycleBin.IsChecked ?? false;
 			// Graba los datos de los plugins
 			SavePluginsData();
 			// Graba la configuración

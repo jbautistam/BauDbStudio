@@ -21,6 +21,7 @@
 				<Grid>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
 						<RowDefinition Height="*"/>
 					</Grid.RowDefinitions>
 					<GroupBox Grid.Row="0" Grid.Column="0" Header="Editor">
@@ -66,6 +67,18 @@
 								<ColumnDefinition Width="*"/>
 							</Grid.ColumnDefinitions>
 							<CheckBox Grid.Row="0" Grid.Column="0" x:Name="chkShowNotifications" Content="Mostrar notificaciones de sistema"/>
+						</Grid>
+					</GroupBox>
+					<GroupBox Grid.Row="2" Grid.Column="0" Header="Explorador de archivos">
+						<Grid>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="Auto"/>
+							</Grid.RowDefinitions>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="Auto"/>
+								<ColumnDefinition Width="*"/>
+							</Grid.ColumnDefinitions>
+							<CheckBox Grid.Row="0" Grid.Column="0" x:Name="chkRemoveToRecycleBin" Content="Borrar archivos utilizando la papelera de reciclaje"/>
 						</Grid>
 					</GroupBox>
 				</Grid>

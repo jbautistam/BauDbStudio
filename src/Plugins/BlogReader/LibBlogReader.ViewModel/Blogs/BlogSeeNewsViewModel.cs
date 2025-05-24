@@ -306,7 +306,7 @@ public class BlogSeeNewsViewModel : BaseObservableObject, PluginsStudio.ViewMode
 					// Elimina los archivos asociados
 					if (!string.IsNullOrEmpty(entryViewModel.Entry.DownloadFileName) &&
 							File.Exists(entryViewModel.Entry.DownloadFileName))
-						LibHelper.Files.HelperFiles.KillFile(Path.Combine(MainViewModel.ConfigurationViewModel.PathBlogs, entryViewModel.Entry.DownloadFileName));
+						LibHelper.Files.HelperFiles.KillFile(Path.Combine(MainViewModel.ConfigurationViewModel.PathBlogs, entryViewModel.Entry.DownloadFileName), false);
 					// Indica que algo se ha borrado
 					deleted = true;
 				}

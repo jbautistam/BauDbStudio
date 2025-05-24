@@ -418,7 +418,7 @@ public class TreeBlogsViewModel : PluginsStudio.ViewModels.Base.Explorers.Plugin
 	private void KillPaths(BlogsModelCollection blogs)
 	{
 		foreach (BlogModel blog in blogs)
-			LibHelper.Files.HelperFiles.KillPath(Path.Combine(MainViewModel.ConfigurationViewModel.PathBlogs, blog.Path));
+			LibHelper.Files.HelperFiles.KillPath(Path.Combine(MainViewModel.ConfigurationViewModel.PathBlogs, blog.Path), false);
 	}
 
 	/// <summary>

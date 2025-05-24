@@ -192,7 +192,7 @@ public class ComicContentViewModel : BaseObservableObject, PluginsStudio.ViewMod
 	public void Close()
 	{
 		if (!string.IsNullOrWhiteSpace(_tempPath) && Directory.Exists(_tempPath))
-			LibHelper.Files.HelperFiles.KillPath(_tempPath);
+			LibHelper.Files.HelperFiles.KillPath(_tempPath, false);
 	}
 
 	/// <summary>

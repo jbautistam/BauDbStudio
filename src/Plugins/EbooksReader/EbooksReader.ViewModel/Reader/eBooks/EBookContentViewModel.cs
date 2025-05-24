@@ -210,7 +210,7 @@ public class EBookContentViewModel : BaseObservableObject, PluginsStudio.ViewMod
 	public void Close()
 	{
 		if (!string.IsNullOrWhiteSpace(_tempPath))
-			LibHelper.Files.HelperFiles.KillPath(_tempPath);
+			LibHelper.Files.HelperFiles.KillPath(_tempPath, false);
 	}
 
 	/// <summary>

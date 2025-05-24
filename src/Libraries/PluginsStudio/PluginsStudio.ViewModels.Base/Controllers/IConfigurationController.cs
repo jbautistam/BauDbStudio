@@ -41,6 +41,11 @@ public interface IConfigurationController
 	double EditorZoom { get; set; }
 
 	/// <summary>
+	///		Indica si se deben borrar archivos utilizando la papelera de reciclaje
+	/// </summary>
+	bool RemoveFilesToRecycleBin { get; }
+
+	/// <summary>
 	///		Indice de la codificación seleccionada al grabar un archivo 
 	/// </summary>
 	int LastEncodingIndex { get; set; }

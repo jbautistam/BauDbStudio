@@ -34,7 +34,7 @@ public class TreeFilesViewModel : PluginTreeViewModel, Base.Interfaces.IPaneView
 	}
 	// Variables privadas
 	private NodeFileViewModel? _nodeToCopy;
-	private bool _actionNodeToCopyMove;
+	private bool _actionNodeToCopyIsMove;
 
 	public TreeFilesViewModel(PluginsStudioViewModel solutionViewModel)
 	{ 
@@ -297,7 +297,13 @@ public class TreeFilesViewModel : PluginTreeViewModel, Base.Interfaces.IPaneView
 						if ((Path.GetDirectoryName(fileSource) ?? string.Empty).Equals(pathTarget, StringComparison.CurrentCultureIgnoreCase))
 							fileNameTarget = HelperFiles.GetConsecutiveFileName(pathTarget, Path.GetFileName(fileSource));
 						else
+						{
+							// Obtiene el nombre del archivo destino
 							fileNameTarget = Path.Combine(pathTarget, Path.GetFileName(fileSource));
+							// Si ya existe ese nombre, se busca un nuevo nombre
+							if (File.Exists(fileNameTarget))
+								fileNameTarget = HelperFiles.GetConsecutiveFileName(pathTarget, Path.GetFileName(fileNameTarget));
+						}
 						// Copia / mueve el archivo
 						if (move)
 							copied = HelperFiles.MoveFile(fileSource, fileNameTarget);
@@ -507,7 +513,7 @@ public class TreeFilesViewModel : PluginTreeViewModel, Base.Interfaces.IPaneView
 		if (SelectedNode is NodeFileViewModel node)
 		{
 			_nodeToCopy = node;
-			_actionNodeToCopyMove = move;
+			_actionNodeToCopyIsMove = move;
 		}
 		else
 			_nodeToCopy = null;
@@ -523,12 +529,13 @@ public class TreeFilesViewModel : PluginTreeViewModel, Base.Interfaces.IPaneView
 			string pathTarget = GetSelectedPath();
 			string fileSource = _nodeToCopy.FileName;
 
-				if (CopyFile(pathTarget, fileSource, _actionNodeToCopyMove))
+				if (CopyFile(pathTarget, fileSource, _actionNodeToCopyIsMove))
 				{
 					// Actualiza el árbol
 					Load();
-					// ... y vacía el nodo de copia
-					_nodeToCopy = null;
+					// ... y vacía el nodo de copia si se está cortando el archivo
+					if (_actionNodeToCopyIsMove)
+						_nodeToCopy = null;
 				}
 		}
 	}
@@ -604,30 +611,32 @@ public class TreeFilesViewModel : PluginTreeViewModel, Base.Interfaces.IPaneView
 	/// </summary>
 	private void DeleteFile(string fileName)
 	{
-		if (Directory.Exists(fileName))
-		{
-			if (MainViewModel.MainController.MainWindowController.SystemController.ShowQuestion($"¿Realmente desea eliminar el directorio {Path.GetFileName(fileName)}?"))
+		bool useRecycleBin = MainViewModel.MainController.PluginsController.ConfigurationController.RemoveFilesToRecycleBin;
+
+			if (Directory.Exists(fileName))
 			{
-				// Elimina el directorio
-				HelperFiles.KillPath(fileName);
-				// Cierra las ventanas abiertas en este directorio
-				CloseWindows(fileName, true);
-				// Actualiza el árbol
-				Load();
+				if (MainViewModel.MainController.MainWindowController.SystemController.ShowQuestion($"¿Realmente desea eliminar el directorio {Path.GetFileName(fileName)}?"))
+				{
+					// Elimina el directorio
+					HelperFiles.KillPath(fileName, useRecycleBin);
+					// Cierra las ventanas abiertas en este directorio
+					CloseWindows(fileName, true);
+					// Actualiza el árbol
+					Load();
+				}
 			}
-		}
-		else if (File.Exists(fileName))
-		{
-			if (MainViewModel.MainController.MainWindowController.SystemController.ShowQuestion($"¿Realmente desea eliminar el archivo {Path.GetFileName(fileName)}?"))
+			else if (File.Exists(fileName))
 			{
-				// Elimina el archivo
-				HelperFiles.KillFile(fileName);
-				// Cierra la ventana abierta de este archivo
-				CloseWindows(fileName, false);
-				// Actualiza el árbol
-				Load();
+				if (MainViewModel.MainController.MainWindowController.SystemController.ShowQuestion($"¿Realmente desea eliminar el archivo {Path.GetFileName(fileName)}?"))
+				{
+					// Elimina el archivo
+					HelperFiles.KillFile(fileName, useRecycleBin);
+					// Cierra la ventana abierta de este archivo
+					CloseWindows(fileName, false);
+					// Actualiza el árbol
+					Load();
+				}
 			}
-		}
 	}
 
 	/// <summary>

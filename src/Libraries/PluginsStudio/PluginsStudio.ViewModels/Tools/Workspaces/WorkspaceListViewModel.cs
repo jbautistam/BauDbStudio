@@ -121,7 +121,7 @@ public class WorkspaceListViewModel : BaseObservableObject
 			// Elimina el elemento en la lista
 			Items.Remove(SelectedItem);
 			// Borra el directorio
-			LibHelper.Files.HelperFiles.KillPath(SelectedItem.Path);
+			LibHelper.Files.HelperFiles.KillPath(SelectedItem.Path, false);
 			// Lanza el evento de carga del menú
 			MainViewModel.SelectWorkspace(DefaultWorkSpace);
 		}

@@ -36,7 +36,7 @@ public class ImagesGeneratedListItemViewModel : BaseObservableObject
 					.SystemController.ShowQuestion($"Do you want to delete the file '{Path.GetFileName(FileName)}'?", "Accept", "Cancel"))
 		{
 			// Borra el archivo
-			LibHelper.Files.HelperFiles.KillFile(FileName);
+			LibHelper.Files.HelperFiles.KillFile(FileName, true);
 			// Elimina la imagen de la lista
 			ImagesGeneratedListViewModel.Items.Remove(this);
 			// Actualiza el árbol de archivos

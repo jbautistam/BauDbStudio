@@ -39,6 +39,7 @@ public class ConfigurationController : Libraries.PluginsStudio.ViewModels.Base.C
 		LastWorkSpace = Properties.Settings.Default.LastWorkSpace;
 		LastFiles = Properties.Settings.Default.LastFiles;
 		ShowWindowNotifications = Properties.Settings.Default.ShowWindowNotifications;
+		RemoveFilesToRecycleBin = Properties.Settings.Default.RemoveFilesToRecycleBin;
 		LastEncodingIndex = Properties.Settings.Default.LastEncodingIndex;
 		PathData = Properties.Settings.Default.PathData;
 		if (string.IsNullOrWhiteSpace(PathData) || !System.IO.Directory.Exists(PathData))
@@ -168,6 +169,7 @@ public class ConfigurationController : Libraries.PluginsStudio.ViewModels.Base.C
 		Properties.Settings.Default.LastWorkSpace = LastWorkSpace;
 		Properties.Settings.Default.LastFiles = LastFiles;
 		Properties.Settings.Default.ShowWindowNotifications = ShowWindowNotifications;
+		Properties.Settings.Default.RemoveFilesToRecycleBin = RemoveFilesToRecycleBin;
 		Properties.Settings.Default.LastEncodingIndex = LastEncodingIndex;
 		Properties.Settings.Default.PathData = PathData;
 		// Graba la configuración
@@ -255,6 +257,11 @@ public class ConfigurationController : Libraries.PluginsStudio.ViewModels.Base.C
 	///		Indica si se deben mostrar las notificaciones de sistema
 	/// </summary>
 	public bool ShowWindowNotifications { get; set; }
+
+	/// <summary>
+	///		Indica si se deben borrar archivos utilizando la papelera de reciclaje
+	/// </summary>
+	public bool RemoveFilesToRecycleBin { get; set; }
 
 	/// <summary>
 	///		Indice de la codificación seleccionada al grabar un archivo 
