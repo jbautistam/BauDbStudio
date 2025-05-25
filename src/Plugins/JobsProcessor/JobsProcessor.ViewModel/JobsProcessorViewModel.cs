@@ -12,7 +12,7 @@ public class JobsProcessorViewModel : BaseObservableObject
 		// Asigna el controlador de vistas
 		MainController = mainController;
 		// Inicializa los comandos
-		ExecuteFileCommand = new BaseCommand(parameter => ExecuteFolderFile(parameter));
+		ExecuteFileCommand = new BaseCommand(ExecuteFolderFile);
 	}
 
 	/// <summary>
@@ -39,9 +39,9 @@ public class JobsProcessorViewModel : BaseObservableObject
 	/// <summary>
 	///		Ejecuta el script de un archivo o una carpeta
 	/// </summary>
-	private void ExecuteFolderFile(object parameter)
+	private void ExecuteFolderFile(object? parameter)
 	{
-		if (parameter != null && parameter is string fileName && !string.IsNullOrWhiteSpace(fileName) &&
+		if (parameter is string fileName && !string.IsNullOrWhiteSpace(fileName) &&
 				fileName.EndsWith(".cmd.xml", StringComparison.CurrentCultureIgnoreCase))
 			MainController.OpenWindow(new Processor.ExecuteConsoleViewModel(this, fileName));
 	}

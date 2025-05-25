@@ -21,7 +21,7 @@ public class JobsProcessorController : ViewModel.Controllers.IJobsProcessorContr
 		// Abre la ventana
 		switch (detailsViewModel)
 		{
-			case Bau.Libraries.JobsProcessor.ViewModel.Processor.ExecuteConsoleViewModel viewModel:
+			case ViewModel.Processor.ExecuteConsoleViewModel viewModel:
 					JobsProcessorPlugin.AppViewsController.OpenDocument(new Views.Processor.ExecuteEtlConsoleView(viewModel), viewModel);
 				break;
 		}

@@ -13,5 +13,5 @@ public class ContextModel
 	/// <summary>
 	///		Parámetros del contexto
 	/// </summary>
-	public List<ParameterModel> Parameters { get; } = new();
+	public List<ParameterModel> Parameters { get; } = [];
 }

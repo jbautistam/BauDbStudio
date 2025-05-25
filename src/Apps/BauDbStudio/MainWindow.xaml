@@ -8,14 +8,13 @@
 		xmlns:commandsLocal="clr-namespace:Bau.DbStudio.Converters"
 		xmlns:dockLayout="clr-namespace:Bau.Controls.DockLayout;assembly=DockLayout"
         mc:Ignorable="d"
-        Title="BauDbStudio" Height="450" Width="800" Loaded="Window_Loaded" Unloaded="Window_Unloaded" WindowStartupLocation="CenterScreen" WindowState="Maximized" Closing="Window_Closing">
+        Title="BauDbStudio" Height="450" Width="800" Loaded="Window_Loaded" Unloaded="Window_Unloaded" 
+		WindowStartupLocation="CenterScreen" WindowState="Maximized" Closing="Window_Closing">
 	<Window.CommandBindings>
 		<CommandBinding Command="Save" Executed="SaveCommandBinding_Executed" CanExecute="SaveCommandBinding_CanExecute"/>
 		<CommandBinding Command="Delete" Executed="DeleteCommandBinding_Executed" CanExecute="DeleteCommandBinding_CanExecute"/>
-
 		<CommandBinding Command="Search" Executed="SearchCommandBinding_Executed"/>
-		<CommandBinding Command="commandsLocal:CustomCommands.ExecuteScript" Executed="ExecuteScriptCommandBinding_Executed" CanExecute="ExecuteScriptCommandBinding_CanExecute"/>
-		<CommandBinding Command="commandsLocal:CustomCommands.NewQuery" Executed="NewQueryCommandBinding_Executed" CanExecute="NewQueryCommandBinding_CanExecute"/>
+		<CommandBinding Command="commandsLocal:CustomCommands.Execute" Executed="ExecuteCommandBinding_Executed" CanExecute="ExecuteCommandBinding_CanExecute"/>
 	</Window.CommandBindings>
 	<Window.InputBindings>
 		<KeyBinding Command="Save" Key="S" Modifiers="Ctrl"/>
@@ -135,7 +134,7 @@
 					</MenuItem.Icon>
 				</MenuItem>
 				<Separator/>
-				<MenuItem Header="E_jecutar" InputGestureText="F5" Command="{Binding Path=SolutionViewModel.ConnectionExecutionViewModel.ExecuteScripCommand}">
+				<MenuItem Header="E_jecutar" InputGestureText="F5" Command="{Binding Path=ExecuteCommand}">
 					<MenuItem.Icon>
 						<Image Width="16" Height="16" Source="/Resources/Images/ArrowRight.png" />
 					</MenuItem.Icon>
@@ -241,6 +240,10 @@
 				<Button ToolTip="Actualizar" Command="{Binding Path=RefreshCommand}" Margin="2">
 					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Refresh.png" />
 				</Button>
+				<!--<Separator Margin="2"/>
+				<Button ToolTip="Execute" Command="{Binding Path=ExecuteCommand}" Margin="2">
+					<Image Width="16" Height="16" Source="/Resources/Images/ArrowRight.png" />
+				</Button>-->
 			</ToolBar>
 		</ToolBarTray>
 

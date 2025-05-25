@@ -635,14 +635,15 @@ public partial class MainWindow : Window
 		OpenSearchWindow();
 	}
 
-	private void ExecuteScriptCommandBinding_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
+	private void ExecuteCommandBinding_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
 	{
-		ViewModel.MainController.HostPluginsController.ExecutePluginCommand("DbStudio", "ConnectionExecutionViewModel", "ExecuteScripCommand");
+		ViewModel.ExecuteCommand.Execute(null);
 	}
 
-	private void ExecuteScriptCommandBinding_CanExecute(object sender, System.Windows.Input.CanExecuteRoutedEventArgs e)
+	private void ExecuteCommandBinding_CanExecute(object sender, System.Windows.Input.CanExecuteRoutedEventArgs e)
 	{
-		e.CanExecute = ViewModel.MainController.HostPluginsController.CheckCanExecutePluginCommand("DbStudio", "ConnectionExecutionViewModel", "ExecuteScripCommand");
+		if (ViewModel is not null)
+			e.CanExecute = ViewModel.ExecuteCommand.CanExecute(null);
 	}
 
 	private void NewQueryCommandBinding_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)

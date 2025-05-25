@@ -5,7 +5,7 @@ using Bau.Libraries.JobsProcessor.Application.Models;
 namespace Bau.Libraries.JobsProcessor.Application.Repository;
 
 /// <summary>
-///		Repositorio de <see cref="Models.CommandModel"/>
+///		Repositorio de <see cref="CommandModel"/>
 /// </summary>
 internal class ConsoleRepository
 {
@@ -22,13 +22,16 @@ internal class ConsoleRepository
 	private const string TagEnvironment = "Environment";
 	private const string TagName = "Name";
 	private const string TagValue = "Value";
+	private const string TagExitCodeValidWhen = "ExitCodeValidWhen";
+	private const string TagMinimum = "Minimum";
+	private const string TagMaximum = "Maximum";
 
 	/// <summary>
 	///		Carga los datos de consola de un archivo
 	/// </summary>
 	internal ProjectModel Load(string fileName)
 	{
-		MLFile fileML = new Bau.Libraries.LibMarkupLanguage.Services.XML.XMLParser().Load(fileName);
+		MLFile fileML = new LibMarkupLanguage.Services.XML.XMLParser().Load(fileName);
 		ProjectModel project = new();
 
 			// Carga los datos del proyecto
@@ -63,11 +66,11 @@ internal class ConsoleRepository
 	/// </summary>
 	private CommandModel LoadCommand(MLNode rootML)
 	{
-		CommandModel command = new CommandModel
-										{
-											FileName = rootML.Attributes[TagFileName].Value.TrimIgnoreNull(),
-											StopWhenError = rootML.Attributes[TagStopWhenError].Value.GetBool(true)
-										};
+		CommandModel command = new()
+									{
+										FileName = rootML.Attributes[TagFileName].Value.TrimIgnoreNull(),
+										StopWhenError = rootML.Attributes[TagStopWhenError].Value.GetBool(true)
+									};
 
 			// Carga los argumentos del comando
 			foreach (MLNode nodeML in rootML.Nodes)
@@ -79,9 +82,24 @@ internal class ConsoleRepository
 					case TagEnvironment:
 							command.Arguments.Add(LoadArgument(ArgumentModel.ArgumentPosition.Environment, nodeML));
 						break;
+					case TagExitCodeValidWhen:
+							command.ValidationExitCode.Add(LoadExitCodeValid(nodeML));
+						break;
 				}
 			// Devuelve los datos del comando
 			return command;
+	}
+
+	/// <summary>
+	///		Carga los datos de un <see cref="CommandValidationExitCodeModel"/>
+	/// </summary>
+	private CommandValidationExitCodeModel LoadExitCodeValid(MLNode nodeML)
+	{
+		return new CommandValidationExitCodeModel
+							{
+								Minimum = nodeML.Attributes[TagMinimum].Value.GetInt(),
+								Maximum = nodeML.Attributes[TagMaximum].Value.GetInt()
+							};
 	}
 
 	/// <summary>

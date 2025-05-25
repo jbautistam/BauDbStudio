@@ -291,7 +291,7 @@ public class ExecuteConsoleViewModel : BaseObservableObject, PluginsStudio.ViewM
 	/// <summary>
 	///		Id de la ficha en pantalla
 	/// </summary>
-	public string TabId => GetType().ToString() + "_" + FileName;
+	public string TabId => $"{GetType().ToString()}_{FileName}";
 
 	/// <summary>
 	///		Nombre de archivo

@@ -8,11 +8,6 @@ namespace Bau.Libraries.JobsProcessor.Application.Models;
 public class CommandModel
 {
 	/// <summary>
-	///		Id del comando
-	/// </summary>
-	public string Id { get; } = Guid.NewGuid().ToString();
-
-	/// <summary>
 	///		Obtiene una cadena con los argumentos
 	/// </summary>
 	public string GetArguments(ContextModel context)
@@ -42,7 +37,7 @@ public class CommandModel
 	/// </summary>
 	public List<ArgumentModel> GetConvertedArguments(ContextModel context)
 	{
-		List<ArgumentModel> arguments = new();
+		List<ArgumentModel> arguments = [];
 
 			// Añade los argumentos
 			foreach (ArgumentModel argument in Arguments)
@@ -56,7 +51,7 @@ public class CommandModel
 	/// </summary>
 	public Dictionary<string, string> GetEnvironmentVariables(ContextModel context)
 	{
-		Dictionary<string, string> variables = new();
+		Dictionary<string, string> variables = [];
 
 			// Asigna las variables
 			foreach (ArgumentModel argument in Arguments)
@@ -67,6 +62,29 @@ public class CommandModel
 	}
 
 	/// <summary>
+	///		Comprueba si el código de salida del proceso es válido según los parámetros
+	/// </summary>
+	public bool ValidateExitCode(int exitCode)
+	{
+		bool validated = false;
+
+			// Comprueba si el código de salida está entre los códigos de acceso válidos
+			if (ValidationExitCode.Count == 0)
+				validated = true;
+			else
+				foreach (CommandValidationExitCodeModel exitCodeValid in ValidationExitCode)
+					if (!validated)
+						validated = exitCodeValid.Validate(exitCode);
+			// Devuelve el valor que indica si los códigos son válidos
+			return validated;
+	}
+
+	/// <summary>
+	///		Id del comando
+	/// </summary>
+	public string Id { get; } = Guid.NewGuid().ToString();
+
+	/// <summary>
 	///		Nombre del ejecutable
 	/// </summary>
 	public string FileName { get; set; } = default!;
@@ -74,10 +92,15 @@ public class CommandModel
 	/// <summary>
 	///		Argumentos de la consola
 	/// </summary>
-	public List<ArgumentModel> Arguments { get; } = new();
+	public List<ArgumentModel> Arguments { get; } = [];
 
 	/// <summary>
 	///		Indica si se debe detener con el primer error
 	/// </summary>
 	public bool StopWhenError { get; set; } = true;
+
+	/// <summary>
+	///		Códigos de acceso válidos
+	/// </summary>
+	public List<CommandValidationExitCodeModel> ValidationExitCode { get; } = [];
 }

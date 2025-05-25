@@ -529,7 +529,7 @@ public class TreeReportingViewModel : PluginTreeViewModel, IPaneViewModel
 		if (ReportingSolutionViewModel.SolutionViewModel.MainController.SystemController.ShowQuestion($"¿Realmente desea borrar los datos del informe {report.Id}?"))
 		{
 			// Borra el informe
-			LibHelper.Files.HelperFiles.KillFile(report.FileName);
+			LibHelper.Files.HelperFiles.KillFile(report.FileName, true);
 			report.DataWarehouse.Reports.Remove(report);
 			// Graba la solución y actualiza el árbol
 			SaveDataWarehouse(report.DataWarehouse);

@@ -21,7 +21,7 @@ public class JobsProcessorManager
 	/// </summary>
 	public List<string> Validate(ProjectModel project)
 	{
-		List<string> errors = new();
+		List<string> errors = [];
 
 			// Valida el proyecto
 			if (project == null)
@@ -118,18 +118,24 @@ public class JobsProcessorManager
 				// Ejecuta el comando
 				await processor.ExecuteAsync(cancellationToken);
 				// Devuelve el valor que indica si ha habido algún error
-				processed = processor.ExitCode >= 0;
+				processed = command.ValidateExitCode(processor.ExitCode);
 			}
 			catch (Exception exception)
 			{
 				AddLog(JobProcessEventArgs.StatusType.Error, $"Error when execute {Path.GetFileName(command.FileName)}. {exception.Message}");
 				processed = false;
 			}
-			// Elimina el proceso
+			// Elimina el proceso cuando se ha cancelado
 			if (cancellationToken.IsCancellationRequested)
+			{
+				// Indica que no se ha procesado
+				processed = false;
+				// Elimina el proceso de memoria
 				try
 				{
+					// Elimina el proceso
 					processor.Kill(true, out string error);
+					// Muestra el posible error
 					if (!string.IsNullOrWhiteSpace(error))
 						AddLog(JobProcessEventArgs.StatusType.Error, $"Error when kill process {error}");
 				}
@@ -137,6 +143,7 @@ public class JobsProcessorManager
 				{
 					AddLog(JobProcessEventArgs.StatusType.Error, $"Error when kill process {Path.GetFileName(command.FileName)}. {exception.Message}");
 				}
+			}
 			// Devuelve el valor que indica si se ha ejecutado correctamente
 			return processed;
 	}

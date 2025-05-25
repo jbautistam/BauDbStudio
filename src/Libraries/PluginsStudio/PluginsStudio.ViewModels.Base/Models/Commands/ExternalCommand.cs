@@ -21,7 +21,9 @@ public class ExternalCommand
 		/// <summary>Cortar</summary>
 		Cut,
 		/// <summary>Pegar</summary>
-		Paste
+		Paste,
+		/// <summary>Ejecución de comando</summary>
+		Execute
 	}
 
 	public ExternalCommand(ExternalCommandType type, string? name = null)

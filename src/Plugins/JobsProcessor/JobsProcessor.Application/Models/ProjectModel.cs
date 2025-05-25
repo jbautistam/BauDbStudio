@@ -8,10 +8,10 @@ public class ProjectModel
 	/// <summary>
 	///		Contextos de ejecución
 	/// </summary>
-	public List<ContextModel> Contexts { get; } = new();
+	public List<ContextModel> Contexts { get; } = [];
 
 	/// <summary>
 	///		Comandos
 	/// </summary>
-	public List<CommandModel> Commands { get; } = new();
+	public List<CommandModel> Commands { get; } = [];
 }

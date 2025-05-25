@@ -10,7 +10,7 @@ public static class CustomCommands
 	/// <summary>
 	///		Salir de la aplicación
 	/// </summary>
-	public static readonly RoutedUICommand Exit = new RoutedUICommand("Exit", "Exit", typeof(CustomCommands), 
+	public static readonly RoutedUICommand Exit = new RoutedUICommand(nameof(Exit), nameof(Exit), typeof(CustomCommands), 
 																	  new InputGestureCollection()
 																			{
 																				new KeyGesture(Key.F4, ModifierKeys.Alt)
@@ -20,30 +20,20 @@ public static class CustomCommands
 	/// <summary>
 	///		Ejecutar un script
 	/// </summary>
-	public static readonly RoutedUICommand ExecuteScript = new RoutedUICommand("Execute", "Execute", typeof(CustomCommands), 
-																			   new InputGestureCollection()
+	public static readonly RoutedUICommand Execute = new RoutedUICommand(nameof(Execute), nameof(Execute), typeof(CustomCommands), 
+																		 new InputGestureCollection()
 																						{
 																							new KeyGesture(Key.F5, ModifierKeys.None)
 																						}
-																			  );
-
-	/// <summary>
-	///		Abrir una consulta
-	/// </summary>
-	public static readonly RoutedUICommand NewQuery = new RoutedUICommand("New query", "New query", typeof(CustomCommands), 
-																		  new InputGestureCollection()
-																						{
-																							new KeyGesture(Key.Q, ModifierKeys.Control)
-																						}
 																		 );
 
 	/// <summary>
-	///		Abrir una consulta
+	///		Renombrar un archivo
 	/// </summary>
-	public static readonly RoutedUICommand Rename = new RoutedUICommand("Rename", "Rename", typeof(CustomCommands), 
-																		  new InputGestureCollection()
+	public static readonly RoutedUICommand Rename = new RoutedUICommand(nameof(Rename), nameof(Rename), typeof(CustomCommands), 
+																		new InputGestureCollection()
 																						{
 																							new KeyGesture(Key.F2)
 																						}
-																		 );
+																		);
 }

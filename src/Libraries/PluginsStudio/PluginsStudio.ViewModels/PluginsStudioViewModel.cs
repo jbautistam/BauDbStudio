@@ -40,6 +40,7 @@ public class PluginsStudioViewModel : BaseObservableObject
 		SaveAllCommand = new BaseCommand(_ => SaveAll(), _ => CanSave())
 								.AddListener(this, nameof(SelectedDetailsViewModel));
 		DeleteCommand = new BaseCommand(_ => Delete(), _ => CanDelete());
+		ExecuteCommand = new BaseCommand(_ => Execute(), _ => CanExecute());
 		RefreshCommand = new BaseCommand(_ => Refresh());
 	}
 
@@ -161,6 +162,22 @@ public class PluginsStudioViewModel : BaseObservableObject
 	private bool CanDelete() => true;
 
 	/// <summary>
+	///		Ejecuta los datos de la ventana actual
+	/// </summary>
+	private void Execute()
+	{
+		if (MainController.MainWindowController.GetActiveDetails() is Base.Interfaces.IDetailViewModel details)
+			details.Execute(new ExternalCommand(ExternalCommand.ExternalCommandType.Execute));
+		else if (MainController.MainWindowController.GetActivePane() is Base.Interfaces.IPaneViewModel pane)
+			pane.Execute(new ExternalCommand(ExternalCommand.ExternalCommandType.Execute));
+	}
+
+	/// <summary>
+	///		Comprueba si puede ejecutar
+	/// </summary>
+	private bool CanExecute() => true;
+
+	/// <summary>
 	///		Controlador principal
 	/// </summary>
 	public Controllers.IPluginsStudioController MainController { get; }
@@ -247,6 +264,11 @@ public class PluginsStudioViewModel : BaseObservableObject
 	///		Comando para borrar datos del elemento abierto
 	/// </summary>
 	public BaseCommand DeleteCommand { get; }
+
+	/// <summary>
+	///		Comando para ejecutar un script sobre plugins
+	/// </summary>
+	public BaseCommand ExecuteCommand { get; }
 
 	/// <summary>
 	///		Comando para actualizar los datos

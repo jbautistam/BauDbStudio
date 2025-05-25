@@ -49,17 +49,17 @@ public class JobsProcessorPlugin : IPlugin
 	/// <summary>
 	///		Obtiene los paneles del plugin
 	/// </summary>
-	public List<PaneModel> GetPanes() => new();
+	public List<PaneModel> GetPanes() => [];
 
 	/// <summary>
 	///		Obtiene las barras de herramientas del plugin
 	/// </summary>
-	public List<ToolBarModel> GetToolBars() => new();
+	public List<ToolBarModel> GetToolBars() => [];
 
 	/// <summary>
 	///		Obtiene los menús del plugin
 	/// </summary>
-	public List<MenuListModel> GetMenus() => new();
+	public List<MenuListModel> GetMenus() => [];
 
 	/// <summary>
 	///		Obtiene las opciones de menú asociadas a las extensiones de archivo y carpetas
@@ -71,7 +71,7 @@ public class JobsProcessorPlugin : IPlugin
 								.WithExtension("cmd.xml")
 								.WithMenu(new MenuModel
 													{
-														Header = "Ejecutar",
+														Header = "Execute",
 														Icon = GetIconName("ArrowNext.png", true),
 														Command = MainViewModel.ExecuteFileCommand
 													}
@@ -103,37 +103,6 @@ public class JobsProcessorPlugin : IPlugin
 	}
 
 	/// <summary>
-	///		Obtiene la plantilla del archivo
-	/// </summary>
-	private string GetTemplateCmdXml()
-	{
-		return @"
-<?xml version=##1.0## encoding=##utf-8## ?>
-<Project>
-	<Contexts>
-		<Context>
-			<Parameter Name=##ParameterName## Value = ##ParameterValue## />
-		</Context>
-	</Contexts>
-	<Commands>
-		<Command FileName = ##Executable##>			
-			<Argument Type=##string## Name=##Argument1## Value=##{{ParameterName}}##/>
-			<Argument Type=##int## Name=##Argument2## Value=##40##/>
-			<Environment Type=##json## Name=##Parameters##>
-				<![CDATA[
-					{
-						##Argument3##: ##{{ParameterName}}##,
-						##Argument4##: ##{{ParameterName}}##
-					}
-				]]>
-			</Environment>
-		</Command>
-	</Commands>
-</Project>"
-			.Replace("##", "\"").Trim();
-	}
-
-	/// <summary>
 	///		Obtiene un nombre de recurso
 	/// </summary>
 	private string GetIconName(string name, bool packApplication)
@@ -142,6 +111,38 @@ public class JobsProcessorPlugin : IPlugin
 			return $"pack://application:,,,/JobsProcessor.Plugin;component/Resources/{name}";
 		else
 			return $"/JobsProcessor.Plugin;component/Resources/{name}";
+	}
+
+	/// <summary>
+	///		Obtiene la plantilla del archivo
+	/// </summary>
+	private string GetTemplateCmdXml()
+	{
+		return """
+			  <?xml version="1.0" encoding="utf-8" ?>
+			  <Project>
+			    <Contexts>
+			    	<Context>
+			    		<Parameter Name="ParameterName" Value = "ParameterValue" />
+			    	</Context>
+			    </Contexts>
+			    <Commands>
+			        <Command FileName = "Executable">
+			    			<Argument Type="string" Name="Argument1" Value="{{ParameterName}}"/>
+			    			<Argument Type="int" Name="Argument2" Value="40"/>
+			    			<Environment Type="json" Name="Parameters">
+			    				<![CDATA[
+			    					{
+			    						"Argument3": "{{ParameterName}}",
+			    						"Argument4": "{{ParameterName}}"
+			    					}
+			    				]]>
+			    			</Environment>
+			    			<ExitCodeValidWhen Minimum = "0" Maximum = "5000"/>
+			    		</Command>
+			    </Commands>
+			  </Project>	  
+			  """;
 	}
 
 	/// <summary>
