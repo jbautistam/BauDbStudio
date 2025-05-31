@@ -251,9 +251,9 @@ public class TreeConnectionsViewModel : TreeSolutionBaseViewModel, IPaneViewMode
 		if (SelectedNode is NodeConnectionViewModel node)
 		{
 			string? fileName = SolutionViewModel.MainController.DialogsController.OpenDialogSave(null, 
-																								"Archivos XML (*.xml)|*.xml|Todos los archivos (*.*)|*.*", 
-																								$"{node.Connection.Name}.xml", 
-																								".xml");
+																								 "Archivos XML (*.xml)|*.xml|Todos los archivos (*.*)|*.*", 
+																								 $"{node.Connection.Name}.xml", 
+																								 ".xml");
 
 				if (!string.IsNullOrWhiteSpace(fileName))
 					try

@@ -20,7 +20,7 @@ public class SolutionModel : LibDataStructures.Base.BaseExtendedModel
 	/// <summary>
 	///		Nombre de archivo
 	/// </summary>
-	public string FileName { get; set; } = string.Empty;
+	public string FileName { get; set; } = default!;
 
 	/// <summary>
 	///		Directorio base de la solución
@@ -32,7 +32,7 @@ public class SolutionModel : LibDataStructures.Base.BaseExtendedModel
 			if (string.IsNullOrWhiteSpace(FileName))
 				return string.Empty;
 			else
-				return System.IO.Path.GetDirectoryName(FileName) ?? string.Empty;
+				return System.IO.Path.GetDirectoryName(FileName)!;
 		}
 	}
 
@@ -59,15 +59,15 @@ public class SolutionModel : LibDataStructures.Base.BaseExtendedModel
 	/// <summary>
 	///		Nombre del último archivo de parámetros para proyectos ETL seleccionado
 	/// </summary>
-	public string LastEtlParametersFileName { get; set; } = string.Empty;
+	public string? LastEtlParametersFileName { get; set; }
 
 	/// <summary>
 	///		Id de la última conexión seleccionada
 	/// </summary>
-	public string LastConnectionSelectedGlobalId { get; set; } = string.Empty;
+	public string? LastConnectionSelectedGlobalId { get; set; }
 
 	/// <summary>
 	///		Conexiones
 	/// </summary>
-	public Connections.ConnectionModelCollection Connections { get; } = new();
+	public Connections.ConnectionModelCollection Connections { get; } = [];
 }

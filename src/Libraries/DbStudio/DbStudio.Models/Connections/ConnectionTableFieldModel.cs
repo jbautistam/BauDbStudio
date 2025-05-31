@@ -43,7 +43,7 @@ public class ConnectionTableFieldModel : LibDataStructures.Base.BaseExtendedMode
 	/// <summary>
 	///		Tipo de campo (texto)
 	/// </summary>
-	public string TypeText { get; set; } = string.Empty;
+	public string TypeText { get; set; } = default!;
 
 	/// <summary>
 	///		Longitud del campo

@@ -36,7 +36,7 @@ public class ConnectionModel : LibDataStructures.Base.BaseExtendedModel
 	/// </summary>
 	public ConnectionModel Clone()
 	{
-		ConnectionModel connection = new ConnectionModel(Solution);
+		ConnectionModel connection = new(Solution);
 
 			// Asigna las propiedades
 			connection.Name = Name;
@@ -56,7 +56,7 @@ public class ConnectionModel : LibDataStructures.Base.BaseExtendedModel
 	/// <summary>
 	///		Tipo de conexión
 	/// </summary>
-	public ConnectionType Type { get; set; } = ConnectionType.Spark;
+	public ConnectionType Type { get; set; } = ConnectionType.SqlServer;
 
 	/// <summary>
 	///		Parámetros de la conexión
@@ -71,10 +71,10 @@ public class ConnectionModel : LibDataStructures.Base.BaseExtendedModel
 	/// <summary>
 	///		Tablas
 	/// </summary>
-	public List<ConnectionTableModel> Tables { get; } = new();
+	public List<ConnectionTableModel> Tables { get; } = [];
 
 	/// <summary>
 	///		Vistas
 	/// </summary>
-	public List<ConnectionTableModel> Views { get; } = new();
+	public List<ConnectionTableModel> Views { get; } = [];
 }

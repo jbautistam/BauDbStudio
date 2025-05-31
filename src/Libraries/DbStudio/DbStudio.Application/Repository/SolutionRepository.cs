@@ -119,7 +119,7 @@ internal class SolutionRepository
 	/// </summary>
 	private MLNodesCollection GetConnectionsNodes(SolutionModel solution)
 	{
-		MLNodesCollection nodesML = new();
+		MLNodesCollection nodesML = [];
 
 			// Añade los datos
 			foreach (ConnectionModel connection in solution.Connections)
@@ -151,7 +151,7 @@ internal class SolutionRepository
 	/// </summary>
 	private MLNodesCollection GetQueueConnectionsNodes(SolutionModel solution)
 	{
-		MLNodesCollection nodes = new();
+		MLNodesCollection nodes = [];
 
 			// Añade los nodos con os parámetrosde la cola
 			foreach (string connectionParameters in solution.QueueConnectionParameters.Enumerate())

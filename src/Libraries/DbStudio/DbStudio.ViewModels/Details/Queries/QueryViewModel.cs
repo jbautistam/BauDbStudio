@@ -17,7 +17,7 @@ public class QueryViewModel : BaseObservableObject
 {
 	// Constantes
 	private const string DefaultFileName = "New file.csv";
-	private const string MaskExportFiles = "Archivos CSV (*.csv)|*.csv|Archivos parquet (*.parquet)|*.parquet|Archivo SQL - INSERT (*.sql)|*.sql";
+	private const string MaskExportFiles = "CSV files (*.csv)|*.csv|Parquet files (*.parquet)|*.parquet|Archivo SQL - INSERT (*.sql)|*.sql";
 	private const string DefaultExtension = ".csv";
 	// Eventos públicos
 	public event EventHandler? ExecutionRequested;

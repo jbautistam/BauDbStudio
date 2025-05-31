@@ -45,7 +45,7 @@ public class ConnectionViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogVi
 		Server = Connection.Parameters[nameof(Server)];
 		Port = Connection.Parameters[nameof(Port)].GetInt(1433);
 		User = Connection.Parameters[nameof(User)];
-		Password = Connection.Parameters[nameof(Password)];
+		Password = Decrypt(Connection.Parameters[nameof(Password)]);
 		Database = Connection.Parameters[nameof(Database)];
 		InMemory = Connection.Parameters[nameof(InMemory)].GetBool();
 		UseIntegratedSecurity = Connection.Parameters[nameof(UseIntegratedSecurity)].GetBool();
@@ -69,7 +69,7 @@ public class ConnectionViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogVi
 		// Crea el combo
 		ComboTypes = new ComboViewModel(this);
 		// Añade los elementos
-		ComboTypes.AddItem(-1, "<Seleccione un tipo de conexión>");
+		ComboTypes.AddItem(-1, "<Connection type>");
 		ComboTypes.AddItem((int) ConnectionModel.ConnectionType.Spark, "Spark");
 		ComboTypes.AddItem((int) ConnectionModel.ConnectionType.SqlServer, "Sql server");
 		ComboTypes.AddItem((int) ConnectionModel.ConnectionType.Odbc, "Odbc");
@@ -187,7 +187,7 @@ public class ConnectionViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogVi
 			Connection.Parameters[nameof(Server)] = Server;
 			Connection.Parameters[nameof(Port)] = Port.ToString();
 			Connection.Parameters[nameof(User)] = User;
-			Connection.Parameters[nameof(Password)] = Password;
+			Connection.Parameters[nameof(Password)] = Encrypt(Password);
 			Connection.Parameters[nameof(Database)] = Database;
 			Connection.Parameters[nameof(UseIntegratedSecurity)] = UseIntegratedSecurity.ToString();
 			Connection.Parameters[nameof(MultipleActiveResultSets)] = MultipleActiveResultSets.ToString();
@@ -227,6 +227,44 @@ public class ConnectionViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogVi
 		// Si ha llegado hasta aquí es porque no se ha definido ninguna propiedad adicional
 		return string.Empty;
 	}
+
+	/// <summary>
+	///		Encripta una cadena
+	/// </summary>
+	private string Encrypt(string text)
+	{
+		return text;
+
+		// => GetCryptographyController().EncryptToBase64(text);
+	}
+
+	/// <summary>
+	///		Desencripta una cadena
+	/// </summary>
+	private string Decrypt(string text)
+	{
+		return text;
+		//// Desencripta una cadena
+		//if (!string.IsNullOrWhiteSpace(text))
+		//	try
+		//	{
+		//		return GetCryptographyController().DecryptFromBase64(text);
+		//	}
+		//	catch (Exception exception)
+		//	{
+		//		SolutionViewModel.MainController.HostController.SystemController.ShowMessage($"Error when decrypt password. {exception.Message}");
+		//	}
+		//// Si ha llegado hasta aquí es porque no ha podido desencriptar la cadena
+		//return string.Empty;
+	}
+
+	///// <summary>
+	/////		Obtiene el controlador criptográfico
+	///// </summary>
+	//private LibCryptography.Cryptography.CryptographyController GetCryptographyController()
+	//{
+	//	return new LibCryptography.Cryptography.CryptographyController(LibCryptography.Cryptography.CryptographyController.CryptographyProviders.TripleDES, "key");
+	//}
 
 	/// <summary>
 	///		ViewModel de la solución

@@ -18,7 +18,7 @@ public class ConnectionTableModel : LibDataStructures.Base.BaseExtendedModel
 	/// <summary>
 	///		Nombre del esquema
 	/// </summary>
-	public string Schema { get; set; } = string.Empty;
+	public string Schema { get; set; } = default!;
 
 	/// <summary>
 	///		Nombre completo de la tabla
@@ -42,5 +42,5 @@ public class ConnectionTableModel : LibDataStructures.Base.BaseExtendedModel
 	/// <summary>
 	///		Campos
 	/// </summary>
-	public List<ConnectionTableFieldModel> Fields { get; } = new();
+	public List<ConnectionTableFieldModel> Fields { get; } = [];
 }
