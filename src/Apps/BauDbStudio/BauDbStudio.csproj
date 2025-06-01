@@ -92,9 +92,7 @@
     <Page Remove="Views\Tools\FindView.xaml" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Markdig" Version="0.41.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.5" />
-    <PackageReference Include="Npgsql" Version="9.0.3" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="App.xaml" />
@@ -111,7 +109,7 @@
     <ProjectReference Include="..\..\..\..\..\Controls\WPF\CodeEditor\src\CodeEditor.csproj" />
     <ProjectReference Include="..\..\..\..\..\Controls\WPF\DockLayout\src\DockLayout.csproj" />
     <ProjectReference Include="..\..\..\..\..\Controls\WPF\ZoomAndPanControl\ZoomAndPanControls.csproj" />
-    <ProjectReference Include="..\..\..\..\..\Libraries\Common\LibSystem.Windows\LibSystem.Windows.csproj" />
+    <ProjectReference Include="..\..\..\..\..\Libraries\Common\LibSystem.Windows\src\LibSystem.Windows.csproj" />
     <ProjectReference Include="..\..\Libraries\DbStudio\DbStudio.Views\DbStudio.Views.csproj" />
     <ProjectReference Include="..\..\Libraries\PluginsStudio\PluginsStudio.ViewModels\PluginsStudio.ViewModels.csproj" />
     <ProjectReference Include="..\..\Plugins\AiTools\AiTools.Plugin\AiTools.Plugin.csproj" />

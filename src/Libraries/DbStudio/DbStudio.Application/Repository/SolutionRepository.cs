@@ -2,6 +2,7 @@
 using Bau.Libraries.LibMarkupLanguage;
 using Bau.Libraries.DbStudio.Models;
 using Bau.Libraries.DbStudio.Models.Connections;
+using Bau.Libraries.LibDataStructures.Collections;
 
 namespace Bau.Libraries.DbStudio.Application.Repository;
 
@@ -74,6 +75,8 @@ internal class SolutionRepository
 					foreach (MLNode childML in nodeML.Nodes)
 						if (childML.Name == TagParameter)
 							connection.Parameters.Add(childML.Attributes[TagName].Value.TrimIgnoreNull(), childML.Attributes[TagValue].Value.TrimIgnoreNull());
+					// Desencripta la contraseña
+					Decrypt(connection.Parameters);
 					// Añade los datos a la solución
 					solution.Connections.Add(connection);
 			}
@@ -139,7 +142,10 @@ internal class SolutionRepository
 
 							// Añade los atributos
 							parameterML.Attributes.Add(TagName, key);
-							parameterML.Attributes.Add(TagValue, value);
+							if (key.Equals("Password", StringComparison.CurrentCultureIgnoreCase))
+								parameterML.Attributes.Add(TagValue, Encrypt(value));
+							else
+								parameterML.Attributes.Add(TagValue, value);
 					}
 			}
 			// Devuelve la colección de nodos
@@ -160,4 +166,43 @@ internal class SolutionRepository
 			// Devuelve la colección de nodos
 			return nodes;
 	}
+
+	/// <summary>
+	///		Desencripta la contraseña
+	/// </summary>
+	private void Decrypt(NormalizedDictionary<string> parameters)
+	{
+		string? password = parameters["Password"];
+
+			if (!string.IsNullOrWhiteSpace(password))
+				try
+				{
+					parameters["Password"] = GetCryptographyController().DecryptFromBase64(password);
+				}
+				catch (Exception exception)
+				{
+					System.Diagnostics.Debug.WriteLine($"Error when decrypt password. {exception.Message}");
+				}
+	}
+
+	/// <summary>
+	///		Encripta una cadena
+	/// </summary>
+	private string Encrypt(string text) 
+	{
+		if (string.IsNullOrWhiteSpace(text))
+			return string.Empty;
+		else
+			return GetCryptographyController().EncryptToBase64(text);
+	}
+
+	/// <summary>
+	///		Obtiene el controlador criptográfico
+	/// </summary>
+	private LibCryptography.Cryptography.CryptographyController GetCryptographyController()
+	{
+		return new LibCryptography.Cryptography.CryptographyController(LibCryptography.Cryptography.CryptographyController.CryptographyProviders.TripleDES, 
+																	   "BauDbStudioConnectionKey");
+	}
+
 }
