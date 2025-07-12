@@ -25,6 +25,8 @@ internal class ProjectRepository
 	private const string TagContent = "Content";
 	private const string TagRestStep = "RestStep";
 	private const string TagSecurity = "Security";
+	private const string TagQueryString = "QueryString";
+	private const string TagTimeout = "Timeout";
 	
 	/// <summary>
 	///		Carga un proyecto del archivo
@@ -82,6 +84,7 @@ internal class ProjectRepository
 			connection.Description = rootML.Nodes[TagDescription].Value.TrimIgnoreNull();
 			connection.Url = rootML.Attributes[TagUrl].Value.TrimIgnoreNull().GetUrl();
 			connection.Authentication.Type = rootML.Attributes[TagSecurity].Value.GetEnum(AuthenticationModel.AuthenticationType.None);
+			connection.Timeout = TimeSpan.FromSeconds(rootML.Attributes[TagTimeout].Value.GetInt(120));
 			// Añade los datos
 			foreach (MLNode nodeML in rootML.Nodes)
 				switch (nodeML.Name)
@@ -113,10 +116,18 @@ internal class ProjectRepository
 			step.Url = rootML.Attributes[TagUrl].Value.TrimIgnoreNull();
 			step.Enabled = rootML.Attributes[TagEnabled].Value.GetBool();
 			step.Content = rootML.Nodes[TagContent].Value.TrimIgnoreNull();
+			step.Timeout = TimeSpan.FromSeconds(rootML.Attributes[TagTimeout].Value.GetInt(120));
 			// Añade los datos
 			foreach (MLNode nodeML in rootML.Nodes)
-				if (nodeML.Name == TagHeader)
-					step.Headers.Add(GetParameter(nodeML));
+				switch (nodeML.Name)
+				{
+					case TagHeader:
+							step.Headers.Add(GetParameter(nodeML));
+						break;
+					case TagQueryString:
+							step.QueryStrings.Add(GetParameter(nodeML));
+						break;
+				}
 			// Devuelve el paso
 			return step;
 	}
@@ -158,6 +169,7 @@ internal class ProjectRepository
 					nodeML.Nodes.Add(TagDescription, connection.Description);
 					nodeML.Attributes.Add(TagUrl, connection.Url?.ToString());
 					nodeML.Attributes.Add(TagSecurity, connection.Authentication.Type.ToString());
+					nodeML.Attributes.Add(TagTimeout, connection.Timeout.TotalSeconds);
 					// Añade las cabeceras
 					nodeML.Nodes.AddRange(GetXmlParameters(TagHeader, connection.Headers));
 					// Añade las opciones de seguridad
@@ -228,10 +240,12 @@ internal class ProjectRepository
 			rootML.Attributes.Add(TagConnection, step.ConnectionId);
 			rootML.Attributes.Add(TagMethod, step.Method.ToString());
 			rootML.Attributes.Add(TagUrl, step.Url);
+			rootML.Attributes.Add(TagTimeout, step.Timeout.TotalSeconds);
 			rootML.Attributes.Add(TagEnabled, step.Enabled);
 			rootML.Nodes.Add(TagContent, step.Content);
 			// Añade las cabeceras
 			rootML.Nodes.AddRange(GetXmlParameters(TagHeader, step.Headers));
+			rootML.Nodes.AddRange(GetXmlParameters(TagQueryString, step.QueryStrings));
 			// Devuelve el nodo
 			return rootML;
 	}

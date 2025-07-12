@@ -7,6 +7,9 @@ namespace Bau.Libraries.RestManager.Application;
 /// </summary>
 public class RestProjectManager
 {
+	// Evento de log
+	public event EventHandler<EventArguments.LogEventArgs>? Log;
+
 	/// <summary>
 	///		Carga el proyecto
 	/// </summary>
@@ -25,6 +28,32 @@ public class RestProjectManager
 	/// </summary>
 	public async Task ExecuteAsync(RestProjectModel project, CancellationToken cancellationToken)
 	{
-		await new Compiler.ProjectInterpreter(project).ExecuteAsync(cancellationToken);
+		await new Compiler.ProjectInterpreter(this, project).ExecuteAsync(cancellationToken);
+	}
+
+	/// <summary>
+	///		Ejecuta un paso de un proyecto
+	/// </summary>
+	public async Task ExecuteAsync(RestProjectModel project, RestStepModel step, CancellationToken cancellationToken)
+	{
+		await new Compiler.ProjectInterpreter(this, project).ExecuteAsync([ step ], cancellationToken);
+	}
+
+	/// <summary>
+	///		Lanza un evento informativo
+	/// </summary>
+	internal void RaiseInfo(string message) => RaiseLog(EventArguments.LogEventArgs.Status.Info, message);
+
+	/// <summary>
+	///		Lanza un evento de error
+	/// </summary>
+	internal void RaiseError(string message) => RaiseLog(EventArguments.LogEventArgs.Status.Error, message);
+
+	/// <summary>
+	///		Lanza un evento de log
+	/// </summary>
+	internal void RaiseLog(EventArguments.LogEventArgs.Status status, string message)
+	{
+		Log?.Invoke(this, new EventArguments.LogEventArgs(status, message));
 	}
 }

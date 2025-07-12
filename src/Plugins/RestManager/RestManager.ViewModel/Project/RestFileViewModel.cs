@@ -1,4 +1,5 @@
 ﻿using Bau.Libraries.BauMvvm.ViewModels;
+using Bau.Libraries.PluginsStudio.ViewModels.Base.Models.Processes;
 using Bau.Libraries.RestManager.Application.Models;
 using Bau.Libraries.RestManager.ViewModel.Project.Connections;
 
@@ -10,11 +11,12 @@ namespace Bau.Libraries.RestManager.ViewModel.Project;
 public class RestFileViewModel : BaseObservableObject, PluginsStudio.ViewModels.Base.Interfaces.IDetailViewModel
 {
 	// Variables privadas
-	private string _fileName = default!;
+	private string _fileName = default!, _log = default!;
 	private Parameters.RestParametersListViewModel? _projectVariables;
 	private Steps.RestFileListStepsViewModel _listStepsViewModel = default!;
 	private ConnectionsListViewModel _connectionsListViewModel = default!;
 	private bool _isExecuting;
+	private SynchronizationContext? _contextUi = SynchronizationContext.Current;
 
 	public RestFileViewModel(RestManagerViewModel restManagerViewModel, string fileName)
 	{ 
@@ -25,11 +27,13 @@ public class RestFileViewModel : BaseObservableObject, PluginsStudio.ViewModels.
 		ConnectionsListViewModel = new ConnectionsListViewModel(this);
 		// Asigna las propiedades
 		FileName = fileName;
-		Header = Path.GetFileNameWithoutExtension(fileName);
+		Header = Path.GetFileName(fileName);
 		// Indica que no ha habido modificaciones
 		IsUpdated = false;
 		// Asigna los comandos
-		ExecuteCommand = new BaseCommand(_ => Execute(), _ => CanExecute())
+		ExecuteCommand = new BaseCommand(async _ => await ExecuteAsync(true, CancellationToken.None), _ => CanExecute(true))
+								.AddListener(this, nameof(IsExecuting));
+		ExecuteStepCommand = new BaseCommand(async _ => await ExecuteAsync(false, CancellationToken.None), _ => CanExecute(false))
 								.AddListener(this, nameof(IsExecuting));
 		StopCommand = new BaseCommand(_ => Stop(), _ => CanStop())
 								.AddListener(this, nameof(IsExecuting));
@@ -141,27 +145,65 @@ public class RestFileViewModel : BaseObservableObject, PluginsStudio.ViewModels.
 	/// </summary>
 	public void Execute(PluginsStudio.ViewModels.Base.Models.Commands.ExternalCommand externalCommand)
 	{
-		System.Diagnostics.Debug.WriteLine($"Execute command {externalCommand.Type.ToString()} at {Header}");
+		System.Diagnostics.Debug.WriteLine("Execute by external command");
+	}
+
+	/// <summary>
+	///		Comienza la ejecución
+	/// </summary>
+	public async Task ExecuteAsync(bool allSteps, CancellationToken cancellationToken)
+	{
+		if (IsExecuting)
+			MainViewModel.ViewsController.SystemController.ShowMessage("Cannot be executed. There is another process running");
+		else
+		{
+			Controllers.Processors.RestProcessor processor = new(this, allSteps ? null : StepsViewModel.SelectedItem);
+
+				// Asigna el tratamiento de eventos
+				processor.Log += (sender, args) => TreatLog(args);
+				// Indica que se está ejecutando
+				IsExecuting = true;
+				// Encola el proceso
+				await MainViewModel.ViewsController.MainWindowController.EnqueueProcessAsync(processor, cancellationToken);
+				// Indica que ha finalizado la ejecución
+				IsExecuting = false;
+		}
+
+		// Trata el evento de log
+		void TreatLog(LogEventArgs args)
+		{
+			object state = new object();
+
+				//? _contexUi mantiene el contexto de sincronización que creó el ViewModel (que debería ser la interface de usuario)
+				//? Al generarse el log en un evento interno, no se puede añadir el texto si no está en el mismo contexto
+				// Añade el mensaje
+				if (_contextUi is not null)
+					_contextUi.Send(_ => {
+											Log += $"**{args.State.ToString().ToUpper()}:** {args.Message}" + Environment.NewLine;
+										 }, 
+										 state
+								   );
+		}
 	}
 
 	/// <summary>
 	///		Indica si se puede activar la visualización
 	/// </summary>
-	private bool CanExecute() => !string.IsNullOrWhiteSpace(FileName) && File.Exists(FileName) && !IsExecuting;
+	private bool CanExecute(bool allSteps) 
+	{
+		bool canExecute = !string.IsNullOrWhiteSpace(FileName) && File.Exists(FileName) && !IsExecuting && StepsViewModel.Items?.Count != 0;
+
+			// Si no se tienen que ejecutar todos los pasos, comprueba que se haya seleccionado algún elemento
+			if (!allSteps)
+				canExecute = StepsViewModel.SelectedItem is not null;
+			// Devuelve el valor que indica si se debe ejecutar
+			return canExecute;
+	}
 
 	/// <summary>
 	///		Indica si se puede detener la visualización
 	/// </summary>
 	private bool CanStop() => IsExecuting;
-
-	/// <summary>
-	///		Comienza la ejecución
-	/// </summary>
-	public void Execute()
-	{
-		// Indica que se está ejecutando
-		IsExecuting = true;
-	}
 
 	/// <summary>
 	///		Detiene la ejecución del archivo multimedia
@@ -183,6 +225,16 @@ public class RestFileViewModel : BaseObservableObject, PluginsStudio.ViewModels.
 	public RestProjectModel RestProject { get; private set; } = new();
 
 	/// <summary>
+	///		Cabecera de la ventana
+	/// </summary>
+	public string Header { get; private set; }
+
+	/// <summary>
+	///		Id del documento
+	/// </summary>
+	public string TabId => $"{GetType().ToString()}_{FileName}";
+
+	/// <summary>
 	///		Nombre de archivo
 	/// </summary>
 	public string FileName
@@ -201,7 +253,7 @@ public class RestFileViewModel : BaseObservableObject, PluginsStudio.ViewModels.
 	public bool IsExecuting
 	{
 		get { return _isExecuting; }
-		set { CheckProperty(ref _isExecuting, value); }
+		set { CheckProperty(ref _isExecuting, value, false); }
 	}
 
 	/// <summary>
@@ -210,7 +262,7 @@ public class RestFileViewModel : BaseObservableObject, PluginsStudio.ViewModels.
 	public Steps.RestFileListStepsViewModel StepsViewModel 
 	{ 
 		get { return _listStepsViewModel; }
-		set { CheckObject(ref _listStepsViewModel, value); }
+		set { CheckObject(ref _listStepsViewModel!, value); }
 	}
 
 	/// <summary>
@@ -219,7 +271,7 @@ public class RestFileViewModel : BaseObservableObject, PluginsStudio.ViewModels.
 	public ConnectionsListViewModel ConnectionsListViewModel
 	{
 		get { return _connectionsListViewModel; }
-		set { CheckObject(ref _connectionsListViewModel, value); }
+		set { CheckObject(ref _connectionsListViewModel!, value); }
 	}
 
 	/// <summary>
@@ -232,19 +284,23 @@ public class RestFileViewModel : BaseObservableObject, PluginsStudio.ViewModels.
 	}
 
 	/// <summary>
-	///		Cabecera de la ventana
+	///		Texto de log
 	/// </summary>
-	public string Header { get; private set; }
+	public string Log
+	{
+		get { return _log; }
+		set { CheckProperty(ref _log, value, false); }
+	}
 
 	/// <summary>
-	///		Id del documento
-	/// </summary>
-	public string TabId => $"{GetType().ToString()}_{FileName}";
-
-	/// <summary>
-	///		Comando para ejecutar el archivo multimedia
+	///		Comando para ejecutar todos los pasos del archivo
 	/// </summary>
 	public BaseCommand ExecuteCommand{ get; }
+
+	/// <summary>
+	///		Comando para ejecutar el paso seleccionado
+	/// </summary>
+	public BaseCommand ExecuteStepCommand { get; }
 
 	/// <summary>
 	///		Comando para detener la ejecución

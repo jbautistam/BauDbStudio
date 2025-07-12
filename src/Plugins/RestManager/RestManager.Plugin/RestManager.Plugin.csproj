@@ -30,6 +30,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\ArrowLast.png" />
+    <Resource Include="Resources\ArrowNext.png" />
+    <Resource Include="Resources\Cancel.png" />
     <Resource Include="Resources\Log.png" />
     <Resource Include="Resources\RestFile.png" />
   </ItemGroup>

@@ -119,30 +119,31 @@ public class JobsProcessorPlugin : IPlugin
 	private string GetTemplateCmdXml()
 	{
 		return """
-			  <?xml version="1.0" encoding="utf-8" ?>
-			  <Project>
-			    <Contexts>
-			    	<Context>
-			    		<Parameter Name="ParameterName" Value = "ParameterValue" />
-			    	</Context>
-			    </Contexts>
-			    <Commands>
-			        <Command FileName = "Executable">
-			    			<Argument Type="string" Name="Argument1" Value="{{ParameterName}}"/>
-			    			<Argument Type="int" Name="Argument2" Value="40"/>
-			    			<Environment Type="json" Name="Parameters">
-			    				<![CDATA[
-			    					{
-			    						"Argument3": "{{ParameterName}}",
-			    						"Argument4": "{{ParameterName}}"
-			    					}
-			    				]]>
-			    			</Environment>
-			    			<ExitCodeValidWhen Minimum = "0" Maximum = "5000"/>
-			    		</Command>
-			    </Commands>
-			  </Project>	  
-			  """;
+				<?xml version="1.0" encoding="utf-8" ?>
+				<Project>
+					<Contexts>
+						<Context>
+							<Import FileName="../file.xml" />
+							<Parameter Name="ParameterName" Value = "ParameterValue" />
+						</Context>
+					</Contexts>
+					<Commands>
+						<Command FileName = "Executable" StopWhenError = "false">
+							<Argument Type="string" Name="Argument1" Value="{{ParameterName}}"/>
+							<Argument Type="int" Name="Argument2" Value="40"/>
+							<Environment Type="json" Name="Parameters">
+								<![CDATA[
+									{
+										"Argument3": "{{ParameterName}}",
+										"Argument4": "{{ParameterName}}"
+									}
+								]]>
+							</Environment>
+							<ExitCodeValidWhen Minimum = "0" Maximum = "5000"/>
+						</Command>
+					</Commands>
+				</Project>	  
+				""";
 	}
 
 	/// <summary>

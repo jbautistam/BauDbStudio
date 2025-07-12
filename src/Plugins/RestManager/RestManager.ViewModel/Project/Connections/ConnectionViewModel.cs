@@ -11,11 +11,15 @@ public class ConnectionViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogVi
 	// Variables privadas
 	private string _name = default!;
 	private string? _description, _url;
+	private int _timeout;
 	private Parameters.RestParametersListViewModel? _headers;
+	private ConnectionAuthenticationViewModel _authenticationViewModel = default!;
+	private bool _isNew;
 
 	public ConnectionViewModel(ConnectionsListViewModel listConnectionsViewModel, ConnectionModel? connection)
 	{
 		// Asigna las propiedades
+		_isNew = connection is null;
 		ListConnectionsViewModel = listConnectionsViewModel;
 		Connection = connection ?? new ConnectionModel();
 		// Inicializa los datos
@@ -31,8 +35,15 @@ public class ConnectionViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogVi
 		Name = Connection.Name;
 		Description = Connection.Description;
 		Url = Connection.Url?.ToString();
+		Timeout = (int) Connection.Timeout.TotalSeconds;
+		// Asigna las cabeceras
 		Headers = new Parameters.RestParametersListViewModel(ListConnectionsViewModel.FileViewModel);
-		Headers.AddParameters(Connection.Headers);
+		if (_isNew)
+			Headers.AddParameters(Connection.GetDefaultHeaders("BauDbStudio-Rest-Agent"));
+		else
+			Headers.AddParameters(Connection.Headers);
+		// Asigna el viewModel de autenticación
+		AuthenticationViewModel = new ConnectionAuthenticationViewModel(this);
 		// Asigna el manejador de eventos
 		PropertyChanged += (sender, args) => ListConnectionsViewModel.FileViewModel.IsUpdated = true;
 	}
@@ -47,10 +58,10 @@ public class ConnectionViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogVi
 			// Comprueba los datos introducidos
 			if (string.IsNullOrWhiteSpace(Name))
 				ListConnectionsViewModel.FileViewModel.MainViewModel.ViewsController.HostController.SystemController.ShowMessage("Enter the connection name");
-			if (Url.GetUrl() is null)
+			else if (Url.GetUrl() is null)
 				ListConnectionsViewModel.FileViewModel.MainViewModel.ViewsController.HostController.SystemController.ShowMessage("Enter a valid url");
 			else
-				validated = true;
+				validated = AuthenticationViewModel.ValidateData();
 			// Devuelve el valor que indica si los datos son correctos
 			return validated;
 	}
@@ -66,9 +77,13 @@ public class ConnectionViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogVi
 			Connection.Name = Name;
 			Connection.Description = Description;
 			Connection.Url = Url?.GetUrl();
+			Connection.Timeout = TimeSpan.FromSeconds(Timeout);
+			// Añade las cabeceras
 			Connection.Headers.Clear();
 			if (Headers is not null)
 				Connection.Headers.AddRange(Headers.GetParameters());
+			// Añade los datos de autenticación
+			AuthenticationViewModel.UpdateAuthentication(Connection);
 			// Indica que está grabado
 			IsUpdated = false;
 			// Cierra la ventana
@@ -114,11 +129,29 @@ public class ConnectionViewModel : BauMvvm.ViewModels.Forms.Dialogs.BaseDialogVi
 	}
 
 	/// <summary>
+	///		Tiempo de espera (segundos)
+	/// </summary>
+	public int Timeout
+	{
+		get { return _timeout; }
+		set { CheckProperty(ref _timeout, value); }
+	}
+
+	/// <summary>
 	///		Lista de cabeceras
 	/// </summary>
 	public Parameters.RestParametersListViewModel? Headers
 	{
 		get { return _headers; }
 		set { CheckObject(ref _headers, value); }
+	}
+
+	/// <summary>
+	///		ViewModel de autentificación
+	/// </summary>
+	public ConnectionAuthenticationViewModel AuthenticationViewModel 
+	{
+		get { return _authenticationViewModel; }
+		set { CheckObject(ref _authenticationViewModel!, value); }
 	}
 }

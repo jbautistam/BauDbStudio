@@ -14,12 +14,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Compiler\RequestMessage.cs" />
     <Compile Remove="Program.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibHelper\src\LibHelper.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\Libraries\Common\LibMarkup\src\LibMarkup.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Communications\Rest\src\LibRestClient\LibRestClient.csproj" />
   </ItemGroup>
 
 </Project>

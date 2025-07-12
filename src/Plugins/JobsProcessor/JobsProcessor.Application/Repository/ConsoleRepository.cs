@@ -13,6 +13,7 @@ internal class ConsoleRepository
 	private const string TagRoot = "Project";
 	private const string TagContextsRoot = "Contexts";
 	private const string TagContext = "Context";
+	private const string TagImport = "Import";
 	private const string TagParameter = "Parameter";
 	private const string TagCommandsRoot = "Commands";
 	private const string TagCommand = "Command";
@@ -41,7 +42,7 @@ internal class ConsoleRepository
 						switch (nodeML.Name)
 						{
 							case TagContextsRoot:
-									project.Contexts.AddRange(LoadContexts(nodeML));
+									project.Contexts.AddRange(LoadContexts(nodeML, Path.GetDirectoryName(fileName)!));
 								break;
 							case TagCommandsRoot:
 									project.Commands.AddRange(LoadCommands(nodeML));	
@@ -123,39 +124,69 @@ internal class ConsoleRepository
 	/// <summary>
 	///		Carga la lista de contextos
 	/// </summary>
-	private IEnumerable<ContextModel> LoadContexts(MLNode rootML)
+	private IEnumerable<ContextModel> LoadContexts(MLNode rootML, string folder)
 	{
 		foreach (MLNode nodeML in rootML.Nodes)
 			if (nodeML.Name == TagContext)
-				yield return LoadContext(nodeML);
+				yield return LoadContext(nodeML, folder);
 	}
 
 	/// <summary>
 	///		Carga los datos de un contexto
 	/// </summary>
-	private ContextModel LoadContext(MLNode rootML)
+	private ContextModel LoadContext(MLNode rootML, string folder)
 	{
 		ContextModel context = new();
 
-			// Añade los parámetros
+			// Añade los parámetros y las importaciones
 			foreach (MLNode nodeML in rootML.Nodes)
-				if (nodeML.Name == TagParameter)
+				switch (nodeML.Name)
 				{
-					string name = nodeML.Attributes[TagName].Value.TrimIgnoreNull();
-					string value = nodeML.Attributes[TagValue].Value.TrimIgnoreNull();
-
-						// Recoge el valor del cuerpo del nodo
-						if (string.IsNullOrWhiteSpace(value) && !string.IsNullOrWhiteSpace(nodeML.Value))
-							value = nodeML.Value.TrimIgnoreNull();
-						// Añade el valor al diccionario
-						context.Parameters.Add(new ParameterModel
-														{
-															Name = name, 
-															Value = value
-														}
-												);
+					case TagImport:
+							if (!string.IsNullOrWhiteSpace(nodeML.Attributes[TagFileName].Value))
+								ImportContextFile(context, Path.Combine(folder, nodeML.Attributes[TagFileName].Value.TrimIgnoreNull()));
+						break;
+					case TagParameter:
+							context.Add(LoadParameter(nodeML));
+						break;
 				}
 			// Devuelve los datos
 			return context;
+	}
+
+	/// <summary>
+	///		Carga los datos de un parámetro de un nodo
+	/// </summary>
+	private ParameterModel LoadParameter(MLNode rootML)
+	{
+		string name = rootML.Attributes[TagName].Value.TrimIgnoreNull();
+		string value = rootML.Attributes[TagValue].Value.TrimIgnoreNull();
+
+			// Recoge el valor del cuerpo del nodo
+			if (string.IsNullOrWhiteSpace(value) && !string.IsNullOrWhiteSpace(rootML.Value))
+				value = rootML.Value.TrimIgnoreNull();
+			// Devuelve los datos del parámetro
+			return new ParameterModel
+							{
+								Name = name, 
+								Value = value
+							};
+	}
+
+	/// <summary>
+	///		Importa un archivo XML de contexto sobre el contexto actual
+	/// </summary>
+	private void ImportContextFile(ContextModel context, string fileName)
+	{
+		MLFile fileML = new LibMarkupLanguage.Services.XML.XMLParser().Load(fileName);
+
+			foreach (MLNode rootML in fileML.Nodes)
+				if (rootML.Name == TagContext)
+				{
+					ContextModel children = LoadContext(rootML, Path.GetDirectoryName(fileName)!);
+
+						// Añade los datos al contexto original
+						context.Add(children);
+				}
 	}
 }

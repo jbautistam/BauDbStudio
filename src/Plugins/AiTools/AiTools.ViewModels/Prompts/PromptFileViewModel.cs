@@ -219,7 +219,7 @@ public class PromptFileViewModel : BaseObservableObject, PluginsStudio.ViewModel
 	public PromptVersionListViewModel VersionsViewModel
 	{
 		get { return _versionsViewModel; }
-		set { CheckObject(ref _versionsViewModel, value); }
+		set { CheckObject(ref _versionsViewModel!, value); }
 	}
 
 	/// <summary>

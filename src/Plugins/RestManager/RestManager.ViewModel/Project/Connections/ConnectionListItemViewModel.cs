@@ -9,6 +9,7 @@ public class ConnectionListItemViewModel : BauMvvm.ViewModels.Forms.ControlItems
 {
 	// Variables privadas 
 	private string _name = default!, _url = default!;
+	private int _timeout;
 
 	public ConnectionListItemViewModel(ConnectionsListViewModel connectionsListViewModel, ConnectionModel connection) : base(connection.Name, connection)
 	{
@@ -26,6 +27,7 @@ public class ConnectionListItemViewModel : BauMvvm.ViewModels.Forms.ControlItems
 	{
 		Name = Connection.Name;
 		Url = Connection.Url?.ToString() ?? string.Empty;
+		Timeout = (int) Connection.Timeout.TotalSeconds;
 	}
 
 	/// <summary>
@@ -54,5 +56,14 @@ public class ConnectionListItemViewModel : BauMvvm.ViewModels.Forms.ControlItems
 	{
 		get { return _url; }
 		set { CheckProperty(ref _url, value); }
+	}
+
+	/// <summary>
+	///		Tiempo de espera
+	/// </summary>
+	public int Timeout
+	{
+		get { return _timeout; }
+		set { CheckProperty(ref _timeout, value); }
 	}
 }

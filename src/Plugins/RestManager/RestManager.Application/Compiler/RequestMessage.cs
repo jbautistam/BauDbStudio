@@ -56,7 +56,7 @@ internal class RequestMessage
 	/// <summary>
 	///		Cabeceras
 	/// </summary>
-	public ParametersCollectionModel Headers { get; } = new();
+	public ParametersCollectionModel Headers { get; } = [];
 
 	/// <summary>
 	///		Contenido

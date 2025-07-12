@@ -1,4 +1,5 @@
 ﻿using Bau.Libraries.RestManager.Application.Models;
+using Bau.Libraries.LibRestClient.Messages;
 
 namespace Bau.Libraries.RestManager.Application.Compiler;
 
@@ -7,8 +8,9 @@ namespace Bau.Libraries.RestManager.Application.Compiler;
 /// </summary>
 internal class ProjectInterpreter
 {
-	internal ProjectInterpreter(RestProjectModel project)
+	internal ProjectInterpreter(RestProjectManager manager, RestProjectModel project)
 	{
+		Manager = manager;
 		Project = project;
 	}
 
@@ -17,12 +19,20 @@ internal class ProjectInterpreter
 	/// </summary>
 	internal async Task ExecuteAsync(CancellationToken cancellationToken)
 	{
+		await ExecuteAsync(Project.Steps, cancellationToken);
+	}
+
+	/// <summary>
+	///		Ejecuta una serie de pasos
+	/// </summary>
+	internal async Task ExecuteAsync(List<BaseStepModel> steps, CancellationToken cancellationToken)
+	{
 		// Inicializa el contexto
 		Contexts.Clear();
 		foreach (ParameterModel parameter in Project.Parameters)
 			Contexts.Add(parameter.Key, parameter.Value);
 		// Ejecuta las sentencias
-		await ExecuteSentencesAsync(Project.Steps, cancellationToken);
+		await ExecuteSentencesAsync(steps, cancellationToken);
 	}
 
 	/// <summary>
@@ -47,54 +57,44 @@ internal class ProjectInterpreter
 	/// </summary>
 	private async Task ExecuteRestStepAsync(RestStepModel step, CancellationToken cancellationToken)
 	{
-		RequestMessage request = new(step);
+		RequestMessage request = new Conversors.MessageConversor().CreateRequest(step, Contexts);
 
-			// Asigna las propiedades
-			request.Method = step.Method;
-			request.Url = Parse(step.Url) ?? throw new ArgumentException("Can't find Url");
-			request.Content = Parse(step.Content);
-			request.Headers.AddRange(Parse(step.Headers));
 			// Ejecuta la solicitud
 			await ExecuteAsync(request, cancellationToken);
 	}
 
 	/// <summary>
-	///		Interpreta las cabeceras
-	/// </summary>
-	private ParametersCollectionModel Parse(ParametersCollectionModel headers)
-	{
-		ParametersCollectionModel parsed = new();
-
-			// Interpreta los datos
-			foreach (ParameterModel parameter in headers)
-				parsed.Add(parameter.Key, Parse(parameter.Value));
-			// Devuelve los datos interpretador
-			return parsed;
-	}
-
-	/// <summary>
-	///		Interpreta un valor
-	/// </summary>
-	private string? Parse(string? value)
-	{
-		// Normaliza el valor
-		value = Contexts.Parse(value);
-		// Devuelve el valor interpretado
-		return value;
-	}
-
-	/// <summary>
 	///		Ejecuta una solicitud
 	/// </summary>
-	private async Task ExecuteAsync(RequestMessage request, CancellationToken cancellationToken)
+	private async Task<bool> ExecuteAsync(RequestMessage request, CancellationToken cancellationToken)
 	{
-		// Evita las advertencias
-		await Task.Delay(1, cancellationToken);
-		// Escribe la cadena de depuración
-		Console.WriteLine(request.Debug(0));
-		// Salto
-		Console.WriteLine(new string('-', 20));
+		bool executed = false;
+
+			// Ejecuta la solicitud
+			try
+			{
+				// Log
+				Manager.RaiseInfo("Start request");
+				Manager.RaiseInfo(request.GetDebugString());
+				// Evita las advertencias
+				await Task.Delay(1, cancellationToken);
+				// Escribe la cadena de depuración
+				Manager.RaiseInfo("End request");
+				// Indica que se ha ejecutado correctamente
+				executed = true;
+			}
+			catch (Exception exception)
+			{
+				Manager.RaiseError($"Error when execute request. {exception.Message}");
+			}
+			// Devuelve el valor que indica si se ha ejecutado correctamente
+			return executed;
 	}
+
+	/// <summary>
+	///		Manager principal
+	/// </summary>
+	public RestProjectManager Manager { get; }
 
 	/// <summary>
 	///		Proyecto en ejecución

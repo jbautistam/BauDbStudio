@@ -218,7 +218,7 @@ public class PromptVersionViewModel : BauMvvm.ViewModels.BaseObservableObject
 	public ComboViewModel ComboGenerators
 	{
 		get { return _comboGenerators; }
-		set { CheckObject(ref _comboGenerators, value); }
+		set { CheckObject(ref _comboGenerators!, value); }
 	}
 
 	/// <summary>
@@ -227,7 +227,7 @@ public class PromptVersionViewModel : BauMvvm.ViewModels.BaseObservableObject
 	public ComboViewModel ComboModels
 	{
 		get { return _comboModels; }
-		set { CheckObject(ref _comboModels, value); }
+		set { CheckObject(ref _comboModels!, value); }
 	}
 
 	/// <summary>
@@ -236,7 +236,7 @@ public class PromptVersionViewModel : BauMvvm.ViewModels.BaseObservableObject
 	public ComboViewModel ComboSampler
 	{
 		get { return _comboSampler; }
-		set { CheckObject(ref _comboSampler, value); }
+		set { CheckObject(ref _comboSampler!, value); }
 	}
 
 	/// <summary>
@@ -245,7 +245,7 @@ public class PromptVersionViewModel : BauMvvm.ViewModels.BaseObservableObject
 	public ControlListViewModel ListViewPostProcessing
 	{
 		get { return _listPostProcessing; }
-		set { CheckObject(ref _listPostProcessing, value); }
+		set { CheckObject(ref _listPostProcessing!, value); }
 	}
 
 	/// <summary>
@@ -375,6 +375,6 @@ public class PromptVersionViewModel : BauMvvm.ViewModels.BaseObservableObject
 	public Images.ImagesGeneratedListViewModel ImagesViewModel
 	{
 		get { return _imagesViewModel; }
-		set { CheckObject(ref _imagesViewModel, value); }
+		set { CheckObject(ref _imagesViewModel!, value); }
 	}
 }

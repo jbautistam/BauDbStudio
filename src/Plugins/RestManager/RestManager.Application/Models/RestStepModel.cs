@@ -44,9 +44,19 @@ public class RestStepModel : BaseStepModel
 	public string Url { get; set; } = default!;
 
 	/// <summary>
+	///		Tiempo de espera
+	/// </summary>
+	public TimeSpan Timeout { get; set; } = TimeSpan.FromMinutes(2);
+
+	/// <summary>
 	///		Cabeceras
 	/// </summary>
 	public ParametersCollectionModel Headers { get; } = [];
+
+	/// <summary>
+	///		Cabeceras
+	/// </summary>
+	public ParametersCollectionModel QueryStrings { get; } = [];
 
 	/// <summary>
 	///		Contenido

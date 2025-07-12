@@ -1,4 +1,5 @@
 ﻿<UserControl x:Class="Bau.Libraries.RestManager.Plugin.Views.RestFileStepView"
+			xmlns:Editors="clr-namespace:Bau.Controls.Editors;assembly=BauControls" 
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -11,9 +12,6 @@
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="*"/>
-			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
@@ -21,29 +19,42 @@
 			<ColumnDefinition Width="*"/>
 			<ColumnDefinition Width="Auto"/>
 			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="Auto"/>
+			<ColumnDefinition Width="Auto"/>
+			<ColumnDefinition Width="Auto"/>
 		</Grid.ColumnDefinitions>
 
 		<Label Content="Name:" Grid.Row="0" Grid.Column="0"/>
 		<TextBox Grid.Row="0" Grid.Column="1" Margin="5" VerticalAlignment="Center" 
 				Text="{Binding Path=Name,UpdateSourceTrigger=PropertyChanged}"/>
 		<Label Content="Connection:" Grid.Row="0" Grid.Column="2"/>
-		<ComboBox Grid.Row="0" Grid.Column="3" Margin="5" Width="200"
+		<ComboBox Grid.Row="0" Grid.Column="3" Margin="5" 
 						  ItemsSource="{Binding ComboConnections.Items}" DisplayMemberPath="Text" 
 						  SelectedItem="{Binding ComboConnections.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+		<Label Grid.Row="0" Grid.Column="4" Margin="5" Content="Timeout:"/>
+		<Editors:IntegerUpDown Grid.Row="0" Grid.Column="5" Margin="5" MinWidth="100" Width="100" HorizontalAlignment="Left"
+					Value="{Binding Path=Timeout}"/>
+		<Label Grid.Row="0" Grid.Column="6" Margin="5" Content="seconds"/>
+
 		<Label Content="Method:" Grid.Row="1" Grid.Column="0"/>
 		<ComboBox Grid.Row="1" Grid.Column="1" Margin="5"
 						  ItemsSource="{Binding ComboMethods.Items}" DisplayMemberPath="Text" 
 						  SelectedItem="{Binding ComboMethods.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 		<Label Content="Endpoint:" Grid.Row="1" Grid.Column="2"/>
-		<TextBox Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="3" Margin="5" VerticalAlignment="Center" 
+		<TextBox Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="4" Margin="5" VerticalAlignment="Center" 
 				Text="{Binding Path=Url,UpdateSourceTrigger=PropertyChanged}"/>
 
-		<Label Content="Headers" Grid.Row="2" Grid.Column="0"/>
-		<local:ParametersListView Margin="2" x:Name="lstHeaders" 
-					Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4"
-					Parameters="{Binding Path=Headers, UpdateSourceTrigger=PropertyChanged}" />
-		<Label Content="Body" Grid.Row="4" Grid.Column="0"/>
-		<Editor:ctlEditor Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="4"
-					x:Name="udtBody" Margin="5" BorderBrush="Black" BorderThickness="1"/>
+		<TabControl Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="7" Margin="5">
+			<TabItem Header="Headers">
+				<local:ParametersListView Margin="2" x:Name="lstHeaders" Parameters="{Binding Path=Headers, UpdateSourceTrigger=PropertyChanged}" />
+			</TabItem>
+			<TabItem Header="Query strings">
+				<local:ParametersListView Margin="2" x:Name="lstQueryStrings" Parameters="{Binding Path=QueryStrings, UpdateSourceTrigger=PropertyChanged}" />
+			</TabItem>
+			<TabItem Header="Body">
+				<Editor:ctlEditor Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="4"
+							x:Name="udtBody" Margin="5" BorderBrush="Black" BorderThickness="1"/>
+			</TabItem>
+		</TabControl>
 	</Grid>
 </UserControl>

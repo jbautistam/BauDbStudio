@@ -1,4 +1,4 @@
-﻿<Window
+﻿<Window xmlns:Editors="clr-namespace:Bau.Controls.Editors;assembly=BauControls" 
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -10,7 +10,6 @@
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
@@ -20,26 +19,64 @@
 					<RowDefinition Height="Auto"/>
 					<RowDefinition Height="Auto"/>
 					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
 				</Grid.RowDefinitions>
 				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto"/>
 					<ColumnDefinition Width="Auto"/>
 					<ColumnDefinition Width="*"/>
 				</Grid.ColumnDefinitions>
 				<Label Grid.Row="0" Grid.Column="0" Margin="5" Content="Name:"/>
-				<TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=Name,UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+				<TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Path=Name,UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
 				<Label Grid.Row="1" Grid.Column="0" Margin="5" Content="Description:"/>
-				<TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource MultilineTextBox}"
+				<TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource MultilineTextBox}"
 						Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"/>
 				<Label Grid.Row="2" Grid.Column="0" Margin="5" Content="Url:"/>
-				<TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Path=Url,UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+				<TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Path=Url,UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+				<Label Grid.Row="3" Grid.Column="0" Margin="5" Content="Timeout:"/>
+				<Editors:IntegerUpDown Grid.Row="3" Grid.Column="1" Margin="5" MinWidth="100" Width="100" HorizontalAlignment="Left"
+					Value="{Binding Path=Timeout}"/>
+				<Label Grid.Row="3" Grid.Column="2" Margin="5" Content="seconds"/>
 			</Grid>
 		</GroupBox>
-		<GroupBox Grid.Row="1" Grid.Column="0" Header="Security">
-		</GroupBox>
-		<GroupBox Grid.Row="2" Grid.Column="0" Header="Headers">
-			<local:ParametersListView x:Name="lstHeaders" Parameters="{Binding Path=Headers}"></local:ParametersListView>
-		</GroupBox>
-		<StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
+		<TabControl Grid.Row="1" Grid.Column="0" Margin="5">
+			<TabItem Header="Headers">
+				<local:ParametersListView x:Name="lstHeaders" Parameters="{Binding Path=Headers}"></local:ParametersListView>
+			</TabItem>
+			<TabItem Header="Security">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition Width="*"/>
+					</Grid.ColumnDefinitions>
+					<Label Grid.Row="0" Grid.Column="0" Margin="5" Content="Mode:"/>
+					<ComboBox Grid.Row="0" Grid.Column="1" Margin="5"
+						  ItemsSource="{Binding Path=AuthenticationViewModel.ComboTypes.Items}" DisplayMemberPath="Text" 
+						  SelectedItem="{Binding Path=AuthenticationViewModel.ComboTypes.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+					<Label Grid.Row="1" Grid.Column="0" Margin="5" Content="Url authoritation:"/>
+					<TextBox Grid.Row="1" Grid.Column="1" Margin="5" 
+						Text="{Binding Path=AuthenticationViewModel.UrlAuthorization,UpdateSourceTrigger=PropertyChanged}"/>
+					<Label Grid.Row="2" Grid.Column="0" Margin="5" Content="User:"/>
+					<TextBox Grid.Row="2" Grid.Column="1" Margin="5" 
+						Text="{Binding Path=AuthenticationViewModel.User,UpdateSourceTrigger=PropertyChanged}"/>
+					<Label Grid.Row="3" Grid.Column="0" Margin="5" Content="Password:"/>
+					<TextBox Grid.Row="3" Grid.Column="1" Margin="5" 
+						Text="{Binding Path=AuthenticationViewModel.Password,UpdateSourceTrigger=PropertyChanged}"/>
+					<Label Grid.Row="4" Grid.Column="0" Margin="5" Content="Bearer:"/>
+					<TextBox Grid.Row="4" Grid.Column="1" Margin="5" 
+						Text="{Binding Path=AuthenticationViewModel.Bearer,UpdateSourceTrigger=PropertyChanged}"/>
+
+				</Grid>
+			</TabItem>
+		</TabControl>
+		<StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
 			<Button Margin="2" Padding="5" IsDefault="True" Command="{Binding SaveCommand}">
 				<StackPanel Orientation="Horizontal">
 					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Accept.png"/>

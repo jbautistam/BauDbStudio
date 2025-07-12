@@ -11,8 +11,9 @@ public class RestFileStepItemViewModel : BaseObservableObject
 {
 	// Variables privadas
 	private string _name = default!, _url = default!, _content = default!;
+	private int _timeout;
 	private ComboViewModel? _comboConnections, _comboMethods;
-	private Parameters.RestParametersListViewModel? _headers;
+	private Parameters.RestParametersListViewModel? _headers, _queryStrings;
 
 	public RestFileStepItemViewModel(RestFileListStepsViewModel listStepsViewModel, RestStepModel restStep)
 	{
@@ -36,9 +37,14 @@ public class RestFileStepItemViewModel : BaseObservableObject
 		ComboConnections.SelectedTag = GetConnection(RestStep.ConnectionId);
 		Name = RestStep.Name;
 		Url = RestStep.Url;
+		Timeout = (int) RestStep.Timeout.TotalSeconds;
 		Content = RestStep.Content ?? string.Empty;
+		// Cabeceras
 		Headers = new Parameters.RestParametersListViewModel(ListStepsViewModel.FileViewModel);
 		Headers.AddParameters(RestStep.Headers);
+		// Query strings
+		QueryStrings = new Parameters.RestParametersListViewModel(ListStepsViewModel.FileViewModel);
+		QueryStrings.AddParameters(RestStep.QueryStrings);
 		// Asigna el manejador de eventos
 		PropertyChanged += (sender, args) => ListStepsViewModel.FileViewModel.IsUpdated = true;
 		ComboMethods.PropertyChanged += (sender, args) => ListStepsViewModel.FileViewModel.IsUpdated = true;
@@ -110,12 +116,18 @@ public class RestFileStepItemViewModel : BaseObservableObject
 				step.Method = (RestStepModel.RestMethod) (ComboMethods.SelectedId ?? 0);
 			step.Name = Name;
 			step.Url = Url;
+			step.Timeout = TimeSpan.FromSeconds(Timeout);
 			step.Content = Content;
 			// Añade las cabeceras
 			step.Headers.Clear();
 			if (Headers is not null)
 				foreach (Parameters.RestParametersListItemViewModel header in Headers.Items)
 					step.Headers.Add(new ParameterModel(header.Key, header.Value));
+			// Añade las query strings
+			step.QueryStrings.Clear();
+			if (QueryStrings is not null)
+				foreach (Parameters.RestParametersListItemViewModel queryString in QueryStrings.Items)
+					step.QueryStrings.Add(new ParameterModel(queryString.Key, queryString.Value));
 			// Devuelve el paso
 			return step;
 	}
@@ -167,6 +179,15 @@ public class RestFileStepItemViewModel : BaseObservableObject
 	}
 
 	/// <summary>
+	///		Tiempo de espera
+	/// </summary>
+	public int Timeout
+	{
+		get { return _timeout; }
+		set { CheckProperty(ref _timeout, value); }
+	}
+
+	/// <summary>
 	///		Contenido
 	/// </summary>
 	public string Content
@@ -182,5 +203,14 @@ public class RestFileStepItemViewModel : BaseObservableObject
 	{
 		get { return _headers; }
 		set { CheckObject(ref _headers, value); }
+	}
+
+	/// <summary>
+	///		Lista de query strings
+	/// </summary>
+	public Parameters.RestParametersListViewModel? QueryStrings
+	{
+		get { return _queryStrings; }
+		set { CheckObject(ref _queryStrings, value); }
 	}
 }

@@ -28,9 +28,18 @@ public partial class RestFileStepView : UserControl
 	private void InitEditor()
 	{
 		// Asigna la configuración al editor
-		udtBody.EditorFontName = "";
-		udtBody.EditorFontSize = 12;
-		udtBody.ShowLinesNumber = true;
+		if (Step is not null)
+		{
+			udtBody.EditorFontName = Step.ListStepsViewModel.FileViewModel.MainViewModel.ViewsController.PluginController.ConfigurationController.EditorFontName;
+			udtBody.EditorFontSize = Step.ListStepsViewModel.FileViewModel.MainViewModel.ViewsController.PluginController.ConfigurationController.EditorFontSize;
+			udtBody.ShowLinesNumber = Step.ListStepsViewModel.FileViewModel.MainViewModel.ViewsController.PluginController.ConfigurationController.EditorShowLinesNumber;
+		}
+		else
+		{
+			udtBody.EditorFontName = string.Empty;
+			udtBody.EditorFontSize = 10;
+			udtBody.ShowLinesNumber = true;
+		}
 		// Asigna el nombre de archivo
 		udtBody.Text = Step?.Content ?? string.Empty;
 		udtBody.ChangeHighLightByExtension(".json");
@@ -59,6 +68,7 @@ public partial class RestFileStepView : UserControl
 			DataContext = value;
 			lstHeaders.Parameters = value?.Headers;
 			udtBody.Text = value?.Content ?? string.Empty;
+			InitEditor();
 		}
 	}
 }
