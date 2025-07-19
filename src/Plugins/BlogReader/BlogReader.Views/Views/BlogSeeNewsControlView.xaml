@@ -7,6 +7,7 @@
 						 mc:Ignorable="d" 
 						 xmlns:Converter="clr-namespace:Bau.Libraries.BauMvvm.Views.Converters;assembly=BauMvvm.Views"
 						 x:Class="Bau.Libraries.BlogReader.Views.Views.BlogSeeNewsControlView"
+						 xmlns:Graphical="clr-namespace:Bau.Controls.Graphical;assembly=BauControls"  
 						 d:DesignHeight="506">
 	<UserControl.CommandBindings>
 		<CommandBinding Command="ApplicationCommands.Delete" CanExecute="DeleteCommandBinding_CanExecute" Executed="DeleteCommandBinding_Executed" />
@@ -66,23 +67,23 @@
 					<ContextMenu x:Key="mnuEntries">
 						<MenuItem Header="_Marcar como leído" Command="{Binding MarkAsReadCommand}">
 							<MenuItem.Icon>
-								<Image Source="/BlogReader.Views;component/Resources/EntryRead.png" Width="16" Height="16"/>
+								<Graphical:ImageWithDisable Source="/BlogReader.Views;component/Resources/EntryRead.png" Width="16" Height="16"/>
 							</MenuItem.Icon>
 						</MenuItem>
 						<MenuItem Header="_Marcar como no leído" Command="{Binding MarkAsNotReadCommand}">
 							<MenuItem.Icon>
-								<Image Source="/BlogReader.Views;component/Resources/EntryNotRead.png" Width="16" Height="16"/>
+								<Graphical:ImageWithDisable Source="/BlogReader.Views;component/Resources/EntryNotRead.png" Width="16" Height="16"/>
 							</MenuItem.Icon>
 						</MenuItem>
 						<MenuItem Header="_Marcar como interesante" Command="{Binding MarkAsInterestingCommand}">
 							<MenuItem.Icon>
-								<Image Source="/BlogReader.Views;component/Resources/EntryInteresting.png" Width="16" Height="16"/>
+								<Graphical:ImageWithDisable Source="/BlogReader.Views;component/Resources/EntryInteresting.png" Width="16" Height="16"/>
 							</MenuItem.Icon>
 						</MenuItem>
 						<Separator />
 						<MenuItem Header="_Borrar" Command="{Binding DeleteCommand}">
 							<MenuItem.Icon>
-								<Image Source="/BauControls;component/Themes/Images/Delete.png" Width="16" Height="16"/>
+								<Graphical:ImageWithDisable Source="/BauControls;component/Themes/Images/Delete.png" Width="16" Height="16"/>
 							</MenuItem.Icon>
 						</MenuItem>
 					</ContextMenu>

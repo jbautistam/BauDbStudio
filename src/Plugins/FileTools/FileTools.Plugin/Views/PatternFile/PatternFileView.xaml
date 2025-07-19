@@ -4,6 +4,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+			 xmlns:Graphical="clr-namespace:Bau.Controls.Graphical;assembly=BauControls"  
 			 Loaded="UserControl_Loaded"
              mc:Ignorable="d" d:DesignHeight="600" d:DesignWidth="600" >
 	<Grid>
@@ -20,11 +21,11 @@
 		<ToolBarTray Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
 			<ToolBar HorizontalAlignment="Stretch" >
 				<Button ToolTip="Ejecutar" Click="cmdExecute_Click">
-					<Image Width="16" Height="16" Source="/FileTools.Plugin;component/Resources/Execute.png" />
+					<Graphical:ImageWithDisable Width="16" Height="16" Source="/FileTools.Plugin;component/Resources/Execute.png" />
 				</Button>
 				<Separator/>
 				<Button ToolTip="Borrar" Click="cmdDelete_Click">
-					<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
+					<Graphical:ImageWithDisable Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
 				</Button>
 			</ToolBar>
 			<ToolBar HorizontalAlignment="Stretch" >

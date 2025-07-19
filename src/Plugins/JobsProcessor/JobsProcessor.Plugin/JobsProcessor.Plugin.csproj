@@ -39,6 +39,7 @@
     <Resource Include="Resources\ArrowNext.png" />
     <Resource Include="Resources\Cancel.png" />
     <Resource Include="Resources\File.png" />
+    <Resource Include="Resources\FileContext.png" />
     <Resource Include="Resources\FileBat.png" />
     <Resource Include="Resources\FolderNode.png" />
     <Resource Include="Resources\Log.png" />

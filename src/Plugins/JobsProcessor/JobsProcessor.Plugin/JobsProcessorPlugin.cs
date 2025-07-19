@@ -10,6 +10,9 @@ namespace Bau.Libraries.JobsProcessor.Plugin;
 /// </summary>
 public class JobsProcessorPlugin : IPlugin
 { 
+	// Constantes privadas
+	private const string CommandFileExtension = ".cmd.xml";
+
 	/// <summary>
 	///		Inicializa el manager de vistas del procesador
 	/// </summary>
@@ -68,7 +71,7 @@ public class JobsProcessorPlugin : IPlugin
 	{
 		return new PluginsStudio.ViewModels.Base.Models.Builders.FileOptionsBuilder()
 							.WithOption()
-								.WithExtension("cmd.xml")
+								.WithExtension(CommandFileExtension)
 								.WithMenu(new MenuModel
 													{
 														Header = "Execute",
@@ -86,18 +89,19 @@ public class JobsProcessorPlugin : IPlugin
 	{
 		return new()
 				{
-					GetIcon(".cmd.xml", "FileBat.png")
+					GetIcon("Console commands file", CommandFileExtension, "FileBat.png", GetTemplateCmdXml()),
+					GetIcon("Console context file", ".context.xml", "FileContext.png", GetTemplateContextXml())
 				};
 
 		// Obtiene el icono asociado a la extensión
-		FileAssignedModel GetIcon(string extension, string name)
+		FileAssignedModel GetIcon(string name, string extension, string icon, string template)
 		{
 			return new FileAssignedModel
 							{
-								Name = "Context command file",
+								Name = name,
 								FileExtension = extension,
-								Icon = GetIconName(name, false),
-								Template = GetTemplateCmdXml()
+								Icon = GetIconName(icon, false),
+								Template = template
 							};
 		}
 	}
@@ -143,6 +147,21 @@ public class JobsProcessorPlugin : IPlugin
 						</Command>
 					</Commands>
 				</Project>	  
+				""";
+	}
+
+	/// <summary>
+	///		Obtiene la plantilla del archivo de contexto
+	/// </summary>
+	private string GetTemplateContextXml()
+	{
+		return """
+				<?xml version="1.0" encoding="utf-8" ?>
+				<Contexts>
+					<Context>
+						<Parameter Name="ParameterName" Value = "ParameterValue" />
+					</Context>
+				</Contexts>
 				""";
 	}
 

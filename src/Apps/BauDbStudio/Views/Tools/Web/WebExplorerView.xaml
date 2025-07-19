@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:Bau.DbStudio.Views.Tools.Web"
 			 xmlns:bc="clr-namespace:Bau.Controls.WebExplorers;assembly=BauControls"
 			 x:Class="Bau.DbStudio.Views.Tools.Web.WebExplorerView"
+			 xmlns:Graphical="clr-namespace:Bau.Controls.Graphical;assembly=BauControls"  
              mc:Ignorable="d" Loaded="UserControl_Loaded"
              d:DesignHeight="450" d:DesignWidth="800">
 	<Grid>
@@ -16,24 +17,24 @@
 		<ToolBarTray Grid.Column="0" Grid.Row="0">
 			<ToolBar BandIndex="1">
 				<Button ToolTip="Primero" Command="{Binding Path=GoFirstCommand}" Margin="2">
-					<Image Width="16" Height="16" Source="/Resources/Images/ArrowFirst.png" />
+					<Graphical:ImageWithDisable Width="16" Height="16" Source="/Resources/Images/ArrowFirst.png" />
 				</Button>
 				<Button ToolTip="Anterior" Command="{Binding Path=GoPreviousCommand}" Margin="2">
-					<Image Width="16" Height="16" Source="/Resources/Images/ArrowLeft.png" />
+					<Graphical:ImageWithDisable Width="16" Height="16" Source="/Resources/Images/ArrowLeft.png" />
 				</Button>
 				<TextBox Text="{Binding Path=Url,UpdateSourceTrigger=LostFocus}" MinWidth="400"/>
 				<Button ToolTip="Siguiente" Command="{Binding Path=GoNextCommand}" Margin="2">
-					<Image Width="16" Height="16" Source="/Resources/Images/ArrowRight.png" />
+					<Graphical:ImageWithDisable Width="16" Height="16" Source="/Resources/Images/ArrowRight.png" />
 				</Button>
 				<Button ToolTip="Último" Command="{Binding Path=GoLastCommand}" Margin="2">
-					<Image Width="16" Height="16" Source="/Resources/Images/ArrowLast.png" />
+					<Graphical:ImageWithDisable Width="16" Height="16" Source="/Resources/Images/ArrowLast.png" />
 				</Button>
 				<Separator/>
 				<Button ToolTip="Actualizar" Command="{Binding Path=RefreshCommand}" Margin="2">
-					<Image Width="16" Height="16" Source="/Resources/Images/Refresh.png" />
+					<Graphical:ImageWithDisable Width="16" Height="16" Source="/Resources/Images/Refresh.png" />
 				</Button>
 				<Button ToolTip="Abrir en el explorador" Command="{Binding Path=OpenExplorerCommand}" Margin="2">
-					<Image Width="16" Height="16" Source="/Resources/Images/SeeWindow.png" />
+					<Graphical:ImageWithDisable Width="16" Height="16" Source="/Resources/Images/SeeWindow.png" />
 				</Button>
 			</ToolBar>
 		</ToolBarTray>

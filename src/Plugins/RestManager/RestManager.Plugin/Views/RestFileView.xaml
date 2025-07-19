@@ -4,6 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bau.Libraries.RestManager.Plugin.Views"
 		xmlns:Editor="clr-namespace:Bau.Controls.CodeEditor;assembly=CodeEditor"
+		xmlns:Graphical="clr-namespace:Bau.Controls.Graphical;assembly=BauControls"  
 		x:Class="Bau.Libraries.RestManager.Plugin.Views.RestFileView"
         mc:Ignorable="d" 
 		d:DesignHeight="250" d:DesignWidth="800" >
@@ -29,24 +30,23 @@
 					</Grid.RowDefinitions>
 					<ToolBar Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
 						<Button ToolTip="New" Command="{Binding Path=StepsViewModel.NewCommand}" Margin="2">
-							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
+							<Graphical:ImageWithDisable Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
 						</Button>
 						<Button ToolTip="Update" Command="{Binding Path=StepsViewModel.UpdateCommand}" Margin="2">
-							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Properties.gif" />
+							<Graphical:ImageWithDisable Width="16" Height="16" Source="/BauControls;component/Themes/Images/Properties.gif" />
 						</Button>
 						<Button ToolTip="Delete" Command="{Binding Path=StepsViewModel.DeleteCommand}" Margin="2">
-							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
+							<Graphical:ImageWithDisable Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
 						</Button>
 						<Separator/>
 						<Button ToolTip="Execute" Command="{Binding Path=ExecuteCommand}" Margin="2">
-							<Image Width="16" Height="16" Source="/RestManager.Plugin;component/Resources/ArrowNext.png" />
+							<Graphical:ImageWithDisable Width="16" Height="16" Source="/RestManager.Plugin;component/Resources/ArrowNext.png" />
 						</Button>
 						<Button ToolTip="Execute step" Command="{Binding Path=ExecuteStepCommand}" Margin="2">
-							<Image Width="16" Height="16" Source="/RestManager.Plugin;component/Resources/ArrowLast.png" />
+							<Graphical:ImageWithDisable Width="16" Height="16" Source="/RestManager.Plugin;component/Resources/ArrowLast.png" />
 						</Button>
-
 						<Button ToolTip="Cancel" Command="{Binding Path=CancelCommand}" Margin="2">
-							<Image Width="16" Height="16" Source="/RestManager.Plugin;component/Resources/Cancel.png" />
+							<Graphical:ImageWithDisable Width="16" Height="16" Source="/RestManager.Plugin;component/Resources/Cancel.png" />
 						</Button>
 					</ToolBar>
 
@@ -110,13 +110,13 @@
 							</Grid.RowDefinitions>
 							<ToolBar Grid.Row="0">
 								<Button ToolTip="New" Command="{Binding Path=ConnectionsListViewModel.NewItemCommand}" Margin="2">
-									<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
+									<Graphical:ImageWithDisable Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
 								</Button>
 								<Button ToolTip="Update" Command="{Binding Path=ConnectionsListViewModel.OpenItemCommand}" Margin="2">
-									<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Properties.gif" />
+									<Graphical:ImageWithDisable Width="16" Height="16" Source="/BauControls;component/Themes/Images/Properties.gif" />
 								</Button>
 								<Button ToolTip="Delete" Command="{Binding Path=ConnectionsListViewModel.DeleteItemCommand}" Margin="2">
-									<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
+									<Graphical:ImageWithDisable Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
 								</Button>
 							</ToolBar>
 							<ListView Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Path=ConnectionsListViewModel.Items}" 

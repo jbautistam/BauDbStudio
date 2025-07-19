@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Bau.Libraries.ToDoManager.Plugin.Views.Appointments"
+			 xmlns:Graphical="clr-namespace:Bau.Controls.Graphical;assembly=BauControls"  
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 	<Grid>
@@ -15,13 +16,13 @@
 		<Calendar Grid.Row="0" Grid.Column="0" DisplayDateEnd="2023-12-31" DisplayDateStart="2021-01-01" />
 		<ToolBar Grid.Row="1" Grid.Column="0">
 			<Button ToolTip="New appointment" Command="{Binding Path=AppointmentsList.NewAppointmentCommand}" Margin="2">
-				<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
+				<Graphical:ImageWithDisable Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
 			</Button>
 			<Button ToolTip="Update appointment" Command="{Binding Path=AppointmentsList.UpdateAppointmentCommand}" Margin="2">
-				<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Properties.gif" />
+				<Graphical:ImageWithDisable Width="16" Height="16" Source="/BauControls;component/Themes/Images/Properties.gif" />
 			</Button>
 			<Button ToolTip="Delete appointment" Command="{Binding Path=AppointmentsList.DeleteAppointmentCommand}" Margin="2">
-				<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
+				<Graphical:ImageWithDisable Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
 			</Button>
 		</ToolBar>
 		<ListView x:Name="lswAppointments" Grid.Column="0" Grid.Row="2"

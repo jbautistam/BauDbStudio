@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Bau.Libraries.ToDoManager.Plugin.Views.TimeManagement"
+			 xmlns:Graphical="clr-namespace:Bau.Controls.Graphical;assembly=BauControls"  
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 	<Grid>
@@ -20,27 +21,27 @@
 
 		<ToolBar Grid.Row="1">
 			<Button ToolTip="New" Command="{Binding Path=TimeListViewModel.NewCommand}" Margin="2">
-				<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
+				<Graphical:ImageWithDisable Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
 			</Button>
 			<Button ToolTip="Update" Command="{Binding Path=TimeListViewModel.UpdateCommand}" Margin="2">
-				<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Properties.gif" />
+				<Graphical:ImageWithDisable Width="16" Height="16" Source="/BauControls;component/Themes/Images/Properties.gif" />
 			</Button>
 			<Button ToolTip="Delete" Command="{Binding Path=TimeListViewModel.DeleteCommand}" Margin="2">
-				<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
+				<Graphical:ImageWithDisable Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
 			</Button>
 			<Separator/>
 			<Button ToolTip="Start" Command="{Binding Path=TimeListViewModel.StartCommand}" Margin="2">
-				<Image Width="16" Height="16" Source="/ToDoManager.Plugin;component/Resources/Start.png" />
+				<Graphical:ImageWithDisable Width="16" Height="16" Source="/ToDoManager.Plugin;component/Resources/Start.png" />
 			</Button>
 			<Separator/>
 			<Button ToolTip="List tasks" Command="{Binding Path=ListTasksCommand}" Margin="2" HorizontalAlignment="Right">
-				<Image Width="16" Height="16" Source="/ToDoManager.Plugin;component/Resources/ListTasks.png" />
+				<Graphical:ImageWithDisable Width="16" Height="16" Source="/ToDoManager.Plugin;component/Resources/ListTasks.png" />
 			</Button>
 			<Button ToolTip="Export CSV" Command="{Binding Path=ExportCommand}" Margin="2" HorizontalAlignment="Right">
-				<Image Width="16" Height="16" Source="/ToDoManager.Plugin;component/Resources/FileCsv.png" />
+				<Graphical:ImageWithDisable Width="16" Height="16" Source="/ToDoManager.Plugin;component/Resources/FileCsv.png" />
 			</Button>
 			<Button ToolTip="Collapse tasks" Command="{Binding Path=TimeListViewModel.CollapseCommand}" Margin="2" HorizontalAlignment="Right">
-				<Image Width="16" Height="16" Source="/ToDoManager.Plugin;component/Resources/Collapse.png" />
+				<Graphical:ImageWithDisable Width="16" Height="16" Source="/ToDoManager.Plugin;component/Resources/Collapse.png" />
 			</Button>
 		</ToolBar>
 		<ListView Grid.Row="2" Grid.Column="0"

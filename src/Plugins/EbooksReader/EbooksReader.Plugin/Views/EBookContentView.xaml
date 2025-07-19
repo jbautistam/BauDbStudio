@@ -6,6 +6,7 @@
 			 Loaded="UserControl_Loaded"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="400" 
+			 xmlns:Graphical="clr-namespace:Bau.Controls.Graphical;assembly=BauControls"  
 			 xmlns:NodeViewModel="clr-namespace:Bau.Libraries.EbooksReader.ViewModel.Reader.eBooks.Explorer;assembly=EbooksReader.ViewModel"
 			 xmlns:Converters="clr-namespace:Bau.Libraries.EbooksReader.Plugin.Converters"
 			 xmlns:BauControls="clr-namespace:Bau.Controls.WebExplorers;assembly=BauControls"
@@ -26,10 +27,10 @@
 		<ToolBarTray Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" >
 			<ToolBar HorizontalAlignment="Stretch" >
 				<Button ToolTip="Primera página" Command="{Binding FirstPageCommand}">
-					<Image Source="/EbooksReader.Plugin;component/Resources/ArrowFirst.png"></Image>
+					<Graphical:ImageWithDisable Source="/EbooksReader.Plugin;component/Resources/ArrowFirst.png"/>
 				</Button>
 				<Button ToolTip="Página anterior" Command="{Binding PreviousPageCommand}">
-					<Image Source="/EbooksReader.Plugin;component/Resources/ArrowPrevious.png"></Image>
+					<Graphical:ImageWithDisable Source="/EbooksReader.Plugin;component/Resources/ArrowPrevious.png"/>
 				</Button>
 				<TextBlock VerticalAlignment="Center" Margin="20,0">
 					<TextBlock.Text>
@@ -40,10 +41,10 @@
 					</TextBlock.Text>
 				</TextBlock>
 				<Button ToolTip="Página siguiente" Command="{Binding NextPageCommand}">
-					<Image Source="/EbooksReader.Plugin;component/Resources/ArrowNext.png"></Image>
+					<Graphical:ImageWithDisable Source="/EbooksReader.Plugin;component/Resources/ArrowNext.png"/>
 				</Button>
 				<Button Command="{Binding LastPageCommand}">
-					<Image Source="/EbooksReader.Plugin;component/Resources/ArrowLast.png"></Image>
+					<Graphical:ImageWithDisable Source="/EbooksReader.Plugin;component/Resources/ArrowLast.png"/>
 				</Button>
 			</ToolBar>
 		</ToolBarTray>

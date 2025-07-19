@@ -183,12 +183,14 @@ internal class CommandsConsoleRepository
 		MLFile fileML = new LibMarkupLanguage.Services.XML.XMLParser().Load(file.FileName);
 
 			foreach (MLNode rootML in fileML.Nodes)
-				if (rootML.Name == TagContext)
-				{
-					ContextModel children = LoadContext(rootML, file.GetDirectory()!);
+				if (rootML.Name == TagContextsRoot || rootML.Name == TagRoot)
+					foreach (MLNode nodeML in rootML.Nodes)
+						if (nodeML.Name == TagContext)
+						{
+							ContextModel children = LoadContext(nodeML, file.GetDirectory()!);
 
-						// Añade los datos al contexto original
-						context.Add(children);
-				}
+								// Añade los datos al contexto original
+								context.Add(children);
+						}
 	}
 }

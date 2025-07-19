@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bau.Libraries.DbStudio.Views.Reporting.Queries"
 		xmlns:Editors="clr-namespace:Bau.Controls.Editors;assembly=BauControls"
+		xmlns:Graphical="clr-namespace:Bau.Controls.Graphical;assembly=BauControls"  
 		x:Class="Bau.Libraries.DbStudio.Views.Reporting.Queries.ListFilterColumnView"
         mc:Ignorable="d"
         Title="Filtros de la columna" Height="550" Width="800" ResizeMode="NoResize" ShowInTaskbar="False"
@@ -41,10 +42,10 @@
 				</Grid.RowDefinitions>
 				<ToolBar Grid.Row="0" Grid.Column="0">
 					<Button ToolTip="Nuevo filtro" Command="{Binding Path=NewItemCommand}" Margin="2">
-						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
+						<Graphical:ImageWithDisable Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
 					</Button>
 					<Button ToolTip="Borrar filtro" Command="{Binding Path=DeleteItemCommand}" Margin="2">
-						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
+						<Graphical:ImageWithDisable Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
 					</Button>
 				</ToolBar>
 				<ListView Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Path=FiltersViewModel}" SelectedItem="{Binding Path=SelectedItem}" Margin="0">

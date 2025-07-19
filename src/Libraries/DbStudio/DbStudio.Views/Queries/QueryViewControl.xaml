@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:Bau.Libraries.DbStudio.Views.Queries"
 			 xmlns:CodeEditor="clr-namespace:Bau.Controls.CodeEditor;assembly=CodeEditor"
 			 xmlns:Editors="clr-namespace:Bau.Controls.Editors;assembly=BauControls"
+			 xmlns:Graphical="clr-namespace:Bau.Controls.Graphical;assembly=BauControls"  
 			 x:Class="Bau.Libraries.DbStudio.Views.Queries.QueryViewControl"
              mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
 	<Grid>
@@ -36,20 +37,20 @@
 						SelectedItem="{Binding Path=ComboConnections.Connections.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 					<Button Grid.Row="0" Grid.Column="10" ToolTip="Ejecutar consulta" Command="{Binding Path=ProcessCommand}" Margin="5"
 							Visibility="{Binding Path=IsExecuting,Converter={StaticResource InverseBoolToVisibilityConverter}}">
-						<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/ArrowRight.png" />
+						<Graphical:ImageWithDisable Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/ArrowRight.png" />
 					</Button>
 					<Button Margin="5,0,0,0" ToolTip="Cancelar" Command="{Binding Path=CancelQueryCommand}"
 							Visibility="{Binding Path=IsExecuting,Converter={StaticResource BoolToVisibilityConverter}}">
-						<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/Stop.png" />
+						<Graphical:ImageWithDisable Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/Stop.png" />
 					</Button>
 					<TextBlock Text="{Binding Path=ExecutionTime}" Grid.Row="0" Grid.Column="9" Margin="10" Foreground="Black" FontWeight="Bold" />
 
 					<Button Grid.Row="0" Grid.Column="10" ToolTip="Plan de ejecución" Command="{Binding Path=ShowExecutionPlanCommand}" Margin="5">
-						<Image Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/ExecutionPlan.png" />
+						<Graphical:ImageWithDisable Width="16" Height="16" Source="/DbStudio.Views;component/Resources/Images/ExecutionPlan.png" />
 					</Button>
 					<Separator/>
 					<Button Grid.Row="0" Grid.Column="11" Command="{Binding Path=ExportCommand}" Margin="5">
-						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Save.png" />
+						<Graphical:ImageWithDisable Width="16" Height="16" Source="/BauControls;component/Themes/Images/Save.png" />
 					</Button>
 					<Separator/>
 					<CheckBox Margin="5" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Paginar consulta" IsChecked="{Binding Path=PaginateQuery}"/>
@@ -57,23 +58,23 @@
 					<Editors:IntegerUpDown Margin="5" Minimum="1" Maximum="900000" Value="{Binding Path=PageSize,UpdateSourceTrigger=PropertyChanged}"/>
 					<Button Command="{Binding Path=FirstPageCommand}" >
 						<Button.Content>
-							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/ArrowFirst.png" />
+							<Graphical:ImageWithDisable Width="16" Height="16" Source="/BauControls;component/Themes/Images/ArrowFirst.png" />
 						</Button.Content>
 					</Button>
 					<Button Command="{Binding Path=PreviousPageCommand}">
 						<Button.Content>
-							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/ArrowPrevious.png" />
+							<Graphical:ImageWithDisable Width="16" Height="16" Source="/BauControls;component/Themes/Images/ArrowPrevious.png" />
 						</Button.Content>
 					</Button>
 					<TextBlock Margin="5" Text="{Binding Path=ActualPage}" VerticalAlignment="Center"/>
 					<Button Grid.Row="0" Grid.Column="3" Command="{Binding Path=NextPageCommand}">
 						<Button.Content>
-							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/ArrowNext.png" />
+							<Graphical:ImageWithDisable Width="16" Height="16" Source="/BauControls;component/Themes/Images/ArrowNext.png" />
 						</Button.Content>
 					</Button>
 					<Button Command="{Binding Path=LastPageCommand}">
 						<Button.Content>
-							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/ArrowLast.png" />
+							<Graphical:ImageWithDisable Width="16" Height="16" Source="/BauControls;component/Themes/Images/ArrowLast.png" />
 						</Button.Content>
 					</Button>
 				</ToolBar>

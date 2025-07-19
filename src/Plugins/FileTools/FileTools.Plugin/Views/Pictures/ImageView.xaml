@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+			 xmlns:Graphical="clr-namespace:Bau.Controls.Graphical;assembly=BauControls"  
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="1000"
 			 xmlns:system="clr-namespace:System;assembly=mscorlib"
@@ -21,17 +22,17 @@
 		<ToolBarTray x:Name="tbMain" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
 			<ToolBar BandIndex="1">
 				<Button Margin="5" Command="{Binding ElementName=ZoomAndPanControl, Path=ZoomPercentCommand}" ToolTip="100%">
-					<Image Width="16" Height="16" Source="/FileTools.Plugin;component/Resources/Zoom100.png" />
+					<Graphical:ImageWithDisable Width="16" Height="16" Source="/FileTools.Plugin;component/Resources/Zoom100.png" />
 				</Button>
 				<Button Margin="5" Command="{Binding ElementName=ZoomAndPanControl, Path=FitCommand}" ToolTip="Ajustar al alto">
-					<Image Width="16" Height="16" Source="/FileTools.Plugin;component/Resources/ZoomFit.png" />
+					<Graphical:ImageWithDisable Width="16" Height="16" Source="/FileTools.Plugin;component/Resources/ZoomFit.png" />
 				</Button>
 				<Button Margin="5" Command="{Binding ElementName=ZoomAndPanControl, Path=FillCommand}" ToolTip="Ajustar al ancho">
-					<Image Width="16" Height="16" Source="/FileTools.Plugin;component/Resources/ZoomFill.png" />
+					<Graphical:ImageWithDisable Width="16" Height="16" Source="/FileTools.Plugin;component/Resources/ZoomFill.png" />
 				</Button>
 				<Separator/>
 				<Button Margin="5" Command="{Binding ElementName=ZoomAndPanControl, Path=ZoomOutCommand}">
-					<Image Width="16" Height="16" Source="/FileTools.Plugin;component/Resources/ZoomOut.png" />
+					<Graphical:ImageWithDisable Width="16" Height="16" Source="/FileTools.Plugin;component/Resources/ZoomOut.png" />
 				</Button>
 				<Slider Width="120" LargeChange="20" Margin="5"
                     Maximum="{Binding ElementName=ZoomAndPanControl, Path=ZoomAndPanContent.MaximumZoom, Converter={zoomAndPan:ZoomAdjustConverter}}"
@@ -41,14 +42,14 @@
                     TickFrequency="10"
                     TickPlacement="TopLeft" />
 				<Button Margin="5" Command="{Binding ElementName=ZoomAndPanControl, Path=ZoomInCommand}">
-					<Image Width="16" Height="16" Source="/FileTools.Plugin;component/Resources/ZoomIn.png" />
+					<Graphical:ImageWithDisable Width="16" Height="16" Source="/FileTools.Plugin;component/Resources/ZoomIn.png" />
 				</Button>
 				<TextBlock Width="50" VerticalAlignment="Center" Margin="5"
 						Text="{Binding ElementName=ZoomAndPanControl, Path=ViewportZoom, StringFormat=p1}"
 						TextAlignment="Right" />
 				<Separator/>
 				<ToggleButton x:Name="chkShowThumb" IsChecked="True" Click="chkShowThumb_Click" ToolTip="Mostrar thumbnail">
-					<Image Width="16" Height="16" Source="/FileTools.Plugin;component/Resources/SeeWindow.png" />
+					<Graphical:ImageWithDisable Width="16" Height="16" Source="/FileTools.Plugin;component/Resources/SeeWindow.png" />
 				</ToggleButton>
 			</ToolBar>
 

@@ -4,6 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bau.Libraries.JobsProcessor.Plugin.Views.Processor"
 		xmlns:Editor="clr-namespace:Bau.Controls.CodeEditor;assembly=CodeEditor"
+		xmlns:Graphical="clr-namespace:Bau.Controls.Graphical;assembly=BauControls"  
 		x:Class="Bau.Libraries.JobsProcessor.Plugin.Views.Processor.ExecuteEtlConsoleView"
         mc:Ignorable="d"
 		d:DesignHeight="250" d:DesignWidth="800" >
@@ -19,20 +20,20 @@
 		<ToolBarTray x:Name="tbMain" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" >
 			<ToolBar BandIndex="1">
 				<Button ToolTip="Execute" Command="{Binding Path=ExecuteCommand}" Margin="2">
-					<Image Width="16" Height="16" Source="/JobsProcessor.Plugin;component/Resources/ArrowNext.png" />
+					<Graphical:ImageWithDisable Width="16" Height="16" Source="/JobsProcessor.Plugin;component/Resources/ArrowNext.png" />
 				</Button>
 				<Button ToolTip="Cancel" Command="{Binding Path=CancelCommand}" Margin="2">
-					<Image Width="16" Height="16" Source="/JobsProcessor.Plugin;component/Resources/Cancel.png" />
+					<Graphical:ImageWithDisable Width="16" Height="16" Source="/JobsProcessor.Plugin;component/Resources/Cancel.png" />
 				</Button>
 				<Button ToolTip="Clear" Command="{Binding Path=ClearCommand}" Margin="2">
-					<Image Width="16" Height="16" Source="/JobsProcessor.Plugin;component/Resources/Log.png" />
+					<Graphical:ImageWithDisable Width="16" Height="16" Source="/JobsProcessor.Plugin;component/Resources/Log.png" />
 				</Button>
 				<Separator/>
 				<Button ToolTip="Open file" Command="{Binding Path=OpenFileCommand}" Margin="2">
-					<Image Width="16" Height="16" Source="/JobsProcessor.Plugin;component/Resources/FolderNode.png" />
+					<Graphical:ImageWithDisable Width="16" Height="16" Source="/JobsProcessor.Plugin;component/Resources/FolderNode.png" />
 				</Button>
 				<Button ToolTip="Refresh" Command="{Binding Path=RefreshCommand}" Margin="2">
-					<Image Width="16" Height="16" Source="/JobsProcessor.Plugin;component/Resources/Refresh.png" />
+					<Graphical:ImageWithDisable Width="16" Height="16" Source="/JobsProcessor.Plugin;component/Resources/Refresh.png" />
 				</Button>
 			</ToolBar>
 		</ToolBarTray>

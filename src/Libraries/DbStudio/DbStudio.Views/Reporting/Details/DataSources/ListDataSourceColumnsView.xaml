@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Bau.Libraries.DbStudio.Views.Reporting.Details.DataSources"
+			 xmlns:Graphical="clr-namespace:Bau.Controls.Graphical;assembly=BauControls"  
+			 xmlns:local="clr-namespace:Bau.Libraries.DbStudio.Views.Reporting.Details.DataSources"
 			 x:Class="Bau.Libraries.DbStudio.Views.Reporting.Details.DataSources.ListDataSourceColumnsView"
              mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
 	<Grid>
@@ -13,10 +14,10 @@
 		</Grid.RowDefinitions>
 		<ToolBar Grid.Row="0" Grid.Column="0" Visibility="{Binding Path=Updatable,Converter={StaticResource BoolToVisibilityConverter}}">
 			<Button ToolTip="Nueva columna" Command="{Binding Path=NewColumnCommand}" Margin="2">
-				<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
+				<Graphical:ImageWithDisable Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
 			</Button>
 			<Button ToolTip="Borrar columna" Command="{Binding Path=DeleteColumnCommand}" Margin="2">
-				<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
+				<Graphical:ImageWithDisable Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
 			</Button>
 		</ToolBar>
 		<ListView Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Path=Items}" SelectedItem="{Binding Path=SelectedItem}" Margin="0">

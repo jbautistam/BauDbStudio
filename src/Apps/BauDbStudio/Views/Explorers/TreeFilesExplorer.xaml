@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:Bau.DbStudio.Views.Explorers"
 			 xmlns:ViewModel="clr-namespace:Bau.Libraries.PluginsStudio.ViewModels.Base.Explorers;assembly=PluginsStudio.ViewModels.Base"
 			 xmlns:ViewModelExplorer="clr-namespace:Bau.Libraries.PluginsStudio.ViewModels.Explorers.Files;assembly=PluginsStudio.ViewModels"
+			 xmlns:Graphical="clr-namespace:Bau.Controls.Graphical;assembly=BauControls"  
 			 xmlns:commandsLocal="clr-namespace:Bau.DbStudio.Converters"
 			 xmlns:converters="clr-namespace:Bau.DbStudio.Converters"
              mc:Ignorable="d" 
@@ -78,70 +79,70 @@
 				<ContextMenu x:Key="mnuExplorer">
 					<MenuItem Header="Nuevo">
 						<MenuItem.Icon>
-							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
+							<Graphical:ImageWithDisable Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
 						</MenuItem.Icon>
 						<MenuItem Header="Bookmark" Command="{Binding Path=AddToBookmarksCommand}">
 							<MenuItem.Icon>
-								<Image Width="16" Height="16" Source="/Resources/Images/Bookmarks.png" />
+								<Graphical:ImageWithDisable Width="16" Height="16" Source="/Resources/Images/Bookmarks.png" />
 							</MenuItem.Icon>
 						</MenuItem>
 						<Separator/>
 						<MenuItem Header="Carpeta" Command="{Binding Path=NewFolderCommand}">
 							<MenuItem.Icon>
-								<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Folder.png" />
+								<Graphical:ImageWithDisable Width="16" Height="16" Source="/BauControls;component/Themes/Images/Folder.png" />
 							</MenuItem.Icon>
 						</MenuItem>
 						<MenuItem Header="Archivo" Command="{Binding Path=NewFileCommand}">
 							<MenuItem.Icon>
-								<Image Width="16" Height="16" Source="/Resources/Images/File.png" />
+								<Graphical:ImageWithDisable Width="16" Height="16" Source="/Resources/Images/File.png" />
 							</MenuItem.Icon>
 						</MenuItem>
 					</MenuItem>
 					<MenuItem Header="Abrir" Command="{Binding OpenCommand}">
 						<MenuItem.Icon>
-							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Properties.gif" />
+							<Graphical:ImageWithDisable Width="16" Height="16" Source="/BauControls;component/Themes/Images/Properties.gif" />
 						</MenuItem.Icon>
 					</MenuItem>
 					<MenuItem Header="Cambiar nombre" Command="{Binding RenameCommand}">
 						<MenuItem.Icon>
-							<Image Width="16" Height="16" Source="/Resources/Images/File.png" />
+							<Graphical:ImageWithDisable Width="16" Height="16" Source="/Resources/Images/File.png" />
 						</MenuItem.Icon>
 					</MenuItem>
 					<Separator />
 					<MenuItem Header="Copiar" Command="{Binding CopyCommand}">
 						<MenuItem.Icon>
-							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Copy.png" />
+							<Graphical:ImageWithDisable Width="16" Height="16" Source="/BauControls;component/Themes/Images/Copy.png" />
 						</MenuItem.Icon>
 					</MenuItem>
 					<MenuItem Header="Cortar" Command="{Binding CutCommand}">
 						<MenuItem.Icon>
-							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Cut.png" />
+							<Graphical:ImageWithDisable Width="16" Height="16" Source="/BauControls;component/Themes/Images/Cut.png" />
 						</MenuItem.Icon>
 					</MenuItem>
 					<MenuItem Header="Pegar" Command="{Binding PasteCommand}">
 						<MenuItem.Icon>
-							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Paste.png" />
+							<Graphical:ImageWithDisable Width="16" Height="16" Source="/BauControls;component/Themes/Images/Paste.png" />
 						</MenuItem.Icon>
 					</MenuItem>
 					<MenuItem Header="Pegar imagen" Command="{Binding PasteClipboardImageCommand}">
 						<MenuItem.Icon>
-							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Paste.png" />
+							<Graphical:ImageWithDisable Width="16" Height="16" Source="/BauControls;component/Themes/Images/Paste.png" />
 						</MenuItem.Icon>
 					</MenuItem>
 					<MenuItem Header="Borrar" Command="{Binding DeleteCommand}">
 						<MenuItem.Icon>
-							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
+							<Graphical:ImageWithDisable Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
 						</MenuItem.Icon>
 					</MenuItem>
 					<Separator/>
 					<MenuItem Header="Search" Command="{Binding Path=SearchCommand}">
 						<MenuItem.Icon>
-							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Search.png" />
+							<Graphical:ImageWithDisable Width="16" Height="16" Source="/BauControls;component/Themes/Images/Search.png" />
 						</MenuItem.Icon>
 					</MenuItem>
 					<MenuItem Header="Abrir en el explorador" Command="{Binding Path=SeeAtExplorerCommand}">
 						<MenuItem.Icon>
-							<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Folder.png" />
+							<Graphical:ImageWithDisable Width="16" Height="16" Source="/BauControls;component/Themes/Images/Folder.png" />
 						</MenuItem.Icon>
 					</MenuItem>
 					<Separator x:Name="mnuPluginsSeparator" />

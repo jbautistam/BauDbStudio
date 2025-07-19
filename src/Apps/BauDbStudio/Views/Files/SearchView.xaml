@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Bau.DbStudio.Views.Files"
 			 xmlns:ViewModel="clr-namespace:Bau.Libraries.PluginsStudio.ViewModels.Files.Search;assembly=PluginsStudio.ViewModels"
+			 xmlns:Graphical="clr-namespace:Bau.Controls.Graphical;assembly=BauControls"  
              mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
 	<Grid>
 		<Grid.RowDefinitions>
@@ -29,22 +30,22 @@
 		<ToolBar Grid.Row="0" Grid.Column="3" Background="Transparent" >
 			<Button Command="{Binding Path=SearchCommand}" Background="Transparent" IsDefault="True" BorderThickness="0">
 				<Button.Content>
-					<Image Width="16" Height="16" Margin="0" Source="/Resources/Images/ArrowRight.png" />
+					<Graphical:ImageWithDisable Width="16" Height="16" Margin="0" Source="/Resources/Images/ArrowRight.png" />
 				</Button.Content>
 			</Button>
 			<ToggleButton IsChecked="{Binding Path=CaseSensitive,UpdateSourceTrigger=PropertyChanged}" ToolTip="Distinguir mayúsculas y minúsculas">
 				<ToggleButton.Content>
-					<Image Width="16" Height="16" Margin="0" Source="/Resources/Images/CaseSensitive.png" />
+					<Graphical:ImageWithDisable Width="16" Height="16" Margin="0" Source="/Resources/Images/CaseSensitive.png" />
 				</ToggleButton.Content>
 			</ToggleButton>
 			<ToggleButton IsChecked="{Binding Path=WholeWord,UpdateSourceTrigger=PropertyChanged}" ToolTip="Palabras completas">
 				<ToggleButton.Content>
-					<Image Width="16" Height="16" Margin="0" Source="/Resources/Images/WholeWord.png" />
+					<Graphical:ImageWithDisable Width="16" Height="16" Margin="0" Source="/Resources/Images/WholeWord.png" />
 				</ToggleButton.Content>
 			</ToggleButton>
 			<ToggleButton IsChecked="{Binding Path=UseRegex,UpdateSourceTrigger=PropertyChanged}" Margin="2" ToolTip="Utilizar expresiones regulares">
 				<ToggleButton.Content>
-					<Image Width="16" Height="16" Margin="0" Source="/Resources/Images/Wildcards.png" />
+					<Graphical:ImageWithDisable Width="16" Height="16" Margin="0" Source="/Resources/Images/Wildcards.png" />
 				</ToggleButton.Content>
 			</ToggleButton>
 		</ToolBar>

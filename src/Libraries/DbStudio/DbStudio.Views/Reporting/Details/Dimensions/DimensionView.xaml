@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Bau.Libraries.DbStudio.Views.Reporting.Details.Dimensions"
+			 xmlns:Graphical="clr-namespace:Bau.Controls.Graphical;assembly=BauControls"  
 			 x:Class="Bau.Libraries.DbStudio.Views.Reporting.Details.Dimensions.DimensionView"
              mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
 	<Grid>
@@ -40,13 +41,13 @@
 				</Grid.RowDefinitions>
 				<ToolBar Grid.Row="0">
 					<Button ToolTip="Nueva relación" Command="{Binding Path=ListRelationsViewModel.NewRelationCommand}" Margin="2">
-						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
+						<Graphical:ImageWithDisable Width="16" Height="16" Source="/BauControls;component/Themes/Images/NewItem.png" />
 					</Button>
 					<Button ToolTip="Modificar relación" Command="{Binding Path=ListRelationsViewModel.OpenRelationCommand}" Margin="2">
-						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Properties.gif" />
+						<Graphical:ImageWithDisable Width="16" Height="16" Source="/BauControls;component/Themes/Images/Properties.gif" />
 					</Button>
 					<Button ToolTip="Borrar relación" Command="{Binding Path=ListRelationsViewModel.DeleteRelationCommand}" Margin="2">
-						<Image Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
+						<Graphical:ImageWithDisable Width="16" Height="16" Source="/BauControls;component/Themes/Images/Delete.png" />
 					</Button>
 				</ToolBar>
 				<ListView Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Path=ListRelationsViewModel.ListRelations}" SelectedItem="{Binding Path=ListRelationsViewModel.SelectedItem}" Margin="0">
