@@ -11,7 +11,6 @@ Con **BauDbStudio** puede:
 * Editar y ejecutar scripts sobre Spark Sql y sobre otras bases de datos.
 * Editar y ejecutar proyectos de ETL y proyectos de prueba sobre bases de datos.
 * Visualizar archivos de tipo parquet y CSV.
-* Mantener conexiones a Azure blob storage.
 
 Consulte el [tutorial](https://jbautistam.github.io/blog/applications/baudbstudio/manual/001-tutorial-baudbstudio/001-tutorial-baudbstudio/) para más información.
 

@@ -1,4 +1,5 @@
-﻿using Bau.Libraries.RestManager.Application.Models;
+﻿using Bau.Libraries.LibRestClient;
+using Bau.Libraries.RestManager.Application.Models;
 
 namespace Bau.Libraries.RestManager.Application;
 
@@ -28,7 +29,7 @@ public class RestProjectManager
 	/// </summary>
 	public async Task ExecuteAsync(RestProjectModel project, CancellationToken cancellationToken)
 	{
-		await new Compiler.ProjectInterpreter(this, project).ExecuteAsync(cancellationToken);
+		await new Compiler.ProjectInterpreter(this, project, PrepareRestClient(project)).ExecuteAsync(cancellationToken);
 	}
 
 	/// <summary>
@@ -36,7 +37,21 @@ public class RestProjectManager
 	/// </summary>
 	public async Task ExecuteAsync(RestProjectModel project, RestStepModel step, CancellationToken cancellationToken)
 	{
-		await new Compiler.ProjectInterpreter(this, project).ExecuteAsync([ step ], cancellationToken);
+		await new Compiler.ProjectInterpreter(this, project, PrepareRestClient(project)).ExecuteAsync([ step ], cancellationToken);
+	}
+
+	/// <summary>
+	///		Prepara el cliente de llamadas REST
+	/// </summary>
+	private RestClientManager PrepareRestClient(RestProjectModel project)
+	{
+		RestClientManager manager = new();
+
+			// Añade las conexiones
+			foreach (ConnectionModel connection in project.Connections)
+				manager.AddConnection(connection.Url, connection.Timeout);
+			// Devuelve el manager
+			return manager;
 	}
 
 	/// <summary>

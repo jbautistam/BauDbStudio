@@ -44,10 +44,10 @@ public class RestFileListStepsViewModel : BaseObservableObject
 		if (Items is not null && stepViewModel is null)
 		{
 			// Crea el paso
-			stepViewModel = new RestFileStepItemViewModel(this, new RestStepModel
+			stepViewModel = new RestFileStepItemViewModel(this, new RestStepModel(FileViewModel.RestProject)
 																		{
 																			Method = RestStepModel.RestMethod.Get,
-																			Url = "{{Url}}"
+																			EndPoint = "/api/sample"
 																		}
 														 );
 			// Añade el paso a la lista

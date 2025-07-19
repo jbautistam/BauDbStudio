@@ -36,7 +36,7 @@ public class RestFileStepItemViewModel : BaseObservableObject
 		ComboMethods.SelectedId = (int) RestStep.Method;
 		ComboConnections.SelectedTag = GetConnection(RestStep.ConnectionId);
 		Name = RestStep.Name;
-		Url = RestStep.Url;
+		Url = RestStep.EndPoint;
 		Timeout = (int) RestStep.Timeout.TotalSeconds;
 		Content = RestStep.Content ?? string.Empty;
 		// Cabeceras
@@ -107,7 +107,7 @@ public class RestFileStepItemViewModel : BaseObservableObject
 	/// </summary>
 	internal BaseStepModel GetStep()
 	{
-		RestStepModel step = new();
+		RestStepModel step = new(ListStepsViewModel.FileViewModel.RestProject);
 
 			// Asigna los datos
 			if (ComboConnections?.SelectedTag is ConnectionModel connection)
@@ -115,7 +115,7 @@ public class RestFileStepItemViewModel : BaseObservableObject
 			if (ComboMethods is not null)
 				step.Method = (RestStepModel.RestMethod) (ComboMethods.SelectedId ?? 0);
 			step.Name = Name;
-			step.Url = Url;
+			step.EndPoint = Url;
 			step.Timeout = TimeSpan.FromSeconds(Timeout);
 			step.Content = Content;
 			// Añade las cabeceras

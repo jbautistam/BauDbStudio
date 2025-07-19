@@ -159,30 +159,16 @@ public class RestFileViewModel : BaseObservableObject, PluginsStudio.ViewModels.
 		{
 			Controllers.Processors.RestProcessor processor = new(this, allSteps ? null : StepsViewModel.SelectedItem);
 
+				// Log
+				WriteLog($"# {DateTime.Now:HH:mm:ss} Start execution");
 				// Asigna el tratamiento de eventos
-				processor.Log += (sender, args) => TreatLog(args);
+				processor.Log += (sender, args) => WriteLog(args);
 				// Indica que se está ejecutando
 				IsExecuting = true;
 				// Encola el proceso
 				await MainViewModel.ViewsController.MainWindowController.EnqueueProcessAsync(processor, cancellationToken);
 				// Indica que ha finalizado la ejecución
 				IsExecuting = false;
-		}
-
-		// Trata el evento de log
-		void TreatLog(LogEventArgs args)
-		{
-			object state = new object();
-
-				//? _contexUi mantiene el contexto de sincronización que creó el ViewModel (que debería ser la interface de usuario)
-				//? Al generarse el log en un evento interno, no se puede añadir el texto si no está en el mismo contexto
-				// Añade el mensaje
-				if (_contextUi is not null)
-					_contextUi.Send(_ => {
-											Log += $"**{args.State.ToString().ToUpper()}:** {args.Message}" + Environment.NewLine;
-										 }, 
-										 state
-								   );
 		}
 	}
 
@@ -198,6 +184,28 @@ public class RestFileViewModel : BaseObservableObject, PluginsStudio.ViewModels.
 				canExecute = StepsViewModel.SelectedItem is not null;
 			// Devuelve el valor que indica si se debe ejecutar
 			return canExecute;
+	}
+
+	/// <summary>
+	///		Añade un evento al log
+	/// </summary>
+	private void WriteLog(LogEventArgs args)
+	{
+		WriteLog($"**[{DateTime.Now:HH:mm:ss}] {args.State.ToString().ToUpper()} :** {args.Message}");
+	}
+
+	/// <summary>
+	///		Añade un texto al log
+	/// </summary>
+	private void WriteLog(string log)
+	{
+		object state = new();
+
+			//? _contexUi mantiene el contexto de sincronización que creó el ViewModel (que debería ser la interface de usuario)
+			//? Al generarse el log en un evento interno, no se puede añadir el texto si no está en el mismo contexto
+			// Añade el mensaje
+			if (_contextUi is not null)
+				_contextUi.Send(_ => Log += log + Environment.NewLine, state);
 	}
 
 	/// <summary>

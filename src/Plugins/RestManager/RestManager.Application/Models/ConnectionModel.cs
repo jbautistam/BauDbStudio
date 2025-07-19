@@ -1,4 +1,5 @@
-﻿namespace Bau.Libraries.RestManager.Application.Models;
+﻿
+namespace Bau.Libraries.RestManager.Application.Models;
 
 /// <summary>
 ///		Clase con los datos de una conexión
@@ -28,6 +29,11 @@ public class ConnectionModel
 	public string Id { get; set; } = Guid.NewGuid().ToString();
 
 	/// <summary>
+	///		Url de la colección
+	/// </summary>
+	public Uri Url { get; set; } = default!;
+
+	/// <summary>
 	///		Nombre de la conexión
 	/// </summary>
 	public string Name { get; set; } = default!;
@@ -36,11 +42,6 @@ public class ConnectionModel
 	///		Descripción de la conexión
 	/// </summary>
 	public string? Description { get; set; }
-
-	/// <summary>
-	///		Url de la colección
-	/// </summary>
-	public Uri? Url { get; set; }
 
 	/// <summary>
 	///		Datos de autenticación

@@ -1,4 +1,5 @@
 ﻿using Bau.Libraries.LibHelper.Extensors;
+using Bau.Libraries.LibHelper.Files;
 using Bau.Libraries.LibMarkupLanguage;
 using Bau.Libraries.JobsProcessor.Application.Models;
 
@@ -7,7 +8,7 @@ namespace Bau.Libraries.JobsProcessor.Application.Repository;
 /// <summary>
 ///		Repositorio de <see cref="CommandModel"/>
 /// </summary>
-internal class ConsoleRepository
+internal class CommandsConsoleRepository
 {
 	// Constantes privadas
 	private const string TagRoot = "Project";
@@ -144,7 +145,7 @@ internal class ConsoleRepository
 				{
 					case TagImport:
 							if (!string.IsNullOrWhiteSpace(nodeML.Attributes[TagFileName].Value))
-								ImportContextFile(context, Path.Combine(folder, nodeML.Attributes[TagFileName].Value.TrimIgnoreNull()));
+								ImportContextFile(context, folder, nodeML.Attributes[TagFileName].Value.TrimIgnoreNull());
 						break;
 					case TagParameter:
 							context.Add(LoadParameter(nodeML));
@@ -176,14 +177,15 @@ internal class ConsoleRepository
 	/// <summary>
 	///		Importa un archivo XML de contexto sobre el contexto actual
 	/// </summary>
-	private void ImportContextFile(ContextModel context, string fileName)
+	private void ImportContextFile(ContextModel context, string folder, string fileName)
 	{
-		MLFile fileML = new LibMarkupLanguage.Services.XML.XMLParser().Load(fileName);
+		FileModel file = new(folder, fileName);
+		MLFile fileML = new LibMarkupLanguage.Services.XML.XMLParser().Load(file.FileName);
 
 			foreach (MLNode rootML in fileML.Nodes)
 				if (rootML.Name == TagContext)
 				{
-					ContextModel children = LoadContext(rootML, Path.GetDirectoryName(fileName)!);
+					ContextModel children = LoadContext(rootML, file.GetDirectory()!);
 
 						// Añade los datos al contexto original
 						context.Add(children);

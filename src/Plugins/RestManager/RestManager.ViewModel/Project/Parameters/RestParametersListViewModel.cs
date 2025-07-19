@@ -20,6 +20,7 @@ public class RestParametersListViewModel : BauMvvm.ViewModels.Forms.ControlItems
 		// Limpia la lista
 		Items.Clear();
 		// Añade los elementos
+		parameters.Sort((first, second) => first.Key.CompareTo(second.Key));
 		foreach (ParameterModel parameter in parameters)
 			Items.Add(new RestParametersListItemViewModel(this, parameter));
 	}
@@ -34,14 +35,11 @@ public class RestParametersListViewModel : BauMvvm.ViewModels.Forms.ControlItems
 			// Abre el cuadro de diálogo y recoge los valores
 			if (RestFileViewModel.MainViewModel.ViewsController.OpenDialog(parameterViewModel) == BauMvvm.ViewModels.Controllers.SystemControllerEnums.ResultType.Yes)
 			{
-				// Añade / modifica el elemento
-				if (item is null)
-					Items.Add(new RestParametersListItemViewModel(this, new ParameterModel(parameterViewModel.Key, parameterViewModel.Value)));
-				else
-				{
-					item.Key = parameterViewModel.Key;
-					item.Value = parameterViewModel.Value;
-				}
+				// Elimina el elemento que se estaba editando
+				if (item is not null)
+					Items.Remove(item);
+				// y lo crea de nuevo
+				Items.Add(new RestParametersListItemViewModel(this, new ParameterModel(parameterViewModel.Key, parameterViewModel.Value)));
 				// Indica que se ha modificado el proyecto
 				RestFileViewModel.IsUpdated = true;
 			}

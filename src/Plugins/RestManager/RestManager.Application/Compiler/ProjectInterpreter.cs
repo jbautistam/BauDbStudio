@@ -8,10 +8,11 @@ namespace Bau.Libraries.RestManager.Application.Compiler;
 /// </summary>
 internal class ProjectInterpreter
 {
-	internal ProjectInterpreter(RestProjectManager manager, RestProjectModel project)
+	internal ProjectInterpreter(RestProjectManager manager, RestProjectModel project, LibRestClient.RestClientManager restManager)
 	{
 		Manager = manager;
 		Project = project;
+		RestManager = restManager;
 	}
 
 	/// <summary>
@@ -27,12 +28,16 @@ internal class ProjectInterpreter
 	/// </summary>
 	internal async Task ExecuteAsync(List<BaseStepModel> steps, CancellationToken cancellationToken)
 	{
+		// Lanza un evento de inicio
+		Manager.RaiseInfo("Start rest execution");
 		// Inicializa el contexto
 		Contexts.Clear();
 		foreach (ParameterModel parameter in Project.Parameters)
 			Contexts.Add(parameter.Key, parameter.Value);
 		// Ejecuta las sentencias
 		await ExecuteSentencesAsync(steps, cancellationToken);
+		// Lanza un evento de fin
+		Manager.RaiseLog(EventArguments.LogEventArgs.Status.Success, "End rest execution");
 	}
 
 	/// <summary>
@@ -41,14 +46,15 @@ internal class ProjectInterpreter
 	private async Task ExecuteSentencesAsync(List<BaseStepModel> steps, CancellationToken cancellationToken)
 	{
 		foreach (BaseStepModel step in steps)
-			if (step.Enabled && !cancellationToken.IsCancellationRequested)
+			if (step.Enabled && !HasError && !cancellationToken.IsCancellationRequested)
 				switch (step)
 				{
 					case RestStepModel sentence:
 							await ExecuteRestStepAsync(sentence, cancellationToken);
 						break;
 					default:
-						throw new NotImplementedException($"Step type unknown: {step.GetType().ToString()}");
+							SetError($"Step type unknown: {step.GetType().ToString()}");
+						break;
 				}
 	}
 
@@ -58,37 +64,45 @@ internal class ProjectInterpreter
 	private async Task ExecuteRestStepAsync(RestStepModel step, CancellationToken cancellationToken)
 	{
 		RequestMessage request = new Conversors.MessageConversor().CreateRequest(step, Contexts);
+		ConnectionModel? connection = step.Project.Connections.Search(step.ConnectionId);
 
 			// Ejecuta la solicitud
-			await ExecuteAsync(request, cancellationToken);
-	}
-
-	/// <summary>
-	///		Ejecuta una solicitud
-	/// </summary>
-	private async Task<bool> ExecuteAsync(RequestMessage request, CancellationToken cancellationToken)
-	{
-		bool executed = false;
-
-			// Ejecuta la solicitud
-			try
+			if (connection is null)
+				SetError($"Can't find the connection for request {step.Name} - {step.Method}");
+			else
 			{
+				// Añade las cabeceras de la conexión a la solicitud
+				foreach (ParameterModel header in connection.Headers)
+					if (!request.Headers.ContainsKey(header.Key))
+						request.Headers.Add(header.Key, header.Value);
 				// Log
 				Manager.RaiseInfo("Start request");
 				Manager.RaiseInfo(request.GetDebugString());
-				// Evita las advertencias
-				await Task.Delay(1, cancellationToken);
-				// Escribe la cadena de depuración
-				Manager.RaiseInfo("End request");
-				// Indica que se ha ejecutado correctamente
-				executed = true;
+				// Envía la solicitud
+				try
+				{
+					ResponseMessage response = await RestManager.SendAsync(connection.Url, request, cancellationToken);
+
+						// Escribe la cadena de depuración
+						Manager.RaiseInfo("End request");
+						Manager.RaiseInfo(response.GetDebugString());
+				}
+				catch (Exception exception)
+				{
+					SetError($"Error when execute request. {exception.Message}");
+				}
 			}
-			catch (Exception exception)
-			{
-				Manager.RaiseError($"Error when execute request. {exception.Message}");
-			}
-			// Devuelve el valor que indica si se ha ejecutado correctamente
-			return executed;
+	}
+
+	/// <summary>
+	///		Asigna un error
+	/// </summary>
+	private void SetError(string message)
+	{
+		// Indica que ha habido algún error
+		HasError = true;
+		// Lanza el mensaje de error
+		Manager.RaiseError(message);
 	}
 
 	/// <summary>
@@ -105,4 +119,14 @@ internal class ProjectInterpreter
 	///		Contextos
 	/// </summary>
 	private ContextStackModel Contexts { get; } = new();
+
+	/// <summary>
+	///		Indica si hay algún error
+	/// </summary>
+	public bool HasError { get; private set; }
+
+	/// <summary>
+	///		Manager de llamadas REST
+	/// </summary>
+	private LibRestClient.RestClientManager RestManager { get; }
 }

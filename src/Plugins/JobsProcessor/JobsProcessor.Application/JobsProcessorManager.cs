@@ -14,7 +14,7 @@ public class JobsProcessorManager
 	/// <summary>
 	///		Carga los datos de ejecución de un comando
 	/// </summary>
-	public ProjectModel Load(string fileName) => new Repository.ConsoleRepository().Load(fileName);
+	public ProjectModel Load(string fileName) => new Repository.CommandsConsoleRepository().Load(fileName);
 
 	/// <summary>
 	///		Valida un proyecto

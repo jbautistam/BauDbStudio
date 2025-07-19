@@ -13,7 +13,7 @@ internal class MessageConversor
 	/// </summary>
 	internal RequestMessage CreateRequest(RestStepModel step, ContextStackModel context)
 	{
-		RequestMessage request = new(ConvertMethod(step.Method), Parse(step.Url, context), step.Timeout);
+		RequestMessage request = new(ConvertMethod(step.Method), Parse(step.EndPoint, context), step.Timeout);
 
 			// Asigna las propiedades
 			AddHeaders(request, step.Headers, context);
@@ -21,8 +21,8 @@ internal class MessageConversor
 			request.Content = Parse(step.Content, context);
 			// Devuelve la solicitud
 			return request;
-
 	}
+
 	/// <summary>
 	///		Convierte el método
 	/// </summary>

@@ -56,7 +56,7 @@ internal class ProjectRepository
 										project.Connections.Add(GetConnection(nodeML));
 									break;
 								case TagRestStep:
-										project.Steps.Add(GetRestStep(nodeML));
+										project.Steps.Add(GetRestStep(project, nodeML));
 									break;
 							}
 			// Devuelve el proyecto
@@ -82,7 +82,7 @@ internal class ProjectRepository
 			connection.Id = rootML.Attributes[TagId].Value.TrimIgnoreNull();
 			connection.Name = rootML.Nodes[TagName].Value.TrimIgnoreNull();
 			connection.Description = rootML.Nodes[TagDescription].Value.TrimIgnoreNull();
-			connection.Url = rootML.Attributes[TagUrl].Value.TrimIgnoreNull().GetUrl();
+			connection.Url = rootML.Attributes[TagUrl].Value.TrimIgnoreNull().GetUrl()!;
 			connection.Authentication.Type = rootML.Attributes[TagSecurity].Value.GetEnum(AuthenticationModel.AuthenticationType.None);
 			connection.Timeout = TimeSpan.FromSeconds(rootML.Attributes[TagTimeout].Value.GetInt(120));
 			// Añade los datos
@@ -104,16 +104,16 @@ internal class ProjectRepository
 	/// <summary>
 	///		Obtiene los datos de un paso Rest
 	/// </summary>
-	public BaseStepModel GetRestStep(MLNode rootML)
+	public BaseStepModel GetRestStep(RestProjectModel project, MLNode rootML)
 	{
-		RestStepModel step = new();
+		RestStepModel step = new(project);
 
 			// Obtiene los datos del paso
 			step.Name = rootML.Nodes[TagName].Value.TrimIgnoreNull();
 			step.Description = rootML.Nodes[TagDescription].Value.TrimIgnoreNull();
 			step.ConnectionId = rootML.Attributes[TagConnection].Value.TrimIgnoreNull();
 			step.Method = rootML.Attributes[TagMethod].Value.GetEnum(RestStepModel.RestMethod.Get);
-			step.Url = rootML.Attributes[TagUrl].Value.TrimIgnoreNull();
+			step.EndPoint = rootML.Attributes[TagUrl].Value.TrimIgnoreNull();
 			step.Enabled = rootML.Attributes[TagEnabled].Value.GetBool();
 			step.Content = rootML.Nodes[TagContent].Value.TrimIgnoreNull();
 			step.Timeout = TimeSpan.FromSeconds(rootML.Attributes[TagTimeout].Value.GetInt(120));
@@ -239,7 +239,7 @@ internal class ProjectRepository
 			rootML.Nodes.Add(TagDescription, step.Description);
 			rootML.Attributes.Add(TagConnection, step.ConnectionId);
 			rootML.Attributes.Add(TagMethod, step.Method.ToString());
-			rootML.Attributes.Add(TagUrl, step.Url);
+			rootML.Attributes.Add(TagUrl, step.EndPoint);
 			rootML.Attributes.Add(TagTimeout, step.Timeout.TotalSeconds);
 			rootML.Attributes.Add(TagEnabled, step.Enabled);
 			rootML.Nodes.Add(TagContent, step.Content);

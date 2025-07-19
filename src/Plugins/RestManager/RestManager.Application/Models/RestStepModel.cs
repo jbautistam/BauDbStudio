@@ -3,7 +3,7 @@
 /// <summary>
 ///		Paso de un proyecto
 /// </summary>
-public class RestStepModel : BaseStepModel
+public class RestStepModel(RestProjectModel project) : BaseStepModel(project)
 {
 	/// <summary>
 	///		Método de llamada a Rest
@@ -39,9 +39,9 @@ public class RestStepModel : BaseStepModel
 	public RestMethod Method { get; set; }
 
 	/// <summary>
-	///		Url
+	///		Punto de entrada
 	/// </summary>
-	public string Url { get; set; } = default!;
+	public string EndPoint { get; set; } = default!;
 
 	/// <summary>
 	///		Tiempo de espera
