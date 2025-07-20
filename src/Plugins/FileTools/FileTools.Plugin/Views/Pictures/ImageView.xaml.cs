@@ -43,7 +43,7 @@ public partial class ImageView : UserControl
 			{
 				ZoomAndPanControl.ZoomAndPanContent.MinimumZoom = 0.25;
 				ZoomAndPanControl.ZoomAndPanContent.MaximumZoom = 4;
-				ZoomAndPanControl.ZoomAndPanContent.ZoomAndPanInitialPosition = Controls.ZoomAndPanControls.ZoomAndPanInitialPositionEnum.FitScreen;
+				ZoomAndPanControl.ZoomAndPanContent.ZoomAndPanInitialPosition = Controls.ZoomAndPanControls.ZoomAndPanControl.ZoomAndPanInitialPositionEnum.FitScreen;
 			}
 			// Oculta el thumb
 			chkShowThumb.IsChecked = false;

@@ -32,8 +32,8 @@ public partial class ComicContentView : UserControl
 			// Carga el archivo
 			await ViewModel.ParseAsync();
 			// Asigna las propiedades al control de imagen
-			ZoomAndPanControl.MinimumZoomType = Controls.ZoomAndPanControls.MinimumZoomTypeEnum.FitScreen;
-			ZoomAndPanControl.ZoomAndPanContent.MinimumZoomType = Controls.ZoomAndPanControls.MinimumZoomTypeEnum.FitScreen;
+			ZoomAndPanControl.MinimumZoomType = Controls.ZoomAndPanControls.ZoomAndPanControl.MinimumZoomTypeEnum.FitScreen;
+			ZoomAndPanControl.ZoomAndPanContent.MinimumZoomType = Controls.ZoomAndPanControls.ZoomAndPanControl.MinimumZoomTypeEnum.FitScreen;
 			ZoomAndPanControl.ZoomAndPanContent.MaximumZoom = 3;
 			ZoomAndPanControl.ZoomAndPanContent.MinimumZoom = 0.25;
 			// Asigna los manejadores de eventos sobre el control de imagen

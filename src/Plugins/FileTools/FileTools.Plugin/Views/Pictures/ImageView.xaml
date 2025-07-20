@@ -7,7 +7,9 @@
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="1000"
 			 xmlns:system="clr-namespace:System;assembly=mscorlib"
-             xmlns:zoomAndPan="clr-namespace:Bau.Controls.ZoomAndPanControls;assembly=ZoomAndPanControls">
+             xmlns:zoomAndPan="clr-namespace:Bau.Controls.ZoomAndPanControls;assembly=ZoomAndPanControls"
+			 xmlns:zoomAndPanConverters="clr-namespace:Bau.Controls.ZoomAndPanControls.Converters;assembly=ZoomAndPanControls"
+			 >
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
@@ -35,9 +37,9 @@
 					<Graphical:ImageWithDisable Width="16" Height="16" Source="/FileTools.Plugin;component/Resources/ZoomOut.png" />
 				</Button>
 				<Slider Width="120" LargeChange="20" Margin="5"
-                    Maximum="{Binding ElementName=ZoomAndPanControl, Path=ZoomAndPanContent.MaximumZoom, Converter={zoomAndPan:ZoomAdjustConverter}}"
-                    Minimum="{Binding ElementName=ZoomAndPanControl, Path=ZoomAndPanContent.MinimumZoom, Converter={zoomAndPan:ZoomAdjustConverter}}"
-                    Value="{Binding ElementName=ZoomAndPanControl, Path=ViewportZoom, Converter={zoomAndPan:ZoomAdjustConverter}}"
+                    Maximum="{Binding ElementName=ZoomAndPanControl, Path=ZoomAndPanContent.MaximumZoom, Converter={zoomAndPanConverters:ZoomAdjustConverter}}"
+                    Minimum="{Binding ElementName=ZoomAndPanControl, Path=ZoomAndPanContent.MinimumZoom, Converter={zoomAndPanConverters:ZoomAdjustConverter}}"
+                    Value="{Binding ElementName=ZoomAndPanControl, Path=ViewportZoom, Converter={zoomAndPanConverters:ZoomAdjustConverter}}"
                     SmallChange=".1"
                     TickFrequency="10"
                     TickPlacement="TopLeft" />
