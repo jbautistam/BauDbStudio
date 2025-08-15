@@ -47,12 +47,12 @@ public class BlogModel : LibDataStructures.Base.BaseExtendedModel
 	/// <summary>
 	///		Fecha de última descarga
 	/// </summary>
-	public DateTime? DateLastDownload { get; set; }
+	public DateTime DateLastDownload { get; set; } = DateTime.UtcNow.AddYears(-10);
 
 	/// <summary>
 	///		Fecha de la última entrada descargada
 	/// </summary>
-	public DateTime? DateLastEntry { get; set; }
+	public DateTime DateLastEntry { get; set; } = DateTime.UtcNow.AddYears(-10);
 
 	/// <summary>
 	///		Número de elementos no leídos

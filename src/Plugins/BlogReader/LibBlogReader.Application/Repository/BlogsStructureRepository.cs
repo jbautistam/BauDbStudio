@@ -90,8 +90,8 @@ internal class BlogsStructureRepository
 			blog.URL = nodeML.Nodes[TagUrl].Value;
 			blog.NumberNotRead = nodeML.Attributes[TagNumberNotRead].Value.GetInt(0);
 			blog.DeleteOldEntries = nodeML.Attributes[TagDeleteOldEntries].Value.GetBool();
-			blog.DateLastDownload = nodeML.Attributes[TagDateLastDownload].Value.GetDateTime();
-			blog.DateLastEntry = nodeML.Attributes[TagDateLastEntry].Value.GetDateTime();
+			blog.DateLastDownload = nodeML.Attributes[TagDateLastDownload].Value.GetDateTime(DateTime.UtcNow.AddYears(-10));
+			blog.DateLastEntry = nodeML.Attributes[TagDateLastEntry].Value.GetDateTime(DateTime.UtcNow.AddYears(-10));
 			blog.DownloadPodcast = nodeML.Attributes[TagDownloadPodcast].Value.GetBool();
 			blog.Enabled = nodeML.Attributes[TagEnabled].Value.GetBool();
 			// Devuelve los datos del blog
@@ -170,8 +170,8 @@ internal class BlogsStructureRepository
 			nodeML.Attributes.Add(TagID, blog.GlobalId);
 			nodeML.Attributes.Add(TagNumberNotRead, blog.NumberNotRead);
 			nodeML.Attributes.Add(TagDeleteOldEntries, blog.DeleteOldEntries);
-			nodeML.Attributes.Add(TagDateLastDownload, blog.DateLastDownload ?? DateTime.Now);
-			nodeML.Attributes.Add(TagDateLastEntry, blog.DateLastEntry ?? DateTime.Now);
+			nodeML.Attributes.Add(TagDateLastDownload, blog.DateLastDownload);
+			nodeML.Attributes.Add(TagDateLastEntry, blog.DateLastEntry);
 			nodeML.Attributes.Add(TagDownloadPodcast, blog.DownloadPodcast);
 			nodeML.Attributes.Add(TagEnabled, blog.Enabled);
 			nodeML.Nodes.Add(TagName, blog.Name);

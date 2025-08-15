@@ -11,7 +11,6 @@ internal class BlogDownloadProcessor : IDisposable
 	private const int MinutesBetweenDownload = 5;
 	// Variables privadas
 	private System.Timers.Timer? _timer;
-	private object _lock = new();
 
 	internal BlogDownloadProcessor(BlogReaderViewModel mainViewModel)
 	{
@@ -24,10 +23,14 @@ internal class BlogDownloadProcessor : IDisposable
 	public void Start()
 	{
 		// Inicializa el temporizador
-		_timer = new System.Timers.Timer(TimeSpan.FromMinutes(MinutesBetweenDownload).TotalMilliseconds);
+		#if DEBUG
+			_timer = new System.Timers.Timer(TimeSpan.FromMinutes(1).TotalMilliseconds);
+		#else
+			_timer = new System.Timers.Timer(TimeSpan.FromMinutes(MinutesBetweenDownload).TotalMilliseconds);
+		#endif
 		_timer.Enabled = true;
 		// Asigna el manejador de eventos
-		_timer.Elapsed += (sender, args) => Execute();
+		_timer.Elapsed += async (sender, args) => await ExecuteAsync(CancellationToken.None);
 		// Arranca el temporizador
 		_timer.Start();
 	}
@@ -35,21 +38,18 @@ internal class BlogDownloadProcessor : IDisposable
 	/// <summary>
 	///		Ejecuta la descarga de blogs
 	/// </summary>
-	private void Execute()
+	private async Task ExecuteAsync(CancellationToken cancellationToken)
 	{
-		lock (_lock)
+		if (_timer is not null && (DateTime.UtcNow - LastDownload).TotalMinutes > MainViewModel.ConfigurationViewModel.MinutesBetweenDownload)
 		{
-			if (_timer != null && (DateTime.Now - LastDownload).TotalMinutes > MainViewModel.ConfigurationViewModel.MinutesBetweenDownload)
-			{
-				// Detiene el temporizador
-				_timer.Stop();
-				// Guarda la fecha de última descarga
-				LastDownload = DateTime.Now;
-				// Descarga los datos
-				Task.Run(async () => await DownloadBlogsAsync(CancellationToken.None));
-				// Y arranca el temporizador de nuevo
-				_timer.Start();
-			}
+			// Detiene el temporizador
+			_timer.Stop();
+			// Guarda la fecha de última descarga
+			LastDownload = DateTime.UtcNow;
+			// Descarga los datos
+			await DownloadBlogsAsync(cancellationToken);
+			// Y arranca el temporizador de nuevo
+			_timer.Start();
 		}
 	}
 
@@ -119,7 +119,7 @@ internal class BlogDownloadProcessor : IDisposable
 	/// <summary>
 	///		Fecha de última descarga
 	/// </summary>
-	public DateTime LastDownload { get; private set; } = DateTime.Now.AddDays(-1);
+	public DateTime LastDownload { get; private set; } = DateTime.UtcNow.AddDays(-1);
 
 	/// <summary>
 	///		Indica si se ha liberado la memoria

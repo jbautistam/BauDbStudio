@@ -43,7 +43,7 @@ public class EntriesModelCollection : LibDataStructures.Base.BaseExtendedModelCo
 	/// <summary>
 	///		Comprueba si existe una URL
 	/// </summary>
-	public bool ExistsURL(string url) => SearchByURL(url) != null;
+	public bool ExistsURL(string url) => SearchByURL(url) is not null;
 
 	/// <summary>
 	///		Obtiene el número de elementos no leídos
@@ -80,7 +80,7 @@ public class EntriesModelCollection : LibDataStructures.Base.BaseExtendedModelCo
 	/// </summary>
 	public EntriesModelCollection GetFrom(BlogModel blog)
 	{
-		EntriesModelCollection entries = new();
+		EntriesModelCollection entries = [];
 
 			// Busca las entradas del blog
 			foreach (EntryModel entry in this)
@@ -99,5 +99,19 @@ public class EntriesModelCollection : LibDataStructures.Base.BaseExtendedModelCo
 			if (Count > MaxItems && this[index].DatePublish < DateTime.Now.AddDays(-60) &&
 					this[index].Status == EntryModel.StatusEntry.Deleted)
 				RemoveAt(index);
+	}
+	/// <summary>
+	///		Obtiene la fecha de última entrada
+	/// </summary>
+	public DateTime GetDateLastEntry()
+	{
+		DateTime? dateLastEntry = null;
+
+			// Obtiene la fecha máxima de entrada
+			foreach (EntryModel entry in this)
+				if (dateLastEntry is null || entry.DatePublish > dateLastEntry)
+					dateLastEntry = entry.DatePublish;
+			// Devuelve la fecha
+			return dateLastEntry ?? DateTime.UtcNow.AddYears(-10);
 	}
 }

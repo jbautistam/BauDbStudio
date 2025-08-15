@@ -24,7 +24,7 @@ public class RssDownload
 	/// </summary>
 	public async Task<int> DownloadAsync(bool includeDisabled, BlogModel blog, CancellationToken cancellationToken)
 	{
-		return await DownloadAsync(includeDisabled, new BlogsModelCollection { blog }, cancellationToken);
+		return await DownloadAsync(includeDisabled, [ blog ], cancellationToken);
 	}
 
 	/// <summary>
@@ -70,11 +70,9 @@ public class RssDownload
 										// Añade el número de elementos descargados
 										dowloadedItems += downloaded.Count;
 										// Obtiene la fecha de última entrada
-										blog.DateLastEntry = GetDateLastEntry(blog.DateLastEntry, downloaded);
+										blog.DateLastEntry = entriesForDownload.GetDateLastEntry();
 									}
 							}
-							// Modifica la fecha de última descarga y el número de entradas no leidas
-							blog.DateLastDownload = DateTime.Now;
 							// Log
 							_blogManager.Logger.LogInformation($"End download {blog.Name}");
 						}
@@ -95,29 +93,20 @@ public class RssDownload
 	}
 
 	/// <summary>
-	///		Obtiene la fecha de última entrada
-	/// </summary>
-	private DateTime? GetDateLastEntry(DateTime? dateLastEntry, EntriesModelCollection entries)
-	{
-		// Obtiene la fecha máxima de entrada
-		foreach (EntryModel entry in entries)
-			if (dateLastEntry is null || entry.DatePublish > dateLastEntry)
-				dateLastEntry = entry.DatePublish;
-		// Devuelve la fecha
-		return dateLastEntry;
-	}
-
-	/// <summary>
 	///		Añade los mensajes a las cuentas
 	/// </summary>
 	private EntriesModelCollection AddMessages(BlogModel blog, AtomChannel channel)
 	{
 		EntriesModelCollection existingEntries = _blogManager.LoadEntries(blog);
-		EntriesModelCollection downloadedEntries = new();
+		EntriesModelCollection downloadedEntries = [];
+		DateTime previousDate = existingEntries.GetDateLastEntry();
 
 			// Graba las entradas nuevas
 			foreach (AtomEntry entry in channel.Entries)
-				if (entry.Links != null && !existingEntries.ExistsURL(GetUrlAlternate(entry.Links)))
+			{
+				if (!(entry.GetFirstDate() >= previousDate))
+					System.Diagnostics.Debug.WriteLine("Esta no");
+				if (entry.Links is not null && !existingEntries.ExistsURL(GetUrlAlternate(entry.Links)) && entry.GetFirstDate() >= previousDate)
 				{
 					EntryModel blogEntry = new();
 
@@ -136,9 +125,13 @@ public class RssDownload
 						// Añade la entrada al blog y a la lista de elementos descargados
 						downloadedEntries.Add(blogEntry);
 				}
+			}
+
 			// Si se ha añadido algo, graba las entradas
 			if (downloadedEntries.Count > 0)
 			{
+				// Modifica la fecha de última descarga
+				blog.DateLastDownload = DateTime.UtcNow;
 				// Añade las entradas descargadas a las existentes
 				existingEntries.AddRange(downloadedEntries);
 				// Graba las entradas
