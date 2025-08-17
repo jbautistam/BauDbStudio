@@ -32,7 +32,7 @@ internal class OpmlServices
 			}
 			catch (Exception exception)
 			{
-				System.Diagnostics.Debug.WriteLine("Excepción: " + exception.Message);
+				System.Diagnostics.Debug.WriteLine("Exception when load file: " + exception.Message);
 			}
 	}
 
@@ -45,7 +45,7 @@ internal class OpmlServices
 			if (entry.Entries.Count == 0 && !string.IsNullOrWhiteSpace(entry.URL))
 				folder.Blogs.Add(entry.Text, entry.Title, entry.URL);
 			else if (entry.Entries.Count > 0)
-				AddEntries(folder.Folders.Add(entry.Text), entry.Entries);
+				AddEntries(folder.Folders.Add(entry.Text ?? "Folder"), entry.Entries);
 	}
 
 	/// <summary>
@@ -64,7 +64,7 @@ internal class OpmlServices
 			foreach (Model.BlogModel blog in manager.File.Blogs)
 				AddBlog(blog, channel.Entries);
 			// Graba el archivo
-			LibHelper.Files.HelperFiles.MakePath(Path.GetDirectoryName(fileName));
+			LibHelper.Files.HelperFiles.MakePath(Path.GetDirectoryName(fileName)!);
 			new OPMLWriter().Save(channel, fileName);
 	}
 
@@ -96,7 +96,7 @@ internal class OpmlServices
 	/// <summary>
 	///		Crea una entrada
 	/// </summary>
-	private OPMLEntry CreateEntry(string name, string type, string description, string url)
+	private OPMLEntry CreateEntry(string name, string? type, string? description, string? url)
 	{
 		return new OPMLEntry()
 					{

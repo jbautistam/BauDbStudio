@@ -23,11 +23,7 @@ internal class BlogDownloadProcessor : IDisposable
 	public void Start()
 	{
 		// Inicializa el temporizador
-		#if DEBUG
-			_timer = new System.Timers.Timer(TimeSpan.FromMinutes(1).TotalMilliseconds);
-		#else
-			_timer = new System.Timers.Timer(TimeSpan.FromMinutes(MinutesBetweenDownload).TotalMilliseconds);
-		#endif
+		_timer = new System.Timers.Timer(TimeSpan.FromMinutes(MinutesBetweenDownload).TotalMilliseconds);
 		_timer.Enabled = true;
 		// Asigna el manejador de eventos
 		_timer.Elapsed += async (sender, args) => await ExecuteAsync(CancellationToken.None);

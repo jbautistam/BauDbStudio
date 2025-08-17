@@ -1,5 +1,4 @@
-﻿
-namespace Bau.Libraries.LibBlogReader.Model;
+﻿namespace Bau.Libraries.LibBlogReader.Model;
 
 /// <summary>
 ///		Colección de <see cref="BlogModel"/>
@@ -9,7 +8,7 @@ public class BlogsModelCollection : LibDataStructures.Base.BaseExtendedModelColl
 	/// <summary>
 	///		Añade un <see cref="BlogModel"/> a la colección
 	/// </summary>
-	public BlogModel Add(string name, string description, string url)
+	public BlogModel Add(string? name, string? description, string url)
 	{
 		BlogModel blog = new() 
 							{ 
