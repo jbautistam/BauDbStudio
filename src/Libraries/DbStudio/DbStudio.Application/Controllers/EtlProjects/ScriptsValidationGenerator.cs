@@ -36,7 +36,9 @@ public class ScriptsValidationGenerator
 					// Genera el archivo de creación de la base de datos
 					generator.WriteFileCreateConnection(Options.DataBaseValidateVariable, Options.MountPathVariable, "00. Create database.sql");
 					// Carga el esquema
-					await Manager.DbScriptsManager.LoadSchemaAsync(Options.Connection, false, cancellationToken);
+					await Manager.DbScriptsManager.LoadSchemaAsync(Options.Connection, 
+																   new DbScripts.Manager.DbScriptsManager.SchemaOptions(true, true, false, false), 
+																   cancellationToken);
 					// Prepara los archivos de validación de tablas
 					foreach ((string schema, List<ConnectionTableModel> tables) in schemaTables.Enumerate())
 						if (!cancellationToken.IsCancellationRequested)

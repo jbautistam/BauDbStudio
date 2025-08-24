@@ -12,6 +12,9 @@ namespace Bau.Libraries.DbScripts.Manager;
 /// </summary>
 public class DbScriptsManager
 {
+	// Opciones para carga de esquema
+	public record SchemaOptions(bool IncludeTables, bool IncludeViews, bool IncludeRoutines, bool IncludeSystemTables);
+
 	public DbScriptsManager(ILogger logger)
 	{
 		Logger = logger;
@@ -21,9 +24,9 @@ public class DbScriptsManager
 	/// <summary>
 	///		Carga el esquema de una conexión
 	/// </summary>
-	public async Task LoadSchemaAsync(ConnectionModel connection, bool includeSystemTables, CancellationToken cancellationToken)
+	public async Task LoadSchemaAsync(ConnectionModel connection, SchemaOptions options, CancellationToken cancellationToken)
 	{
-		await ConnectionManager.LoadSchemaAsync(connection, includeSystemTables, cancellationToken);
+		await ConnectionManager.LoadSchemaAsync(connection, options, cancellationToken);
 	}
 
 	/// <summary>
@@ -66,9 +69,9 @@ public class DbScriptsManager
 	/// <summary>
 	///		Obtiene el esquema de una conexión
 	/// </summary>
-	public async Task<LibDbProviders.Base.Schema.SchemaDbModel> GetDbSchemaAsync(ConnectionModel connection, bool includeSystemTables, CancellationToken cancellationToken)
+	public async Task<LibDbProviders.Base.Schema.SchemaDbModel> GetDbSchemaAsync(ConnectionModel connection, SchemaOptions options, CancellationToken cancellationToken)
 	{
-		return await ConnectionManager.GetSchemaAsync(connection, includeSystemTables, cancellationToken);
+		return await ConnectionManager.GetSchemaAsync(connection, options, cancellationToken);
 	}
 
 	/// <summary>

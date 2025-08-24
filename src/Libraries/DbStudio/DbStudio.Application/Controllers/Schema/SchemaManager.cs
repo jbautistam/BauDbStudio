@@ -18,7 +18,9 @@ public class SchemaManager
 	/// </summary>
 	public async Task SaveAsync(ConnectionModel connection, string fileName, CancellationToken cancellationToken)
 	{
-		new SchemaXmlManager().Save(await Manager.DbScriptsManager.GetDbSchemaAsync(connection, false, cancellationToken), fileName);
+		new SchemaXmlManager().Save(await Manager.DbScriptsManager.GetDbSchemaAsync(connection, 
+																					new DbScripts.Manager.DbScriptsManager.SchemaOptions(true, true, false, false), cancellationToken), 
+																					fileName);
 	}
 
 	/// <summary>

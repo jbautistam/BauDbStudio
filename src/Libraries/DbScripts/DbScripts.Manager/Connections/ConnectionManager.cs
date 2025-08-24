@@ -18,22 +18,36 @@ internal class ConnectionManager
 	/// <summary>
 	///		Obtiene el esquema de la conexión
 	/// </summary>
-	internal async Task<SchemaDbModel> GetSchemaAsync(ConnectionModel connection, bool includeSystemTables, CancellationToken cancellationToken)
+	internal async Task<SchemaDbModel> GetSchemaAsync(ConnectionModel connection, DbScriptsManager.SchemaOptions options, CancellationToken cancellationToken)
 	{
-		return await GetDbProvider(connection).GetSchemaAsync(includeSystemTables, TimeSpan.FromMinutes(5), cancellationToken);
+		return await GetDbProvider(connection).GetSchemaAsync(Convert(options), TimeSpan.FromMinutes(5), cancellationToken);
 	}
 
 	/// <summary>
 	///		Carga el esquema de la conexión
 	/// </summary>
-	internal async Task LoadSchemaAsync(ConnectionModel connection, bool includeSystemTables, CancellationToken cancellationToken)
+	internal async Task LoadSchemaAsync(ConnectionModel connection, DbScriptsManager.SchemaOptions options, CancellationToken cancellationToken)
 	{
-		SchemaDbModel schema = await GetDbProvider(connection).GetSchemaAsync(includeSystemTables, TimeSpan.FromMinutes(5), cancellationToken);
+		SchemaDbModel schema = await GetDbProvider(connection).GetSchemaAsync(Convert(options), TimeSpan.FromMinutes(5), cancellationToken);
 
 			// Carga las tablas
 			LoadSchemaTables(connection, schema);
 			// Carga las vistas
 			LoadSchemaViews(connection, schema);
+	}
+
+	/// <summary>
+	///		Convierte las opciones de carga de esquema
+	/// </summary>
+	private SchemaOptions Convert(DbScriptsManager.SchemaOptions options)
+	{
+		return new SchemaOptions
+						{
+							IncludeTables = options.IncludeTables,
+							IncludeViews = options.IncludeViews,
+							IncludeRoutines = options.IncludeRoutines,
+							IncludeSystemData = options.IncludeSystemTables
+						};
 	}
 
 	/// <summary>

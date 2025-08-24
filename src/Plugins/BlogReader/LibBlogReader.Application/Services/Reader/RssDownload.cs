@@ -103,7 +103,8 @@ public class RssDownload
 
 			// Graba las entradas nuevas
 			foreach (AtomEntry entry in channel.Entries)
-				if (entry.Links is not null && !existingEntries.ExistsURL(GetUrlAlternate(entry.Links)) && entry.GetFirstDate() >= previousDate)
+				if (entry.Links is not null && !existingEntries.ExistsURL(GetUrlAlternate(entry.Links)) && entry.GetFirstDate() >= previousDate &&
+					!downloadedEntries.ExistsURL(GetUrlAlternate(entry.Links)))
 				{
 					EntryModel blogEntry = new();
 

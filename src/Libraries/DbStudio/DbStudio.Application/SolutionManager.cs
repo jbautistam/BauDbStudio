@@ -50,7 +50,7 @@ public class SolutionManager
 	/// </summary>
 	public async Task LoadSchemaAsync(ConnectionModel connection, bool includeSystemTables, CancellationToken cancellationToken)
 	{
-		await DbScriptsManager.LoadSchemaAsync(connection, includeSystemTables, cancellationToken);
+		await DbScriptsManager.LoadSchemaAsync(connection, new DbScripts.Manager.DbScriptsManager.SchemaOptions(true, true, false, includeSystemTables), cancellationToken);
 	}
 
 	/// <summary>

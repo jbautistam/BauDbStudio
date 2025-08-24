@@ -27,7 +27,7 @@ public class XmlTestProjectGenerator
 		// Limpia los errores
 		Errors.Clear();
 		// Carga el esquema
-		await Manager.DbScriptsManager.LoadSchemaAsync(Connection, false, cancellationToken);
+		await Manager.DbScriptsManager.LoadSchemaAsync(Connection, new DbScripts.Manager.DbScriptsManager.SchemaOptions(true, true, false, false), cancellationToken);
 		// Genera los archivos
 		if (!cancellationToken.IsCancellationRequested)
 		{
