@@ -31,6 +31,7 @@ public class NodeRootViewModel : PluginNodeViewModel
 					Icon = TreeReportingViewModel.IconType.DataSourceRoot.ToString();
 				break;
 			case TreeReportingViewModel.NodeType.DataSourceSchemasRoot:
+			case TreeReportingViewModel.NodeType.TransformRulesRoot:
 					Icon = TreeReportingViewModel.IconType.Folder.ToString();
 				break;
 			case TreeReportingViewModel.NodeType.ReportsRoot:
@@ -66,6 +67,9 @@ public class NodeRootViewModel : PluginNodeViewModel
 				break;
 			case TreeReportingViewModel.NodeType.ReportsRoot:
 					LoadReports();
+				break;
+			case TreeReportingViewModel.NodeType.TransformRulesRoot:
+					LoadTransformRules();
 				break;
 		}
 	}
@@ -146,6 +150,17 @@ public class NodeRootViewModel : PluginNodeViewModel
 			if (dataWarehouse is not null)
 				foreach (ReportModel report in dataWarehouse.Reports.EnumerateValuesSorted())
 					Children.Add(new NodeReportViewModel(TreeViewModel, this, report));
+	}
+
+	/// <summary>
+	///		Carga las reglas de transfromación
+	/// </summary>
+	private void LoadTransformRules()
+	{
+		DataWarehouseModel? dataWarehouse = GetDataWarehouse();
+
+			if (dataWarehouse is not null)
+				Children.Add(new NodeTransformRulesViewModel(TreeViewModel, this, dataWarehouse));
 	}
 
 	/// <summary>

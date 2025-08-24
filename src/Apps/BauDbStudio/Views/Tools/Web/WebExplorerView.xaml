@@ -22,7 +22,7 @@
 				<Button ToolTip="Anterior" Command="{Binding Path=GoPreviousCommand}" Margin="2">
 					<Graphical:ImageWithDisable Width="16" Height="16" Source="/Resources/Images/ArrowLeft.png" />
 				</Button>
-				<TextBox Text="{Binding Path=Url,UpdateSourceTrigger=LostFocus}" MinWidth="400"/>
+				<TextBox Text="{Binding Path=Url,UpdateSourceTrigger=LostFocus}" MinWidth="1000" MaxWidth="1000"/>
 				<Button ToolTip="Siguiente" Command="{Binding Path=GoNextCommand}" Margin="2">
 					<Graphical:ImageWithDisable Width="16" Height="16" Source="/Resources/Images/ArrowRight.png" />
 				</Button>

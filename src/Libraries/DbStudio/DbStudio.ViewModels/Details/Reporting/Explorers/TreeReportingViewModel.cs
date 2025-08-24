@@ -39,6 +39,10 @@ public class TreeReportingViewModel : PluginTreeViewModel, IPaneViewModel
 		ReportsRoot,
 		/// <summary>Informe</summary>
 		Report,
+		/// <summary>Raíz de reglas de transformación</summary>
+		TransformRulesRoot,
+		/// <summary>Reglas de transformación</summary>
+		TransformRules,
 		/// <summary>Nodo con error</summary>
 		Error
 	}
@@ -59,7 +63,8 @@ public class TreeReportingViewModel : PluginTreeViewModel, IPaneViewModel
 		DataSourceSql,
 		Dimension,
 		DimensionChild,
-		Folder
+		Folder,
+		Rules
 	}
 
 	public TreeReportingViewModel(ReportingSolutionViewModel reportingSolutionViewModel)
@@ -148,7 +153,8 @@ public class TreeReportingViewModel : PluginTreeViewModel, IPaneViewModel
 				nameof(NewDataSourceCommand) or nameof(NewReportCommand)
 						=> ReportingSolutionViewModel.ReportingSolutionManager.Manager.Schema.DataWarehouses.Count > 0,
 				nameof(NewDimensionCommand) => SelectedNode is NodeDataSourceViewModel || SelectedNode is NodeDimensionViewModel,
-				nameof(OpenCommand) => SelectedNode is NodeDimensionViewModel || SelectedNode is NodeDataSourceViewModel || SelectedNode is NodeReportViewModel,
+				nameof(OpenCommand) => SelectedNode is NodeDimensionViewModel || SelectedNode is NodeDataSourceViewModel || 
+									   SelectedNode is NodeReportViewModel || SelectedNode is NodeTransformRulesViewModel,
 				nameof(QueryCommand) => SelectedNode is NodeDataSourceViewModel || SelectedNode is NodeReportViewModel,
 				nameof(DeleteCommand) => SelectedNode is NodeDataWarehouseViewModel || SelectedNode is NodeReportViewModel || SelectedNode is NodeDimensionViewModel ||
 										   (SelectedNode is NodeDataSourceViewModel nodeDataSource && nodeDataSource.DataSource is DataSourceSqlModel),
@@ -173,6 +179,9 @@ public class TreeReportingViewModel : PluginTreeViewModel, IPaneViewModel
 				break;
 			case NodeReportViewModel node:
 					OpenReport(node);
+				break;
+			case NodeTransformRulesViewModel node:
+					OpenTransformRules(node);
 				break;
 		}
 	}
@@ -283,20 +292,28 @@ public class TreeReportingViewModel : PluginTreeViewModel, IPaneViewModel
 	/// </summary>
 	private void OpenDataSource(NodeDataSourceViewModel? node)
 	{
-		if (node == null || node.DataSource is DataSourceSqlModel)
-		{
-			DataSourceSqlModel? dataSource;
+		DataWarehouseModel? dataWarehouse = GetSelectedDataWarehouse(SelectedNode);
 
-				// Genera el origen de datos
-				if (node is not null && node.DataSource is DataSourceSqlModel dataSourceSql)
-					dataSource = dataSourceSql;
-				else
-					dataSource = new DataSourceSqlModel(GetSelectedDataWarehouse(SelectedNode));
-				// Abre la vista
-				ReportingSolutionViewModel.SolutionViewModel.MainController.OpenWindow(new DataSources.DataSourceSqlViewModel(ReportingSolutionViewModel, dataSource));
-		}
-		else if (node.DataSource is DataSourceTableModel dataSourceTable)
-			ReportingSolutionViewModel.SolutionViewModel.MainController.OpenWindow(new DataSources.DataSourceTableViewModel(ReportingSolutionViewModel, dataSourceTable));
+			if (dataWarehouse is null)
+				ReportingSolutionViewModel.SolutionViewModel.MainController.SystemController
+									.ShowMessage("Seleccione un almacén de datos");
+			else
+			{
+				if (node is null || node.DataSource is DataSourceSqlModel)
+				{
+					DataSourceSqlModel? dataSource;
+
+						// Genera el origen de datos
+						if (node is not null && node.DataSource is DataSourceSqlModel dataSourceSql)
+							dataSource = dataSourceSql;
+						else
+							dataSource = new DataSourceSqlModel(dataWarehouse);
+						// Abre la vista
+						ReportingSolutionViewModel.SolutionViewModel.MainController.OpenWindow(new DataSources.DataSourceSqlViewModel(ReportingSolutionViewModel, dataSource));
+				}
+				else if (node.DataSource is DataSourceTableModel dataSourceTable)
+					ReportingSolutionViewModel.SolutionViewModel.MainController.OpenWindow(new DataSources.DataSourceTableViewModel(ReportingSolutionViewModel, dataSourceTable));
+			}
 	}
 
 	/// <summary>
@@ -379,13 +396,10 @@ public class TreeReportingViewModel : PluginTreeViewModel, IPaneViewModel
 					ReportingSolutionViewModel.SolutionViewModel.MainController.SystemController.ShowMessage("You must select a datawarehouse");
 				else
 				{
-					string dataWarehouseFile = ReportingSolutionViewModel.ReportingSolutionManager.ReportingSolution.GetFileName(dataWarehouse);
+					string? path = CreateFolder(dataWarehouse, "Reports");
 
-						if (string.IsNullOrWhiteSpace(dataWarehouseFile) || !File.Exists(dataWarehouseFile))
-							ReportingSolutionViewModel.SolutionViewModel.MainController.SystemController.ShowMessage("Can't find the datawarehouse file name");
-						else
+						if (!string.IsNullOrWhiteSpace(path))
 						{
-							string path = CreateReportFolder(Path.GetDirectoryName(dataWarehouseFile)!);
 							string? fileName = ReportingSolutionViewModel.SolutionViewModel.MainController.DialogsController.OpenDialogSave
 													(path, "Report file xml (*.report.xml)|*.report.xml|All files (*.*)|*.*",
 													 "New report.report.xml", ".report.xml");
@@ -394,32 +408,78 @@ public class TreeReportingViewModel : PluginTreeViewModel, IPaneViewModel
 								{
 									// Graba el archivo
 									File.WriteAllText(fileName, 
-																$@"<?xml version=""1.0"" encoding=""utf-8""?>
-																		<Report>
-																			<DataWarehouse Name = ""{dataWarehouse.Name}""/>
-																			<Name>{Path.GetFileName(fileName)}</Name>
-																			<Description>
-																			</Description>
-																		</Report>
-																	".Replace("\t", string.Empty).Trim()
-																);
+														$"""
+														<?xml version="1.0" encoding="utf-8"?>
+														<Report>
+															<DataWarehouse Name = "{dataWarehouse.Name}"/>
+															<Name>{Path.GetFileName(fileName)}</Name>
+															<Description>
+															</Description>
+														</Report>
+														"""
+													  );
 									// y lo abre en el editor
 									ReportingSolutionViewModel.SolutionViewModel.MainController.HostPluginsController.OpenFile(fileName);
 								}
 						}
 				}
 		}
+	}
 
-		// Crea el directorio de informes
-		string CreateReportFolder(string folder)
-		{
-			// Añade el subdirectorio
-			folder = Path.Combine(folder, "Reports");
-			// Crea la carpeta si no existía
-			LibHelper.Files.HelperFiles.MakePath(folder);
+	/// <summary>
+	///		Crea un directorio donde grabar archivos
+	/// </summary>
+	private string? CreateFolder(DataWarehouseModel dataWarehouse, string folder)
+	{
+		string? newFolder = null;
+		string dataWarehouseFile = ReportingSolutionViewModel.ReportingSolutionManager.ReportingSolution.GetFileName(dataWarehouse);
+
+			// Crea el directorio debajo del directorio del archivo
+			if (string.IsNullOrWhiteSpace(dataWarehouseFile) || !File.Exists(dataWarehouseFile))
+				ReportingSolutionViewModel.SolutionViewModel.MainController.SystemController.ShowMessage($"Can't find the datawarehouse {dataWarehouse.Name} file name");
+			else
+			{
+				// Añade el subdirectorio
+				newFolder = Path.Combine(Path.GetDirectoryName(dataWarehouseFile)!, folder);
+				// Crea la carpeta si no existía
+				LibHelper.Files.HelperFiles.MakePath(newFolder);
+			}
 			// Devuelve la carpeta creada
-			return folder;
-		}
+			return newFolder;
+	}
+
+	/// <summary>
+	///		Abre el archivo de reglas de transformación
+	/// </summary>
+	private void OpenTransformRules(NodeTransformRulesViewModel node)
+	{
+		DataWarehouseModel? dataWarehouse = GetSelectedDataWarehouse(SelectedNode);
+
+			if (dataWarehouse is null)
+				ReportingSolutionViewModel.SolutionViewModel.MainController.SystemController.ShowMessage("You must select a datawarehouse");
+			else
+			{
+				string? path = CreateFolder(dataWarehouse, "Rules");
+
+					if (!string.IsNullOrWhiteSpace(path))
+					{
+						string fileName = Path.Combine(path, "transform.rules.xml");
+
+							// Crea el archivo si no existe
+							if (!File.Exists(fileName))
+								File.WriteAllText(fileName, 
+												  $"""
+													<?xml version="1.0" encoding="utf-8"?>
+													<Rules>
+														<!-- Enter a list of source and targets strings on rules tags -->
+														<Rule Source="" Target=""/>
+													</Rules>
+													"""
+												  );
+							// y lo abre en el editor
+							ReportingSolutionViewModel.SolutionViewModel.MainController.HostPluginsController.OpenFile(fileName);
+					}
+			}
 	}
 
 	/// <summary>

@@ -39,6 +39,7 @@ public class TreeReportingIconConverter : IValueConverter
 					TreeReportingViewModel.IconType.Report => "/DbStudio.Views;component/Resources/Images/Report.png",
 					TreeReportingViewModel.IconType.Dimension => "/DbStudio.Views;component/Resources/Images/ReportDimension.png",
 					TreeReportingViewModel.IconType.DimensionChild => "/DbStudio.Views;component/Resources/Images/DimensionChild.png",
+					TreeReportingViewModel.IconType.Rules => "/DbStudio.Views;component/Resources/Images/File.png",
 					TreeReportingViewModel.IconType.Folder => "/DbStudio.Views;component/Resources/Images/FolderNode.png",
 					_ => null,
 				};
